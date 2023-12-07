@@ -1,6 +1,7 @@
 # stocks.py
-# Copyright (c) by Algo Investor, Inc
-# created by john 2023-12-06
+# Copyright (c) 2022-2024 by Algo Investor Inc.  All Rights Reserved
+# created by john botti 2023-11-26
+# updated by will botti 2023-12-07 candlesticks
 
 import yfinance as yf
 import mplfinance as mpf
