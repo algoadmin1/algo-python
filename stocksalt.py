@@ -1,3 +1,7 @@
+# stocksalt.py
+# Copyright (c) 2022-2024 by Algo Investor Inc.  All Rights Reserved
+# created by john botti 2023-11-26
+
 import yfinance as yf
 import matplotlib.pyplot as plt
 from datetime import datetime, timedelta
