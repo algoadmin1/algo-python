@@ -1,2 +1,2 @@
 # algo-python
-python code for real time yahoo finance
+python code for grabbing yahoo finance data, chart graphing, a monte carlo trading simulator, and more
