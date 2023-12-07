@@ -9,7 +9,9 @@ import matplotlib.pyplot as plt
 # Define the symbol
 symbol_default = "AAPL"
  
- 
+
+print("\nGIT HUB INSTALLLED")
+
 print("\nEnter Symbol (", symbol_default , ")")
 symbol = input()
 if symbol == "":
