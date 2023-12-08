@@ -15,6 +15,23 @@ for($i=0;$i<7;$i++){
 echo  "\n";
 echo  "\n";
 echo  "\n";
+echo  "\n";
+
+echo  "Trades (Buy or Sell Signals) Generated from Server:\n";
+echo  "===================================================\n";
+echo  "=\n";
+echo  "=\n";
+echo  "=   FORMAT:\n";
+echo  "=\n";
+echo  "=        <tradeID>,<symbol>,<tradeCmd>,<price>,<numSharesOrContracts>,<duration_uDate>,<signalType>\n";
+echo  "=\n";
+echo  "=\n";
+echo  "=\n";
+echo  "=\n";
+echo  "=\n";
+echo  "===================================================\n";
+echo  "=\n";
+echo  "=\n";
 
 echo "trade1,AAPL,buyLimitAt,192.50,100,gtc_2024-03-15,buySignal";
 echo  "\n";

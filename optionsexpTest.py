@@ -10,7 +10,7 @@ import requests
 # Define the symbol
 symbol_default = "AAPL"
  
-def fn_GetPauseInputFromUser(jbstr):
+def fn_GetPauseInputFromUser(jbstr="Press Enter to Continue:"):
     tmpstr="\n"+jbstr
     print(tmpstr)
     tmpInput=input()
@@ -18,7 +18,7 @@ def fn_GetPauseInputFromUser(jbstr):
 
 print("\nWelcome to the Algo Investor Options Bot.\n\n")
 
-print("\nReaching out to the Algo Investor http server, one moment please...")
+print("\nReaching out to the Algo Investor Server (https://algoinvestorr.com), one moment please...")
 
 x = requests.get('https://algoinvestorr.com/trades/trades_test.php')
 fn_GetPauseInputFromUser("Press Enter to see the trades_test.php contents from http server: ")
@@ -30,7 +30,7 @@ fn_GetPauseInputFromUser("Press Enter to see the trades.json contents from http 
 print("\ny.text= (from static .json)", y.text)
 
 
-
+fn_GetPauseInputFromUser();
 
 print("\nEnter the underlying Symbol to retrieve its Options Chain (", symbol_default , ")")
 symbol = input()
@@ -66,7 +66,13 @@ for option_date in options:
     if option_date==expdate_dateSelected:
         option_chain = tickerObj.option_chain(option_date)
         print("\nExpiration Date:", option_date)
+        fn_GetPauseInputFromUser();
+
         print(option_chain)
+        fn_GetPauseInputFromUser();
+        
+#        print(option_chain.loc[0])
+
         print("\n")
 
 
