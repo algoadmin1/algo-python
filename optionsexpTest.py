@@ -32,6 +32,12 @@ print("\ny.text= (from static .json)", y.text)
 
 fn_GetPauseInputFromUser();
 
+
+
+
+
+
+
 print("\nEnter the underlying Symbol to retrieve its Options Chain (", symbol_default , ")")
 symbol = input()
 if symbol == "":
@@ -42,6 +48,16 @@ if symbol == "":
 
 # Create a Ticker object for the symbol
 tickerObj = yf.Ticker(symbol)
+#print(tickerObj.info)
+
+hist = tickerObj.history(period="max")
+#hist.head()
+print(symbol, "Header = ", hist.head())
+#note hist.actions, hist.dividends, hist.split, hist.financials, hist.balance_sheet, hist.cashflow,
+#     hist.options
+
+fn_GetPauseInputFromUser()
+
 
 # Get the options data
 options = tickerObj.options
@@ -66,13 +82,13 @@ for option_date in options:
     if option_date==expdate_dateSelected:
         option_chain = tickerObj.option_chain(option_date)
         print("\nExpiration Date:", option_date)
-        fn_GetPauseInputFromUser();
+        fn_GetPauseInputFromUser("Press Enter for "+symbol+"'s CALLS:")
+        print(option_chain.calls)
 
-        print(option_chain)
-        fn_GetPauseInputFromUser();
+#        fn_GetPauseInputFromUser()
         
-#        print(option_chain.loc[0])
-
+        fn_GetPauseInputFromUser("Press Enter for "+symbol+"'s PUTS:")
+        print(option_chain.puts)
         print("\n")
 
 

@@ -23,7 +23,7 @@ echo  "=\n";
 echo  "=\n";
 echo  "=   FORMAT:\n";
 echo  "=\n";
-echo  "=        <tradeID>,<symbol>,<tradeCmd>,<price>,<numSharesOrContracts>,<duration_uDate>,<signalType>\n";
+echo  "=        <tradeID>,<udateTime>,<symbol>,<tradeCmd>,<price>,<numSharesOrContracts>,<duration_uDate>,<signalType>\n";
 echo  "=\n";
 echo  "=\n";
 echo  "=\n";
@@ -33,14 +33,13 @@ echo  "===================================================\n";
 echo  "=\n";
 echo  "=\n";
 
-echo "trade1,AAPL,buyLimitAt,192.50,100,gtc_2024-03-15,buySignal";
+echo "trade1,2023-12-08T10:01:00,AAPL,buyLimitAt,192.50,100,gtc_2024-03-15,buySignal";
 echo  "\n";
-echo "trade2,AAPL,buyLimitAt,187.25,200,gtc_2024-03-15,buySignal";
+echo "trade2,2023-12-08T10:02:10,AAPL,buyLimitAt,187.25,200,gtc_2024-03-15,buySignal";
 echo  "\n";
-echo "trade3,AAPL240315C190,buyToOpen,12.50,25,day,buySignal";
+echo "trade3,2023-12-08T10:04:00,AAPL240315C190,buyToOpen,12.50,25,day,buySignal";
 echo  "\n";
-
-echo "trade4,MSFT,buyMarket,0.00,1200,moc,buySignal";
+echo "trade4,2023-12-08T10:21:43,MSFT,buyMarket,0.00,1200,moc,buySignal";
 echo  "\n";
 
 
