@@ -40,7 +40,7 @@ echo  "\n";
 echo "trade3,AAPL240315C190,buyToOpen,12.50,25,day,buySignal";
 echo  "\n";
 
-echo "trade4,AAPL240315C190,buyMarket,0.00,1200,moc,buySignal";
+echo "trade4,MSFT,buyMarket,0.00,1200,moc,buySignal";
 echo  "\n";
 
 
