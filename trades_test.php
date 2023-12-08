@@ -35,9 +35,12 @@ echo  "=\n";
 
 echo "trade1,AAPL,buyLimitAt,192.50,100,gtc_2024-03-15,buySignal";
 echo  "\n";
-echo "trade1,AAPL,buyLimitAt,187.25,200,gtc_2024-03-15,buySignal";
+echo "trade2,AAPL,buyLimitAt,187.25,200,gtc_2024-03-15,buySignal";
 echo  "\n";
-echo "trade1,AAPL240315C190,buyToOpen,12.50,day,buySignal";
+echo "trade3,AAPL240315C190,buyToOpen,12.50,25,day,buySignal";
+echo  "\n";
+
+echo "trade4,AAPL240315C190,buyMarket,0.00,1200,moc,buySignal";
 echo  "\n";
 
 
