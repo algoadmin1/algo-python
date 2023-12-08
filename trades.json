@@ -1,0 +1,72 @@
+
+//  AlgoInvestorBot Data Format Copyright (c) 2022-2024 by Algo Investor Inc. All Rights Reserved.
+
+tradeSize = {
+
+"numShares": "1000",
+"numContracts": "10",
+
+}
+
+tradeDuration = {
+
+"duration": "day",
+"duration": "gtc",
+
+"duration": "moc",
+
+"duration": "fillOrKill",
+
+}
+
+tradeTypes = {
+
+// stocks
+
+"buy": "at market",
+"buy": "limit",
+"buy": "stop market",
+"sell": "at market",
+"sell": "limit",
+"sell": "stop market",
+"sell short": "at market",
+"sell short": "limit",
+"sell short": "stop market",
+"buy to cover": "at market",
+"buy to cover": "limit",
+"buy to cover": "stop market",
+// options
+
+"buy to open": "at market",
+"buy to open": "limit",
+"buy to open": "stop market",
+
+"sell to close": "at market",
+"sell to close": "limit",
+"sell to close": "stop market",
+
+"sell to open": "at market",
+"sell to open": "limit",
+"sell to open": "stop market",
+
+"buy to close": "at market",
+"buy to close": "limit",
+"buy to close": "stop market",
+
+// options spreads
+
+// Debit Call Spread
+// Debit Put Spread
+
+// Credit Call Spread
+// Credit Put Spread
+
+// Sell iron condor
+
+// Buy Butterfly
+
+
+
+
+}
+
