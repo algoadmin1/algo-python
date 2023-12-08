@@ -47,6 +47,8 @@ if symbol == "":
 
 
 # Create a Ticker object for the symbol
+# github repo
+# https://github.com/ranaroussi/yfinance 
 tickerObj = yf.Ticker(symbol)
 #print(tickerObj.info)
 
@@ -56,12 +58,18 @@ print(symbol, "Header = ", hist.head())
 #note hist.actions, hist.dividends, hist.split, hist.financials, hist.balance_sheet, hist.cashflow,
 #     hist.options
 
-fn_GetPauseInputFromUser()
+fn_GetPauseInputFromUser("Press Enter for Financials:")
+print(tickerObj.financials)
 
+fn_GetPauseInputFromUser("Press Enter for Balance Sheet:")
+print(tickerObj.balance_sheet)
+
+fn_GetPauseInputFromUser("Press Enter for Cashflow:")
+print(tickerObj.cashflow)
 
 # Get the options data
 options = tickerObj.options
-print(options)
+print("\n\n"+symbol+"'s options expiration dates:",options)
 
 print("\nThese are the available expiration dates for",symbol,"...\n")
 
