@@ -1,4 +1,4 @@
-# options.py
+# bot.py derived from options.py
 #
 
 
@@ -16,6 +16,12 @@ def fn_GetPauseInputFromUser(jbstr="Press Enter to Continue:"):
     print(tmpstr)
     tmpInput=input()
 
+def fn_printUdateTime():   
+    current_time_unix = time.strftime('%s', time.localtime())
+    print("Current date and time in Unix format:", current_time_unix)
+
+    
+
 
 print("\nWelcome to the Algo Investor Options Bot.\n\n")
 
@@ -25,10 +31,21 @@ print("\nWelcome to the Algo Investor Options Bot.\n\n")
 # Initialize the timer
 start_time = time.time()
 print("time=",start_time)
+fn_printUdateTime() 
 
+delaySeconds = 3
+gLooping = 1
+cnt =0
+maxSeconds=21
 
-
-
+print("Looping...")
+while gLooping==1:
+    print(".", cnt*delaySeconds)
+    fn_printUdateTime()
+    time.sleep(delaySeconds)
+    cnt += 1
+    if(cnt*delaySeconds > maxSeconds ):
+        gLooping=0
 
 
 

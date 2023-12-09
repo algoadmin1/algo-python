@@ -6,7 +6,6 @@ import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
 import requests
-import time
 
 # Define the symbol
 symbol_default = "AAPL"
@@ -18,20 +17,6 @@ def fn_GetPauseInputFromUser(jbstr="Press Enter to Continue:"):
 
 
 print("\nWelcome to the Algo Investor Options Bot.\n\n")
-
-# on mac: open Terminal, > pwd
-# on mac: > cd _dev/Projects/algo-python
-
-# Initialize the timer
-start_time = time.time()
-print("time=",start_time)
-
-
-
-
-
-
-
 
 print("\nReaching out to the Algo Investor Server (https://algoinvestorr.com), one moment please...")
 
@@ -89,7 +74,7 @@ print("\n\n"+symbol+"'s options expiration dates:",options)
 print("\nThese are the available expiration dates for",symbol,"...\n")
 
 # options Expiry
-expdate_date = "2024-02-16"
+expdate_date = "2024-03-15"
 print("\nEnter options ExpirationDate desired (", expdate_date , "): ")
 input0 = input()
 if input0 == "":
