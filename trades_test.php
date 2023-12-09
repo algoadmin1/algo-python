@@ -1,6 +1,6 @@
 <?php
 
-
+/*
 echo "Bravo Charlie Alpha, over???!?\n";
 
 echo "Copy that, B*tch, this is the https://algoinvestorr.com server tawlkin' !\n\n\n";
@@ -32,6 +32,10 @@ echo  "=\n";
 echo  "===================================================\n";
 echo  "=\n";
 echo  "=\n";
+*/
+$t=time();
+echo($t . "<br>");
+echo("serverPing DateTime,". date("Y-m-d",$t). "A,B,C,D,E" );
 
 echo "trade1,2023-12-08T10:01:00,AAPL,buyLimitAt,192.50,100,gtc_2024-03-15,buySignal";
 echo  "\n";

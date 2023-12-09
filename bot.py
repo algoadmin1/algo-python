@@ -10,7 +10,10 @@ import time
 
 # Define the symbol
 symbol_default = "AAPL"
- 
+tradesqueuedFn ="https://algoinvestorr.com/trades/tradesqueued.php"
+
+############################################################################ FUNCTIONS START
+
 def fn_GetPauseInputFromUser(jbstr="Press Enter to Continue:"):
     tmpstr="\n"+jbstr
     print(tmpstr)
@@ -20,8 +23,18 @@ def fn_printUdateTime():
     current_time_unix = time.strftime('%s', time.localtime())
     print("Current date and time in Unix format:", current_time_unix)
 
-    
+def fn_PollServerForTradeCMDs():
+    #print("\nConnecting to the Algo Investor Server...")
+    #x = requests.get('https://algoinvestorr.com/trades/trades_test.php')
+    x = requests.get(tradesqueuedFn)
+    print("\n",x.text)
+    #fn_printUdateTime() 
 
+#def fn_abc():
+    #
+
+    
+############################################################################ CODE START
 
 print("\nWelcome to the Algo Investor Options Bot.\n\n")
 
@@ -30,19 +43,22 @@ print("\nWelcome to the Algo Investor Options Bot.\n\n")
 
 # Initialize the timer
 start_time = time.time()
-print("time=",start_time)
-fn_printUdateTime() 
+#print("time=",start_time)
+#fn_printUdateTime() 
 
-delaySeconds = 3
+print("\nConnecting to the Algo Investor Server...")
+
+delaySeconds = 5
 gLooping = 1
 cnt =0
-maxSeconds=21
-
-print("Looping...")
+maxSeconds=120
+   
+print("\nEntering the Algo Investor Bot's Trade Loop for", maxSeconds ,"seconds, polling every", delaySeconds,"secs...")
 while gLooping==1:
-    print(".", cnt*delaySeconds)
-    fn_printUdateTime()
+    #print(".", cnt*delaySeconds)
+    #fn_printUdateTime()
     time.sleep(delaySeconds)
+    fn_PollServerForTradeCMDs()
     cnt += 1
     if(cnt*delaySeconds > maxSeconds ):
         gLooping=0
@@ -50,19 +66,16 @@ while gLooping==1:
 
 
 
-print("\nReaching out to the Algo Investor Server (https://algoinvestorr.com), one moment please...")
-
-x = requests.get('https://algoinvestorr.com/trades/trades_test.php')
-fn_GetPauseInputFromUser("Press Enter to see the trades_test.php contents from http server: ")
-print("\nx.text (from php executable)=",x.text)
-
-
-y = requests.get('https://algoinvestorr.com/trades/trades.json')
-fn_GetPauseInputFromUser("Press Enter to see the trades.json contents from http server: ")
-print("\ny.text= (from static .json)", y.text)
+# print("\nReaching out to the Algo Investor Server (https://algoinvestorr.com), one moment please...")
+# x = requests.get('https://algoinvestorr.com/trades/trades_test.php')
+# fn_GetPauseInputFromUser("Press Enter to see the trades_test.php contents from http server: ")
+# print("\nx.text (from php executable)=",x.text)
 
 
-fn_GetPauseInputFromUser();
+# y = requests.get('https://algoinvestorr.com/trades/trades.json')
+# fn_GetPauseInputFromUser("Press Enter to see the trades.json contents from http server: ")
+# print("\ny.text= (from static .json)", y.text)
+# fn_GetPauseInputFromUser();
 
 
 
@@ -84,20 +97,24 @@ if symbol == "":
 tickerObj = yf.Ticker(symbol)
 #print(tickerObj.info)
 
-hist = tickerObj.history(period="max")
-#hist.head()
-print(symbol, "Header = ", hist.head())
+#hist = tickerObj.history(period="max")
+
+#print(symbol, "Header = ", hist.head())
 #note hist.actions, hist.dividends, hist.split, hist.financials, hist.balance_sheet, hist.cashflow,
 #     hist.options
 
-fn_GetPauseInputFromUser("Press Enter for Financials:")
-print(tickerObj.financials)
 
-fn_GetPauseInputFromUser("Press Enter for Balance Sheet:")
-print(tickerObj.balance_sheet)
 
-fn_GetPauseInputFromUser("Press Enter for Cashflow:")
-print(tickerObj.cashflow)
+# fn_GetPauseInputFromUser("Press Enter for Financials:")
+# print(tickerObj.financials)
+
+# fn_GetPauseInputFromUser("Press Enter for Balance Sheet:")
+# print(tickerObj.balance_sheet)
+
+# fn_GetPauseInputFromUser("Press Enter for Cashflow:")
+# print(tickerObj.cashflow)
+
+
 
 # Get the options data
 options = tickerObj.options
