@@ -11,6 +11,8 @@ import time
 # Define the symbol
 symbol_default = "AAPL"
 tradesqueuedFn ="https://algoinvestorr.com/trades/tradesqueued.php"
+fname_log ="tradeslog.txt"
+
 
 ############################################################################ FUNCTIONS START
 
@@ -28,6 +30,10 @@ def fn_PollServerForTradeCMDs():
     #x = requests.get('https://algoinvestorr.com/trades/trades_test.php')
     x = requests.get(tradesqueuedFn)
     print("\n",x.text)
+    
+    f = open(fname_log, "a")
+    f.write(x.text)
+    f.close()
     #fn_printUdateTime() 
 
 #def fn_abc():
@@ -65,6 +71,7 @@ while gLooping==1:
     txt = "\nMinutes remaining in polling loop: {:.2f} minutes"+ "  ("+ str(secsleft)+ " secs)"
     print(txt.format(secsleft/60, ','))
 
+  
     #print("\nMinutes remaining in polling loop:",secsleft/60,"  (",secsleft," seconds)")
     if(cnt*delaySeconds > maxSeconds ):
         gLooping=0
