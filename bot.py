@@ -60,6 +60,12 @@ while gLooping==1:
     time.sleep(delaySeconds)
     fn_PollServerForTradeCMDs()
     cnt += 1
+    secsleft=maxSeconds - cnt*delaySeconds
+
+    txt = "\nMinutes remaining in polling loop: {:.2f} minutes"+ "  ("+ str(secsleft)+ " secs)"
+    print(txt.format(secsleft/60, ','))
+
+    #print("\nMinutes remaining in polling loop:",secsleft/60,"  (",secsleft," seconds)")
     if(cnt*delaySeconds > maxSeconds ):
         gLooping=0
 
