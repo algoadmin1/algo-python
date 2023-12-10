@@ -41,28 +41,67 @@ $d1=  date("Y-m-d");
 $t12= date("h:i:sa");
 $t24= date("H:i:s");
 
+$uTimestamp = $d1. "T". $t24 ;
 
-//echo("serverPingDateTime,". date("Y-m-d",$t)."T". $t. ",A,B,C,D,E" );
-echo "\n". "server,". $d1. "T". $t24. ",SYMBOL,TRADECMD,PRICE,NUMSH,DUR,". $t12 . "_EDT\n";
-
+//echo "\n". "server,". $uTimestamp. ",SYMBOL,TRADECMD,PRICE,NUMSH,DUR,". $t12 . "_EDT\n";
+ 
 $rnd = rand(1,100);
-if($rnd<20){
-    echo "trade1,2023-12-08T10:01:00,NVDA,buyLimitAt,392.50,10,gtc_2024-02-16,buySignal";
-    echo  "\n";
-}else if($rnd<40){
-    echo "trade1,2023-12-08T10:01:00,AAPL,buyLimitAt,192.50,100,gtc_2024-03-15,buySignal";
-    echo  "\n";
-    echo "trade2,2023-12-08T10:02:10,AAPL,buyLimitAt,187.25,200,gtc_2024-03-15,buySignal";
-    echo  "\n";
-}else if($rnd<60){
-    echo "trade1,2023-12-08T10:04:00,AAPL240315C190,buyToOpen,12.50,25,day,buySignal";
-    echo  "\n";
-}else if($rnd<80){
-    echo "noTRADE,2023-12-09T10:21:43,NOTRADE,nop,0.00,0,day,noTradeSignal";
-    echo  "\n";
+
+
+if($rnd<10){
+    $trade0 = array("tradeId"=>"trade99", "date"=>"2023-12-09T09:22:54", "symbol"=>"nil",
+            "tradeCmd"=>"killBot","price"=>"0.00","tradeSize"=>"0","dur"=>"nop","signalType"=>"stopTrading",
+            "reqTimestamp"=>$uTimestamp);
+    echo json_encode($trade0);
+   
+}else if($rnd<25){
+    $trade0 = array("tradeId"=>"trade11", "date"=>"2023-12-13T13:03:54", "symbol"=>"NFLX",
+           "tradeCmd"=>"sellIronCondor","price"=>"54.35","wings"=>["340","350","490","500"],"tradeSize"=>"5","dur"=>"day","signalType"=>"neutralMkt",
+           "reqTimestamp"=>$uTimestamp);
+   echo json_encode($trade0);
+    
+}else if($rnd<35){
+    $trade0 = array("tradeId"=>"trade12", "date"=>"2023-12-13T13:03:54", "symbol"=>"NFLX",
+           "tradeCmd"=>"sellCallCreditSpread","price"=>"485.50","wings"=>["490","500"],"tradeSize"=>"13","dur"=>"day","signalType"=>"bearishMkt",
+           "reqTimestamp"=>$uTimestamp);
+   echo json_encode($trade0);
+    
+}else if($rnd<45){
+    $trade0 = array("tradeId"=>"trade13", "date"=>"2023-12-13T13:03:54", "symbol"=>"AAPL",
+           "tradeCmd"=>"sellPutCreditSpread","price"=>"194.35","wings"=>["160","170"],"tradeSize"=>"17","dur"=>"day","signalType"=>"bullishMkt",
+           "reqTimestamp"=>$uTimestamp);
+   echo json_encode($trade0);
+    
+}else if($rnd<55){
+    $trade0 = array("tradeId"=>"trade5", "date"=>"2023-12-08T09:22:54", "symbol"=>"ESTY",
+           "tradeCmd"=>"buyStop","price"=>"54.35","tradeSize"=>"400","dur"=>"gtc","signalType"=>"buySignal",
+           "reqTimestamp"=>$uTimestamp);
+   echo json_encode($trade0);
+    
+}else if($rnd<65){
+    $trade0 = array("tradeId"=>"trade3", "date"=>"2023-12-09T09:22:54", "symbol"=>"GS240315C230",
+            "tradeCmd"=>"buyToOpen","price"=>"34.50","tradeSize"=>"4","dur"=>"day","signalType"=>"buySignal",
+            "reqTimestamp"=>$uTimestamp);
+    echo json_encode($trade0);
+   
+}else if($rnd<75){
+    $trade0 = array("tradeId"=>"trade13", "date"=>"2023-12-14T13:03:54", "symbol"=>"AAPL",
+           "tradeCmd"=>"buyButterfly","price"=>"194.35","wings"=>["192.50","195","197.50"],"tradeSize"=>"6","dur"=>"day","signalType"=>"neutralMkt",
+           "reqTimestamp"=>$uTimestamp);
+   echo json_encode($trade0);
+    
+}else if($rnd<90){
+    $trade0 = array("tradeId"=>"trade2", "date"=>"2023-12-10T12:21:43", "symbol"=>"AMZN240315C130",
+            "tradeCmd"=>"buyToOpen","price"=>"14.50","tradeSize"=>"12","dur"=>"day","signalType"=>"buySignal",
+            "reqTimestamp"=>$uTimestamp);
+    echo json_encode($trade0);
+   
 }else{
-    echo "trade1,2023-12-09T10:21:43,TSLA240315C230,buyToOpen,24.25,5,day,buySignal";
-    echo  "\n";
+    $trade0 = array("tradeId"=>"trade1", "date"=>"2023-12-09T10:21:43", "symbol"=>"TSLA240315C230",
+            "tradeCmd"=>"buyToOpen","price"=>"24.50","tradeSize"=>"5","dur"=>"day","signalType"=>"buySignal",
+            "reqTimestamp"=>$uTimestamp);
+    echo json_encode($trade0);
+   
 }
 
 

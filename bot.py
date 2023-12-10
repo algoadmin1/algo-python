@@ -7,6 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import requests
 import time
+import json
 
 # Define the symbol
 symbol_default = "AAPL"
@@ -29,11 +30,27 @@ def fn_PollServerForTradeCMDs():
     #print("\nConnecting to the Algo Investor Server...")
     #x = requests.get('https://algoinvestorr.com/trades/trades_test.php')
     x = requests.get(tradesqueuedFn)
-    print("\n",x.text)
+    x1="'"+ x.text +"'"
+    print("\nDownloaded json:",x1 )
+    y = json.loads(x.text)
+    #print("\n",y)
+    #print("\n",y["reqTimestamp"]," > TRADE_CMD: ",y["tradeCmd"], y["symbol"], "reason:",y["signalType"] )
     
+    if y["tradeCmd"] == "sellIronCondor" or y["tradeCmd"] == "buyButterfly" or y["tradeCmd"] == "sellCallCreditSpread" or y["tradeCmd"] == "sellPutCreditSpread":
+        print("\n",y["reqTimestamp"]," > TRADE_CMD: ",y["symbol"],y["tradeCmd"], y["wings"], "reason:",y["signalType"] )
+    else:
+        print("\n",y["reqTimestamp"]," > TRADE_CMD: ",y["symbol"],y["tradeCmd"], "reason:",y["signalType"] )
+     
+    if y["tradeCmd"] == "killBot":
+        print("\nKILLING TRADING BOT. EXITING...")
+        exit()
+    print("\n")
+
     f = open(fname_log, "a")
-    f.write(x.text)
+    current_time_unix = time.strftime('%s', time.localtime())
+    f.write("\n"+current_time_unix+": "+x.text)
     f.close()
+    
     #fn_printUdateTime() 
 
 #def fn_abc():
@@ -42,7 +59,7 @@ def fn_PollServerForTradeCMDs():
     
 ############################################################################ CODE START
 
-print("\nWelcome to the Algo Investor Options Bot.\n\n")
+print("\nWelcome to the Algo Investor Stock and Options Trading Bot!\n")
 
 # on mac: open Terminal, > pwd
 # on mac: > cd _dev/Projects/algo-python
@@ -175,3 +192,28 @@ for option_date in options:
 # plt.legend()
 # plt.grid()
 # plt.show()
+
+questions = [
+    {
+        "question": "What is the tallest being in existence?",
+        "options": [
+            "Is it A, Dinosaur?",
+            "B, The one and only, Giraffe",
+            "C,The soul of the ocean Whale",
+            "or D, None"
+        ],
+        "correctOption": "a",
+        "prize": 100_000
+    },
+    {
+        "question": "Which famous inventor was born in 1856?",
+        "options": [
+            "A Einstein",
+            "B, Tesla",
+            "C, Napoleon",
+            "D, Newton"
+        ],
+        "correctOption": "b",
+        "prize": 100_000
+    }
+]

@@ -1,65 +1,90 @@
-
-server,2023-12-09T15:37:35,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:37:35pm_EDT
-trade1,2023-12-08T10:01:00,AAPL,buyLimitAt,192.50,100,gtc_2024-03-15,buySignal
-trade2,2023-12-08T10:02:10,AAPL,buyLimitAt,187.25,200,gtc_2024-03-15,buySignal
-
-server,2023-12-09T15:37:40,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:37:40pm_EDT
-trade1,2023-12-08T10:01:00,NVDA,buyLimitAt,392.50,10,gtc_2024-02-16,buySignal
-
-server,2023-12-09T15:37:45,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:37:45pm_EDT
-trade1,2023-12-08T10:04:00,AAPL240315C190,buyToOpen,12.50,25,day,buySignal
-
-server,2023-12-09T15:37:51,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:37:51pm_EDT
-trade1,2023-12-08T10:01:00,NVDA,buyLimitAt,392.50,10,gtc_2024-02-16,buySignal
-
-server,2023-12-09T15:37:56,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:37:56pm_EDT
-trade1,2023-12-08T10:04:00,AAPL240315C190,buyToOpen,12.50,25,day,buySignal
-
-server,2023-12-09T15:38:01,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:38:01pm_EDT
-trade1,2023-12-09T10:21:43,TSLA240315C230,buyToOpen,24.25,5,day,buySignal
-
-server,2023-12-09T15:38:06,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:38:06pm_EDT
-trade1,2023-12-08T10:01:00,AAPL,buyLimitAt,192.50,100,gtc_2024-03-15,buySignal
-trade2,2023-12-08T10:02:10,AAPL,buyLimitAt,187.25,200,gtc_2024-03-15,buySignal
-
-server,2023-12-09T15:38:11,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:38:11pm_EDT
-trade1,2023-12-08T10:04:00,AAPL240315C190,buyToOpen,12.50,25,day,buySignal
-
-server,2023-12-09T15:38:16,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:38:16pm_EDT
-trade1,2023-12-09T10:21:43,TSLA240315C230,buyToOpen,24.25,5,day,buySignal
-
-server,2023-12-09T15:38:21,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:38:21pm_EDT
-trade1,2023-12-08T10:04:00,AAPL240315C190,buyToOpen,12.50,25,day,buySignal
-
-server,2023-12-09T15:38:27,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:38:27pm_EDT
-noTRADE,2023-12-09T10:21:43,NOTRADE,nop,0.00,0,day,noTradeSignal
-
-server,2023-12-09T15:38:32,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:38:32pm_EDT
-trade1,2023-12-08T10:04:00,AAPL240315C190,buyToOpen,12.50,25,day,buySignal
-
-server,2023-12-09T15:38:37,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:38:37pm_EDT
-noTRADE,2023-12-09T10:21:43,NOTRADE,nop,0.00,0,day,noTradeSignal
-
-server,2023-12-09T15:38:42,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:38:42pm_EDT
-trade1,2023-12-08T10:01:00,AAPL,buyLimitAt,192.50,100,gtc_2024-03-15,buySignal
-trade2,2023-12-08T10:02:10,AAPL,buyLimitAt,187.25,200,gtc_2024-03-15,buySignal
-
-server,2023-12-09T15:38:47,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:38:47pm_EDT
-trade1,2023-12-08T10:01:00,AAPL,buyLimitAt,192.50,100,gtc_2024-03-15,buySignal
-trade2,2023-12-08T10:02:10,AAPL,buyLimitAt,187.25,200,gtc_2024-03-15,buySignal
-
-server,2023-12-09T15:38:53,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:38:53pm_EDT
-trade1,2023-12-09T10:21:43,TSLA240315C230,buyToOpen,24.25,5,day,buySignal
-
-server,2023-12-09T15:38:58,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:38:58pm_EDT
-trade1,2023-12-09T10:21:43,TSLA240315C230,buyToOpen,24.25,5,day,buySignal
-
-server,2023-12-09T15:39:03,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:39:03pm_EDT
-trade1,2023-12-08T10:04:00,AAPL240315C190,buyToOpen,12.50,25,day,buySignal
-
-server,2023-12-09T15:39:08,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:39:08pm_EDT
-trade1,2023-12-08T10:01:00,AAPL,buyLimitAt,192.50,100,gtc_2024-03-15,buySignal
-trade2,2023-12-08T10:02:10,AAPL,buyLimitAt,187.25,200,gtc_2024-03-15,buySignal
-
-server,2023-12-09T15:39:13,SYMBOL,TRADECMD,PRICE,NUMSH,DUR,03:39:13pm_EDT
-trade1,2023-12-08T10:01:00,NVDA,buyLimitAt,392.50,10,gtc_2024-02-16,buySignal
+1702220346: {"tradeID":"trade5","date":"2023-12-08T09:22:54","symbol":"ESTY","tradeCmd":"buyStop","price":"54.35","tradeSize":"400","dur":"gtc","signalType":"buySignal","reqTimestamp":"2023-12-10T09:59:06"}
+1702220352: {"tradeID":"trade5","date":"2023-12-08T09:22:54","symbol":"ESTY","tradeCmd":"buyStop","price":"54.35","tradeSize":"400","dur":"gtc","signalType":"buySignal","reqTimestamp":"2023-12-10T09:59:12"}
+1702220357: {"tradeID":"trade1","date":"2023-12-09T10:21:43","symbol":"TSLA240315C230","tradeCmd":"buyToOpen","price":"24.50","tradeSize":"5","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T09:59:17"}
+1702220362: {"tradeID":"trade99","date":"2023-12-09T09:22:54","symbol":"nil","tradeCmd":"killBot","price":"0.00","tradeSize":"0","dur":"nop","signalType":"stopTrading","reqTimestamp":"2023-12-10T09:59:22"}
+1702220367: {"tradeID":"trade3","date":"2023-12-09T09:22:54","symbol":"GS240315C230","tradeCmd":"buyToOpen","price":"34.50","tradeSize":"4","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T09:59:27"}
+1702220372: {"tradeID":"trade5","date":"2023-12-08T09:22:54","symbol":"ESTY","tradeCmd":"buyStop","price":"54.35","tradeSize":"400","dur":"gtc","signalType":"buySignal","reqTimestamp":"2023-12-10T09:59:32"}
+1702220378: {"tradeID":"trade5","date":"2023-12-08T09:22:54","symbol":"ESTY","tradeCmd":"buyStop","price":"54.35","tradeSize":"400","dur":"gtc","signalType":"buySignal","reqTimestamp":"2023-12-10T09:59:38"}
+1702221050: {"tradeID":"trade5","date":"2023-12-08T09:22:54","symbol":"ESTY","tradeCmd":"buyStop","price":"54.35","tradeSize":"400","dur":"gtc","signalType":"buySignal","reqTimestamp":"2023-12-10T10:10:50"}
+1702221067: {"tradeID":"trade5","date":"2023-12-08T09:22:54","symbol":"ESTY","tradeCmd":"buyStop","price":"54.35","tradeSize":"400","dur":"gtc","signalType":"buySignal","reqTimestamp":"2023-12-10T10:11:07"}
+1702221073: {"tradeID":"trade1","date":"2023-12-09T10:21:43","symbol":"TSLA240315C230","tradeCmd":"buyToOpen","price":"24.50","tradeSize":"5","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:11:13"}
+1702221078: {"tradeID":"trade1","date":"2023-12-09T10:21:43","symbol":"TSLA240315C230","tradeCmd":"buyToOpen","price":"24.50","tradeSize":"5","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:11:18"}
+1702221083: {"tradeID":"trade3","date":"2023-12-09T09:22:54","symbol":"GS240315C230","tradeCmd":"buyToOpen","price":"34.50","tradeSize":"4","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:11:23"}
+1702221394: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"10","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:16:35"}
+1702221400: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"10","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:16:40"}
+1702221405: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"10","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:16:45"}
+1702221844: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:24:04"}
+1702221849: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:24:09"}
+1702221854: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:24:14"}
+1702221859: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:24:20"}
+1702221865: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:24:25"}
+1702221870: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:24:30"}
+1702221875: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:24:35"}
+1702221880: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:24:40"}
+1702221885: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:24:45"}
+1702221891: {"tradeId":"trade2","date":"2023-12-10T12:21:43","symbol":"AMZN240315C130","tradeCmd":"buyToOpen","price":"14.50","tradeSize":"12","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:24:51"}
+1702221904: {"tradeId":"trade13","date":"2023-12-13T13:03:54","symbol":"AAPL","tradeCmd":"sellPutCreditSpread","price":"194.35","wings":["160","170"],"tradeSize":"17","dur":"day","signalType":"bullishMkt","reqTimestamp":"2023-12-10T10:25:04"}
+1702221909: {"tradeId":"trade3","date":"2023-12-09T09:22:54","symbol":"GS240315C230","tradeCmd":"buyToOpen","price":"34.50","tradeSize":"4","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:25:09"}
+1702221914: {"tradeId":"trade13","date":"2023-12-13T13:03:54","symbol":"AAPL","tradeCmd":"sellPutCreditSpread","price":"194.35","wings":["160","170"],"tradeSize":"17","dur":"day","signalType":"bullishMkt","reqTimestamp":"2023-12-10T10:25:14"}
+1702221919: {"tradeId":"trade2","date":"2023-12-10T12:21:43","symbol":"AMZN240315C130","tradeCmd":"buyToOpen","price":"14.50","tradeSize":"12","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:25:19"}
+1702221924: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:25:24"}
+1702221930: {"tradeId":"trade2","date":"2023-12-10T12:21:43","symbol":"AMZN240315C130","tradeCmd":"buyToOpen","price":"14.50","tradeSize":"12","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:25:30"}
+1702221935: {"tradeId":"trade2","date":"2023-12-10T12:21:43","symbol":"AMZN240315C130","tradeCmd":"buyToOpen","price":"14.50","tradeSize":"12","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:25:35"}
+1702221940: {"tradeId":"trade13","date":"2023-12-13T13:03:54","symbol":"AAPL","tradeCmd":"sellPutCreditSpread","price":"194.35","wings":["160","170"],"tradeSize":"17","dur":"day","signalType":"bullishMkt","reqTimestamp":"2023-12-10T10:25:40"}
+1702221945: {"tradeId":"trade5","date":"2023-12-08T09:22:54","symbol":"ESTY","tradeCmd":"buyStop","price":"54.35","tradeSize":"400","dur":"gtc","signalType":"buySignal","reqTimestamp":"2023-12-10T10:25:45"}
+1702221950: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:25:50"}
+1702221955: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:25:55"}
+1702221961: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:26:01"}
+1702221966: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:26:06"}
+1702221971: {"tradeId":"trade13","date":"2023-12-13T13:03:54","symbol":"AAPL","tradeCmd":"sellPutCreditSpread","price":"194.35","wings":["160","170"],"tradeSize":"17","dur":"day","signalType":"bullishMkt","reqTimestamp":"2023-12-10T10:26:11"}
+1702221976: {"tradeId":"trade13","date":"2023-12-14T13:03:54","symbol":"AAPL","tradeCmd":"buyButterfly","price":"194.35","wings":["192.50","195","197.50"],"tradeSize":"6","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:26:16"}
+1702221981: {"tradeId":"trade13","date":"2023-12-13T13:03:54","symbol":"AAPL","tradeCmd":"sellPutCreditSpread","price":"194.35","wings":["160","170"],"tradeSize":"17","dur":"day","signalType":"bullishMkt","reqTimestamp":"2023-12-10T10:26:21"}
+1702221986: {"tradeId":"trade3","date":"2023-12-09T09:22:54","symbol":"GS240315C230","tradeCmd":"buyToOpen","price":"34.50","tradeSize":"4","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:26:26"}
+1702221992: {"tradeId":"trade13","date":"2023-12-13T13:03:54","symbol":"AAPL","tradeCmd":"sellPutCreditSpread","price":"194.35","wings":["160","170"],"tradeSize":"17","dur":"day","signalType":"bullishMkt","reqTimestamp":"2023-12-10T10:26:32"}
+1702221997: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:26:37"}
+1702222002: {"tradeId":"trade1","date":"2023-12-09T10:21:43","symbol":"TSLA240315C230","tradeCmd":"buyToOpen","price":"24.50","tradeSize":"5","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:26:42"}
+1702222007: {"tradeId":"trade1","date":"2023-12-09T10:21:43","symbol":"TSLA240315C230","tradeCmd":"buyToOpen","price":"24.50","tradeSize":"5","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:26:47"}
+1702222012: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:26:52"}
+1702222018: {"tradeId":"trade13","date":"2023-12-13T13:03:54","symbol":"AAPL","tradeCmd":"sellPutCreditSpread","price":"194.35","wings":["160","170"],"tradeSize":"17","dur":"day","signalType":"bullishMkt","reqTimestamp":"2023-12-10T10:26:58"}
+1702222023: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:27:03"}
+1702222028: {"tradeId":"trade13","date":"2023-12-13T13:03:54","symbol":"AAPL","tradeCmd":"sellPutCreditSpread","price":"194.35","wings":["160","170"],"tradeSize":"17","dur":"day","signalType":"bullishMkt","reqTimestamp":"2023-12-10T10:27:08"}
+1702222063: {"tradeId":"trade2","date":"2023-12-10T12:21:43","symbol":"AMZN240315C130","tradeCmd":"buyToOpen","price":"14.50","tradeSize":"12","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:27:43"}
+1702222068: {"tradeId":"trade1","date":"2023-12-09T10:21:43","symbol":"TSLA240315C230","tradeCmd":"buyToOpen","price":"24.50","tradeSize":"5","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:27:48"}
+1702222098: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:28:18"}
+1702222159: {"tradeId":"trade13","date":"2023-12-14T13:03:54","symbol":"AAPL","tradeCmd":"buyButterfly","price":"194.35","wings":["192.50","195","197.50"],"tradeSize":"6","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:29:19"}
+1702222164: {"tradeId":"trade5","date":"2023-12-08T09:22:54","symbol":"ESTY","tradeCmd":"buyStop","price":"54.35","tradeSize":"400","dur":"gtc","signalType":"buySignal","reqTimestamp":"2023-12-10T10:29:24"}
+1702222169: {"tradeId":"trade13","date":"2023-12-14T13:03:54","symbol":"AAPL","tradeCmd":"buyButterfly","price":"194.35","wings":["192.50","195","197.50"],"tradeSize":"6","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:29:29"}
+1702222174: {"tradeId":"trade2","date":"2023-12-10T12:21:43","symbol":"AMZN240315C130","tradeCmd":"buyToOpen","price":"14.50","tradeSize":"12","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:29:35"}
+1702222180: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:29:40"}
+1702222185: {"tradeId":"trade2","date":"2023-12-10T12:21:43","symbol":"AMZN240315C130","tradeCmd":"buyToOpen","price":"14.50","tradeSize":"12","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:29:45"}
+1702222190: {"tradeId":"trade3","date":"2023-12-09T09:22:54","symbol":"GS240315C230","tradeCmd":"buyToOpen","price":"34.50","tradeSize":"4","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:29:50"}
+1702222195: {"tradeId":"trade2","date":"2023-12-10T12:21:43","symbol":"AMZN240315C130","tradeCmd":"buyToOpen","price":"14.50","tradeSize":"12","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:29:55"}
+1702222200: {"tradeId":"trade13","date":"2023-12-14T13:03:54","symbol":"AAPL","tradeCmd":"buyButterfly","price":"194.35","wings":["192.50","195","197.50"],"tradeSize":"6","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:30:00"}
+1702222205: {"tradeId":"trade13","date":"2023-12-14T13:03:54","symbol":"AAPL","tradeCmd":"buyButterfly","price":"194.35","wings":["192.50","195","197.50"],"tradeSize":"6","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:30:06"}
+1702222211: {"tradeId":"trade1","date":"2023-12-09T10:21:43","symbol":"TSLA240315C230","tradeCmd":"buyToOpen","price":"24.50","tradeSize":"5","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:30:11"}
+1702222216: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:30:16"}
+1702222221: {"tradeId":"trade13","date":"2023-12-14T13:03:54","symbol":"AAPL","tradeCmd":"buyButterfly","price":"194.35","wings":["192.50","195","197.50"],"tradeSize":"6","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:30:21"}
+1702222226: {"tradeId":"trade13","date":"2023-12-13T13:03:54","symbol":"AAPL","tradeCmd":"sellPutCreditSpread","price":"194.35","wings":["160","170"],"tradeSize":"17","dur":"day","signalType":"bullishMkt","reqTimestamp":"2023-12-10T10:30:26"}
+1702222231: {"tradeId":"trade13","date":"2023-12-14T13:03:54","symbol":"AAPL","tradeCmd":"buyButterfly","price":"194.35","wings":["192.50","195","197.50"],"tradeSize":"6","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:30:31"}
+1702222237: {"tradeId":"trade2","date":"2023-12-10T12:21:43","symbol":"AMZN240315C130","tradeCmd":"buyToOpen","price":"14.50","tradeSize":"12","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:30:37"}
+1702222242: {"tradeId":"trade3","date":"2023-12-09T09:22:54","symbol":"GS240315C230","tradeCmd":"buyToOpen","price":"34.50","tradeSize":"4","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:30:42"}
+1702222247: {"tradeId":"trade5","date":"2023-12-08T09:22:54","symbol":"ESTY","tradeCmd":"buyStop","price":"54.35","tradeSize":"400","dur":"gtc","signalType":"buySignal","reqTimestamp":"2023-12-10T10:30:47"}
+1702222252: {"tradeId":"trade3","date":"2023-12-09T09:22:54","symbol":"GS240315C230","tradeCmd":"buyToOpen","price":"34.50","tradeSize":"4","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:30:52"}
+1702222257: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:30:57"}
+1702222263: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:31:03"}
+1702222268: {"tradeId":"trade2","date":"2023-12-10T12:21:43","symbol":"AMZN240315C130","tradeCmd":"buyToOpen","price":"14.50","tradeSize":"12","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:31:08"}
+1702222521: {"tradeId":"trade2","date":"2023-12-10T12:21:43","symbol":"AMZN240315C130","tradeCmd":"buyToOpen","price":"14.50","tradeSize":"12","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:35:21"}
+1702222526: {"tradeId":"trade5","date":"2023-12-08T09:22:54","symbol":"ESTY","tradeCmd":"buyStop","price":"54.35","tradeSize":"400","dur":"gtc","signalType":"buySignal","reqTimestamp":"2023-12-10T10:35:26"}
+1702222531: {"tradeId":"trade2","date":"2023-12-10T12:21:43","symbol":"AMZN240315C130","tradeCmd":"buyToOpen","price":"14.50","tradeSize":"12","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:35:31"}
+1702222536: {"tradeId":"trade2","date":"2023-12-10T12:21:43","symbol":"AMZN240315C130","tradeCmd":"buyToOpen","price":"14.50","tradeSize":"12","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:35:36"}
+1702222542: {"tradeId":"trade12","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellCallCreditSpread","price":"485.50","wings":["490","500"],"tradeSize":"13","dur":"day","signalType":"bearishMkt","reqTimestamp":"2023-12-10T10:35:42"}
+1702222612: {"tradeId":"trade3","date":"2023-12-09T09:22:54","symbol":"GS240315C230","tradeCmd":"buyToOpen","price":"34.50","tradeSize":"4","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:36:52"}
+1702222617: {"tradeId":"trade11","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellIronCondor","price":"54.35","wings":["340","350","490","500"],"tradeSize":"5","dur":"day","signalType":"neutralMkt","reqTimestamp":"2023-12-10T10:36:57"}
+1702222622: {"tradeId":"trade3","date":"2023-12-09T09:22:54","symbol":"GS240315C230","tradeCmd":"buyToOpen","price":"34.50","tradeSize":"4","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:37:02"}
+1702222628: {"tradeId":"trade12","date":"2023-12-13T13:03:54","symbol":"NFLX","tradeCmd":"sellCallCreditSpread","price":"485.50","wings":["490","500"],"tradeSize":"13","dur":"day","signalType":"bearishMkt","reqTimestamp":"2023-12-10T10:37:08"}
+1702222633: {"tradeId":"trade2","date":"2023-12-10T12:21:43","symbol":"AMZN240315C130","tradeCmd":"buyToOpen","price":"14.50","tradeSize":"12","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:37:13"}
+1702222697: {"tradeId":"trade13","date":"2023-12-13T13:03:54","symbol":"AAPL","tradeCmd":"sellPutCreditSpread","price":"194.35","wings":["160","170"],"tradeSize":"17","dur":"day","signalType":"bullishMkt","reqTimestamp":"2023-12-10T10:38:17"}
+1702222702: {"tradeId":"trade13","date":"2023-12-13T13:03:54","symbol":"AAPL","tradeCmd":"sellPutCreditSpread","price":"194.35","wings":["160","170"],"tradeSize":"17","dur":"day","signalType":"bullishMkt","reqTimestamp":"2023-12-10T10:38:22"}
+1702222707: {"tradeId":"trade1","date":"2023-12-09T10:21:43","symbol":"TSLA240315C230","tradeCmd":"buyToOpen","price":"24.50","tradeSize":"5","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:38:27"}
+1702222713: {"tradeId":"trade1","date":"2023-12-09T10:21:43","symbol":"TSLA240315C230","tradeCmd":"buyToOpen","price":"24.50","tradeSize":"5","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:38:33"}
+1702222718: {"tradeId":"trade3","date":"2023-12-09T09:22:54","symbol":"GS240315C230","tradeCmd":"buyToOpen","price":"34.50","tradeSize":"4","dur":"day","signalType":"buySignal","reqTimestamp":"2023-12-10T10:38:38"}
