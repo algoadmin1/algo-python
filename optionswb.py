@@ -52,6 +52,11 @@ if input0 == "":
 expdate_dateSelected = input0
 print("\nSelected Options ExpirationDate is:", expdate_dateSelected)
 
+
+#stock_info = tickerObj.info
+#print(symbol.upper(),"'s Current Price: ",stock_info) #['regularMarketPrice']  )
+
+
 # Print the options chain
 print("\n\nOptions Chain for", symbol)
 for option_date in options:
