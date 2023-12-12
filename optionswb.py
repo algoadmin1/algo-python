@@ -8,15 +8,19 @@ import matplotlib.pyplot as plt
 
 # Define the symbol
 symbol_default = "AAPL"
- 
+currstr="$"
 
-def PrintStrike(optionCallOrPuts, a):
-    print(optionCallOrPuts.contractSymbol[a])
-    print(optionCallOrPuts.strike[a])
-    print(optionCallOrPuts.lastPrice[a])
-    print(optionCallOrPuts.bid[a])
-    print(optionCallOrPuts.ask[a])
-    print(optionCallOrPuts.inTheMoney[a])
+def PrintStrike(optionCallOrPuts, a,descstr):
+    print(descstr)
+    print("Contract Symbol=",optionCallOrPuts.contractSymbol[a])
+    print("Strike         ="+currstr,optionCallOrPuts.strike[a])
+    print("Last Trade Date=",optionCallOrPuts.lastTradeDate[a])
+    print("Last Price     ="+currstr,optionCallOrPuts.lastPrice[a])
+    print("Bid            ="+currstr,optionCallOrPuts.bid[a])
+    print("Ask            ="+currstr,optionCallOrPuts.ask[a])
+    print("Implied Vol.   =",optionCallOrPuts.impliedVolatility[a])
+    print("ITM?           =",optionCallOrPuts.inTheMoney[a])
+
 
 print("\nWelcome to optionswb.py for dataframe testing...")
 
@@ -57,17 +61,103 @@ for option_date in options:
         calls0= option_chain.calls
         puts0 = option_chain.puts
 
-        print(calls0)
-        print("Calls data for [1]:")
-            
-        a=1
-        PrintStrike(calls0, a)
+
+       
+##################################### find otm/itm for CALLS
+        callsITM=0
+        callsOTM=0
+
+        i=0 
+        df = pd.DataFrame(calls0)
+        max_rows = df.shape[0]
+        print(" max_rows =",max_rows)
+        keepsearching=1
+        while i<max_rows and keepsearching==1:
+            print(i," ",calls0.contractSymbol[i], calls0.inTheMoney[i])
+            if( str(calls0.inTheMoney[i])=="False"):
+                print("Found the CALLs ITM/OTM at: ",i-1," / ",i)
+                callsOTM=i
+                callsITM=i-1
+                keepsearching=0
+            i += 1 
+        
+        print(symbol.upper(),": CALLS ITM=",callsITM, " OTM=",callsOTM)
+
+        a=callsITM
+        print("\nCalls ITM for [",a,"]:")
+        cpstr=symbol.upper()+"'s Calls Expiring: "+option_date
+        PrintStrike(calls0, a, cpstr)  
+        
+        a=callsOTM
+        print("\nCalls OTM for [",a,"]:")
+        cpstr=symbol.upper()+"'s Calls Expiring: "+option_date
+        PrintStrike(calls0, a, cpstr)
+
+
+
+
+
+
+##################################### find otm/itm for PUTS
+        putsITM=0
+        putsOTM=0
+
+        i=0 
+        df = pd.DataFrame(puts0)
+        max_rows = df.shape[0]
+        print(" max_rows =",max_rows)
+        keepsearching=1
+        while i<max_rows and keepsearching==1:
+            print(i," ",puts0.contractSymbol[i], puts0.inTheMoney[i])
+            if( str(puts0.inTheMoney[i])=="True"):
+                print("Found the PUTs OTM/ITM at: ",i-1," / ",i)
+                putsITM=i
+                putsOTM=i-1
+                keepsearching=0
+            i += 1
+
+        print(symbol.upper(),": PUTS ITM=",putsITM, " OTM=",putsOTM)
+
+
+
+        a=putsITM
+        print("\nPuts  data for [",a,"]:")
+        cpstr=symbol.upper()+"'s Puts Expiring: "+option_date
+        PrintStrike(puts0, a, cpstr)
+
+        a=putsOTM
+        print("\nPuts  data for [",a,"]:")
+        cpstr=symbol.upper()+"'s Puts Expiring: "+option_date
+        PrintStrike(puts0, a, cpstr)
+
+
+
          
-        #  contractSymbol lastTradeDate  strike  lastPrice    bid   ask  change  percentChange  
-        #  volume  openInterest  impliedVolatility  inTheMoney contractSize currency
+
+        print("\n\n\n\n")
+        print("CALLS:")
+        print(calls0)
+
+        print("PUTS:")
         print(puts0)
 
-        print("\n")
+
+        #  contractSymbol lastTradeDate  strike  lastPrice    bid   ask  change  percentChange  
+        #  volume  openInterest  impliedVolatility  inTheMoney contractSize currency
+       
+        print("\n\n\n END OF DATAFRAME ANALYSIS.")
+
+
+
+
+
+
+
+# END OF PROGRAM
+
+
+
+
 
 
 
