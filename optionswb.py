@@ -10,7 +10,15 @@ import matplotlib.pyplot as plt
 symbol_default = "AAPL"
  
 
-print("\nGIT HUB INSTALLLED")
+def PrintStrike(optionCallOrPuts, a):
+    print(optionCallOrPuts.contractSymbol[a])
+    print(optionCallOrPuts.strike[a])
+    print(optionCallOrPuts.lastPrice[a])
+    print(optionCallOrPuts.bid[a])
+    print(optionCallOrPuts.ask[a])
+    print(optionCallOrPuts.inTheMoney[a])
+
+print("\nWelcome to optionswb.py for dataframe testing...")
 
 print("\nEnter Symbol (", symbol_default , ")")
 symbol = input()
@@ -46,7 +54,19 @@ for option_date in options:
     if option_date==expdate_dateSelected:
         option_chain = tickerObj.option_chain(option_date)
         print("\nExpiration Date:", option_date)
-        print(option_chain)
+        calls0= option_chain.calls
+        puts0 = option_chain.puts
+
+        print(calls0)
+        print("Calls data for [1]:")
+            
+        a=1
+        PrintStrike(calls0, a)
+         
+        #  contractSymbol lastTradeDate  strike  lastPrice    bid   ask  change  percentChange  
+        #  volume  openInterest  impliedVolatility  inTheMoney contractSize currency
+        print(puts0)
+
         print("\n")
 
 

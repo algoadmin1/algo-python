@@ -19,3 +19,18 @@ print(dict_from_df)
 # chatGPT's response
 # Certainly! In Python, you can use the to_dict() method available in pandas to convert a DataFrame to a Python dictionary. Here's an example:
 # The to_dict() method with the argument orient='records' creates a list of dictionaries where each dictionary represents a row in the DataFrame. There are other orient options ('dict', 'list', 'series', etc.) available in to_dict() to suit different requirements for dictionary transformation.
+
+
+
+
+
+# JB RnD
+# from yahoo_fin import options
+# import pandas as pd
+
+# data = options.get_options_chain("XOM")
+
+# access dict by key
+# calls = data['calls']
+# puts = data['puts']
+
