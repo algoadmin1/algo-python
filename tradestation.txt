@@ -1,0 +1,2935 @@
+# tradestation.txt
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.02
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.02
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.02
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.02
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.02
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.03
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.02
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.03
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.03
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.03
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.03
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.03
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.02
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.02
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.03
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.02
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.04
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.06
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.07
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.05
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.05
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.03
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.05
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.03
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.04
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.04
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.04
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.03
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.04
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.03
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.04
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.04
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.02
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.02
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.03
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.04
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.03
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.01
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.02
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 237.00
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.99
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.98
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.80, 237.12, 236.38, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.95, 236.95, 236.95
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.95, 236.95, 236.95
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.95
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.95
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.95
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.95
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.95
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.95
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.97
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.95, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.94, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.94, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.94, 236.95
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.94, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.94, 236.96
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.94, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.94, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.94, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.93, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.93, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.93, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.92, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.92, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.92, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.92, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.92, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.92, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.92, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.92, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.92, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.92, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.92, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.92, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.92, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.92, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.91, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.91, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.91, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.91, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.90, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.90, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.90, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.90, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.90, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.90, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.89, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.89, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.89, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.89, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.89, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.88, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.88, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.88, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.88, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.88, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.88, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.87, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.87, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.87, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.87, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.87, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.87, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.86, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.86, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.85, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.95
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.94
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.93
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.92
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.83, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.82, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.82, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.82, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.82, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.82, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.82, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.82, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.82, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.82, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.82, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.82, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.82, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.82, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.81, 236.81
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.80, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.80, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.80, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.80, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.80, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.80, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.80, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.80, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.79, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.78, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.78, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.78, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.78, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.78, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.77, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.77, 236.81
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.77, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.77, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.76, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.76, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.76, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.76, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.75, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.75, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.75, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.75, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.75, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.75, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.75, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.75, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.75, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.75, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.74, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.74, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.74, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.74, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.74, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.73, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.72, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.71, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.70, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.69, 236.69
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.69, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.69, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.69, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.69, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.69, 236.72
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.69, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.69, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.69, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.69, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.68
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.68
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.68
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.69
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.69
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.69
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.69
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.69
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.69
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.68
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.69
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.70
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.68
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.69
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.71
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.74
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.73
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.75
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.81
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.81
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.91
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.90
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.89
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.81
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.81
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.81
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.86
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.87
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.88
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.85
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.84
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.83
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.82
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.81
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.76
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.77
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.78
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.79
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
+
+TSLA  12/12/2023  | Open, High, Low, Close=  236.95, 236.97, 236.68, 236.80
