@@ -59,3 +59,11 @@ quantity = 1  # Specify the quantity of shares you want to sell
 order = rh.order_sell_stop_loss(stock_symbol, quantity, stop_price)
 
 print(order)  # Print the order details
+
+
+
+# asked chat to gimme the code for selling an Iron Condor...
+
+# Creating complex options strategies like an iron condor via the Robinhood API directly can be challenging due to the limitations of the Robinhood API and the inherent complexity of multi-leg options strategies. 
+# As of my last update in January 2022, the robin_stocks library doesn't directly support multi-leg options strategies like iron condors.
+# Typically, advanced options strategies like iron condors involve multiple legs and strike prices, which might require specific API endpoints or complex manipulation not directly available through the simplified robin_stocks library.
