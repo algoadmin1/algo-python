@@ -96,6 +96,8 @@ vars:
  
  DayOfWeekNum(0), JBString0("?jb"),JBudate("2023-12-13"),JBudate1("2023-12-13"),JBudate2("2023-12-13"),JBudate3("2023-12-13"),
  
+ DayOfWeekNum1(0),DayOfWeekNumStr("sun"),pivotsStrOutput("0"),priceMinusR1str("0"),priceMinusS1str("0"),
+ 
  DayOfWeekString0("?DAY"),  // today
  DayOfWeekString1("?DAY"),  // yesterday
  DayOfWeekString2("?DAY"),  // 2 days ago
@@ -117,7 +119,7 @@ vars:
  SupportColor(Green),ResistanceColor(Red), PivotColor(Blue), Avg3DayPivotColor(Yellow), // new 5.0
  JBColorPivot(cyan), JBColorMvgAvg(yellow),  // Pivot line, 3-day avg(Ps)
  JBplotW(13), JBplotWsm(.5),
- SellThreshold(3), BuyThreshold(3),
+ SellThreshold(3), BuyThreshold(3), SellThreshold2(5), BuyThreshold2(5),
  HardPivot(-1), HardS1(-1), HardR1(-1),
 
  
@@ -279,12 +281,86 @@ R3day = (Pday-S1day) + R2day;
 
 
 
+
+
+
+
+
+
+
+
+// ************************** PREP VARS for output to intradaytrades.txt
+
+
+
+
+ DayOfWeekNum1 = DayOfWeek(Date);
+ DayOfWeekNumStr ="sun";
+ Switch(DayOfWeekNum1)
+	Begin
+  		Case 0:
+   			Begin
+ 				DayOfWeekNumStr = "sun";
+ 			end;
+ 		Case 1:     
+   			Begin
+				DayOfWeekNumStr = "mon"; 
+ 			end;
+  		Case 2:     
+   			Begin
+ 				DayOfWeekNumStr = "tue";
+ 			end;
+  		Case 3:     
+   			Begin
+ 				DayOfWeekNumStr = "wed";
+ 			end;
+  		Case 4:     
+   			Begin
+				DayOfWeekNumStr = "thu"; 
+ 			end;
+  		Case 5:     
+   			Begin
+				DayOfWeekNumStr = "fri"; 
+ 			end;
+  		Case 6:     
+   			Begin
+				DayOfWeekNumStr = "sat"; 
+ 			end;
+ 	end;		
+ 
 JBudate3 = LeftStr(ELDateToString(Date), 10) ;
 
 JBudate1 = LeftStr(ELDateToString(Date),5) ;
 
 JBudate= RightStr(JBudate3, 4)+"-"+ LeftStr(JBudate1, 2)+"-"+RightStr(JBudate1, 2) ;
 
+
+
+
+// CALCULATE TODAY'S LINES FROM YESTERDAY
+PHARDday  = (HighD(1) + LowD(1) + CloseD(1) )/3 ;  // P == yesterday (H+L+C)/3
+
+P3HARDday  =(  ( (HighD(2) + LowD(2) + CloseD(2) )/3 ) +   ( (HighD(3) + LowD(3) + CloseD(3) )/3 )+  ( (HighD(4) + LowD(4) + CloseD(4) )/3 )     )/3;
+
+S1HARDday = (PHARDday *2)-HighD(1);
+S2HARDday = PHARDday - HighD(1) + LowD(1);
+R1HARDday = (PHARDday *2)-LowD(1);
+R2HARDday = PHARDday + HighD(1) - LowD(1);
+// New ** jb
+S3HARDday = PHARDday - (R2HARDday - S1HARDday);
+R3HARDday = (PHARDday - S1HARDday) + R2HARDday;
+  //S3day = Pday - (R2day-S1day);
+  //R3day = (Pday-S1day) + R2day;
+ 
+ 
+ pivotsStrOutput = "R3R2R1_P_P3_S1S2S3=,"+ NumtoStr(R3HARDday ,2)+","+NumtoStr(R2HARDday ,2)+","+NumtoStr(R1HARDday ,2)+","+NumtoStr( PHARDday,2)+","+NumtoStr(P3HARDday ,2)+","+NumtoStr(S1HARDday ,2)+","+NumtoStr(S2HARDday ,2)+","+NumtoStr(S3HARDday ,2) ;
+ 
+ // for Sell sig we use PtrailingAvg for P3 for Price
+ priceMinusR1str =  "p3-R1=,"+ NumtoStr( ( PtrailingAvg - R1HARDday  ) , 2);
+ 
+ priceMinusS1str =  "p-S1=,"+ NumtoStr( ( Pday         - S1HARDday  ) , 2);
+
+///////////////////////////////////////////////////// END CALC OF VARS FOR intradaytrades.txt
 
 //
 // get Hand-drawn Trendline   - need MELS.ELD -teacher's TL_FindColor routine
@@ -303,6 +379,9 @@ if TLV<0 then HardR1=-1
  else HardR1 = TLV;
 }
 
+
+
+// BUY / SELL SIGNAL LOGIC HERE...
 
  
 SetPlotColor(1, JBColorMvgAvg );  // yello
@@ -325,14 +404,14 @@ Value67 = Text_New(Date, Time,PtrailingAvg , JBString0 );
 
 
 // SELL 100 Shares SYMBOL at LIMIT $PtrailingAvg+.01 time = timstr , IFF SHORTing = ON;
-If BuySignal>=(BuyThreshold*2) then
- FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine +JBudate +","+NumtoStr(Time,0)+  ",intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",sellsigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min," );
+If BuySignal>=(BuyThreshold2) then
+ FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine +JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+  "intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",P3day,sellsigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusR1str+"," );
 // FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine +JBudate +","+NumtoStr(Time,0)+","+ LeftStr(ELDateToString(Date), 10) + ",intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",sellsigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min," );
 // FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + LeftStr(ELDateToString(Date), 10) +","+NumtoStr(Time,0) + ",intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",sellsigcnt,"+JBString0+"," );
 // FileAppend("c:\_dev\DayTrades.txt", NewLine+"|::   SELL 100 Shares  of "+Symbol+" at LIMIT " +"$"+NumtoStr( PtrailingAvg ,2) +"   ::|    "+LeftStr(ELDateToString(Date), 10) +"  "+NumtoStr(Time,0) +"   = "+JBString0 );
 
 
- 
+  
  
 
 
@@ -354,7 +433,7 @@ If BuySignal>=(BuyThreshold*2) then
   SetPlotWidth(2, JBplotWsm);  //Plot2 = buy line, reset it
  end;
 end;
-
+ 
 
 
 // buy signal?
@@ -375,8 +454,9 @@ Value66 = Text_New(Date, Time,Pday , JBString0 );
 
 ///LeftStr(ELDateToString(Date), 10)
 // BUY 100 Shares SYMBOL at LIMIT $Pday+.01 time = timstr , IFF SHORTing = ON;
-If SellSignal>=(SellThreshold*2) then
-  FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + JBudate +","+NumtoStr(Time,0)  + ",intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",buysigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min," );
+If SellSignal>=(SellThreshold2) then
+  FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+ "intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( Pday ,2) +",Pday,buysigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusS1str+"," );
+// FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + JBudate +","+NumtoStr(Time,0)  + ",intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",buysigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min,"+DayOfWeekNumStr+","+pivotsStrOutput );
 //FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + JBudate +","+NumtoStr(Time,0) +","+ LeftStr(ELDateToString(Date), 10) + ",intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",buysigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min," );
 //FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + LeftStr(ELDateToString(Date), 10) +","+NumtoStr(Time,0) + ",intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",buysigcnt,"+JBString0+"," );
 //FileAppend("c:\_dev\DayTrades.txt", NewLine+"|::   BUY  100 Shares of "+Symbol+" at LIMIT " +"$"+NumtoStr( Pday ,2) +"   ::|    "+LeftStr(ELDateToString(Date), 10) +"  "+NumtoStr(Time,0) +"   = "+JBString0);
@@ -535,6 +615,10 @@ End;
 //S2HARDday = PHARDday - HighD(0) + LowD(0);
 //R1HARDday = (PHARDday *2)-LowD(0);
 //R2HARDday = PHARDday + HighD(0) - LowD(0);
+
+
+{ // MOVED TO ABOVE BUY/SELL LOGIC 2023-12-13
+//
 // CALCULATE TODAY'S LINES FROM YESTERDAY
 PHARDday  = (HighD(1) + LowD(1) + CloseD(1) )/3 ;  // P == yesterday (H+L+C)/3
 
@@ -549,6 +633,10 @@ S3HARDday = PHARDday - (R2HARDday - S1HARDday);
 R3HARDday = (PHARDday - S1HARDday) + R2HARDday;
   //S3day = Pday - (R2day-S1day);
   //R3day = (Pday-S1day) + R2day;
+}
+
+
+
 // CALCULATE YESTERDAY'S LINES FROM THE DAY BEFORE, THEN 2,3,4 BACK
 PHARDday1  = (HighD(2) + LowD(2) + CloseD(2) )/3 ;
 S1HARDday1 = (PHARDday1 *2)-HighD(2);
