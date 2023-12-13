@@ -98,6 +98,8 @@ vars:
  
  DayOfWeekNum1(0),DayOfWeekNumStr("sun"),pivotsStrOutput("0"),priceMinusR1str("0"),priceMinusS1str("0"),
  
+ weeklyPivotsStr("wkR2R1S1S2="),
+ 
  DayOfWeekString0("?DAY"),  // today
  DayOfWeekString1("?DAY"),  // yesterday
  DayOfWeekString2("?DAY"),  // 2 days ago
@@ -283,7 +285,7 @@ R3day = (Pday-S1day) + R2day;
 
 
 
-
+weeklyPivotsStr = "wkR2R1S1S2=,"+ NumtoStr(R2week, 2) +","+ NumtoStr(R1week, 2) +","+ NumtoStr(S1week, 2) +","+ NumtoStr(S2week, 2) ;
 
 
 
@@ -405,7 +407,7 @@ Value67 = Text_New(Date, Time,PtrailingAvg , JBString0 );
 
 // SELL 100 Shares SYMBOL at LIMIT $PtrailingAvg+.01 time = timstr , IFF SHORTing = ON;
 If BuySignal>=(BuyThreshold2) then
- FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine +JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+  "intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",P3day,sellsigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusR1str+"," );
+ FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine +JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+  "intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",P3day,sellsigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusR1str+","+weeklyPivotsStr+"," );
 // FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine +JBudate +","+NumtoStr(Time,0)+","+ LeftStr(ELDateToString(Date), 10) + ",intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",sellsigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min," );
 // FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + LeftStr(ELDateToString(Date), 10) +","+NumtoStr(Time,0) + ",intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",sellsigcnt,"+JBString0+"," );
 // FileAppend("c:\_dev\DayTrades.txt", NewLine+"|::   SELL 100 Shares  of "+Symbol+" at LIMIT " +"$"+NumtoStr( PtrailingAvg ,2) +"   ::|    "+LeftStr(ELDateToString(Date), 10) +"  "+NumtoStr(Time,0) +"   = "+JBString0 );
@@ -455,7 +457,7 @@ Value66 = Text_New(Date, Time,Pday , JBString0 );
 ///LeftStr(ELDateToString(Date), 10)
 // BUY 100 Shares SYMBOL at LIMIT $Pday+.01 time = timstr , IFF SHORTing = ON;
 If SellSignal>=(SellThreshold2) then
-  FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+ "intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( Pday ,2) +",Pday,buysigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusS1str+"," );
+  FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+ "intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( Pday ,2) +",Pday,buysigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusS1str+","+weeklyPivotsStr+"," );
 // FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + JBudate +","+NumtoStr(Time,0)  + ",intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",buysigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min,"+DayOfWeekNumStr+","+pivotsStrOutput );
 //FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + JBudate +","+NumtoStr(Time,0) +","+ LeftStr(ELDateToString(Date), 10) + ",intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",buysigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min," );
 //FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + LeftStr(ELDateToString(Date), 10) +","+NumtoStr(Time,0) + ",intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",buysigcnt,"+JBString0+"," );
