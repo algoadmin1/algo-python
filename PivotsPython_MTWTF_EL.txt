@@ -94,7 +94,7 @@ vars:
   PHARD3dayAvg4(0),  // new 5.0  4 DAYS AGO
  PivotHARDBarsBack(120), Yesterdy(Date),
  
- DayOfWeekNum(0), JBString0("?jb"),
+ DayOfWeekNum(0), JBString0("?jb"),JBudate("2023-12-13"),JBudate1("2023-12-13"),JBudate2("2023-12-13"),JBudate3("2023-12-13"),
  
  DayOfWeekString0("?DAY"),  // today
  DayOfWeekString1("?DAY"),  // yesterday
@@ -279,8 +279,11 @@ R3day = (Pday-S1day) + R2day;
 
 
 
+JBudate3 = LeftStr(ELDateToString(Date), 10) ;
 
+JBudate1 = LeftStr(ELDateToString(Date),5) ;
 
+JBudate= RightStr(JBudate3, 4)+"-"+ LeftStr(JBudate1, 2)+"-"+RightStr(JBudate1, 2) ;
 
 
 //
@@ -323,7 +326,10 @@ Value67 = Text_New(Date, Time,PtrailingAvg , JBString0 );
 
 // SELL 100 Shares SYMBOL at LIMIT $PtrailingAvg+.01 time = timstr , IFF SHORTing = ON;
 If BuySignal>=(BuyThreshold*2) then
- FileAppend("c:\_dev\DayTrades.txt", NewLine+"|::   SELL 100 Shares of "+Symbol+" at LIMIT " +"$"+NumtoStr( PtrailingAvg ,2) +"   ::|    "+LeftStr(ELDateToString(Date), 10) +"  "+NumtoStr(Time,0) +"   = "+JBString0 );
+ FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine +JBudate +","+NumtoStr(Time,0)+  ",intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",sellsigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min," );
+// FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine +JBudate +","+NumtoStr(Time,0)+","+ LeftStr(ELDateToString(Date), 10) + ",intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",sellsigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min," );
+// FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + LeftStr(ELDateToString(Date), 10) +","+NumtoStr(Time,0) + ",intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",sellsigcnt,"+JBString0+"," );
+// FileAppend("c:\_dev\DayTrades.txt", NewLine+"|::   SELL 100 Shares  of "+Symbol+" at LIMIT " +"$"+NumtoStr( PtrailingAvg ,2) +"   ::|    "+LeftStr(ELDateToString(Date), 10) +"  "+NumtoStr(Time,0) +"   = "+JBString0 );
 
 
  
@@ -367,10 +373,13 @@ Value66 = Text_New(Date, Time,Pday , JBString0 );
   Text_SetColor(Value66, cyan);
   Text_SetLocation(Value66, Date, Time, (Pday -(Pday/250) ));
 
-
+///LeftStr(ELDateToString(Date), 10)
 // BUY 100 Shares SYMBOL at LIMIT $Pday+.01 time = timstr , IFF SHORTing = ON;
 If SellSignal>=(SellThreshold*2) then
- FileAppend("c:\_dev\DayTrades.txt", NewLine+"|::   BUY  100 Shares of "+Symbol+" at LIMIT " +"$"+NumtoStr( Pday ,2) +"   ::|    "+LeftStr(ELDateToString(Date), 10) +"  "+NumtoStr(Time,0) +"   = "+JBString0);
+  FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + JBudate +","+NumtoStr(Time,0)  + ",intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",buysigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min," );
+//FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + JBudate +","+NumtoStr(Time,0) +","+ LeftStr(ELDateToString(Date), 10) + ",intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",buysigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min," );
+//FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + LeftStr(ELDateToString(Date), 10) +","+NumtoStr(Time,0) + ",intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",buysigcnt,"+JBString0+"," );
+//FileAppend("c:\_dev\DayTrades.txt", NewLine+"|::   BUY  100 Shares of "+Symbol+" at LIMIT " +"$"+NumtoStr( Pday ,2) +"   ::|    "+LeftStr(ELDateToString(Date), 10) +"  "+NumtoStr(Time,0) +"   = "+JBString0);
 
 
     if HardS1>0 and Pday<HardS1 then   // final check for trendline support S1 broken
@@ -1104,8 +1113,11 @@ end; // IFF Friday...
 //   " |  High, Low, Close=");
 //   ,High,Low,Close );
 
+{
+
 if lastbaronchart then begin 
 
 	FileAppend("c:\_dev\Projects\algo-python\tradestation.txt", NewLine+Symbol+"  "+ ELDateToString(Date)+" "+Timetostring(time)+ " | Open, High, Low, Close=  "+NumtoStr(Open,2)+ ", "+ NumtoStr(High,2)+ ", "+NumtoStr(Low,2)+", "+NumtoStr(Close,2)+ NewLine );
 
 end;
+}
