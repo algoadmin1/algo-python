@@ -64,7 +64,7 @@ with open(file_path, 'r') as file:
         i=i+1
 
 
-print("\n\n")
+print("\n\nToday's Trades Extracted:", dataToday)
 # Get the last line from the CSV data
 #last_line = data[-1]
 #print(last_line)
