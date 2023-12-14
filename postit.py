@@ -60,8 +60,8 @@ dstr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
 print("Today's date in New York:",dstr)
 
 #####################################################  OVERIDING today's date
-dstr= "2023-12-13"
-print("] OVERIDING dstr = "+dstr)
+#dstr= "2023-12-13"
+#print("] OVERIDING dstr = "+dstr)
 #####################################################
 
 
@@ -69,7 +69,7 @@ print("] OVERIDING dstr = "+dstr)
 tstr =(f"{current_time_ny.strftime('%H:%M:%S')}")
 tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 tstrHHMMstart = tstrHHMM
-print("\n\n")
+print("\n")
 print("Current time in New York is:",tstr)
 print("Current time in New York (Tradestation format) is :",tstrHHMM)
 
@@ -77,7 +77,7 @@ print("Current time in New York (Tradestation format) is :",tstrHHMM)
 # Print today's date as a Unix timestamp
 #print(f"Today's date as Unix timestamp: {int(today_date_unix)}")
  
-print("\n\n")
+print("\n")
 # Read the CSV file and extract data
 file_path = 'intradaytrades.txt'  # Replace with your file path
 #file_path = 'intradaytradessm.txt'  # Replace with your file path
@@ -104,7 +104,7 @@ i=0
 with open(file_path, 'r') as file:
     csv_reader = csv.reader(file)
     for row in csv_reader:
-        print("row=",row) 
+        #print("row=",row) 
         data_to_send = ','.join(row)
         #print("i=",i,":  ",data_to_send)
         #payload = {'data': data_to_send}
@@ -149,7 +149,8 @@ with open(file_path, 'r') as file:
 
 
 
-print("\n\nLAST ITEM:")
+print("\n\n Read "+ str(i)+ "rows. ")
+print("  - The LAST ITEM:")
 j=0
 tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 print("EDT tstrHHMM=",tstrHHMM)

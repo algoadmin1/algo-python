@@ -32,11 +32,10 @@ $i=0;
 $params = explode (",", $searchQuery);
 echo "\n params = ". $params[0]. "|". $params[1]. "|". $params[2]. "|".  $params[3]. "|". $params[4]. "|". $params[5]. "|". $params[6]. "|". $params[7]. "|". $params[8]. "|". $params[9];
 $cnt=count($params);
-echo "\n\n";
-for($i=0;$i<$cnt;$i++){
-
-    echo $i. ") ". $params[$i]."\n";
-}
+echo "\nFound $cnt params[] (all lines)...\n";
+//for($i=0;$i<$cnt;$i++){
+//    if($i%50==0) echo $i. ") ". $params[$i]."\n";
+//}
 
 //echo "  userNewsignin.php:   avName = $avName,  afterAdrsee = $afterAdrsee\n";
 
@@ -64,7 +63,7 @@ $name = $searchQuery;
 
 
 
-echo "\n\n] Writing/appending ". $searchQuery. " to file: ". $filePath. "\n";
+echo "\n\n] Writing/appending  searchQuery  to file: ". $filePath. "\n";
 
 // Check if the searchQuery is set and not empty
 if (isset($searchQuery) && !empty($searchQuery)) {
