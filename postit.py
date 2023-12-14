@@ -15,7 +15,7 @@
 #       which is output by the Tradestation EL Program:  !!PivotsPython_MTWTF  (this appends intradaytrades.txt )
 #
 #       *** postit.py NEEDs to run in a LOOP so it can sit on the PC where Tradestation( !!PivotsPython_MTWTF ) is running and
-#       
+#       ***           AND it needs to timeout every 20 secs and shutil.copyfile(source_file, destination_file) to avoid TradeSta AppendFile contention
 #       postit.py calls 
 #
 #           https://algoinvestorr.com/trades/recpost.php 
@@ -25,13 +25,19 @@
 #           https://algoinvestorr.com/trades/intradaytrades_2023-12-13.txt
 #
 #
-
+#import shutil
+#source_file      = "intradaytrades.txt"
+#destination_file = "intradaytrades1.txt"
+# Copy the file
+#shutil.copyfile(source_file, destination_file)
+#print(f"File '{source_file}' copied to '{destination_file}'")
 
 
 import requests
 import csv
 import datetime
 import pytz
+import shutil
 
 #today_date_unix = datetime.datetime.now().timestamp()
 #print(today_date_unix )
