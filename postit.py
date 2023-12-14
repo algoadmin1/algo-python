@@ -12,6 +12,8 @@ MAX_Elements=29
 dtstr="nydatetime"
 dstr="nydate"
 tstr="nytime"
+urlPost = 'https://algoinvestorr.com/trades/recpost.php'
+
 
 # Get current date in New York - we need EDT for markets...
 new_york_timezone = pytz.timezone('America/New_York')
@@ -50,16 +52,32 @@ file_path = 'intradaytrades.txt'  # Replace with your file path
 data = []
 dataToday = []
 
+dstr= "2023-12-13"
+print("] OVERIDING dstr = "+dstr)
 i=0
 with open(file_path, 'r') as file:
     csv_reader = csv.reader(file)
     for row in csv_reader:
+        print("row=",row) 
+         
+        data_to_send = ','.join(row)
+        print("i=",i,":  ",data_to_send)
+        #payload = {'data': data_to_send}
+        #response = requests.post(urlPost, data_to_send)
+        #print(response.text)
+
         data.append(row)
         #print("i=",i,data[i])
         arrstr = data[i]
         #print("\n #0,10,21==",arrstr[0],arrstr[10],arrstr[21])
         if(arrstr[0] == dstr):
-            print("Today's trade data[",i,"] =  ",data[i])
+            #if dates match then POST
+            print("Today's (", dstr ,") trade data[",i,"] =  ",data[i], "  POSTing...\n")
+            
+            payload = {'data': data_to_send}
+            response = requests.post(urlPost, data_to_send)
+            print(response.text)
+
             dataToday.append(row)
             signalStrength = int(arrstr[12])  # [12]=sigStrength
             if(signalStrength>=8):
@@ -125,3 +143,34 @@ print("\n\n")
 #response = requests.post(url, json=last_line_dict)
 #response = requests.post(url, last_line_dict)
 #print(response.text)  # Print the response from the PHP script
+
+
+
+
+
+
+
+
+
+
+############################ working _POST to use w/ recpost.php
+# sendpost.py sample py => php sender
+
+##import requests
+
+# String data to be sent
+##data_to_send = "a,b,c,d,34,554,1.2,g,h,i,j"
+
+# URL to send POST request
+##url = 'https://algoinvestorr.com/trades/recpost.php'
+
+# Define data to be sent as a dictionary
+##payload = {'data': data_to_send}
+
+# Send POST request 
+#response = requests.post(url, data_to_send)
+
+# Print response from the server
+##print(response.text)
+##
+############################ working _POST to use w/ recpost.php

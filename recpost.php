@@ -1,13 +1,83 @@
 // recpost.php
 <?php
-echo "recpost.php is running...";
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  // collect value of input field
-  $name = $_POST['fname'];
-  if (empty($name)) {
-    echo "Name is empty";
-  } else {
-    echo $name;
-  }
+echo "] recpost.php is running...\n";
+
+
+
+//Setting up Error Reporting Level
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+//$searchQuery = $_POST["post_query"];
+$searchQuery = $_POST["data"];
+
+//$con = mysqli_connect("localhost", "jb_jackabeejohn", "jackabee66", "jb_jackabee_Users1");
+//	if (!$con) die('Could not connect: ' . mysqli_error($con));
+//	mysqli_select_db($con, "jb_jackabee_Users1" ) or die ("DB select failed - " . mysqli_error($con));
+ 
+echo "] searchQuery = $searchQuery \n";
+
+$splitChars = ",";
+//$afterAdrsee = strpbrk($searchQuery,$splitChars);
+//$avName      =  strtok($searchQuery,$splitChars);    // userName trying to sign in, above, pwd
+
+$i=0;
+
+$params = explode (",", $searchQuery);
+echo "\n params = ". $params[1]. "|". $params[2]. "|".  $params[3]. "|". $params[4]. "|". $params[5]. "|". $params[6]. "|". $params[7]. "|". $params[8]. "|". $params[9];
+$cnt=count($params);
+echo "\n\n";
+for($i=0;$i<$cnt;$i++){
+
+    echo $i. ") ". $params[$i]."\n";
 }
+
+//echo "  userNewsignin.php:   avName = $avName,  afterAdrsee = $afterAdrsee\n";
+
+//$password = $afterAdrsee;
+/*
+$params = explode (",", $afterAdrsee);
+$password= $params[1];
+$passwordSHA1 = sha1( $password );
+$lastIP  = $params[2];
+*/
+
+$name = $searchQuery;
+// chatGPT's version...
+//if ($_SERVER["REQUEST_METHOD"] == "POST") {
+//  $name = $_POST['fname'];
+
+  //
+  if (empty($name)) {
+    echo "Name is empty\n";
+  } else {
+    echo $name. "\n\n msg rec'd OK!\n";
+  }
+
+//}
+
+
+$filePath = "todaystrades.txt";
+
+echo "\n\n] Writing/appending ". $searchQuery. " to file: ". $filePath. "\n";
+
+// Check if the searchQuery is set and not empty
+if (isset($searchQuery) && !empty($searchQuery)) {
+    // File path
+   // $filePath = "todaystrades.txt";
+
+    // Open the file in append mode
+    $file = fopen($filePath, "a");
+
+    // Append the searchQuery to the file
+    fwrite($file, $searchQuery. PHP_EOL); // Appends the query and adds a new line
+
+    // Close the file
+    fclose($file);
+
+    echo "\n] Search query '$searchQuery' has been successfully appended to 'todaystrades.txt'.\n\n";
+} else {
+    echo "\nNo valid search query provided.";
+}
+
 ?>
