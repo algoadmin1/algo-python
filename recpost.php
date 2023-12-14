@@ -10,6 +10,7 @@ error_reporting(E_ALL);
 
 //$searchQuery = $_POST["post_query"];
 $searchQuery = $_POST["data"];
+$filePath = "todaystrades.txt";
 
 //$con = mysqli_connect("localhost", "jb_jackabeejohn", "jackabee66", "jb_jackabee_Users1");
 //	if (!$con) die('Could not connect: ' . mysqli_error($con));
@@ -57,7 +58,6 @@ $name = $searchQuery;
 //}
 
 
-$filePath = "todaystrades.txt";
 
 echo "\n\n] Writing/appending ". $searchQuery. " to file: ". $filePath. "\n";
 

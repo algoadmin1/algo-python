@@ -12,7 +12,7 @@ MAX_Elements=29
 dtstr="nydatetime"
 dstr="nydate"
 tstr="nytime"
-urlPost = 'https://algoinvestorr.com/trades/recpost.php'
+url = 'https://algoinvestorr.com/trades/recpost.php'
 
 
 # Get current date in New York - we need EDT for markets...
@@ -59,7 +59,7 @@ with open(file_path, 'r') as file:
     csv_reader = csv.reader(file)
     for row in csv_reader:
         print("row=",row) 
-         
+        data_to_sendLast="nil,nil,"
         data_to_send = ','.join(row)
         print("i=",i,":  ",data_to_send)
         #payload = {'data': data_to_send}
@@ -72,12 +72,9 @@ with open(file_path, 'r') as file:
         #print("\n #0,10,21==",arrstr[0],arrstr[10],arrstr[21])
         if(arrstr[0] == dstr):
             #if dates match then POST
-            print("Today's (", dstr ,") trade data[",i,"] =  ",data[i], "  POSTing...\n")
+            print("Today's (", dstr ,") trade data[",i,"] =  ",data[i], "  SETting...\n")
+            data_to_sendLast=data_to_send   
             
-            payload = {'data': data_to_send}
-            response = requests.post(urlPost, data_to_send)
-            print(response.text)
-
             dataToday.append(row)
             signalStrength = int(arrstr[12])  # [12]=sigStrength
             if(signalStrength>=8):
@@ -121,6 +118,13 @@ for row in dataToday:
 print("\nEND OF Trade Injest.")
 
 print("\n\n")
+
+
+payload = {'data': data_to_sendLast }
+response = requests.post(url, data=payload)
+print(response.text)
+
+print("\n\n")
 # Get the last line from the CSV data
 #last_line = data[-1]
 #print(last_line)
@@ -134,8 +138,8 @@ print("\n\n")
 ##last_line_dict = dict(zip(keys, last_line))
 
 # POST the last line to the PHP script
-url = 'https://algoinvestorr.com/trades/cueintradaytrade.php'
-print("Calling",url)
+url = 'https://algoinvestorr.com/trades/recpost.php'
+print("Called: ",url)
 
 print("\n\n")
 print("\n\n")
