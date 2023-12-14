@@ -14,7 +14,6 @@ payload = {'data': data_to_send}
 
 # Send POST request
 response = requests.post(url, data=payload)
-#response = requests.post(url, data_to_send)
 
 # Print response from the server
 print(response.text)

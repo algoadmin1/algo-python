@@ -52,8 +52,15 @@ file_path = 'intradaytrades.txt'  # Replace with your file path
 data = []
 dataToday = []
 
+
+#####################################################  OVERIDING today's date
 dstr= "2023-12-13"
 print("] OVERIDING dstr = "+dstr)
+#####################################################
+
+
+
+
 i=0
 with open(file_path, 'r') as file:
     csv_reader = csv.reader(file)
