@@ -60,15 +60,14 @@ print("] OVERIDING dstr = "+dstr)
 
 
 
-
+data_to_sendLast=""
 i=0
 with open(file_path, 'r') as file:
     csv_reader = csv.reader(file)
     for row in csv_reader:
         print("row=",row) 
-        data_to_sendLast="nil,nil,"
         data_to_send = ','.join(row)
-        print("i=",i,":  ",data_to_send)
+        #print("i=",i,":  ",data_to_send)
         #payload = {'data': data_to_send}
         #response = requests.post(urlPost, data_to_send)
         #print(response.text)
@@ -77,10 +76,12 @@ with open(file_path, 'r') as file:
         #print("i=",i,data[i])
         arrstr = data[i]
         #print("\n #0,10,21==",arrstr[0],arrstr[10],arrstr[21])
+
         if(arrstr[0] == dstr):
             #if dates match then POST
-            print("Today's (", dstr ,") trade data[",i,"] =  ",data[i], "  SETting...\n")
-            data_to_sendLast=data_to_send   
+            print("Today's (", dstr ,") trade data[",i,"] =  ",data[i], "  adding to data_to_sendLast...\n")
+            print("i=",i,":  ",data_to_send)
+            data_to_sendLast=data_to_sendLast+data_to_send+"\n"  
             
             dataToday.append(row)
             signalStrength = int(arrstr[12])  # [12]=sigStrength

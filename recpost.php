@@ -80,7 +80,7 @@ if (isset($searchQuery) && !empty($searchQuery)) {
     // Close the file
     fclose($file);
 
-    echo "\n] Search query '$searchQuery' has been successfully appended to 'todaystrades.txt'.\n\n";
+    echo "\n] Search query '$searchQuery' has been successfully appended to ". $filePath." ...\n\n";
 } else {
     echo "\nNo valid search query provided.";
 }
