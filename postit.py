@@ -1,4 +1,32 @@
 # postit.py   i.e. postIntradayTrades.py
+#
+#
+#
+#  postit.py:
+#
+#       This is meant to run on a PC, running in the folder:
+#
+#          c:\_dev\Projects\algo-python\postit.py
+#
+#       It will look for the realime, [TradeSta] Updated file to read:
+#
+#          c:\_dev\Projects\algo-python\intradaytrades.txt  
+#
+#       which is output by the Tradestation EL Program:  !!PivotsPython_MTWTF  (this appends intradaytrades.txt )
+#
+#       *** postit.py NEEDs to run in a LOOP so it can sit on the PC where Tradestation( !!PivotsPython_MTWTF ) is running and
+#       
+#       postit.py calls 
+#
+#           https://algoinvestorr.com/trades/recpost.php 
+#
+#       which receives the trades for TODAY's DATE intradaytradesYYYY-MM-DD via $_POST and writes them to a text file called (on 12-13-23):
+#
+#           https://algoinvestorr.com/trades/intradaytrades_2023-12-13.txt
+#
+#
+
+
 
 import requests
 import csv
@@ -28,8 +56,13 @@ print("Today's Date and Time in NYC (EDT) is:",dtstr)
 
 # Print current date in New York as YYYY-MM-DD
 #print(f"Current date in New York: {current_date_ny.strftime('%Y-%m-%d')}")
-dstr= ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
+dstr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
 print("Today's date in New York:",dstr)
+
+#####################################################  OVERIDING today's date
+dstr= "2023-12-13"
+print("] OVERIDING dstr = "+dstr)
+#####################################################
 
 
 # Print current time in New York as HH:MM:SS
@@ -45,7 +78,6 @@ print("Current time in New York (Tradestation format) is :",tstrHHMM)
 #print(f"Today's date as Unix timestamp: {int(today_date_unix)}")
  
 print("\n\n")
-print("\n\n")
 # Read the CSV file and extract data
 file_path = 'intradaytrades.txt'  # Replace with your file path
 #file_path = 'intradaytradessm.txt'  # Replace with your file path
@@ -53,13 +85,20 @@ data = []
 dataToday = []
 
 
-#####################################################  OVERIDING today's date
-dstr= "2023-12-13"
-print("] OVERIDING dstr = "+dstr)
-#####################################################
 
+#
+#
+# Check if arrstr exists and arrstr[0] is defined
+# if 'arrstr' in locals() and arrstr and len(arrstr) > 0:
+#     if arrstr[0] is not None:
+#         print("arrstr[0] is defined and not None.")
+#     else:
+#         print("arrstr[0] is either None or not defined.")
+# else:
+#     print("arrstr is not defined or is an empty list.")
+#
 
-
+data_lines_to_send=0
 data_to_sendLast=""
 i=0
 with open(file_path, 'r') as file:
@@ -76,17 +115,20 @@ with open(file_path, 'r') as file:
         #print("i=",i,data[i])
         arrstr = data[i]
         #print("\n #0,10,21==",arrstr[0],arrstr[10],arrstr[21])
+        
 
-        if(arrstr[0] == dstr):
-            #if dates match then POST
-            print("Today's (", dstr ,") trade data[",i,"] =  ",data[i], "  adding to data_to_sendLast...\n")
-            print("i=",i,":  ",data_to_send)
-            data_to_sendLast=data_to_sendLast+data_to_send+"\n"  
-            
-            dataToday.append(row)
-            signalStrength = int(arrstr[12])  # [12]=sigStrength
-            if(signalStrength>=8):
-                print("*** Strong "+ arrstr[5].upper()+ " signal !!!\n")
+        if arrstr and len(arrstr) > 0:
+            if arrstr[0] is not None:
+                if(arrstr[0] == dstr):
+                    #if dates match then POST
+                    print("Today's (", dstr ,") trade data[",i,"] =  ",data[i], "  adding to data_to_sendLast...\n")
+                    print("i=",i,":  ",data_to_send)
+                    data_to_sendLast=data_to_sendLast+data_to_send+"\n"   #this is the trade data from today to send uo
+                    data_lines_to_send = data_lines_to_send+1
+                    dataToday.append(row)
+                    signalStrength = int(arrstr[12])  # [12]=sigStrength
+                    if(signalStrength>=8):
+                        print("*** Strong "+ arrstr[5].upper()+ " signal !!!\n")
             
         #j=0
         #tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
@@ -133,29 +175,16 @@ response = requests.post(url, data=payload)
 print(response.text)
 
 print("\n\n")
-# Get the last line from the CSV data
-#last_line = data[-1]
-#print(last_line)
-#print(data[-2])
-#last_line_dict = last_line
 
-
-
-# Create a dictionary from the last line
-##keys = ['key1', 'key2', 'key3']  # Replace with your keys
-##last_line_dict = dict(zip(keys, last_line))
 
 # POST the last line to the PHP script
 url = 'https://algoinvestorr.com/trades/recpost.php'
-print("Called: ",url)
+tgt = "intradaytrades"+dstr+".txt"
+print("Called & POSTed "+str(data_lines_to_send)+ " lines (Trades) to: ",url, "----> ", tgt)
 
 print("\n\n")
 print("\n\n")
 print("\n\n")
-#response = requests.post(url, json=last_line_dict)
-#response = requests.post(url, last_line_dict)
-#print(response.text)  # Print the response from the PHP script
-
 
 
 
