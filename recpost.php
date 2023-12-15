@@ -21,7 +21,7 @@ $filePath.= $filePath1."_". $todaysdate. ".txt";
 //	if (!$con) die('Could not connect: ' . mysqli_error($con));
 //	mysqli_select_db($con, "jb_jackabee_Users1" ) or die ("DB select failed - " . mysqli_error($con));
  
-echo "] fn= $filePath , searchQuery = $searchQuery \n";
+echo "] fn= $filePath , reading searchQuery... \n";  //= $searchQuery \n";
 
 $splitChars = ",";
 //$afterAdrsee = strpbrk($searchQuery,$splitChars);
@@ -79,7 +79,7 @@ if (isset($searchQuery) && !empty($searchQuery)) {
     // Close the file
     fclose($file);
 
-    echo "\n] Search query '$searchQuery' has been successfully appended to ". $filePath." ...\n\n";
+    echo "\n] Search  searchQuery  has been successfully appended to ". $filePath." ...\n\n";
 } else {
     echo "\nNo valid search query provided.";
 }

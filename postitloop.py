@@ -107,7 +107,7 @@ if(tt<930 and tt>1415):
     print("\n] Markets are Open!\n\n\n")
 
 
-keepLooping = 20  # Set keepLooping to a value greater than 0 to enter the loop
+keepLooping = 3  # Set keepLooping to a value greater than 0 to enter the loop
 timeDelay   = 5     # secs
 print("\n] Starting to Loop for ",str((timeDelay*keepLooping)/60), "minutes,\n\n]  *** ENTERING BUY/SELL TRADE ALERT LOOP...\n")
 print("\n] currentTradestaionNY_Time=", tt,"\n\n> HH:MM:SS NY EDT_-_-_")
@@ -117,6 +117,11 @@ current_time = datetime.datetime.now()
 tstr =(f"{current_time_ny.strftime('%H:%M:%S')}")
 print(">",tstr, end="", flush=True)
 lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
+
+
+
+
+###################### STARTING LOOP ****************************************
 
 while keepLooping > 0:
     current_time_ny = datetime.datetime.now(new_york_timezone).time()
@@ -138,7 +143,41 @@ while keepLooping > 0:
     # Decrement keepLooping to eventually exit the loop
     keepLooping -= 1  # You might have a condition to break the loop based on a certain condition
 
+#
+##
+#########      INDENT ALL CODE HERE TO LOOP AROUND OPENING & READING FILE, then CLOSING FILE
+##
+#    
+    
+
+        #fname = "myfile.txt"
+        ## Open the file in read mode
+        #file = open(fname, 'r')
+    
+            ####-->Perform operations with the file...
+        
+        # Close the file
+        #file.close()    
+
+
+
+
+
+
+
+    #END OF THE LOOP
+
+###################### ENDING LOOP **********************************************
+
 print("\n> Exiting LOOP.\n")
+
+
+
+
+
+
+
+
 
 #
 # Check if arrstr exists and arrstr[0] is defined
@@ -220,8 +259,16 @@ for row in dataToday:
 
 
 print("\nEND OF Trade Injest.")
-
 print("\n\n")
+
+
+
+
+
+
+
+
+
 
 
 payload = {'data': data_to_sendLast }
@@ -231,10 +278,20 @@ print(response.text)
 print("\n\n")
 
 
+
+
+
+
+
+
+
+
+
 # POST the last line to the PHP script
+urlbase = 'https://algoinvestorr.com/trades/'
 url = 'https://algoinvestorr.com/trades/recpost.php'
-tgt = "intradaytrades"+dstr+".txt"
-print("Called & POSTed "+str(data_lines_to_send)+ " lines (Trades) to: ",url, "----> ", tgt)
+tgt = "intradaytrades_"+dstr+".txt"
+print("Called & POSTed "+str(data_lines_to_send)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
 
 print("\n\n")
 print("\n\n")
