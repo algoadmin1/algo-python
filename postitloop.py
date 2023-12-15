@@ -37,6 +37,7 @@
 
 import requests
 import csv
+import time
 import datetime
 import pytz
 import shutil
@@ -97,14 +98,48 @@ print("Current time in New York (Tradestation format) is :",tstrHHMM)
 
 tt = int(tstrHHMM)
 if(tt<930):
-    print("\n] Markets not open yet- time remaining:", (930-tt),"minutes...\n\n\n")
+    print("\n] Markets not open yet- time remaining:", (930-tt)," minutes...\n\n\n")
     sys.exit()
-# Print today's date as a Unix timestamp
-#print(f"Today's date as Unix timestamp: {int(today_date_unix)}")
- 
+if(tt>1415):
+    print("\n] Markets Closed !\n\n\n")
+    #sys.exit()
+if(tt<930 and tt>1415):
+    print("\n] Markets are Open!\n\n\n")
 
 
-#
+keepLooping = 20  # Set keepLooping to a value greater than 0 to enter the loop
+timeDelay   = 5     # secs
+print("\n] Starting to Loop for ",str((timeDelay*keepLooping)/60), "minutes,\n\n]  *** ENTERING BUY/SELL TRADE ALERT LOOP...\n")
+print("\n] currentTradestaionNY_Time=", tt,"\n\n> HH:MM:SS NY EDT_-_-_")
+
+current_time = datetime.datetime.now()
+    
+tstr =(f"{current_time_ny.strftime('%H:%M:%S')}")
+print(">",tstr, end="", flush=True)
+lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
+
+while keepLooping > 0:
+    current_time_ny = datetime.datetime.now(new_york_timezone).time()
+    lastminute1 = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
+    if(lastminute1>lastminute):
+        lastminute=lastminute1
+        #print("\n")
+        tstr =(f"{current_time_ny.strftime('%H:%M:%S')}")
+        print("\n>",tstr, end="", flush=True)
+
+
+    #current_time = time.strftime("%H:%M:%S")  # Get current time
+    #print(f"Current time: {current_time}")
+    tstr =(f"{current_time_ny.strftime('%H:%M:%S.%f')}")
+    #print(" ",tstr)
+    print(".", end="", flush=True)
+    #print(">",tstr,".", end="", flush=True)
+    time.sleep(timeDelay)  # Wait for 10 seconds
+    # Decrement keepLooping to eventually exit the loop
+    keepLooping -= 1  # You might have a condition to break the loop based on a certain condition
+
+print("\n> Exiting LOOP.\n")
+
 #
 # Check if arrstr exists and arrstr[0] is defined
 # if 'arrstr' in locals() and arrstr and len(arrstr) > 0:
