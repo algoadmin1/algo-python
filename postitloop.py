@@ -47,7 +47,17 @@ import sys
 #today_date_unix = datetime.datetime.now().timestamp()
 #print(today_date_unix )
 
-MAX_Elements=29
+MAX_Elements=42  # added MonthlyR/S123 (8) gaps(4)+ EOL  # old: 29
+# 2023-12-15,1500,fri,15min,3.2152%,BUY,100,TSLA,atLimit,251.41,Pday,buysigcnt,4,R3R2R1_P_P3_S1S2S3=,266.97,261.69,256.42,248.60,237.57,243.33,235.51,230.24,p-S1=,8.08,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,254.61,249.19,235.82,227.87,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL
+#
+# 2023-12-15,1500,fri,15min,3.2152%,BUY,100,TSLA,atLimit,251.41,
+# Pday,buysigcnt,4,R3R2R1_P_P3_S1S2S3=,266.97,261.69,256.42,248.60,237.57,243.33,
+# 235.51,230.24,p-S1=,8.08,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,254.61,
+# 249.19,235.82,227.87,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,
+# -1.00,EOL
+#
+#
+
 dtstr="nydatetime"
 dstr="nydate"
 tstr="nytime"
@@ -64,7 +74,7 @@ dstr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
 print("Today's date in New York:",dstr)
 
 #####################################################  OVERIDING today's date
-#dstr= "2023-12-13"
+dstr= "2023-12-15"
 #print("] OVERIDING dstr = "+dstr)
 #####################################################
 
