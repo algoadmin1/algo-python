@@ -44,6 +44,18 @@ import shutil
 import sys
 
 
+
+################################################ for TESTING
+#
+#             /_dev/Projects/algo-python       cp intradaytradesTest0[0-4].txt intradaytrades.txt
+#
+#
+#
+#################################################
+
+
+
+
 #today_date_unix = datetime.datetime.now().timestamp()
 #print(today_date_unix )
 
@@ -64,6 +76,7 @@ tstr="nytime"
 url = 'https://algoinvestorr.com/trades/recpost.php'
 
 LOOPMax =20
+SECSMax =12   # 20 loops * 12 secs
 
 # Get current date in New York - we need EDT for markets...
 new_york_timezone = pytz.timezone('America/New_York')
@@ -109,11 +122,8 @@ print("\n] Initializing memory and arrays[]...\n")
 # Read the CSV file and extract data
 file_path = 'intradaytrades.txt'  # Replace with your file path
 #file_path = 'intradaytradessm.txt'  # Replace with your file path
-data = []
 dataMaster = []     # called 1st, then each looped call is read into data[], and cmp'd to/insertedIFF into dataMaster[] - the running list of a,b,c,d,...,EOL
 dataMasterLen=0
-
-dataToday = []
 
 
 # GET TIME
@@ -164,15 +174,19 @@ if(injest0==1):
             #print("\n] i0=",i0,":  ",data_to_send)
             
             result = Check_data( dataMaster, data_to_send )
-            print("\n]",i0,"The current string IS FOUND in the dataMaster[] array?",result)  # This will print True or False based on whether my_datastr is in my_array or not
+            #print("\n]",i0,"The current string IS FOUND in the dataMaster[] array?",result, end="", flush=True )     # This will print True or False based on whether my_datastr is in my_array or not
+            #print("\n] "+str(i0)+": The current string IS FOUND in the dataMaster[] array? "+str(result), end="", flush=True )   # This will print True or False based on whether my_datastr is in my_array or not
+            jstr = "] "+str(i0)+": The current string IS FOUND in the dataMaster[] array? "+str(result)    # This will print True or False based on whether my_datastr is in my_array or not
+            if(i0%20==0):
+                print("\n",jstr, end="", flush=True)
 
             dataMaster.append(data_to_send)
-            arrstr = dataMaster[i0]
-            print("] arrstr=", arrstr)
+            arrstr = dataMaster[i0]             # i0  becomes dataMasterLen
+            #print("] arrstr=", arrstr)
              
             i0=i0+1
 
-    print("] end of dataMaster["+str(i0)+"] 1st INJEST... Closing file.\n")
+    print("\n] end of dataMaster["+str(i0)+"] 1st INJEST... Closing file.\n")
 
     # Close the file, read  i  rows...
     file.close()
@@ -181,7 +195,7 @@ dataMasterLen = i0
 
 
 keepLooping = LOOPMax # Set keepLooping to a value greater than 0 to enter the loop
-timeDelay   = 5     # secs
+timeDelay   = SECSMax    # secs
 print("\ndstr=",dstr  ,"len(dstr)=", len(dstr)  )
 print("\n] Starting to Loop for ",str((timeDelay*keepLooping)/60), "minutes,\n\n]  *** ENTERING BUY/SELL TRADE ALERT LOOP...\n")
 print("\n] currentTradestaionNY_Time=", tt,"\n\n> HH:MM:SS NY EDT_-_-_")
@@ -219,10 +233,14 @@ while keepLooping > 0:
 
 
     # Looping this code now 2023-12-7T19:01:00
-
+    additionalTradesFound=0
     data_lines_to_send=0
     data_to_sendLast=""
+    data = []
+    dataToday = []
+
     i=0
+    uniques=0
     print("\n Opening local csv file:", file_path)
     with open(file_path, 'r') as file:
         csv_reader = csv.reader(file)
@@ -238,34 +256,41 @@ while keepLooping > 0:
 
             result = Check_data( dataMaster, data_to_send )
             #print("\n]",i,"The current string IS FOUND in the dataMaster[] array?",result)  # This will print True or False based on whether my_datastr is in my_array or not
+            if(result==False):
+                print("\n] row=",i,". The current string IS NOT FOUND in dataMaster[], adding:\n",data_to_send)
+                dataMaster.append(data_to_send)
+                arrstrM = dataMaster[dataMasterLen]             # i0  becomes dataMasterLen
+                print("\n] dataMaster["+str(dataMasterLen)+"] :  ADDING:arrstrM=", arrstrM)
+                dataMasterLen=dataMasterLen+1
 
-
-            data.append(row)
-            #print("i=",i,data[i])
-            arrstr = data[i]
-            #print("\n #0,10,21==",arrstr[0],arrstr[10],arrstr[21])
-        
-
-            if arrstr and len(arrstr) > 0:
-                if arrstr[0] is not None:
-                    if(arrstr[0] == dstr):
-                        #if dates match then POST
-                        print("Today's (", dstr ,") trade data[",i,"] =  ",data[i], "  adding to data_to_sendLast...\n")
-                        print("i=",i,":  ",data_to_send)
-                        data_to_sendLast=data_to_sendLast+data_to_send+"\n"   #this is the trade data from today to send uo
-                        data_lines_to_send = data_lines_to_send+1
-                        dataToday.append(row)
-                        signalStrength = int(arrstr[12])  # [12]=sigStrength
-                        if(signalStrength>=8):
-                            print("*** Strong "+ arrstr[5].upper()+ " signal !!!\n")
+                data.append(row)
+                print("] uniques=",uniques,data[uniques])
+                arrstr = data[uniques]
+                uniques=uniques+1
+                #print("\n #0,10,21==",arrstr[0],arrstr[10],arrstr[21])
+                additionalTradesFound=additionalTradesFound+1
+                if arrstr and len(arrstr) > 0:
+                    if arrstr[0] is not None:
+                        if(arrstr[0] == dstr):
+                            #if dates match then POST
+                            print("\nTrade date (", dstr ,") trade array:  data["+str(uniques)+"] =  ",data[uniques], "  adding to data_to_sendLast...\n")
+                            print("uniques=",uniques,":  ",data_to_send)
+                            data_to_sendLast=data_to_sendLast+data_to_send+"\n"   #this is the trade data from today to send uo
+                            data_lines_to_send = data_lines_to_send+1
+                            dataToday.append(row)
+                            signalStrength = int(arrstr[12])  # [12]=sigStrength
+                            if(signalStrength>=8):
+                                print("*** Strong "+ arrstr[5].upper()+ " signal !!!\n")
        
             i=i+1
 
     # Close the file, read  i  rows...
     file.close()
+    print("\nClosed file.\n Read "+ str(i)+ "rows, UNIQUE lines found:", additionalTradesFound )
 
-    print("\nClosed file.\n Read "+ str(i)+ "rows. ")
-    print("  - The LAST ITEM:")
+
+
+    print("\n]  ***** The LAST ITEM:")
     j=0
     tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
     print("EDT tstrHHMM=",tstrHHMM)
@@ -281,7 +306,7 @@ while keepLooping > 0:
             j=j+1
 
     print("\n] END OF Trade Injest. \n] keepLooping==",keepLooping)
-    print("\n] SENDING data via _POST...\n")
+    print("\n] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-----====>>>SENDING data_to_sendLast via _POST...\n")
 
     payload = {'data': data_to_sendLast }
     response = requests.post(url, data=payload)
@@ -292,7 +317,7 @@ while keepLooping > 0:
 # POST the last line to the PHP script
     urlbase = 'https://algoinvestorr.com/trades/'
     url = 'https://algoinvestorr.com/trades/recpost.php'
-    tgt = "intradaytrades_"+dstr+".txt"
+    tgt = "intradaytradesServer_"+dstr1+".txt"
     print("Called & POSTed "+str(data_lines_to_send)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
 
     current_date_time_ny = datetime.datetime.now(new_york_timezone)
