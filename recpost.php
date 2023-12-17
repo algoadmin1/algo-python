@@ -12,7 +12,7 @@ error_reporting(E_ALL);
 $searchQuery = $_POST["data"];
 
 $filePath="";
-$filePath1 = "intradaytrades"; 
+$filePath1 = "intradaytradesServer"; 
 $todaysdate = date('Y-m-d');
 $filePath.= $filePath1."_". $todaysdate. ".txt";
 

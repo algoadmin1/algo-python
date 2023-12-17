@@ -103,10 +103,9 @@ dataToday = []
 
 # GET TIME
 
-current_date_time_ny = datetime.datetime.now(new_york_timezone)
 current_time_ny = datetime.datetime.now(new_york_timezone).time()
 
-#print (f"Current date and time in New York: {current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
+current_date_time_ny = datetime.datetime.now(new_york_timezone)
 dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
 print("Today's Date and Time in NYC (EDT) is:",dtstr)
 
@@ -163,30 +162,15 @@ while keepLooping > 0:
     #print(" ",tstr)
     print(".", end="", flush=True)
     #print(">",tstr,".", end="", flush=True)
-    time.sleep(timeDelay)  # Wait for 10 seconds
+    time.sleep(timeDelay)  # Wait for n seconds
+
+
+
+
+
     # Decrement keepLooping to eventually exit the loop
     keepLooping -= 1  # You might have a condition to break the loop based on a certain condition
-
-#
-##
-#########      INDENT ALL CODE HERE TO LOOP AROUND OPENING & READING FILE, then CLOSING FILE
-##
-#    
     
-
-        #fname = "myfile.txt"
-        ## Open the file in read mode
-        #file = open(fname, 'r')
-    
-            ####-->Perform operations with the file...
-        
-        # Close the file
-        #file.close()    
-
-
-
-
-
 
 
     #END OF THE LOOP
@@ -202,17 +186,6 @@ print("\n> Exiting LOOP.\n")
 
 
 
-
-#
-# Check if arrstr exists and arrstr[0] is defined
-# if 'arrstr' in locals() and arrstr and len(arrstr) > 0:
-#     if arrstr[0] is not None:
-#         print("arrstr[0] is defined and not None.")
-#     else:
-#         print("arrstr[0] is either None or not defined.")
-# else:
-#     print("arrstr is not defined or is an empty list.")
-#
 
 data_lines_to_send=0
 data_to_sendLast=""
@@ -245,27 +218,13 @@ with open(file_path, 'r') as file:
                     signalStrength = int(arrstr[12])  # [12]=sigStrength
                     if(signalStrength>=8):
                         print("*** Strong "+ arrstr[5].upper()+ " signal !!!\n")
-            
-        #j=0
-        #tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
-        #print("EDT tstrHHMM=",tstrHHMM)
-        #print("\n\nToday's Trades Extracted today", dstr,": dataToday[][] at time=",tstrHHMM) 
-        #for row1 in dataToday:
-        #    if(j<MAX_Elements):  ## ie last rowstr[]=''
-        #        rowstr = row1[j]
-        #        diffTime = 1000 #int(rowstr[1]) - tstrHHMM
-        #        print(j,": ",rowstr)
-        #        if(j==1):
-        #            diffTime = int(tstrHHMM) - int(rowstr) 
-        #            print("tstrHHMM - row1[1]=", tstrHHMM, " - " ,rowstr, ", ",diffTime,"hrs ago.")
-        #        j=j+1
-        # end of j loop
-
+       
         i=i+1
 
+# Close the file
+file.close()
 
-
-print("\n\n Read "+ str(i)+ "rows. ")
+print("\nClosed file.\n Read "+ str(i)+ "rows. ")
 print("  - The LAST ITEM:")
 j=0
 tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
@@ -281,34 +240,13 @@ for row in dataToday:
             print("tstrHHMM - row[1]=", tstrHHMM, " - " ,rowstr, ", ",diffTime,"hrs ago* MAth NOT Correct for time -.")
         j=j+1
 
-
 print("\nEND OF Trade Injest.")
 print("\n\n")
-
-
-
-
-
-
-
-
-
-
 
 payload = {'data': data_to_sendLast }
 response = requests.post(url, data=payload)
 print(response.text)
-
 print("\n\n")
-
-
-
-
-
-
-
-
-
 
 
 # POST the last line to the PHP script
@@ -317,9 +255,13 @@ url = 'https://algoinvestorr.com/trades/recpost.php'
 tgt = "intradaytrades_"+dstr+".txt"
 print("Called & POSTed "+str(data_lines_to_send)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
 
+current_date_time_ny = datetime.datetime.now(new_york_timezone)
+dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
+print("\n======================>Today's Date and Time in NYC (EDT) is:",dtstr)
+
 print("\n\n")
-print("\n\n")
-print("\n\n")
+#print("\n\n")
+#print("\n\n")
 
 
 
@@ -348,5 +290,28 @@ print("\n\n")
 
 # Print response from the server
 ##print(response.text)
-##
+#
+#
+
+        #fname = "myfile.txt"
+        ## Open the file in read mode
+        #file = open(fname, 'r')
+    
+            ####-->Perform operations with the file...
+        
+        # Close the file
+        #file.close()    
+
 ############################ working _POST to use w/ recpost.php
+
+
+#
+# Check if arrstr exists and arrstr[0] is defined
+# if 'arrstr' in locals() and arrstr and len(arrstr) > 0:
+#     if arrstr[0] is not None:
+#         print("arrstr[0] is defined and not None.")
+#     else:
+#         print("arrstr[0] is either None or not defined.")
+# else:
+#     print("arrstr is not defined or is an empty list.")
+#
