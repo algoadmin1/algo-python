@@ -76,17 +76,6 @@ dstr1 = dstr
 print("Today's date in New York:",dstr)
 
 
-def Check_data(array, datastr):
-    return datastr in array
-
-# Example usage:
-#my_array = [1, 3, 5, 7, 9]
-#my_datastr = 7
-#result = Check_data( data, data_to_send )
-#print(result)  # This will print True or False based on whether my_datastr is in my_array or not
-
-
-
 #####################################################  OVERIDING today's date
 print("\n] Enter Date Override (", dstr , ")")
 dateUser = input()
@@ -111,13 +100,14 @@ file_path = 'intradaytrades.txt'  # Replace with your file path
 #file_path = 'intradaytradessm.txt'  # Replace with your file path
 data = []
 dataMaster = []     # called 1st, then each looped call is read into data[], and cmp'd to/insertedIFF into dataMaster[] - the running list of a,b,c,d,...,EOL
-dataMasterLen=0
 
 dataToday = []
 
 
 # GET TIME
+
 current_time_ny = datetime.datetime.now(new_york_timezone).time()
+
 current_date_time_ny = datetime.datetime.now(new_york_timezone)
 dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
 print("Today's Date and Time in NYC (EDT) is:",dtstr)
@@ -141,43 +131,6 @@ if(tt>1415):
     #sys.exit()
 if(tt<930 and tt>1415):
     print("\n] Markets are Open!\n\n\n")
-
-
-###################################################### 1st dataMaster[] Injest...
-#
-    
-# set this to zero for testing if you do not want dataMaster[] init'd...
-        
-injest0=1
-
-
-if(injest0==1):
-    print("\n] ATTEMPTING 1st INJEST...\n")
-
-    i0=0
-    print("\n] 1st TIME Opening local csv file:", file_path)
-    with open(file_path, 'r') as file:
-        csv_reader = csv.reader(file)
-        for row in csv_reader:
-            #print("row=",row) 
-            data_to_send = ','.join(row)
-            #print("\n] i0=",i0,":  ",data_to_send)
-            
-            result = Check_data( dataMaster, data_to_send )
-            print("\n]",i0,"The current string IS FOUND in the dataMaster[] array?",result)  # This will print True or False based on whether my_datastr is in my_array or not
-
-            dataMaster.append(data_to_send)
-            arrstr = dataMaster[i0]
-            print("] arrstr=", arrstr)
-             
-            i0=i0+1
-
-    print("] end of dataMaster["+str(i0)+"] 1st INJEST... Closing file.\n")
-
-    # Close the file, read  i  rows...
-    file.close()
-
-dataMasterLen = i0
 
 
 keepLooping = LOOPMax # Set keepLooping to a value greater than 0 to enter the loop
@@ -233,12 +186,6 @@ while keepLooping > 0:
             #payload = {'data': data_to_send}
             #response = requests.post(urlPost, data_to_send)
             #print(response.text)
-
-            # if [def ]check_str( data_to_send, dataMaster) == false:
-
-            result = Check_data( dataMaster, data_to_send )
-            #print("\n]",i,"The current string IS FOUND in the dataMaster[] array?",result)  # This will print True or False based on whether my_datastr is in my_array or not
-
 
             data.append(row)
             #print("i=",i,data[i])
