@@ -1,4 +1,4 @@
-# postit.py   i.e. postIntradayTrades.py
+# postitloop1.py   version 1.2 by John Botti for Algo Investor Inc
 #
 #
 #
@@ -73,9 +73,12 @@ MAX_Elements=42  # added MonthlyR/S123 (8) gaps(4)+ EOL  # old: 29
 dtstr="nydatetime"
 dstr="nydate"
 tstr="nytime"
-url = 'https://algoinvestorr.com/trades/recpost.php'
 
-LOOPMax =20
+urlbase = 'https://algoinvestorr.com/trades/'
+url = 'https://algoinvestorr.com/trades/recpost.php'
+       
+MIN_DATA_STRING_LEN = 32
+LOOPMax =40
 SECSMax =12   # 20 loops * 12 secs
 
 # Get current date in New York - we need EDT for markets...
@@ -266,9 +269,9 @@ while keepLooping > 0:
                 data.append(row)
                 print("] uniques=",uniques,data[uniques])
                 arrstr = data[uniques]
-                uniques=uniques+1
                 #print("\n #0,10,21==",arrstr[0],arrstr[10],arrstr[21])
                 additionalTradesFound=additionalTradesFound+1
+                
                 if arrstr and len(arrstr) > 0:
                     if arrstr[0] is not None:
                         if(arrstr[0] == dstr):
@@ -281,7 +284,10 @@ while keepLooping > 0:
                             signalStrength = int(arrstr[12])  # [12]=sigStrength
                             if(signalStrength>=8):
                                 print("*** Strong "+ arrstr[5].upper()+ " signal !!!\n")
-       
+                
+                uniques=uniques+1
+            #if False
+                
             i=i+1
 
     # Close the file, read  i  rows...
@@ -306,19 +312,24 @@ while keepLooping > 0:
             j=j+1
 
     print("\n] END OF Trade Injest. \n] keepLooping==",keepLooping)
-    print("\n] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-----====>>>SENDING data_to_sendLast via _POST...\n")
-
-    payload = {'data': data_to_sendLast }
-    response = requests.post(url, data=payload)
-    print(response.text)
-    print("\n\n")
 
 
-# POST the last line to the PHP script
-    urlbase = 'https://algoinvestorr.com/trades/'
-    url = 'https://algoinvestorr.com/trades/recpost.php'
-    tgt = "intradaytradesServer_"+dstr1+".txt"
-    print("Called & POSTed "+str(data_lines_to_send)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
+
+    # check if there is no data
+    if(len(data_to_sendLast) > MIN_DATA_STRING_LEN):
+        print("\n] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-----====>>>SENDING data_to_sendLast via _POST...\n")
+
+        payload = {'data': data_to_sendLast }
+        response = requests.post(url, data=payload)
+        print(response.text)
+        print("\n\n")
+
+        # POST the last line to the PHP script
+        tgt = "intradaytradesServer_"+dstr1+".txt"
+        print("Called & POSTed "+str(data_lines_to_send)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
+    else:
+        print("\n] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> *NOT Sending ANY data - NO TRADES FOUND.\n") 
+
 
     current_date_time_ny = datetime.datetime.now(new_york_timezone)
     dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
