@@ -76,10 +76,10 @@ print("Today's date in New York:",dstr)
 
 
 #####################################################  OVERIDING today's date
-print("\nEnter Date Override (", dstr , ")")
+print("\n] Enter Date Override (", dstr , ")")
 dateUser = input()
 if dateUser == "":
-    print(" Defaulting Symbol to ", dstr)
+    print("] * Defaulting Symbol to ", dstr)
 else:
     if len(dateUser)==10:
         dstr = dateUser
@@ -121,7 +121,8 @@ print("Current time in New York (Tradestation format) is :",tstrHHMM)
 tt = int(tstrHHMM)
 if(tt<930):
     print("\n] Markets not open yet- time remaining:", (930-tt)," minutes...\n\n\n")
-    sys.exit()
+    # uncomment for production
+    #sys.exit()
 if(tt>1415):
     print("\n] Markets Closed !\n\n\n")
     #sys.exit()
@@ -143,7 +144,7 @@ lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 
 
 
-print("\n] Attempting to Loop",keepLooping," tines, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 ) ,"\n\n" )
+print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 ) ,"\n\n" )
 ###################### STARTING LOOP ****************************************
 
 while keepLooping > 0:
