@@ -73,8 +73,18 @@ current_date_ny = datetime.datetime.now(new_york_timezone).date()
 dstr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
 print("Today's date in New York:",dstr)
 
+
 #####################################################  OVERIDING today's date
-dstr= "2023-12-15"
+print("\nEnter Date Override (", dstr , ")")
+symbol = input()
+if symbol == "":
+    print(" Defaulting Symbol to ", dstr)
+else:
+    dstr = symbol_default
+    if(len(dstr)<10):
+        dstr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
+        print(" Defaulting Symbol to ", dstr)
+        #dstr= "2023-12-15"
 #print("] OVERIDING dstr = "+dstr)
 #####################################################
 

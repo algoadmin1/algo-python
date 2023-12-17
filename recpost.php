@@ -27,6 +27,18 @@ $splitChars = ",";
 //$afterAdrsee = strpbrk($searchQuery,$splitChars);
 //$avName      =  strtok($searchQuery,$splitChars);    // userName trying to sign in, above, pwd
 
+
+
+
+  //
+  if (empty($searchQuery)) {
+    echo "searchQuery is empty, exiting.\n";
+    exit("recpost.php execution terminated.\n\n");
+
+  } else {
+    echo " searchQuery, len=". strlen($searchQuery). " - _POST msg rec'd OK!\n";
+  }
+
 $i=0;
 
 $params = explode (",", $searchQuery);

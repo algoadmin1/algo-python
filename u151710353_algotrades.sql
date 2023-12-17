@@ -1,0 +1,21 @@
+CREATE TABLE u151710353_algotrades.trades (
+    tradeId INT AUTO_INCREMENT PRIMARY KEY,
+    tradeDTstamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tradeDateTime VARCHAR(32),
+    userId VARCHAR(128),
+    accountId VARCHAR(256),
+    tradeType VARCHAR(128),
+    tradeSize INT,
+    tradePrice FLOAT,
+    tradePrExec FLOAT,
+    tradeCond VARCHAR(32),
+    tradeDur VARCHAR(128),
+    tradeSpec VARCHAR(512),
+    tradeSig VARCHAR(512),
+    tradeDistPct VARCHAR(32),
+    tradeGapPct VARCHAR(32),
+    tradeStatus VARCHAR(128),
+    tradeAux1 VARCHAR(1024),
+    tradeAux2 VARCHAR(1024),
+    tradeAux3 VARCHAR(1024)
+);
