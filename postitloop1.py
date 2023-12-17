@@ -63,6 +63,7 @@ dstr="nydate"
 tstr="nytime"
 url = 'https://algoinvestorr.com/trades/recpost.php'
 
+LOOPMax =20
 
 # Get current date in New York - we need EDT for markets...
 new_york_timezone = pytz.timezone('America/New_York')
@@ -130,7 +131,7 @@ if(tt<930 and tt>1415):
     print("\n] Markets are Open!\n\n\n")
 
 
-keepLooping = 20 # Set keepLooping to a value greater than 0 to enter the loop
+keepLooping = LOOPMax # Set keepLooping to a value greater than 0 to enter the loop
 timeDelay   = 5     # secs
 print("\ndstr=",dstr  ,"len(dstr)=", len(dstr)  )
 print("\n] Starting to Loop for ",str((timeDelay*keepLooping)/60), "minutes,\n\n]  *** ENTERING BUY/SELL TRADE ALERT LOOP...\n")
