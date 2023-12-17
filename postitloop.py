@@ -63,6 +63,7 @@ dstr="nydate"
 tstr="nytime"
 url = 'https://algoinvestorr.com/trades/recpost.php'
 
+LOOPMax =20
 
 # Get current date in New York - we need EDT for markets...
 new_york_timezone = pytz.timezone('America/New_York')
@@ -98,6 +99,8 @@ print("\n] Initializing memory and arrays[]...\n")
 file_path = 'intradaytrades.txt'  # Replace with your file path
 #file_path = 'intradaytradessm.txt'  # Replace with your file path
 data = []
+dataMaster = []     # called 1st, then each looped call is read into data[], and cmp'd to/insertedIFF into dataMaster[] - the running list of a,b,c,d,...,EOL
+
 dataToday = []
 
 
@@ -130,7 +133,7 @@ if(tt<930 and tt>1415):
     print("\n] Markets are Open!\n\n\n")
 
 
-keepLooping = 20 # Set keepLooping to a value greater than 0 to enter the loop
+keepLooping = LOOPMax # Set keepLooping to a value greater than 0 to enter the loop
 timeDelay   = 5     # secs
 print("\ndstr=",dstr  ,"len(dstr)=", len(dstr)  )
 print("\n] Starting to Loop for ",str((timeDelay*keepLooping)/60), "minutes,\n\n]  *** ENTERING BUY/SELL TRADE ALERT LOOP...\n")
@@ -242,11 +245,11 @@ while keepLooping > 0:
     current_date_time_ny = datetime.datetime.now(new_york_timezone)
     dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
     print("\n======================>Today's Date and Time in NYC (EDT) is:",dtstr)
-
-
+    
 #### End of Loop
     # Decrement keepLooping to eventually exit the loop
     keepLooping -= 1  # You might have a condition to break the loop based on a certain condition
+    print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 ) ,"\n\n" )
 
     #END OF THE LOOP
 

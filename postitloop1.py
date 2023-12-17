@@ -99,6 +99,8 @@ print("\n] Initializing memory and arrays[]...\n")
 file_path = 'intradaytrades.txt'  # Replace with your file path
 #file_path = 'intradaytradessm.txt'  # Replace with your file path
 data = []
+dataMaster = []     # called 1st, then each looped call is read into data[], and cmp'd to/insertedIFF into dataMaster[] - the running list of a,b,c,d,...,EOL
+
 dataToday = []
 
 
@@ -243,11 +245,11 @@ while keepLooping > 0:
     current_date_time_ny = datetime.datetime.now(new_york_timezone)
     dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
     print("\n======================>Today's Date and Time in NYC (EDT) is:",dtstr)
-
-
+    
 #### End of Loop
     # Decrement keepLooping to eventually exit the loop
     keepLooping -= 1  # You might have a condition to break the loop based on a certain condition
+    print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 ) ,"\n\n" )
 
     #END OF THE LOOP
 
