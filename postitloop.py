@@ -103,10 +103,9 @@ dataToday = []
 
 # GET TIME
 
-current_date_time_ny = datetime.datetime.now(new_york_timezone)
 current_time_ny = datetime.datetime.now(new_york_timezone).time()
 
-#print (f"Current date and time in New York: {current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
+current_date_time_ny = datetime.datetime.now(new_york_timezone)
 dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
 print("Today's Date and Time in NYC (EDT) is:",dtstr)
 
@@ -130,8 +129,8 @@ if(tt<930 and tt>1415):
     print("\n] Markets are Open!\n\n\n")
 
 
-keepLooping = 3  # Set keepLooping to a value greater than 0 to enter the loop
-timeDelay   = 3     # secs
+keepLooping = 20 # Set keepLooping to a value greater than 0 to enter the loop
+timeDelay   = 5     # secs
 print("\ndstr=",dstr  ,"len(dstr)=", len(dstr)  )
 print("\n] Starting to Loop for ",str((timeDelay*keepLooping)/60), "minutes,\n\n]  *** ENTERING BUY/SELL TRADE ALERT LOOP...\n")
 print("\n] currentTradestaionNY_Time=", tt,"\n\n> HH:MM:SS NY EDT_-_-_")
@@ -144,7 +143,7 @@ lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 
 
 
-
+print("\n] Attempting to Loop",keepLooping," tines, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 ) ,"\n\n" )
 ###################### STARTING LOOP ****************************************
 
 while keepLooping > 0:
@@ -163,162 +162,97 @@ while keepLooping > 0:
     #print(" ",tstr)
     print(".", end="", flush=True)
     #print(">",tstr,".", end="", flush=True)
-    time.sleep(timeDelay)  # Wait for 10 seconds
+    time.sleep(timeDelay) 
+    
+    # Wait for 3 seconds then open local file... (adjust for longer durations like 5 sec+ )
+
+
+    # Looping this code now 2023-12-7T19:01:00
+
+    data_lines_to_send=0
+    data_to_sendLast=""
+    i=0
+    print("\n Opening local csv file:", file_path)
+    with open(file_path, 'r') as file:
+        csv_reader = csv.reader(file)
+        for row in csv_reader:
+            #print("row=",row) 
+            data_to_send = ','.join(row)
+            #print("i=",i,":  ",data_to_send)
+            #payload = {'data': data_to_send}
+            #response = requests.post(urlPost, data_to_send)
+            #print(response.text)
+
+            data.append(row)
+            #print("i=",i,data[i])
+            arrstr = data[i]
+            #print("\n #0,10,21==",arrstr[0],arrstr[10],arrstr[21])
+        
+
+            if arrstr and len(arrstr) > 0:
+                if arrstr[0] is not None:
+                    if(arrstr[0] == dstr):
+                        #if dates match then POST
+                        print("Today's (", dstr ,") trade data[",i,"] =  ",data[i], "  adding to data_to_sendLast...\n")
+                        print("i=",i,":  ",data_to_send)
+                        data_to_sendLast=data_to_sendLast+data_to_send+"\n"   #this is the trade data from today to send uo
+                        data_lines_to_send = data_lines_to_send+1
+                        dataToday.append(row)
+                        signalStrength = int(arrstr[12])  # [12]=sigStrength
+                        if(signalStrength>=8):
+                            print("*** Strong "+ arrstr[5].upper()+ " signal !!!\n")
+       
+            i=i+1
+
+    # Close the file, read  i  rows...
+    file.close()
+
+    print("\nClosed file.\n Read "+ str(i)+ "rows. ")
+    print("  - The LAST ITEM:")
+    j=0
+    tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
+    print("EDT tstrHHMM=",tstrHHMM)
+    print("\n\nToday's Trades Extracted today", dstr,": dataToday[][] at time=",tstrHHMM) 
+    for row in dataToday:
+        if(j<MAX_Elements and j<11):   
+            rowstr = row[j]
+            diffTime = 1000 #int(rowstr[1]) - tstrHHMM
+            print(j,": ",rowstr)
+            if(j==1):
+                diffTime = int(tstrHHMM) - int(rowstr) 
+                print("tstrHHMM - row[1]=", tstrHHMM, " - " ,rowstr, ", ",diffTime,"hrs ago* MAth NOT Correct for time -.")
+            j=j+1
+
+    print("\n] END OF Trade Injest. \n] keepLooping==",keepLooping)
+    print("\n] SENDING data via _POST...\n")
+
+    payload = {'data': data_to_sendLast }
+    response = requests.post(url, data=payload)
+    print(response.text)
+    print("\n\n")
+
+
+# POST the last line to the PHP script
+    urlbase = 'https://algoinvestorr.com/trades/'
+    url = 'https://algoinvestorr.com/trades/recpost.php'
+    tgt = "intradaytrades_"+dstr+".txt"
+    print("Called & POSTed "+str(data_lines_to_send)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
+
+    current_date_time_ny = datetime.datetime.now(new_york_timezone)
+    dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
+    print("\n======================>Today's Date and Time in NYC (EDT) is:",dtstr)
+
+
+#### End of Loop
     # Decrement keepLooping to eventually exit the loop
     keepLooping -= 1  # You might have a condition to break the loop based on a certain condition
-
-#
-##
-#########      INDENT ALL CODE HERE TO LOOP AROUND OPENING & READING FILE, then CLOSING FILE
-##
-#    
-    
-
-        #fname = "myfile.txt"
-        ## Open the file in read mode
-        #file = open(fname, 'r')
-    
-            ####-->Perform operations with the file...
-        
-        # Close the file
-        #file.close()    
-
-
-
-
-
-
 
     #END OF THE LOOP
 
 ###################### ENDING LOOP **********************************************
 
-print("\n> Exiting LOOP.\n")
+print("\n] Exiting LOOP.\n")
 
-
-
-
-
-
-
-
-
-#
-# Check if arrstr exists and arrstr[0] is defined
-# if 'arrstr' in locals() and arrstr and len(arrstr) > 0:
-#     if arrstr[0] is not None:
-#         print("arrstr[0] is defined and not None.")
-#     else:
-#         print("arrstr[0] is either None or not defined.")
-# else:
-#     print("arrstr is not defined or is an empty list.")
-#
-
-data_lines_to_send=0
-data_to_sendLast=""
-i=0
-with open(file_path, 'r') as file:
-    csv_reader = csv.reader(file)
-    for row in csv_reader:
-        #print("row=",row) 
-        data_to_send = ','.join(row)
-        #print("i=",i,":  ",data_to_send)
-        #payload = {'data': data_to_send}
-        #response = requests.post(urlPost, data_to_send)
-        #print(response.text)
-
-        data.append(row)
-        #print("i=",i,data[i])
-        arrstr = data[i]
-        #print("\n #0,10,21==",arrstr[0],arrstr[10],arrstr[21])
-        
-
-        if arrstr and len(arrstr) > 0:
-            if arrstr[0] is not None:
-                if(arrstr[0] == dstr):
-                    #if dates match then POST
-                    print("Today's (", dstr ,") trade data[",i,"] =  ",data[i], "  adding to data_to_sendLast...\n")
-                    print("i=",i,":  ",data_to_send)
-                    data_to_sendLast=data_to_sendLast+data_to_send+"\n"   #this is the trade data from today to send uo
-                    data_lines_to_send = data_lines_to_send+1
-                    dataToday.append(row)
-                    signalStrength = int(arrstr[12])  # [12]=sigStrength
-                    if(signalStrength>=8):
-                        print("*** Strong "+ arrstr[5].upper()+ " signal !!!\n")
-            
-        #j=0
-        #tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
-        #print("EDT tstrHHMM=",tstrHHMM)
-        #print("\n\nToday's Trades Extracted today", dstr,": dataToday[][] at time=",tstrHHMM) 
-        #for row1 in dataToday:
-        #    if(j<MAX_Elements):  ## ie last rowstr[]=''
-        #        rowstr = row1[j]
-        #        diffTime = 1000 #int(rowstr[1]) - tstrHHMM
-        #        print(j,": ",rowstr)
-        #        if(j==1):
-        #            diffTime = int(tstrHHMM) - int(rowstr) 
-        #            print("tstrHHMM - row1[1]=", tstrHHMM, " - " ,rowstr, ", ",diffTime,"hrs ago.")
-        #        j=j+1
-        # end of j loop
-
-        i=i+1
-
-
-
-print("\n\n Read "+ str(i)+ "rows. ")
-print("  - The LAST ITEM:")
-j=0
-tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
-print("EDT tstrHHMM=",tstrHHMM)
-print("\n\nToday's Trades Extracted today", dstr,": dataToday[][] at time=",tstrHHMM) 
-for row in dataToday:
-    if(j<MAX_Elements):  ## ie last rowstr[]=''
-        rowstr = row[j]
-        diffTime = 1000 #int(rowstr[1]) - tstrHHMM
-        print(j,": ",rowstr)
-        if(j==1):
-            diffTime = int(tstrHHMM) - int(rowstr) 
-            print("tstrHHMM - row[1]=", tstrHHMM, " - " ,rowstr, ", ",diffTime,"hrs ago* MAth NOT Correct for time -.")
-        j=j+1
-
-
-print("\nEND OF Trade Injest.")
-print("\n\n")
-
-
-
-
-
-
-
-
-
-
-
-payload = {'data': data_to_sendLast }
-response = requests.post(url, data=payload)
-print(response.text)
-
-print("\n\n")
-
-
-
-
-
-
-
-
-
-
-
-# POST the last line to the PHP script
-urlbase = 'https://algoinvestorr.com/trades/'
-url = 'https://algoinvestorr.com/trades/recpost.php'
-tgt = "intradaytrades_"+dstr+".txt"
-print("Called & POSTed "+str(data_lines_to_send)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
-
-print("\n\n")
-print("\n\n")
 print("\n\n")
 
 
@@ -348,5 +282,28 @@ print("\n\n")
 
 # Print response from the server
 ##print(response.text)
-##
+#
+#
+
+        #fname = "myfile.txt"
+        ## Open the file in read mode
+        #file = open(fname, 'r')
+    
+            ####-->Perform operations with the file...
+        
+        # Close the file
+        #file.close()    
+
 ############################ working _POST to use w/ recpost.php
+
+
+#
+# Check if arrstr exists and arrstr[0] is defined
+# if 'arrstr' in locals() and arrstr and len(arrstr) > 0:
+#     if arrstr[0] is not None:
+#         print("arrstr[0] is defined and not None.")
+#     else:
+#         print("arrstr[0] is either None or not defined.")
+# else:
+#     print("arrstr is not defined or is an empty list.")
+#
