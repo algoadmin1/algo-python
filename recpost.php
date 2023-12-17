@@ -57,7 +57,7 @@ $params = explode (",", $afterAdrsee);
 $password= $params[1];
 $passwordSHA1 = sha1( $password );
 $lastIP  = $params[2];
-*/
+
 
 $name = $searchQuery;
 // chatGPT's version...
@@ -70,6 +70,8 @@ $name = $searchQuery;
   } else {
     echo $name. "\n\n msg rec'd OK!\n";
   }
+*/
+
 
 //}
 

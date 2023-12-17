@@ -71,20 +71,23 @@ current_date_ny = datetime.datetime.now(new_york_timezone).date()
 # Print current date in New York as YYYY-MM-DD
 #print(f"Current date in New York: {current_date_ny.strftime('%Y-%m-%d')}")
 dstr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
+dstr1 = dstr
 print("Today's date in New York:",dstr)
 
 
 #####################################################  OVERIDING today's date
 print("\nEnter Date Override (", dstr , ")")
-symbol = input()
-if symbol == "":
+dateUser = input()
+if dateUser == "":
     print(" Defaulting Symbol to ", dstr)
 else:
-    dstr = symbol_default
-    if(len(dstr)<10):
-        dstr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
-        print(" Defaulting Symbol to ", dstr)
-        #dstr= "2023-12-15"
+    if len(dateUser)==10:
+        dstr = dateUser
+        print("] OVERIDING dstr(",dstr1,") = ",dstr)
+        #if( len(dstr)<10 or len(dstr)>10 ):
+        #    dstr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
+        #    print(" Defaulting Symbol to ", dstr)
+        #    #dstr= "2023-12-15"
 #print("] OVERIDING dstr = "+dstr)
 #####################################################
 
@@ -129,6 +132,7 @@ if(tt<930 and tt>1415):
 
 keepLooping = 3  # Set keepLooping to a value greater than 0 to enter the loop
 timeDelay   = 5     # secs
+print("\ndstr=",dstr  ,"len(dstr)=", len(dstr)  )
 print("\n] Starting to Loop for ",str((timeDelay*keepLooping)/60), "minutes,\n\n]  *** ENTERING BUY/SELL TRADE ALERT LOOP...\n")
 print("\n] currentTradestaionNY_Time=", tt,"\n\n> HH:MM:SS NY EDT_-_-_")
 
