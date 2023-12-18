@@ -1,7 +1,9 @@
 ////////////////////////////////////////////
 //
 //
-//          candlesticks.js - by John Botti for aiTrader.me / Jackabee Inc Copyright (C) 2010-2023	
+//          candlesticks.js - by John Botti for aiTrader.me  
+//
+//               Copyright (c) 2021-2025 by  Algo Investor Inc  
 //
 //
 ////////////////////////////////////////////
@@ -20,7 +22,7 @@
             screenWidth0   = canvasWidth;
             screenHeight0  = canvasHeight;
 
-                               var gVersionStr = "v12.327";
+                               var gVersionStr = "v12.330";  // new 2024 FOMC dates
 
                                const gRESIZE_TEST  =    0   ;    // set to =1 for resizable
 
@@ -388,6 +390,22 @@ var gGeoPoliticalEvents=[
 
     { udate: "2023-11-01", ev:"FOMC 2day Meeting", tag:"FOMC" },
     { udate: "2023-12-13", ev:"FOMC 2day Meeting*", tag:"FOMC" },
+
+
+    // 2024
+    { udate: "2024-01-31", ev:"FOMC Mtg:525/550", tag:"FOMC" },
+    { udate: "2024-03-20", ev:"FOMC Mtg:500/525", tag:"FOMC" },
+    { udate: "2024-05-01", ev:"FOMC Mtg:475/500", tag:"FOMC" },
+    { udate: "2024-06-12", ev:"FOMC Mtg:450/475", tag:"FOMC" },
+
+    { udate: "2024-07-31", ev:"FOMC Mtg:425/450", tag:"FOMC" },
+    { udate: "2024-09-18", ev:"FOMC Mtg:400/425-50", tag:"FOMC" },
+    { udate: "2024-11-07", ev:"FOMC Mtg:400/425", tag:"FOMC" },
+    { udate: "2024-12-18", ev:"FOMC Mtg:375/400", tag:"FOMC" },
+
+    { udate: "2024-11-05", ev:"US PresElection", tag:"tag" },
+
+    { udate: "2024-04-15", ev:"US TAX DAY", tag:"tag" },
 
 
 
