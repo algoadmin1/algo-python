@@ -22,7 +22,7 @@
             screenWidth0   = canvasWidth;
             screenHeight0  = canvasHeight;
 
-                               var gVersionStr = "v12.330";  // new 2024 FOMC dates
+                               var gVersionStr = "v12.331";  // new 2024 FOMC dates
 
                                const gRESIZE_TEST  =    0   ;    // set to =1 for resizable
 
@@ -291,7 +291,8 @@ var gLastUDate ="2092-12-13";
 var gAlgoStop=0;
 
 
-var gPoorFinancialStr ="Poor Financials!";
+var gPoorFinancialStr ="Check Financials!";
+var gPoorFinancialSize =110;
 
 let gDrawCrawlCount =0;
 
@@ -869,6 +870,7 @@ var YRange  = 0;  //     YRange  = Ybottom - Yt0op;
 var candleWidth  =8; // =11;  //  =15;  // =20;
 var candleOffset = candleWidth * 0.50;
 var XendOfCandles = 0;
+var XendOfCandlesMASTER=0;
 var gLastClose =0;
 
 // sta rtX in Canvas = pixels from left of screen to start drawing candles etc...
@@ -3641,8 +3643,8 @@ let tstr= candlesClamp.toString()+ ","+candlesLen_ScreenNew.toString();
            drawTextRotated( gCSV_DateStartStr+" ["+tstr+" ]", (gGlobalViewportRect.x + gGlobalViewportRectFntSz-25),
                                              gGlobalViewportRect.y+(0.95*gGlobalViewportRect.h), "#72a1d1", mf(0.5*gGlobalViewportRectFntSz), "Helvetica" ) ;
 
-        // use XendOfCandles 
-           // drawTextRotated( gCSV_DateEndStr, XendOfCandles, //gGlobalViewportRect.x+ gGlobalViewportRect.w-6,
+        // use Xe ndOfCandles 
+           // drawTextRotated( gCSV_DateEndStr, Xen dOfCandles, //gGlobalViewportRect.x+ gGlobalViewportRect.w-6,
            drawTextRotated( gCSV_DateEndStr, gGlobalViewportRect.x+ gGlobalViewportRect.w-8,
                                              gGlobalViewportRect.y+(0.95*gGlobalViewportRect.h), "#72a1d1", mf(0.5*gGlobalViewportRectFntSz), "Helvetica" ) ;
         }
@@ -6991,7 +6993,8 @@ if(typeof symDataStr === "undefined"){
       drawFibonacci(candles52WeekHigh, candles52WeekLow);
 
      gActualCandleXNext = candleXnext;
-
+     XendOfCandlesMASTER =  candleXnext + candleWidth + candleOffset ;
+ 
 
 // *********************************************************************   predict!
 // *********************************************************************   predict!
@@ -7131,7 +7134,7 @@ if(typeof symDataStr === "undefined"){
     
     XendOfCandles  = candleXnext + candleWidth + candleOffset ;
 
-    SetgGlobalViewportRectRecomputed(XendOfCandles);
+    SetgGlobalViewportRectRecomputed(XendOfCandlesMASTER);
 
     SetPriceToLastXYPos( gLastClose ); 
 
@@ -16683,7 +16686,7 @@ let poorFinancials=false;
             if(poorFinancials==true){
                 let tmpsty = ctx.fillStyle;  
 
-                let fns =140;
+                let fns = gPoorFinancialSize;  // =140;
 
                 let pfstr =  gPoorFinancialStr ; //"Poor Financials!";
                 ctx.font = fns.toString()+    "px Courier New";
@@ -16691,12 +16694,14 @@ let poorFinancials=false;
 
             ctx.save();
 
-                let x0=  gGlobalViewportRect.x+50;
-                let y0= gGlobalViewportRect.y+ (gGlobalViewportRect.h*0.20) ;
+                let x0=  gGlobalViewportRect.x+110;
+                let y0= gGlobalViewportRect.y+ (gGlobalViewportRect.h*0.200) ;
                 let y1= gGlobalViewportRect.y+ (gGlobalViewportRect.h*0.750) ;
 
                 ctx.translate(x0*0.35,y1);
-                ctx.rotate(-49.0*Math.PI/180);
+                //ctx.rotate(-49.0*Math.PI/180);    // JMB 2023-12-18
+                ctx.rotate(-41.0*Math.PI/180);
+
                 let rw = ctx.measureText(pfstr).width ;
 
                 ctx.fillStyle ="rgba(150,150,150,0.25)";  

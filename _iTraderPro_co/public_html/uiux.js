@@ -10,7 +10,7 @@ var canvasGlobal = document.getElementById("myCanvas");
    //          var canvasHeightG = ctxG.height;
 
 
-                                      var gVersionNum = "v12.327ui";  
+                                      var gVersionNum = "v12.331ui";  
 
  
 var screenWidth   =screen.width;
@@ -824,11 +824,11 @@ var bRects = [     // var bClickStatus = [  //  + bClickStatusInit
                  
 
 
-              // [77..80]   10,100,1000 , 10k shares   						
-                  650+    xButOff+gSwitchOffsetX -gxIntvOff +  ( 7 *xl100) -  ( 5 *xl100), (y10b1*1.0) + gIntervalButton0b+16 , xl100,y10b1,
-                  650+    xButOff+gSwitchOffsetX -gxIntvOff + ( 8 *xl100) -  ( 5 *xl100), (y10b1*1.0) + gIntervalButton0b +16 , xl100,y10b1,
-                  650+    xButOff+gSwitchOffsetX -gxIntvOff + ( 9 *xl100) -  ( 5 *xl100), (y10b1*1.0) + gIntervalButton0b +16 , xl100,y10b1,
-                  650+    xButOff+gSwitchOffsetX -gxIntvOff + (10 *xl100) -  ( 5 *xl100), (y10b1*1.0) + gIntervalButton0b +16 ,  xl100,y10b1,
+              // [77..80]   10,100,1000 , 10k shares   	// BACKTEST BUTTONS					
+                  650+    xButOff+gSwitchOffsetX -gxIntvOff +  ( 7 *xl100) -  ( 5 *xl100), (y10b1*1.0) + gIntervalButton0b+16 +48 , xl100,y10b1,
+                  650+    xButOff+gSwitchOffsetX -gxIntvOff + ( 8 *xl100) -  ( 5 *xl100), (y10b1*1.0) + gIntervalButton0b +16 +48 , xl100,y10b1,
+                  650+    xButOff+gSwitchOffsetX -gxIntvOff + ( 9 *xl100) -  ( 5 *xl100), (y10b1*1.0) + gIntervalButton0b +16 +48 , xl100,y10b1,
+                  650+    xButOff+gSwitchOffsetX -gxIntvOff + (10 *xl100) -  ( 5 *xl100), (y10b1*1.0) + gIntervalButton0b +16 +48 ,  xl100,y10b1,
                
 
                // [81]  "<<<",
