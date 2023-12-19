@@ -43,7 +43,7 @@ import pytz
 import shutil
 import sys
 
-
+import os
 
 ################################################ for TESTING
 #
@@ -78,7 +78,7 @@ urlbase = 'https://algoinvestorr.com/trades/'
 url = 'https://algoinvestorr.com/trades/recpost.php'
        
 MIN_DATA_STRING_LEN = 32
-LOOPMax =40
+LOOPMax =  7 * 60 * 5
 SECSMax =12   # 20 loops * 12 secs
 
 # Get current date in New York - we need EDT for markets...
@@ -161,9 +161,15 @@ if(tt<930 and tt>1415):
     
 # set this to zero for testing if you do not want dataMaster[] init'd...
         
-injest0=1
+# assume initial file intradaytrades.txt (PC[tradesta]-->c:\...) NOT exists
+injest0=0  
 
+if os.path.exists(file_path):
+    injest0=1
+else:
+    print("\n] ",file_path," NOT Found, skipping initial INJEST, records found=0.")
 
+i0=0
 if(injest0==1):
     print("\n] ATTEMPTING 1st INJEST...\n")
 
@@ -244,55 +250,65 @@ while keepLooping > 0:
 
     i=0
     uniques=0
-    print("\n Opening local csv file:", file_path)
-    with open(file_path, 'r') as file:
-        csv_reader = csv.reader(file)
-        for row in csv_reader:
-            #print("row=",row) 
-            data_to_send = ','.join(row)
-            #print("i=",i,":  ",data_to_send)
-            #payload = {'data': data_to_send}
-            #response = requests.post(urlPost, data_to_send)
-            #print(response.text)
+    if os.path.exists(file_path):
+        print("\n Opening local csv file:", file_path)
+    
+        with open(file_path, 'r') as file:
+            csv_reader = csv.reader(file)
+            for row in csv_reader:
+                #print("row=",row) 
+                data_to_send = ','.join(row)
+                #print("i=",i,":  ",data_to_send)
+                #payload = {'data': data_to_send}
+                #response = requests.post(urlPost, data_to_send)
+                #print(response.text)
 
-            # if [def ]check_str( data_to_send, dataMaster) == false:
+                # if [def ]check_str( data_to_send, dataMaster) == false:
 
-            result = Check_data( dataMaster, data_to_send )
-            #print("\n]",i,"The current string IS FOUND in the dataMaster[] array?",result)  # This will print True or False based on whether my_datastr is in my_array or not
-            if(result==False):
-                print("\n] row=",i,". The current string IS NOT FOUND in dataMaster[], adding:\n",data_to_send)
-                dataMaster.append(data_to_send)
-                arrstrM = dataMaster[dataMasterLen]             # i0  becomes dataMasterLen
-                print("\n] dataMaster["+str(dataMasterLen)+"] :  ADDING:arrstrM=", arrstrM)
-                dataMasterLen=dataMasterLen+1
+                result = Check_data( dataMaster, data_to_send )
+                #print("\n]",i,"The current string IS FOUND in the dataMaster[] array?",result)  # This will print True or False based on whether my_datastr is in my_array or not
+                if(result==False):
+                    print("\n] row=",i,". The current string IS NOT FOUND in dataMaster[], adding:\n",data_to_send)
+                    dataMaster.append(data_to_send)
+                    arrstrM = dataMaster[dataMasterLen]             # i0  becomes dataMasterLen
+                    print("\n] dataMaster["+str(dataMasterLen)+"] :  ADDING:arrstrM=", arrstrM)
+                    dataMasterLen=dataMasterLen+1
 
-                data.append(row)
-                print("] uniques=",uniques,data[uniques])
-                arrstr = data[uniques]
-                #print("\n #0,10,21==",arrstr[0],arrstr[10],arrstr[21])
-                additionalTradesFound=additionalTradesFound+1
+                    data.append(row)
+                    print("] uniques=",uniques,data[uniques])
+                    arrstr = data[uniques]
+                    #print("\n #0,10,21==",arrstr[0],arrstr[10],arrstr[21])
+                    additionalTradesFound=additionalTradesFound+1
                 
-                if arrstr and len(arrstr) > 0:
-                    if arrstr[0] is not None:
-                        if(arrstr[0] == dstr):
-                            #if dates match then POST
-                            print("\nTrade date (", dstr ,") trade array:  data["+str(uniques)+"] =  ",data[uniques], "  adding to data_to_sendLast...\n")
-                            print("uniques=",uniques,":  ",data_to_send)
-                            data_to_sendLast=data_to_sendLast+data_to_send+"\n"   #this is the trade data from today to send uo
-                            data_lines_to_send = data_lines_to_send+1
-                            dataToday.append(row)
-                            signalStrength = int(arrstr[12])  # [12]=sigStrength
-                            if(signalStrength>=8):
-                                print("*** Strong "+ arrstr[5].upper()+ " signal !!!\n")
+                    if arrstr and len(arrstr) > 0:
+                        if arrstr[0] is not None:
+                            if(arrstr[0] == dstr):
+                                #if dates match then POST
+                                print("\nTrade date (", dstr ,") trade array:  data["+str(uniques)+"] =  ",data[uniques], "  adding to data_to_sendLast...\n")
+                                print("uniques=",uniques,":  ",data_to_send)
+                                data_to_sendLast=data_to_sendLast+data_to_send+"\n"   #this is the trade data from today to send uo
+                                data_lines_to_send = data_lines_to_send+1
+                                dataToday.append(row)
+                                signalStrength = int(arrstr[12])  # [12]=sigStrength
+                                if(signalStrength>=8):
+                                    print("*** Strong "+ arrstr[5].upper()+ " signal !!!\n")
                 
-                uniques=uniques+1
-            #if False
+                    uniques=uniques+1
+                #
+                #if False
+                #########
                 
-            i=i+1
-
-    # Close the file, read  i  rows...
-    file.close()
-    print("\nClosed file.\n Read "+ str(i)+ "rows, UNIQUE lines found:", additionalTradesFound )
+                i=i+1
+            # for
+        # with open file
+        # Close the file, read  i  rows...
+        file.close()
+        print("\nClosed file.\n Read "+ str(i)+ "rows, UNIQUE lines found:", additionalTradesFound )
+    #
+    #
+    #
+    # END OF If file exists...
+    ############################
 
 
 
