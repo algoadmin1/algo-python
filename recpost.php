@@ -1,19 +1,25 @@
 // recpost.php
 <?php
-echo "] recpost.php is running...\n";
-
-
-
 //Setting up Error Reporting Level
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+
+date_default_timezone_set("America/New_York"); 
+                                                      $vers = "2.13";
+
+$todaysdate = date('Y-m-d');
+
+echo "\n\n] recpost.php $vers is running, Time in NYC = $todaysdate \n";
+
+
+
 
 //$searchQuery = $_POST["post_query"];
 $searchQuery = $_POST["data"];
 
 $filePath="";
 $filePath1 = "intradaytradesServer"; 
-$todaysdate = date('Y-m-d');
+//$todaysdate = date('Y-m-d');
 $filePath.= $filePath1."_". $todaysdate. ".txt";
 
 
