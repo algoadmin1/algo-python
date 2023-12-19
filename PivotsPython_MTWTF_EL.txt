@@ -1,7 +1,10 @@
 {
-  // !!PivotsMTWTF_Weekly ver 8.0
+  //  !!PivotsPython_MTWTF(_Weekly)  ver 10.3.0   jb 2023-12-13, 12-16-23
+  //  
+  //     derived from:
+  //        !!PivotsMTWTF_Weekly ver 8.0
   //
-  //  was !!Pivots5DayTRENDLN5
+  //  	was !!Pivots5DayTRENDLN5
   //  
   // - by John Botti - includes R3, R2, R1, P, S1, S2, S3  new + sss + weekly
   //
@@ -96,9 +99,22 @@ vars:
  
  DayOfWeekNum(0), JBString0("?jb"),JBudate("2023-12-13"),JBudate1("2023-12-13"),JBudate2("2023-12-13"),JBudate3("2023-12-13"),
  
- DayOfWeekNum1(0),DayOfWeekNumStr("sun"),pivotsStrOutput("0"),priceMinusR1str("0"),priceMinusS1str("0"),
+ DayOfWeekNum1(0),DayOfWeekNumStr("sun"),pivotsStrOutput("0"),priceMinusR1str("0"),priceMinusS1str("0"),   priceMinusR1pctstr("0"),   priceMinusS1pctstr("0"),
+ datestr1("0000-11-22"), datestr2("0000-11-22"),yesterdateNum(0),
  
- weeklyPivotsStr("wkR2R1S1S2="),
+ daysBackToCompute(-8), processBar(0),
+ 
+ weeklyPivotsStr("wkR2R1S1S2="),monthlyPivotsStr("moR3R2R1PS1S2S3="), currBuyStr("==="), currSellStr("==="),
+ gapstr("GAP="), gappct(0.0), 
+
+ gapThreshold(0.0125),
+  
+  intrabarpersist  lastBuyStr("==="),
+  intrabarpersist lastSellStr("==="),
+ 
+  buyStrEqual(0), sellStrEqual(0),
+ 
+ str1("n"),  str2("n"),  str3("n"),  str4("n"),
  
  DayOfWeekString0("?DAY"),  // today
  DayOfWeekString1("?DAY"),  // yesterday
@@ -121,7 +137,12 @@ vars:
  SupportColor(Green),ResistanceColor(Red), PivotColor(Blue), Avg3DayPivotColor(Yellow), // new 5.0
  JBColorPivot(cyan), JBColorMvgAvg(yellow),  // Pivot line, 3-day avg(Ps)
  JBplotW(13), JBplotWsm(.5),
- SellThreshold(3), BuyThreshold(3), SellThreshold2(5), BuyThreshold2(5),
+ SellThreshold(3), BuyThreshold(3),
+ 
+ 
+ SellThreshold2(4), BuyThreshold2(4), // here THIS ONE
+ 
+ 
  HardPivot(-1), HardS1(-1), HardR1(-1),
 
  
@@ -283,11 +304,10 @@ R3day = (Pday-S1day) + R2day;
 
 
 
-
-
 weeklyPivotsStr = "wkR2R1S1S2=,"+ NumtoStr(R2week, 2) +","+ NumtoStr(R1week, 2) +","+ NumtoStr(S1week, 2) +","+ NumtoStr(S2week, 2) ;
 
 
+monthlyPivotsStr = "moR3R2R1PS1S2S3=,"+ NumtoStr(MonthR3,2) + ","+ NumtoStr(MonthR2,2) + ","+ NumtoStr(MonthR1,2) + ","+ NumtoStr(MonthPivot,2) + ","+ NumtoStr(MonthS1,2) + ","+ NumtoStr(MonthS2,2) + ","+ NumtoStr(MonthS3,2)  ;
 
 
 
@@ -299,36 +319,36 @@ weeklyPivotsStr = "wkR2R1S1S2=,"+ NumtoStr(R2week, 2) +","+ NumtoStr(R1week, 2) 
  DayOfWeekNum1 = DayOfWeek(Date);
  DayOfWeekNumStr ="sun";
  Switch(DayOfWeekNum1)
-	Begin
-  		Case 0:
-   			Begin
- 				DayOfWeekNumStr = "sun";
- 			end;
- 		Case 1:     
-   			Begin
-				DayOfWeekNumStr = "mon"; 
- 			end;
-  		Case 2:     
-   			Begin
- 				DayOfWeekNumStr = "tue";
- 			end;
-  		Case 3:     
-   			Begin
- 				DayOfWeekNumStr = "wed";
- 			end;
-  		Case 4:     
-   			Begin
-				DayOfWeekNumStr = "thu"; 
- 			end;
-  		Case 5:     
-   			Begin
-				DayOfWeekNumStr = "fri"; 
- 			end;
-  		Case 6:     
-   			Begin
-				DayOfWeekNumStr = "sat"; 
- 			end;
- 	end;		
+Begin
+  Case 0:
+    Begin
+  DayOfWeekNumStr = "sun";
+  end;
+  Case 1:    
+    Begin
+DayOfWeekNumStr = "mon";
+  end;
+  Case 2:    
+    Begin
+  DayOfWeekNumStr = "tue";
+  end;
+  Case 3:    
+    Begin
+  DayOfWeekNumStr = "wed";
+  end;
+  Case 4:    
+    Begin
+DayOfWeekNumStr = "thu";
+  end;
+  Case 5:    
+    Begin
+DayOfWeekNumStr = "fri";
+  end;
+  Case 6:    
+    Begin
+DayOfWeekNumStr = "sat";
+  end;
+  end;
  
 JBudate3 = LeftStr(ELDateToString(Date), 10) ;
 
@@ -355,21 +375,58 @@ R3HARDday = (PHARDday - S1HARDday) + R2HARDday;
   //R3day = (Pday-S1day) + R2day;
  
  
- pivotsStrOutput = "R3R2R1_P_P3_S1S2S3=,"+ NumtoStr(R3HARDday ,2)+","+NumtoStr(R2HARDday ,2)+","+NumtoStr(R1HARDday ,2)+","+NumtoStr( PHARDday,2)+","+NumtoStr(P3HARDday ,2)+","+NumtoStr(S1HARDday ,2)+","+NumtoStr(S2HARDday ,2)+","+NumtoStr(S3HARDday ,2) ;
+ /////////////////////////////////////////////////////////////////////////////////////// yesterdateNum = CalcDate(Date,  -8 );   //  calc's 8 days before BarDate in TradeSta's YYYMMDD weird format
+ 
+//					 SET UP TOP, comment out for testing: (set to -8)
+//																	 daysBackToCompute= -8;
+ 
+ yesterdateNum = CalcDate(Currentdate,  daysBackToCompute );   //  calc's 8 days before CurrentDate (today) in TradeSta's YYYMMDD weird format
+ 
+ processBar =0;   // default to do not process
+ if(Date=CurrentDate )   then processBar=1;
+ if(Date>=yesterdateNum) then processBar=1;  // if current bar's date >=  CurrentDate-daysBackToComp  ie IF BAR is within window 
+ 
+ 
+ datestr1 = "CurrDate="+ NumtoStr(Currentdate,0) +"_"+ NumtoStr(daysBackToCompute,0) +"_daysAgo="+   NumtoStr( yesterdateNum, 0)  +"_"  ;
+ datestr2 =  datestr1 + "processBar="+ NumtoStr(processBar,0) +"_";     //+ NumtoStr(Date,0) +"_"  ; 
+ 
+ // uncomment below line for testing
+ datestr2 = "";
+  //datestr2 = "_prBar="+ NumtoStr(processBar,0) +"_";  
+ 
+ 
+ gapstr="GAP=,";
+ pivotsStrOutput =datestr2+ "R3R2R1_P_P3_S1S2S3=,"+ NumtoStr(R3HARDday ,2)+","+NumtoStr(R2HARDday ,2)+","+NumtoStr(R1HARDday ,2)+","+NumtoStr( PHARDday,2)+","+NumtoStr(P3HARDday ,2)+","+NumtoStr(S1HARDday ,2)+","+NumtoStr(S2HARDday ,2)+","+NumtoStr(S3HARDday ,2) ;
  
  // for Sell sig we use PtrailingAvg for P3 for Price
- priceMinusR1str =  "p3-R1=,"+ NumtoStr( ( PtrailingAvg - R1HARDday  ) , 2);
+ priceMinusR1str    =  "p3-R1=,"+ NumtoStr( ( PtrailingAvg - R1HARDday  ) , 2);
+ priceMinusR1pctstr =    NumtoStr( ( PtrailingAvg - R1HARDday  )/PtrailingAvg*100 , 4)+"%";
  
- priceMinusS1str =  "p-S1=,"+ NumtoStr( ( Pday         - S1HARDday  ) , 2);
+ priceMinusS1str    =  "p-S1=,"+ NumtoStr( ( Pday         - S1HARDday  ) , 2);
+ priceMinusS1pctstr =    NumtoStr( ( Pday         - S1HARDday  )/Pday*100 , 4)+"%";
 
-///////////////////////////////////////////////////// END CALC OF VARS FOR intradaytrades.txt
+
+// gap calc
+//
+//   gapstr("GAP="), gappct(0.0), gapThreshold(0.015), 
+
+
+gappct = ( OpenD(0) -  CloseD(1) )  / CloseD(1);
+gapstr = "gap="+ NumtoStr(gapThreshold,4)  +","+ "0.00,0.0,0.0" ;
+if(AbsValue(gappct) > gapThreshold) then 
+	Begin
+		gapstr = "GAP="+   NumtoStr(gapThreshold,4)  +","+    NumtoStr(gappct ,4)  +","+  NumtoStr(CloseD(1), 2 )  + ","+   NumtoStr(OpenD(0), 2 )   ;
+	
+	end;
+
+///////////////////////////////////////////////////////////////////////////////////////////////// END CALC OF VARS FOR intradaytrades.txt
 
 //
 // get Hand-drawn Trendline   - need MELS.ELD -teacher's TL_FindColor routine
 TLV=0;
 TLID=0;
 {
-TLID=TL_FindColor(7,TLColor);       
+TLID=TL_FindColor(7,TLColor);      
 if TLID>-1 then TLV = TL_GetValue( TLID, Date, Time);
 if TLV<0 then HardS1=-1
  else HardS1 = TLV;
@@ -383,7 +440,7 @@ if TLV<0 then HardR1=-1
 
 
 
-// BUY / SELL SIGNAL LOGIC HERE...
+////////////////////////////////////////////////////////////////////////////////////////// BUY / SELL SIGNAL LOGIC HERE...
 
  
 SetPlotColor(1, JBColorMvgAvg );  // yello
@@ -405,17 +462,18 @@ Value67 = Text_New(Date, Time,PtrailingAvg , JBString0 );
 // Text_SetLocation(Value67, Date, Time, (PtrailingAvg +(PtrailingAvg/100) ));
 
 
+currSellStr= JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+ priceMinusR1pctstr   + ",SELL,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",P3day,sellsigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusR1str+","+ gapstr +","+weeklyPivotsStr+","+monthlyPivotsStr+",EOL";
+//currSellStr= JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+  "intraday,SELL,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",P3day,sellsigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusR1str+","+weeklyPivotsStr+",";
+
 // SELL 100 Shares SYMBOL at LIMIT $PtrailingAvg+.01 time = timstr , IFF SHORTing = ON;
-If BuySignal>=(BuyThreshold2) then
- FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine +JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+  "intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",P3day,sellsigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusR1str+","+weeklyPivotsStr+"," );
-// FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine +JBudate +","+NumtoStr(Time,0)+","+ LeftStr(ELDateToString(Date), 10) + ",intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",sellsigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min," );
-// FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + LeftStr(ELDateToString(Date), 10) +","+NumtoStr(Time,0) + ",intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",sellsigcnt,"+JBString0+"," );
+
+
+If ( BuySignal>= BuyThreshold2   and  ( currSellStr <>  lastSellStr ) and processBar=1  ) then
+Begin
+  FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine +  currSellStr );  //NewLine +JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+  "intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",P3day,sellsigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusR1str+","+weeklyPivotsStr+"," );
 // FileAppend("c:\_dev\DayTrades.txt", NewLine+"|::   SELL 100 Shares  of "+Symbol+" at LIMIT " +"$"+NumtoStr( PtrailingAvg ,2) +"   ::|    "+LeftStr(ELDateToString(Date), 10) +"  "+NumtoStr(Time,0) +"   = "+JBString0 );
-
-
-  
- 
-
+lastSellStr = currSellStr ;
+end;
 
     if HardR1>0 and Pday>HardR1 then   // final check for trendline resistance R1 broken
         SetPlotColor(1, white)
@@ -436,11 +494,10 @@ If BuySignal>=(BuyThreshold2) then
  end;
 end;
  
+ 
 
-
-// buy signal?
+//********************************************************************************************************************* buy signal?  
 if PtrailingAvg < Pday then begin
-
 
  if SellSignal>=0 then begin
   BuySignal=BuySignal+1;
@@ -454,15 +511,28 @@ Value66 = Text_New(Date, Time,Pday , JBString0 );
   Text_SetColor(Value66, cyan);
   Text_SetLocation(Value66, Date, Time, (Pday -(Pday/250) ));
 
-///LeftStr(ELDateToString(Date), 10)
-// BUY 100 Shares SYMBOL at LIMIT $Pday+.01 time = timstr , IFF SHORTing = ON;
-If SellSignal>=(SellThreshold2) then
-  FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+ "intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( Pday ,2) +",Pday,buysigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusS1str+","+weeklyPivotsStr+"," );
-// FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + JBudate +","+NumtoStr(Time,0)  + ",intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",buysigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min,"+DayOfWeekNumStr+","+pivotsStrOutput );
-//FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + JBudate +","+NumtoStr(Time,0) +","+ LeftStr(ELDateToString(Date), 10) + ",intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",buysigcnt,"+JBString0+","+NumtoStr(BarInterval,0)+"min," );
-//FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + LeftStr(ELDateToString(Date), 10) +","+NumtoStr(Time,0) + ",intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",buysigcnt,"+JBString0+"," );
-//FileAppend("c:\_dev\DayTrades.txt", NewLine+"|::   BUY  100 Shares of "+Symbol+" at LIMIT " +"$"+NumtoStr( Pday ,2) +"   ::|    "+LeftStr(ELDateToString(Date), 10) +"  "+NumtoStr(Time,0) +"   = "+JBString0);
+//test
+str1=  JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+ "intraday,BUY**,100,"+Symbol;
+str2=  lastBuyStr ;
 
+//if( str1 <> str2 ) then str3="notEqual";
+//if( str1 = str2 ) then  str3="yesEqual";
+
+if( currBuyStr <> lastBuyStr ) then str3="notEqual";
+if( currBuyStr = lastBuyStr ) then  str3="yesEqual";
+
+currBuyStr=   JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+ priceMinusS1pctstr +",BUY,100,"+Symbol+",atLimit,"+NumtoStr( Pday ,2) +",Pday,buysigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusS1str+ ","+ gapstr +","+weeklyPivotsStr+","+monthlyPivotsStr+",EOL";
+
+
+
+
+If ( SellSignal>=SellThreshold2      and ( currBuyStr <>  lastBuyStr )    and processBar=1 ) then
+//If ( SellSignal>=SellThreshold2      and ( str3="notEqual" )  ) then
+begin
+  FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + currBuyStr); // +NewLine + "1>"+currBuyStr +NewLine + "2>"+lastBuyStr +NewLine +"]"+str3 );  // NewLine + JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+ "intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( Pday ,2) +",Pday,buysigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusS1str+","+weeklyPivotsStr+"," );
+//FileAppend("c:\_dev\DayTrades.txt", NewLine+"|::   BUY  100 Shares of "+Symbol+" at LIMIT " +"$"+NumtoStr( Pday ,2) +"   ::|    "+LeftStr(ELDateToString(Date), 10) +"  "+NumtoStr(Time,0) +"   = "+JBString0);
+lastBuyStr =  currBuyStr ;
+end;
 
     if HardS1>0 and Pday<HardS1 then   // final check for trendline support S1 broken
        SetPlotColor(2, magenta)
@@ -1098,7 +1168,7 @@ end; // IFF Friday...
 //
 //
 // set a TEXT string to print day of week: mon, tue, wed, thu, fri on screen
- Value50 = Text_New(Date-DayOffset[1], Time, R1HARDday0 , DayOfWeekString0 );
+ Value50 = Text_New(Date-DayOffset[1], Time, R1HARDday0 , DayOfWeekString0+" Py" );
  Text_SetColor(Value50, white);
  Text_SetLocation(Value50, Date-DayOffset[1], Time-300, (PHARDday0 +( (PHARDday0-S1HARDday0)/4  )  ));
  Value51 = Text_New(Date-DayOffset[2], Time, R1HARDday0 , DayOfWeekString1 );
@@ -1111,7 +1181,7 @@ end; // IFF Friday...
  Text_SetColor(Value53, white);
  Text_SetLocation(Value53, Date-DayOffset[4], Time-300, (PHARDday0 +( (PHARDday0-S1HARDday0)/4  )   ));
  
- Value54 = Text_New(Date-DayOffset[5], Time, R1HARDday0 , DayOfWeekString4 );
+ Value54 = Text_New(Date-DayOffset[5], Time, R1HARDday0 , DayOfWeekString4+" Py" );
  Text_SetColor(Value54, white);
  Text_SetLocation(Value54, Date-DayOffset[5], Time-300, (PHARDday0 -( (PHARDday0-S1HARDday0)/4  )  ));
  
@@ -1205,9 +1275,11 @@ end; // IFF Friday...
 
 {
 
-if lastbaronchart then begin 
+if lastbaronchart then begin
 
-	FileAppend("c:\_dev\Projects\algo-python\tradestation.txt", NewLine+Symbol+"  "+ ELDateToString(Date)+" "+Timetostring(time)+ " | Open, High, Low, Close=  "+NumtoStr(Open,2)+ ", "+ NumtoStr(High,2)+ ", "+NumtoStr(Low,2)+", "+NumtoStr(Close,2)+ NewLine );
+FileAppend("c:\_dev\Projects\algo-python\tradestation.txt", NewLine+Symbol+"  "+ ELDateToString(Date)+" "+Timetostring(time)+ " | Open, High, Low, Close=  "+NumtoStr(Open,2)+ ", "+ NumtoStr(High,2)+ ", "+NumtoStr(Low,2)+", "+NumtoStr(Close,2)+ NewLine );
 
 end;
 }
+
+

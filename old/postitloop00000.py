@@ -1,7 +1,4 @@
-#
-# postitloop1.py   version 1.5, for use with TradeSta.'s  !!PivotsPython_MTWTF
-#
-#       Copyright (c) by John Botti  and Algo Investor Inc
+# postitloop1.py   version 1.2 by John Botti for Algo Investor Inc
 #
 #
 #
@@ -46,7 +43,7 @@ import pytz
 import shutil
 import sys
 
-import os
+
 
 ################################################ for TESTING
 #
@@ -81,7 +78,7 @@ urlbase = 'https://algoinvestorr.com/trades/'
 url = 'https://algoinvestorr.com/trades/recpost.php'
        
 MIN_DATA_STRING_LEN = 32
-LOOPMax =  7 * 60 * 5
+LOOPMax =40
 SECSMax =12   # 20 loops * 12 secs
 
 # Get current date in New York - we need EDT for markets...
@@ -91,9 +88,8 @@ current_date_ny = datetime.datetime.now(new_york_timezone).date()
 # Print current date in New York as YYYY-MM-DD
 #print(f"Current date in New York: {current_date_ny.strftime('%Y-%m-%d')}")
 dstr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
-dstr1 = dstr  # dstr1 = doesnt change in code todays DATE in NYC
-
-print("Today's date in New York:",dstr1)
+dstr1 = dstr
+print("Today's date in New York:",dstr)
 
 
 def Check_data(array, datastr):
@@ -131,7 +127,6 @@ file_path = 'intradaytrades.txt'  # Replace with your file path
 #file_path = 'intradaytradessm.txt'  # Replace with your file path
 dataMaster = []     # called 1st, then each looped call is read into data[], and cmp'd to/insertedIFF into dataMaster[] - the running list of a,b,c,d,...,EOL
 dataMasterLen=0
-data_to_sendLastMaster =""        
 
 
 # GET TIME
@@ -165,19 +160,10 @@ if(tt<930 and tt>1415):
 #
     
 # set this to zero for testing if you do not want dataMaster[] init'd...
+        
+injest0=1
 
-data_to_sendLastMaster =""        
-dataMasterLen=0
 
-# assume initial file intradaytrades.txt (PC[tradesta]-->c:\...) NOT exists
-injest0=0  
-
-if os.path.exists(file_path):
-    injest0=1
-else:
-    print("\n] ",file_path," NOT Found, skipping initial INJEST, records found=0.")
-
-i0=0
 if(injest0==1):
     print("\n] ATTEMPTING 1st INJEST...\n")
 
@@ -191,72 +177,24 @@ if(injest0==1):
             #print("\n] i0=",i0,":  ",data_to_send)
             
             result = Check_data( dataMaster, data_to_send )
-           
-        
-## here we MUST check if the first value, split_values[0], the date == current date dstr (or overridden date)
+            #print("\n]",i0,"The current string IS FOUND in the dataMaster[] array?",result, end="", flush=True )     # This will print True or False based on whether my_datastr is in my_array or not
+            #print("\n] "+str(i0)+": The current string IS FOUND in the dataMaster[] array? "+str(result), end="", flush=True )   # This will print True or False based on whether my_datastr is in my_array or not
+            jstr = "] "+str(i0)+": The current string IS FOUND in the dataMaster[] array? "+str(result)    # This will print True or False based on whether my_datastr is in my_array or not
+            if(i0%20==0):
+                print("\n",jstr, end="", flush=True)
 
-            dateMatch=False
-            str0="nil"
-            if(len(data_to_send ) > MIN_DATA_STRING_LEN):       # make sure data_to_send is not null
-                split_values = data_to_send.split(",")
-                if split_values:
-                    str0 = split_values[0]
-                    if(str0 == dstr):                            # make sure  dates match & set explicitly
-                        dateMatch=True
-                    else:   
-                        dateMatch=False
+            dataMaster.append(data_to_send)
+            arrstr = dataMaster[i0]             # i0  becomes dataMasterLen
+            #print("] arrstr=", arrstr)
+             
+            i0=i0+1
 
+    print("\n] end of dataMaster["+str(i0)+"] 1st INJEST... Closing file.\n")
 
-            jstr = "] row="+str(i0)+": split_values[0]_DATE="+ str0 +"_today="+dstr+"?="+ str(dateMatch)  +  ". The current string IS FOUND in the dataMaster[] array? "+str(result)    # This will print True or False based on whether my_datastr is in my_array or not
-            if(i0%5==0):
-                print("\n",jstr) #, end="", flush=True)
-
-
-            if(result == False ):            # IFF Not in dataMaster[] unique array (note: dates do not have to match)
-                dataMaster.append(data_to_send)
-                dataMasterLen = dataMasterLen  + 1 
-                if( dateMatch==True ):  
-                    data_to_sendLastMaster = data_to_sendLastMaster + data_to_send +"\n"
-
-
-            i0=i0+1   # only num rows read
-        #
-        # END of For loop
-        #################
-
-    print("\n] end of dataMaster["+str(dataMasterLen)+"] 1st INJEST, out of a total of "+str(i0)+" rows read... Closing file.\n")
-
-    # Close the file, read  i0  rows...
+    # Close the file, read  i  rows...
     file.close()
-    print("\n] LOCAL read FILE " +file_path +" CLOSED.  Here's today's data to send upon INIT data_to_sendLastMaster=\n"+data_to_sendLastMaster)
- 
 
-
-# here send initial data
-
-# check if there is no data
-if(len(data_to_sendLastMaster) > MIN_DATA_STRING_LEN):
-    print("\n] =====================================================================>>>INIT_SENDING data_to_sendLastMaster (1st TIME) via _POST...\n")
-
-    payload = {'data': data_to_sendLastMaster }
-    response = requests.post(url, data=payload)
-    print(response.text)
-    print("<<<=============================\n\n")
-
-    # print the info line to the console
-    tgt = "intradaytradesServer_"+dstr1+".txt"
-    print("Called & POSTed "+str(dataMasterLen)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
-else:
-    print("\n] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> *NOT Sending ANY INITIAL data - NO TRADES FOUND in data_to_sendLastMaster.\n") 
-
-
-
-
-
-
-
-
-
+dataMasterLen = i0
 
 
 keepLooping = LOOPMax # Set keepLooping to a value greater than 0 to enter the loop
@@ -272,8 +210,8 @@ print(">",tstr, end="", flush=True)
 lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 
 
-MaxMinutes = (keepLooping * (timeDelay+0 )/60 ) 
-print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:",MaxMinutes," Max HOURS=",MaxMinutes/60,"\n\n" )
+
+print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 ) ,"\n\n" )
 ###################### STARTING LOOP ****************************************
 
 while keepLooping > 0:
@@ -306,65 +244,55 @@ while keepLooping > 0:
 
     i=0
     uniques=0
-    if os.path.exists(file_path):
-        print("\n Opening local csv file:", file_path)
-    
-        with open(file_path, 'r') as file:
-            csv_reader = csv.reader(file)
-            for row in csv_reader:
-                #print("row=",row) 
-                data_to_send = ','.join(row)
-                #print("i=",i,":  ",data_to_send)
-                #payload = {'data': data_to_send}
-                #response = requests.post(urlPost, data_to_send)
-                #print(response.text)
+    print("\n Opening local csv file:", file_path)
+    with open(file_path, 'r') as file:
+        csv_reader = csv.reader(file)
+        for row in csv_reader:
+            #print("row=",row) 
+            data_to_send = ','.join(row)
+            #print("i=",i,":  ",data_to_send)
+            #payload = {'data': data_to_send}
+            #response = requests.post(urlPost, data_to_send)
+            #print(response.text)
 
-                # if [def ]check_str( data_to_send, dataMaster) == false:
+            # if [def ]check_str( data_to_send, dataMaster) == false:
 
-                result = Check_data( dataMaster, data_to_send )
-                #print("\n]",i,"The current string IS FOUND in the dataMaster[] array?",result)  # This will print True or False based on whether my_datastr is in my_array or not
-                if(result==False):
-                    print("\n] row=",i,". The current string IS NOT FOUND in dataMaster[], adding:\n",data_to_send)
-                    dataMaster.append(data_to_send)
-                    arrstrM = dataMaster[dataMasterLen]             # i0  becomes dataMasterLen
-                    print("\n] dataMaster["+str(dataMasterLen)+"] :  ADDING:arrstrM=", arrstrM)
-                    dataMasterLen=dataMasterLen+1
+            result = Check_data( dataMaster, data_to_send )
+            #print("\n]",i,"The current string IS FOUND in the dataMaster[] array?",result)  # This will print True or False based on whether my_datastr is in my_array or not
+            if(result==False):
+                print("\n] row=",i,". The current string IS NOT FOUND in dataMaster[], adding:\n",data_to_send)
+                dataMaster.append(data_to_send)
+                arrstrM = dataMaster[dataMasterLen]             # i0  becomes dataMasterLen
+                print("\n] dataMaster["+str(dataMasterLen)+"] :  ADDING:arrstrM=", arrstrM)
+                dataMasterLen=dataMasterLen+1
 
-                    data.append(row)
-                    print("] uniques=",uniques,data[uniques])
-                    arrstr = data[uniques]
-                    #print("\n #0,10,21==",arrstr[0],arrstr[10],arrstr[21])
-                    additionalTradesFound=additionalTradesFound+1
+                data.append(row)
+                print("] uniques=",uniques,data[uniques])
+                arrstr = data[uniques]
+                #print("\n #0,10,21==",arrstr[0],arrstr[10],arrstr[21])
+                additionalTradesFound=additionalTradesFound+1
                 
-                    if arrstr and len(arrstr) > 0:
-                        if arrstr[0] is not None:
-                            if(arrstr[0] == dstr):
-                                #if dates match then POST
-                                print("\nTrade date (", dstr ,") trade array:  data["+str(uniques)+"] =  ",data[uniques], "  adding to data_to_sendLast...\n")
-                                print("uniques=",uniques,":  ",data_to_send)
-                                data_to_sendLast=data_to_sendLast+data_to_send+"\n"   #this is the trade data from today to send uo
-                                data_lines_to_send = data_lines_to_send+1
-                                dataToday.append(row)
-                                signalStrength = int(arrstr[12])  # [12]=sigStrength
-                                if(signalStrength>=8):
-                                    print("*** Strong "+ arrstr[5].upper()+ " signal !!!\n")
+                if arrstr and len(arrstr) > 0:
+                    if arrstr[0] is not None:
+                        if(arrstr[0] == dstr):
+                            #if dates match then POST
+                            print("\nTrade date (", dstr ,") trade array:  data["+str(uniques)+"] =  ",data[uniques], "  adding to data_to_sendLast...\n")
+                            print("uniques=",uniques,":  ",data_to_send)
+                            data_to_sendLast=data_to_sendLast+data_to_send+"\n"   #this is the trade data from today to send uo
+                            data_lines_to_send = data_lines_to_send+1
+                            dataToday.append(row)
+                            signalStrength = int(arrstr[12])  # [12]=sigStrength
+                            if(signalStrength>=8):
+                                print("*** Strong "+ arrstr[5].upper()+ " signal !!!\n")
                 
-                    uniques=uniques+1
-                #
-                #if False
-                #########
+                uniques=uniques+1
+            #if False
                 
-                i=i+1
-            # for
-        # with open file
-        # Close the file, read  i  rows...
-        file.close()
-        print("\nClosed file.\n Read "+ str(i)+ "rows, UNIQUE lines found:", additionalTradesFound )
-    #
-    #
-    #
-    # END OF If file exists...
-    ############################
+            i=i+1
+
+    # Close the file, read  i  rows...
+    file.close()
+    print("\nClosed file.\n Read "+ str(i)+ "rows, UNIQUE lines found:", additionalTradesFound )
 
 
 
@@ -410,7 +338,7 @@ while keepLooping > 0:
 #### End of Loop
     # Decrement keepLooping to eventually exit the loop
     keepLooping -= 1  # You might have a condition to break the loop based on a certain condition
-    print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 )," and Max # HOURS=", (keepLooping * (timeDelay+0 )/60 )/60  ,"\n\n" )
+    print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 ) ,"\n\n" )
 
     #END OF THE LOOP
 
