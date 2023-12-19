@@ -1,7 +1,4 @@
-#
-# postitloop1.py   version 1.4, for use with TradeSta.'s  !!PivotsPython_MTWTF
-#
-#       Copyright (c) by John Botti  and Algo Investor Inc
+# postitloop1.py   version 1.2 by John Botti for Algo Investor Inc
 #
 #
 #
@@ -91,9 +88,8 @@ current_date_ny = datetime.datetime.now(new_york_timezone).date()
 # Print current date in New York as YYYY-MM-DD
 #print(f"Current date in New York: {current_date_ny.strftime('%Y-%m-%d')}")
 dstr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
-dstr1 = dstr  # dstr1 = doesnt change in code todays DATE in NYC
-
-print("Today's date in New York:",dstr1)
+dstr1 = dstr
+print("Today's date in New York:",dstr)
 
 
 def Check_data(array, datastr):
@@ -164,9 +160,7 @@ if(tt<930 and tt>1415):
 #
     
 # set this to zero for testing if you do not want dataMaster[] init'd...
-
-data_to_sendLastMaster =""        
-
+        
 # assume initial file intradaytrades.txt (PC[tradesta]-->c:\...) NOT exists
 injest0=0  
 
@@ -195,12 +189,9 @@ if(injest0==1):
             if(i0%20==0):
                 print("\n",jstr, end="", flush=True)
 
-
-            if(result == False):
-                dataMaster.append(data_to_send)
-                data_to_sendLastMaster=data_to_sendLastMaster+data_to_send +"\n"
-                arrstr = dataMaster[i0]             # i0  becomes dataMasterLen
-                #print("] arrstr=", arrstr)
+            dataMaster.append(data_to_send)
+            arrstr = dataMaster[i0]             # i0  becomes dataMasterLen
+            #print("] arrstr=", arrstr)
              
             i0=i0+1
 
@@ -210,28 +201,6 @@ if(injest0==1):
     file.close()
 
 dataMasterLen = i0
-
-# here send initial data
-
-# check if there is no data
-if(len(data_to_sendLastMaster) > MIN_DATA_STRING_LEN):
-    print("\n] =====================================================================>>>INIT_SENDING data_to_sendLastMaster (1st TIME) via _POST...\n")
-
-    payload = {'data': data_to_sendLastMaster }
-    response = requests.post(url, data=payload)
-    print(response.text)
-    print("<<<=============================\n\n")
-
-    # print the info line to the console
-    tgt = "intradaytradesServer_"+dstr1+".txt"
-    print("Called & POSTed "+str(dataMasterLen)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
-else:
-    print("\n] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> *NOT Sending ANY INITIAL data - NO TRADES FOUND in data_to_sendLastMaster.\n") 
-
-
-
-
-
 
 
 keepLooping = LOOPMax # Set keepLooping to a value greater than 0 to enter the loop
@@ -247,8 +216,8 @@ print(">",tstr, end="", flush=True)
 lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 
 
-MaxMinutes = (keepLooping * (timeDelay+0 )/60 ) 
-print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:",MaxMinutes," Max HOURS=",MaxMinutes/60,"\n\n" )
+
+print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 ) ,"\n\n" )
 ###################### STARTING LOOP ****************************************
 
 while keepLooping > 0:
@@ -385,7 +354,7 @@ while keepLooping > 0:
 #### End of Loop
     # Decrement keepLooping to eventually exit the loop
     keepLooping -= 1  # You might have a condition to break the loop based on a certain condition
-    print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 )," and Max # HOURS=", (keepLooping * (timeDelay+0 )/60 )/60  ,"\n\n" )
+    print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 ) ,"\n\n" )
 
     #END OF THE LOOP
 
