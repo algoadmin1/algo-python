@@ -1,5 +1,5 @@
 #
-# postitloop1.py   version 1.4, for use with TradeSta.'s  !!PivotsPython_MTWTF
+# postitloop1.py   version 1.5, for use with TradeSta.'s  !!PivotsPython_MTWTF
 #
 #       Copyright (c) by John Botti  and Algo Investor Inc
 #
@@ -131,6 +131,7 @@ file_path = 'intradaytrades.txt'  # Replace with your file path
 #file_path = 'intradaytradessm.txt'  # Replace with your file path
 dataMaster = []     # called 1st, then each looped call is read into data[], and cmp'd to/insertedIFF into dataMaster[] - the running list of a,b,c,d,...,EOL
 dataMasterLen=0
+data_to_sendLastMaster =""        
 
 
 # GET TIME
@@ -166,6 +167,7 @@ if(tt<930 and tt>1415):
 # set this to zero for testing if you do not want dataMaster[] init'd...
 
 data_to_sendLastMaster =""        
+dataMasterLen=0
 
 # assume initial file intradaytrades.txt (PC[tradesta]-->c:\...) NOT exists
 injest0=0  
@@ -189,27 +191,46 @@ if(injest0==1):
             #print("\n] i0=",i0,":  ",data_to_send)
             
             result = Check_data( dataMaster, data_to_send )
-            #print("\n]",i0,"The current string IS FOUND in the dataMaster[] array?",result, end="", flush=True )     # This will print True or False based on whether my_datastr is in my_array or not
-            #print("\n] "+str(i0)+": The current string IS FOUND in the dataMaster[] array? "+str(result), end="", flush=True )   # This will print True or False based on whether my_datastr is in my_array or not
-            jstr = "] "+str(i0)+": The current string IS FOUND in the dataMaster[] array? "+str(result)    # This will print True or False based on whether my_datastr is in my_array or not
-            if(i0%20==0):
-                print("\n",jstr, end="", flush=True)
+           
+        
+## here we MUST check if the first value, split_values[0], the date == current date dstr (or overridden date)
+
+            dateMatch=False
+            str0="nil"
+            if(len(data_to_send ) > MIN_DATA_STRING_LEN):       # make sure data_to_send is not null
+                split_values = data_to_send.split(",")
+                if split_values:
+                    str0 = split_values[0]
+                    if(str0 == dstr):                            # make sure  dates match & set explicitly
+                        dateMatch=True
+                    else:   
+                        dateMatch=False
 
 
-            if(result == False):
+            jstr = "] row="+str(i0)+": split_values[0]_DATE="+ str0 +"_today="+dstr+"?="+ str(dateMatch)  +  ". The current string IS FOUND in the dataMaster[] array? "+str(result)    # This will print True or False based on whether my_datastr is in my_array or not
+            if(i0%5==0):
+                print("\n",jstr) #, end="", flush=True)
+
+
+            if(result == False ):            # IFF Not in dataMaster[] unique array (note: dates do not have to match)
                 dataMaster.append(data_to_send)
-                data_to_sendLastMaster=data_to_sendLastMaster+data_to_send +"\n"
-                arrstr = dataMaster[i0]             # i0  becomes dataMasterLen
-                #print("] arrstr=", arrstr)
-             
-            i0=i0+1
+                dataMasterLen = dataMasterLen  + 1 
+                if( dateMatch==True ):  
+                    data_to_sendLastMaster = data_to_sendLastMaster + data_to_send +"\n"
 
-    print("\n] end of dataMaster["+str(i0)+"] 1st INJEST... Closing file.\n")
 
-    # Close the file, read  i  rows...
+            i0=i0+1   # only num rows read
+        #
+        # END of For loop
+        #################
+
+    print("\n] end of dataMaster["+str(dataMasterLen)+"] 1st INJEST, out of a total of "+str(i0)+" rows read... Closing file.\n")
+
+    # Close the file, read  i0  rows...
     file.close()
+    print("\n] LOCAL read FILE " +file_path +" CLOSED.  Here's today's data to send upon INIT data_to_sendLastMaster=\n"+data_to_sendLastMaster)
+ 
 
-dataMasterLen = i0
 
 # here send initial data
 
@@ -227,6 +248,10 @@ if(len(data_to_sendLastMaster) > MIN_DATA_STRING_LEN):
     print("Called & POSTed "+str(dataMasterLen)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
 else:
     print("\n] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> *NOT Sending ANY INITIAL data - NO TRADES FOUND in data_to_sendLastMaster.\n") 
+
+
+
+
 
 
 
