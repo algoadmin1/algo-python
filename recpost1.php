@@ -9,8 +9,9 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.541";
-$minstrlen = 32;
+                                                      $vers = "1.542";
+$minstrlen = 32; 
+$happy1 = "Vegas2024!";
 $todaysdate = date('Y-m-d');
 
 //echo "\n\n] recpost1.php $vers is running, Time in NYC = $todaysdate \n";
@@ -28,7 +29,6 @@ $prgname="recpost1.php";
 
 $servername = "localhost"; // Replace with your server name
 $username = "u151710353_roguequant1";
-$happy1 = "Vegas2024!";
 $password1 = "Egw2B4f*q@z_$";
 $dbname = "u151710353_algotrades";
 $tblname ="trades";
@@ -143,6 +143,7 @@ echo "<br />******** ATTEMPTING DB ACCESS *********<br />";
 
 
 $timeNYC =  date("Y-m-d\TH:i:s");
+
 $insertdb = 0;
 
 // SHOW CREATE TABLE table_name;
@@ -179,6 +180,8 @@ try {
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
+
+///// *************************************************************************************************
 
 
 
@@ -270,9 +273,9 @@ if ($fileout) {
         fwrite($fileout, $line0 . PHP_EOL); // Write each line and add a newline
     }
     fclose($fileout);
-    echo "Array content written to $fnameout successfully.";
+    echo "<br />Array content written to $fnameout successfully.<br /><br /><br />";
 } else {
-    echo "Unable to open file!";
+    echo "<br />Unable to open file!<br />";
 }
 
 
@@ -283,6 +286,124 @@ if ($fileout) {
 // ********** Loop thru and insert into MySQL
 //
 //
+
+// Sample array of strings
+/*
+$arrstrs = [
+    "1,apple,banana,orange",
+    "2,carrot,potato,tomato",
+    "3,grape,kiwi,pineapple"
+];
+*/
+
+
+//
+//
+// Loop through $arrstrs and separate CSV elements into $csvelems
+//
+$csvelems = [];
+$c=0;
+foreach ($arrstrs as $string) {
+    echo "<br /><br /> ] arrstrs[ $c ]=". $string;
+
+// Explode the CSV string into an array using str_getcsv()
+    $csvelems = str_getcsv($string);
+    echo "<br />"; 
+    $elements = [];
+
+    foreach ($csvelems as $element) {
+      echo $element . "<br />"; 
+      $elements[]=$element;
+    }
+    print_r($elements);
+
+    $c++;
+
+}//foreach
+//
+
+
+/*
+$string = "1,apple,banana,orange";
+
+// Explode the CSV string into an array using str_getcsv()
+$csvelems = str_getcsv($string);
+
+print_r($csvelems);
+
+// Loop through $csvelems[] and print each element
+foreach ($csvelems as $element) {
+    echo $element . "\n"; // Print each element
+}
+
+
+
+*/
+
+
+
+
+// Loop through $csvelems and print each element
+/*
+foreach ($csvelems as $elems) {
+    foreach ($elems as $element) {
+        echo $element . "<br />"; // Print each element
+    }
+    echo "-----\n"; // Separator between strings
+}
+*/
+
+
+
+/*
+
+
+$insertdb = 0;
+
+// SHOW CREATE TABLE table_name;
+try {
+    // Connect to MySQL using PDO
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);
+
+    // Set PDO to throw exceptions for errors
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+  if($insertdb!=0){
+
+
+
+          // Insert a sample trade into the 'trades' table
+          $insertQuery = "INSERT INTO trades (tradeDTstamp, tradeDateTime, userId, accountId,   tradeType, tradeSize, tradePrice) 
+                          VALUES (CURRENT_TIMESTAMP ,'$timeNYC',       'superuser', 'testaccount', 'sell', 100, 50.25)";
+          $conn->exec($insertQuery);
+          $lastInsertedId = $conn->lastInsertId();
+
+          echo "Sample trade inserted. Last inserted ID: $lastInsertedId <br>";
+
+
+
+
+  }
+
+    // Query the table for a specific tradeId
+    $tradeIdToQuery = 1; // Replace with the desired tradeId to query
+    $query = "SELECT * FROM trades WHERE tradeId = :tradeId";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':tradeId', $tradeIdToQuery);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result) {
+        echo "Trade found for tradeId $tradeIdToQuery: <pre>" . print_r($result, true) . "</pre>";
+    } else {
+        echo "No trade found for tradeId $tradeIdToQuery";
+    }
+} catch (PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
+
+*/
+
 
 
 
@@ -491,6 +612,42 @@ CREATE TABLE u151710353_algotrades.trades (
     tradeAux2 VARCHAR(1024),
     tradeAux3 VARCHAR(1024)
 );
+
+//**** NEW DEC 21 2023
+Array
+(
+    [tradeId] => 1
+    [tradeDTstamp] => 2023-12-21 06:33:26
+    [tradeDateTime] => 2023-12-21T06:33:26
+    [tradeTime] => 
+    [tradeDay] => 
+    [tradeBar] => 
+    [userId] => superuser
+    [accountId] => testaccount
+    [tradeType] => buy
+    [tradeRAW] => 
+    [tradeSize] => 100
+    [tradePrice] => 50.25
+    [tradePrFilled] => 
+    [tradeCond] => 
+    [tradeDur] => 
+    [tradeStopMkt] => 0
+    [tradeLimitExit] => 0
+    [optionStrategy] => 
+    [leg1] => 0
+    [leg2] => 0
+    [leg3] => 0
+    [leg4] => 0
+    [buySellCnt] => 0
+    [buySellPct] => 
+    [tradeSpec] => 
+    [tradeSig] => 
+    [tradeGapPct] => 
+    [tradeStatus] => 
+    [tradeAux1] => 
+    [tradeAux2] => 
+    [tradeHash] => 
+)
 
 
 
