@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.544";
+                                                      $vers = "1.542";
 $minstrlen = 32; 
 $happy1 = "Vegas2024!";
 $todaysdate = date('Y-m-d');
@@ -90,10 +90,7 @@ function GetDBSafe_NYCTimeNOW(){
   $timeNYCnow =  date("Y-m-d\TH_i_s");
   return( $timeNYCnow );
 }
-function GetNYDateTime(){
-  $timeNYC0 =  date("Y-m-d\TH:i:s");
-  return $timeNYC0;
-}
+
 
 // ********************************************************************* MAIN CODE
 //
@@ -297,10 +294,10 @@ if ($fileout) {
 // **************************************************************************************************
 // **************************************************************************************************
 
-// //
-// //
-// // Loop through $arrstrs and separate CSV elements into $csvelems
-// //
+//
+//
+// Loop through $arrstrs and separate CSV elements into $csvelems
+//
 $csvelems = [];
 $c=0;
 foreach ($arrstrs as $string) {
@@ -318,102 +315,6 @@ foreach ($arrstrs as $string) {
     echo $elements[ 0 ]. " ".  $elements[ 1 ]. " ".  $elements[ 2 ]. " ". $elements[ 5 ]. " ".  $elements[ 3 ]. " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".  $elements[ 9 ]. " DAY ".  "<br />"; 
 
     print_r($elements);
-    $c++;
-
-    }//foreach($arrstrs
- 
-
-
-
-/*************************************************************************************************
-
-
-$insertdb = 1;
-
-try {
-    // Connect to MySQL using PDO
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);
-    // Set PDO to throw exceptions for errors
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    if($insertdb==1){
-         
-        $csvelems = [];
-        $c=0;
-        //
-        // Loop through $arrstrs and separate CSV elements into $csvelems
-        //
-        foreach ($arrstrs as $string) {
-            echo "<br /><br /> ] arrstrs[ $c ]=". $string. "<br />";
-
-            // Explode the CSV string into an array using str_getcsv()
-            $csvelems = str_getcsv($string);
-            echo "<br />"; 
-            $elements = [];
-            foreach ($csvelems as $element) {
-              // echo $element . "<br />";        // append
-              $elements[]=$element;
-            }
-
-              //          2023-12-21 1000 thu                                       BUY                   15min                 ROKU                  atLimit                   90.42
-            echo $elements[ 0 ]. " ".  $elements[ 1 ]. " ".  $elements[ 2 ]. " ". $elements[ 5 ]. " ".  $elements[ 3 ]. " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".  $elements[ 9 ]. " DAY ".  "<br />"; 
-
-            print_r($elements);
-
-            $timeNYC = GetNYDateTime();
-
-
-
-            // Insert a sample trade into the 'trades' table
-            //$insertQuery = "INSERT INTO trades (tradeDTstamp, tradeRedDateTime,  tradeDate, tradeTime,     tradeDay,          userId,     accountId,       tradeType,  tradeSize, tradePrice , tradeAux1) 
-            $insertQuery = "INSERT INTO trades (tradeDTstamp, tradeDateTime, tradeTime,     tradeDay,          userId,     accountId,       tradeType,  tradeSize, tradePrice , tradeAux1) 
-                            VALUES         (CURRENT_TIMESTAMP ,'$timeNYC',  '$elements[1]',  '$elements[2]',    , '$uname0',   '$acct0', '$elements[5]',  100,    '$elements[9]' , '$elements[7]' )";
-            $conn->exec($insertQuery);
-            $lastInsertedId = $conn->lastInsertId();
-
-            echo "<br /> ] *** Sample trade inserted: $insertQuery <br /> ] Last inserted ID: $lastInsertedId <br />";
-
-
-
-
-
-            // < > Query the table  HERE for a specific tradeId
-          
-            $c++;
-
-          }//foreach($arrstrs
- 
-
-    }// if insert == TRUE
-
-
-} catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-}
-*/
-
-// **************************************************************************************************
-
-
-/*
-// sample data
-
-arrstrs[ 7 ]=2023-12-21,1000,thu,15min,3.5795%,BUY,100,ROKU,atLimit,90.42,Pday,buysigcnt,7,R3R2R1_P_P3_S1S2S3=,99.25,95.85,92.46,90.58,95.46,87.19,85.31,81.92,p-S1=,3.24,GAP=0.0125,0.0188,89.06,90.73,wkR2R1S1S2=,113.40,104.65,91.35,86.80,moR3R2R1PS1S2S3=,123.32,116.93,110.55,102.01,95.63,87.09,80.71,EOL,0c6c5ca47e34f3774932106c19dbf67ca1ecf1e591a3ad230eae5c4db7b030c2
-
-2023-12-21 1000 thu BUY 15min ROKU atLimit 90.42
-
-Array ( [0] => 2023-12-21 [1] => 1000 [2] => thu [3] => 15min [4] => 3.5795% [5] => BUY [6] => 100 [7] => ROKU [8] => atLimit [9] => 90.42 [10] => Pday [11] => buysigcnt [12] => 7 [13] => R3R2R1_P_P3_S1S2S3= [14] => 99.25 [15] => 95.85 [16] => 92.46 [17] => 90.58 [18] => 95.46 [19] => 87.19 [20] => 85.31 [21] => 81.92 [22] => p-S1= [23] => 3.24 [24] => GAP=0.0125 [25] => 0.0188 [26] => 89.06 [27] => 90.73 [28] => wkR2R1S1S2= [29] => 113.40 [30] => 104.65 [31] => 91.35 [32] => 86.80 [33] => moR3R2R1PS1S2S3= [34] => 123.32 [35] => 116.93 [36] => 110.55 [37] => 102.01 [38] => 95.63 [39] => 87.09 [40] => 80.71 [41] => EOL [42] => 0c6c5ca47e34f3774932106c19dbf67ca1ecf1e591a3ad230eae5c4db7b030c2 )
-
-*/
-
-
-
-
-
-
-
-
-
 
 
 
@@ -460,7 +361,6 @@ try {
     } else {
         echo "No trade found for tradeId $tradeIdToQuery";
     }
-
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
@@ -473,6 +373,22 @@ try {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $c++;
+
+}//foreach
 
 // **************************************************************************************************
 // **************************************************************************************************
