@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.5375";
+                                                      $vers = "1.541";
 $minstrlen = 32;
 $todaysdate = date('Y-m-d');
 
@@ -86,8 +86,8 @@ function PrintArray( $arrstrs , $arrstrs0 ){
 }
 
 function GetDBSafe_NYCTimeNOW(){
-  //$timeNYC0 =  date("Y-m-d\TH:i:s");
-  $timeNYCnow =  date("Y-m-d\TH:i:s");
+  //$timeNYCnow =  date("Y-m-d\TH:i:s");
+  $timeNYCnow =  date("Y-m-d\TH_i_s");
   return( $timeNYCnow );
 }
 
@@ -109,7 +109,7 @@ echo "<br />] **** Greetings, Creator. We are currently running:   $prgname  : $
 //echo "\n*\n] Accessing https://algoinvestorr.com/*_". $dbname. "[". $username"]_". $tblname. "\n*\n*\n*\n";
 echo "*****************<br />";
 
-PrintUserInputs( $udate0, $utime0, $uname0, $acct0 );
+PrintUserInputs( $udate0, $utime0, $uname0, $acct0 , $msg0 );
 
 echo "<br />******** ATTEMPTING DB ACCESS *********<br />";
 
@@ -145,6 +145,7 @@ echo "<br />******** ATTEMPTING DB ACCESS *********<br />";
 $timeNYC =  date("Y-m-d\TH:i:s");
 $insertdb = 0;
 
+// SHOW CREATE TABLE table_name;
 try {
     // Connect to MySQL using PDO
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);
@@ -252,9 +253,8 @@ if($msg0==1) PrintArray( $arrstrs , $arrname );
 
 
 
-$ftimeout = GetDBSafe_NYCTimeNOW();
-//$fnameout = "rawtrades_". $tradedatestr. ".txt";  
-$fnameout = "rawtrades_". $ftimeout. ".txt";  
+$ftimeout = GetDBSafe_NYCTimeNOW();   
+$fnameout = "rawtrades_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
 
 echo "<br /><br /><br />] FOUND $j unique RAW trades, and inserted them into ". $arrname. "[] writing to $fnameout ... <br />";
 
@@ -274,6 +274,72 @@ if ($fileout) {
 } else {
     echo "Unable to open file!";
 }
+
+
+
+//
+//
+// *********
+// ********** Loop thru and insert into MySQL
+//
+//
+
+
+
+
+
+
+
+
+/*
+
+ // SAMPLE DATA note: [140] not NULL but found a copy
+
+
+] 131 : 2023-12-19,1500,tue,15min,1.3584%,BUY,100,HBAN,atLimit,12.76,Pday,buysigcnt,5,R3R2R1_P_P3_S1S2S3=,13.32,13.11,12.91,12.79,12.72,12.59,12.47,12.27,p-S1=,0.17,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,14.09,13.48,12.02,11.17,moR3R2R1PS1S2S3=,13.20,12.56,11.91,10.72,10.07,8.88,8.23,EOL,fd010db3cdc87032dc6dad09f72e9db66e4bc427752abfacdebedb7674100655 , LINE LEN== 277
+[INSERTED] __Orig(re-hash)_numCSVs==42
+
+] 132 : ,e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 , LINE LEN== 0
+[ NOT Inserted ] <#noHash#>
+
+] 133 : 2023-12-19,1300,tue,15min,2.0143%,BUY,100,YUM,atLimit,131.23,Pday,buysigcnt,5,R3R2R1_P_P3_S1S2S3=,133.76,132.66,131.55,129.69,130.02,128.58,126.72,125.61,p-S1=,2.64,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,135.81,132.20,124.70,120.81,moR3R2R1PS1S2S3=,134.26,131.33,128.41,126.43,123.51,121.53,118.61,EOL,883601a0f8c15e819fc5624171005204a87790b6bd4f1a4587136788bb989fcc , LINE LEN== 298
+[INSERTED] __Orig(re-hash)_numCSVs==42
+
+] 134 : 2023-12-19,1600,tue,15min,1.4486%,BUY,100,YUM,atLimit,130.47,Pday,buysigcnt,10,R3R2R1_P_P3_S1S2S3=,133.76,132.66,131.55,129.69,130.02,128.58,126.72,125.61,p-S1=,1.89,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,135.81,132.20,124.70,120.81,moR3R2R1PS1S2S3=,134.26,131.33,128.41,126.43,123.51,121.53,118.61,EOL,64db985a4948d600ab0e06a769b4c9d54298e48298337f2c8f3f2580490f4cfc , LINE LEN== 299
+[INSERTED] __Orig(re-hash)_numCSVs==42
+
+] 135 : ,e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 , LINE LEN== 0
+[ NOT Inserted ] <#noHash#>
+
+] 136 : 2023-12-19,1100,tue,15min,-0.3087%,SELL,100,AAL,atLimit,14.40,P3day,sellsigcnt,8,R3R2R1_P_P3_S1S2S3=,14.82,14.63,14.44,14.25,14.33,14.06,13.87,13.68,p3-R1=,-0.04,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,15.32,14.91,13.85,13.20,moR3R2R1PS1S2S3=,13.59,13.21,12.83,12.39,12.01,11.57,11.19,EOL,1aee5df6f24f0dd854e55856fb63b38fe70c6330f4ad0c1a4dc93e4b5f29587d , LINE LEN== 284
+[INSERTED] __Orig(re-hash)_numCSVs==42
+
+] 137 : 2023-12-19,1300,tue,15min,2.0437%,BUY,100,AAL,atLimit,14.35,Pday,buysigcnt,8,R3R2R1_P_P3_S1S2S3=,14.82,14.63,14.44,14.25,14.33,14.06,13.87,13.68,p-S1=,0.29,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,15.32,14.91,13.85,13.20,moR3R2R1PS1S2S3=,13.59,13.21,12.83,12.39,12.01,11.57,11.19,EOL,2467f9f75a1c477d36c2b9033c990ea13dd3b4d1f6c5d4d48c99a6ff592b1f7a , LINE LEN== 278
+[INSERTED] __Orig(re-hash)_numCSVs==42
+
+] 138 : 2023-12-19,1200,tue,15min,-0.6436%,SELL,100,DAL,atLimit,41.61,P3day,sellsigcnt,8,R3R2R1_P_P3_S1S2S3=,43.26,42.57,41.87,41.49,41.80,40.79,40.41,39.71,p3-R1=,-0.27,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,44.31,43.32,40.73,39.13,moR3R2R1PS1S2S3=,39.00,38.31,37.63,36.54,35.86,34.77,34.09,EOL,08f259ed7db065e9ae7397a660fc0aabd9c9969893f4f7571d85a2843936bf74 , LINE LEN== 284
+[INSERTED] __Orig(re-hash)_numCSVs==42
+
+] 139 : 2023-12-19,1300,tue,15min,1.5605%,BUY,100,DAL,atLimit,41.44,Pday,buysigcnt,4,R3R2R1_P_P3_S1S2S3=,43.26,42.57,41.87,41.49,41.80,40.79,40.41,39.71,p-S1=,0.65,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,44.31,43.32,40.73,39.13,moR3R2R1PS1S2S3=,39.00,38.31,37.63,36.54,35.86,34.77,34.09,EOL,d7b8cd60206e86d59d9b7ccf0cba09f4a7c740f5732fc4e8ee5dbbb224898973 , LINE LEN== 278
+[INSERTED] __Orig(re-hash)_numCSVs==42
+
+] 140 : 2023-12-19,1300,tue,15min,1.5605%,BUY,100,DAL,atLimit,41.44,Pday,buysigcnt,4,R3R2R1_P_P3_S1S2S3=,43.26,42.57,41.87,41.49,41.80,40.79,40.41,39.71,p-S1=,0.65,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,44.31,43.32,40.73,39.13,moR3R2R1PS1S2S3=,39.00,38.31,37.63,36.54,35.86,34.77,34.09,EOL,d7b8cd60206e86d59d9b7ccf0cba09f4a7c740f5732fc4e8ee5dbbb224898973 , LINE LEN== 278
+[ NOT Inserted ] <#noHash#>
+
+] 141 : ,e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 , LINE LEN== 0
+[ NOT Inserted ] <#noHash#>
+
+
+] FOUND 115 unique RAW trades, and inserted them into arrstrs[] writing to rawtrades_2023-12-21T22_14_59.txt ...
+Array content written to rawtrades_2023-12-21T22_14_59.txt successfully.
+
+
+
+
+*/
+
+
+
 
 
 /* 
@@ -425,6 +491,12 @@ CREATE TABLE u151710353_algotrades.trades (
     tradeAux2 VARCHAR(1024),
     tradeAux3 VARCHAR(1024)
 );
+
+
+
+mysqldump -u username -p --no-data databasename > schema.sql
+
+
 
 //
 
