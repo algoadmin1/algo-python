@@ -317,6 +317,76 @@ foreach ($arrstrs as $string) {
     }
     print_r($elements);
 
+
+
+/*
+
+
+$insertdb = 0;
+
+// SHOW CREATE TABLE table_name;
+try {
+    // Connect to MySQL using PDO
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);
+
+    // Set PDO to throw exceptions for errors
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    if($insertdb!=0){
+
+
+
+          // Insert a sample trade into the 'trades' table
+          $insertQuery = "INSERT INTO trades (tradeDTstamp, tradeDateTime, userId, accountId,   tradeType, tradeSize, tradePrice) 
+                          VALUES (CURRENT_TIMESTAMP ,'$timeNYC',       'superuser', 'testaccount', 'sell', 100, 50.25)";
+          $conn->exec($insertQuery);
+          $lastInsertedId = $conn->lastInsertId();
+
+          echo "Sample trade inserted. Last inserted ID: $lastInsertedId <br>";
+
+
+
+
+    }
+
+    // Query the table for a specific tradeId
+    $tradeIdToQuery = 1; // Replace with the desired tradeId to query
+    $query = "SELECT * FROM trades WHERE tradeId = :tradeId";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':tradeId', $tradeIdToQuery);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result) {
+        echo "Trade found for tradeId $tradeIdToQuery: <pre>" . print_r($result, true) . "</pre>";
+    } else {
+        echo "No trade found for tradeId $tradeIdToQuery";
+    }
+} catch (PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     $c++;
 
 }//foreach
