@@ -1,22 +1,28 @@
 <?php
-//Setting up Error Reporting Level
 ////////////// **************************************  recpost1.php Copyright (c) 2023-2026 by Algo Investor Inc
 ////////////// **                                                   written by John Botti
 //
 //
-
+//
+//Setting up Error Reporting Level
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.41";
-
+                                                      $vers = "1.5375";
+$minstrlen = 32;
 $todaysdate = date('Y-m-d');
 
 //echo "\n\n] recpost1.php $vers is running, Time in NYC = $todaysdate \n";
+// ******************************************************************** INITAL VARS
 
-
-
+// Get the values from the URL parameters
+$udate0 = isset($_GET['date']) ? $_GET['date'] : $todaysdate ;
+$utime0 = isset($_GET['t']) ? $_GET['t'] : '2500';
+$uname0 = isset($_GET['uname']) ? $_GET['uname'] : 'creator';
+$acct0  = isset($_GET['acct']) ? $_GET['acct'] : 'crtracct';
+$msg0   = isset($_GET['msg']) ? $_GET['msg'] : 'nil';
+//$msg0=0;
 
 $prgname="recpost1.php";
 
@@ -29,19 +35,81 @@ $tblname ="trades";
 
 $timeNYC =  date("Y-m-d\TH:i:s");
 
+// ******************************************************************** INITAL VARS
+
+
+
+// include 'functions.php'; // Include the file containing functions
+function PrintUserInputs($udate0, $utime0, $uname0, $acct0, $msg0){
+  // Use the values as needed
+  echo "Input msg: $msg0 , ";
+  echo "Input Date: $udate0 , ";
+  echo "Input Time: $utime0 , ";
+  echo "Input Username: $uname0 , ";
+  echo "Input Acct#: $acct0 <br>";  
+}
+function RightString($str0, $numchars) {
+    $right_part = substr($str0, -$numchars);
+    return $right_part;
+}
+function LeftString($str0, $numchars) {
+    $left_part = substr($str0, 0, $numchars);
+    return $left_part;
+}
+function ConCat($str1, $str2) {
+    $concatenated_string = $str1. $str2;
+    return $concatenated_string;
+}
+function NumCSVs( $csvstring ){
+  //$csvstring0 = "2,w,3,aal,googl,8,citi,xom"; // Your CSV string
+  // Parse the CSV string into an array
+  $values_array = str_getcsv($csvstring);
+  // Count the number of values
+  $num_values = count($values_array);
+  //echo "Number of CSV values: $num_values"; // Output the count
+  return $num_values;
+}
+function HashIt($str0){
+  //$str0 = "Your string here"; // Replace this with your string
+  // Generate SHA-256 hash
+  $hashstr = hash('sha256', $str0);
+  /*echo "  >>>>Original String: ";
+  echo LeftString($str0,32) ."...<<<<  ";
+  echo "SHA-256 Hash: >>>$hashstr<<<  ";
+  */
+  return $hashstr;
+}
+function PrintArray( $arrstrs , $arrstrs0 ){
+  // Print the resulting array
+  echo "<br /><br /><br />] resulting array = ". $arrstrs0. "[] == <br />";
+  print_r($arrstrs);
+}
+
+function GetDBSafe_NYCTimeNOW(){
+  //$timeNYC0 =  date("Y-m-d\TH:i:s");
+  $timeNYCnow =  date("Y-m-d\TH:i:s");
+  return( $timeNYCnow );
+}
+
+
+// ********************************************************************* MAIN CODE
+//
+//
+
 echo "<br />  $prgname   $vers is running, Time in NYC =   $timeNYC  ... <br />";
 
 echo "<br /><br />";
 
 echo "*****************<br />";
-echo "*****************\n";
 
-echo "<br />] **** Greetings, Creator. We are currently running:   $prgname   $servername :  $username / $password1  $dbname $tblname  ...  ********\n";
+echo "<br />] **** Greetings, Creator. We are currently running:   $prgname  : $servername :  $username / $password1 | $dbname : $tblname  ...  ********<br />";
 
-echo "*****************\n";
+//echo "*****************\n";
 
 //echo "\n*\n] Accessing https://algoinvestorr.com/*_". $dbname. "[". $username"]_". $tblname. "\n*\n*\n*\n";
 echo "*****************<br />";
+
+PrintUserInputs( $udate0, $utime0, $uname0, $acct0 );
 
 echo "<br />******** ATTEMPTING DB ACCESS *********<br />";
 
@@ -75,6 +143,7 @@ echo "<br />******** ATTEMPTING DB ACCESS *********<br />";
 
 
 $timeNYC =  date("Y-m-d\TH:i:s");
+$insertdb = 0;
 
 try {
     // Connect to MySQL using PDO
@@ -83,6 +152,7 @@ try {
     // Set PDO to throw exceptions for errors
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+  if($insertdb!=0){
     // Insert a sample trade into the 'trades' table
     $insertQuery = "INSERT INTO trades (tradeDTstamp, tradeDateTime, userId, accountId,   tradeType, tradeSize, tradePrice) 
                     VALUES (CURRENT_TIMESTAMP ,'$timeNYC',       'superuser', 'testaccount', 'sell', 100, 50.25)";
@@ -90,7 +160,7 @@ try {
     $lastInsertedId = $conn->lastInsertId();
 
     echo "Sample trade inserted. Last inserted ID: $lastInsertedId <br>";
-
+  }
 
     // Query the table for a specific tradeId
     $tradeIdToQuery = 1; // Replace with the desired tradeId to query
@@ -110,14 +180,37 @@ try {
 }
 
 
-$minstrlen = 32;
 
-$fname = "intradaytradesServer_2023-12-20.txt"; // Replace with your file name
+// data to test / read in txt file from this date:
+$tradedatestr = "2023-12-20";
 
-echo "<br />] After msyql access.  Attempting file read of: ". $fname . "<br />";
+
+//turn this into a fn
+$datestr = $udate0 ; // User date string chk
+
+$dateck = DateTime::createFromFormat('Y-m-d', $datestr);
+//if( strlen($udate0==10) )  $tradedatestr = $udate0 ;
+if ($dateck !== false && $dateck->format('Y-m-d') === $datestr) {
+    echo "<br /> ] Valid date in 'YYYY-MM-DD' format: $datestr , strlen()==". strlen($datestr);
+    $tradedatestr=$datestr;  // override date to read/write
+
+} else {
+    echo "<br /> ] Invalid date or not in 'YYYY-MM-DD' format: $datestr";
+
+}
+
+
+
+
+
+
+
+
+$fname = "intradaytradesServer_". $tradedatestr. ".txt"; // Replace with your file name
+
+echo "<br />] After MySQL access, date verify.  <br /><br />] Attempting file read of: ". $fname. "<br />";
 
 //$fname = "intradaytradesServer_2023-12-20.txt"; // Replace with your file name
-
 // Array to store strings
 $arrstrs = array();
 $i=0;
@@ -126,29 +219,46 @@ $j=0;
 if (($handle = fopen($fname, "r")) !== false) {
     while (($data = fgetcsv($handle, 0, ",")) !== false) {
 
-        
         // Check each line against $arrstrs before appending
         $line = implode(",", $data); // Convert line array to a string
         $linelen= strlen($line);
-        echo "<br /> $i  :  $line  , $linelen  <br />";
+   //     echo "<br /><br /> ] $i  :  $line  ,  LINE LEN== $linelen  <br />";
+        $numcsv = NumCSVs($line)  ;
+        $h0= HashIt($line);
+        $line = $line.",". $h0;
+
+        echo "<br /><br /> ] $i  :  $line  ,  LINE LEN== $linelen  <br />";
 
         // Check if the line exists in $arrstrs
         if (!in_array($line, $arrstrs) &&  ( $linelen > $minstrlen ) ) {
-            $arrstrs[] = $line; // Append the line to $arrstrs if it doesn't exist
+            echo " [INSERTED] ". "__Orig(re-hash)_numCSVs==". $numcsv. "  "; //. $h0;     
+
+            $arrstrs[] = $line ; // Append the line to $arrstrs if it doesn't exist
             $j++;
-            echo " [INSERTED] ";
-        }
+        }else echo " [ NOT Inserted ]  <#noHash#>";
+
         $i++;
 
     }
     fclose($handle);
 }
 
-// Print the resulting array
-print_r($arrstrs);
-echo "<br />] FOUND $j unique RAW trades, and inserted them into arrstrs[] writing to rawtrades.txt... <br />";
+$arrname = "arrstrs";
+// $arrstrs[] should have only unique RAW trades at this point...
+if($msg0==1) PrintArray( $arrstrs , $arrname );
+ 
+ 
 
-$fnameout = "rawtrades_2023-12-20.txt"; // Output file name
+
+
+
+$ftimeout = GetDBSafe_NYCTimeNOW();
+//$fnameout = "rawtrades_". $tradedatestr. ".txt";  
+$fnameout = "rawtrades_". $ftimeout. ".txt";  
+
+echo "<br /><br /><br />] FOUND $j unique RAW trades, and inserted them into ". $arrname. "[] writing to $fnameout ... <br />";
+
+
 //$arrstrs = array(/* your array content here */); // Replace this with your array
 
 // Open the file for writing
@@ -167,6 +277,23 @@ if ($fileout) {
 
 
 /* 
+
+//............ OOP
+
+class MyClass {
+    public function myMethod() {
+        // Method logic
+    }
+}
+
+// Create an object of MyClass
+$obj = new MyClass();
+$obj->myMethod(); // Call the method
+
+//............ OOP
+
+
+
 //$searchQuery = $_POST["post_query"];
 $searchQuery = $_POST["data"];
 
