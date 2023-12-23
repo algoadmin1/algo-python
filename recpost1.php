@@ -21,8 +21,8 @@ $todaysdate = date('Y-m-d');
 $udate0 = isset($_GET['d']) ? $_GET['d'] : $todaysdate ;
 $utime0 = isset($_GET['t']) ? $_GET['t'] : '2500';
 
-//$udate0 = isset($_GET['d']) ? $_GET['d'] : $todaysdate ;
-//$utime0 = isset($_GET['t']) ? $_GET['t'] : '2600';
+//$udate0 = isset($_GET['date']) ? $_GET['date'] : $todaysdate ;
+//$utime0 = isset($_GET['time']) ? $_GET['time'] : '2600';
 
 $uname0 = isset($_GET['name']) ? $_GET['name'] : 'creator';
 $acct0  = isset($_GET['acct']) ? $_GET['acct'] : 'crtracct';
