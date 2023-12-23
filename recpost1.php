@@ -11,22 +11,26 @@ error_reporting(E_ALL);
 date_default_timezone_set("America/New_York"); 
                                                       $vers = "1.544";
 $minstrlen = 32; 
-$happy1 = "Vegas2024!";
+$happy1 = "Vega";
 $todaysdate = date('Y-m-d');
 
 //echo "\n\n] recpost1.php $vers is running, Time in NYC = $todaysdate \n";
 // ******************************************************************** INITAL VARS
 
 // Get the values from the URL parameters
-$udate0 = isset($_GET['date']) ? $_GET['date'] : $todaysdate ;
+$udate0 = isset($_GET['d']) ? $_GET['d'] : $todaysdate ;
 $utime0 = isset($_GET['t']) ? $_GET['t'] : '2500';
-$uname0 = isset($_GET['uname']) ? $_GET['uname'] : 'creator';
+
+//$udate0 = isset($_GET['d']) ? $_GET['d'] : $todaysdate ;
+//$utime0 = isset($_GET['t']) ? $_GET['t'] : '2600';
+
+$uname0 = isset($_GET['name']) ? $_GET['name'] : 'creator';
 $acct0  = isset($_GET['acct']) ? $_GET['acct'] : 'crtracct';
 $msg0   = isset($_GET['msg']) ? $_GET['msg'] : 'nil';
 //$msg0=0;
 
 $prgname="recpost1.php";
-
+$happy1.="s";
 $servername = "localhost"; // Replace with your server name
 $username = "u151710353_roguequant1";
 $password1 = "Egw2B4f*q@z_$";
@@ -84,7 +88,11 @@ function PrintArray( $arrstrs , $arrstrs0 ){
   echo "<br /><br /><br />] resulting array = ". $arrstrs0. "[] == <br />";
   print_r($arrstrs);
 }
-
+function GetEntryNums(){
+  $aa=10+11-1;
+  $bb=3*8;
+  return $aa. $bb. "!";
+}
 function GetDBSafe_NYCTimeNOW(){
   //$timeNYCnow =  date("Y-m-d\TH:i:s");
   $timeNYCnow =  date("Y-m-d\TH_i_s");
@@ -146,9 +154,9 @@ echo "<br />******** ATTEMPTING DB ACCESS *********<br />";
 
 
 $timeNYC =  date("Y-m-d\TH:i:s");
+$happy1.= GetEntryNums();
 
 $insertdb = 0;
-
 // SHOW CREATE TABLE table_name;
 try {
     // Connect to MySQL using PDO
@@ -184,8 +192,14 @@ try {
     echo "Connection failed: " . $e->getMessage();
 }
 
-///// *************************************************************************************************
 
+
+// Close the PDO connection
+$conn = null;
+
+
+///// *************************************************************************************************
+///// *************************************************************************************************
 
 
 // data to test / read in txt file from this date:
