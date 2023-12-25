@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.60";
+                                                      $vers = "1.63";
 $minstrlen = 32; 
 $happy1 = "Vega"; 
 $CurrencyStr="$";
@@ -31,7 +31,7 @@ $msg0=0;
 $msg0   = isset($_GET['msg']) ? $_GET['msg'] : 'nil';
 
 
-$prgname="recpost1.php";
+$prgname="recpost1db.php";
 $happy1.="s";
 $servername = "localhost"; // Replace with your server name
 $username = "u151710353_roguequant1";
@@ -196,7 +196,8 @@ echo $result; // Output: abcd123efgh
 //
 //
 
-echo "<br />  $prgname   $vers is running, Time in NYC =   $timeNYC  ... <br />";
+$pstr8= "<br />  $prgname   $vers is running, Time in NYC =   $timeNYC  ... <br />";
+echoColor($pstr8,"red");
 
 echo "<br /><br />";
 
@@ -211,7 +212,7 @@ echo "*****************<br />";
 
 PrintUserInputs( $udate0, $utime0, $uname0, $acct0 , $msg0 );
 
-echo "<br />******** ATTEMPTING DB ACCESS *********<br />";
+// echo "<br />******** ATTEMPTING DB ACCESS HERE in $prgname *********<br />";
 
 
 //$con = mysqli_connect("localhost", "jb_jackabeejohn", "jackabee66", "jb_jackabee_Users1");
@@ -245,46 +246,44 @@ echo "<br />******** ATTEMPTING DB ACCESS *********<br />";
 $timeNYC =  date("Y-m-d\TH:i:s");
 $happy1.= GetEntryNums();
 
-$insertdb = 0;
-// SHOW CREATE TABLE table_name;
-try {
-    // Connect to MySQL using PDO
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);
+// $insertdb = 0;
+// // SHOW CREATE TABLE table_name;
+// try {
+//     // Connect to MySQL using PDO
+//     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);
 
-    // Set PDO to throw exceptions for errors
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//     // Set PDO to throw exceptions for errors
+//     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-  if($insertdb!=0){
-    // Insert a sample trade into the 'trades' table
-    $insertQuery = "INSERT INTO trades (tradeDTstamp, tradeDateTime, userId, accountId,   tradeType, tradeSize, tradePrice) 
-                    VALUES (CURRENT_TIMESTAMP ,'$timeNYC',       'superuser', 'testaccount', 'sell', 100, 50.25)";
-    $conn->exec($insertQuery);
-    $lastInsertedId = $conn->lastInsertId();
+//   if($insertdb!=0){
+//     // Insert a sample trade into the 'trades' table
+//     $insertQuery = "INSERT INTO trades (tradeDTstamp, tradeDateTime, userId, accountId,   tradeType, tradeSize, tradePrice) 
+//                     VALUES (CURRENT_TIMESTAMP ,'$timeNYC',       'superuser', 'testaccount', 'sell', 100, 50.25)";
+//     $conn->exec($insertQuery);
+//     $lastInsertedId = $conn->lastInsertId();
 
-    echo "Sample trade inserted. Last inserted ID: $lastInsertedId <br>";
-  }
+//     echo "Sample trade inserted. Last inserted ID: $lastInsertedId <br>";
+//   }
 
-    // Query the table for a specific tradeId
-    $tradeIdToQuery = 1; // Replace with the desired tradeId to query
-    $query = "SELECT * FROM trades WHERE tradeId = :tradeId";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':tradeId', $tradeIdToQuery);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+//     // Query the table for a specific tradeId
+//     $tradeIdToQuery = 1; // Replace with the desired tradeId to query
+//     $query = "SELECT * FROM trades WHERE tradeId = :tradeId";
+//     $stmt = $conn->prepare($query);
+//     $stmt->bindParam(':tradeId', $tradeIdToQuery);
+//     $stmt->execute();
+//     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($result) {
-        echo "Trade found for tradeId $tradeIdToQuery: <pre>" . print_r($result, true) . "</pre>";
-    } else {
-        echo "No trade found for tradeId $tradeIdToQuery";
-    }
-} catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-}
+//     if ($result) {
+//         echo "Trade found for tradeId $tradeIdToQuery: <pre>" . print_r($result, true) . "</pre>";
+//     } else {
+//         echo "No trade found for tradeId $tradeIdToQuery";
+//     }
+// } catch (PDOException $e) {
+//     echo "Connection failed: " . $e->getMessage();
+// }
 
-
-
-// Close the PDO connection
-$conn = null;
+// // Close the PDO connection
+// $conn = null;
 
 
 ///// *************************************************************************************************
@@ -545,11 +544,84 @@ echo $floatValue;
     }//foreach($arrstrs
  
 
-$pstr9="End of $c Algo Trades at " .date("Y-m-d\TH:i:s"). "NYC Time.";
+//////////////////////////////////////////////// 
+
+$maxTradesToInsert=$c;
+
+$pstr9="End of $c Algo Trades at " .date("Y-m-d\TH:i:s"). "NYC Time.<br /><br /><br />";
 echoColor($pstr9,"blue");
 
-/*************************************************************************************************
 
+/*
+
+AlgoGeneratedRawTrade[ 24 ]: [ c019234a0065376bdee4a3b45b4c5aa91ef400e339f98f54fb6360d89df0adf7 ]
+
+---------> 2023-12-21 Thu December 21st 12:30pm SELL NVDA atLimit $487.66 duration DAY (off a 15min chart with a SellSigCnt of 4) -1.2454% or $-6.07 Below Daily Resistance(R1) of $493.73
+
+
+AlgoGeneratedRawTrade[ 25 ]: [ 6abcc6cff6e497b6e7240c963f644b79289bf9d5ffc7f8eb53d36311a71d81ce ]
+
+---------> 2023-12-21 Thu December 21st 13:30pm BUY SPY atLimit $469.74 duration DAY (off a 15min chart with a BuySigCnt of 5) 0.9580% or $4.50 Above Daily Support(S1) of $465.24
+
+
+*/
+
+
+$pstr9= "<br />******** ATTEMPTING DB ACCESS HERE in $prgname *********<br />";
+echoColor($pstr9,"orange");
+
+$insertdb = 0;
+// SHOW CREATE TABLE table_name;
+try {
+    // Connect to MySQL using PDO
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);
+
+    // Set PDO to throw exceptions for errors
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+  if($insertdb!=0){
+    // Insert a sample trade into the 'trades' table
+    $insertQuery = "INSERT INTO trades (tradeDTstamp, tradeDateTime, userId, accountId,   tradeType, tradeSize, tradePrice) 
+                    VALUES (CURRENT_TIMESTAMP ,'$timeNYC',       'superuser', 'testaccount', 'sell', 100, 50.25)";
+    $conn->exec($insertQuery);
+    $lastInsertedId = $conn->lastInsertId();
+
+    echo "Sample trade inserted. Last inserted ID: $lastInsertedId <br>";
+  }
+
+    // Query the table for a specific tradeId
+    $tradeIdToQuery = 1; // Replace with the desired tradeId to query
+    $query = "SELECT * FROM trades WHERE tradeId = :tradeId";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':tradeId', $tradeIdToQuery);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result) {
+        echo "Trade found for tradeId $tradeIdToQuery: <pre>" . print_r($result, true) . "</pre>";
+    } else {
+        echo "No trade found for tradeId $tradeIdToQuery";
+    }
+} catch (PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
+
+// Close the PDO connection
+$conn = null;
+
+
+
+$pstr9= "<br />******** CLOSING DB ACCESS HERE in $prgname *********<br />";
+echoColor($pstr9,"red");
+
+
+
+
+
+
+/*
+
+//////////////. comm'd code
 
 function RaiseCharacter($str, $num) {
     if ($num >= 0 && $num < strlen($str)) {
