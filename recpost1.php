@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.544";
+                                                      $vers = "1.55";
 $minstrlen = 32; 
 $happy1 = "Vega";
 $todaysdate = date('Y-m-d');
@@ -102,7 +102,17 @@ function GetNYDateTime(){
   $timeNYC0 =  date("Y-m-d\TH:i:s");
   return $timeNYC0;
 }
+function echoColor($printstr, $colorstr){   // colorstr = " red blue  green black white yellow purple orange gray"
+  echo '<p style="color: '. $colorstr. ';">'. $printstr. '</p>';
+ // echo '<p style="color: green;">The file '. $fname. ' exists.</p>';
+}
 
+//
+//
+// ********************************************************************* MAIN CODE
+// ********************************************************************* MAIN CODE
+// ********************************************************************* MAIN CODE
+// ********************************************************************* MAIN CODE
 // ********************************************************************* MAIN CODE
 //
 //
@@ -229,40 +239,61 @@ if ($dateck !== false && $dateck->format('Y-m-d') === $datestr) {
 
 $fname = "intradaytradesServer_". $tradedatestr. ".txt"; // Replace with your file name
 
-echo "<br />] After MySQL access, date verify.  <br /><br />] Attempting file read of: ". $fname. "<br />";
+$pstr= "<br />] After MySQL access, date verify.  <br /><br />] Attempting file read of: ". $fname. "<br />";
+echoColor( $pstr, "orange");
 
 //$fname = "intradaytradesServer_2023-12-20.txt"; // Replace with your file name
 // Array to store strings
 $arrstrs = array();
 $i=0;
 $j=0;
-// Read the file line by line
-if (($handle = fopen($fname, "r")) !== false) {
-    while (($data = fgetcsv($handle, 0, ",")) !== false) {
+$fexist=0;
+   
+//$fname = 'path/to/your/file.txt'; // Replace this with the path to your file
 
-        // Check each line against $arrstrs before appending
-        $line = implode(",", $data); // Convert line array to a string
-        $linelen= strlen($line);
-   //     echo "<br /><br /> ] $i  :  $line  ,  LINE LEN== $linelen  <br />";
-        $numcsv = NumCSVs($line)  ;
-        $h0= HashIt($line);
-        $line = $line.",". $h0;
+if (file_exists($fname)) {
+    echo '<p style="color: green;">The file '. $fname. ' exists.</p>';
+    $fexist=1;
+} else {
+  //echo '<p style="color: red;">This text will be displayed in red.</p>';
 
-        echo "<br /><br /> ] $i  :  $line  ,  LINE LEN== $linelen  <br />";
-
-        // Check if the line exists in $arrstrs
-        if (!in_array($line, $arrstrs) &&  ( $linelen > $minstrlen ) ) {
-            echo " [INSERTED] ". "__Orig(re-hash)_numCSVs==". $numcsv. "  "; //. $h0;     
-
-            $arrstrs[] = $line ; // Append the line to $arrstrs if it doesn't exist
-            $j++;
-        }else echo " [ NOT Inserted ]  <#noHash#>";
-
-        $i++;
-
-    }
-    fclose($handle);
+    echo '<p style="color: red;">The file '. $fname. ' does not exist.  Use the ?d=YYYY-MM-DD parameter.</p>';
 }
+
+
+
+if($fexist==1){
+
+    // Read the file line by line
+    if (($handle = fopen($fname, "r")) !== false) {
+        while (($data = fgetcsv($handle, 0, ",")) !== false) {
+
+            // Check each line against $arrstrs before appending
+            $line = implode(",", $data); // Convert line array to a string
+            $linelen= strlen($line);
+       //     echo "<br /><br /> ] $i  :  $line  ,  LINE LEN== $linelen  <br />";
+            $numcsv = NumCSVs($line)  ;
+            $h0= HashIt($line);
+            $line = $line.",". $h0;
+
+            echo "<br /><br /> ] $i  :  $line  ,  LINE LEN== $linelen  <br />";
+
+            // Check if the line exists in $arrstrs
+            if (!in_array($line, $arrstrs) &&  ( $linelen > $minstrlen ) ) {
+                echo " [ Appended into array] ". "__Orig(re-hash)_numCSVs==". $numcsv. "  "; //. $h0;     
+
+                $arrstrs[] = $line ; // Append the line to $arrstrs if it doesn't exist
+                $j++;
+            }else echo " [ NOT Inserted into array ]  <#noHash#>";
+
+            $i++;
+
+        }
+        fclose($handle);
+    }//if
+
+}//if fexist==1
+
 
 $arrname = "arrstrs";
 // $arrstrs[] should have only unique RAW trades at this point...
@@ -276,7 +307,8 @@ if($msg0==1) PrintArray( $arrstrs , $arrname );
 $ftimeout = GetDBSafe_NYCTimeNOW();   
 $fnameout = "rawtrades_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
 
-echo "<br /><br /><br />] FOUND $j unique RAW trades, and inserted them into ". $arrname. "[] writing to $fnameout ... <br />";
+$pstr= "<br /><br /><br />] FOUND $j unique RAW trades, and inserted them into ". $arrname. "[] writing to $fnameout ... <br />";
+echoColor( $pstr, "orange");
 
 
 //$arrstrs = array(/* your array content here */); // Replace this with your array
@@ -290,9 +322,12 @@ if ($fileout) {
         fwrite($fileout, $line0 . PHP_EOL); // Write each line and add a newline
     }
     fclose($fileout);
-    echo "<br />Array content written to $fnameout successfully.<br /><br /><br />";
+
+    $pstr= "<br />Array content written to $fnameout successfully.<br /><br /><br />";
+    echoColor( $pstr, "green");
 } else {
-    echo "<br />Unable to open file!<br />";
+    $pstr= "<br />Unable to open file!<br />";
+    echoColor( $pstr, "red");
 }
 
 
@@ -329,7 +364,20 @@ foreach ($arrstrs as $string) {
       // echo $element . "<br />"; 
       $elements[]=$element;
     }
-    echo $elements[ 0 ]. " ".  $elements[ 1 ]. " ".  $elements[ 2 ]. " ". $elements[ 5 ]. " ".  $elements[ 3 ]. " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".  $elements[ 9 ]. " DAY ".  "<br />"; 
+    //echo $elements[ 0 ]. " ".  $elements[ 1 ]. " ".  $elements[ 2 ]. " ". $elements[ 5 ]. " ".  $elements[ 3 ]. " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".  $elements[ 9 ]. " DAY ".  "<br />"; 
+    // ] arrstrs[ 0 ]=
+    // 2023-12-21,945,thu,15min,1.1383%,BUY,100,AMZN,atLimit,152.28,Pday,buysigcnt,8,R3R2R1_P_P3_S1S2S3=,159.70,157.16,154.61,153.09,152.08,150.54,149.02,146.47,p-S1=,1.73,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,154.90,152.30,145.37,141.04,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,70ac488fa3488b4669d178ad1011265f69378daa0244605f2fcc890c912a0dd3
+
+    $aboveBelowStr="around";
+    $ampmStr="am";
+
+    $t0str = $elements[ 1 ];      // ie 945, 1115 am
+    $intValue = intval($t0str);
+    if($intValue>=1200) $ampmStr="pm";
+
+    $pstr=  $elements[ 0 ]. " ".  $elements[ 1 ]. $ampmStr. " ".  $elements[ 2 ]. " ". $elements[ 5 ].   " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".  $elements[ 9 ]. " duration: DAY, off a ". $elements[ 3 ]. " chart, & a ". $elements[ 11 ]. "'s Strengh= ". $elements[ 12 ].  $elements[ 4 ]. "% ". $aboveBelowStr.  $elements[ 9 ] ."<br />"; 
+
+    echoColor($pstr, "purple");
 
     print_r($elements);
     $c++;
@@ -422,16 +470,30 @@ Array ( [0] => 2023-12-21 [1] => 1000 [2] => thu [3] => 15min [4] => 3.5795% [5]
 
 
 
-
-
-
-
-
-
-
-
-
 /*
+
+  colors
+ echo '<p style="color: red;">This text will be displayed in red.</p>';
+
+
+Red: color: red;
+Blue: color: blue;
+Green: color: green;
+Black: color: black;
+White: color: white;
+Yellow: color: yellow;
+Purple: color: purple;
+Orange: color: orange;
+Gray: color: gray;
+
+Hexadecimal: color: #FF0000; (Red)
+RGB: color: rgb(255, 0, 0); (Red)
+
+
+
+
+
+
 
 
 $insertdb = 0;
