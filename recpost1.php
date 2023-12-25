@@ -27,8 +27,9 @@ $utime0 = isset($_GET['t']) ? $_GET['t'] : '2500';
 
 $uname0 = isset($_GET['name']) ? $_GET['name'] : 'creator';
 $acct0  = isset($_GET['acct']) ? $_GET['acct'] : 'crtracct';
+$msg0=0;
 $msg0   = isset($_GET['msg']) ? $_GET['msg'] : 'nil';
-//$msg0=0;
+
 
 $prgname="recpost1.php";
 $happy1.="s";
@@ -344,16 +345,16 @@ if($fexist==1){
             $h0= HashIt($line);
             $line = $line.",". $h0;
 
-            echo "<br /><br /> ] $i  : "; 
+            if($msg0=="1") echo "<br /><br /> ] $i  : "; 
             $pstr0= " $line  ,  LINE LEN== $linelen  <br />";
-            echoColor($pstr0,"blue");
+            if($msg0=="1")  echoColor($pstr0,"blue");
             // Check if the line exists in $arrstrs
             if (!in_array($line, $arrstrs) &&  ( $linelen > $minstrlen ) ) {
-                echo " [ Appended into array] ". "__Orig(re-hash)_numCSVs==". $numcsv. "  "; //. $h0;     
+                if($msg0=="1")  echo " [ Appended into array] ". "__Orig(re-hash)_numCSVs==". $numcsv. "  "; //. $h0;     
 
                 $arrstrs[] = $line ; // Append the line to $arrstrs if it doesn't exist
                 $j++;
-            }else echo " [ NOT Inserted into array ]  <#noHash#>";
+            }else if($msg0=="1")  echo " [ NOT Inserted into array ]  <#noHash#>";
 
             $i++;
 
@@ -422,7 +423,7 @@ if ($fileout) {
 $csvelems = [];
 $c=0;
 foreach ($arrstrs as $string) {
-    echo "<br /><br /> ] arrstrs[ $c ]=". $string;
+    if($msg0=="1") echo "<br /><br /> ] arrstrs[ $c ]=". $string;
 
 // Explode the CSV string into an array using str_getcsv()
     $csvelems = str_getcsv($string);
@@ -500,7 +501,7 @@ echo $floatValue;
       else $aboveBelowStr="Above";
     //$pctNearS1R1=RemoveRightCharacter($pctNearS1R1,0);  // remove % "1.23%" ==> "1.23"
 
-    $pstr= "AlgoGeneratedRawTrade: ";   //"<br />";
+    $pstr= "AlgoGeneratedRawTrade". "[ $c ]: ";   //"<br />";
     $hastr=$elements[ 42 ];
     $hastr="[ ".$hastr." ]";
 
@@ -523,7 +524,7 @@ echo $floatValue;
 //    echoColor( "[ ".$hastr." ]", "blue");
     echoColor($trstr, $col007);
 
-    print_r($elements);
+    if($msg0=="1") print_r($elements);
     $c++;
 
     }//foreach($arrstrs
