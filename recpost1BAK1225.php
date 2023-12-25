@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.60";
+                                                      $vers = "1.55";
 $minstrlen = 32; 
 $happy1 = "Vega"; 
 $CurrencyStr="$";

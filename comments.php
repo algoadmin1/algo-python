@@ -1,555 +1,10 @@
 <?php
-////////////// **************************************  recpost1.php Copyright (c) 2023-2026 by Algo Investor Inc
-////////////// **                                                   written by John Botti
-//
-//
-//
-//Setting up Error Reporting Level
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+//comments.php
 
-date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.60";
-$minstrlen = 32; 
-$happy1 = "Vega"; 
-$CurrencyStr="$";
-$todaysdate = date('Y-m-d');
+//from recpost1.php 
 
-//echo "\n\n] recpost1.php $vers is running, Time in NYC = $todaysdate \n";
-// ******************************************************************** INITAL VARS
-
-// Get the values from the URL parameters
-$udate0 = isset($_GET['d']) ? $_GET['d'] : $todaysdate ;
-$utime0 = isset($_GET['t']) ? $_GET['t'] : '2500';
-
-//$udate0 = isset($_GET['date']) ? $_GET['date'] : $todaysdate ;
-//$utime0 = isset($_GET['time']) ? $_GET['time'] : '2600';
-
-$uname0 = isset($_GET['name']) ? $_GET['name'] : 'creator';
-$acct0  = isset($_GET['acct']) ? $_GET['acct'] : 'crtracct';
-$msg0=0;
-$msg0   = isset($_GET['msg']) ? $_GET['msg'] : 'nil';
-
-
-$prgname="recpost1.php";
-$happy1.="s";
-$servername = "localhost"; // Replace with your server name
-$username = "u151710353_roguequant1";
-$password1 = "Egw2B4f*q@z_$";
-$dbname = "u151710353_algotrades";
-$tblname ="trades";
-
-$timeNYC =  date("Y-m-d\TH:i:s");
-
-// ******************************************************************** INITAL VARS
-
-
-
-// include 'functions.php'; // Include the file containing functions
-function PrintUserInputs($udate0, $utime0, $uname0, $acct0, $msg0){
-  // Use the values as needed
-  echo "Input msg: $msg0 , ";
-  echo "Input Date: $udate0 , ";
-  echo "Input Time: $utime0 , ";
-  echo "Input Username: $uname0 , ";
-  echo "Input Acct#: $acct0 <br>";  
-}
-function RightString($str0, $numchars) {
-    $right_part = substr($str0, -$numchars);
-    return $right_part;
-}
-function LeftString($str0, $numchars) {
-    $left_part = substr($str0, 0, $numchars);
-    return $left_part;
-}
-function ConCat($str1, $str2) {
-    $concatenated_string = $str1. $str2;
-    return $concatenated_string;
-}
-function NumCSVs( $csvstring ){
-  //$csvstring0 = "2,w,3,aal,googl,8,citi,xom"; // Your CSV string
-  // Parse the CSV string into an array
-  $values_array = str_getcsv($csvstring);
-  // Count the number of values
-  $num_values = count($values_array);
-  //echo "Number of CSV values: $num_values"; // Output the count
-  return $num_values;
-}
-function HashIt($str0){
-  //$str0 = "Your string here"; // Replace this with your string
-  // Generate SHA-256 hash
-  $hashstr = hash('sha256', $str0);
-  /*echo "  >>>>Original String: ";
-  echo LeftString($str0,32) ."...<<<<  ";
-  echo "SHA-256 Hash: >>>$hashstr<<<  ";
-  */
-  return $hashstr;
-}
-function PrintArray( $arrstrs , $arrstrs0 ){
-  // Print the resulting array
-  echo "<br /><br /><br />] resulting array = ". $arrstrs0. "[] == <br />";
-  print_r($arrstrs);
-}
-function GetEntryNums(){
-  $aa=10+11-1;
-  $bb=3*8;
-  return $aa. $bb. "!";
-}
-function GetDBSafe_NYCTimeNOW(){
-  //$timeNYCnow =  date("Y-m-d\TH:i:s");
-  $timeNYCnow =  date("Y-m-d\TH_i_s");
-  return( $timeNYCnow );
-}
-function GetNYDateTime(){
-  $timeNYC0 =  date("Y-m-d\TH:i:s");
-  return $timeNYC0;
-}
-function echoColor($printstr, $colorstr){   // colorstr = " red blue  green black white yellow purple orange gray"
-  echo '<p style="color: '. $colorstr. ';">'. $printstr. '</p>';
- // echo '<p style="color: green;">The file '. $fname. ' exists.</p>';
-}
-function RaiseCharacter($str, $num) {
-    if ($num >= 0 && $num < strlen($str)) {
-        $str[$num] = strtoupper($str[$num]);
-        return $str;
-    } else {
-        return "Invalid position $num  or string length exceeded in: $str at $num .";
-    }
-}
-function LeftInsertString($str0, $strToInsert, $num) {
-    if ($num >= 0 && $num <= strlen($str0)) {
-        $leftPart = substr($str0, 0, $num);
-        $rightPart = substr($str0, $num);
-        return $leftPart . $strToInsert . $rightPart;
-    } else {
-        return "Invalid position $num  or string length exceeded in: $str0 at $num .";
-    }
-}
-function RightInsertString($str0, $strToInsert, $num) {
-    if ($num >= 0 && $num <= strlen($str0)) {
-        $leftPart = substr($str0, 0, -$num);
-        $rightPart = substr($str0, -$num);
-        return $leftPart . $strToInsert . $rightPart;
-    } else {
-        return "Invalid position $num  or string length exceeded in: $str0 at $num .";
-    }
-}
-function DetectCharacter($str0, $char0, $num) {
-    if ($num >= 0 && $num < strlen($str0)) {
-        return $str0[$num] === $char0;
-    } else {
-        return false;
-    }
-}
-function RemoveRightCharacter($str0, $num) {
-    if ($num >= 0 && $num < strlen($str0)) {
-        return substr($str0, 0, -$num - 1) . substr($str0, -$num);
-    } else {
-        return "Invalid position or string length exceeded";
-    }
-}
-function ReadableDate($datestr,$yrStr) { // returns "December 25th 2023  w/ or w/out the year"
-    $timestamp = strtotime($datestr);
-    if($yrStr=="year"){
-      return date("F jS Y", $timestamp);
-    }    else    return date("F jS", $timestamp);
-
-}
-function BoldString($str2){
-  $str1='<strong>';
-  $str3='</strong>';
-  return $str1.$str2.$str3;
-}
-/*
-echo '<b>This text will be bold.</b>';
-echo '<strong>This text will also be bold.</strong>';
-
-
-
-// Example usage
-$string = "abcdefgh";
-$position = 3;
-$result = RemoveRightCharacter($string, $position);
-echo $result; // Output: abcdefh (removed character 'g' at position 3 from the right)
-
-// Example usage
-$string = "hello world";
-$charToDetect = "o";
-$position = 4;
-$result = DetectCharacter($string, $charToDetect, $position);
-echo $result ? "Character found at position $position" : "Character not found at position $position";
-
-// Example usage
-$string = "abcdefgh";
-$stringToInsert = "123";
-$position = 4;
-$result = LeftInsertString($string, $stringToInsert, $position);
-echo $result; // Output: abcd123efgh
-
-*/
-//
-// ********************************************************************* MAIN CODE
-// ********************************************************************* MAIN CODE
-// ********************************************************************* MAIN CODE
-// ********************************************************************* MAIN CODE
-// ********************************************************************* MAIN CODE
-//
-//
-
-echo "<br />  $prgname   $vers is running, Time in NYC =   $timeNYC  ... <br />";
-
-echo "<br /><br />";
-
-echo "*****************<br />";
-
-echo "<br />] **** Greetings, Creator. We are currently running:   $prgname  : $servername :  $username / $password1 | $dbname : $tblname  ...  ********<br />";
-
-//echo "*****************\n";
-
-//echo "\n*\n] Accessing https://algoinvestorr.com/*_". $dbname. "[". $username"]_". $tblname. "\n*\n*\n*\n";
-echo "*****************<br />";
-
-PrintUserInputs( $udate0, $utime0, $uname0, $acct0 , $msg0 );
-
-echo "<br />******** ATTEMPTING DB ACCESS *********<br />";
-
-
-//$con = mysqli_connect("localhost", "jb_jackabeejohn", "jackabee66", "jb_jackabee_Users1");
-
-// $con = mysqli_connect( $servername,  $username,           $happy1,      $dbname);
-// if (!$con) die('Could not connect: ' . mysqli_error($con));
-// mysqli_select_db($con, $username ) or die ("DB select failed - " . mysqli_error($con));
-
-// w3schools mysqli
-
-// $servername = "localhost";
-// $username = "username";
-// $password = "password";
-
-// // Create connection
-// $conn = new mysqli($servername, $username, $password);
-
-// // Check connection
-// if ($conn->connect_error) {
-//   die("Connection failed: " . $conn->connect_error);
-// }
-// echo "Connected successfully";
-
-
-// echo "<br />******** GOT PAST DB CONNECT OK ! *********<br />";
-
-
-// exit("\n] ".  $prgname. ": Script execution terminated.\n\n");
-
-
-$timeNYC =  date("Y-m-d\TH:i:s");
-$happy1.= GetEntryNums();
-
-$insertdb = 0;
-// SHOW CREATE TABLE table_name;
-try {
-    // Connect to MySQL using PDO
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);
-
-    // Set PDO to throw exceptions for errors
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-  if($insertdb!=0){
-    // Insert a sample trade into the 'trades' table
-    $insertQuery = "INSERT INTO trades (tradeDTstamp, tradeDateTime, userId, accountId,   tradeType, tradeSize, tradePrice) 
-                    VALUES (CURRENT_TIMESTAMP ,'$timeNYC',       'superuser', 'testaccount', 'sell', 100, 50.25)";
-    $conn->exec($insertQuery);
-    $lastInsertedId = $conn->lastInsertId();
-
-    echo "Sample trade inserted. Last inserted ID: $lastInsertedId <br>";
-  }
-
-    // Query the table for a specific tradeId
-    $tradeIdToQuery = 1; // Replace with the desired tradeId to query
-    $query = "SELECT * FROM trades WHERE tradeId = :tradeId";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':tradeId', $tradeIdToQuery);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($result) {
-        echo "Trade found for tradeId $tradeIdToQuery: <pre>" . print_r($result, true) . "</pre>";
-    } else {
-        echo "No trade found for tradeId $tradeIdToQuery";
-    }
-} catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-}
-
-
-
-// Close the PDO connection
-$conn = null;
-
-
-///// *************************************************************************************************
-///// *************************************************************************************************
-
-
-// data to test / read in txt file from this date:
-$tradedatestr = "2023-12-20";
-
-
-//turn this into a fn
-$datestr = $udate0 ; // User date string chk
-
-$dateck = DateTime::createFromFormat('Y-m-d', $datestr);
-//if( strlen($udate0==10) )  $tradedatestr = $udate0 ;
-if ($dateck !== false && $dateck->format('Y-m-d') === $datestr) {
-    echo "<br /> ] Valid date in 'YYYY-MM-DD' format: $datestr , strlen()==". strlen($datestr);
-    $tradedatestr=$datestr;  // override date to read/write
-
-} else {
-    echo "<br /> ] Invalid date or not in 'YYYY-MM-DD' format: $datestr";
-
-}
-
-
-
-
-
-
-
-
-$fname = "intradaytradesServer_". $tradedatestr. ".txt"; // Replace with your file name
-
-$pstr= "<br />] After MySQL access, date verify.  <br /><br />] Attempting file read of: ". $fname. "<br />";
-echoColor( $pstr, "orange");
-
-//$fname = "intradaytradesServer_2023-12-20.txt"; // Replace with your file name
-// Array to store strings
-$arrstrs = array();
-$i=0;
-$j=0;
-$fexist=0;
-   
-//$fname = 'path/to/your/file.txt'; // Replace this with the path to your file
-
-if (file_exists($fname)) {
-    echo '<p style="color: green;">The file '. $fname. ' exists.</p>';
-    $fexist=1;
-} else {
-  //echo '<p style="color: red;">This text will be displayed in red.</p>';
-
-    echo '<p style="color: red;">The file '. $fname. ' does not exist.  Use the ?d=YYYY-MM-DD parameter.</p>';
-}
-
-
-
-if($fexist==1){
-
-    // Read the file line by line
-    if (($handle = fopen($fname, "r")) !== false) {
-        while (($data = fgetcsv($handle, 0, ",")) !== false) {
-
-            // Check each line against $arrstrs before appending
-            $line = implode(",", $data); // Convert line array to a string
-            $linelen= strlen($line);
-       //     echo "<br /><br /> ] $i  :  $line  ,  LINE LEN== $linelen  <br />";
-            $numcsv = NumCSVs($line)  ;
-            $h0= HashIt($line);
-            $line = $line.",". $h0;
-
-            if($msg0=="1") echo "<br /><br /> ] $i  : "; 
-            $pstr0= " $line  ,  LINE LEN== $linelen  <br />";
-            if($msg0=="1")  echoColor($pstr0,"blue");
-            // Check if the line exists in $arrstrs
-            if (!in_array($line, $arrstrs) &&  ( $linelen > $minstrlen ) ) {
-                if($msg0=="1")  echo " [ Appended into array] ". "__Orig(re-hash)_numCSVs==". $numcsv. "  "; //. $h0;     
-
-                $arrstrs[] = $line ; // Append the line to $arrstrs if it doesn't exist
-                $j++;
-            }else if($msg0=="1")  echo " [ NOT Inserted into array ]  <#noHash#>";
-
-            $i++;
-
-        }
-        fclose($handle);
-    }//if
-
-}//if fexist==1
-
-
-$arrname = "arrstrs";
-// $arrstrs[] should have only unique RAW trades at this point...
-if($msg0==1) PrintArray( $arrstrs , $arrname );
- 
- 
-
-
-
-
-$ftimeout = GetDBSafe_NYCTimeNOW();   
-$fnameout = "rawtrades_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
-
-$pstr= "<br /><br /><br />] FOUND $j unique RAW trades, and inserted them into ". $arrname. "[] writing to $fnameout ... <br />";
-echoColor( $pstr, "orange");
-
-
-//$arrstrs = array(/* your array content here */); // Replace this with your array
-
-// Open the file for writing
-$fileout = fopen($fnameout, "w");
-
-// Write each element of the array to the file
-if ($fileout) {
-    foreach ($arrstrs as $line0) {
-        fwrite($fileout, $line0 . PHP_EOL); // Write each line and add a newline
-    }
-    fclose($fileout);
-
-    $pstr= "<br />Array content written to $fnameout successfully.<br /><br /><br />";
-    echoColor( $pstr, "green");
-} else {
-    $pstr= "<br />Unable to open file!<br />";
-    echoColor( $pstr, "red");
-}
-
-
-
-//
-//
-//  
-// ********** Loop thru and insert into MySQL
-//
-//
-// **************************************************************************************************
-// **************************************************************************************************
-// **************************************************************************************************
-// **************************************************************************************************
-// **************************************************************************************************
-// **************************************************************************************************
-// **************************************************************************************************
-
-// //
-// //
-// // Loop through $arrstrs and separate CSV elements into $csvelems
-// //
-$csvelems = [];
-$c=0;
-foreach ($arrstrs as $string) {
-    if($msg0=="1") echo "<br /><br /> ] arrstrs[ $c ]=". $string;
-
-// Explode the CSV string into an array using str_getcsv()
-    $csvelems = str_getcsv($string);
-    echo "<br />"; 
-    $elements = [];
-
-    foreach ($csvelems as $element) {
-      // echo $element . "<br />"; 
-      $elements[]=$element;
-    }
 
 /*
-
-$numstr = "12341234.12311231"; // Your string representing a floating-point number
-$floatValue = floatval($numstr);
-
-echo $floatValue;
-
-*/
-    //echo $elements[ 0 ]. " ".  $elements[ 1 ]. " ".  $elements[ 2 ]. " ". $elements[ 5 ]. " ".  $elements[ 3 ]. " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".  $elements[ 9 ]. " DAY ".  "<br />"; 
-    // ] arrstrs[ 0 ]= 
-    // [ 0..10 ]     2023-12-21,945,thu,15min,1.1383%,    BUY, 100,AMZN,atLimit,152.28,Pday,
-    // [ 11..21 ]       buysigcnt,8, [13]R3R2R1_P_P3_S1S2S3=, 159.70,157.16,[16]154.61, 153.09,152.08,  [19]150.54, 149.02, [21]146.47, 
-    //  ...               [22]p-S1=,1.73,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,154.90,152.30,145.37,141.04,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,70ac488fa3488b4669d178ad1011265f69378daa0244605f2fcc890c912a0dd3
-
-    $buySellstr = $elements[ 5 ];   // BUY or SELL ?
-
-    $buySellSigCnt=$elements[ 12 ];
-    $buySellSigCnt0 = intval($buySellSigCnt);
-
-    $buySellSigCount=$elements[ 11 ];
-    if($buySellstr=="BUY"){
-      $buySellSigCount=RaiseCharacter($buySellSigCount,0);
-      $buySellSigCount=RaiseCharacter($buySellSigCount,3);
-      $buySellSigCount=RaiseCharacter($buySellSigCount,6);
-    }else if($buySellstr=="SELL"){
-      $buySellSigCount=RaiseCharacter($buySellSigCount,0);
-      $buySellSigCount=RaiseCharacter($buySellSigCount,4);
-      $buySellSigCount=RaiseCharacter($buySellSigCount,7);
-    }
-
-    $dayofwk = $elements[ 2 ];
-    $dayofwk=RaiseCharacter($dayofwk,0);
-
-
-    $aboveBelowStr="aboveOrBelow ";
-    $aboveBelowAmtStr =$elements[ 23 ];
-    $ampmStr="am";
-
-    $SRstr="Daily ";
-    $S1str="Support(S1)";
-    $R1str="Resistance(R1)";
-    $S1numstr =  $elements[ 19 ];
-    $R1numstr =  $elements[ 16 ];
-    $SuppResisStr ="suppOrResist=nil";
-
-    $col007="black";
-    //$buySellstr = $elements[ 5 ];
-    if($buySellstr=="BUY"){
-       $SRstr.=  $S1str;   //if buy, x % near S1 else R1
-       $SuppResisStr= $S1numstr ;
-       $col007="green";
-    } else{
-        $SRstr.=  $R1str; 
-        $SuppResisStr= $R1numstr;
-        $col007="red";
-    }
-
-    $t0str = $elements[ 1 ];      // ie 945, 1115 am
-    $intValue = intval($t0str);
-    if($intValue>=1200) $ampmStr="pm";
-    $timeofday = $elements[1];
-    $timeofday=RightInsertString($timeofday, ":", 2);
-
-    $pctNearS1R1 = $elements[4];
-    if(DetectCharacter($pctNearS1R1, "-", 0)==true) $aboveBelowStr="Below";
-      else $aboveBelowStr="Above";
-    //$pctNearS1R1=RemoveRightCharacter($pctNearS1R1,0);  // remove % "1.23%" ==> "1.23"
-
-    $pstr= "AlgoGeneratedRawTrade". "[ $c ]: ";   //"<br />";
-    $hastr=$elements[ 42 ];
-    $hastr="[ ".$hastr." ]";
-
-    $date0str = $elements[ 0 ];
-    $date1str=  ReadableDate($datestr,"nil"); 
-
-    $humanReadableTradeStr = $date0str." ".  $dayofwk. " ". $date1str." ". $timeofday. $ampmStr.  "  ". $elements[ 5 ].   " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".$CurrencyStr  .  $elements[ 9 ]. " duration DAY (off a ". $elements[ 3 ]. " chart with a ". $buySellSigCount. " of ". $elements[ 12 ]. ") ".  $pctNearS1R1. " or ". $CurrencyStr. $aboveBelowAmtStr." ". $aboveBelowStr. " ".  $SRstr ." of ".$CurrencyStr  . $SuppResisStr ."<br />"; 
-    
-    $trstr= "        --------->     ". $humanReadableTradeStr;
-
-    // reassign EOL to human readable str for mysql insertion
-    $eolstr=$elements[ 41 ];
- // echoColor($eolstr."[41]", "gray");
-    $elements[ 41 ]=$humanReadableTradeStr ;
-    $eolstr=$elements[ 41 ];
-  //echoColor($eolstr, "blue");
-
-
-    echoColor($pstr.$hastr, "purple");
-//    echoColor( "[ ".$hastr." ]", "blue");
-
-// test for strong or weak buy/sell signals
-    if($buySellSigCnt0>7) $trstr = BoldString($trstr);
-    echoColor($trstr, $col007);
-
-    if($msg0=="1") print_r($elements);
-    $c++;
-
-    }//foreach($arrstrs
- 
-
-
-
-/*************************************************************************************************
-
-
 function RaiseCharacter($str, $num) {
     if ($num >= 0 && $num < strlen($str)) {
         $str[$num] = strtoupper($str[$num]);
@@ -722,6 +177,41 @@ try {
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
+
+
+
+
+///////////////// oldr
+
+//$con = mysqli_connect("localhost", "jb_jackabeejohn", "jackabee66", "jb_jackabee_Users1");
+
+// $con = mysqli_connect( $servername,  $username,           $happy1,      $dbname);
+// if (!$con) die('Could not connect: ' . mysqli_error($con));
+// mysqli_select_db($con, $username ) or die ("DB select failed - " . mysqli_error($con));
+
+// w3schools mysqli
+
+// $servername = "localhost";
+// $username = "username";
+// $password = "password";
+
+// // Create connection
+// $conn = new mysqli($servername, $username, $password);
+
+// // Check connection
+// if ($conn->connect_error) {
+//   die("Connection failed: " . $conn->connect_error);
+// }
+// echo "Connected successfully";
+
+
+// echo "<br />******** GOT PAST DB CONNECT OK ! *********<br />";
+
+
+// exit("\n] ".  $prgname. ": Script execution terminated.\n\n");
+
+
+
 
 */
 
@@ -1285,6 +775,8 @@ echo "\nFound $cnt params[] (all lines)...\n";
 //for($i=0;$i<$cnt;$i++){
 //    if($i%50==0) echo $i. ") ". $params[$i]."\n";
 //}
+
+
 
 
 ?>
