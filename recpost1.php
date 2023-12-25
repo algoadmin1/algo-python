@@ -11,7 +11,8 @@ error_reporting(E_ALL);
 date_default_timezone_set("America/New_York"); 
                                                       $vers = "1.55";
 $minstrlen = 32; 
-$happy1 = "Vega";
+$happy1 = "Vega"; 
+$CurrencyStr="$";
 $todaysdate = date('Y-m-d');
 
 //echo "\n\n] recpost1.php $vers is running, Time in NYC = $todaysdate \n";
@@ -106,8 +107,75 @@ function echoColor($printstr, $colorstr){   // colorstr = " red blue  green blac
   echo '<p style="color: '. $colorstr. ';">'. $printstr. '</p>';
  // echo '<p style="color: green;">The file '. $fname. ' exists.</p>';
 }
+function RaiseCharacter($str, $num) {
+    if ($num >= 0 && $num < strlen($str)) {
+        $str[$num] = strtoupper($str[$num]);
+        return $str;
+    } else {
+        return "Invalid position $num  or string length exceeded in: $str at $num .";
+    }
+}
+function LeftInsertString($str0, $strToInsert, $num) {
+    if ($num >= 0 && $num <= strlen($str0)) {
+        $leftPart = substr($str0, 0, $num);
+        $rightPart = substr($str0, $num);
+        return $leftPart . $strToInsert . $rightPart;
+    } else {
+        return "Invalid position $num  or string length exceeded in: $str0 at $num .";
+    }
+}
+function RightInsertString($str0, $strToInsert, $num) {
+    if ($num >= 0 && $num <= strlen($str0)) {
+        $leftPart = substr($str0, 0, -$num);
+        $rightPart = substr($str0, -$num);
+        return $leftPart . $strToInsert . $rightPart;
+    } else {
+        return "Invalid position $num  or string length exceeded in: $str0 at $num .";
+    }
+}
+function DetectCharacter($str0, $char0, $num) {
+    if ($num >= 0 && $num < strlen($str0)) {
+        return $str0[$num] === $char0;
+    } else {
+        return false;
+    }
+}
+function RemoveRightCharacter($str0, $num) {
+    if ($num >= 0 && $num < strlen($str0)) {
+        return substr($str0, 0, -$num - 1) . substr($str0, -$num);
+    } else {
+        return "Invalid position or string length exceeded";
+    }
+}
+function ReadableDate($datestr,$yrStr) { // returns "December 25th 2023  w/ or w/out the year"
+    $timestamp = strtotime($datestr);
+    if($yrStr=="year"){
+      return date("F jS Y", $timestamp);
+    }    else    return date("F jS", $timestamp);
 
-//
+}
+/*
+// Example usage
+$string = "abcdefgh";
+$position = 3;
+$result = RemoveRightCharacter($string, $position);
+echo $result; // Output: abcdefh (removed character 'g' at position 3 from the right)
+
+// Example usage
+$string = "hello world";
+$charToDetect = "o";
+$position = 4;
+$result = DetectCharacter($string, $charToDetect, $position);
+echo $result ? "Character found at position $position" : "Character not found at position $position";
+
+// Example usage
+$string = "abcdefgh";
+$stringToInsert = "123";
+$position = 4;
+$result = LeftInsertString($string, $stringToInsert, $position);
+echo $result; // Output: abcd123efgh
+
+*/
 //
 // ********************************************************************* MAIN CODE
 // ********************************************************************* MAIN CODE
@@ -276,8 +344,9 @@ if($fexist==1){
             $h0= HashIt($line);
             $line = $line.",". $h0;
 
-            echo "<br /><br /> ] $i  :  $line  ,  LINE LEN== $linelen  <br />";
-
+            echo "<br /><br /> ] $i  : "; 
+            $pstr0= " $line  ,  LINE LEN== $linelen  <br />";
+            echoColor($pstr0,"blue");
             // Check if the line exists in $arrstrs
             if (!in_array($line, $arrstrs) &&  ( $linelen > $minstrlen ) ) {
                 echo " [ Appended into array] ". "__Orig(re-hash)_numCSVs==". $numcsv. "  "; //. $h0;     
@@ -364,20 +433,95 @@ foreach ($arrstrs as $string) {
       // echo $element . "<br />"; 
       $elements[]=$element;
     }
-    //echo $elements[ 0 ]. " ".  $elements[ 1 ]. " ".  $elements[ 2 ]. " ". $elements[ 5 ]. " ".  $elements[ 3 ]. " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".  $elements[ 9 ]. " DAY ".  "<br />"; 
-    // ] arrstrs[ 0 ]=
-    // 2023-12-21,945,thu,15min,1.1383%,BUY,100,AMZN,atLimit,152.28,Pday,buysigcnt,8,R3R2R1_P_P3_S1S2S3=,159.70,157.16,154.61,153.09,152.08,150.54,149.02,146.47,p-S1=,1.73,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,154.90,152.30,145.37,141.04,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,70ac488fa3488b4669d178ad1011265f69378daa0244605f2fcc890c912a0dd3
 
-    $aboveBelowStr="around";
+/*
+
+$numstr = "12341234.12311231"; // Your string representing a floating-point number
+$floatValue = floatval($numstr);
+
+echo $floatValue;
+
+*/
+    //echo $elements[ 0 ]. " ".  $elements[ 1 ]. " ".  $elements[ 2 ]. " ". $elements[ 5 ]. " ".  $elements[ 3 ]. " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".  $elements[ 9 ]. " DAY ".  "<br />"; 
+    // ] arrstrs[ 0 ]= 
+    // [ 0..10 ]     2023-12-21,945,thu,15min,1.1383%,    BUY, 100,AMZN,atLimit,152.28,Pday,
+    // [ 11..21 ]       buysigcnt,8, [13]R3R2R1_P_P3_S1S2S3=, 159.70,157.16,[16]154.61, 153.09,152.08,  [19]150.54, 149.02, [21]146.47, 
+    //  ...               [22]p-S1=,1.73,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,154.90,152.30,145.37,141.04,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,70ac488fa3488b4669d178ad1011265f69378daa0244605f2fcc890c912a0dd3
+
+    $buySellstr = $elements[ 5 ];   // BUY or SELL ?
+
+
+    $buySellSigCount=$elements[ 11 ];
+    if($buySellstr=="BUY"){
+      $buySellSigCount=RaiseCharacter($buySellSigCount,0);
+      $buySellSigCount=RaiseCharacter($buySellSigCount,3);
+      $buySellSigCount=RaiseCharacter($buySellSigCount,6);
+    }else if($buySellstr=="SELL"){
+      $buySellSigCount=RaiseCharacter($buySellSigCount,0);
+      $buySellSigCount=RaiseCharacter($buySellSigCount,4);
+      $buySellSigCount=RaiseCharacter($buySellSigCount,7);
+    }
+
+    $dayofwk = $elements[ 2 ];
+    $dayofwk=RaiseCharacter($dayofwk,0);
+
+
+    $aboveBelowStr="aboveOrBelow ";
+    $aboveBelowAmtStr =$elements[ 23 ];
     $ampmStr="am";
+
+    $SRstr="Daily ";
+    $S1str="Support(S1)";
+    $R1str="Resistance(R1)";
+    $S1numstr =  $elements[ 19 ];
+    $R1numstr =  $elements[ 16 ];
+    $SuppResisStr ="suppOrResist=nil";
+
+    $col007="black";
+    //$buySellstr = $elements[ 5 ];
+    if($buySellstr=="BUY"){
+       $SRstr.=  $S1str;   //if buy, x % near S1 else R1
+       $SuppResisStr= $S1numstr ;
+       $col007="green";
+    } else{
+        $SRstr.=  $R1str; 
+        $SuppResisStr= $R1numstr;
+        $col007="red";
+    }
 
     $t0str = $elements[ 1 ];      // ie 945, 1115 am
     $intValue = intval($t0str);
     if($intValue>=1200) $ampmStr="pm";
+    $timeofday = $elements[1];
+    $timeofday=RightInsertString($timeofday, ":", 2);
 
-    $pstr=  $elements[ 0 ]. " ".  $elements[ 1 ]. $ampmStr. " ".  $elements[ 2 ]. " ". $elements[ 5 ].   " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".  $elements[ 9 ]. " duration: DAY, off a ". $elements[ 3 ]. " chart, & a ". $elements[ 11 ]. "'s Strengh= ". $elements[ 12 ].  $elements[ 4 ]. "% ". $aboveBelowStr.  $elements[ 9 ] ."<br />"; 
+    $pctNearS1R1 = $elements[4];
+    if(DetectCharacter($pctNearS1R1, "-", 0)==true) $aboveBelowStr="Below";
+      else $aboveBelowStr="Above";
+    //$pctNearS1R1=RemoveRightCharacter($pctNearS1R1,0);  // remove % "1.23%" ==> "1.23"
 
-    echoColor($pstr, "purple");
+    $pstr= "AlgoGeneratedRawTrade: ";   //"<br />";
+    $hastr=$elements[ 42 ];
+    $hastr="[ ".$hastr." ]";
+
+    $date0str = $elements[ 0 ];
+    $date1str=  ReadableDate($datestr,"nil"); 
+
+    $humanReadableTradeStr = $date0str." ".  $dayofwk. " ". $date1str." ". $timeofday. $ampmStr.  " ". $elements[ 5 ].   " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".$CurrencyStr  .  $elements[ 9 ]. " duration DAY (off a ". $elements[ 3 ]. " chart with a ". $buySellSigCount. " of ". $elements[ 12 ]. ") ".  $pctNearS1R1. " or ". $CurrencyStr. $aboveBelowAmtStr." ". $aboveBelowStr. " ".  $SRstr ." of ".$CurrencyStr  . $SuppResisStr ."<br />"; 
+    
+    $trstr= "        --------->     ". $humanReadableTradeStr;
+
+    // reassign EOL to human readable str for mysql insertion
+    $eolstr=$elements[ 41 ];
+ // echoColor($eolstr."[41]", "gray");
+    $elements[ 41 ]=$humanReadableTradeStr ;
+    $eolstr=$elements[ 41 ];
+  //echoColor($eolstr, "blue");
+
+
+    echoColor($pstr.$hastr, "purple");
+//    echoColor( "[ ".$hastr." ]", "blue");
+    echoColor($trstr, $col007);
 
     print_r($elements);
     $c++;
@@ -388,6 +532,28 @@ foreach ($arrstrs as $string) {
 
 
 /*************************************************************************************************
+
+
+function RaiseCharacter($str, $num) {
+    if ($num >= 0 && $num < strlen($str)) {
+        $str[$num] = strtoupper($str[$num]);
+        return $str;
+    } else {
+        return "Invalid position or string length exceeded";
+    }
+}
+
+// Example usage
+$string = "hello world";
+$position = 3;
+$result = RaiseCharacter($string, $position);
+echo $result; // Output: helLo world
+
+
+
+
+
+
 
 
 $insertdb = 1;
