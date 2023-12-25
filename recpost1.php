@@ -155,7 +155,17 @@ function ReadableDate($datestr,$yrStr) { // returns "December 25th 2023  w/ or w
     }    else    return date("F jS", $timestamp);
 
 }
+function BoldString($str2){
+  $str1='<strong>';
+  $str3='</strong>';
+  return $str1.$str2.$str3;
+}
 /*
+echo '<b>This text will be bold.</b>';
+echo '<strong>This text will also be bold.</strong>';
+
+
+
 // Example usage
 $string = "abcdefgh";
 $position = 3;
@@ -451,6 +461,8 @@ echo $floatValue;
 
     $buySellstr = $elements[ 5 ];   // BUY or SELL ?
 
+    $buySellSigCnt=$elements[ 12 ];
+    $buySellSigCnt0 = intval($buySellSigCnt);
 
     $buySellSigCount=$elements[ 11 ];
     if($buySellstr=="BUY"){
@@ -508,7 +520,7 @@ echo $floatValue;
     $date0str = $elements[ 0 ];
     $date1str=  ReadableDate($datestr,"nil"); 
 
-    $humanReadableTradeStr = $date0str." ".  $dayofwk. " ". $date1str." ". $timeofday. $ampmStr.  " ". $elements[ 5 ].   " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".$CurrencyStr  .  $elements[ 9 ]. " duration DAY (off a ". $elements[ 3 ]. " chart with a ". $buySellSigCount. " of ". $elements[ 12 ]. ") ".  $pctNearS1R1. " or ". $CurrencyStr. $aboveBelowAmtStr." ". $aboveBelowStr. " ".  $SRstr ." of ".$CurrencyStr  . $SuppResisStr ."<br />"; 
+    $humanReadableTradeStr = $date0str." ".  $dayofwk. " ". $date1str." ". $timeofday. $ampmStr.  "  ". $elements[ 5 ].   " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".$CurrencyStr  .  $elements[ 9 ]. " duration DAY (off a ". $elements[ 3 ]. " chart with a ". $buySellSigCount. " of ". $elements[ 12 ]. ") ".  $pctNearS1R1. " or ". $CurrencyStr. $aboveBelowAmtStr." ". $aboveBelowStr. " ".  $SRstr ." of ".$CurrencyStr  . $SuppResisStr ."<br />"; 
     
     $trstr= "        --------->     ". $humanReadableTradeStr;
 
@@ -522,6 +534,9 @@ echo $floatValue;
 
     echoColor($pstr.$hastr, "purple");
 //    echoColor( "[ ".$hastr." ]", "blue");
+
+// test for strong or weak buy/sell signals
+    if($buySellSigCnt0>7) $trstr = BoldString($trstr);
     echoColor($trstr, $col007);
 
     if($msg0=="1") print_r($elements);
