@@ -1,5 +1,5 @@
 <?php
-////////////// **************************************  recpost1.php Copyright (c) 2023-2026 by Algo Investor Inc
+////////////// **************************************  recpost1db.php Copyright (c) 2023-2026 by Algo Investor Inc
 ////////////// **                                                   written by John Botti
 //
 //
@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.63";
+                                                      $vers = "1.81";
 $minstrlen = 32; 
 $happy1 = "Vega"; 
 $CurrencyStr="$";
@@ -384,7 +384,8 @@ if($msg0==1) PrintArray( $arrstrs , $arrname );
 
 
 $ftimeout = GetDBSafe_NYCTimeNOW();   
-$fnameout = "rawtrades_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
+// $fnameout = "rawtrades_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
+$fnameout = "rawtrades_". $tradedatestr . "_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
 
 $pstr= "<br /><br /><br />] FOUND $j unique RAW trades, and inserted them into ". $arrname. "[] writing to $fnameout ... <br />";
 echoColor( $pstr, "orange");
@@ -403,6 +404,7 @@ if ($fileout) {
     fclose($fileout);
 
     $pstr= "<br />Array content written to $fnameout successfully.<br /><br /><br />";
+    $pstr = BoldString($pstr);
     echoColor( $pstr, "green");
 } else {
     $pstr= "<br />Unable to open file!<br />";
@@ -535,7 +537,8 @@ echo $floatValue;
 //    echoColor( "[ ".$hastr." ]", "blue");
 
 // test for strong or weak buy/sell signals
-    if($buySellSigCnt0>7) $trstr = BoldString($trstr);
+    // NEEDs better filtering of above/below R1,S1 etc
+    //if($buySellSigCnt0>7) $trstr = BoldString($trstr);
     echoColor($trstr, $col007);
 
     if($msg0=="1") print_r($elements);
@@ -569,6 +572,10 @@ AlgoGeneratedRawTrade[ 25 ]: [ 6abcc6cff6e497b6e7240c963f644b79289bf9d5ffc7f8eb5
 
 $pstr9= "<br />******** ATTEMPTING DB ACCESS HERE in $prgname *********<br />";
 echoColor($pstr9,"orange");
+
+$pstr9= "<br />******** WILL ATTEMPT to LOOP and INSERT( )to MySQL DB <br />";
+echoColor($pstr9,"green");
+
 
 $insertdb = 0;
 // SHOW CREATE TABLE table_name;
