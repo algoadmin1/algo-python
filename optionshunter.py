@@ -1,5 +1,8 @@
 #
-#       optionsdataframe.py         by John Botti     Copyright (c) 2023-2025 by Algo Investor Inc
+#       optionshunter.py derv'd from: optionsdataframe.py
+#
+#            by John Botti     Copyright (c) 2023-2025 by Algo Investor Inc
+#
 #
 # pip install yfinance
 # pip install matplotlib
@@ -15,18 +18,21 @@
 #           
 #
 #
-
+#########################################################    imports
 
 import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime 
 
+
+#########################################################    variables
+
 # Define the symbol
 symbol_default = "AAPL"
 currstr        ="$"
-prgname        = "optionsdataframe.py"
-prgvers        =                            "3.0"
+prgname        = "optionshunter.py"
+prgvers        =                            "3.6"
 
 # colors 
 colorGreen ="32"
@@ -50,13 +56,14 @@ colorGray  ="90"
 colorArray = [ colorRed, colorBlue, colorGreen, colorOrange, colorCyan]
 colorArrayLen = len(colorArray)
 
+desiredDTE = 45
+
 # Get today's date 
 today_date = datetime.today().strftime('%Y-%m-%d') 
  # Output: e.g., 2023-12-27 (current date)
 
-######################################################### functions
-#
-#
+
+#########################################################    def functions
 
 def print_colored(text, color_code): 
     print(f"\033[{color_code}m{text}\033[0m") 
@@ -97,6 +104,8 @@ def PrintDollars(prefixstr, amt):
 
 
 
+
+#############################################################################################    main code
 
 print("\n] Welcome to ",prgname," for Options dataframe testing, vers=", prgvers,"...")
 
@@ -143,15 +152,52 @@ print_colored(pstr00, colorYellow)
 print("\n\n\n")
 
 
-# Get the options data
+# Get the options data exp dates
 options = tickerObj.options
 print(options)
 
 print("\n] Above are the available expiration dates for",symbol,"...\n")
 
-# Determine options Expiry
+
+# Determine options DTE
 expdate_date = "2024-03-15"
-print("\n] ENTER options Expiration Date desired (", expdate_date , "): ")
+pstr="\n] ENTER a NUMBER for DTE (Days Til Expiration) for "+symbol+" Option's Chain,  [default="+  str(desiredDTE)+ "]:  "
+print_colored(pstr,colorCyan)
+input0 = input()
+if input0 == "":
+    pstr="\n] Defaulting ExpirationDate to "+ str(desiredDTE)
+    print_colored(pstr,colorOrange)
+    input0 = desiredDTE
+desiredDTE=int(input0)
+
+
+pstr ="\n\n] "+today_date+":  DAYS til Options Expiry for "+ symbol+ ": SEARCHING for Option Chains with "+str(desiredDTE)+" DTE or Greater."
+print_colored(pstr, colorCyan )
+
+# find DTE YYYY-MM-DD
+chainnum=0
+firstDateFound="nil"
+for option_date in options:
+#   if option_date==expdate_dateSelected:
+    daystilexp = DaysDifference( today_date, option_date )
+    #pstr= "\n"+ str(chainnum)  +  "] Days from now "+today_date+" until "+option_date+": "+str(daystilexp) 
+    pstr=  str(chainnum)  +  "] Days from now til "+option_date+": "+str(daystilexp) 
+    if(daystilexp < desiredDTE):
+        print_colored(pstr, colorGray )
+    else:
+        print_colored(pstr, colorLimeGreen )
+        if firstDateFound=="nil":
+            firstDateFound=option_date
+    chainnum=chainnum+1
+
+
+# Determine options Expiry from above DTE determination
+expdate_date = "2024-03-15"
+if firstDateFound!="nil":
+    expdate_date=firstDateFound
+
+pstr= "\n] ENTER options Expiration Date desired ("+ expdate_date + "): "
+print_colored(pstr,colorCyan)
 input0 = input()
 if input0 == "":
     print("\n] Defaulting ExpirationDate to ", expdate_date)
@@ -163,6 +209,11 @@ print("\n] Selected Options ExpirationDate is:", expdate_dateSelected)
 daysTilExpiry = DaysDifference( today_date, expdate_dateSelected )
 pstr= "\n\n] Days from now "+today_date+" until "+symbol+"'s Options Expiration "+expdate_dateSelected+" is "+str(daysTilExpiry) +" days."
 print_colored(pstr, colorYellow)
+
+
+
+
+
 
 # Print the options chain
 print("\n\n] Options Chain for", symbol)
@@ -201,11 +252,11 @@ for option_date in options:
                 callsITM=i-1
                 keepsearching=0
                 print_colored(pstr, colorDarkGreen )
-                pstr1=str(i+1)+" "+calls0.contractSymbol[i+1]+" "+str( calls0.inTheMoney[i+1])
-                print_colored(pstr1, colorDarkGreen)
                 
-                pstr1=str(i+2)+" "+calls0.contractSymbol[i+2]+" "+str( calls0.inTheMoney[i+2])
-                print_colored(pstr1, colorDarkGreen)
+                #pstr1=str(i+1)+" "+calls0.contractSymbol[i+1]+" "+str( calls0.inTheMoney[i+1])
+                #print_colored(pstr1, colorDarkGreen)
+                #pstr1=str(i+2)+" "+calls0.contractSymbol[i+2]+" "+str( calls0.inTheMoney[i+2])
+                #print_colored(pstr1, colorDarkGreen)
             else:
                 print_colored(pstr, colorGreen )
 
@@ -257,11 +308,11 @@ for option_date in options:
                 putsOTM=i-1
                 keepsearching=0
                 print_colored(pstr, colorRed)
-                pstr1=str(i+1)+" "+puts0.contractSymbol[i+1]+" "+str( puts0.inTheMoney[i+1])
-                print_colored(pstr1, colorRed)
                 
-                pstr1=str(i+2)+" "+puts0.contractSymbol[i+2]+" "+str( puts0.inTheMoney[i+2])
-                print_colored(pstr1, colorRed)
+                #pstr1=str(i+1)+" "+puts0.contractSymbol[i+1]+" "+str( puts0.inTheMoney[i+1])
+                #print_colored(pstr1, colorRed)
+                #pstr1=str(i+2)+" "+puts0.contractSymbol[i+2]+" "+str( puts0.inTheMoney[i+2])
+                #print_colored(pstr1, colorRed)
             
             else:
                 print_colored(pstr, colorDarkRed)
