@@ -30,11 +30,15 @@
 #           https://algoinvestorr.com/trades/intradaytrades_2023-12-13.txt
 #
 #       
+#       to run batch file:  ] & "C:\_dev\Projects\algo-python\gobot.bat"
 #
+#                                    & "C:\_dev\Projects\algo-python\gobot.bat"    ==
+#
+#                                    Start-Process -FilePath "C:\_dev\Projects\algo-python\gobot.bat"
 #
 #       Set-Content -Path "C:\_dev\Projects\algo-python\gobot.bat" -Value "cls `ncd c:\_dev\Projects\algo-python `npython postitloop1.py"
 #
-#
+#       Copy-Item "C:\_dev\Projects\algo-python\gobot.bat" -Destination "C:\Users\rogue\gobot.bat"
 #
 #
 #

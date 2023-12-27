@@ -1,5 +1,9 @@
-# options.py
 #
+#        optionsexp.py derived from options.py  by John Botti     version 2.2
+#
+# pip install yfinance
+# pip install matplotlib
+# pip install pandas
 
 
 import yfinance as yf
