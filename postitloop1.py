@@ -1,5 +1,5 @@
 #
-# postitloop1.py   version 1.5, for use with TradeSta.'s  !!PivotsPython_MTWTF
+# postitloop1.py   version 2.1, for use with TradeSta.'s  !!PivotsPython_MTWTF
 #
 #       Copyright (c) by John Botti  and Algo Investor Inc
 #
@@ -28,6 +28,15 @@
 #       which receives the trades for TODAY's DATE intradaytradesYYYY-MM-DD via $_POST and writes them to a text file called (on 12-13-23):
 #
 #           https://algoinvestorr.com/trades/intradaytrades_2023-12-13.txt
+#
+#       
+#
+#
+#       Set-Content -Path "C:\_dev\Projects\algo-python\gobot.bat" -Value "cls `ncd c:\_dev\Projects\algo-python `npython postitloop1.py"
+#
+#
+#
+#
 #
 #
 #import shutil
