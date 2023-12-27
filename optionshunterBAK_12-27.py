@@ -32,7 +32,7 @@ from datetime import datetime
 symbol_default = "AAPL"
 currstr        ="$"
 prgname        = "optionshunter.py"
-prgvers        =                            "3.850"
+prgvers        =                            "3.70"
 
 # colors 
 colorGreen ="32"
@@ -71,10 +71,6 @@ desiredDTE = 45
 # Get today's date 
 today_date = datetime.today().strftime('%Y-%m-%d') 
  # Output: e.g., 2023-12-27 (current date)
-#
-# note: NY Time EST = UTC-5hrs   // EDT =UTC-4hrs                 10:50:10 am NY Time
-# 37 TSLA240105P00237500 :  Strike=237.5 ITM? False at 2023-12-27 15:50:10+00:00  last=$0.83  volume=812.0  oi=1417
-# 38 TSLA240105P00240000 :  Strike=240.0 ITM? False at 2023-12-27 15:50:01+00:00  last=$1.07  volume=5263.0  oi=11305
 
 
 #########################################################    def functions
@@ -127,14 +123,11 @@ print("\n] Welcome to ",prgname," for Options dataframe testing, vers=", prgvers
 mystr =  "WELCOME to "+prgname+" for Options dataframe testing, vers="+prgvers+"..." 
 
 print_colored(mystr, colorRed ) 
-print_colored(mystr, colorOrange ) 
-print_colored(mystr, colorYellow) 
-
 print_colored(mystr, colorGreen ) 
 print_colored(mystr, colorBlue ) 
 print_colored(mystr, colorYellow) 
-print_colored(mystr, colorPurple)
 print_colored(mystr, colorMagenta)
+print_colored(mystr, colorPurple)
 
 print_colored(mystr, colorAqua ) 
 print_colored(mystr, colorGray ) 
@@ -369,69 +362,14 @@ for option_date in options:
         i=0 
         df = pd.DataFrame(puts0)
         max_rows = df.shape[0]
-        pstr="\n\n\n] ################################################### PUTs: max_rows ="+str(max_rows)
+        pstr="\n\n\n] ##################################### PUTs: max_rows ="+str(max_rows)
         print_colored(pstr,colorRed)
 
 
 
 
 
-#   GRAB MAX VOLUME AND MAX OPEN INTEREST  for PUTS
-        put_maxvolumeIdx =0
-        put_maxvolume0   =0
-        put_maxoiIdx     =0
-        put_maxoi0       =0
-
-        i0=0 
-        while i0<max_rows:
-            pstr =str(i0)+" "+puts0.contractSymbol[i0]+" "  
-            p1str= pstr+":  Strike="+str(puts0.strike[i0])+"  volume="+str( puts0.volume[i0])+"  oi="+str( puts0.openInterest[i0])
-
-            if( int( puts0.openInterest[i0] ) > put_maxoi0):
-                put_maxoi0 = int(puts0.openInterest[i0])
-                put_maxoiIdx = i0
-            if( float( puts0.volume[i0] ) > put_maxvolume0):
-                put_maxvolume0 = float(puts0.volume[i0])
-                put_maxvolumeIdx = i0
-            #print_colored(p1str, colorGray )
-            i0+=1
-
-
-        i0=0 
-        priceOnce=0
-        while i0<max_rows:
-            pstr =str(i0)+" "+puts0.contractSymbol[i0]+" "  
-            p1str= pstr+":  Strike="+str(puts0.strike[i0])+" ITM? "+ str( puts0.inTheMoney[i0] )+  " at "+str( puts0.lastTradeDate[i0]) + "  last="+currstr+str( puts0.lastPrice[i0])+"  volume="+str( puts0.volume[i0])+"  oi="+str( puts0.openInterest[i0])
-            if( float(puts0.strike[i0]) > price0  and priceOnce==0):
-                estr="\n *** "+symbol+" Price = "+ str(price0)+"\n"
-                print_colored(estr, colorGreen )
-                priceOnce=1
-            
-            if( i0 == put_maxoiIdx or  i0 == put_maxvolumeIdx ):
-                if( i0 == put_maxoiIdx):
-                    print_colored(p1str, colorCyan )
-                if( i0 == put_maxvolumeIdx ):
-                    print_colored(p1str, colorYellow )  
-            else:
-                print_colored(p1str, colorGray )
- 
-            i0+=1
-       
-
-
-        p0str="\n] MAX PUTs Open Interest = "+str(put_maxoi0)+ " at Strike "+ currstr+str(puts0.strike[call_maxoiIdx]) +", idx="+str(put_maxoiIdx)  
-        print_colored(p0str, colorCyan )
         
-        p0str="\n] MAX PUTs Volume        = "+str(put_maxvolume0)+ " at Strike "+ currstr+str(puts0.strike[call_maxvolumeIdx]) +", idx="+str(put_maxvolumeIdx)   
-        print_colored(p0str, colorYellow )
-   
-        print("\n\n\n")
-
-
-
-
-
-
         keepsearching=1
         while i<max_rows and keepsearching==1:
             #print(i," ",puts0.contractSymbol[i], puts0.inTheMoney[i])
