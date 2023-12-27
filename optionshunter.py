@@ -419,10 +419,10 @@ for option_date in options:
        
 
 
-        p0str="\n] MAX PUTs Open Interest = "+str(put_maxoi0)+ " at Strike "+ currstr+str(puts0.strike[call_maxoiIdx]) +", idx="+str(put_maxoiIdx)  
+        p0str="\n] MAX PUTs Open Interest = "+str(put_maxoi0)+ " at Strike "+ currstr+str(puts0.strike[put_maxoiIdx]) +", idx="+str(put_maxoiIdx)  
         print_colored(p0str, colorCyan )
         
-        p0str="\n] MAX PUTs Volume        = "+str(put_maxvolume0)+ " at Strike "+ currstr+str(puts0.strike[call_maxvolumeIdx]) +", idx="+str(put_maxvolumeIdx)   
+        p0str="\n] MAX PUTs Volume        = "+str(put_maxvolume0)+ " at Strike "+ currstr+str(puts0.strike[put_maxvolumeIdx]) +", idx="+str(put_maxvolumeIdx)   
         print_colored(p0str, colorYellow )
    
         print("\n\n\n")
