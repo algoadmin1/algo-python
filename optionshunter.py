@@ -342,9 +342,12 @@ for option_date in options:
 
 
 
-         
-
         print("\n\n\n\n")
+
+        #price0= GetStockPrice(symbol)
+        pstr= "\n] Price for "+symbol+" = " 
+        PrintDollars(pstr, price0)
+
         print_colored("CALLS:", colorGreen)
         print(calls0)
 
