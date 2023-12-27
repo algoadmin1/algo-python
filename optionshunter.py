@@ -32,7 +32,7 @@ from datetime import datetime
 symbol_default = "AAPL"
 currstr        ="$"
 prgname        = "optionshunter.py"
-prgvers        =                            "3.850"
+prgvers        =                            "3.950"
 
 # colors 
 colorGreen ="32"
@@ -407,7 +407,7 @@ for option_date in options:
             p1str= pstr+":  Strike="+str(puts0.strike[i0])+" ITM? "+ str( puts0.inTheMoney[i0] )+  " at "+str( puts0.lastTradeDate[i0]) + "  last="+currstr+str( puts0.lastPrice[i0])+"  volume="+str( puts0.volume[i0])+"  oi="+str( puts0.openInterest[i0])
             if( float(puts0.strike[i0]) > price0  and priceOnce==0):
                 estr="\n ***            "+symbol+"    Price = "+ currstr+str(price0)+"\n"
-                print_colored(estr, colorGreen )
+                print_colored(estr, colorRed )
                 priceOnce=1
             
             if( i0 == put_maxoiIdx or  i0 == put_maxvolumeIdx ):
