@@ -128,7 +128,8 @@ mystr =  "WELCOME to "+prgname+" for Options dataframe testing, vers="+prgvers+"
 
 print_colored(mystr, colorRed ) 
 print_colored(mystr, colorOrange ) 
-print_colored(mystr, colorYellow) 
+print_colored(mystr, colorBrown ) 
+
 
 print_colored(mystr, colorGreen ) 
 print_colored(mystr, colorBlue ) 
@@ -139,6 +140,8 @@ print_colored(mystr, colorMagenta)
 print_colored(mystr, colorAqua ) 
 print_colored(mystr, colorGray ) 
 print_colored(mystr, colorLimeGreen ) 
+
+print_colored(mystr, colorYellow) 
 print_colored(mystr, colorBrown ) 
 print_colored(mystr, colorDarkRed ) 
 print_colored(mystr, colorDarkGreen ) 
@@ -287,7 +290,7 @@ for option_date in options:
             pstr =str(i0)+" "+calls0.contractSymbol[i0]+" "  
             p1str= pstr+":  Strike="+str(calls0.strike[i0])+" ITM? "+ str( calls0.inTheMoney[i0] )+  " at "+str( calls0.lastTradeDate[i0]) + "  last="+currstr+str( calls0.lastPrice[i0])+"  volume="+str( calls0.volume[i0])+"  oi="+str( calls0.openInterest[i0])
             if( float(calls0.strike[i0]) > price0  and priceOnce==0):
-                estr="\n *** "+symbol+" Price = "+ str(price0)+"\n"
+                estr="\n ***            "+symbol+"    Price = "+ currstr+str(price0)+"\n"
                 print_colored(estr, colorGreen )
                 priceOnce=1
             
@@ -403,7 +406,7 @@ for option_date in options:
             pstr =str(i0)+" "+puts0.contractSymbol[i0]+" "  
             p1str= pstr+":  Strike="+str(puts0.strike[i0])+" ITM? "+ str( puts0.inTheMoney[i0] )+  " at "+str( puts0.lastTradeDate[i0]) + "  last="+currstr+str( puts0.lastPrice[i0])+"  volume="+str( puts0.volume[i0])+"  oi="+str( puts0.openInterest[i0])
             if( float(puts0.strike[i0]) > price0  and priceOnce==0):
-                estr="\n *** "+symbol+" Price = "+ str(price0)+"\n"
+                estr="\n ***            "+symbol+"    Price = "+ currstr+str(price0)+"\n"
                 print_colored(estr, colorGreen )
                 priceOnce=1
             
