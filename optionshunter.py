@@ -237,6 +237,34 @@ for option_date in options:
         pstr="\n\n\n] ##################################### CALL: max_rows ="+str(max_rows)
         print_colored(pstr,colorGreen )
         
+        maxvolumeIdx =0
+        maxvolume0   =0
+        maxoiIdx     =0
+        maxoi0       =0
+
+        i0=0 
+        while i0<max_rows:
+            pstr =str(i0)+" "+calls0.contractSymbol[i0]+" "   #+str( calls0.inTheMoney[i])
+            p1str= pstr+":  Strike="+str(calls0.strike[i0])+"  volume="+str( calls0.volume[i0])+"  oi="+str( calls0.openInterest[i0])
+            if( int( calls0.openInterest[i0] ) > maxoi0):
+                maxoi0 = int(calls0.openInterest[i0])
+                maxoiIdx = i0
+            if( float( calls0.volume[i0] ) > maxvolume0):
+                maxvolume0 = float(calls0.volume[i0])
+                maxvolumeIdx = i0
+                
+            print_colored(p1str, colorCyan )
+            i0+=1
+            
+        p0str="\n] MAX CALLs Open Interest = "+str(maxoi0)+ " at Strike "+ currstr+str(calls0.strike[maxoiIdx]) +", idx="+str(maxoiIdx)  
+        print_colored(p0str, colorCyan )
+        
+        p0str="\n] MAX CALLs Volume        = "+str(maxvolume0)+ " at Strike "+ currstr+str(calls0.strike[maxvolumeIdx]) +", idx="+str(maxvolumeIdx)   
+        print_colored(p0str, colorCyan )
+   
+
+        print("\n\n\n")
+
         keepsearching=1
         while i<max_rows and keepsearching==1:
             #print(i," ",calls0.contractSymbol[i], calls0.inTheMoney[i])
