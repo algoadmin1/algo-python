@@ -244,7 +244,12 @@ for option_date in options:
         df = pd.DataFrame(calls0)
         max_rows = df.shape[0]
         #print(" max_rows =",max_rows)
-        pstr="\n\n\n] ##################################### CALL: max_rows ="+str(max_rows)
+
+        price0= GetStockPrice(symbol)
+        pstr= "\n] Price for "+symbol+" = " 
+        PrintDollars(pstr, price0)
+
+        pstr="\n\n\n] ################################################ CALL: max_rows ="+str(max_rows)
         print_colored(pstr,colorGreen )
         
 
@@ -258,21 +263,44 @@ for option_date in options:
         while i0<max_rows:
             pstr =str(i0)+" "+calls0.contractSymbol[i0]+" "  
             p1str= pstr+":  Strike="+str(calls0.strike[i0])+"  volume="+str( calls0.volume[i0])+"  oi="+str( calls0.openInterest[i0])
+
             if( int( calls0.openInterest[i0] ) > call_maxoi0):
                 call_maxoi0 = int(calls0.openInterest[i0])
                 call_maxoiIdx = i0
             if( float( calls0.volume[i0] ) > call_maxvolume0):
                 call_maxvolume0 = float(calls0.volume[i0])
                 call_maxvolumeIdx = i0
-                
-            print_colored(p1str, colorCyan )
+            #print_colored(p1str, colorGray )
             i0+=1
+
+
+        i0=0 
+        priceOnce=0
+        while i0<max_rows:
+            pstr =str(i0)+" "+calls0.contractSymbol[i0]+" "  
+            p1str= pstr+":  Strike="+str(calls0.strike[i0])+" ITM? "+ str( calls0.inTheMoney[i0] )+"  volume="+str( calls0.volume[i0])+"  oi="+str( calls0.openInterest[i0])
+            if( float(calls0.strike[i0]) > price0  and priceOnce==0):
+                estr="\n *** "+symbol+" Price = "+ str(price0)+"\n"
+                print_colored(estr, colorGreen )
+                priceOnce=1
             
+            if( i0 == call_maxoiIdx or  i0 == call_maxvolumeIdx ):
+                if( i0 == call_maxoiIdx):
+                    print_colored(p1str, colorCyan )
+                if( i0 == call_maxvolumeIdx ):
+                    print_colored(p1str, colorYellow )  
+            else:
+                print_colored(p1str, colorGray )
+ 
+            i0+=1
+       
+
+
         p0str="\n] MAX CALLs Open Interest = "+str(call_maxoi0)+ " at Strike "+ currstr+str(calls0.strike[call_maxoiIdx]) +", idx="+str(call_maxoiIdx)  
         print_colored(p0str, colorCyan )
         
         p0str="\n] MAX CALLs Volume        = "+str(call_maxvolume0)+ " at Strike "+ currstr+str(calls0.strike[call_maxvolumeIdx]) +", idx="+str(call_maxvolumeIdx)   
-        print_colored(p0str, colorCyan )
+        print_colored(p0str, colorYellow )
    
         print("\n\n\n")
 
