@@ -4,17 +4,34 @@
 # pip install yfinance
 # pip install matplotlib
 # pip install pandas
-
+#
+#
+#       also use:
+#
+#           optionsexpTest.py - goes through different yfinance functions
+#
+#           optionsdataframe.py
 
 import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
+from datetime import datetime 
 
 # Define the symbol
 symbol_default = "AAPL"
- 
+prgname        = "optionsexp.py"
 
-print("\nGIT HUB INSTALLLED")
+def DaysDifference(udate1, udate2):
+    date_format = "%Y-%m-%d" 
+    parsed_date1 = datetime.strptime(udate1, date_format) 
+    parsed_date2 = datetime.strptime(udate2, date_format) 
+    difference = parsed_date2 - parsed_date1
+    return difference.days
+
+
+print("\n] RUNNING ", prgname )
+
+
 
 print("\nEnter Symbol (", symbol_default , ")")
 symbol = input()

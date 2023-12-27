@@ -1,14 +1,41 @@
-# options.py
+#
+#       optionsdataframe.py         by John Botti     Copyright (c) 2023-2025 by Algo Investor Inc
+#
+# pip install yfinance
+# pip install matplotlib
+# pip install pandas
+#
+#
+#       also use:
+#
+#           optionsexpTest.py - goes through different yfinance functions
+#
+#           optionsexp.py derived from options.py  by John Botti      
+#
+#           
+#
 #
 
 
 import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
+from datetime import datetime 
 
 # Define the symbol
 symbol_default = "AAPL"
-currstr="$"
+currstr        ="$"
+prgname        = "optionsdataframe.py"
+prgvers        =                            "3.0"
+
+
+def DaysDifference(udate1, udate2):
+    date_format = "%Y-%m-%d" 
+    parsed_date1 = datetime.strptime(udate1, date_format) 
+    parsed_date2 = datetime.strptime(udate2, date_format) 
+    difference = parsed_date2 - parsed_date1
+    return difference.days
+
 
 def PrintStrike(optionCallOrPuts, a,descstr):
     print(descstr)
@@ -22,12 +49,12 @@ def PrintStrike(optionCallOrPuts, a,descstr):
     print("ITM?           =",optionCallOrPuts.inTheMoney[a])
 
 
-print("\nWelcome to optionswb.py for dataframe testing...")
+print("\n] Welcome to ",prgname," for dataframe testing...")
 
-print("\nEnter Symbol (", symbol_default , ")")
+print("\n] Enter Symbol (", symbol_default , ")")
 symbol = input()
 if symbol == "":
-    print(" Defaulting Symbol to ", symbol_default)
+    print("] Defaulting Symbol to ", symbol_default)
     symbol = symbol_default
 
 
@@ -39,25 +66,25 @@ tickerObj = yf.Ticker(symbol)
 options = tickerObj.options
 print(options)
 
-print("\nAbove are the available expiration dates for",symbol,"...\n")
+print("\n] Above are the available expiration dates for",symbol,"...\n")
 
 # options Expiry
 expdate_date = "2024-03-15"
-print("\nEnter options ExpirationDate desired (", expdate_date , "): ")
+print("\n] ENTER options Expiration Date desired (", expdate_date , "): ")
 input0 = input()
 if input0 == "":
-    print("\nDefaulting ExpirationDate to ", expdate_date)
+    print("\n] Defaulting ExpirationDate to ", expdate_date)
     input0 = expdate_date
 
 expdate_dateSelected = input0
-print("\nSelected Options ExpirationDate is:", expdate_dateSelected)
+print("\n] Selected Options ExpirationDate is:", expdate_dateSelected)
 
 # Print the options chain
-print("\n\nOptions Chain for", symbol)
+print("\n\n] Options Chain for", symbol)
 for option_date in options:
     if option_date==expdate_dateSelected:
         option_chain = tickerObj.option_chain(option_date)
-        print("\nExpiration Date:", option_date)
+        print("\n * Expiration Date:", option_date)
         calls0= option_chain.calls
         puts0 = option_chain.puts
 

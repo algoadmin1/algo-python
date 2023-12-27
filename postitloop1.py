@@ -1,5 +1,5 @@
 #
-# postitloop1.py   version 2.1, for use with TradeSta.'s  !!PivotsPython_MTWTF
+# postitloop1.py   version 2.2, for use with TradeSta.'s  !!PivotsPython_MTWTF
 #
 #       Copyright (c) by John Botti  and Algo Investor Inc
 #
