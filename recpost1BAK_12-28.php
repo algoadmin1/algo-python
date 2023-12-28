@@ -1,5 +1,5 @@
 <?php
-////////////// **************************************  recpost1db.php Copyright (c) 2023-2026 by Algo Investor Inc
+////////////// **************************************  recpost1.php Copyright (c) 2023-2026 by Algo Investor Inc
 ////////////// **                                                   written by John Botti
 //
 //
@@ -9,9 +9,8 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.97";
+                                                      $vers = "1.60";
 $minstrlen = 32; 
-$dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
 $CurrencyStr="$";
 $todaysdate = date('Y-m-d');
@@ -32,7 +31,7 @@ $msg0=0;
 $msg0   = isset($_GET['msg']) ? $_GET['msg'] : 'nil';
 
 
-$prgname="recpost1db.php";
+$prgname="recpost1.php";
 $happy1.="s";
 $servername = "localhost"; // Replace with your server name
 $username = "u151710353_roguequant1";
@@ -46,10 +45,6 @@ $timeNYC =  date("Y-m-d\TH:i:s");
 
 
 
-
-
-// ******************************************************************** Functions
-//
 // include 'functions.php'; // Include the file containing functions
 function PrintUserInputs($udate0, $utime0, $uname0, $acct0, $msg0){
   // Use the values as needed
@@ -100,13 +95,10 @@ function GetEntryNums(){
   $bb=3*8;
   return $aa. $bb. "!";
 }
-function GetDBSafe_NYCTimeNOW($num0){
-      $timeNYCnow0 =  date("Y-m-d\TH:i:s");
-      $timeNYCnow1 =  date("Y-m-d\THis");    
-      $timeNYCnow  =  date("Y-m-d\TH_i_s");
-  if($num0==1) return( $timeNYCnow1 ); 
-    else if($num0==0) return( $timeNYCnow0);
-    else  return( $timeNYCnow ); 
+function GetDBSafe_NYCTimeNOW(){
+  //$timeNYCnow =  date("Y-m-d\TH:i:s");
+  $timeNYCnow =  date("Y-m-d\TH_i_s");
+  return( $timeNYCnow );
 }
 function GetNYDateTime(){
   $timeNYC0 =  date("Y-m-d\TH:i:s");
@@ -168,31 +160,12 @@ function BoldString($str2){
   $str3='</strong>';
   return $str1.$str2.$str3;
 }
-
-function CheckDate0($datestr0){
-    $dateck = DateTime::createFromFormat('Y-m-d', $datestr0);
-    //if( strlen($udate0==10) )  $tradedatestr = $udate0 ;
-    $tof0=false;
-    if ($dateck !== false && $dateck->format('Y-m-d') === $datestr0 &&  strlen($datestr0)==10  ) {
-        echo "<br /> ] CheckDate0(): Valid date OK in 'YYYY-MM-DD' format: $datestr0 , strlen()==". strlen($datestr0);
-        // $tradedatestr=$datestr;  // override date to read/write
-        $tof0= true;
-    } else {
-        echo "<br /> ] CheckDate0(): Invalid date or not in 'YYYY-MM-DD' format: $datestr ";
-        $tof0= false;
-    }
-    return $tof0;
-}
-
-// ********************************************************************  
-//
-// ********************************************************************   END OF Functions
-//
-// ********************************************************************  
-
 /*
 echo '<b>This text will be bold.</b>';
 echo '<strong>This text will also be bold.</strong>';
+
+
+
 // Example usage
 $string = "abcdefgh";
 $position = 3;
@@ -223,24 +196,13 @@ echo $result; // Output: abcd123efgh
 //
 //
 
-$pstr8= "<br />  $prgname   $vers is running, Time in NYC =   $timeNYC  ... <br />";
-echoColor($pstr8,"red");
+echo "<br />  $prgname   $vers is running, Time in NYC =   $timeNYC  ... <br />";
 
 echo "<br /><br />";
 
-// echo "*****************<br /><br />";
+echo "*****************<br />";
 
-// echo "<br />] **** Greetings, Creator. We are currently running:   $prgname  : $servername :  $username / $password1 | $dbname : $tblname  ...  ********<br />";
-$pstr00= "] **** Greetings, Creator. We are currently running:   $prgname  : $servername :  $username / $password1 | $dbname : $tblname  ...  ********<br />";
-echoColor( $pstr00, "red" );
-echoColor( $pstr00, "orange" );
-echoColor( $pstr00, "yellow" );
-echoColor( $pstr00, "green" );
-echoColor( $pstr00, "blue" );
-echoColor( $pstr00, "purple" );
-echoColor( $pstr00, "black" );
-echoColor( $pstr00, "gray" ); 
-
+echo "<br />] **** Greetings, Creator. We are currently running:   $prgname  : $servername :  $username / $password1 | $dbname : $tblname  ...  ********<br />";
 
 //echo "*****************\n";
 
@@ -249,7 +211,7 @@ echo "*****************<br />";
 
 PrintUserInputs( $udate0, $utime0, $uname0, $acct0 , $msg0 );
 
-// echo "<br />******** ATTEMPTING DB ACCESS HERE in $prgname *********<br />";
+echo "<br />******** ATTEMPTING DB ACCESS *********<br />";
 
 
 //$con = mysqli_connect("localhost", "jb_jackabeejohn", "jackabee66", "jb_jackabee_Users1");
@@ -283,71 +245,69 @@ PrintUserInputs( $udate0, $utime0, $uname0, $acct0 , $msg0 );
 $timeNYC =  date("Y-m-d\TH:i:s");
 $happy1.= GetEntryNums();
 
-// $insertdb = 0;
-// // SHOW CREATE TABLE table_name;
-// try {
-//     // Connect to MySQL using PDO
-//     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);
+$insertdb = 0;
+// SHOW CREATE TABLE table_name;
+try {
+    // Connect to MySQL using PDO
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);
 
-//     // Set PDO to throw exceptions for errors
-//     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Set PDO to throw exceptions for errors
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-//   if($insertdb!=0){
-//     // Insert a sample trade into the 'trades' table
-//     $insertQuery = "INSERT INTO trades (tradeDTstamp, tradeDateTime, userId, accountId,   tradeType, tradeSize, tradePrice) 
-//                     VALUES (CURRENT_TIMESTAMP ,'$timeNYC',       'superuser', 'testaccount', 'sell', 100, 50.25)";
-//     $conn->exec($insertQuery);
-//     $lastInsertedId = $conn->lastInsertId();
+  if($insertdb!=0){
+    // Insert a sample trade into the 'trades' table
+    $insertQuery = "INSERT INTO trades (tradeDTstamp, tradeDateTime, userId, accountId,   tradeType, tradeSize, tradePrice) 
+                    VALUES (CURRENT_TIMESTAMP ,'$timeNYC',       'superuser', 'testaccount', 'sell', 100, 50.25)";
+    $conn->exec($insertQuery);
+    $lastInsertedId = $conn->lastInsertId();
 
-//     echo "Sample trade inserted. Last inserted ID: $lastInsertedId <br>";
-//   }
+    echo "Sample trade inserted. Last inserted ID: $lastInsertedId <br>";
+  }
 
-//     // Query the table for a specific tradeId
-//     $tradeIdToQuery = 1; // Replace with the desired tradeId to query
-//     $query = "SELECT * FROM trades WHERE tradeId = :tradeId";
-//     $stmt = $conn->prepare($query);
-//     $stmt->bindParam(':tradeId', $tradeIdToQuery);
-//     $stmt->execute();
-//     $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Query the table for a specific tradeId
+    $tradeIdToQuery = 1; // Replace with the desired tradeId to query
+    $query = "SELECT * FROM trades WHERE tradeId = :tradeId";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':tradeId', $tradeIdToQuery);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-//     if ($result) {
-//         echo "Trade found for tradeId $tradeIdToQuery: <pre>" . print_r($result, true) . "</pre>";
-//     } else {
-//         echo "No trade found for tradeId $tradeIdToQuery";
-//     }
-// } catch (PDOException $e) {
-//     echo "Connection failed: " . $e->getMessage();
-// }
+    if ($result) {
+        echo "Trade found for tradeId $tradeIdToQuery: <pre>" . print_r($result, true) . "</pre>";
+    } else {
+        echo "No trade found for tradeId $tradeIdToQuery";
+    }
+} catch (PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
 
-// // Close the PDO connection
-// $conn = null;
+
+
+// Close the PDO connection
+$conn = null;
 
 
 ///// *************************************************************************************************
 ///// *************************************************************************************************
 
 
-// SET Default data to test / read in txt file from this date:
+// data to test / read in txt file from this date:
 $tradedatestr = "2023-12-20";
 
+
+//turn this into a fn
 $datestr = $udate0 ; // User date string chk
 
-$tof9=false;
-$tof9=CheckDate0($datestr);
+$dateck = DateTime::createFromFormat('Y-m-d', $datestr);
+//if( strlen($udate0==10) )  $tradedatestr = $udate0 ;
+if ($dateck !== false && $dateck->format('Y-m-d') === $datestr) {
+    echo "<br /> ] Valid date in 'YYYY-MM-DD' format: $datestr , strlen()==". strlen($datestr);
+    $tradedatestr=$datestr;  // override date to read/write
 
-if($tof9==true) $tradedatestr=$datestr;  
+} else {
+    echo "<br /> ] Invalid date or not in 'YYYY-MM-DD' format: $datestr";
 
-// turned this into a fn
-// $dateck = DateTime::createFromFormat('Y-m-d', $datestr);
-// //if( strlen($udate0==10) )  $tradedatestr = $udate0 ;
-// if ($dateck !== false && $dateck->format('Y-m-d') === $datestr) {
-//     echo "<br /> ] Valid date in 'YYYY-MM-DD' format: $datestr , strlen()==". strlen($datestr);
-//     $tradedatestr=$datestr;  // override date to read/write
-
-// } else {
-//     echo "<br /> ] Invalid date or not in 'YYYY-MM-DD' format: $datestr";
-
-// }
+}
 
 
 
@@ -358,7 +318,7 @@ if($tof9==true) $tradedatestr=$datestr;
 
 $fname = "intradaytradesServer_". $tradedatestr. ".txt"; // Replace with your file name
 
-$pstr= "<br />] After date verify.  <br /><br />] Attempting file read of: ". $fname. "<br />";
+$pstr= "<br />] After MySQL access, date verify.  <br /><br />] Attempting file read of: ". $fname. "<br />";
 echoColor( $pstr, "orange");
 
 //$fname = "intradaytradesServer_2023-12-20.txt"; // Replace with your file name
@@ -377,28 +337,15 @@ if (file_exists($fname)) {
   //echo '<p style="color: red;">This text will be displayed in red.</p>';
 
     echo '<p style="color: red;">The file '. $fname. ' does not exist.  Use the ?d=YYYY-MM-DD parameter.</p>';
-    exit();
 }
 
-// set flag for dates MUST BE identical
-$tof=false;
-$badlines=0;
+
+
 if($fexist==1){
+
     // Read the file line by line
     if (($handle = fopen($fname, "r")) !== false) {
         while (($data = fgetcsv($handle, 0, ",")) !== false) {
-            if($msg0=="1")  echo "<br /> data[0]=====>>". $data[0]. "<<=====<br />";
-            
-            $tof=false;
-            if( $data[0] == $tradedatestr) $tof=true;
-              else{
-                $badlines++;
-                $pstr88a=" ...  <br />";
-                if( strlen($data[0])==10  ) $pstr88a =" $data[0] $data[1] $data[2] $data[3]  ...  <br />";
-                    else if( strlen($data[0])<3  ) $pstr88a=" 0-length uDate found.   <br />";
-                $pstr88="<br />* ] $i )   DATE: ". $data[0]. " != NOT EQUAL TO RawTradeDate: ". $tradedatestr. " ... Skipping Append on Older-dated RawTrade ". $pstr88a; 
-                if($msg0=="1")  echoColor($pstr88, "blue");
-              }//else
 
             // Check each line against $arrstrs before appending
             $line = implode(",", $data); // Convert line array to a string
@@ -412,7 +359,7 @@ if($fexist==1){
             $pstr0= " $line  ,  LINE LEN== $linelen  <br />";
             if($msg0=="1")  echoColor($pstr0,"blue");
             // Check if the line exists in $arrstrs
-            if (!in_array($line, $arrstrs) &&  ( $linelen > $minstrlen ) && $tof==true ) {
+            if (!in_array($line, $arrstrs) &&  ( $linelen > $minstrlen ) ) {
                 if($msg0=="1")  echo " [ Appended into array] ". "__Orig(re-hash)_numCSVs==". $numcsv. "  "; //. $h0;     
 
                 $arrstrs[] = $line ; // Append the line to $arrstrs if it doesn't exist
@@ -435,14 +382,13 @@ if($msg0==1) PrintArray( $arrstrs , $arrname );
  
 
 
-$ftimeout0 = GetDBSafe_NYCTimeNOW(0);   
-$ftimeout = GetDBSafe_NYCTimeNOW(1);   
-$fnameout = $dirPrefix. "rawtrades_". $tradedatestr . "_recv_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
 
-$pstr= "<br /><br /><br />] FOUND $j unique RAW trades ( generated on $tradedatestr ), and inserted them into ". $arrname. "[] writing to $fnameout  at $ftimeout0 ... <br />";
-$pstrRej="<br />] FOUND $badlines BAD 'csv-lines' and ignored them. <br />";
-echoColor( $pstr, "blue");
-echoColor( $pstrRej, "red");
+
+$ftimeout = GetDBSafe_NYCTimeNOW();   
+$fnameout = "rawtrades_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
+
+$pstr= "<br /><br /><br />] FOUND $j unique RAW trades, and inserted them into ". $arrname. "[] writing to $fnameout ... <br />";
+echoColor( $pstr, "orange");
 
 
 //$arrstrs = array(/* your array content here */); // Replace this with your array
@@ -458,7 +404,6 @@ if ($fileout) {
     fclose($fileout);
 
     $pstr= "<br />Array content written to $fnameout successfully.<br /><br /><br />";
-    $pstr = BoldString($pstr);
     echoColor( $pstr, "green");
 } else {
     $pstr= "<br />Unable to open file!<br />";
@@ -487,236 +432,124 @@ if ($fileout) {
 // //
 $csvelems = [];
 $c=0;
-
-
-
-
-        foreach ($arrstrs as $string) {
-            if($msg0=="1") echo "<br /><br /> ] arrstrs[ $c ]=". $string;
-
-        // Explode the CSV string into an array using str_getcsv()
-            $csvelems = str_getcsv($string);
-            echo "<br />"; 
-            $elements = [];
-
-            foreach ($csvelems as $element) {
-              // echo $element . "<br />"; 
-              $elements[]=$element;
-            }
-
-            //echo $elements[ 0 ]. " ".  $elements[ 1 ]. " ".  $elements[ 2 ]. " ". $elements[ 5 ]. " ".  $elements[ 3 ]. " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".  $elements[ 9 ]. " DAY ".  "<br />"; 
-            
-            // ] arrstrs[ 0 ]= 
-            // [ 0..10 ]     2023-12-21,945,thu,15min,1.1383%,    BUY, 100,AMZN,atLimit,152.28,Pday,
-            // [ 11..21 ]       buysigcnt,8, [13]R3R2R1_P_P3_S1S2S3=, 159.70,157.16,[16]154.61, 153.09,152.08,  [19]150.54, 149.02, [21]146.47, 
-            //  ...               [22]p-S1=,1.73,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,154.90,152.30,145.37,141.04,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,70ac488fa3488b4669d178ad1011265f69378daa0244605f2fcc890c912a0dd3
-
-            $buySellstr = $elements[ 5 ];   // BUY or SELL ?
-
-            $buySellSigCnt=$elements[ 12 ];
-            $buySellSigCnt0 = intval($buySellSigCnt);
-
-            $buySellSigCount=$elements[ 11 ];
-            if($buySellstr=="BUY"){
-              $buySellSigCount=RaiseCharacter($buySellSigCount,0);
-              $buySellSigCount=RaiseCharacter($buySellSigCount,3);
-              $buySellSigCount=RaiseCharacter($buySellSigCount,6);
-            }else if($buySellstr=="SELL"){
-              $buySellSigCount=RaiseCharacter($buySellSigCount,0);
-              $buySellSigCount=RaiseCharacter($buySellSigCount,4);
-              $buySellSigCount=RaiseCharacter($buySellSigCount,7);
-            }
-
-            $dayofwk = $elements[ 2 ];
-            $dayofwk=RaiseCharacter($dayofwk,0);
-
-
-            $aboveBelowStr="aboveOrBelow ";
-            $aboveBelowAmtStr =$elements[ 23 ];
-            $ampmStr="am";
-
-            $SRstr="Daily ";
-            $S1str="Support(S1)";
-            $R1str="Resistance(R1)";
-            $S1numstr =  $elements[ 19 ];
-            $R1numstr =  $elements[ 16 ];
-            $SuppResisStr ="suppOrResist=nil";
-
-            $col007="black";
-            //$buySellstr = $elements[ 5 ];
-            if($buySellstr=="BUY"){
-               $SRstr.=  $S1str;   //if buy, x % near S1 else R1
-               $SuppResisStr= $S1numstr ;
-               $col007="green";
-            } else{
-                $SRstr.=  $R1str; 
-                $SuppResisStr= $R1numstr;
-                $col007="red";
-            }
-
-            $t0str = $elements[ 1 ];      // ie 945, 1115 am
-            $intValue = intval($t0str);
-            if($intValue>=1200) $ampmStr="pm";
-            $timeofday = $elements[1];
-            $timeofday=RightInsertString($timeofday, ":", 2);
-
-            $pctNearS1R1 = $elements[4];
-            if(DetectCharacter($pctNearS1R1, "-", 0)==true) $aboveBelowStr="Below";
-              else $aboveBelowStr="Above";
-            //$pctNearS1R1=RemoveRightCharacter($pctNearS1R1,0);  // remove % "1.23%" ==> "1.23"
-
-            $pstr= "AlgoGeneratedRawTrade". "[ $c ]: ";   //"<br />";
-            $hastr=$elements[ 42 ];
-            $hastr="[ ".$hastr." ]";
-
-            $date0str = $elements[ 0 ];
-            $date1str=  ReadableDate($datestr,"nil"); 
-
-            $humanReadableTradeStr = $date0str." ".  $dayofwk. " ". $date1str." ". $timeofday. $ampmStr.  "  ". $elements[ 5 ].   " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".$CurrencyStr  .  $elements[ 9 ]. " duration DAY (off a ". $elements[ 3 ]. " chart with a ". $buySellSigCount. " of ". $elements[ 12 ]. ") ".  $pctNearS1R1. " or ". $CurrencyStr. $aboveBelowAmtStr." ". $aboveBelowStr. " ".  $SRstr ." of ".$CurrencyStr  . $SuppResisStr ."<br />"; 
-            
-            $trstr= "        --------->     ". $humanReadableTradeStr;
-
-            // reassign EOL to human readable str for mysql insertion
-            $eolstr=$elements[ 41 ];
-         // echoColor($eolstr."[41]", "gray");
-            $elements[ 41 ]=$humanReadableTradeStr ;
-            $eolstr=$elements[ 41 ];
-          //echoColor($eolstr, "blue");
-
-
-            echoColor($pstr.$hastr, "purple");
-        //    echoColor( "[ ".$hastr." ]", "blue");
-
-        // test for strong or weak buy/sell signals
-            // NEEDs better filtering of above/below R1,S1 etc
-            //if($buySellSigCnt0>7) $trstr = BoldString($trstr);
-            echoColor($trstr, $col007);
-
-            if($msg0=="1") print_r($elements);
-            $c++;
-
-        }//foreach($arrstrs
-
-
-// after loop, capture size
-$maxTradesToInsert=$c;
-
-
-
-//////////////////////////////////////////////// 
-//////////////////////////////////////////////// 
-//////////////////////////////////////////////// 
-
-
-$pstr9="End of $c Algo Trades at " .date("Y-m-d\TH:i:s"). "NYC Time.<br /><br /><br />";
-echoColor($pstr9,"blue");
-
-
-/*
-
-AlgoGeneratedRawTrade[ 24 ]: [ c019234a0065376bdee4a3b45b4c5aa91ef400e339f98f54fb6360d89df0adf7 ]
-
----------> 2023-12-21 Thu December 21st 12:30pm SELL NVDA atLimit $487.66 duration DAY (off a 15min chart with a SellSigCnt of 4) -1.2454% or $-6.07 Below Daily Resistance(R1) of $493.73
-
-
-AlgoGeneratedRawTrade[ 25 ]: [ 6abcc6cff6e497b6e7240c963f644b79289bf9d5ffc7f8eb53d36311a71d81ce ]
-
----------> 2023-12-21 Thu December 21st 13:30pm BUY SPY atLimit $469.74 duration DAY (off a 15min chart with a BuySigCnt of 5) 0.9580% or $4.50 Above Daily Support(S1) of $465.24
-
-
-
-from 2023-12-27
-
-[35] => 2023-12-27,1300,wed,15min,-2.9118%,SELL,100,ALB,atLimit,149.66,P3day,sellsigcnt,5,R3R2R1_P_P3_S1S2S3=,157.07,155.54,154.02,151.56,146.63,150.04,147.58,146.06,p3-R1=,-4.36,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,160.27,155.23,143.46,136.73,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,7475bf6f706cb7a0cd92840c7d0dbe8de9579f39ec04db3ded7b470617e25d51 
-
-[36] => 2023-12-27,1315,wed,15min,-2.3832%,SELL,100,ROKU,atLimit,94.22,P3day,sellsigcnt,4,R3R2R1_P_P3_S1S2S3=,99.63,98.05,96.47,93.82,91.35,92.24,89.59,88.01,p3-R1=,-2.25,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,99.84,95.58,87.89,84.46,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,afa7e92597ddfd8bee34378261f71beee36f8d26deb92f2def4ab7322fc53000 
-
-    
-FIRST. check HASH:
-
-SELECT * FROM `trades` WHERE tradeHash='7475bf6f706cb7a0cd92840c7d0dbe8de9579f39ec04db3ded7b470617e25d51';
-
-
-THEN INSERT: 
-
-INSERT INTO `trades` (`tradeId`, `tradeRecTimestamp`, `tradeDateTime`, `tradeDate`, `tradeTime`, `tradeDay`, `tradeBar`, `userId`, `accountId`, `tradeType`, `symbol`, `tradeRAW`, `tradeRawId`, `tradeSize`, `tradePrice`, `tradePrFilled`, `tradeCond`, `tradeDur`, `tradeStopMkt`, `tradeLimitExit`, `optionStrategy`, `leg1`, `leg2`, `leg3`, `leg4`, `buySellCnt`, `buySellPct`, `buySellDist`, `tradeSpec`, `tradeSig`, `tradeGapPct`, `tradeStatus`, `tradeAux1`, `tradeAux2`, `tradeHash`) VALUES (NULL, current_timestamp(), '2023-12-27', '2023-12-27T130000', '1300', 'wed', '15min', 'creator', '12345354', 'SELL', 'ALB', 'YES', '0', '100', '149.66', '0.0', 'atLimit', 'Day', '0.0', '0.0', 'noOptions', '0.0', '0.0', '0.0', '0.0', '5', '-2.9118%', '-4.36', 'nil', 'sell', '0.0', 'cued', 'nil', 'nil', '7475bf6f706cb7a0cd92840c7d0dbe8de9579f39ec04db3ded7b470617e25d51');
-
-*/
-
-
-$pstr9= "<br />******** ATTEMPTING DB ACCESS HERE in $prgname *********<br />";
-echoColor($pstr9,"orange");
-
-$pstr9= "<br />******** WILL ATTEMPT to LOOP and INSERT( )to MySQL DB <br />";
-echoColor($pstr9,"green");
-
-
-$insertdb = 0;
-// SHOW CREATE TABLE table_name;
-try {
-    // Connect to MySQL using PDO
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);
-
-    // Set PDO to throw exceptions for errors
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-  if($insertdb!=0){
-    // Insert a sample trade into the 'trades' table
-    $insertQuery = "INSERT INTO trades (tradeDTstamp, tradeDateTime, userId, accountId,   tradeType, tradeSize, tradePrice) 
-                    VALUES (CURRENT_TIMESTAMP ,'$timeNYC',       'superuser', 'testaccount', 'sell', 100, 50.25)";
-    $conn->exec($insertQuery);
-    $lastInsertedId = $conn->lastInsertId();
-
-    echo "Sample trade inserted. Last inserted ID: $lastInsertedId <br>";
-  }
-
-
-
-    $tradeHashToQuery = "7475bf6f706cb7a0cd92840c7d0dbe8de9579f39ec04db3ded7b470617e25d51"; // Replace with the desired tradeId to query
-    $query = "SELECT * FROM trades WHERE tradeHash = :tradeHash";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':tradeHash', $tradeHashToQuery);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-  
-
-
-      // Query the table for a specific tradeId
-    $tradeIdToQuery = 1; // Replace with the desired tradeId to query
-    // $query = "SELECT * FROM trades WHERE tradeId = :tradeId";
-    // $stmt = $conn->prepare($query);
-    // $stmt->bindParam(':tradeId', $tradeIdToQuery);
-    // $stmt->execute();
-    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($result) {
-        echo "Trade found for tradeId $tradeIdToQuery: <pre>" . print_r($result, true) . "</pre>";
-    } else {
-        echo "No trade found for tradeId $tradeIdToQuery";
+foreach ($arrstrs as $string) {
+    if($msg0=="1") echo "<br /><br /> ] arrstrs[ $c ]=". $string;
+
+// Explode the CSV string into an array using str_getcsv()
+    $csvelems = str_getcsv($string);
+    echo "<br />"; 
+    $elements = [];
+
+    foreach ($csvelems as $element) {
+      // echo $element . "<br />"; 
+      $elements[]=$element;
     }
 
-
-
-} catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-}
-
-// Close the PDO connection
-$conn = null;
-
-
-
-$pstr9= "<br />******** CLOSING DB ACCESS HERE in $prgname *********<br />";
-echoColor($pstr9,"red");
-
-
-
-
-
-
 /*
 
-//////////////. comm'd code
+$numstr = "12341234.12311231"; // Your string representing a floating-point number
+$floatValue = floatval($numstr);
+
+echo $floatValue;
+
+*/
+    //echo $elements[ 0 ]. " ".  $elements[ 1 ]. " ".  $elements[ 2 ]. " ". $elements[ 5 ]. " ".  $elements[ 3 ]. " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".  $elements[ 9 ]. " DAY ".  "<br />"; 
+    // ] arrstrs[ 0 ]= 
+    // [ 0..10 ]     2023-12-21,945,thu,15min,1.1383%,    BUY, 100,AMZN,atLimit,152.28,Pday,
+    // [ 11..21 ]       buysigcnt,8, [13]R3R2R1_P_P3_S1S2S3=, 159.70,157.16,[16]154.61, 153.09,152.08,  [19]150.54, 149.02, [21]146.47, 
+    //  ...               [22]p-S1=,1.73,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,154.90,152.30,145.37,141.04,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,70ac488fa3488b4669d178ad1011265f69378daa0244605f2fcc890c912a0dd3
+
+    $buySellstr = $elements[ 5 ];   // BUY or SELL ?
+
+    $buySellSigCnt=$elements[ 12 ];
+    $buySellSigCnt0 = intval($buySellSigCnt);
+
+    $buySellSigCount=$elements[ 11 ];
+    if($buySellstr=="BUY"){
+      $buySellSigCount=RaiseCharacter($buySellSigCount,0);
+      $buySellSigCount=RaiseCharacter($buySellSigCount,3);
+      $buySellSigCount=RaiseCharacter($buySellSigCount,6);
+    }else if($buySellstr=="SELL"){
+      $buySellSigCount=RaiseCharacter($buySellSigCount,0);
+      $buySellSigCount=RaiseCharacter($buySellSigCount,4);
+      $buySellSigCount=RaiseCharacter($buySellSigCount,7);
+    }
+
+    $dayofwk = $elements[ 2 ];
+    $dayofwk=RaiseCharacter($dayofwk,0);
+
+
+    $aboveBelowStr="aboveOrBelow ";
+    $aboveBelowAmtStr =$elements[ 23 ];
+    $ampmStr="am";
+
+    $SRstr="Daily ";
+    $S1str="Support(S1)";
+    $R1str="Resistance(R1)";
+    $S1numstr =  $elements[ 19 ];
+    $R1numstr =  $elements[ 16 ];
+    $SuppResisStr ="suppOrResist=nil";
+
+    $col007="black";
+    //$buySellstr = $elements[ 5 ];
+    if($buySellstr=="BUY"){
+       $SRstr.=  $S1str;   //if buy, x % near S1 else R1
+       $SuppResisStr= $S1numstr ;
+       $col007="green";
+    } else{
+        $SRstr.=  $R1str; 
+        $SuppResisStr= $R1numstr;
+        $col007="red";
+    }
+
+    $t0str = $elements[ 1 ];      // ie 945, 1115 am
+    $intValue = intval($t0str);
+    if($intValue>=1200) $ampmStr="pm";
+    $timeofday = $elements[1];
+    $timeofday=RightInsertString($timeofday, ":", 2);
+
+    $pctNearS1R1 = $elements[4];
+    if(DetectCharacter($pctNearS1R1, "-", 0)==true) $aboveBelowStr="Below";
+      else $aboveBelowStr="Above";
+    //$pctNearS1R1=RemoveRightCharacter($pctNearS1R1,0);  // remove % "1.23%" ==> "1.23"
+
+    $pstr= "AlgoGeneratedRawTrade". "[ $c ]: ";   //"<br />";
+    $hastr=$elements[ 42 ];
+    $hastr="[ ".$hastr." ]";
+
+    $date0str = $elements[ 0 ];
+    $date1str=  ReadableDate($datestr,"nil"); 
+
+    $humanReadableTradeStr = $date0str." ".  $dayofwk. " ". $date1str." ". $timeofday. $ampmStr.  "  ". $elements[ 5 ].   " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".$CurrencyStr  .  $elements[ 9 ]. " duration DAY (off a ". $elements[ 3 ]. " chart with a ". $buySellSigCount. " of ". $elements[ 12 ]. ") ".  $pctNearS1R1. " or ". $CurrencyStr. $aboveBelowAmtStr." ". $aboveBelowStr. " ".  $SRstr ." of ".$CurrencyStr  . $SuppResisStr ."<br />"; 
+    
+    $trstr= "        --------->     ". $humanReadableTradeStr;
+
+    // reassign EOL to human readable str for mysql insertion
+    $eolstr=$elements[ 41 ];
+ // echoColor($eolstr."[41]", "gray");
+    $elements[ 41 ]=$humanReadableTradeStr ;
+    $eolstr=$elements[ 41 ];
+  //echoColor($eolstr, "blue");
+
+
+    echoColor($pstr.$hastr, "purple");
+//    echoColor( "[ ".$hastr." ]", "blue");
+
+// test for strong or weak buy/sell signals
+    if($buySellSigCnt0>7) $trstr = BoldString($trstr);
+    echoColor($trstr, $col007);
+
+    if($msg0=="1") print_r($elements);
+    $c++;
+
+    }//foreach($arrstrs
+ 
+
+$pstr9="End of $c Algo Trades at " .date("Y-m-d\TH:i:s"). "NYC Time.";
+echoColor($pstr9,"blue");
+
+/*************************************************************************************************
+
 
 function RaiseCharacter($str, $num) {
     if ($num >= 0 && $num < strlen($str)) {
