@@ -9,8 +9,9 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.81";
+                                                      $vers = "1.92";
 $minstrlen = 32; 
+$dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
 $CurrencyStr="$";
 $todaysdate = date('Y-m-d');
@@ -45,6 +46,10 @@ $timeNYC =  date("Y-m-d\TH:i:s");
 
 
 
+
+
+// ******************************************************************** Functions
+//
 // include 'functions.php'; // Include the file containing functions
 function PrintUserInputs($udate0, $utime0, $uname0, $acct0, $msg0){
   // Use the values as needed
@@ -160,12 +165,17 @@ function BoldString($str2){
   $str3='</strong>';
   return $str1.$str2.$str3;
 }
+
+
+// ********************************************************************  
+//
+// ********************************************************************   END OF Functions
+//
+// ********************************************************************  
+
 /*
 echo '<b>This text will be bold.</b>';
 echo '<strong>This text will also be bold.</strong>';
-
-
-
 // Example usage
 $string = "abcdefgh";
 $position = 3;
@@ -381,11 +391,8 @@ if($msg0==1) PrintArray( $arrstrs , $arrname );
  
 
 
-
-
 $ftimeout = GetDBSafe_NYCTimeNOW();   
-// $fnameout = "rawtrades_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
-$fnameout = "rawtrades_". $tradedatestr . "_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
+$fnameout = $dirPrefix. "rawtrades_rec_". $tradedatestr . "_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
 
 $pstr= "<br /><br /><br />] FOUND $j unique RAW trades, and inserted them into ". $arrname. "[] writing to $fnameout ... <br />";
 echoColor( $pstr, "orange");
