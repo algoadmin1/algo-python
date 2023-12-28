@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.94";
+                                                      $vers = "1.95";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
@@ -168,17 +168,20 @@ function BoldString($str2){
   $str3='</strong>';
   return $str1.$str2.$str3;
 }
-function CheckDate($datestr){
-    $dateck = DateTime::createFromFormat('Y-m-d', $datestr);
+
+function CheckDate0($datestr0){
+    $dateck = DateTime::createFromFormat('Y-m-d', $datestr0);
     //if( strlen($udate0==10) )  $tradedatestr = $udate0 ;
-    if ($dateck !== false && $dateck->format('Y-m-d') === $datestr &&  strlen($datestr)==10  ) {
-        echo "<br /> ] CheckDate(): Valid date OK in 'YYYY-MM-DD' format: $datestr , strlen()==". strlen($datestr);
+    $tof0=false;
+    if ($dateck !== false && $dateck->format('Y-m-d') === $datestr0 &&  strlen($datestr0)==10  ) {
+        echo "<br /> ] CheckDate0(): Valid date OK in 'YYYY-MM-DD' format: $datestr0 , strlen()==". strlen($datestr0);
         // $tradedatestr=$datestr;  // override date to read/write
-        return true;
+        $tof0= true;
     } else {
-        echo "<br /> ] CheckDate(): Invalid date or not in 'YYYY-MM-DD' format: $datestr";
-        return false;
+        echo "<br /> ] CheckDate0(): Invalid date or not in 'YYYY-MM-DD' format: $datestr ";
+        $tof0= false;
     }
+    return $tof0;
 }
 
 // ********************************************************************  
@@ -319,7 +322,10 @@ $tradedatestr = "2023-12-20";
 
 $datestr = $udate0 ; // User date string chk
 
-if(CheckDate($datestr)==true) $tradedatestr=$datestr;  
+$tof9=false;
+$tof9=CheckDate0($datestr);
+
+if($tof9==true) $tradedatestr=$datestr;  
 
 // turned this into a fn
 // $dateck = DateTime::createFromFormat('Y-m-d', $datestr);
@@ -361,6 +367,7 @@ if (file_exists($fname)) {
   //echo '<p style="color: red;">This text will be displayed in red.</p>';
 
     echo '<p style="color: red;">The file '. $fname. ' does not exist.  Use the ?d=YYYY-MM-DD parameter.</p>';
+    exit();
 }
 
 // set flag for dates MUST BE identical
