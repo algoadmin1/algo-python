@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.92";
+                                                      $vers = "1.93";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
@@ -100,10 +100,13 @@ function GetEntryNums(){
   $bb=3*8;
   return $aa. $bb. "!";
 }
-function GetDBSafe_NYCTimeNOW(){
-  //$timeNYCnow =  date("Y-m-d\TH:i:s");
-  $timeNYCnow =  date("Y-m-d\TH_i_s");
-  return( $timeNYCnow );
+function GetDBSafe_NYCTimeNOW($num0){
+      $timeNYCnow0 =  date("Y-m-d\TH:i:s");
+      $timeNYCnow1 =  date("Y-m-d\THis");    
+      $timeNYCnow  =  date("Y-m-d\TH_i_s");
+  if($num0==1) return( $timeNYCnow1 ); 
+    else if($num0==0) return( $timeNYCnow0);
+    else  return( $timeNYCnow ); 
 }
 function GetNYDateTime(){
   $timeNYC0 =  date("Y-m-d\TH:i:s");
@@ -391,10 +394,11 @@ if($msg0==1) PrintArray( $arrstrs , $arrname );
  
 
 
-$ftimeout = GetDBSafe_NYCTimeNOW();   
-$fnameout = $dirPrefix. "rawtrades_rec_". $tradedatestr . "_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
+$ftimeout0 = GetDBSafe_NYCTimeNOW(0);   
+$ftimeout = GetDBSafe_NYCTimeNOW(1);   
+$fnameout = $dirPrefix. "rawtrades_". $tradedatestr . "_recv_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
 
-$pstr= "<br /><br /><br />] FOUND $j unique RAW trades, and inserted them into ". $arrname. "[] writing to $fnameout ... <br />";
+$pstr= "<br /><br /><br />] FOUND $j unique RAW trades, and inserted them into ". $arrname. "[] writing to $fnameout  at $ftimeout0 ... <br />";
 echoColor( $pstr, "orange");
 
 
