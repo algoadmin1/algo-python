@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.97";
+                                                      $vers = "2.01";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
@@ -26,8 +26,8 @@ $utime0 = isset($_GET['t']) ? $_GET['t'] : '2500';
 //$udate0 = isset($_GET['date']) ? $_GET['date'] : $todaysdate ;
 //$utime0 = isset($_GET['time']) ? $_GET['time'] : '2600';
 
-$uname0 = isset($_GET['name']) ? $_GET['name'] : 'creator';
-$acct0  = isset($_GET['acct']) ? $_GET['acct'] : 'crtracct';
+$uname0 = isset($_GET['name']) ? $_GET['name'] : 'Creator';
+$acct0  = isset($_GET['acct']) ? $_GET['acct'] : '12345354911';
 $msg0=0;
 $msg0   = isset($_GET['msg']) ? $_GET['msg'] : 'nil';
 
@@ -182,6 +182,10 @@ function CheckDate0($datestr0){
         $tof0= false;
     }
     return $tof0;
+}
+
+function FloorIt($num, $modulo) {
+    return floor($num / $modulo) * $modulo;
 }
 
 // ********************************************************************  
@@ -648,7 +652,7 @@ $pstr9= "<br />******** ATTEMPTING DB ACCESS HERE in $prgname *********<br />";
 echoColor($pstr9,"orange");
 
 $pstr9= "<br />******** WILL ATTEMPT to LOOP and INSERT( )to MySQL DB <br />";
-echoColor($pstr9,"green");
+echoColor($pstr9,"blue");
 
 
 $insertdb = 0;
@@ -656,49 +660,128 @@ $insertdb = 0;
 try {
     // Connect to MySQL using PDO
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);
-
     // Set PDO to throw exceptions for errors
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-  if($insertdb!=0){
-    // Insert a sample trade into the 'trades' table
-    $insertQuery = "INSERT INTO trades (tradeDTstamp, tradeDateTime, userId, accountId,   tradeType, tradeSize, tradePrice) 
-                    VALUES (CURRENT_TIMESTAMP ,'$timeNYC',       'superuser', 'testaccount', 'sell', 100, 50.25)";
-    $conn->exec($insertQuery);
-    $lastInsertedId = $conn->lastInsertId();
+//  ############  OLDr    
+                  // if($insertdb!=0){
+                  //   // Insert a sample trade into the 'trades' table
+                  //   $insertQuery = "INSERT INTO trades (tradeDTstamp, tradeDateTime, userId, accountId,   tradeType, tradeSize, tradePrice) 
+                  //                   VALUES (CURRENT_TIMESTAMP ,'$timeNYC',       'superuser', 'testaccount', 'sell', 100, 50.25)";
+                  //   $conn->exec($insertQuery);
+                  //   $lastInsertedId = $conn->lastInsertId();
 
-    echo "Sample trade inserted. Last inserted ID: $lastInsertedId <br>";
-  }
+                  //   echo "Sample trade inserted. Last inserted ID: $lastInsertedId <br>";
+                  // }
+
+                // Query the table for a specific tradeId
+                // $tradeIdToQuery = 1; // Replace with the desired tradeId to query
+                // $query = "SELECT * FROM trades WHERE tradeId = :tradeId";
+                // $stmt = $conn->prepare($query);
+                // $stmt->bindParam(':tradeId', $tradeIdToQuery);
+                // $stmt->execute();
+                // $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                
 
 
 
-    $tradeHashToQuery = "7475bf6f706cb7a0cd92840c7d0dbe8de9579f39ec04db3ded7b470617e25d51"; // Replace with the desired tradeId to query
-    $query = "SELECT * FROM trades WHERE tradeHash = :tradeHash";
-    $stmt = $conn->prepare($query);
-    $stmt->bindParam(':tradeHash', $tradeHashToQuery);
-    $stmt->execute();
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-  
 
 
-      // Query the table for a specific tradeId
-    $tradeIdToQuery = 1; // Replace with the desired tradeId to query
-    // $query = "SELECT * FROM trades WHERE tradeId = :tradeId";
-    // $stmt = $conn->prepare($query);
-    // $stmt->bindParam(':tradeId', $tradeIdToQuery);
-    // $stmt->execute();
-    // $result = $stmt->fetch(PDO::FETCH_ASSOC);
+// ################### Start LOOP HERE
+// ################### Start LOOP HERE
 
-    if ($result) {
-        echo "Trade found for tradeId $tradeIdToQuery: <pre>" . print_r($result, true) . "</pre>";
-    } else {
-        echo "No trade found for tradeId $tradeIdToQuery";
-    }
+
+
+                $tradeHashToQuery =  "7475bf6f706cb7a0cd92840c7d0dbe8de9579f39ec04db3ded7b470617e25d51";  
+
+                //$tradeHashToQuery0 = "7775bf6f706cb7a0cd92840c7d0dbe8de9579f39ec04db3ded7b470617e25d51";  
+                $tradeHashToQuery0 = "5bf6f706cb7a0cd92840c7d0dbe9118de9579f39ec04db3ded7b470617e25d51";  
+
+                if($msg0==100) $tradeHashToQuery = $tradeHashToQuery0;
+
+
+
+                $query = "SELECT * FROM trades WHERE tradeHash = :tradeHash";
+                $stmt = $conn->prepare($query);
+                $stmt->bindParam(':tradeHash', $tradeHashToQuery);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
+              
+                $insertdb=0;
+
+                if ($result) {
+                    $insertdb=0;
+                    echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
+                } else {
+                    $insertdb=1;
+                    echo "<br />] NO RawTrade found for tradeHash $tradeHashToQuery.  insertdb= $insertdb ;  INSERTing to db.trades ...<br />";
+                }
+
+
+                //$insertdb=0;
+                if($insertdb==1){
+
+                       // ORIGINal
+                       // $insertQuery0 = "INSERT INTO trades (tradeId, tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES (NULL, current_timestamp(), '2023-12-27', '2023-12-27T130000', '1300', 'wed', '15min', 'creator', '12345354', 'SELL', 'ALB', 'YES', '0', '100', '149.66', '0.0', 'atLimit', 'Day', '0.0', '0.0', 'noOptions', '0.0', '0.0', '0.0', '0.0', '5', '-2.9118%', '-4.36', 'nil', 'sell', '0.0', 'cued', 'nil', 'nil', '7475bf6f706cb7a0cd92840c7d0dbe8de9579f39ec04db3ded7b470617e25d51')";
+
+                        $tradeprice = 493.26 ;
+                        $leg1 =  FloorIt( $tradeprice  *  1.20 , 5);        // Call Credit spread buy
+                        $leg2 =  FloorIt( $tradeprice  *  1.15 , 5);        // Call Credit spread sell
+                        $leg3 =  FloorIt( $tradeprice  *  0.85 , 5);        //  Put Credit spread sell
+                        $leg4 =  FloorIt( $tradeprice  *  0.80 , 5);        //  Put Credit spread buy
+
+
+                        $tradeDate0 =     '2023-12-27';
+                        //$tradeTime0 =     '1300';
+                        $tradeTime0 =     '930';
+                        if(strlen($tradeTime0)==3) $tradeTime0= "0". $tradeTime0;   // 945==>0945
+                        $tradeDateTime0 =  $tradeDate0. "T". $tradeTime0. "00";     //'2023-12-27 T 0945 00'  ==> '2023-12-27T094500';  
+
+                        $tradeDay   =     'wed';
+                        $tradeBar   =     '15min';
+                        $userId     =      $uname0;
+                        $acctId     =      $acct0 ;
+
+                        $tradeType  =      "SELL";
+                        $tradeSize  =      100;
+
+                        $buySellCnt =      7;
+                        $buySellPctStr =   '-2.1923%';
+                        $buySellDist =      -4.36;
+
+                        $humanTrade =      'nilHumanReadableTrade';
+                        $symbol     =       'NVDA';
+                        $opStrat    =       'IronCondor';
+
+                        $insertQuery0 = "INSERT INTO trades ( tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES ( CURRENT_TIMESTAMP, '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', 'raw', 0, '$tradeSize', '$tradeprice', 0.0, 'atLimit', 'day', 0.0, 0.0, '$opStrat', '$leg1', '$leg2', '$leg3', '$leg4', '$buySellCnt', '$buySellPctStr', '$buySellDist', 'nil', 'sell', 0.0, 'cued', '$humanTrade', '$timeNYC', '$tradeHashToQuery' )";
+
+
+                        //$insertQuery = "INSERT INTO trades (tradeDTstamp, tradeDateTime, userId, accountId,   tradeType, tradeSize, tradePrice) 
+                        //                VALUES (CURRENT_TIMESTAMP ,'$timeNYC',       'superuser', 'testaccount', 'sell', 100, 50.25)";
+
+                        $conn->exec($insertQuery0);
+                        $lastInsertedId = $conn->lastInsertId();
+
+
+                        $pstr2= "<br />] Sample trade inserted. Last inserted ID: $lastInsertedId ";
+                        echoColor($pstr2,"green");
+                        $pstr3= "<br />]  insertQuery0 = $insertQuery0 ";
+                        echoColor($pstr3,"purple");
+
+
+
+
+                }//if insertdb==1
+
+
+
+
+
 
 
 
 } catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+    echo "<br />] Connection failed: " . $e->getMessage();
 }
 
 // Close the PDO connection
