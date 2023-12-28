@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.93";
+                                                      $vers = "1.94";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
