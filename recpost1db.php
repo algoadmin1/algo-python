@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "2.01";
+                                                      $vers = "3.54";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
@@ -467,153 +467,146 @@ if ($fileout) {
 } else {
     $pstr= "<br />Unable to open file!<br />";
     echoColor( $pstr, "red");
+    exit();
 }
 
 
 
-//
-//
-//  
-// ********** Loop thru and insert into MySQL
-//
-//
-// **************************************************************************************************
-// **************************************************************************************************
-// **************************************************************************************************
-// **************************************************************************************************
-// **************************************************************************************************
-// **************************************************************************************************
-// **************************************************************************************************
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////   code moved...////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
 // //
 // //
 // // Loop through $arrstrs and separate CSV elements into $csvelems
 // //
-$csvelems = [];
-$c=0;
 
+// $csvelems = [];
+// $c=0;
 
+//         foreach ($arrstrs as $string) {
+//             if($msg0=="1") echo "<br /><br /> ] arrstrs[ $c ]=". $string;
 
+//         // Explode the CSV string into an array using str_getcsv()
+//             $csvelems = str_getcsv($string);
+//             echo "<br />"; 
+//             $elements = [];
 
-        foreach ($arrstrs as $string) {
-            if($msg0=="1") echo "<br /><br /> ] arrstrs[ $c ]=". $string;
+//             foreach ($csvelems as $element) {
+//               // echo $element . "<br />"; 
+//               $elements[]=$element;
+//             }
 
-        // Explode the CSV string into an array using str_getcsv()
-            $csvelems = str_getcsv($string);
-            echo "<br />"; 
-            $elements = [];
-
-            foreach ($csvelems as $element) {
-              // echo $element . "<br />"; 
-              $elements[]=$element;
-            }
-
-            //echo $elements[ 0 ]. " ".  $elements[ 1 ]. " ".  $elements[ 2 ]. " ". $elements[ 5 ]. " ".  $elements[ 3 ]. " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".  $elements[ 9 ]. " DAY ".  "<br />"; 
+//             //echo $elements[ 0 ]. " ".  $elements[ 1 ]. " ".  $elements[ 2 ]. " ". $elements[ 5 ]. " ".  $elements[ 3 ]. " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".  $elements[ 9 ]. " DAY ".  "<br />"; 
             
-            // ] arrstrs[ 0 ]= 
-            // [ 0..10 ]     2023-12-21,945,thu,15min,1.1383%,    BUY, 100,AMZN,atLimit,152.28,Pday,
-            // [ 11..21 ]       buysigcnt,8, [13]R3R2R1_P_P3_S1S2S3=, 159.70,157.16,[16]154.61, 153.09,152.08,  [19]150.54, 149.02, [21]146.47, 
-            //  ...               [22]p-S1=,1.73,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,154.90,152.30,145.37,141.04,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,70ac488fa3488b4669d178ad1011265f69378daa0244605f2fcc890c912a0dd3
+//             // ] arrstrs[ 0 ]= 
+//             // [ 0..10 ]     2023-12-21,945,thu,15min,1.1383%,    BUY, 100,AMZN,atLimit,152.28,Pday,
+//             // [ 11..21 ]       buysigcnt,8, [13]R3R2R1_P_P3_S1S2S3=, 159.70,157.16,[16]154.61, 153.09,152.08,  [19]150.54, 149.02, [21]146.47, 
+//             //  ...               [22]p-S1=,1.73,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,154.90,152.30,145.37,141.04,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,70ac488fa3488b4669d178ad1011265f69378daa0244605f2fcc890c912a0dd3
 
-            $buySellstr = $elements[ 5 ];   // BUY or SELL ?
+//             $buySellstr = $elements[ 5 ];   // BUY or SELL ?
 
-            $buySellSigCnt=$elements[ 12 ];
-            $buySellSigCnt0 = intval($buySellSigCnt);
+//             $buySellSigCnt=$elements[ 12 ];
+//             $buySellSigCnt0 = intval($buySellSigCnt);
 
-            $buySellSigCount=$elements[ 11 ];
-            if($buySellstr=="BUY"){
-              $buySellSigCount=RaiseCharacter($buySellSigCount,0);
-              $buySellSigCount=RaiseCharacter($buySellSigCount,3);
-              $buySellSigCount=RaiseCharacter($buySellSigCount,6);
-            }else if($buySellstr=="SELL"){
-              $buySellSigCount=RaiseCharacter($buySellSigCount,0);
-              $buySellSigCount=RaiseCharacter($buySellSigCount,4);
-              $buySellSigCount=RaiseCharacter($buySellSigCount,7);
-            }
+//             $buySellSigCount=$elements[ 11 ];
+//             if($buySellstr=="BUY"){
+//               $buySellSigCount=RaiseCharacter($buySellSigCount,0);
+//               $buySellSigCount=RaiseCharacter($buySellSigCount,3);
+//               $buySellSigCount=RaiseCharacter($buySellSigCount,6);
+//             }else if($buySellstr=="SELL"){
+//               $buySellSigCount=RaiseCharacter($buySellSigCount,0);
+//               $buySellSigCount=RaiseCharacter($buySellSigCount,4);
+//               $buySellSigCount=RaiseCharacter($buySellSigCount,7);
+//             }
 
-            $dayofwk = $elements[ 2 ];
-            $dayofwk=RaiseCharacter($dayofwk,0);
+//             $dayofwk = $elements[ 2 ];
+//             $dayofwk=RaiseCharacter($dayofwk,0);
 
 
-            $aboveBelowStr="aboveOrBelow ";
-            $aboveBelowAmtStr =$elements[ 23 ];
-            $ampmStr="am";
+//             $aboveBelowStr="aboveOrBelow ";
+//             $aboveBelowAmtStr =$elements[ 23 ];
+//             $ampmStr="am";
 
-            $SRstr="Daily ";
-            $S1str="Support(S1)";
-            $R1str="Resistance(R1)";
-            $S1numstr =  $elements[ 19 ];
-            $R1numstr =  $elements[ 16 ];
-            $SuppResisStr ="suppOrResist=nil";
+//             $SRstr="Daily ";
+//             $S1str="Support(S1)";
+//             $R1str="Resistance(R1)";
+//             $S1numstr =  $elements[ 19 ];
+//             $R1numstr =  $elements[ 16 ];
+//             $SuppResisStr ="suppOrResist=nil";
 
-            $col007="black";
-            //$buySellstr = $elements[ 5 ];
-            if($buySellstr=="BUY"){
-               $SRstr.=  $S1str;   //if buy, x % near S1 else R1
-               $SuppResisStr= $S1numstr ;
-               $col007="green";
-            } else{
-                $SRstr.=  $R1str; 
-                $SuppResisStr= $R1numstr;
-                $col007="red";
-            }
+//             $col007="black";
+//             //$buySellstr = $elements[ 5 ];
+//             if($buySellstr=="BUY"){
+//                $SRstr.=  $S1str;   //if buy, x % near S1 else R1
+//                $SuppResisStr= $S1numstr ;
+//                $col007="green";
+//             } else{
+//                 $SRstr.=  $R1str; 
+//                 $SuppResisStr= $R1numstr;
+//                 $col007="red";
+//             }
 
-            $t0str = $elements[ 1 ];      // ie 945, 1115 am
-            $intValue = intval($t0str);
-            if($intValue>=1200) $ampmStr="pm";
-            $timeofday = $elements[1];
-            $timeofday=RightInsertString($timeofday, ":", 2);
+//             $t0str = $elements[ 1 ];      // ie 945, 1115 am
+//             $intValue = intval($t0str);
+//             if($intValue>=1200) $ampmStr="pm";
+//             $timeofday = $elements[1];
+//             $timeofday=RightInsertString($timeofday, ":", 2);
 
-            $pctNearS1R1 = $elements[4];
-            if(DetectCharacter($pctNearS1R1, "-", 0)==true) $aboveBelowStr="Below";
-              else $aboveBelowStr="Above";
-            //$pctNearS1R1=RemoveRightCharacter($pctNearS1R1,0);  // remove % "1.23%" ==> "1.23"
+//             $pctNearS1R1 = $elements[4];
+//             if(DetectCharacter($pctNearS1R1, "-", 0)==true) $aboveBelowStr="Below";
+//               else $aboveBelowStr="Above";
+//             //$pctNearS1R1=RemoveRightCharacter($pctNearS1R1,0);  // remove % "1.23%" ==> "1.23"
 
-            $pstr= "AlgoGeneratedRawTrade". "[ $c ]: ";   //"<br />";
-            $hastr=$elements[ 42 ];
-            $hastr="[ ".$hastr." ]";
+//             $pstr= "AlgoGeneratedRawTrade". "[ $c ]: ";   //"<br />";
+//             $hastr=$elements[ 42 ];
+//             $hastr="[ ".$hastr." ]";
 
-            $date0str = $elements[ 0 ];
-            $date1str=  ReadableDate($datestr,"nil"); 
+//             $date0str = $elements[ 0 ];
+//             $date1str=  ReadableDate($datestr,"nil"); 
 
-            $humanReadableTradeStr = $date0str." ".  $dayofwk. " ". $date1str." ". $timeofday. $ampmStr.  "  ". $elements[ 5 ].   " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".$CurrencyStr  .  $elements[ 9 ]. " duration DAY (off a ". $elements[ 3 ]. " chart with a ". $buySellSigCount. " of ". $elements[ 12 ]. ") ".  $pctNearS1R1. " or ". $CurrencyStr. $aboveBelowAmtStr." ". $aboveBelowStr. " ".  $SRstr ." of ".$CurrencyStr  . $SuppResisStr ."<br />"; 
+//             $humanReadableTradeStr = $date0str." ".  $dayofwk. " ". $date1str." ". $timeofday. $ampmStr.  "  ". $elements[ 5 ].   " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".$CurrencyStr  .  $elements[ 9 ]. " duration DAY (off a ". $elements[ 3 ]. " chart with a ". $buySellSigCount. " of ". $elements[ 12 ]. ") ".  $pctNearS1R1. " or ". $CurrencyStr. $aboveBelowAmtStr." ". $aboveBelowStr. " ".  $SRstr ." of ".$CurrencyStr  . $SuppResisStr ; 
             
-            $trstr= "        --------->     ". $humanReadableTradeStr;
+//             $trstr= "        --------->     ". $humanReadableTradeStr."<br />";
 
-            // reassign EOL to human readable str for mysql insertion
-            $eolstr=$elements[ 41 ];
-         // echoColor($eolstr."[41]", "gray");
-            $elements[ 41 ]=$humanReadableTradeStr ;
-            $eolstr=$elements[ 41 ];
-          //echoColor($eolstr, "blue");
+//             // reassign EOL to human readable str for mysql insertion
+//             $eolstr=$elements[ 41 ];
+//          // echoColor($eolstr."[41]", "gray");
+//             $elements[ 41 ]=$humanReadableTradeStr ;
+//             $eolstr=$elements[ 41 ];
+//           //echoColor($eolstr, "blue");
 
+//             echoColor($pstr.$hastr, "purple");
+//             //if($buySellSigCnt0>7) $trstr = BoldString($trstr);            // NEEDs better filtering of above/below R1,S1 etc
+//             echoColor($trstr, $col007);
 
-            echoColor($pstr.$hastr, "purple");
-        //    echoColor( "[ ".$hastr." ]", "blue");
+//             if($msg0=="1") print_r($elements);
+//             $c++;
 
-        // test for strong or weak buy/sell signals
-            // NEEDs better filtering of above/below R1,S1 etc
-            //if($buySellSigCnt0>7) $trstr = BoldString($trstr);
-            echoColor($trstr, $col007);
+//         }//foreach($arrstrs
 
-            if($msg0=="1") print_r($elements);
-            $c++;
-
-        }//foreach($arrstrs
-
-
-// after loop, capture size
-$maxTradesToInsert=$c;
+// $maxTradesToInsert=$c;
+// $pstr9="End of $c Algo Trades at " .date("Y-m-d\TH:i:s"). "NYC Time.<br /><br /><br />";
+// echoColor($pstr9,"blue");
 
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
 
-//////////////////////////////////////////////// 
-//////////////////////////////////////////////// 
-//////////////////////////////////////////////// 
 
 
-$pstr9="End of $c Algo Trades at " .date("Y-m-d\TH:i:s"). "NYC Time.<br /><br /><br />";
-echoColor($pstr9,"blue");
+
 
 
 /*
@@ -655,6 +648,11 @@ $pstr9= "<br />******** WILL ATTEMPT to LOOP and INSERT( )to MySQL DB <br />";
 echoColor($pstr9,"blue");
 
 
+// init necessary arr's
+$csvelems = [];
+$c=0;
+$inserted0=0;
+
 $insertdb = 0;
 // SHOW CREATE TABLE table_name;
 try {
@@ -684,22 +682,118 @@ try {
                 
 
 
+// ######################################################### Start LOOP HERE
+// ######################################################### Start LOOP HERE
+// ######################################################### Start LOOP HERE
+
+
+// $csvelems = [];
+// $c=0;
+
+        foreach ($arrstrs as $string) {
+                if($msg0=="1") echo "<br /><br /> ] arrstrs[ $c ]=". $string;
+
+            // Explode the CSV string into an array using str_getcsv()
+                $csvelems = str_getcsv($string);
+                echo "<br />"; 
+                $elements = [];
+
+                foreach ($csvelems as $element) {
+                  // echo $element . "<br />"; 
+                  $elements[]=$element;
+                }
+
+                //echo $elements[ 0 ]. " ".  $elements[ 1 ]. " ".  $elements[ 2 ]. " ". $elements[ 5 ]. " ".  $elements[ 3 ]. " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".  $elements[ 9 ]. " DAY ".  "<br />"; 
+                
+                // ] arrstrs[ 0 ]= 
+                // [ 0..10 ]     2023-12-21,945,thu,15min,1.1383%,    BUY, 100,AMZN,atLimit,152.28,Pday,
+                // [ 11..21 ]       buysigcnt,8, [13]R3R2R1_P_P3_S1S2S3=, 159.70,157.16,[16]154.61, 153.09,152.08,  [19]150.54, 149.02, [21]146.47, 
+                //  ...               [22]p-S1=,1.73,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,154.90,152.30,145.37,141.04,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,70ac488fa3488b4669d178ad1011265f69378daa0244605f2fcc890c912a0dd3
+
+                $buySellstr = $elements[ 5 ];   // BUY or SELL ?
+
+                $buySellSigCnt=$elements[ 12 ];
+                $buySellSigCnt0 = intval($buySellSigCnt);
+
+                $buySellSigCount=$elements[ 11 ];
+                if($buySellstr=="BUY"){
+                  $buySellSigCount=RaiseCharacter($buySellSigCount,0);
+                  $buySellSigCount=RaiseCharacter($buySellSigCount,3);
+                  $buySellSigCount=RaiseCharacter($buySellSigCount,6);
+                }else if($buySellstr=="SELL"){
+                  $buySellSigCount=RaiseCharacter($buySellSigCount,0);
+                  $buySellSigCount=RaiseCharacter($buySellSigCount,4);
+                  $buySellSigCount=RaiseCharacter($buySellSigCount,7);
+                }
+
+                $dayofwk = $elements[ 2 ];
+                $dayofwk0 = $elements[ 2 ];
+                $dayofwk=RaiseCharacter($dayofwk,0);
+
+
+                $aboveBelowStr="aboveOrBelow ";
+                $aboveBelowAmtStr =$elements[ 23 ];
+                $ampmStr="am";
+
+                $SRstr="Daily ";
+                $S1str="Support(S1)";
+                $R1str="Resistance(R1)";
+                $S1numstr =  $elements[ 19 ];
+                $R1numstr =  $elements[ 16 ];
+                $SuppResisStr ="suppOrResist=nil";
+
+                $col007="black";
+                //$buySellstr = $elements[ 5 ];
+                if($buySellstr=="BUY"){
+                   $SRstr.=  $S1str;   //if buy, x % near S1 else R1
+                   $SuppResisStr= $S1numstr ;
+                   $col007="green";
+                } else{
+                    $SRstr.=  $R1str; 
+                    $SuppResisStr= $R1numstr;
+                    $col007="red";
+                }
+
+                $t0str = $elements[ 1 ];      // ie 945, 1115 am
+                $intValue = intval($t0str);
+                if($intValue>=1200) $ampmStr="pm";
+                $timeofday = $elements[1];
+                $timeofday=RightInsertString($timeofday, ":", 2);
+
+                $pctNearS1R1 = $elements[4];
+                if(DetectCharacter($pctNearS1R1, "-", 0)==true) $aboveBelowStr="Below";
+                  else $aboveBelowStr="Above";
+                //$pctNearS1R1=RemoveRightCharacter($pctNearS1R1,0);  // remove % "1.23%" ==> "1.23"
+
+                $pstr= "AlgoGeneratedRawTrade". "[ $c ]: ";   //"<br />";
+                $hastr=$elements[ 42 ];
+                $hastr0=$elements[ 42 ];
+                $hastr="[ ".$hastr." ]";
+
+                $date0str = $elements[ 0 ];
+                $date1str=  ReadableDate($datestr,"nil"); 
+
+                $humanReadableTradeStr = $date0str." ".  $dayofwk. " ". $date1str." ". $timeofday. $ampmStr.  "  ". $elements[ 5 ].   " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".$CurrencyStr  .  $elements[ 9 ]. " duration DAY (off a ". $elements[ 3 ]. " chart with a ". $buySellSigCount. " of ". $elements[ 12 ]. ") ".  $pctNearS1R1. " or ". $CurrencyStr. $aboveBelowAmtStr." ". $aboveBelowStr. " ".  $SRstr ." of ".$CurrencyStr  . $SuppResisStr ; 
+                
+                $trstr= "        --------->     ". $humanReadableTradeStr."<br />";
+
+                // reassign EOL to human readable str for mysql insertion
+                $eolstr=$elements[ 41 ];
+                $elements[ 41 ]=$humanReadableTradeStr ;
+                $eolstr=$elements[ 41 ];
+                //             echoColor($pstr.$hastr, "purple");
+                //             //if($buySellSigCnt0>7) $trstr = BoldString($trstr);            // NEEDs better filtering of above/below R1,S1 etc
+                //             echoColor($trstr, $col007);
+                //             if($msg0=="1") print_r($elements);
+                //             $c++;
+                //         }//foreach($arrstrs
+                // $maxTradesToInsert=$c;
+                // $pstr9="End of $c Algo Trades at " .date("Y-m-d\TH:i:s"). "NYC Time.<br /><br /><br />";
+                // echoColor($pstr9,"blue");
 
 
 
-// ################### Start LOOP HERE
-// ################### Start LOOP HERE
-
-
-
-                $tradeHashToQuery =  "7475bf6f706cb7a0cd92840c7d0dbe8de9579f39ec04db3ded7b470617e25d51";  
-
-                //$tradeHashToQuery0 = "7775bf6f706cb7a0cd92840c7d0dbe8de9579f39ec04db3ded7b470617e25d51";  
-                $tradeHashToQuery0 = "5bf6f706cb7a0cd92840c7d0dbe9118de9579f39ec04db3ded7b470617e25d51";  
-
-                if($msg0==100) $tradeHashToQuery = $tradeHashToQuery0;
-
-
+                $tradeHashToQuery = $hastr0 ;
 
                 $query = "SELECT * FROM trades WHERE tradeHash = :tradeHash";
                 $stmt = $conn->prepare($query);
@@ -707,8 +801,8 @@ try {
                 $stmt->execute();
                 $result = $stmt->fetch(PDO::FETCH_ASSOC);
               
-                $insertdb=0;
 
+                $insertdb=0;
                 if ($result) {
                     $insertdb=0;
                     echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
@@ -718,61 +812,85 @@ try {
                 }
 
 
-                //$insertdb=0;
+
                 if($insertdb==1){
 
                        // ORIGINal
                        // $insertQuery0 = "INSERT INTO trades (tradeId, tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES (NULL, current_timestamp(), '2023-12-27', '2023-12-27T130000', '1300', 'wed', '15min', 'creator', '12345354', 'SELL', 'ALB', 'YES', '0', '100', '149.66', '0.0', 'atLimit', 'Day', '0.0', '0.0', 'noOptions', '0.0', '0.0', '0.0', '0.0', '5', '-2.9118%', '-4.36', 'nil', 'sell', '0.0', 'cued', 'nil', 'nil', '7475bf6f706cb7a0cd92840c7d0dbe8de9579f39ec04db3ded7b470617e25d51')";
 
-                        $tradeprice = 493.26 ;
+                        // ] arrstrs[ 0 ]= 
+                        // [ 0..10 ]     2023-12-21,945,thu,15min,1.1383%,    BUY, 100,AMZN,atLimit,152.28,Pday,
+                        // [ 11..21 ]       buysigcnt,8, [13]R3R2R1_P_P3_S1S2S3=, 159.70,157.16,[16]154.61, 153.09,152.08,  [19]150.54, 149.02, [21]146.47, 
+                        //  ...               [22]p-S1=,1.73,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,154.90,152.30,145.37,141.04,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,70ac488fa3488b4669d178ad1011265f69378daa0244605f2fcc890c912a0dd3
+
+
+                        $tradeprice =   floatval( $elements[ 9 ] );         // 493.26 ;
                         $leg1 =  FloorIt( $tradeprice  *  1.20 , 5);        // Call Credit spread buy
                         $leg2 =  FloorIt( $tradeprice  *  1.15 , 5);        // Call Credit spread sell
                         $leg3 =  FloorIt( $tradeprice  *  0.85 , 5);        //  Put Credit spread sell
                         $leg4 =  FloorIt( $tradeprice  *  0.80 , 5);        //  Put Credit spread buy
 
 
-                        $tradeDate0 =     '2023-12-27';
-                        //$tradeTime0 =     '1300';
-                        $tradeTime0 =     '930';
+                        $tradeDate0 =     $date0str ;    //$elements[ 0 ];    //'2023-12-27';
+                        $tradeTime0 =     $t0str;            //'930';
                         if(strlen($tradeTime0)==3) $tradeTime0= "0". $tradeTime0;   // 945==>0945
                         $tradeDateTime0 =  $tradeDate0. "T". $tradeTime0. "00";     //'2023-12-27 T 0945 00'  ==> '2023-12-27T094500';  
 
-                        $tradeDay   =     'wed';
-                        $tradeBar   =     '15min';
+                        $tradeDay   =     $dayofwk0;          //'wed';
+                        $tradeBar   =     $elements[ 3 ];    // '15min';
                         $userId     =      $uname0;
                         $acctId     =      $acct0 ;
 
-                        $tradeType  =      "SELL";
-                        $tradeSize  =      100;
+                        $tradeType  =      $buySellstr;         //"SELL";
+                        $tradeSize  =      intval(  $elements[ 6 ] );     //100;
 
-                        $buySellCnt =      7;
-                        $buySellPctStr =   '-2.1923%';
-                        $buySellDist =      -4.36;
+                        $buySellCnt =      $buySellSigCnt0;      // 7;
+                        $buySellPctStr =   $pctNearS1R1;        // '-2.1923%';
+                        $buySellDist =     floatval($elements[ 23 ] );   // -4.36;
 
-                        $humanTrade =      'nilHumanReadableTrade';
-                        $symbol     =       'NVDA';
-                        $opStrat    =       'IronCondor';
+                        $humanTrade =      $humanReadableTradeStr; //'nilHumanReadableTrade';
+                        $symbol     =       $elements[ 7 ];   //'NVDA';
+                        $opStrat    =       'IronCondor1.15';
+                        $rawstr     =       'raw'. $c ;
+                        $tradeCond  =        $elements[ 8 ] ;       //atLimit
+                        $tradeStop  =         $tradeprice * 0.60;
+                        $tradeLimit =        $tradeprice * 2.50;
 
-                        $insertQuery0 = "INSERT INTO trades ( tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES ( CURRENT_TIMESTAMP, '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', 'raw', 0, '$tradeSize', '$tradeprice', 0.0, 'atLimit', 'day', 0.0, 0.0, '$opStrat', '$leg1', '$leg2', '$leg3', '$leg4', '$buySellCnt', '$buySellPctStr', '$buySellDist', 'nil', 'sell', 0.0, 'cued', '$humanTrade', '$timeNYC', '$tradeHashToQuery' )";
+                        $insertQuery0 = "INSERT INTO trades ( tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES ( CURRENT_TIMESTAMP, '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', 0, '$tradeSize', '$tradeprice', 0.0, '$tradeCond', 'day', '$tradeStop', '$tradeLimit', '$opStrat', '$leg1', '$leg2', '$leg3', '$leg4', '$buySellCnt', '$buySellPctStr', '$buySellDist', 'nil', '$tradeType', 0.0, 'cued', '$humanTrade', '$timeNYC', '$tradeHashToQuery' )";
 
-
-               
-// ] insertQuery0 = INSERT INTO trades ( tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES ( CURRENT_TIMESTAMP, '2023-12-27T093000', '2023-12-27', '0930', 'wed', '15min', 'Creator', '12345354911', 'SELL', 'NVDA', 'raw', 0, '100', '493.26', 0.0, 'atLimit', 'day', 0.0, 0.0, 'IronCondor', '590', '565', '415', '390', '7', '-2.1923%', '-4.36', 'nil', 'sell', 0.0, 'cued', 'nilHumanReadableTrade', '2023-12-28T06:48:26', '5bf6f706cb7a0cd92840c7d0dbe9118de9579f39ec04db3ded7b470617e25d51' )
+                                           
+                            // ] insertQuery0 = INSERT INTO trades ( tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES ( CURRENT_TIMESTAMP, '2023-12-27T093000', '2023-12-27', '0930', 'wed', '15min', 'Creator', '12345354911', 'SELL', 'NVDA', 'raw', 0, '100', '493.26', 0.0, 'atLimit', 'day', 0.0, 0.0, 'IronCondor', '590', '565', '415', '390', '7', '-2.1923%', '-4.36', 'nil', 'sell', 0.0, 'cued', 'nilHumanReadableTrade', '2023-12-28T06:48:26', '5bf6f706cb7a0cd92840c7d0dbe9118de9579f39ec04db3ded7b470617e25d51' )
 
 
                         $conn->exec($insertQuery0);
                         $lastInsertedId = $conn->lastInsertId();
-
+                        $inserted0++;
 
                         $pstr2= "<br />] Sample trade inserted. Last inserted ID: $lastInsertedId ";
                         echoColor($pstr2,"green");
                         $pstr3= "<br />]  insertQuery0 = $insertQuery0 ";
                         echoColor($pstr3,"purple");
 
-
-
-
                 }//if insertdb==1
+
+
+                echoColor($pstr.$hastr, "purple");
+                //if($buySellSigCnt0>7) $trstr = BoldString($trstr);            // NEEDs better filtering of above/below R1,S1 etc
+                echoColor($trstr, $col007);
+
+                if($msg0=="1") print_r($elements);
+                $c++;
+
+            }//foreach($arrstrs
+
+
+
+            $maxTradesToInsert=$c;
+            $pstr9="End of Algo Trades; INSERTED $inserted0 / $c RawTrades found at " .date("Y-m-d\TH:i:s"). "NYC Time.<br /><br /><br />";
+            echoColor($pstr9,"blue");
+
+
+
 
 
 
