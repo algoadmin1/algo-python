@@ -168,7 +168,18 @@ function BoldString($str2){
   $str3='</strong>';
   return $str1.$str2.$str3;
 }
-
+function CheckDate($datestr){
+    $dateck = DateTime::createFromFormat('Y-m-d', $datestr);
+    //if( strlen($udate0==10) )  $tradedatestr = $udate0 ;
+    if ($dateck !== false && $dateck->format('Y-m-d') === $datestr &&  strlen($datestr)==10  ) {
+        echo "<br /> ] CheckDate(): Valid date OK in 'YYYY-MM-DD' format: $datestr , strlen()==". strlen($datestr);
+        // $tradedatestr=$datestr;  // override date to read/write
+        return true;
+    } else {
+        echo "<br /> ] CheckDate(): Invalid date or not in 'YYYY-MM-DD' format: $datestr";
+        return false;
+    }
+}
 
 // ********************************************************************  
 //
@@ -303,23 +314,24 @@ $happy1.= GetEntryNums();
 ///// *************************************************************************************************
 
 
-// data to test / read in txt file from this date:
+// SET Default data to test / read in txt file from this date:
 $tradedatestr = "2023-12-20";
 
-
-//turn this into a fn
 $datestr = $udate0 ; // User date string chk
 
-$dateck = DateTime::createFromFormat('Y-m-d', $datestr);
-//if( strlen($udate0==10) )  $tradedatestr = $udate0 ;
-if ($dateck !== false && $dateck->format('Y-m-d') === $datestr) {
-    echo "<br /> ] Valid date in 'YYYY-MM-DD' format: $datestr , strlen()==". strlen($datestr);
-    $tradedatestr=$datestr;  // override date to read/write
+if(CheckDate($datestr)==true) $tradedatestr=$datestr;  
 
-} else {
-    echo "<br /> ] Invalid date or not in 'YYYY-MM-DD' format: $datestr";
+// turned this into a fn
+// $dateck = DateTime::createFromFormat('Y-m-d', $datestr);
+// //if( strlen($udate0==10) )  $tradedatestr = $udate0 ;
+// if ($dateck !== false && $dateck->format('Y-m-d') === $datestr) {
+//     echo "<br /> ] Valid date in 'YYYY-MM-DD' format: $datestr , strlen()==". strlen($datestr);
+//     $tradedatestr=$datestr;  // override date to read/write
 
-}
+// } else {
+//     echo "<br /> ] Invalid date or not in 'YYYY-MM-DD' format: $datestr";
+
+// }
 
 
 
@@ -330,7 +342,7 @@ if ($dateck !== false && $dateck->format('Y-m-d') === $datestr) {
 
 $fname = "intradaytradesServer_". $tradedatestr. ".txt"; // Replace with your file name
 
-$pstr= "<br />] After MySQL access, date verify.  <br /><br />] Attempting file read of: ". $fname. "<br />";
+$pstr= "<br />] After date verify.  <br /><br />] Attempting file read of: ". $fname. "<br />";
 echoColor( $pstr, "orange");
 
 //$fname = "intradaytradesServer_2023-12-20.txt"; // Replace with your file name
@@ -351,13 +363,25 @@ if (file_exists($fname)) {
     echo '<p style="color: red;">The file '. $fname. ' does not exist.  Use the ?d=YYYY-MM-DD parameter.</p>';
 }
 
-
-
+// set flag for dates MUST BE identical
+$tof=false;
+$badlines=0;
 if($fexist==1){
-
     // Read the file line by line
     if (($handle = fopen($fname, "r")) !== false) {
         while (($data = fgetcsv($handle, 0, ",")) !== false) {
+            if($msg0=="1")  echo "<br /> data[0]=====>>". $data[0]. "<<=====<br />";
+            
+            $tof=false;
+            if( $data[0] == $tradedatestr) $tof=true;
+              else{
+                $badlines++;
+                $pstr88a=" ...  <br />";
+                if( strlen($data[0])==10  ) $pstr88a =" $data[0] $data[1] $data[2] $data[3]  ...  <br />";
+                    else if( strlen($data[0])<3  ) $pstr88a=" 0-length uDate found.   <br />";
+                $pstr88="<br />* ] $i )   DATE: ". $data[0]. " != NOT EQUAL TO RawTradeDate: ". $tradedatestr. " ... Skipping Append on Older-dated RawTrade ". $pstr88a; 
+                if($msg0=="1")  echoColor($pstr88, "blue");
+              }//else
 
             // Check each line against $arrstrs before appending
             $line = implode(",", $data); // Convert line array to a string
@@ -371,7 +395,7 @@ if($fexist==1){
             $pstr0= " $line  ,  LINE LEN== $linelen  <br />";
             if($msg0=="1")  echoColor($pstr0,"blue");
             // Check if the line exists in $arrstrs
-            if (!in_array($line, $arrstrs) &&  ( $linelen > $minstrlen ) ) {
+            if (!in_array($line, $arrstrs) &&  ( $linelen > $minstrlen ) && $tof==true ) {
                 if($msg0=="1")  echo " [ Appended into array] ". "__Orig(re-hash)_numCSVs==". $numcsv. "  "; //. $h0;     
 
                 $arrstrs[] = $line ; // Append the line to $arrstrs if it doesn't exist
@@ -398,8 +422,10 @@ $ftimeout0 = GetDBSafe_NYCTimeNOW(0);
 $ftimeout = GetDBSafe_NYCTimeNOW(1);   
 $fnameout = $dirPrefix. "rawtrades_". $tradedatestr . "_recv_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
 
-$pstr= "<br /><br /><br />] FOUND $j unique RAW trades, and inserted them into ". $arrname. "[] writing to $fnameout  at $ftimeout0 ... <br />";
-echoColor( $pstr, "orange");
+$pstr= "<br /><br /><br />] FOUND $j unique RAW trades ( generated on $tradedatestr ), and inserted them into ". $arrname. "[] writing to $fnameout  at $ftimeout0 ... <br />";
+$pstrRej="<br />] FOUND $badlines BAD 'csv-lines' and ignored them. <br />";
+echoColor( $pstr, "blue");
+echoColor( $pstrRej, "red");
 
 
 //$arrstrs = array(/* your array content here */); // Replace this with your array
