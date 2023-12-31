@@ -17,6 +17,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 # from datetime import datetime 
 
+import robin_stocks as rs
+
+
+
+
 
 def Check_data(array, datastr):
     return datastr in array
@@ -29,12 +34,27 @@ def ClosePositions(name, account):
     print("Calling CLOSE Positions on ", account)
     return True
 
+# robin_stocks Docs:  https://robin-stocks.readthedocs.io/en/latest/robinhood.html#logging-in-and-out
+def CheckPostionsRobinhood( username0, pwd0 ):
+    print("CheckPostionsRobinhood() Positions for ", username0)
+
+    # Log in to Robinhood (replace 'username' and 'password' with your credentials)
+    rs.robinhood.authentication.login(username=username0, password='Crixus2011', expiresIn=86400, scope='internal', by_sms=True, store_session=True, mfa_code=None, pickle_name='')
+
+    # Get portfolio information
+    rs.robinhood.profiles.load_account_profile(account_number=None, info=None)
+
+    # rs.login(username=username0, password=pwd0)
+    # portfolio = rs.account.get_portfolio()
+    # Log out from Robinhood
+    rs.robinhood.authentication.logout()    
+    # print(portfolio)
+
 
 tstr="nytime"
-
 LOOPMax =  7 * 60 * 12
 SECSMax =  5  # 20 loops * 12 secs
-
+pwd0="Crixus"
 # Get current date in New York - we need EDT for markets...
 new_york_timezone = pytz.timezone('America/New_York')
 current_date_ny = datetime.datetime.now(new_york_timezone).date()
@@ -51,6 +71,11 @@ print("Today's date in New York:",dstr1)
 
 print("\n $$$ Welcome to the Algo Investor's 'Watch Dog' - the Automated Porfolio Manager (APM) $$$")
 print("\n\nThis module will call the Brokerage APIs directly.\nPlanned: Robinhood API, Fidelity API, Schwab/TD API, E*Trade API")
+
+print("\n\n\nAttempting Robinhood Access...")
+pwd0=pwd0+"2011"
+CheckPostionsRobinhood( "roguequant1@gmail.com", pwd0 )
+
 
 # Starting Balance
 startingBalance_default = float(100000.0)
