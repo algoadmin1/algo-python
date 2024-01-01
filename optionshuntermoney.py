@@ -126,12 +126,12 @@ print("\n] Welcome to ",prgname," for Spread Options-hunting to make money.    v
 #mystr = "WELCOME TO THE WILD WILD WEST..." 
 mystr =  "WELCOME to "+prgname+" for Spread Options-hunting to make money.    ver"+prgvers+"..." 
 
-print_colored(mystr, colorRed ) 
-print_colored(mystr, colorOrange ) 
-print_colored(mystr, colorBrown ) 
+# print_colored(mystr, colorRed ) 
+# print_colored(mystr, colorOrange ) 
+# print_colored(mystr, colorBrown ) 
 
 
-print_colored(mystr, colorGreen ) 
+# print_colored(mystr, colorGreen ) 
 print_colored(mystr, colorBlue ) 
 print_colored(mystr, colorYellow) 
 print_colored(mystr, colorPurple)
@@ -230,7 +230,7 @@ daysTilExpiry = DaysDifference( today_date, expdate_dateSelected )
 pstr= "\n\n] Days from now "+today_date+" until "+symbol+"'s Options Expiration "+expdate_dateSelected+" is "+str(daysTilExpiry) +" days."
 print_colored(pstr, colorYellow)
 
-
+spreadPct = 0.15
 
 
 
@@ -258,6 +258,15 @@ for option_date in options:
         price0= GetStockPrice(symbol)
         pstr= "\n] Price for "+symbol+" = " 
         PrintDollars(pstr, price0)
+
+
+        priceOfCallSpreadLeg1 = price0 * (1+spreadPct)
+        priceOfPutSpreadLeg1  = price0 * (1-spreadPct)
+
+        pstr= "\n] STRIKE-Price for Short Call Leg of "+symbol+": " 
+        PrintDollars(pstr, price0)
+
+
 
         pstr="\n\n\n] ################################################ CALL: max_rows ="+str(max_rows)
         print_colored(pstr,colorGreen )
