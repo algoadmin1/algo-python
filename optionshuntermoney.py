@@ -116,12 +116,27 @@ def PrintDollars(prefixstr, amt):
     txt = "\t  ${:.2f}"
     print(prefixstr , txt.format(amt, ','))
 
+def round_down(num, modulo):
+    return num // modulo * modulo
 
+
+
+
+#############################################################################################    init vars
+price0                = 0.0 
+priceOfCallSpreadLeg1 = 0.0
+priceOfPutSpreadLeg1  = 0.0
+priceLegPct           = 0.15
+
+strike1     = 5
+strike5     = 5
+strike2_5   = 2.5
+
+
+print("\n] Variables for ",prgname," have been initialized: prices, spread legs...")
 
 
 #############################################################################################    main code
-
-print("\n] Welcome to ",prgname," for Spread Options-hunting to make money.    ver", prgvers,"...")
 
 #mystr = "WELCOME TO THE WILD WILD WEST..." 
 mystr =  "WELCOME to "+prgname+" for Spread Options-hunting to make money.    ver"+prgvers+"..." 
@@ -233,6 +248,10 @@ print_colored(pstr, colorYellow)
 spreadPct = 0.15
 
 
+ # Example usage:
+# result = round_down(197.50, 5)  # This will return 195
+# print(result)
+
 
 
 # Print the options chain
@@ -260,11 +279,26 @@ for option_date in options:
         PrintDollars(pstr, price0)
 
 
-        priceOfCallSpreadLeg1 = price0 * (1+spreadPct)
-        priceOfPutSpreadLeg1  = price0 * (1-spreadPct)
+        priceOfCallSpreadLeg1 = round_down( price0 * (1+priceLegPct) , strike5 )
+        priceOfPutSpreadLeg1  = round_down( price0 * (1-priceLegPct) , strike5 )
 
-        pstr= "\n] STRIKE-Price for Short Call Leg of "+symbol+": " 
-        PrintDollars(pstr, price0)
+       
+        zstr=" ***  CALL CREDIT SPREAD "+ symbol+" ***"
+        print_colored(zstr,colorCyan )
+
+        c0str= "\n] " +str(priceOfCallSpreadLeg1)+  " STRIKE-Price for Short Call Leg1 of "+symbol+" trading at " +currstr+str(price0)+" ..."
+        c1str= "\n] " +str(priceOfCallSpreadLeg1+5)+  " STRIKE-Price for Long  Call Leg2 of "+symbol+" trading at " +currstr+str(price0)+" ..."
+        print_colored(c1str,colorDarkGreen )
+        print_colored(c0str,colorLimeGreen )
+
+
+        zstr=" ***  PUT CREDIT SPREAD "+ symbol+" ***"
+        print_colored(zstr,colorOrange )
+
+        p0str= "\n] " +str(priceOfPutSpreadLeg1)+  " STRIKE-Price for Short Put Leg1 of "+symbol+" trading at " +currstr+str(price0)+" ..."
+        p1str= "\n] " +str(priceOfPutSpreadLeg1-5)+  " STRIKE-Price for Long  Put Leg2 of "+symbol+" trading at " +currstr+str(price0)+" ..."
+        print_colored(p0str,colorRed )
+        print_colored(p1str,colorDarkRed )
 
 
 
