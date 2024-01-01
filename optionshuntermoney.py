@@ -341,8 +341,8 @@ for option_date in options:
         zstr=" ***  CALL CREDIT SPREAD "+ symbol+" ***"
         print_colored(zstr,colorCyan )
 
-        c0str= "\n] " +str(priceOfCallSpreadLeg1)+  " STRIKE-Price for Short Call Leg1 of "+symbol+" trading at " +currstr+str(price0)+" ..."
-        c1str= "\n] " +str(priceOfCallSpreadLeg1+5)+  " STRIKE-Price for Long  Call Leg2 of "+symbol+" trading at " +currstr+str(price0)+" ..."
+        c0str= "\n] " +str(priceOfCallSpreadLeg1)+  " STRIKE-Price for Short Call Leg1 of "+symbol #+" trading at " +currstr+str(price0)+" ..."
+        c1str= "\n] " +str(priceOfCallSpreadLeg1+strikeSize)+  " STRIKE-Price for Long  Call Leg2 of "+symbol #+" trading at " +currstr+str(price0)+" ..."
         print_colored(c1str,colorDarkGreen )
         print_colored(c0str,colorLimeGreen )
 
@@ -355,8 +355,8 @@ for option_date in options:
         zstr=" ***  PUT CREDIT SPREAD "+ symbol+" ***"
         print_colored(zstr,colorOrange )
 
-        p0str= "\n] " +str(priceOfPutSpreadLeg1)+  " STRIKE-Price for Short Put Leg1 of "+symbol+" trading at " +currstr+str(price0)+" ..."
-        p1str= "\n] " +str(priceOfPutSpreadLeg1-5)+  " STRIKE-Price for Long  Put Leg2 of "+symbol+" trading at " +currstr+str(price0)+" ..."
+        p0str= "\n] " +str(priceOfPutSpreadLeg1)+  " STRIKE-Price for Short Put Leg1 of "+symbol #+" trading at " +currstr+str(price0)+" ..."
+        p1str= "\n] " +str(priceOfPutSpreadLeg1-strikeSize)+  " STRIKE-Price for Long  Put Leg2 of "+symbol #+" trading at " +currstr+str(price0)+" ..."
         print_colored(p0str,colorRed )
         print_colored(p1str,colorDarkRed )
 
