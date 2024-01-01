@@ -127,13 +127,19 @@ price0                = 0.0
 priceOfCallSpreadLeg1 = 0.0
 priceOfPutSpreadLeg1  = 0.0
 priceLegPct           = 0.15
+priceCallLegPct       = 0.175
+pricePutLegPct        = 0.19
 
 
 strikeCallLongLeg   = 0
 strikeCallShortLeg  = 0
+strikeCallShortLegIdx  = 0
+strikeCallLongLegIdx  = 0
 
 strikePutShortLeg   = 0
 strikePutLongLeg    = 0
+strikePutShortLegIdx  = 0
+strikePutLongLegIdx  = 0
 
 
 
@@ -141,6 +147,10 @@ strikePutLongLeg    = 0
 strike1     = 5
 strike5     = 5
 strike2_5   = 2.5
+options100  =100
+
+strikeSize   = strike5
+numContracts = 10
 
 
 print("\n] Variables for ",prgname," have been initialized: prices, spread legs...")
@@ -293,11 +303,17 @@ for option_date in options:
         # pstr= "\n] Price for "+symbol+" = " 
         # PrintDollars(pstr, price0)
 
+        priceOfCallSpreadLeg1 = round_down( price0 * (1+priceCallLegPct) , strikeSize )
+        priceOfPutSpreadLeg1  = round_down( price0 * (1-pricePutLegPct) , strikeSize )
+        
+        # rounded down
+        strikeCallLongLeg =priceOfCallSpreadLeg1 + strikeSize
+        strikeCallShortLeg=priceOfCallSpreadLeg1
 
-        priceOfCallSpreadLeg1 = round_down( price0 * (1+priceLegPct) , strike5 )
-        priceOfPutSpreadLeg1  = round_down( price0 * (1-priceLegPct) , strike5 )
+        strikePutShortLeg =priceOfPutSpreadLeg1
+        strikePutLongLeg  =priceOfPutSpreadLeg1 - strikeSize
+    
 
-       
         zstr=" ***  CALL CREDIT SPREAD "+ symbol+" ***"
         print_colored(zstr,colorCyan )
 
@@ -325,6 +341,7 @@ for option_date in options:
         pstr="\n\n\n] ################################################ CALL: max_rows ="+str(max_rows)
         print_colored(pstr,colorGreen )
         
+       
 
 #   GRAB MAX VOLUME AND MAX OPEN INTEREST  for CALLS
         call_maxvolumeIdx =0
@@ -349,6 +366,10 @@ for option_date in options:
 
         i0=0 
         priceOnce=0
+        strikeCallShortLegOnce=0
+        strikeCallLongLegOnce=0
+
+
         while i0<max_rows:
             pstr =str(i0)+" "+calls0.contractSymbol[i0]+" "  
             p1str= pstr+":  Strike="+str(calls0.strike[i0])+" ITM? "+ str( calls0.inTheMoney[i0] )+  " at "+str( calls0.lastTradeDate[i0]) + "  last="+currstr+str( calls0.lastPrice[i0]) + "  bid="+currstr+str( calls0.bid[i0])+ "  ask="+currstr+str( calls0.ask[i0])+"  volume="+str( calls0.volume[i0])+"  oi="+str( calls0.openInterest[i0])
@@ -357,6 +378,20 @@ for option_date in options:
                 print_colored(estr, colorGreen )
                 priceOnce=1
             
+            if( calls0.strike[i0]>strikeCallShortLeg and strikeCallShortLegOnce==0 ):
+                print(" CALL SHORT LEG ", strikeCallShortLeg )    
+                print_colored(p1str, colorGreen )  
+                strikeCallShortLegIdx = i0
+                strikeCallShortLegOnce=1
+
+            if( calls0.strike[i0]>strikeCallLongLeg and strikeCallLongLegOnce==0 ):
+                print(" CALL LONG LEG ", strikeCallLongLeg )    
+                print_colored(p1str, colorGreen )  
+                strikeCallLongLegIdx = i0
+                strikeCallLongLegOnce=1
+
+
+
             if( i0 == call_maxoiIdx or  i0 == call_maxvolumeIdx ):
                 if( i0 == call_maxoiIdx):
                     print_colored(p1str, colorCyan )
@@ -368,6 +403,17 @@ for option_date in options:
             i0+=1
        
 
+
+        callCredit = numContracts * calls0.bid[strikeCallShortLegIdx] *options100
+        callDebit  = numContracts *  calls0.ask[strikeCallLongLegIdx] *options100
+        totalCredit= callCredit - callDebit  
+        totalRisk  = numContracts * strikeSize * options100
+
+        print(" CREDIT Collecting (Short Leg)", numContracts, "* [bid]" , calls0.bid[strikeCallShortLegIdx] , " =   -"+currstr+ str( callCredit ) )
+        print("  DEBIT Paying      (Long Leg)", numContracts, "* [ask]" , calls0.ask[strikeCallLongLegIdx]  , " =   +"+currstr+ str( callDebit ) )
+        print(" =============================")
+        print("    = "+currstr+ str(totalCredit))
+        
 
         p0str="\n] MAX CALLs Open Interest = "+str(call_maxoi0)+ " at Strike "+ currstr+str(calls0.strike[call_maxoiIdx]) +", idx="+str(call_maxoiIdx)  
         print_colored(p0str, colorCyan )
