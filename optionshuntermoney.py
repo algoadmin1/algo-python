@@ -32,7 +32,7 @@ from datetime import datetime
 symbol_default = "AAPL"
 currstr        ="$"
 prgname        = "optionshuntermoney.py"
-prgvers        =                            "1.0"
+prgvers        =                            "1.4"
 
 # colors 
 colorGreen ="32"
@@ -66,7 +66,7 @@ put_maxvolume0   =0
 put_maxoiIdx     =0
 put_maxoi0       =0
 
-desiredDTE = 45
+desiredDTE = 65 # 45
 
 # Get today's date 
 today_date = datetime.today().strftime('%Y-%m-%d') 
@@ -128,6 +128,16 @@ priceOfCallSpreadLeg1 = 0.0
 priceOfPutSpreadLeg1  = 0.0
 priceLegPct           = 0.15
 
+
+strikeCallLongLeg   = 0
+strikeCallShortLeg  = 0
+
+strikePutShortLeg   = 0
+strikePutLongLeg    = 0
+
+
+
+# modulo
 strike1     = 5
 strike5     = 5
 strike2_5   = 2.5
@@ -231,14 +241,19 @@ expdate_date = "2024-03-15"
 if firstDateFound!="nil":
     expdate_date=firstDateFound
 
-pstr= "\n] ENTER options Expiration Date desired ("+ expdate_date + "): "
-print_colored(pstr,colorCyan)
-input0 = input()
-if input0 == "":
-    print("\n] Defaulting ExpirationDate to ", expdate_date)
-    input0 = expdate_date
+mymsg=0
+if(mymsg==1):
+    pstr= "\n] ENTER options Expiration Date desired ("+ expdate_date + "): "
+    print_colored(pstr,colorCyan)
+    input0 = input()
+    if input0 == "":
+        print("\n] Defaulting ExpirationDate to ", expdate_date)
+        input0 = expdate_date
+    expdate_dateSelected = input0
+else:
+    expdate_dateSelected=expdate_date
 
-expdate_dateSelected = input0
+
 print("\n] Selected Options ExpirationDate is:", expdate_dateSelected)
 
 daysTilExpiry = DaysDifference( today_date, expdate_dateSelected )
@@ -275,8 +290,8 @@ for option_date in options:
         #print(" max_rows =",max_rows)
 
         price0= GetStockPrice(symbol)
-        pstr= "\n] Price for "+symbol+" = " 
-        PrintDollars(pstr, price0)
+        # pstr= "\n] Price for "+symbol+" = " 
+        # PrintDollars(pstr, price0)
 
 
         priceOfCallSpreadLeg1 = round_down( price0 * (1+priceLegPct) , strike5 )
@@ -291,6 +306,11 @@ for option_date in options:
         print_colored(c1str,colorDarkGreen )
         print_colored(c0str,colorLimeGreen )
 
+       
+        pstr= "\n] Price for "+symbol+" = " 
+        PrintDollars(pstr, price0)
+       
+        print("\n")
 
         zstr=" ***  PUT CREDIT SPREAD "+ symbol+" ***"
         print_colored(zstr,colorOrange )
@@ -331,7 +351,7 @@ for option_date in options:
         priceOnce=0
         while i0<max_rows:
             pstr =str(i0)+" "+calls0.contractSymbol[i0]+" "  
-            p1str= pstr+":  Strike="+str(calls0.strike[i0])+" ITM? "+ str( calls0.inTheMoney[i0] )+  " at "+str( calls0.lastTradeDate[i0]) + "  last="+currstr+str( calls0.lastPrice[i0])+"  volume="+str( calls0.volume[i0])+"  oi="+str( calls0.openInterest[i0])
+            p1str= pstr+":  Strike="+str(calls0.strike[i0])+" ITM? "+ str( calls0.inTheMoney[i0] )+  " at "+str( calls0.lastTradeDate[i0]) + "  last="+currstr+str( calls0.lastPrice[i0]) + "  bid="+currstr+str( calls0.bid[i0])+ "  ask="+currstr+str( calls0.ask[i0])+"  volume="+str( calls0.volume[i0])+"  oi="+str( calls0.openInterest[i0])
             if( float(calls0.strike[i0]) > price0  and priceOnce==0):
                 estr="\n ***            "+symbol+"    Price = "+ currstr+str(price0)+"\n"
                 print_colored(estr, colorGreen )
@@ -359,7 +379,7 @@ for option_date in options:
 
 
 
-
+        pPrevStr=" nilPRevStr"
         keepsearching=1
         while i<max_rows and keepsearching==1:
             #print(i," ",calls0.contractSymbol[i], calls0.inTheMoney[i])
@@ -368,6 +388,9 @@ for option_date in options:
 
             if( str(calls0.inTheMoney[i])=="False"):
                 #print("Found the CALLs ITM/OTM at: ",i-1," / ",i)
+                
+
+                print_colored(pPrevStr, colorGreen )
                 pstr0="* Found the 50/50 Delta CALLs (OTM/ITM) at: "+str(i-1)+" / "+str(i)
                 print_colored(pstr0, colorYellow )
 
@@ -381,7 +404,8 @@ for option_date in options:
                 #pstr1=str(i+2)+" "+calls0.contractSymbol[i+2]+" "+str( calls0.inTheMoney[i+2])
                 #print_colored(pstr1, colorDarkGreen)
             else:
-                print_colored(pstr, colorGreen )
+                pPrevStr = pstr
+                # print_colored(pstr, colorGreen )
 
             i += 1 
         
@@ -447,7 +471,7 @@ for option_date in options:
         priceOnce=0
         while i0<max_rows:
             pstr =str(i0)+" "+puts0.contractSymbol[i0]+" "  
-            p1str= pstr+":  Strike="+str(puts0.strike[i0])+" ITM? "+ str( puts0.inTheMoney[i0] )+  " at "+str( puts0.lastTradeDate[i0]) + "  last="+currstr+str( puts0.lastPrice[i0])+"  volume="+str( puts0.volume[i0])+"  oi="+str( puts0.openInterest[i0])
+            p1str= pstr+":  Strike="+str(puts0.strike[i0])+" ITM? "+ str( puts0.inTheMoney[i0] )+  " at "+str( puts0.lastTradeDate[i0]) + "  last="+currstr+str( puts0.lastPrice[i0])+ "  bid="+currstr+str( puts0.bid[i0])+ "  ask="+currstr+str( puts0.ask[i0])+"  volume="+str( puts0.volume[i0])+"  oi="+str( puts0.openInterest[i0])
             if( float(puts0.strike[i0]) > price0  and priceOnce==0):
                 estr="\n ***            "+symbol+"    Price = "+ currstr+str(price0)+"\n"
                 print_colored(estr, colorRed )
@@ -485,6 +509,8 @@ for option_date in options:
             #print_colored(pstr, colorRed)
 
             if( str(puts0.inTheMoney[i])=="True"):
+                print_colored(pPrevStr, colorDarkRed )
+
                 pstr0="* Found the 50/50 Delta PUTs (OTM/ITM) at: "+str(i-1)+" / "+str(i)
                 print_colored(pstr0, colorYellow )
 
@@ -499,7 +525,8 @@ for option_date in options:
                 #print_colored(pstr1, colorRed)
             
             else:
-                print_colored(pstr, colorDarkRed)
+                pPrevStr = pstr
+                # print_colored(pstr, colorDarkRed)
                 
 
             i += 1
