@@ -67,6 +67,8 @@ put_maxoiIdx     =0
 put_maxoi0       =0
 
 desiredDTE = 65 # 45
+spreadPct = 0.15
+
 
 # Get today's date 
 today_date = datetime.today().strftime('%Y-%m-%d') 
@@ -270,7 +272,26 @@ daysTilExpiry = DaysDifference( today_date, expdate_dateSelected )
 pstr= "\n\n] Days from now "+today_date+" until "+symbol+"'s Options Expiration "+expdate_dateSelected+" is "+str(daysTilExpiry) +" days."
 print_colored(pstr, colorYellow)
 
-spreadPct = 0.15
+
+
+# Determine options Strike Size
+strikeSize =  strike5
+pstr="\n] ENTER desired STRIKE Size  [default="+  str(strikeSize)+ "]:  "
+print_colored(pstr,colorYellow)
+input0 = input()
+if input0 == "":
+    pstr="\n] Defaulting STRIKE Size to "+ str(strikeSize)
+    print_colored(pstr,colorOrange)
+    input0 = strikeSize
+strikeSize=int(input0)
+
+
+
+
+
+
+
+
 
 
  # Example usage:
@@ -303,6 +324,9 @@ for option_date in options:
         # pstr= "\n] Price for "+symbol+" = " 
         # PrintDollars(pstr, price0)
 
+
+
+        # round Down here
         priceOfCallSpreadLeg1 = round_down( price0 * (1+priceCallLegPct) , strikeSize )
         priceOfPutSpreadLeg1  = round_down( price0 * (1-pricePutLegPct) , strikeSize )
         
@@ -378,6 +402,7 @@ for option_date in options:
                 print_colored(estr, colorGreen )
                 priceOnce=1
             
+
             if( calls0.strike[i0]>strikeCallShortLeg and strikeCallShortLegOnce==0 ):
                 print(" CALL SHORT LEG ", strikeCallShortLeg )    
                 print_colored(p1str, colorGreen )  
@@ -407,13 +432,16 @@ for option_date in options:
         callCredit = numContracts * calls0.bid[strikeCallShortLegIdx] *options100
         callDebit  = numContracts *  calls0.ask[strikeCallLongLegIdx] *options100
         totalCredit= callCredit - callDebit  
-        totalRisk  = numContracts * strikeSize * options100
-
-        print(" CREDIT Collecting (Short Leg)", numContracts, "* [bid]" , calls0.bid[strikeCallShortLegIdx] , " =   -"+currstr+ str( callCredit ) )
-        print("  DEBIT Paying      (Long Leg)", numContracts, "* [ask]" , calls0.ask[strikeCallLongLegIdx]  , " =   +"+currstr+ str( callDebit ) )
-        print(" =============================")
-        print("    = "+currstr+ str(totalCredit))
+        totalRisk  = (numContracts * strikeSize * options100 ) - totalCredit
+        totalPctGainLoss= totalCredit / totalRisk
         
+        print(" CREDIT Collecting (Short CALL Leg)", numContracts, "* [bid]" , calls0.bid[strikeCallShortLegIdx] , " =   -"+currstr+ str( callCredit ) )
+        print("  DEBIT Paying      (Long CALL Leg)", numContracts, "* [ask]" , calls0.ask[strikeCallLongLegIdx]  , " =   +"+currstr+ str( callDebit ) )
+        print(" =============================")
+        print("    = "+currstr+ str(totalCredit) , "  /  Risk ="+currstr+str(totalRisk), "  ratio: ", str(totalPctGainLoss*100)+"%" )
+        print("\n    numContracts = ",numContracts)
+
+
 
         p0str="\n] MAX CALLs Open Interest = "+str(call_maxoi0)+ " at Strike "+ currstr+str(calls0.strike[call_maxoiIdx]) +", idx="+str(call_maxoiIdx)  
         print_colored(p0str, colorCyan )
@@ -431,6 +459,7 @@ for option_date in options:
             #print(i," ",calls0.contractSymbol[i], calls0.inTheMoney[i])
             pstr=str(i)+" "+calls0.contractSymbol[i]+" "+str( calls0.inTheMoney[i])
             #print_colored(pstr, colorGreen)
+
 
             if( str(calls0.inTheMoney[i])=="False"):
                 #print("Found the CALLs ITM/OTM at: ",i-1," / ",i)
@@ -515,6 +544,8 @@ for option_date in options:
 
         i0=0 
         priceOnce=0
+        strikePutLongLegOnce =0
+        strikePutShortLegOnce = 0
         while i0<max_rows:
             pstr =str(i0)+" "+puts0.contractSymbol[i0]+" "  
             p1str= pstr+":  Strike="+str(puts0.strike[i0])+" ITM? "+ str( puts0.inTheMoney[i0] )+  " at "+str( puts0.lastTradeDate[i0]) + "  last="+currstr+str( puts0.lastPrice[i0])+ "  bid="+currstr+str( puts0.bid[i0])+ "  ask="+currstr+str( puts0.ask[i0])+"  volume="+str( puts0.volume[i0])+"  oi="+str( puts0.openInterest[i0])
@@ -523,6 +554,24 @@ for option_date in options:
                 print_colored(estr, colorRed )
                 priceOnce=1
             
+
+
+            if( puts0.strike[i0]>strikePutShortLeg and strikePutShortLegOnce==0 ):
+                ostr=" PUT SHORT LEG "+currstr+str( strikePutShortLeg )    
+                print_colored(ostr, colorYellow )  
+                print_colored(p1str, colorRed )  
+                strikePutShortLegIdx = i0
+                strikePutShortLegOnce=1
+
+            if( puts0.strike[i0]>strikePutLongLeg and strikePutLongLegOnce==0 ):
+                ostr=" PUT LONG LEG "+ currstr+str(strikePutLongLeg )    
+                print_colored(ostr, colorYellow )  
+                print_colored(p1str, colorRed )  
+                strikePutLongLegIdx = i0
+                strikePutLongLegOnce=1
+
+
+
             if( i0 == put_maxoiIdx or  i0 == put_maxvolumeIdx ):
                 if( i0 == put_maxoiIdx):
                     print_colored(p1str, colorCyan )
@@ -533,6 +582,22 @@ for option_date in options:
  
             i0+=1
        
+
+        putCredit = numContracts * puts0.bid[strikePutShortLegIdx] *options100
+        putDebit  = numContracts *  puts0.ask[strikePutLongLegIdx] *options100
+        totalPutCredit= putCredit - putDebit  
+        totalPutRisk  = (numContracts * strikeSize * options100 ) - totalPutCredit
+        totalPutPctGainLoss= totalPutCredit / totalPutRisk
+        
+        print(" CREDIT Collecting (Short PUT Leg)", numContracts, "* [bid]" , puts0.bid[strikePutShortLegIdx] , " =   -"+currstr+ str( putCredit ) )
+        print("  DEBIT Paying      (Long PUT Leg)", numContracts, "* [ask]" , puts0.ask[strikePutLongLegIdx]  , " =   +"+currstr+ str( putDebit ) )
+        print(" =============================")
+        print("    = "+currstr+ str(totalPutCredit) , "  /  Risk ="+currstr+str(totalPutRisk), "  ratio: ", str(totalPutPctGainLoss*100)+"%" )
+        print("\n    numContracts = ",numContracts)
+
+        
+
+
 
 
         p0str="\n] MAX PUTs Open Interest = "+str(put_maxoi0)+ " at Strike "+ currstr+str(puts0.strike[put_maxoiIdx]) +", idx="+str(put_maxoiIdx)  
