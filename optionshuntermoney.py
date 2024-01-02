@@ -32,7 +32,7 @@ from datetime import datetime
 symbol_default = "AAPL"
 currstr        ="$"
 prgname        = "optionshuntermoney.py"
-prgvers        =                            "1.4"
+prgvers        =                            "1.54"
 
 # colors 
 colorGreen ="32"
@@ -68,6 +68,7 @@ put_maxoi0       =0
 
 desiredDTE = 65 # 45
 spreadPct = 0.15
+estBidAskSpread=0.10  # a $3.00 option will have bid $2.85, ask $3.15
 
 
 # Get today's date 
@@ -583,14 +584,30 @@ for option_date in options:
             i0+=1
        
 
-        putCredit = numContracts * puts0.bid[strikePutShortLegIdx] *options100
-        putDebit  = numContracts *  puts0.ask[strikePutLongLegIdx] *options100
+        # estBidAskSpread=0.10  # a $3.00 option will have bid $2.85, ask $3.15
+        eststrA=" "
+        eststrB=" "
+
+        bid0  = puts0.bid[strikePutShortLegIdx]
+        ask0  = puts0.ask[strikePutLongLegIdx]
+
+        # last0 = puts0.last[strikePutShortLegIdx]
+        # if(bid0<0.05):
+        #     bid0= last0 * (1 - (estBidAskSpread*0.50) )   #  ie  $290 * 0.95
+        #     eststrB=" *Estimated bid"
+        # if(ask0<0.05):
+        #     ask0= last0 * (1 + (estBidAskSpread*0.50) )  #  ie  $290 * 1.05
+        #     eststrA=" *Estimated ask"
+
+            
+        putCredit = numContracts * bid0 *options100
+        putDebit  = numContracts *  ask0 *options100
         totalPutCredit= putCredit - putDebit  
         totalPutRisk  = (numContracts * strikeSize * options100 ) - totalPutCredit
         totalPutPctGainLoss= totalPutCredit / totalPutRisk
         
-        print(" CREDIT Collecting (Short PUT Leg)", numContracts, "* [bid]" , puts0.bid[strikePutShortLegIdx] , " =   -"+currstr+ str( putCredit ) )
-        print("  DEBIT Paying      (Long PUT Leg)", numContracts, "* [ask]" , puts0.ask[strikePutLongLegIdx]  , " =   +"+currstr+ str( putDebit ) )
+        print(" CREDIT Collecting (Short PUT Leg)", numContracts, "* [bid]"+eststrB , bid0   , " =   -"+currstr+ str( putCredit ) )
+        print("  DEBIT Paying      (Long PUT Leg)", numContracts, "* [ask]"+eststrA , ask0 , " =   +"+currstr+ str( putDebit ) )
         print(" =============================")
         print("    = "+currstr+ str(totalPutCredit) , "  /  Risk ="+currstr+str(totalPutRisk), "  ratio: ", str(totalPutPctGainLoss*100)+"%" )
         print("\n    numContracts = ",numContracts)
