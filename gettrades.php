@@ -261,7 +261,7 @@ if($msg0==1) echoColor( $pstr00, "purple" );
 //echo "\n*\n] Accessing https://algoinvestorr.com/*_". $dbname. "[". $username"]_". $tblname. "\n*\n*\n*\n";
 // echo "*****************<br />";
 
-PrintUserInputs( $udate0, $utime0, $uname0, $acct0 , $msg0 );
+if($msg0==1) PrintUserInputs( $udate0, $utime0, $uname0, $acct0 , $msg0 );
  
 $timeNYC =  date("Y-m-d\TH:i:s");
 $happy1.= GetEntryNums();
@@ -643,7 +643,7 @@ try {
                         echo "BuySellCnt: " . $trade['buySellCnt'] . "<br />";
                         echo "BuySellPct: " . $trade['buySellPct'] . "<br />";
                         echo "BuySellDst: " . $trade['buySellDist'] . "<br />";
-                        echo "SpreadLegs: " . $trade['leg1'] . " | ". $trade['leg2'] . "   _/\_   ". $trade['leg3'] . " | ". $trade['leg4'] .   "<br />";
+                        echo "IronCondor: " . $trade['leg1'] . " | ". $trade['leg2'] . "   _/\_   ". $trade['leg3'] . " | ". $trade['leg4'] .   "<br />";
                     }
 
                       echo "<br />";
@@ -663,7 +663,7 @@ try {
                     echo  $trade['leg1'] . "|". $trade['leg2'] . "|". $trade['leg3'] . "|". $trade['leg4'] .",";
 
                     
-                    echo "<br />";
+                    // echo "<br />";
                     //echo "\n";
 
 
@@ -676,10 +676,10 @@ try {
                 // Display the count
                 // echo "Number of trades: " . $numberOfTrades;
 
-                 if ($result) {
+                 if ($result  &&  $msg0==1) {
                     // echo "<br />] FOUND $numberOfTrades trades for tradeDate = $fieldToQuery , result=  $query   <pre>" . print_r($result, true) . "</pre>";
                     echo "<br />] FOUND $numberOfTrades trades for tradeDate = $fieldToQuery , result=  $query  <br />"; // <pre>" . print_r($result, true) . "</pre>";
-                } else {
+                } else if($msg0==1) {
                      echo "<br />] NO TRADES FOUND.<br />";
                 }
 
@@ -775,7 +775,7 @@ try {
 
 
             $pstr99="<br />End of SELECT * from trades, at " .date("Y-m-d\TH:i:s"). " NYC Time.<br /><br /><br />" ;  
-            echoColor($pstr99,"blue");
+            if($msg0==1)  echoColor($pstr99,"blue");
 
 
 

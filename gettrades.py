@@ -7,12 +7,14 @@ def GetTrades(url):
     response = requests.get(url)
 
     if response.status_code == 200:
-        lines = response.text.split('\n')
+        # lines = response.text.split('\n')
+        lines = response.text.split('<br />')
         i=0
         for line in lines:
             print(i,line )
             i=i+1
-            arrTrades.append(line)
+            if(len(line)>2):
+                arrTrades.append(line)
             # if line[:8] == "RAWTRADES":
             #     arrTrades.append(line)
     
@@ -21,4 +23,5 @@ def GetTrades(url):
 # Example usage:
 url = 'https://algoinvestorr.com/trades/gettrades.php?d=2024-01-03'
 result = GetTrades(url)
+print("] ...")
 print(result)
