@@ -20,7 +20,10 @@ import matplotlib.pyplot as plt
 import robin_stocks as rs
 
 
-
+#   open .ini file
+#
+#
+#
 
 
 def Check_data(array, datastr):
