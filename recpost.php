@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "2.13";
+                                                      $vers = "3.0";
 
 $todaysdate = date('Y-m-d');
 
@@ -103,5 +103,21 @@ if (isset($searchQuery) && !empty($searchQuery)) {
 } else {
     echo "\nNo valid search query provided.";
 }
+
+
+
+$url0 = "https://algoinvestorr.com/trades/recpost1db.php?name=Creator&d=". $todaysdate ;
+$response0 = file_get_contents($url0);
+
+if ($response0 !== false) {
+    echo $response0; // Output the response from the URL
+} else {
+    echo "Failed to fetch URL: $url0";
+}
+
+
+
+
+
 
 ?>

@@ -94,7 +94,7 @@ urlbase = 'https://algoinvestorr.com/trades/'
 url = 'https://algoinvestorr.com/trades/recpost.php'
        
 MIN_DATA_STRING_LEN = 32
-LOOPMax =  7 * 60 * 5
+LOOPMax =  7  * 24 * 60 * 5
 SECSMax =12   # 20 loops * 12 secs
 
 # Get current date in New York - we need EDT for markets...
