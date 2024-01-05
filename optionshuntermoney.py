@@ -32,7 +32,7 @@ from datetime import datetime
 symbol_default = "AAPL"
 currstr        ="$"
 prgname        = "optionshuntermoney.py"
-prgvers        =                            "1.54"
+prgvers        =                            "1.60"
 
 # colors 
 colorGreen ="32"
@@ -82,16 +82,6 @@ today_date = datetime.today().strftime('%Y-%m-%d')
 
 #########################################################    def functions
 
-def print_colored(text, color_code): 
-    print(f"\033[{color_code}m{text}\033[0m") 
-
-def DaysDifference(udate1, udate2):
-    date_format = "%Y-%m-%d" 
-    parsed_date1 = datetime.strptime(udate1, date_format) 
-    parsed_date2 = datetime.strptime(udate2, date_format) 
-    difference = parsed_date2 - parsed_date1
-    return difference.days
-
 def PrintStrike(optionCallOrPuts, a,descstr):
     #print(descstr)
     print_colored(descstr,colorCyan)
@@ -103,6 +93,16 @@ def PrintStrike(optionCallOrPuts, a,descstr):
     print("Ask            ="+currstr,optionCallOrPuts.ask[a])
     print("Implied Vol.   =",optionCallOrPuts.impliedVolatility[a])
     print("ITM?           =",optionCallOrPuts.inTheMoney[a])
+
+def print_colored(text, color_code): 
+    print(f"\033[{color_code}m{text}\033[0m") 
+
+def DaysDifference(udate1, udate2):
+    date_format = "%Y-%m-%d" 
+    parsed_date1 = datetime.strptime(udate1, date_format) 
+    parsed_date2 = datetime.strptime(udate2, date_format) 
+    difference = parsed_date2 - parsed_date1
+    return difference.days
 
 
 def GetStockPrice(stock_symbol): 

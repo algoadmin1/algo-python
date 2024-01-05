@@ -55,7 +55,7 @@ def CheckPostionsRobinhood( username0, pwd0 ):
 
 
 tstr="nytime"
-LOOPMax =  7 * 60 * 12
+LOOPMax =  7 * 24  * 60 * 12
 SECSMax =  5  # 20 loops * 12 secs
 pwd0="Crixus"
 # Get current date in New York - we need EDT for markets...
