@@ -159,7 +159,7 @@ def GenerateTrade(arr, idx, arrINIcsv ):
             lineiniarr = StringParts( lineini, ',' )
             #  NVDA,SELL,ABOVE,R1,LONG_CALLS,COUNT,6
             if(symbol0==lineiniarr[0] and buySell==lineiniarr[1] ):
-                pstr9="("+str(linecnt)+")  "+lineiniarr[0]+" "+lineiniarr[1]+"<<====="+" "+aboveBelowstr+" "+S1R1str +"  Trade: "+symbol0+" "+lineiniarr[4]
+                pstr9="(ini."+str(linecnt)+")  "+lineiniarr[0]+" "+lineiniarr[1]+"<<====="+" "+aboveBelowstr+" "+S1R1str +"  Trade: "+symbol0+" "+lineiniarr[4]
                 print_colored(pstr9,colorGray)
             linecnt=linecnt+1
 
