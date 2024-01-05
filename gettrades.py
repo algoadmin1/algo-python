@@ -2,6 +2,7 @@
 prgname="gettrades.py"
 vers="1.23"
 msg0=0
+currstr="$"
 
 print("] Running",prgname,'vers', vers, "- Importing...\n")
 
@@ -97,6 +98,46 @@ def ReadFile(fname):
 # file_name = 'your_file.txt'  # Replace 'your_file.txt' with your file name
 # lines = ReadFile(file_name)
 # print(lines)  # This will print the lines read from the file into the array
+def StringParts(input_str,char0):
+    # arr_str = input_str.split(',')
+    arr_str = input_str.split(char0)
+    return arr_str
+
+# Example usage:
+# csv_string = "12,456,a,bgb,78h,34f,009,23,eol"
+# parts = StringParts(csv_string)
+# print(parts)
+
+# ] todaysTrades[ 21 ] =  RAWTRADE,485,2024-01-04,1300,BUY,TSLA,atLimit,241.26,4,2.7619%,6.66,285|275|205|190,
+# rawtrade found.
+# ] todaysTrades[ 22 ] =  RAWTRADE,483,2024-01-04,1215,SELL,SPY,atLimit,470.56,7,-0.0000%,-0,560|540|395|375,
+# rawtrade found.
+# ] todaysTrades[ 23 ] =  RAWTRADE,484,2024-01-04,1215,SELL,QQQ,atLimit,399.06,7,-0.3004%,-1.2,475|455|335|315,
+# rawtrade found.
+def GenerateTrade(arr, idx, arrINIcsv ):
+    S1R1str="S1"
+    col=colorLimeGreen
+    if(arr[4]=="SELL"):
+        S1R1str="R1"
+        col=colorRed
+
+    aboveBelowstr="above"
+    pct0str=arr[9]
+    if(pct0str[0]=='-'):
+        aboveBelowstr="below"
+        if(arr[4]=="SELL"):
+            col=colorDarkRed
+    else:
+        if(arr[4]=="BUY"):
+            col=colorDarkGreen
+
+
+    # print("at:",arr[3],arr[4],arr[5], arr[6], currstr+arr[7],"count=",arr[8]," ;   ",arr[9], aboveBelowstr, S1R1str)
+    pstr=str(idx)+") at "+arr[3]+" "+arr[4]+" "+arr[5]+" "+ arr[6]+" "+currstr+arr[7]+" count="+arr[8]+" "+currstr+arr[10]+" or "+arr[9]+ " "+aboveBelowstr+" "+ S1R1str
+    print_colored(pstr, col )
+    for field in arrINIcsv:
+        if(field=="BUY"):
+            print(field)
 
 
 def GetTrades(url):
@@ -144,19 +185,60 @@ if(len(str(todaysDate0))==10):
 
 print("] Attemping live trade retrieval for", url1, " on ", current_date_ny)
 
-result = GetTrades(url1)
+todaysTrades = GetTrades(url1)
 if(msg0==1):
-    print("] result[]=...")
-    print(result)
+    print("] todaysTrades[]=...")
+    print(todaysTrades)
+
+
+
+# # each line = today's line trade
+# i=0
+# for linetrade in todaysTrades:
+#     print("] todaysTrades[",i,"] = ",linetrade )
+#     i=i+1
+#     linetradearr = StringParts( linetrade, ',' )
+
+
+
+# GRAB INI FILE
+fname="trades_ini.txt"
+arrINIcsvfile = ReadFile(fname)
+print(arrINIcsvfile)
+print_colored("] Finished reading: " +fname+ " for "+prgname, colorYellow )
+
+
+print_colored("] trades_INI.txt =", colorMagenta)        
+j=0
+for line in arrINIcsvfile:
+    print(j,line)
+    linearr = StringParts( line, ',' )
+    for field in linearr:
+        dummy=0
+        #print(field,"|")
+    # print("\n")
+    j=j+1           
+print_colored("] trades_INI.txt =====================", colorMagenta)        
+
+
+
+
+
+
 
 i=0
-for line in result:
-    print("] result:",i,line )
+for linetrade in todaysTrades:
+    if(msg0==1):
+        print("] todaysTrades[",i,"] = ",linetrade )
     i=i+1
+    linetradearr = StringParts( linetrade, ',' )
+    if(linetradearr[0]=='RAWTRADE'):
+        # print("rawtrade found.")
+        if(linetradearr[2]==todaysDate0):
+            GenerateTrade(linetradearr,i, arrINIcsvfile)
 
-fname="trades_ini.txt"
-arrCSVfile = ReadFile(fname)
-print(arrCSVfile)
-print_colored("] END of "+prgname, colorGreen )
 
-           
+
+
+pstr="\n]  END OF PROGRAM: "+prgname
+print_colored(pstr, colorMagenta)
