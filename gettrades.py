@@ -108,12 +108,21 @@ def StringParts(input_str,char0):
 # parts = StringParts(csv_string)
 # print(parts)
 
+# ___ ini file:
+# ] trades_INI.txt =
+# 0 AAPL,BUY,BELOW,S1,LONG_CALLS,COUNT,6
+# 1 NVDA,SELL,ABOVE,R1,LONG_CALLS,COUNT,6
+# 2 INTC,BUY,BELOW,S1,LONG_CALLS,COUNT,6
+# 3 TSLA,BUY,BELOW,S1,LONG_CALLS,COUNT,6
+# 4 ADBE,SELL,ABOVE,R1,COUNT,6,CREDIT_CALL_SPREAD
+# 5 TSLA,BUY,PUT_CALL_SPREAD
+# 6 QQQ,BUY,LONG_STOCK
+# ] trades_INI.txt =====================
+
 # ] todaysTrades[ 21 ] =  RAWTRADE,485,2024-01-04,1300,BUY,TSLA,atLimit,241.26,4,2.7619%,6.66,285|275|205|190,
-# rawtrade found.
 # ] todaysTrades[ 22 ] =  RAWTRADE,483,2024-01-04,1215,SELL,SPY,atLimit,470.56,7,-0.0000%,-0,560|540|395|375,
-# rawtrade found.
 # ] todaysTrades[ 23 ] =  RAWTRADE,484,2024-01-04,1215,SELL,QQQ,atLimit,399.06,7,-0.3004%,-1.2,475|455|335|315,
-# rawtrade found.
+
 def GenerateTrade(arr, idx, arrINIcsv ):
     S1R1str="S1"
     col=colorLimeGreen
@@ -131,13 +140,30 @@ def GenerateTrade(arr, idx, arrINIcsv ):
         if(arr[4]=="BUY"):
             col=colorDarkGreen
 
-
-    # print("at:",arr[3],arr[4],arr[5], arr[6], currstr+arr[7],"count=",arr[8]," ;   ",arr[9], aboveBelowstr, S1R1str)
+    
+#   35) at 1030 BUY INTC atLimit $46.57 count=6 $-0.06 or -0.1360% below S1
     pstr=str(idx)+") at "+arr[3]+" "+arr[4]+" "+arr[5]+" "+ arr[6]+" "+currstr+arr[7]+" count="+arr[8]+" "+currstr+arr[10]+" or "+arr[9]+ " "+aboveBelowstr+" "+ S1R1str
     print_colored(pstr, col )
-    for field in arrINIcsv:
-        if(field=="BUY"):
-            print(field)
+
+    buySell= arr[4]
+    symbol0= arr[5]
+    #aboveBelowstr  ="below"
+    #S1R1str        ="R1"
+
+    linecnt=0
+    if(col==colorDarkGreen or col==colorDarkRed):
+        dummy9=0
+    else:
+        for lineini in arrINIcsv:
+            # print(lineini)
+            lineiniarr = StringParts( lineini, ',' )
+            #  NVDA,SELL,ABOVE,R1,LONG_CALLS,COUNT,6
+            if(symbol0==lineiniarr[0] and buySell==lineiniarr[1] ):
+                pstr9="("+str(linecnt)+")  "+lineiniarr[0]+" "+lineiniarr[1]+"<<====="+" "+aboveBelowstr+" "+S1R1str +"  Trade: "+symbol0+" "+lineiniarr[4]
+                print_colored(pstr9,colorGray)
+            linecnt=linecnt+1
+
+
 
 
 def GetTrades(url):
