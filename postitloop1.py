@@ -60,6 +60,7 @@ import shutil
 import sys
 
 import os
+import random
 
 ################################################ for TESTING
 #
@@ -97,6 +98,30 @@ MIN_DATA_STRING_LEN = 32
 LOOPMax =  7  * 24 * 60 * 5   
 SECSMax =12   # 20 loops * 12 secs
 
+
+
+# colors 
+colorGreen ="32"
+colorBlue  ="34"
+colorCyan  ="36"
+colorOrange  ="33"
+colorRed  ="31"
+colorMagenta  ="35"
+colorYellow  ="33"
+colorDarkGreen  ="32;2"
+colorDarkRed  ="31;2"
+colorPurple  ="35;2"
+colorBrown  ="33;2"
+colorWhite  ="97"
+colorLimeGreen  ="92"
+colorAqua  ="96"
+colorGray  ="90"
+
+colorArray = [ colorRed, colorBlue, colorGreen, colorOrange, colorCyan, colorAqua, colorYellow ,colorPurple, colorMagenta,colorBrown ]
+colorArrayLen = len(colorArray)
+
+
+
 # Get current date in New York - we need EDT for markets...
 new_york_timezone = pytz.timezone('America/New_York')
 current_date_ny = datetime.datetime.now(new_york_timezone).date()
@@ -108,6 +133,19 @@ dstr1 = dstr  # dstr1 = doesnt change in code todays DATE in NYC
 
 print("Today's date in New York:",dstr1)
 
+
+##################################################### FUNCTIONS
+
+def rand(num):
+    return(random.randint(0, num))
+
+def print_colored(text, color_code): 
+    print(f"\033[{color_code}m{text}\033[0m") 
+
+def print_colored_rnd(text):
+    r = rand(colorArrayLen)
+    print_colored(text, colorArray[r])
+ 
 
 def Check_data(array, datastr):
     return datastr in array
@@ -286,7 +324,10 @@ lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 
 
 MaxMinutes = (keepLooping * (timeDelay+0 )/60 ) 
-print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:",MaxMinutes," Max HOURS=",MaxMinutes/60,"\n\n" )
+# print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:",MaxMinutes," Max HOURS=",MaxMinutes/60,"\n\n" )
+attemptStr="\n] Attempting to Loop "+str( keepLooping)+" times, with a " +str(timeDelay)+" second delay between reading the local file, for a \nMax # minutes of:"+str(MaxMinutes)+" Max HOURS="+str(MaxMinutes/60)+"\n\n" 
+print_colored_rnd(attemptStr)
+
 ###################### STARTING LOOP ****************************************
 
 while keepLooping > 0:
@@ -423,7 +464,9 @@ while keepLooping > 0:
 #### End of Loop
     # Decrement keepLooping to eventually exit the loop
     keepLooping -= 1  # You might have a condition to break the loop based on a certain condition
-    print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 )," and Max # HOURS=", (keepLooping * (timeDelay+0 )/60 )/60  ,"\n\n" )
+    # print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 )," and Max # HOURS=", (keepLooping * (timeDelay+0 )/60 )/60  ,"\n\n" )
+    attemptStr="\n] Attempting to Loop "+str( keepLooping)+" times, with a " +str(timeDelay)+" second delay between reading the local file, for a \nMax # minutes of: "+str(MaxMinutes)+" Max HOURS="+str(  (keepLooping * (timeDelay+0 )/60 )/60 )+"\n\n" 
+    print_colored_rnd(attemptStr)
 
     #END OF THE LOOP
 
