@@ -1,6 +1,6 @@
 #gettrades.py
 prgname="gettrades.py"
-vers="1.23"
+vers="2.1"
 msg0=0
 currstr="$"
 
@@ -109,14 +109,24 @@ def StringParts(input_str,char0):
 # print(parts)
 
 # ___ ini file:
-# ] trades_INI.txt =
-# 0 AAPL,BUY,BELOW,S1,LONG_CALLS,COUNT,6
-# 1 NVDA,SELL,ABOVE,R1,LONG_CALLS,COUNT,6
-# 2 INTC,BUY,BELOW,S1,LONG_CALLS,COUNT,6
-# 3 TSLA,BUY,BELOW,S1,LONG_CALLS,COUNT,6
-# 4 ADBE,SELL,ABOVE,R1,COUNT,6,CREDIT_CALL_SPREAD
-# 5 TSLA,BUY,PUT_CALL_SPREAD
-# 6 QQQ,BUY,LONG_STOCK
+# trades_ini.txt
+#   
+# AAPL,BUY,BELOW,S1,LONG_CALLS,COUNT,6
+# META,SELL,NEAR,R1,CREDIT_CALL_SPREAD,COUNT,6
+# NVDA,SELL,ABOVE,R1,LONG_CALLS,COUNT,6
+# INTC,BUY,BELOW,S1,LONG_CALLS,COUNT,6
+# TSLA,BUY,BELOW,S1,LONG_CALLS,COUNT,6
+# TSLA,SELL,ABOVE,R1,LONG_PUTS,COUNT,6
+# ADBE,SELL,ABOVE,R1,CREDIT_CALL_SPREAD,COUNT,6
+# TSLA,BUY,NEAR,S1,PUT_CALL_SPREAD,COUNT,6
+# ROKU,BUY,BELOW,S1,LONG_CALLS,COUNT,5
+# ROKU,SELL,ABOVE,R1,LONG_PUTS,COUNT,7
+# QQQ,BUY,NEAR,S1,LONG_STOCK,COUNT,7
+# AMZN,BUY,BELOW,S1,LONG_CALLS,COUNT,7
+#
+# SYMBOL,B/SE,A/N/B,PrcLvl,TradeExpression,cnt,cnt#
+#
+#
 # ] trades_INI.txt =====================
 
 # ] todaysTrades[ 21 ] =  RAWTRADE,485,2024-01-04,1300,BUY,TSLA,atLimit,241.26,4,2.7619%,6.66,285|275|205|190,
@@ -168,6 +178,9 @@ def StringParts(input_str,char0):
 # 40) at 1015 BUY SPY atLimit $468.26 count=4 $2.35 or 0.5019% above S1
 # 41) at 1000 BUY AAPL atLimit $182.17 count=8 $1.33 or 0.7319% above S1
 
+############################################################### GenerateTrade(a,i,aINI)
+############################################################### GenerateTrade(a,i,aINI)
+############################################################### GenerateTrade(a,i,aINI)
 
 def GenerateTrade(arr, idx, arrINIcsv ):
     S1R1str="S1"
@@ -187,7 +200,7 @@ def GenerateTrade(arr, idx, arrINIcsv ):
             col=colorDarkGreen
 
     
-#   35) at 1030 BUY INTC atLimit $46.57 count=6 $-0.06 or -0.1360% below S1
+#   35)              at 1030        BUY         INTC       atLimit         $46.57 count=6 $-0.06 or -0.1360% below S1
     pstr=str(idx)+") at "+arr[3]+" "+arr[4]+" "+arr[5]+" "+ arr[6]+" "+currstr+arr[7]+" count="+arr[8]+" "+currstr+arr[10]+" or "+arr[9]+ " "+aboveBelowstr+" "+ S1R1str
     print_colored(pstr, col )
 
@@ -196,7 +209,14 @@ def GenerateTrade(arr, idx, arrINIcsv ):
     #aboveBelowstr  ="below"
     #S1R1str        ="R1"
 
+    leg1=10.6
+    leg2=20.1
+    leg3=5.4
+    leg4=2.5
+
+    pctSize=0.15
     linecnt=0
+    strikeSize=5
     if(col==colorDarkGreen or col==colorDarkRed):
         dummy9=0
     else:
@@ -204,10 +224,84 @@ def GenerateTrade(arr, idx, arrINIcsv ):
             # print(lineini)
             lineiniarr = StringParts( lineini, ',' )
             #  NVDA,SELL,ABOVE,R1,LONG_CALLS,COUNT,6
+            # IF SYMB==     AND  BUY/SELL ==
             if(symbol0==lineiniarr[0] and buySell==lineiniarr[1] ):
                 pstr9="(ini."+str(linecnt)+")  "+lineiniarr[0]+" "+lineiniarr[1]+"<<====="+" "+aboveBelowstr+" "+S1R1str +"  Trade: "+symbol0+" "+lineiniarr[4]
                 print_colored(pstr9,colorGray)
+
+                price1=float(arr[7])
+                leg1= round_down(price1*(1.0+pctSize),10)    # SELL TO OPEN
+                leg2= leg1+strikeSize                      # buy to CLOSE
+                leg2_2= float(leg1+(strikeSize*0.50   )      )             # buy to CLOSE
+
+                leg3= round_down(price1*(1.0-pctSize),10)    # SELL TO OPEN
+                leg4= leg3-strikeSize                      # buy to CLOSE
+                leg4_2= float(leg3-(strikeSize*0.50  )        )            # buy to CLOSE
+
+
+                pstr8sell= "] Price =" + str( price1) + str(pctSize*100)+ "% CallCreditSpread=  _~" + str(leg2) + " | "+  str(leg1)+  "~________["+currstr+str(price1)+"]__ " 
+                pstr8buy = "] Price =" + str( price1) + str(pctSize*100)+ "%  PutCreditSpread=" + " __["+currstr+str(price1)+"]________~"+  str(leg3) + " | " + str(leg4) +"~_" 
+               
+                pstrIronCondor1 = "] Price =" + str( price1) + " IronCondor=" + str(leg2) + "|"+  str(leg1)+  "  _|_  "+  str(leg3) + "|" + str(leg4)  
+                pstrIronCondor_5= "] Price =" + str( price1) + " IronCondor=" + str(leg2_2) + "|"+  str(leg1)+  "  _|_  "+  str(leg3) + "|" + str(leg4_2)  
+                if(price1>350.0):
+                    print_colored(pstrIronCondor1,  colorBlue  )
+                else:
+                    print_colored(pstrIronCondor_5, colorGray )
+
+
+                if(lineiniarr[1]=="BUY"):
+                    print_colored(pstr8buy, colorGreen )
+
+                if(lineiniarr[1]=="SELL"):
+                    print_colored(pstr8sell, colorRed )
+
+                pstr5="______________________________"
+                print_colored(pstr5, colorGray )
+
             linecnt=linecnt+1
+
+
+# 20) at 1345 BUY GS atLimit $386.39 count=8 $5.49 or 1.4208% above S1
+# 21) at 1315 BUY NVDA atLimit $492 count=5 $16.99 or 3.4532% above S1
+# 22) at 1315 BUY AAPL atLimit $181.68 count=6 $0.84 or 0.4624% above S1
+# 23) at 1315 BUY TSLA atLimit $237.68 count=7 $1.45 or 0.6101% above S1
+# 24) at 1315 BUY INTC atLimit $47.05 count=7 $1.38 or 2.9328% above S1
+# 25) at 1315 SELL VXX atLimit $15.74 count=6 $-0.5 or -3.1687% below R1
+# 26) at 1300 BUY META atLimit $351.47 count=5 $7.19 or 2.0457% above S1
+# 27) at 1200 SELL ROKU atLimit $89.58 count=6 $-0.32 or -0.3547% below R1
+# 28) at 1200 SELL NVDA atLimit $493.32 count=8 $8.38 or 1.6996% above R1
+# (ini.3)  NVDA SELL<<===== above R1  Trade: NVDA LONG_CALLS
+# ] Price =493.32 IronCondor=560.0|565.0  _|_  410.0|405.0
+# ] Price =493.32  PutCreditSpread=  _|___  410.0|405.0
+# _____
+# 29) at 1200 SELL AMD atLimit $140.28 count=8 $2.46 or 1.7504% above R1
+# 30) at 1145 SELL QQQ atLimit $399.05 count=6 $0.51 or 0.1289% above R1
+# 31) at 1145 SELL META atLimit $352.53 count=7 $3.51 or 0.9950% above R1
+# (ini.2)  META SELL<<===== above R1  Trade: META CREDIT_CALL_SPREAD
+# ] Price =352.53 IronCondor=400.0|405.0  _|_  290.0|285.0
+# ] Price =352.53  PutCreditSpread=  _|___  290.0|285.0
+# _____
+# 32) at 1145 SELL MSFT atLimit $371.55 count=7 $-0.1 or -0.0257% below R1
+# 33) at 1145 SELL SPY atLimit $469.99 count=6 $0.18 or 0.0376% above R1
+# 34) at 1145 BUY VXX atLimit $15.53 count=7 $-0.31 or -2.0176% below S1
+# 35) at 1145 SELL GS atLimit $388.75 count=6 $2.71 or 0.6974% above R1
+# 36) at 1130 SELL INTC atLimit $47.65 count=5 $0.06 or 0.1189% above R1
+# 37) at 1130 SELL TSLA atLimit $239.32 count=4 $-1.88 or -0.7860% below R1
+# 38) at 1130 SELL AMZN atLimit $146.29 count=6 $-0.33 or -0.2233% below R1
+# 39) at 1030 BUY TSLA atLimit $238.64 count=4 $2.41 or 1.0113% above S1
+# 40) at 1015 BUY SPY atLimit $468.26 count=4 $2.35 or 0.5019% above S1
+# 41) at 1000 BUY AAPL atLimit $182.17 count=8 $1.33 or 0.7319% above S1
+# 42) at 1000 BUY MSFT atLimit $369.74 count=9 $4.03 or 1.0891% above S1
+
+# ]  END OF PROGRAM: gettrades.py
+
+
+
+
+############################################################### GenerateTrade(a,i,aINI)
+############################################################### GenerateTrade(a,i,aINI)
+############################################################### GenerateTrade(a,i,aINI)
 
 
 

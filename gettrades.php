@@ -9,12 +9,13 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.50";
+                                                      $vers = "2.11";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
 $CurrencyStr="$";
 $todaysdate = date('Y-m-d');
+$filename0 = "trades_ini.txt"; 
 
 //echo "\n\n] recpost1.php $vers is running, Time in NYC = $todaysdate \n";
 // ******************************************************************** INITAL VARS
@@ -112,10 +113,15 @@ function GetNYDateTime(){
   $timeNYC0 =  date("Y-m-d\TH:i:s");
   return $timeNYC0;
 }
+
+function print_colored($printstr, $colorstr){   // colorstr = " red blue  green black white yellow purple orange gray"
+    echo '<p style="color: '. $colorstr. ';">'. $printstr. '</p>';
+  }
 function echoColor($printstr, $colorstr){   // colorstr = " red blue  green black white yellow purple orange gray"
-  echo '<p style="color: '. $colorstr. ';">'. $printstr. '</p>';
- // echo '<p style="color: green;">The file '. $fname. ' exists.</p>';
-}
+    echo '<p style="color: '. $colorstr. ';">'. $printstr. '</p>';
+   // echo '<p style="color: green;">The file '. $fname. ' exists.</p>';
+  }
+  
 function RaiseCharacter($str, $num) {
     if ($num >= 0 && $num < strlen($str)) {
         $str[$num] = strtoupper($str[$num]);
@@ -199,6 +205,117 @@ function SendEmailTo($receiverEmail, $senderEmail, $subject, $msg) {
         return "Email sent successfully!";
     } else {
         return "Failed to send email. Check your server's configuration or try again later.";
+    }
+}
+
+function ReadArrayFile($fname) {
+    $strarr = []; // Initialize an empty array to store lines from the file
+
+    // Open the file for reading
+    $file = fopen($fname, "r");
+
+    // Check if the file was opened successfully
+    if ($file) {
+        // Read the file line by line until the end of the file
+        while (($line = fgets($file)) !== false) {
+            // Add each line to the array
+            $strarr[] = $line;
+        }
+
+        // Close the file handle
+        fclose($file);
+    } else {
+        // If the file couldn't be opened, handle the error (you can modify this according to your needs)
+        echo "Unable to open file: $fname";
+    }
+
+    // Return the array containing lines from the file
+    return $strarr;
+}
+
+function GenerateTrade($arr, $idx, $arrINIcsv) {
+    $S1R1str = "S1";
+    $col = $colorLimeGreen; // Assuming $colorLimeGreen is defined elsewhere in your code
+
+    if ($arr[4] == "SELL") {
+        $S1R1str = "R1";
+        $col = $colorRed; // Assuming $colorRed is defined elsewhere in your code
+    }
+
+    $aboveBelowstr = "above";
+    $pct0str = $arr[9];
+
+    if ($pct0str[0] == '-') {
+        $aboveBelowstr = "below";
+        if ($arr[4] == "SELL") {
+            $col = $colorDarkRed; // Assuming $colorDarkRed is defined elsewhere in your code
+        }
+    } else {
+        if ($arr[4] == "BUY") {
+            $col = $colorDarkGreen; // Assuming $colorDarkGreen is defined elsewhere in your code
+        }
+    }
+
+    $pstr = $idx . ") at " . $arr[3] . " " . $arr[4] . " " . $arr[5] . " " . $arr[6] . " " . $currstr . $arr[7] . " count=" . $arr[8] . " " . $currstr . $arr[10] . " or " . $arr[9] . " " . $aboveBelowstr . " " . $S1R1str;
+    print_colored($pstr, $col); // Assuming print_colored is a defined function in your code
+
+    $buySell = $arr[4];
+    $symbol0 = $arr[5];
+
+    $leg1 = 10.6;
+    $leg2 = 20.1;
+    $leg3 = 5.4;
+    $leg4 = 2.5;
+
+    $pctSize = 0.15;
+    $linecnt = 0;
+    $strikeSize = 5;
+
+    if ($col == $colorDarkGreen || $col == $colorDarkRed) {
+        $dummy9 = 0;
+    } else {
+        foreach ($arrINIcsv as $lineini) {
+            $lineiniarr = explode(',', $lineini);
+
+            if ($symbol0 == $lineiniarr[0] && $buySell == $lineiniarr[1]) {
+                $pstr9 = "(ini." . $linecnt . ") " . $lineiniarr[0] . " " . $lineiniarr[1] . "<<=====" . " " . $aboveBelowstr . " " . $S1R1str . " Trade: " . $symbol0 . " " . $lineiniarr[4];
+                print_colored($pstr9, $colorGray); // Assuming $colorGray is defined elsewhere in your code
+
+                $price1 = floatval($arr[7]);
+                $leg1 = round($price1 * (1.0 + $pctSize), 10); // SELL TO OPEN
+                $leg2 = $leg1 + $strikeSize; // buy to CLOSE
+                $leg2_2 = $leg1 + ($strikeSize * 0.50); // buy to CLOSE
+
+                $leg3 = round($price1 * (1.0 - $pctSize), 10); // SELL TO OPEN
+                $leg4 = $leg3 - $strikeSize; // buy to CLOSE
+                $leg4_2 = $leg3 - ($strikeSize * 0.50); // buy to CLOSE
+
+                $pstr8sell = "] Price =" . $price1 . ($pctSize * 100) . "% CallCreditSpread= _~" . $leg2 . " | " . $leg1 . "~________[" . $currstr . $price1 . "]__ ";
+                $pstr8buy = "] Price =" . $price1 . ($pctSize * 100) . "% PutCreditSpread=" . " __[" . $currstr . $price1 . "]________~" . $leg3 . " | " . $leg4 . "~_ ";
+
+                $pstrIronCondor1 = "] Price =" . $price1 . " IronCondor=" . $leg2 . "|" . $leg1 . " _|_ " . $leg3 . "|" . $leg4;
+                $pstrIronCondor_5 = "] Price =" . $price1 . " IronCondor=" . $leg2_2 . "|" . $leg1 . " _|_ " . $leg3 . "|" . $leg4_2;
+
+                if ($price1 > 350.0) {
+                    print_colored($pstrIronCondor1, $colorBlue);
+                } else {
+                    print_colored($pstrIronCondor_5, $colorGray);
+                }
+
+                if ($lineiniarr[1] == "BUY") {
+                    print_colored($pstr8buy, $colorGreen);
+                }
+
+                if ($lineiniarr[1] == "SELL") {
+                    print_colored($pstr8sell, $colorRed);
+                }
+
+                $pstr5 = "______________________________";
+                print_colored($pstr5, $colorGray);
+            }
+
+            $linecnt++;
+        }
     }
 }
 
@@ -796,8 +913,22 @@ if($msg0==1) echoColor($pstr9,"red");
 
 
 
-
-
+// $filename0 = "trades_ini.txt"; 
+$arrayFromFile = ReadArrayFile( $filename0 );
+echo "<br />";
+foreach ($arrayFromFile as $line) {
+    if ($line[0] === '#') {
+        ; // do nil
+    }else {
+        echo  "<br />____".  $line ."    == ";  
+        $linecsv = str_getcsv($line);
+        foreach ($linecsv as $csvelems) {
+            echo $csvelems. " | ";
+        
+        }
+    }
+}
+// print($arrayFromFile);
 
 // $emailSubjectStr        = $uname0. ", ". $inserted0. " Trade Alerts at ". $timeNYC. " New York Time"; 
 
