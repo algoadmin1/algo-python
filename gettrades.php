@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "2.5";
+                                                      $vers = "2.6";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
@@ -260,8 +260,8 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
     $colorGray  ="gray";
 
 
-    echo "] GenerateTrade() arr == ";
-    print_r($arr);
+    // echo "] GenerateTrade() arr == ";
+    // print_r($arr);
 
 
 
@@ -321,8 +321,8 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
                 $leg4 = $leg3 - $strikeSize; // buy to CLOSE
                 $leg4_2 = $leg3 - ($strikeSize * 0.50); // buy to CLOSE
 
-                $pstr8sell = "] Price =" . $price1 . ($pctSize * 100) . "% CallCreditSpread= _~" . $leg2 . " | " . $leg1 . "~________[" . $currstr . $price1 . "]__ ";
-                $pstr8buy = "] Price =" . $price1 . ($pctSize * 100) . "% PutCreditSpread=" . " __[" . $currstr . $price1 . "]________~" . $leg3 . " | " . $leg4 . "~_ ";
+                $pstr8sell = "] Price =" . $price1."  " . ($pctSize * 100) . "% CallCreditSpread= _~" . $leg2 . " | " . $leg1 . "~________[" . $currstr . $price1 . "]__ ";
+                $pstr8buy = "] Price =" . $price1 ."  ". ($pctSize * 100) . "% PutCreditSpread=" . " __[" . $currstr . $price1 . "]________~" . $leg3 . " | " . $leg4 . "~_ ";
 
                 $pstrIronCondor1 = "] Price =" . $price1 . " IronCondor=" . $leg2 . "|" . $leg1 . " _|_ " . $leg3 . "|" . $leg4;
                 $pstrIronCondor_5 = "] Price =" . $price1 . " IronCondor=" . $leg2_2 . "|" . $leg1 . " _|_ " . $leg3 . "|" . $leg4_2;
@@ -963,7 +963,7 @@ $pstr9= "<br />******** CLOSING DB ACCESS HERE in $prgname *********<br />";
 if($msg0==1) echoColor($pstr9,"red");
 
 
-if($rawtrades){
+if($rawtrades && $msg0==1){
     echoColor("rawtrades strings[] ==<br />","blue");
     print_r($rawtrades);
 }
@@ -975,7 +975,8 @@ foreach ($arrINIcsvfile as $line) {
         if ($line[0] === '#'  ) {
         ; // do nil
     }else {
-        echo  "<br />____".  $line ."    == ";  
+        // echo  "<br />____".  $line ."    == ";  
+        echo  "<br />____" ;  
         $linecsv = str_getcsv($line);
         foreach ($linecsv as $csvelems) {
             echo $csvelems. " | ";
@@ -986,26 +987,19 @@ foreach ($arrINIcsvfile as $line) {
 echo "<br />";
 echoColor("] INI file read.<br />","red");
 
-
+// here $line is just a string not arr
 $idx=0;
 foreach ($rawtrades as $line) {
         if ($line[0] === '#'  ) {
         ; // do nil
     }else {
-        echo " $idx ]";
-        print_r($line);
-
-//      GenerateTrade(linetradearr,i, arrINIcsvfile)
+        if($msg0==1){
+            echo " $idx ]";
+            print_r($line);
+        }
         $lineArray = explode(",", $line);
-
         GenerateTrade($lineArray ,$idx, $arrINIcsvfile);
 
-        // echo  "<br />____".  $line ."    == ";  
-        // $linecsv = str_getcsv($line);
-        // foreach ($linecsv as $csvelems) {
-        //     echo $csvelems. " | ";
-        
-        // }
     }
     $idx++;
 }
