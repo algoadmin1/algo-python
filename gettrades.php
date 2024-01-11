@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "2.11";
+                                                      $vers = "2.5";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
@@ -44,6 +44,9 @@ $tblname ="trades";
 $timeNYC =  date("Y-m-d\TH:i:s");
 
 // ******************************************************************** INITAL VARS
+// from gettrades.py
+//
+$currstr= $CurrencyStr;
 
 
 
@@ -234,6 +237,34 @@ function ReadArrayFile($fname) {
 }
 
 function GenerateTrade($arr, $idx, $arrINIcsv) {
+    global $CurrencyStr;
+    $currstr= $CurrencyStr;
+
+    # colors 
+    $colorGreen ="green";
+    $colorBlue  ="blue";
+    $colorCyan  ="cyan";
+    $colorOrange  ="orange";
+
+    $colorRed  ="red";
+    $colorMagenta  ="magenta";
+    $colorYellow  ="yellow";
+    $colorDarkGreen  ="darkgreen";
+    $colorDarkRed  ="darkred";
+    $colorPurple  ="purple";
+    $colorBrown  ="brown";
+
+    $colorWhite  ="white";
+    $colorLimeGreen  ="green";
+    $colorAqua  ="aqua";
+    $colorGray  ="gray";
+
+
+    echo "] GenerateTrade() arr == ";
+    print_r($arr);
+
+
+
     $S1R1str = "S1";
     $col = $colorLimeGreen; // Assuming $colorLimeGreen is defined elsewhere in your code
 
@@ -746,6 +777,7 @@ try {
                 $stmt->execute();
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
               
+                $rawtrades = [];
 
                 // Display the results
                 foreach ($result as $trade) {
@@ -766,6 +798,10 @@ try {
                       echo "<br />";
                     //echo "\n";
 
+
+
+                    // used by gettrades.py
+                    //
                     echo "RAWTRADE,";
                     echo  $trade['tradeId'] . ",";
                     echo  $trade['tradeDate'] . ",";
@@ -779,7 +815,22 @@ try {
                     echo  $trade['buySellDist'] . ",";
                     echo  $trade['leg1'] . "|". $trade['leg2'] . "|". $trade['leg3'] . "|". $trade['leg4'] .",";
 
-                    
+                    $rawtradestr = "RAWTRADE,".
+                       $trade['tradeId'] . ",".
+                       $trade['tradeDate'] . ",".
+                       $trade['tradeTime'] . ",".
+                       $trade['tradeType'] . ",".
+                       $trade['symbol'] . ",".
+                       $trade['tradeCond'] . ",".
+                       $trade['tradePrice'] . ",".
+                       $trade['buySellCnt'] . ",".
+                       $trade['buySellPct'] . ",".
+                       $trade['buySellDist'] . ",".
+                       $trade['leg1'] . "|". $trade['leg2'] . "|". $trade['leg3'] . "|". $trade['leg4'] .",";
+
+                    // append
+                    $rawtrades[]= $rawtradestr;
+
                     // echo "<br />";
                     //echo "\n";
 
@@ -912,22 +963,159 @@ $pstr9= "<br />******** CLOSING DB ACCESS HERE in $prgname *********<br />";
 if($msg0==1) echoColor($pstr9,"red");
 
 
+if($rawtrades){
+    echoColor("rawtrades strings[] ==<br />","blue");
+    print_r($rawtrades);
+}
 
-// $filename0 = "trades_ini.txt"; 
-$arrayFromFile = ReadArrayFile( $filename0 );
-echo "<br />";
-foreach ($arrayFromFile as $line) {
-    if ($line[0] === '#') {
+
+echoColor("] Reading INI File $filename0 <br />","red");
+$arrINIcsvfile = ReadArrayFile( $filename0 );
+foreach ($arrINIcsvfile as $line) {
+        if ($line[0] === '#'  ) {
         ; // do nil
     }else {
         echo  "<br />____".  $line ."    == ";  
         $linecsv = str_getcsv($line);
         foreach ($linecsv as $csvelems) {
             echo $csvelems. " | ";
-        
         }
     }
 }
+
+echo "<br />";
+echoColor("] INI file read.<br />","red");
+
+
+$idx=0;
+foreach ($rawtrades as $line) {
+        if ($line[0] === '#'  ) {
+        ; // do nil
+    }else {
+        echo " $idx ]";
+        print_r($line);
+
+//      GenerateTrade(linetradearr,i, arrINIcsvfile)
+        $lineArray = explode(",", $line);
+
+        GenerateTrade($lineArray ,$idx, $arrINIcsvfile);
+
+        // echo  "<br />____".  $line ."    == ";  
+        // $linecsv = str_getcsv($line);
+        // foreach ($linecsv as $csvelems) {
+        //     echo $csvelems. " | ";
+        
+        // }
+    }
+    $idx++;
+}
+
+
+/*
+
+('\n', '2024-01-11', '] ENTER trades Date (default=2024-01-11): ')
+2024-01-09
+] Attemping live trade retrieval for https://algoinvestorr.com/trades/gettrades.php?d=2024-01-09  on  2024-01-11
+['# trades_ini.txt', 'AMD,SELL,ABOVE,R1,LONG_PUTS,COUNT,7', 'AMD,BUY,BELOW,S1,LONG_CALLS,COUNT,5', 'AAPL,BUY,BELOW,S1,LONG_CALLS,COUNT,6', 'META,SELL,NEAR,R1,CREDIT_CALL_SPREAD,COUNT,6', 'GS,SELL,NEAR,R1,LONG_PUTS,COUNT,6', 'NVDA,SELL,ABOVE,R1,LONG_PUTS,COUNT,6', 'SPY,SELL,ABOVE,R1,LONG_PUTS,COUNT,6', 'QQQ,SELL,ABOVE,R1,LONG_PUTS,COUNT,6', 'INTC,BUY,BELOW,S1,LONG_CALLS,COUNT,6', 'TSLA,BUY,BELOW,S1,LONG_CALLS,COUNT,6', 'TSLA,SELL,ABOVE,R1,CREDIT_CALL_SPREAD,COUNT,6', 'ADBE,SELL,ABOVE,R1,CREDIT_CALL_SPREAD,COUNT,6', 'TSLA,BUY,NEAR,S1,PUT_CALL_SPREAD,COUNT,6', 'ROKU,BUY,BELOW,S1,LONG_CALLS,COUNT,5', 'VXX,BUY,BELOW,S1,LONG_CALLS,COUNT,5', 'ROKU,SELL,ABOVE,R1,LONG_PUTS,COUNT,7', 'INTC,SELL,ABOVE,R1,LONG_PUTS,COUNT,7', 'QQQ,BUY,NEAR,S1,LONG_STOCK,COUNT,7', 'AMZN,BUY,BELOW,S1,LONG_CALLS,COUNT,7']
+] Finished reading: trades_ini.txt for gettrades.py
+] trades_INI.txt =
+0 # trades_ini.txt
+1 AMD,SELL,ABOVE,R1,LONG_PUTS,COUNT,7
+2 AMD,BUY,BELOW,S1,LONG_CALLS,COUNT,5
+3 AAPL,BUY,BELOW,S1,LONG_CALLS,COUNT,6
+4 META,SELL,NEAR,R1,CREDIT_CALL_SPREAD,COUNT,6
+5 GS,SELL,NEAR,R1,LONG_PUTS,COUNT,6
+6 NVDA,SELL,ABOVE,R1,LONG_PUTS,COUNT,6
+7 SPY,SELL,ABOVE,R1,LONG_PUTS,COUNT,6
+8 QQQ,SELL,ABOVE,R1,LONG_PUTS,COUNT,6
+9 INTC,BUY,BELOW,S1,LONG_CALLS,COUNT,6
+10 TSLA,BUY,BELOW,S1,LONG_CALLS,COUNT,6
+11 TSLA,SELL,ABOVE,R1,CREDIT_CALL_SPREAD,COUNT,6
+12 ADBE,SELL,ABOVE,R1,CREDIT_CALL_SPREAD,COUNT,6
+13 TSLA,BUY,NEAR,S1,PUT_CALL_SPREAD,COUNT,6
+14 ROKU,BUY,BELOW,S1,LONG_CALLS,COUNT,5
+15 VXX,BUY,BELOW,S1,LONG_CALLS,COUNT,5
+16 ROKU,SELL,ABOVE,R1,LONG_PUTS,COUNT,7
+17 INTC,SELL,ABOVE,R1,LONG_PUTS,COUNT,7
+18 QQQ,BUY,NEAR,S1,LONG_STOCK,COUNT,7
+19 AMZN,BUY,BELOW,S1,LONG_CALLS,COUNT,7
+] trades_INI.txt =====================
+1) at 1600 SELL AMD atLimit $149.31 count=4 $0.5 or 0.3364% above R1
+(ini.1)  AMD SELL<<===== above R1  Trade: AMD LONG_PUTS
+] Price =149.31 IronCondor=172.5|170.0  _|_  120.0|117.5
+] Price =149.3115.0% CallCreditSpread=  _~175.0 | 170.0~________[$149.31]__ 
+______________________________
+2) at 1600 BUY VXX atLimit $14.86 count=4 $-0.07 or -0.4487% below S1
+(ini.15)  VXX BUY<<===== below S1  Trade: VXX LONG_CALLS
+] Price =14.86 IronCondor=12.5|10.0  _|_  10.0|7.5
+] Price =14.8615.0%  PutCreditSpread= __[$14.86]________~10.0 | 5.0~_
+______________________________
+3) at 1545 BUY QQQ atLimit $405.72 count=4 $5.58 or 1.3745% above S1
+4) at 1545 BUY SPY atLimit $473.87 count=4 $3.54 or 0.7477% above S1
+5) at 1530 SELL MSFT atLimit $375.18 count=4 $-1.73 or -0.4605% below R1
+6) at 1515 BUY META atLimit $358.6 count=6 $4.47 or 1.2474% above S1
+7) at 1515 BUY GS atLimit $382.78 count=10 $-1.53 or -0.4006% below S1
+8) at 1400 SELL NVDA atLimit $538.69 count=10 $6.75 or 1.2537% above R1
+(ini.6)  NVDA SELL<<===== above R1  Trade: NVDA LONG_PUTS
+] Price =538.69 IronCondor=615.0|610.0  _|_  450.0|445.0
+] Price =538.6915.0% CallCreditSpread=  _~615.0 | 610.0~________[$538.69]__ 
+______________________________
+9) at 1400 SELL AMZN atLimit $151.43 count=15 $1.15 or 0.7565% above R1
+10) at 1400 SELL AMD atLimit $149.34 count=4 $0.53 or 0.3519% above R1
+(ini.1)  AMD SELL<<===== above R1  Trade: AMD LONG_PUTS
+] Price =149.34 IronCondor=172.5|170.0  _|_  120.0|117.5
+] Price =149.3415.0% CallCreditSpread=  _~175.0 | 170.0~________[$149.34]__ 
+______________________________
+11) at 1345 SELL MSFT atLimit $375.52 count=11 $-1.38 or -0.3684% below R1
+12) at 1345 SELL INTC atLimit $48.42 count=8 $-0.72 or -1.4939% below R1
+13) at 1345 SELL SPY atLimit $474.33 count=9 $-2.44 or -0.5144% below R1
+14) at 1345 SELL QQQ atLimit $405.98 count=12 $-1.57 or -0.3864% below R1
+15) at 1345 BUY VXX atLimit $14.91 count=12 $-0.02 or -0.1118% below S1
+(ini.15)  VXX BUY<<===== below S1  Trade: VXX LONG_CALLS
+] Price =14.91 IronCondor=12.5|10.0  _|_  10.0|7.5
+] Price =14.9115.0%  PutCreditSpread= __[$14.91]________~10.0 | 5.0~_
+______________________________
+16) at 1300 SELL TSLA atLimit $234.91 count=7 $-7.74 or -3.2953% below R1
+17) at 1245 SELL AMD atLimit $148.55 count=4 $-0.26 or -0.1773% below R1
+18) at 1245 SELL AAPL atLimit $184.51 count=8 $-2.42 or -1.3128% below R1
+19) at 1245 SELL GS atLimit $385.44 count=5 $-5.92 or -1.5365% below R1
+20) at 1200 SELL META atLimit $358.82 count=5 $-2.24 or -0.6240% below R1
+21) at 1145 SELL ROKU atLimit $92.55 count=4 $-3.4 or -3.6773% below R1
+22) at 1115 BUY TSLA atLimit $233.49 count=6 $-3.21 or -1.3748% below S1
+(ini.10)  TSLA BUY<<===== below S1  Trade: TSLA LONG_CALLS
+] Price =233.49 IronCondor=262.5|260.0  _|_  190.0|187.5
+] Price =233.4915.0%  PutCreditSpread= __[$233.49]________~190.0 | 185.0~_
+______________________________
+(ini.13)  TSLA BUY<<===== below S1  Trade: TSLA PUT_CALL_SPREAD
+] Price =233.49 IronCondor=262.5|260.0  _|_  190.0|187.5
+] Price =233.4915.0%  PutCreditSpread= __[$233.49]________~190.0 | 185.0~_
+______________________________
+23) at 1115 SELL AMD atLimit $147.63 count=6 $-1.18 or -0.7963% below R1
+24) at 1100 SELL NVDA atLimit $523.12 count=17 $-8.82 or -1.6860% below R1
+25) at 1100 BUY INTC atLimit $48.05 count=4 $0.69 or 1.4430% above S1
+26) at 1100 BUY MSFT atLimit $372.21 count=4 $1.5 or 0.4030% above S1
+27) at 1045 SELL VXX atLimit $15.27 count=8 $-0.27 or -1.7541% below R1
+28) at 1000 SELL MSFT atLimit $374.52 count=20 $-2.38 or -0.6361% below R1
+29) at 1000 SELL AAPL atLimit $185.28 count=9 $-1.65 or -0.8917% below R1
+30) at 1000 SELL QQQ atLimit $404.69 count=18 $-2.86 or -0.7070% below R1
+31) at 1000 SELL META atLimit $358.05 count=6 $-3.01 or -0.8410% below R1
+32) at 1000 SELL SPY atLimit $474.02 count=28 $-2.75 or -0.5811% below R1
+33) at 0945 BUY INTC atLimit $48.37 count=6 $1.02 or 2.1086% above S1
+34) at 0945 SELL TSLA atLimit $240.65 count=8 $-2 or -0.8329% below R1
+35) at 0945 BUY ROKU atLimit $93.72 count=4 $2.81 or 2.9982% above S1
+36) at 0945 BUY AMD atLimit $146.11 count=6 $4.3 or 2.9452% above S1
+
+]  END OF PROGRAM: gettrades.py
+
+*/
+
+
+
+
+
+
+
+
 // print($arrayFromFile);
 
 // $emailSubjectStr        = $uname0. ", ". $inserted0. " Trade Alerts at ". $timeNYC. " New York Time"; 
