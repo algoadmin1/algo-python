@@ -137,7 +137,7 @@ print("Today's date in New York:",dstr1)
 ##################################################### FUNCTIONS
 
 def rand(num):
-    return(random.randint(0, num))
+    return(random.randint(0, (num-1)))
 
 def print_colored(text, color_code): 
     print(f"\033[{color_code}m{text}\033[0m") 
