@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "2.6";
+                                                      $vers = "2.75";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
@@ -47,6 +47,24 @@ $timeNYC =  date("Y-m-d\TH:i:s");
 // from gettrades.py
 //
 $currstr= $CurrencyStr;
+
+$colorGreen ="green";
+$colorBlue  ="blue";
+$colorCyan  ="cyan";
+$colorOrange  ="orange";
+
+$colorRed  ="red";
+$colorMagenta  ="magenta";
+$colorYellow  ="yellow";
+$colorDarkGreen  ="darkgreen";
+$colorDarkRed  ="darkred";
+$colorPurple  ="purple";
+$colorBrown  ="brown";
+
+$colorWhite  ="white";
+$colorLimeGreen  ="green";
+$colorAqua  ="aqua";
+$colorGray  ="gray";
 
 
 
@@ -241,23 +259,23 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
     $currstr= $CurrencyStr;
 
     # colors 
-    $colorGreen ="green";
-    $colorBlue  ="blue";
-    $colorCyan  ="cyan";
-    $colorOrange  ="orange";
+    global $colorGreen;
+    global $colorBlue  ;
+    global $colorCyan  ;
+    global $colorOrange ;
 
-    $colorRed  ="red";
-    $colorMagenta  ="magenta";
-    $colorYellow  ="yellow";
-    $colorDarkGreen  ="darkgreen";
-    $colorDarkRed  ="darkred";
-    $colorPurple  ="purple";
-    $colorBrown  ="brown";
+    global $colorRed  ;
+    global $colorMagenta  ;
+    global $colorYellow  ;
+    global $colorDarkGreen ;
+    global $colorDarkRed  ;
+    global $colorPurple  ;
+    global $colorBrown ;
 
-    $colorWhite  ="white";
-    $colorLimeGreen  ="green";
-    $colorAqua  ="aqua";
-    $colorGray  ="gray";
+    global $colorWhite   ;
+    global $colorLimeGreen   ;
+    global $colorAqua ;
+    global $colorGray  ;
 
 
     // echo "] GenerateTrade() arr == ";
@@ -313,19 +331,26 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
                 print_colored($pstr9, $colorGray); // Assuming $colorGray is defined elsewhere in your code
 
                 $price1 = floatval($arr[7]);
-                $leg1 = round($price1 * (1.0 + $pctSize), 10); // SELL TO OPEN
-                $leg2 = $leg1 + $strikeSize; // buy to CLOSE
-                $leg2_2 = $leg1 + ($strikeSize * 0.50); // buy to CLOSE
 
-                $leg3 = round($price1 * (1.0 - $pctSize), 10); // SELL TO OPEN
-                $leg4 = $leg3 - $strikeSize; // buy to CLOSE
-                $leg4_2 = $leg3 - ($strikeSize * 0.50); // buy to CLOSE
+                $leg1 = round($price1 * (1.0 + $pctSize), 10);  
+                $leg1 =FloorIt( $leg1, $strikeSize );
+          
+                $leg2 = $leg1 + $strikeSize; 
+                $leg2_2 = $leg1 + ($strikeSize * 0.50);  
 
-                $pstr8sell = "] Price =" . $price1."  " . ($pctSize * 100) . "% CallCreditSpread= _~" . $leg2 . " | " . $leg1 . "~________[" . $currstr . $price1 . "]__ ";
-                $pstr8buy = "] Price =" . $price1 ."  ". ($pctSize * 100) . "% PutCreditSpread=" . " __[" . $currstr . $price1 . "]________~" . $leg3 . " | " . $leg4 . "~_ ";
 
-                $pstrIronCondor1 = "] Price =" . $price1 . " IronCondor=" . $leg2 . "|" . $leg1 . " _|_ " . $leg3 . "|" . $leg4;
-                $pstrIronCondor_5 = "] Price =" . $price1 . " IronCondor=" . $leg2_2 . "|" . $leg1 . " _|_ " . $leg3 . "|" . $leg4_2;
+
+                $leg3 = round($price1 * (1.0 - $pctSize), 10);  
+                $leg3 =FloorIt( $leg3, $strikeSize );
+
+                $leg4 = $leg3 - $strikeSize;  
+                $leg4_2 = $leg3 - ($strikeSize * 0.50);  
+
+                $pstr8sell = "] Price =" . $price1."  " . ($pctSize * 100) . "% CallCreditSpread= _~" . $leg2 . " __|__ " . $leg1 . "~________[" . $currstr . $price1 . "]__ ";
+                $pstr8buy = "] Price =" . $price1 ."  ". ($pctSize * 100) . "% PutCreditSpread=" . " __[" . $currstr . $price1 . "]________~" . $leg3 . " __|__ " . $leg4 . "~_ ";
+
+                $pstrIronCondor1 = "] Price =" . $price1 . " IronCondor=" . $leg2 . "__|__" . $leg1 . " _~|~_ " . $leg3 . "__|__" . $leg4;
+                $pstrIronCondor_5 = "] Price =" . $price1 . " IronCondor=" . $leg2_2 . "__|__" . $leg1 . " _~|~_ " . $leg3 . "__|__" . $leg4_2;
 
                 if ($price1 > 350.0) {
                     print_colored($pstrIronCondor1, $colorBlue);
@@ -983,6 +1008,8 @@ foreach ($arrINIcsvfile as $line) {
         }
     }
 }
+
+
 
 echo "<br />";
 echoColor("] INI file read.<br />","red");
