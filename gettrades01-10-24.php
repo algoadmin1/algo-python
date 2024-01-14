@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "3.54";
+                                                      $vers = "2.75";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
@@ -42,7 +42,7 @@ $dbname = "u151710353_algotrades";
 $tblname ="trades";
 
 $timeNYC =  date("Y-m-d\TH:i:s");
-$tradeCsvHeaders = "tradeDate,tradeTime,tradeType,tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,timestamp";
+
 // ******************************************************************** INITAL VARS
 // from gettrades.py
 //
@@ -257,7 +257,6 @@ function ReadArrayFile($fname) {
 function GenerateTrade($arr, $idx, $arrINIcsv) {
     global $CurrencyStr;
     $currstr= $CurrencyStr;
-    global $msg0;
 
     # colors 
     global $colorGreen;
@@ -278,25 +277,20 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
     global $colorAqua ;
     global $colorGray  ;
 
-    if($msg0==1){
-    echo "] GenerateTrade() v_  $vers   arr == ";  
-    // echo "] GenerateTrade()    arr == ";  
-    print_r($arr);
-    }   
-    $tradestr0="";
-    
+
+    // echo "] GenerateTrade() arr == ";
+    // print_r($arr);
+
+
 
     $S1R1str = "S1";
     $col = $colorLimeGreen; // Assuming $colorLimeGreen is defined elsewhere in your code
-    $buystrong  =1;
-    $sellstrong =1;
-    $tradestrong =1;
 
     if ($arr[4] == "SELL") {
         $S1R1str = "R1";
         $col = $colorRed; // Assuming $colorRed is defined elsewhere in your code
     }
- 
+
     $aboveBelowstr = "above";
     $pct0str = $arr[9];
 
@@ -304,30 +298,14 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
         $aboveBelowstr = "below";
         if ($arr[4] == "SELL") {
             $col = $colorDarkRed; // Assuming $colorDarkRed is defined elsewhere in your code
-            $sellstrong =0;         // this sell signal is below R1 NOT strong
-                                    // check for 'close enough'
-            $tradestrong =0;
-
         }
     } else {
         if ($arr[4] == "BUY") {
             $col = $colorDarkGreen; // Assuming $colorDarkGreen is defined elsewhere in your code
-            $buystrong =0;         // this buy signal is below R1 NOT strong
-                                    // check for 'close enough'
-            $tradestrong =0;
-
         }
     }
 
-
-// tradeDate,tradeTime,tradeType,tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,   priceDist,pricePct,tradeStrong,tradeLeg,timestamp
-    $tradeLeg="1";
-    $timestampnow = GetDBSafe_NYCTimeNOW(1);
-    $tradesize0=10;
-    $tradestr0= $arr[2].",". $arr[3].",". $arr[4].",". $tradesize0.",". $arr[5].",". $arr[6].",". $arr[7].",". $arr[1].",". $arr[8].",". $aboveBelowstr. ",". $S1R1str. ",". $arr[10]. ",". $arr[9]. ",". $tradestrong.",". $tradeLeg.",". $timestampnow  ;
-
-
-    $pstr = $idx . ") at". " " . $arr[3]. " ". $arr[1] . " ". $arr[2] . " " . $arr[4] . " " . $arr[5] . " " . $arr[6] . " " . $currstr . $arr[7] . " count=" . $arr[8] . " " . $currstr . $arr[10] . " or " . $arr[9] . " " . $aboveBelowstr . " " . $S1R1str;
+    $pstr = $idx . ") at " . $arr[3] . " " . $arr[4] . " " . $arr[5] . " " . $arr[6] . " " . $currstr . $arr[7] . " count=" . $arr[8] . " " . $currstr . $arr[10] . " or " . $arr[9] . " " . $aboveBelowstr . " " . $S1R1str;
     print_colored($pstr, $col); // Assuming print_colored is a defined function in your code
 
     $buySell = $arr[4];
@@ -395,63 +373,7 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
             $linecnt++;
         }
     }
-
-    return( $tradestr0 );
 }
-
-
-function writeArrayToCSV($arr, $fname) {
-    // Open the CSV file for writing
-    $file = fopen($fname, 'w');
-
-    // Loop through each line in the array
-    foreach ($arr as $line) {
-        // Write the line to the CSV file
-        fputcsv($file, explode(',', $line));
-    }
-
-    // Close the file handle
-    fclose($file);
-}
-/*
-// Example usage:
-$linesArray = ["a,b,c", "d,e,f", "h,i,j"];
-$fnameout1 = "csvtrades.csv";
-
-writeArrayToCSV($linesArray, $fnameout1);
-
-
-
-
-// Example usage:
-$arr0 = "a,b,c";
-$fnameout1 = "csvtrades.csv";
-
-writeArrayToCSV($arr0, $fnameout1);
-
-
-
-
-
-$fp = fopen('data.csv', 'r');
-$headers = fgetcsv($fp); // Get column headers
-
-$data = array();
-while (($row = fgetcsv($fp)) !== false) {
-    $data[] = array_combine($headers, $row);
-}
-fclose($fp);
-
-$json = json_encode($data, JSON_PRETTY_PRINT);
-
-$output_filename = 'data.json';
-file_put_contents($output_filename, $json);
-
-
-
-
-*/
-
 
 // ********************************************************************  
 //
@@ -1092,11 +1014,6 @@ foreach ($arrINIcsvfile as $line) {
 echo "<br />";
 echoColor("] INI file read.<br />","red");
 
-
-$arrcsv=[];
-echoColor( $tradeCsvHeaders, "blue" );
-$arrcsv[]=$tradeCsvHeaders;
-
 // here $line is just a string not arr
 $idx=0;
 foreach ($rawtrades as $line) {
@@ -1108,64 +1025,14 @@ foreach ($rawtrades as $line) {
             print_r($line);
         }
         $lineArray = explode(",", $line);
-        // GenerateTrade($lineArray ,$idx, $arrINIcsvfile);
-        $arrcsv[]= GenerateTrade($lineArray ,$idx, $arrINIcsvfile);
+        GenerateTrade($lineArray ,$idx, $arrINIcsvfile);
 
     }
     $idx++;
 }
 
 
-
-$ftimeout    = GetDBSafe_NYCTimeNOW(1);   
-
-$fnameout        = $dirPrefix. "cuedtrades_". $tradedatestr . "_recv_". $ftimeout. ".csv";     
-$fnameoutjson    = $dirPrefix. "cuedtrades_". $tradedatestr . "_recv_". $ftimeout. ".json";     
-$fnameoutcsv     = $dirPrefix. "cuedtrades.csv";     
-$fnameoutcsvjson = $dirPrefix. "cuedtrades.json";  
-
-echoColor("<br />] END OF GenrateTrades()... writing $fnameoutcsv and $fnameout (log) containing  tradeCsvHeaders==","blue");
-print_r($arrcsv);
-
-
-writeArrayToCSV($arrcsv, $fnameoutcsv);
-writeArrayToCSV($arrcsv, $fnameout   );
-
-   
-echoColor("<br />] WROTE CSV (w/ Header) FILES: $fnameoutcsv and $fnameout ","purple");
-
-
-//make function
-$fp = fopen($fnameoutcsv, 'r');
-$headers = fgetcsv($fp); // Get column headers
-
-$data = array();
-while (($row = fgetcsv($fp)) !== false) {
-    $data[] = array_combine($headers, $row);
-}
-fclose($fp);
-
-$json = json_encode($data, JSON_PRETTY_PRINT);
-
-// $output_filename = $fnameoutcsvjson ;    //'data.json';
-file_put_contents($fnameoutcsvjson, $json);
-file_put_contents($fnameoutjson, $json);
-
-echoColor("<br />] WROTE JSON FILES: $fnameoutcsvjson and $fnameoutjson ","purple");
-
-
 /*
-
-
-$ftimeout0 = GetDBSafe_NYCTimeNOW(0);   
-$ftimeout = GetDBSafe_NYCTimeNOW(1);   
-$fnameout = $dirPrefix. "rawtrades_". $tradedatestr . "_recv_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
-
-
-
-
-
-
 
 ('\n', '2024-01-11', '] ENTER trades Date (default=2024-01-11): ')
 2024-01-09
