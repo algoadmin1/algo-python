@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "3.66";
+                                                      $vers = "3.76";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
@@ -294,10 +294,11 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
 
 
     if($msg0==1){
-    echo "] GenerateTrade() v_  $vers   arr == ";  
+            echo "] GenerateTrade() v_  $vers   arr == ";  
     // echo "] GenerateTrade()    arr == ";  
-    print_r($arr);
-    }   
+            print_r($arr);
+    }  
+
     $tradestr0="";
     $tradestr1="";
     
@@ -344,7 +345,7 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
 
 
     $pstr = $idx . ") at". " " . $arr[3]. " ". $arr[1] . " ". $arr[2] . " " . $arr[4] . " " . $arr[5] . " " . $arr[6] . " " . $currstr . $arr[7] . " count=" . $arr[8] . " " . $currstr . $arr[10] . " or " . $arr[9] . " " . $aboveBelowstr . " " . $S1R1str;
-    print_colored($pstr, $col); // Assuming print_colored is a defined function in your code
+    if($msg0==1) print_colored($pstr, $col); // Assuming print_colored is a defined function in your code
 
     $buySell = $arr[4];
     $symbol0 = $arr[5];
@@ -359,6 +360,7 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
     $strikeSize = 5;
     $optionentry="buyToOpen";
     $optionTrade=0;
+    $numoptionslegGlobal = $optionTrade;
 
     if ($col == $colorDarkGreen || $col == $colorDarkRed) {
         $dummy9 = 0;
@@ -366,16 +368,11 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
         foreach ($arrINIcsv as $lineini) {
             $lineiniarr = explode(',', $lineini);
 
-/* 
-    Symbol,Action,Range,Value,TradeType,Aux,SigCnt,NumShares,NumStrikes
-        AMD,SELL,ABOVE,R1,LONG_PUTS,COUNT,7,3,1
-        AMD,BUY,BELOW,S1,LONG_CALLS,COUNT,5,4,1
-*/
             $optionTrade=0;
 
             if ($symbol0 == $lineiniarr[0] && $buySell == $lineiniarr[1]) {
                 $pstr9 = "(ini." . $linecnt . ") " . $lineiniarr[0] . " " . $lineiniarr[1] . "<<=====" . " " . $aboveBelowstr . " " . $S1R1str . " Trade: " . $symbol0 . " " . $lineiniarr[4];
-                print_colored($pstr9, $colorGray); // Assuming $colorGray is defined elsewhere in your code
+                if($msg0==1) print_colored($pstr9, $colorGray); // Assuming $colorGray is defined elsewhere in your code
 
                 $price1 = floatval($arr[7]);
 
@@ -399,13 +396,13 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
                 $pstrIronCondor_5 = "] Price =" . $price1 . " IronCondor=" . $leg2_2 . "__|__" . $leg1 . " _~|~_ " . $leg3 . "__|__" . $leg4_2;
 
                 if ($price1 > 350.0) {
-                    print_colored($pstrIronCondor1, $colorBlue);
+                    if($msg0==1) print_colored($pstrIronCondor1, $colorBlue);
                 } else {
-                    print_colored($pstrIronCondor_5, $colorGray);
+                    if($msg0==1) print_colored($pstrIronCondor_5, $colorGray);
                 }
 
                 if ($lineiniarr[1] == "BUY") {
-                    print_colored($pstr8buy, $colorGreen);
+                    if($msg0==1) print_colored($pstr8buy, $colorGreen);
                     if ($lineiniarr[4] == "LONG_CALLS") {
                         $optionentry="buyToOpen_CALL";
                         $optionentry1="";
@@ -418,7 +415,7 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
                 }
 
                 if ($lineiniarr[1] == "SELL") {
-                    print_colored($pstr8sell, $colorRed);
+                    if($msg0==1) print_colored($pstr8sell, $colorRed);
                     if ($lineiniarr[4] == "LONG_PUTS") {
                         $optionentry="buyToOpen_PUT";
                         $optionentry1="";
@@ -435,6 +432,10 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
     Symbol,Action,Range,Value,TradeType,Aux,SigCnt,NumShares,NumStrikes
         AMD,SELL,ABOVE,R1,LONG_PUTS,COUNT,7,3,1
         AMD,BUY,BELOW,S1,LONG_CALLS,COUNT,5,4,1
+
+        TSLA,SELL,ABOVE,R1,CREDIT_CALL_SPREAD,COUNT,6,0,1
+        VXX,BUY,BELOW,S1,CREDIT_PUT_SPREAD,COUNT,5,0,1
+
 
 */
 
@@ -462,9 +463,22 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
                     if($lineiniarr[1]=="SELL") $strikePrice2c = $strikePrice2above;
 
 //                                       tradeDate,tradeTime,tradeType,                                     tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,timestamp
-                   
+                    // 
+                    $strikePrice2d =      $S1R1str ;             
+
+                    if($optionTrade==2 &&  ($lineiniarr[4] == "CREDIT_CALL_SPREAD") ){
+                        $strikePrice2c = $leg2;
+                        $strikePrice2d = $leg1;
+                    }
+                    
+                    if($optionTrade==2 &&  ($lineiniarr[4] == "CREDIT_PUT_SPREAD") ){
+                        $strikePrice2c = $leg4;
+                        $strikePrice2d = $leg3;
+                    }
+
+                    
                     // 1st leg
-                    $tradestr1 = $arr[2].",". $arr[3].",". $optionentry. "_". $optionentry1. ",". $tradesize0a.",". $arr[5].",". $arr[6].",". $arr[7].",". $arr[1].",". $strikePrice2c.",". $strikestr. ",". $S1R1str. ",". $arr[10]. ",". $arr[9]. ",". $tradestrong.",". $tradeLeg.",". $timestampnow   ;
+                    $tradestr1 = $arr[2].",". $arr[3].",". $optionentry. "_". $optionentry1. ",". $tradesize0a.",". $arr[5].",". $arr[6].",". $arr[7].",". $arr[1].",". $strikePrice2c.",". $strikestr. ",". $strikePrice2d. ",". $arr[10]. ",". $arr[9]. ",". $tradestrong.",". $tradeLeg.",". $timestampnow   ;
 
                     // 2nd leg
                     // if( $optionTrade ==2 ){   $tradestr2= "";  }
@@ -486,13 +500,12 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
                 // 2024-01-02,1130,buyToOpen_CALL_,4,ROKU,atLimit,89.49,436 ,85,STRIKE,S1,-1.02,-1.1435%,1,1,2024-01-18T070952
 
                 $pstr5 = "___________# optionTrades= $optionTrade __________**_________". $tradestr1 ;
-                print_colored($pstr5, $colorGray);
+                if($msg0==1) print_colored($pstr5, $colorGray);
             }
 
             $linecnt++;
         }
     }
-    // $tradestr0.= $tradestr1;
     return( $tradestr0 );
 }
 
@@ -1216,9 +1229,9 @@ foreach ($rawtrades as $line) {
         //add aux trades
         if($numoptionslegGlobal>=1 && strlen($tradestr1GlobalStr)> $minstrlen )  $arrcsv[]= $tradestr1GlobalStr;   
 
-        if($numoptionslegGlobal>=2 && strlen($tradestr2GlobalStr)> $minstrlen )  $arrcsv[]= $tradestr2GlobalStr;   
-        if($numoptionslegGlobal>=3 && strlen($tradestr3GlobalStr)> $minstrlen )  $arrcsv[]= $tradestr3GlobalStr;   
-        if($numoptionslegGlobal==4 && strlen($tradestr4GlobalStr)> $minstrlen )  $arrcsv[]= $tradestr4GlobalStr;   
+        // if($numoptionslegGlobal>=2 && strlen($tradestr2GlobalStr)> $minstrlen )  $arrcsv[]= $tradestr2GlobalStr;   
+        // if($numoptionslegGlobal>=3 && strlen($tradestr3GlobalStr)> $minstrlen )  $arrcsv[]= $tradestr3GlobalStr;   
+        // if($numoptionslegGlobal==4 && strlen($tradestr4GlobalStr)> $minstrlen )  $arrcsv[]= $tradestr4GlobalStr;   
  
         // print_r($arrcsv);
     }
@@ -1235,7 +1248,7 @@ $fnameoutcsv     = $dirPrefix. "cuedtrades.csv";
 $fnameoutcsvjson = $dirPrefix. "cuedtrades.json";  
 
 echoColor("<br />] END OF GenrateTrades()... writing $fnameoutcsv and $fnameout (log) containing  tradeCsvHeaders==","blue");
-print_r($arrcsv);
+if($msg0==1) print_r($arrcsv);
 
 
 writeArrayToCSV($arrcsv, $fnameoutcsv);
@@ -1262,6 +1275,44 @@ file_put_contents($fnameoutcsvjson, $json);
 file_put_contents($fnameoutjson, $json);
 
 echoColor("<br />] WROTE JSON FILES: $fnameoutcsvjson and $fnameoutjson ","purple");
+
+$u=0;
+$col0="blue";
+foreach ($arrcsv as $line0) {
+    $col0="blue";
+    $startrade="     ";
+
+    $arr0 = explode(",", $line0);
+    if($arr0[2]=="BUY" || $arr0[2]=="buyToOpen_PUT_sellToOpen_PUT"  ||  $arr0[2]=="buyToOpen_CALL_" ){
+        // $col0="darkgreen";    
+        $col0="gray";    
+        if($arr0[13]=="1"){
+              $col0="green"; 
+              $startrade="^***^";
+        }
+    }
+    
+    if( $arr0[2]=="SELL" || $arr0[2]=="buyToOpen_CALL_sellToOpen_CALL"  ||  $arr0[2]=="buyToOpen_PUT_"  ) {
+        // $col0="darkred";  
+        $col0="gray";    
+  
+        if($arr0[13]=="1") {
+             $col0="red"; 
+             $startrade="v***v";
+        }
+        
+    }
+
+
+    // echoColor($u. ")  ". $line0. "<br/ >", "blue");
+    echoColor($u. ")  ". $startrade. " " . $line0. "<br/ >", $col0);
+    $u++;
+
+}//foreach
+
+
+if($msg0==1) echo $json;
+
 
 
 /*
