@@ -130,14 +130,18 @@ current_date_ny = datetime.datetime.now(new_york_timezone).date()
 #print(f"Current date in New York: {current_date_ny.strftime('%Y-%m-%d')}")
 dstr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
 dstr1 = dstr  # dstr1 = doesnt change in code todays DATE in NYC
-
+dstrlast = dstr
 print("Today's date in New York:",dstr1)
 
 
 ##################################################### FUNCTIONS
 
+def get_udate():
+    datestr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
+    return datestr
+
 def rand(num):
-    return(random.randint(0, num))
+    return(random.randint(0, (num-1)))
 
 def print_colored(text, color_code): 
     print(f"\033[{color_code}m{text}\033[0m") 
@@ -459,7 +463,15 @@ while keepLooping > 0:
 
     current_date_time_ny = datetime.datetime.now(new_york_timezone)
     dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
-    print("\n======================>Today's Date and Time in NYC (EDT) is:",dtstr)
+    dstrnew = get_udate()
+    print("\n======================>Today's Date and Time in NYC (EDT) is:",dtstr, "comparing dstr to ", dstr , " to dstrnew ",dstrnew )
+    if(dstr == dstrnew ):
+        dumdum0=0
+    else:
+        print("\n****==================>Today's Date CHANGED from: dstr=", dstr, " to dstrnew=", dstrnew   )
+        dstr=dstrnew
+        
+
     
 #### End of Loop
     # Decrement keepLooping to eventually exit the loop
@@ -468,6 +480,8 @@ while keepLooping > 0:
     attemptStr="\n] Attempting to Loop "+str( keepLooping)+" times, with a " +str(timeDelay)+" second delay between reading the local file, for a \nMax # minutes of: "+str(MaxMinutes)+" Max HOURS="+str(  (keepLooping * (timeDelay+0 )/60 )/60 )+"\n\n" 
     print_colored_rnd(attemptStr)
 
+    # if abc  dstr = get_udate()
+    #
     #END OF THE LOOP
 
 ###################### ENDING LOOP **********************************************
