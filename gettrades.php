@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "3.76";
+                                                      $vers = "3.90";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
@@ -291,10 +291,11 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
     global $tradestr2GlobalStr;   
     global $tradestr3GlobalStr;   
     global $tradestr4GlobalStr;   
+    global $vers;   
 
 
     if($msg0==1){
-            echo "] GenerateTrade() v_  $vers   arr == ";  
+            echo "] GenerateTrade() v_ $vers  arr == ";  
     // echo "] GenerateTrade()    arr == ";  
             print_r($arr);
     }  
