@@ -130,7 +130,7 @@ current_date_ny = datetime.datetime.now(new_york_timezone).date()
 #print(f"Current date in New York: {current_date_ny.strftime('%Y-%m-%d')}")
 dstr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
 dstr1 = dstr  # dstr1 = doesnt change in code todays DATE in NYC
-dstrlast = dstr
+
 print("Today's date in New York:",dstr1)
 
 
@@ -463,15 +463,7 @@ while keepLooping > 0:
 
     current_date_time_ny = datetime.datetime.now(new_york_timezone)
     dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
-    dstrnew = get_udate()
-    print("\n======================>Today's Date and Time in NYC (EDT) is:",dtstr, "comparing dstr to ", dstr , " to dstrnew ",dstrnew )
-    if(dstr == dstrnew ):
-        dumdum0=0
-    else:
-        print("\n****==================>Today's Date CHANGED from: dstr=", dstr, " to dstrnew=", dstrnew   )
-        dstr=dstrnew
-        
-
+    print("\n======================>Today's Date and Time in NYC (EDT) is:",dtstr)
     
 #### End of Loop
     # Decrement keepLooping to eventually exit the loop
