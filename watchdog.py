@@ -17,6 +17,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 # from datetime import datetime 
 
+import json
 import robin_stocks as rs
 
 
@@ -30,25 +31,85 @@ def Check_data(array, datastr):
     return datastr in array
 
 def CheckPositions(name, account):
-    print("Checking Positions...", account, " for ", name)
+    print("Checking Positions, build_holdings...", account, " for ", name)
+    my_stocks =  rs.robinhood.build_holdings()
+    for key,value in my_stocks.items():
+        print(key,value)
     return True
 
 def ClosePositions(name, account):
     print("Calling CLOSE Positions on ", account)
     return True
 
+def printJson(dict0, str0):
+    json1 = json.dumps(dict0, indent=10)
+    print( str0," json=",json1)
+
 # robin_stocks Docs:  https://robin-stocks.readthedocs.io/en/latest/robinhood.html#logging-in-and-out
 def CheckPostionsRobinhood( username0, pwd0 ):
     print("CheckPostionsRobinhood() Positions for ", username0)
 
+    days0 = 1
+    secsInADay = 86400
+    totalseconds = secsInADay * days0
+
+    # 497177477
+    rs.robinhood.authentication.login(username=username0, password=pwd0, expiresIn=totalseconds, scope='internal', by_sms=True, store_session=True, mfa_code=None, pickle_name='')
+
     # Log in to Robinhood (replace 'username' and 'password' with your credentials)
-    rs.robinhood.authentication.login(username=username0, password='Crixus2011', expiresIn=86400, scope='internal', by_sms=True, store_session=True, mfa_code=None, pickle_name='')
+    # rs.robinhood.authentication.login(username=username0, password='Crixus2011', expiresIn=86400, scope='internal', by_sms=True, store_session=True, mfa_code=None, pickle_name='')
+    
+    # login = rs.robinhood.login(username=username0, password='Crixus2011') # expiresIn=86400, scope='internal', by_sms=True, store_session=True, mfa_code=None )
+    
+    # login = rs.robinhood.login(username="my_email_@gmail.com",password="my_password_here",mfa_code="otp", pickle_name="")
+    # login = r.login(<username>,<password>)
 
     # Get portfolio information
-    rs.robinhood.profiles.load_account_profile(account_number=None, info=None)
+    # rs.robinhood.profiles.load_account_profile(account_number=None, info=None)
+    prof = rs.robinhood.profiles.load_account_profile(account_number=None, info=None)
+    printJson(prof, "Profile")
+
+    poss = rs.robinhood.get_open_stock_positions()
+    # poss= rs.robinhood.options.get_open_positions(info=None)
+    printJson(poss, "Stock positions")
+
+    # poss = rs.get_current_positions()
+    # printJson(poss, "Open positions")
+
+###### THIS WORKS !
+    # ord = rs.robinhood.export_completed_option_orders(".", "Completed ORDERS:") 
+    # printJson(ord, "Completed Orders")
+
+###### THIS WORKS !
+    # rs.robinhood.order_buy_market('AMD',2,  "gtc", extendedHours=True )
+    # rs.robinhood.order_buy_market(  'AMD',1,timeInForce='gtc', extendedHours=True )
+
+# order(symbol, quantity, "buy", account_number, None, None, timeInForce, extendedHours, jsonify)
+    # rs.robinhood.order_buy_market('AMD', 1) # None , None, "gfc", True )
+
+# response:
+# AMD {'price': '179.030000', 'quantity': '0.00000000', 'average_buy_price': '0.0000', 'equity': '0.00', 'percent_change': '0.00', 'intraday_percent_change': '0.00', 'equity_change': '0.000000', 'type': 'stock', 'name': 'AMD', 'id': '940fc3f5-1db5-4fed-b452-f3a2e4562b5f', 'pe_ratio': '1328.230000', 'percentage': '0.00'}
+
+###### THIS WORKS !
+    my_items = rs.robinhood.options.get_open_option_positions(account_number=None, info=None)
+    printJson(my_items, "Option OPEN Orders")
+
+
+###### THIS WORKS !
+    print("] calling build_holdings ")
+    my_items =  rs.robinhood.build_holdings()
+    h=0;
+    for key,value in my_items.items():
+    # for key,value in my_items():
+        print(h," )")
+        print(key,value)
+        h+=1
 
     # rs.login(username=username0, password=pwd0)
     # portfolio = rs.account.get_portfolio()
+
+
+###### THIS WORKS !
     # Log out from Robinhood
     rs.robinhood.authentication.logout()    
     # print(portfolio)
@@ -57,7 +118,7 @@ def CheckPostionsRobinhood( username0, pwd0 ):
 tstr="nytime"
 LOOPMax =  7 * 24  * 60 * 12
 SECSMax =  5  # 20 loops * 12 secs
-pwd0="Crixus"
+pwd0="rixus"
 # Get current date in New York - we need EDT for markets...
 new_york_timezone = pytz.timezone('America/New_York')
 current_date_ny = datetime.datetime.now(new_york_timezone).date()
@@ -76,7 +137,8 @@ print("\n $$$ Welcome to the Algo Investor's 'Watch Dog' - the Automated Porfoli
 print("\n\nThis module will call the Brokerage APIs directly.\nPlanned: Robinhood API, Fidelity API, Schwab/TD API, E*Trade API")
 
 print("\n\n\nAttempting Robinhood Access...")
-pwd0=pwd0+"2011"
+# pwd0="C"+pwd0+"2011"
+pwd0="c"+pwd0+"2011"
 CheckPostionsRobinhood( "roguequant1@gmail.com", pwd0 )
 
 
@@ -173,7 +235,7 @@ while keepLooping > 0:
     # Wait for 3 seconds then open local file... (adjust for longer durations like 5 sec+ )
 
     print("BrokerageRequest[ 'RobinhoodAPI', 'GetPositions' ...")
-    CheckPositions("Gianni", "12345354911")
+    # CheckPositions("Gianni", "12345354911")
 
 
     current_date_time_ny = datetime.datetime.now(new_york_timezone)
