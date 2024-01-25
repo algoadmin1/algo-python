@@ -9,6 +9,7 @@ import datetime
 import pytz
 import shutil
 import sys
+import random
 
 import os
 
@@ -20,6 +21,7 @@ import matplotlib.pyplot as plt
 import json
 import robin_stocks as rs
 
+msg00=0
 
 #   open .ini file
 #
@@ -59,7 +61,6 @@ def ClosePositions(name, account):
 def printJson(dict0, str0):
     json1 = json.dumps(dict0, indent=10)
     print( str0," json=",json1)
-
 
 def sendOrderSell( buySell, qty0, symbol0 , assettype, priceLimit ):
     # Get the instrument URL for the stock
@@ -113,11 +114,62 @@ def GetHoldings(str):
     return my_items
 
 
+
+
+def GetOpenPositions(assettype0):
+    if(assettype0=="stock"):
+        print("Get0penPositions()...")
+    # robin_stocks.robinhood.account.get_open_stock_positions(account_number=None, info=None)[source]
+    # Returns a list of stocks that are currently held.
+
+    # Parameters:	
+    # acccount_number (Optional[str]) – the robinhood account number.
+    # info (Optional[str]) – Will filter the results to get a specific value.
+    # Returns:	
+    # [list] Returns a list of dictionaries of key/value pairs for each ticker. If info parameter is provided, a list of strings is returned where the strings are the value of the key that matches info.
+
+    # Dictionary Keys:
+        
+    # url
+    # instrument
+    # account
+    # account_number
+    # average_buy_price
+    # pending_average_buy_price
+    # quantity
+    # intraday_average_buy_price
+    # intraday_quantity
+    # shares_held_for_buys
+    # shares_held_for_sells
+    # shares_held_for_stock_grants
+    # shares_held_for_options_collateral
+    # shares_held_for_options_events
+    # shares_pending_from_options_events
+    # updated_at
+    # created_at
+
+def WithDrawFundsToBankAccount():
+    print("Withdrawing...")
+    # robin_stocks.robinhood.account.withdrawl_funds_to_bank_account(ach_relationship, amount, info=None)[source]
+    # Submits a post request to withdraw a certain amount of money to a bank account.
+
+    # Parameters:	
+    # ach_relationship (str) – The url of the bank account you want to withdrawl the money to.
+    # amount (float) – The amount of money you wish to withdrawl.
+    # info (Optional[str]) – Will filter the results to get a specific value.
+    # Returns:	
+    # Returns a list of dictionaries of key/value pairs for the transaction.
+
+
+
+
 # robin_stocks Docs:  https://robin-stocks.readthedocs.io/en/latest/robinhood.html#logging-in-and-out
-def CheckPostionsRobinhood( username0, pwd0 ):
+def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
     print("CheckPostionsRobinhood() Positions for ", username0)
     
-    ordersLIVE= 1
+    # UNCOMMENT FOR NO ORDER FLOW
+    # ordersLIVE= 0
+
     getOptionsPOSS=0
     
     days0 = 1
@@ -138,11 +190,13 @@ def CheckPostionsRobinhood( username0, pwd0 ):
     # Get portfolio information
     # rs.robinhood.profiles.load_account_profile(account_number=None, info=None)
     prof = rs.robinhood.profiles.load_account_profile(account_number=None, info=None)
-    printJson(prof, "Profile")
+    if(msg00==1):
+        printJson(prof, "Profile")
 
     poss = rs.robinhood.get_open_stock_positions()
     # poss= rs.robinhood.options.get_open_positions(info=None)
-    printJson(poss, "Stock positions")
+    if(msg00==1):
+        printJson(poss, "Stock positions")
 
     # poss = rs.get_current_positions()
     # printJson(poss, "Open positions")
@@ -167,7 +221,7 @@ def CheckPostionsRobinhood( username0, pwd0 ):
     if(ordersLIVE==1):
         qty0        =   1
         sym0        =   "aapl"
-        buySell0= "BUY"
+        buySell0    = "BUY"
         assettype0  ="stock"
         #sendMarketOrder( buySell0, qty0,sym0 , assettype0  )
             
@@ -223,10 +277,11 @@ def CheckPostionsRobinhood( username0, pwd0 ):
 
 
 # POST ORDER SEND   *** DELAY ***
-    secs=2
-    print("delaying ",secs,"seconds...")
-    delayLoop(2.5)  
-    print("resuming...")
+    if(qty0>0):
+        secs=2
+        print("delaying ",secs,"seconds...")
+        delayLoop(2.5)  
+        print("resuming...")
 
 
 
@@ -244,7 +299,8 @@ def CheckPostionsRobinhood( username0, pwd0 ):
 
 
 ###### THIS WORKS !
-    my_items = GetHoldings("AFTER TRADE")
+    if(qty0>0):
+        my_items = GetHoldings("AFTER TRADE")
 
     # print("] Holdings AFTER BUY ")
     # my_items =  rs.robinhood.build_holdings()
@@ -263,6 +319,77 @@ def CheckPostionsRobinhood( username0, pwd0 ):
     # Log out from Robinhood
     rs.robinhood.authentication.logout()    
     # print(portfolio)
+
+
+def get_udate():
+    datestr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
+    return datestr
+
+def rand(num):
+    return(random.randint(0, (num-1)))
+
+def print_colored(text, color_code): 
+    print(f"\033[{color_code}m{text}\033[0m") 
+
+def print_colored_rnd(text):
+    r = rand(colorArrayLen)
+    print_colored(text, colorArray[r])
+
+def print_colored_rnd1(text, r):
+    # r = rand(colorArrayLen)
+    print_colored(text, colorArray[r])
+ 
+#    / \\__
+#   (    @\___
+#   /         O
+#  /   (_____/
+# /_____/   U
+
+#      __
+# o-''|\_____/)
+#  \_/|_)     )
+#     \  __  /
+#     (_/ (_/ 
+
+def printWatchDogWelcome():
+    c=2
+    dog0="                  ^_"
+    print_colored_rnd1(dog0,c)
+    dog1="   / \\\\__     o-''|\\_____/)"
+    print_colored_rnd1(dog1,c)
+    dog2="  (    @\\___    \\_/|_)     )"
+    print_colored_rnd1(dog2,c)
+    dog3="  /         O      \\  __  /"
+    print_colored_rnd1(dog3,c)
+    dog4=" /   (_____/       (_/ (_/"
+    print_colored_rnd1(dog4,c)
+    dog5="/_____/   U    "
+    print_colored_rnd1(dog5,c)
+
+################################################################ END OF def abcs():
+    
+
+
+# colors 
+colorGreen ="32"
+colorBlue  ="34"
+colorCyan  ="36"
+colorOrange  ="33"
+colorRed  ="31"
+colorMagenta  ="35"
+colorYellow  ="33"
+colorDarkGreen  ="32;2"
+colorDarkRed  ="31;2"
+colorPurple  ="35;2"
+colorBrown  ="33;2"
+colorWhite  ="97"
+colorLimeGreen  ="92"
+colorAqua  ="96"
+colorGray  ="90"
+
+colorArray = [ colorRed, colorBlue, colorGreen, colorOrange, colorCyan, colorAqua, colorYellow ,colorPurple, colorMagenta,colorBrown ]
+colorArrayLen = len(colorArray)
+
 
 
 tstr="nytime"
@@ -284,14 +411,21 @@ print("Today's date in New York:",dstr1)
 
 
 print("\n $$$ Welcome to the Algo Investor's 'Watch Dog' - the Automated Porfolio Manager (APM) $$$")
+printWatchDogWelcome()
+
 print("\n\nThis module will call the Brokerage APIs directly.\nPlanned: Robinhood API, Fidelity API, Schwab/TD API, E*Trade API")
 
 print("\n\n\nAttempting Robinhood Access...")
 # pwd0="C"+pwd0+"2011"
 pwd0="c"+pwd0+"2011"
-CheckPostionsRobinhood( "roguequant1@gmail.com", pwd0 )
+simLIVE=1
+EnterPostionsRobinhood( "roguequant1@gmail.com", pwd0 , simLIVE)
 
 
+
+
+
+#######################################################################
 # Starting Balance
 startingBalance_default = float(100000.0)
 print("\nEnter Starting Balance (", startingBalance_default, "  [0=exit]):")
