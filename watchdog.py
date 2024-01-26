@@ -317,9 +317,11 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
         assettype0  = "stock"
         buySell0    = "BUY"
         
-        sym0        =   "amzn"
-        price0      =  '89.72'
-        # sendStockOrder( buySell0, qty0, sym0, assettype0  , "market", price0)
+        sym0        =   "tsla"
+        price0      =  '183.21'
+        #
+        #   not3: this is actually treated as a BUY LIMIT order
+        ### sendStockOrder( buySell0, qty0, sym0, assettype0  , "market", price0)
         
         # qty0        =   2
         # buySell0    = "SELL"
