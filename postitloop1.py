@@ -292,7 +292,7 @@ if(injest0==1):
 # check if there is no data
 if(len(data_to_sendLastMaster) > MIN_DATA_STRING_LEN):
     print("\n] =====================================================================>>>INIT_SENDING data_to_sendLastMaster (1st TIME) via _POST...\n")
-
+    print("\n]  ok we're running, john will, here is data_to_sendL.M... = ", data_to_sendLastMaster)
     payload = {'data': data_to_sendLastMaster }
     response = requests.post(url, data=payload)
     print(response.text)
