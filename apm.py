@@ -15,12 +15,15 @@ from portfolio import Portfolio
 #       BUY_WRITE_WHEEL,
 #
 
-portfolio1 = Portfolio( "Johnnie"  , "354333", "GYFBOB", "etrade", "E3F266FC2A10034D")
+    #             def __init__(self, name, accountnumber, pwd, broker, apikey):
+
+portfolio1 = Portfolio("JB", "roguequant1@gmail.com", "354" "Crixus2011", "Robinhood", "E3F266FC2A10034D")
 
 portfolio1.initialize()
 
 portfolio1.authenticate()
-portfolio1.getAssets()
+
+portfolio1.getPositions()
 
 portfolio1.print()
 

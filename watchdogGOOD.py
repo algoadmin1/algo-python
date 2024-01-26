@@ -313,7 +313,7 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
 ######################################################
 
     if(ordersLIVE==1):
-        qty0        =   0
+        qty0        =   1
         assettype0  = "stock"
         buySell0    = "BUY"
         
@@ -321,8 +321,8 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
         price0      =  '89.72'
         # sendStockOrder( buySell0, qty0, sym0, assettype0  , "market", price0)
         
-        # qty0        =   2
-        # buySell0    = "SELL"
+        qty0        =   2
+        buySell0    = "SELL"
         sendStockOrder( buySell0, qty0, sym0, assettype0  , "market", price0)
         # .robinhood*** BEFORE SELL new sendStock0rder( SELL 1 aapl stock ) sent to market.
         # Ask price for aapl =  194.440000
