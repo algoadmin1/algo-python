@@ -292,16 +292,40 @@ if(injest0==1):
 # check if there is no data
 if(len(data_to_sendLastMaster) > MIN_DATA_STRING_LEN):
     print("\n] =====================================================================>>>INIT_SENDING data_to_sendLastMaster (1st TIME) via _POST...\n")
+    print("\n]  ok we're running, john will, here is data_to_sendLastMaster  ...  ") #, data_to_sendLastMaster)
+    print("\n \n]<=====================try-catch-ing(url:data354)========>>>\n\n")
 
-    payload = {'data': data_to_sendLastMaster }
-    response = requests.post(url, data=payload)
-    print(response.text)
-    print("<<<=============================\n\n")
-
-    # print the info line to the console
     tgt = "intradaytradesServer_"+dstr1+".txt"
-    print("Called & POSTed "+str(dataMasterLen)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
-else:
+
+    # Wrap the request in a try-except block
+    try:
+        payload = {'data': data_to_sendLastMaster }
+        response = requests.post(url, data=payload)
+        print("<<<=============================\n\n")
+
+    # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            print("Request successful")
+            print(response.text)
+            print("<<<=============================\n\n")
+
+            # print the info line to the console
+            ## tgt = "intradaytradesServer_"+dstr1+".txt"
+            print("Called & POSTed "+str(dataMasterLen)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
+
+        else:
+            print(f"Request failed with status code: {response.status_code}")
+            print("Did not write target file: ",tgt)
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        print_colored("Did not write target file: "+tgt, "red")
+        print_colored("Did not write target file: "+tgt, "red")
+        print_colored("Did NOT write target file: "+tgt, "red")
+
+
+
+else: ## str len not long enough
     print("\n] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> *NOT Sending ANY INITIAL data - NO TRADES FOUND in data_to_sendLastMaster.\n") 
 
 
