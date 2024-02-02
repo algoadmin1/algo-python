@@ -1,12 +1,79 @@
-# watchdog.py   by John Botti
+# watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-#
+versionStr =                    "3.54"
 
-import requests
-import csv
 import time
 import datetime
 import pytz
+
+# Get current date in New York - we need EDT for markets...
+new_york_timezone = pytz.timezone('America/New_York')
+current_date_ny = datetime.datetime.now(new_york_timezone).date()
+
+# colors 
+colorGreen ="32"
+colorBlue  ="34"
+colorCyan  ="36"
+colorOrange  ="33"
+colorRed  ="31"
+colorMagenta  ="35"
+colorYellow  ="33"
+colorDarkGreen  ="32;2"
+colorDarkRed  ="31;2"
+colorPurple  ="35;2"
+colorBrown  ="33;2"
+colorWhite  ="97"
+colorLimeGreen  ="92"
+colorAqua  ="96"
+colorGray  ="90"
+
+colorArray = [ colorRed, colorBlue, colorGreen, colorOrange, colorCyan, colorAqua, colorYellow ,colorPurple, colorMagenta,colorBrown ]
+colorArrayLen = len(colorArray)
+
+
+def printTodaysDate():
+    dstr7 = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
+    print("Today's date in New York:",dstr7 )
+    return dstr7
+
+def print_colored(text, color_code): 
+    print(f"\033[{color_code}m{text}\033[0m") 
+
+def print_colored_rnd1(text, r):
+    # r = rand(colorArrayLen)
+    print_colored(text, colorArray[r])
+
+def printWatchDogWelcome():
+    print("\n $$$ Welcome to the Algo Investor's 'Watch Dog' - the Automated Porfolio Manager: APM ver",versionStr)
+    print("\n ")  
+    dstr7a= printTodaysDate()
+    print("\n ")  
+    print("\n  dstr7a...")  
+
+    c=2
+    dog0="                -^_"
+    print_colored_rnd1(dog0,c)
+    dog1="   / \\\\__     o''|\\_____/)"
+    print_colored_rnd1(dog1,c)
+    dog2="  (    @\\___    \\_/|_)     )"
+    print_colored_rnd1(dog2,c)
+    dog3="  /         O      \\  __  /"
+    print_colored_rnd1(dog3,c)
+    dog4=" /   (_____/       (_/ (_/"
+    print_colored_rnd1(dog4,c)
+    dog5="/_____/   U    "
+    print_colored_rnd1(dog5,c)
+
+
+printWatchDogWelcome()
+
+print("\n\n] *** Importing python modules; this may take a moment on the first run...")
+
+import requests
+import csv
+# import time
+# import datetime
+# import pytz
 import shutil
 import sys
 import random
@@ -20,13 +87,22 @@ import matplotlib.pyplot as plt
 
 import json
 import robin_stocks as rs
+import webbrowser
+
+#custom JB class
+from portfolio import Portfolio
+
+
+print("]  ALL Python modules imported!")
 
 msg00=0
 
 #   open .ini file
 #
 #
-#
+# RULES: dont trade on FED Announc day, M T trad
+def openUrl(urlstr):
+    webbrowser.open(urlstr)
 
 def delayLoop(secs):
     """
@@ -46,6 +122,17 @@ def delayLoop(secs):
 
 def Check_data(array, datastr):
     return datastr in array
+
+
+def removeCharsFromLeftRight(str0,leftRightStr, numchars):
+    modified_string="nil"
+    if(leftRightStr=='left'):
+        modified_string = str0[numchars:]
+    if(leftRightStr=='right'):
+        numchars = numchars * -1
+        modified_string = str0[:numchars]
+        # modified_string = original_string[:-5]
+    return modified_string
 
 def CheckPositions(name, account):
     print("Checking Positions, build_holdings...", account, " for ", name)
@@ -81,12 +168,15 @@ def cancelOrders(assettype):
     if(assettype=="crypto"):
         rs.robinhood.orders.cancel_all_crypto_orders()
 
+
 def sendStockOrder( buySell, qty, symbol0 , assettype, mktLimit, price0):
     # if(mktLimit<>"" and mktLimit<>""):
     qtyMAX=10
+    qtyMAX=0
     acct0='497177477'
 
     if(qty==0):
+        print("] qty=0, exiting; NO ORDER WAS PLACED")
         return
     
     ask_price = rs.robinhood.stocks.get_latest_price(symbol0,  'ask_price')
@@ -137,7 +227,8 @@ def sendStockOrder( buySell, qty, symbol0 , assettype, mktLimit, price0):
                 print("MARKET SELL ORDER: overriding orig price:", price0, "with ASK=", price1)
                 price0 = price1
 
-            result0 =  rs.robinhood.order_sell_market(symbol0, qty, price0, 'gfd',  False, True ) 
+            # result0 =  rs.robinhood.order_sell_market(symbol0, qty, price0, 'gfd',  False, True  ) 
+            result0 =  rs.robinhood.order_sell_market(symbol0, qty, price0, 'gtc',  True, True ) 
 
             print(".robinhood*** AFTER  SELL new sendStock0rder(" ,buySell, qty, symbol0 , assettype,") sent to market.")
             print("result.rs.robinhood=",result0)
@@ -175,13 +266,62 @@ def sendStockOrder( buySell, qty, symbol0 , assettype, mktLimit, price0):
 
 
 
+def removeChar(input_str, char_to_remove):
+    """
+    Remove specified characters from the input string.
+
+    Parameters:
+    - input_str (str): The input string.
+    - char_to_remove (str): The characters to be removed.
+
+    Returns:
+    - str: The result string after removing specified characters.
+
+    Example:
+    >>> removeChar("2024-02-09", "-")
+    '20240209'
+    """
+    result_str = input_str.replace(char_to_remove, "")
+    return result_str
+
+# https://robin-stocks.readthedocs.io/en/latest/_modules/robin_stocks/robinhood/options.html
+# robinhood examples
+
+def padStringLeft(input_str, char_str, max_chars):
+    """
+    Pad the input string with characters to the left.
+
+    Parameters:
+    - input_str (str): The input string.
+    - char_str (str): The characters to pad with.
+    - max_chars (int): The maximum number of characters after padding.
+
+    Returns:
+    - str: The result string after padding to the left.
+
+    Example:
+    >>> padStringLeft("175", "0", 10)
+    '0000000175'
+    """
+    padding_size = max(0, max_chars - len(input_str))
+    padded_str = char_str * padding_size + input_str
+    return padded_str
+
+# # Example usage:
+# input_string = "175"
+# char_to_pad = "0"
+# max_characters = 10
+# result_string = padStringLeft(input_string, char_to_pad, max_characters)
+# print(result_string)
 
 
 
 
+def sendOptionLimitOrder(symbol0,qty,price0,expdate,strike0,putcall,buysell):
+    sendOptionOrder( symbol0,qty,price0,expdate,strike0,putcall,buysell ,"limit" )
 
 
-def sendOptionOrder(symbol0,qty,price0,expdate,strike0,putcall,buysell):
+def sendOptionOrder(symbol0,qty,price0,expdate,strike0,putcall,buysell,mktOrLimitStr):  #   mktOrLimitStr ="mkt" or "limit"
     #  Buy 5 $150 May 1st, 2020 SPY puts if the price per contract is $1.00. Good until cancelled.
     # robin_stocks.order_buy_option_limit('open','debit',1.00,'SPY',5,'2020-05-01',150,'put','gtc')
     # dur='gtc'
@@ -189,11 +329,45 @@ def sendOptionOrder(symbol0,qty,price0,expdate,strike0,putcall,buysell):
         print(" Zero qty ==0 , exiting send0ption0rder()")
         return
     acct0='497177477'
-    if(buysell=="BUY"):
-        rs.robinhood.order_buy_option_limit('open','debit',price0,symbol0, qty, expdate,strike0,putcall,acct0)
-    if(buysell=="SELL"):
-        rs.robinhood.order_sell_option_limit('close','debit',price0,symbol0, qty, expdate,strike0,putcall,acct0)
+    if(mktOrLimitStr=="limit"):
+        if(buysell=="BUY"):
+            rs.robinhood.order_buy_option_limit('open','debit',price0,symbol0, qty, expdate,strike0,putcall,acct0)
+        if(buysell=="SELL"):
+            rs.robinhood.order_sell_option_limit('close','credit',price0,symbol0, qty, expdate,strike0,putcall,acct0)
+    if(mktOrLimitStr=="mkt"):
+        print("Option Market Order Detected, returning did nothing.")
+        print("     1st  -  GET BID/ASK FOR ABC symbol's Option at strike for expdate  ")
+        print("     2nd  -  IF BUY,  mktPrice = ASK FOR ABC symbol's Option at strike for expdate  ")
+        print("     3rd  -  IF SELL, mktPrice = BID FOR ABC symbol's Option at strike for expdate  ")
+        print("     4th  -  Execute order as LIMIT order with slippage  slipUSD/slipPct    ")
+        print("\n")
 
+def GetHoldingsButLoginFirst(str, username0, pwd0): 
+
+    days0 = 5
+    secsInADay = 86400
+    totalseconds = secsInADay * days0
+
+    rs.robinhood.authentication.login(username=username0, password=pwd0, expiresIn=totalseconds, scope='internal', by_sms=True, store_session=True, mfa_code=None, pickle_name='')
+
+    print("] Your Holdings ",str," :")
+    my_items =  rs.robinhood.build_holdings()
+    h=0;
+    for key,value in my_items.items():
+    # for key,value in my_items():
+        print("symbol=",key, "  ",h," )")
+        print(key,value)
+        h+=1
+    return my_items
+
+def FindOptions(symbol, expiration_date, strike0, option_type, username0, pwd0):
+    days0 = 5
+    secsInADay = 86400
+    totalseconds = secsInADay * days0
+    rs.robinhood.authentication.login(username=username0, password=pwd0, expiresIn=totalseconds, scope='internal', by_sms=True, store_session=True, mfa_code=None, pickle_name='')
+
+    result0 = rs.robinhood.find_tradable_options( symbol, expiration_date, strike0, option_type )  
+    return result0
 
 
 def GetHoldings(str):
@@ -202,12 +376,35 @@ def GetHoldings(str):
     h=0;
     for key,value in my_items.items():
     # for key,value in my_items():
-        print(h," )")
+        print("symbol=",key, "  ", h, " ")
+        # print("symbol=",h," )")
         print(key,value)
         h+=1
     return my_items
 
 
+
+# def get_chains(symbol, info=None):
+#     """Returns the chain information of an option.
+
+#     :param symbol: The ticker of the stock.
+#     :type symbol: str
+#     :param info: Will filter the results to get a specific value.
+#     :type info: Optional[str]
+#     :returns: Returns a dictionary of key/value pairs for the option. If info parameter is provided, \
+#     a list of strings is returned where the strings are the value of the key that matches info.
+
+#     """
+#     try:
+#         symbol = symbol.upper().strip()
+#     except AttributeError as message:
+#         print(message, file=get_output())
+#         return None
+
+#     url = chains_url(symbol)
+#     data = request_get(url)
+
+#     return(filter_data(data, info))
 
 
 def GetOpenPositions(assettype0):
@@ -255,16 +452,13 @@ def WithDrawFundsToBankAccount():
     # Returns a list of dictionaries of key/value pairs for the transaction.
 
 
-
-
 # robin_stocks Docs:  https://robin-stocks.readthedocs.io/en/latest/robinhood.html#logging-in-and-out
 def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
     print("CheckPostionsRobinhood() Positions for ", username0)
     
     # UNCOMMENT FOR NO ORDER FLOW
     # ordersLIVE= 0
-
-    getOptionsPOSS=0
+    getOptionsPOSS=1
     
     days0 = 1
     secsInADay = 86400
@@ -281,6 +475,23 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
     # login = rs.robinhood.login(username="my_email_@gmail.com",password="my_password_here",mfa_code="otp", pickle_name="")
     # login = r.login(<username>,<password>)
 
+
+    # print("] User: CREATOR Logged In.")
+    # print("] Attempting Mock Portfolio Object Operations: BEFORE...")
+
+    # portfolio1 = Portfolio("JB", "roguequant1@gmail.com", "354" "Crixus2011", "Robinhood", "E3F266FC2A10034D")
+
+    # portfolio1.initialize()
+
+    # portfolio1.authenticate()
+
+    # portfolio1.getPositions()
+
+    # portfolio1.print()
+
+    # print("] Attempted Mock Portfolio Object Operations:   AFTER...")
+
+
     # Get portfolio information
     # rs.robinhood.profiles.load_account_profile(account_number=None, info=None)
     prof = rs.robinhood.profiles.load_account_profile(account_number=None, info=None)
@@ -289,8 +500,13 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
 
     poss = rs.robinhood.get_open_stock_positions()
     # poss= rs.robinhood.options.get_open_positions(info=None)
-    if(msg00==1):
-        printJson(poss, "Stock positions")
+    printJson(poss, "********* Open Stock positions:")
+    # if(msg00==1):
+    #     printJson(poss, "Stock positions")
+
+    # possOptions = rs.robinhood.options.get_all_option_positions()
+    # printJson(possOptions, "********* Open OPTIONS positions:")
+
 
     # poss = rs.get_current_positions()
     # printJson(poss, "Open positions")
@@ -315,22 +531,15 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
     if(ordersLIVE==1):
         qty0        =   0
         assettype0  = "stock"
-        buySell0    = "BUY"
-        
-        sym0        =   "tsla"
-        price0      =  '183.21'
-        #
-        #   not3: this is actually treated as a BUY LIMIT order
-        ### sendStockOrder( buySell0, qty0, sym0, assettype0  , "market", price0)
-        
-        # qty0        =   2
-        # buySell0    = "SELL"
-        sendStockOrder( buySell0, qty0, sym0, assettype0  , "market", price0)
-        # .robinhood*** BEFORE SELL new sendStock0rder( SELL 1 aapl stock ) sent to market.
-        # Ask price for aapl =  194.440000
-        # MARKET SELL ORDER: overriding orig price: 194.48 with 194.440000
-        # .robinhood*** AFTER  SELL new sendStock0rder( SELL 1 aapl stock ) sent to market.
 
+        buySell0    = "SELL"
+        
+        sym0        =   "amzn"
+
+        price0      =  '165.75'
+
+        sendStockOrder( buySell0, qty0, sym0, assettype0  , "market", price0)
+        
 
 
 
@@ -351,21 +560,30 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
         # buySell0    ="BUY"
         # # buySell0    ="SELL"
         # print(".robinhood *SENDING Order" , sym0,qty0,price0,expdate,strike0,putcall, buySell0)
-        # sendOptionOrder(sym0,qty0,price0,expdate,strike0,putcall, buySell0)
+        # se ndOptionLimitOrder(sym0,qty0,price0,expdate,strike0,putcall, buySell0)
 
-        ####################################### 
-        # qty0        =   3
-        # sym0        =   "amd"
-        # putcall     ='call'
-        # price0      =2.70
-        # # price0      =6.30
-        # # expdate="2024-02-02"
-        # expdate     ="2024-01-26"
-        # strike0     =180
-        # buySell0    ="BUY"
-        # # buySell0    ="SELL"
-        # print(".robinhood *SENDING Order" , sym0,qty0,price0,expdate,strike0,putcall, buySell0)
-        # sendOptionOrder(sym0,qty0,price0,expdate,strike0,putcall, buySell0)
+        ###################################### 
+        qty0        =   0
+        sym0        =   "AAPL"
+        putcall     =   'call'
+        price0      =  6
+        expdate     =   "2024-02-09"
+        strike0     =   195
+        buySell0    =   "BUY"
+        # buySell0    =   "SELL"
+
+        # qty0        =   1
+        # sym0        =   "amzn"
+        # putcall     =   'call'
+        # price0      =   11.0
+        # expdate     =   "2024-02-09"
+        # strike0     =   150
+        # # buySell0  =   "BUY"
+        # buySell0    =   "SELL"
+
+        qty0        =   0
+        print(".robinhood *SENDING Order" , sym0, qty0, price0, expdate, strike0, putcall, buySell0 )
+        sendOptionLimitOrder( sym0,qty0,price0,expdate,strike0,putcall, buySell0 )
 
 
         # qty0        =   1
@@ -379,7 +597,7 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
         # buySell0    ="BUY"
         # # buySell0    ="SELL"
         # print(".robinhood *SENDING Order" , sym0,qty0,price0,expdate,strike0,putcall, buySell0)
-        # sendOptionOrder(sym0,qty0,price0,expdate,strike0,putcall, buySell0)
+        # sendOptionLimitOrder(sym0,qty0,price0,expdate,strike0,putcall, buySell0)
 
 
 
@@ -402,8 +620,8 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
 
 ###### THIS WORKS !
     if(getOptionsPOSS==1):
-        my_items = rs.robinhood.options.get_open_option_positions(account_number=None, info=None)
-        printJson(my_items, "Option OPEN Orders")
+        my_Options_items = rs.robinhood.options.get_open_option_positions(account_number=None, info=None)
+        printJson(my_Options_items, "Option OPEN Orders")
 
 
 
@@ -437,16 +655,16 @@ def get_udate():
 def rand(num):
     return(random.randint(0, (num-1)))
 
-def print_colored(text, color_code): 
-    print(f"\033[{color_code}m{text}\033[0m") 
+# def print_colored(text, color_code): 
+#     print(f"\033[{color_code}m{text}\033[0m") 
 
 def print_colored_rnd(text):
     r = rand(colorArrayLen)
     print_colored(text, colorArray[r])
 
-def print_colored_rnd1(text, r):
-    # r = rand(colorArrayLen)
-    print_colored(text, colorArray[r])
+# def print_colored_rnd1(text, r):
+#     # r = rand(colorArrayLen)
+#     print_colored(text, colorArray[r])
  
 #    / \\__
 #   (    @\___
@@ -460,45 +678,53 @@ def print_colored_rnd1(text, r):
 #     \  __  /
 #     (_/ (_/ 
 
-def printWatchDogWelcome():
-    c=2
-    dog0="                  ^_"
-    print_colored_rnd1(dog0,c)
-    dog1="   / \\\\__     o-''|\\_____/)"
-    print_colored_rnd1(dog1,c)
-    dog2="  (    @\\___    \\_/|_)     )"
-    print_colored_rnd1(dog2,c)
-    dog3="  /         O      \\  __  /"
-    print_colored_rnd1(dog3,c)
-    dog4=" /   (_____/       (_/ (_/"
-    print_colored_rnd1(dog4,c)
-    dog5="/_____/   U    "
-    print_colored_rnd1(dog5,c)
+# def printWatchDogWelcome():
+#     print("\n $$$ Welcome to the Algo Investor's 'Watch Dog' - the Automated Porfolio Manager (APM) $$$")
+#     print("\n ")  
 
-################################################################ END OF def abcs():
+#     c=2
+#     dog0="                  ^_"
+#     print_colored_rnd1(dog0,c)
+#     dog1="   / \\\\__     o-''|\\_____/)"
+#     print_colored_rnd1(dog1,c)
+#     dog2="  (    @\\___    \\_/|_)     )"
+#     print_colored_rnd1(dog2,c)
+#     dog3="  /         O      \\  __  /"
+#     print_colored_rnd1(dog3,c)
+#     dog4=" /   (_____/       (_/ (_/"
+#     print_colored_rnd1(dog4,c)
+#     dog5="/_____/   U    "
+#     print_colored_rnd1(dog5,c)
+
+def openUrls(my_items0):
+    # algoinvestorurl="https://itraderpro.co/candlesticks.php?sym="+symbol2str+"&uname=Gianni&email=johnbotti9000@gmail.com&key=8a2b18a0"
+    algoinvestorurl0="https://itraderpro.co/candlesticks.php?sym="
+    algoinvestorurl2="&uname=Guesti&email=algoinvestorr@gmail.com&key=19112b1b54"
+
+    h=0;
+    for key,value in my_items0.items():
+        print("symbol=",key, "  ", h, " ")
+        symbol2str=str(key)
+        urlstr0 = algoinvestorurl0 +  symbol2str + algoinvestorurl2
+        openUrl(urlstr0)
+        h+=1
     
 
 
-# colors 
-colorGreen ="32"
-colorBlue  ="34"
-colorCyan  ="36"
-colorOrange  ="33"
-colorRed  ="31"
-colorMagenta  ="35"
-colorYellow  ="33"
-colorDarkGreen  ="32;2"
-colorDarkRed  ="31;2"
-colorPurple  ="35;2"
-colorBrown  ="33;2"
-colorWhite  ="97"
-colorLimeGreen  ="92"
-colorAqua  ="96"
-colorGray  ="90"
+################################################################ END OF def FUNCTIONS():
+    
 
-colorArray = [ colorRed, colorBlue, colorGreen, colorOrange, colorCyan, colorAqua, colorYellow ,colorPurple, colorMagenta,colorBrown ]
-colorArrayLen = len(colorArray)
+########################################################################### 
+########################################################################### 
+########################################################################### 
+##################################################### MAIN CODE ###########
+##################################################### MAIN CODE ###########
+##################################################### MAIN CODE ###########
+########################################################################### 
+########################################################################### 
+###########################################################################
 
+ 
 
 
 tstr="nytime"
@@ -519,16 +745,94 @@ print("Today's date in New York:",dstr1)
 
 
 
-print("\n $$$ Welcome to the Algo Investor's 'Watch Dog' - the Automated Porfolio Manager (APM) $$$")
-printWatchDogWelcome()
+# print("\n $$$ Welcome to the Algo Investor's 'Watch Dog' - the Automated Porfolio Manager (APM) $$$")
+# printWatchDogWelcome()
 
-print("\n\nThis module will call the Brokerage APIs directly.\nPlanned: Robinhood API, Fidelity API, Schwab/TD API, E*Trade API")
+print("\n\nThis module will call the Brokerage APIs directly.")
+print("\nPlanned: Robinhood API, Fidelity API, Schwab/TD API, E*Trade API, Webull and Tasty Trade.")
+
+
+##################################################### CLASS STRUCTURE TESTS ###########
+#####
+#####  Start integrating Class structure for tested functions' migration to Portfolio.cancelOrder() or .sendStockOrder()
+
+print("] Attempting Mock Portfolio Object Operations: BEFORE...")
+print("] User: CREATOR Logged In. porfolio.initialize() + beginning...")
+portfolio1 = Portfolio("JB",   "roguequant1@gmail.com", "354" ,"Crixus2011", "Robinhood", "E3F266FC2A10034D")
+portfolio1.initialize()
+portfolio1.authenticate()
+portfolio1.getPositions()
+portfolio1.print()
+print("] Attempted & Completed Mock Portfolio Object Operations:   AFTER...")
+
+#########
+######### 
+##################################################### CLASS STRUCTURE TESTS END ###########
+
+
+
+
 
 print("\n\n\nAttempting Robinhood Access...")
-# pwd0="C"+pwd0+"2011"
 pwd0="c"+pwd0+"2011"
 simLIVE=1       # 0 = off, 1 = live
 EnterPostionsRobinhood( "roguequant1@gmail.com", pwd0 , simLIVE )
+
+
+
+
+
+# ] **************************************** optionSymbol =  AAPL_240209c175
+# option_chain= [{'chain_id': '7dd906e5-7d4b-4161-a3fe-2c3b62038482', 
+# 'chain_symbol': 'AAPL', 'created_at': '2023-12-28T02:05:38.841588Z', 
+# 'expiration_date': '2024-02-09', 'id': 'c54349d7-0ef3-4874-ab27-6933f2c2b114', 
+# 'issue_date': '2023-12-28', 'min_ticks': {'above_tick': '0.05', 'below_tick': '0.01', 'cutoff_price': '3.00'}, 
+# 'rhs_tradability': 'tradable', 'state': 'active', 'strike_price': '175.0000', 'tradability': 'tradable', 
+# 'type': 'call', 'updated_at': '2023-12-28T02:05:38.841591Z', 'url': 'https://api.robinhood.com/options/instruments/c54349d7-0ef3-4874-ab27-6933f2c2b114/', 
+# 'sellout_datetime': '2024-02-09T20:30:00+00:00', 'long_strategy_code': 'c54349d7-0ef3-4874-ab27-6933f2c2b114_L1', 
+# 'short_strategy_code': 'c54349d7-0ef3-4874-ab27-6933f2c2b114_S1'}]
+
+# Option details
+symbol = "AAPL"
+strike0 = 175
+expiration_date = "2024-02-09"
+option_type = "put"   # "call"
+option_chain = FindOptions( symbol, expiration_date, strike0, option_type, "roguequant1@gmail.com", pwd0 )  
+
+aPCstr =option_type[0]
+
+char_to_remove = "-"
+result_string = removeChar(expiration_date, char_to_remove)
+
+result_string1=removeCharsFromLeftRight(result_string,"left", 2)
+
+result_strikePadded = padStringLeft(str(strike0), "0", 5)
+
+optionsymbol=symbol+"  "+result_string1+ aPCstr.upper() + result_strikePadded
+print("] **************************************** optionSymbol = " , optionsymbol)
+print("option_chain=",option_chain)
+# Get option instrument data
+
+bid_price = 0.0 
+ask_price = 0.0  
+# gg = rs.robinhood.options.find_options_by_expiration(['aapl','amzn','msft'],expdate,putcall)
+option_instruments = rs.robinhood.options.find_options_by_expiration(
+    symbol,
+    expirationDate=expiration_date,
+    optionType=option_type
+    # strikePrice=strike0
+)
+print("] option_instrument==",option_instruments)
+option_instrument = option_instruments[0]           # Extract the first option instrument
+bid_price = float(option_instrument['bid_price'])
+ask_price = float(option_instrument['ask_price'])
+
+# Print bid and ask prices
+print(f"Bid Price: {bid_price}")
+print(f"Ask Price: {ask_price}")
+# Logout from Robinhood
+# rs.logout()
+######################################################
 
 
 
@@ -539,12 +843,18 @@ EnterPostionsRobinhood( "roguequant1@gmail.com", pwd0 , simLIVE )
 #######################################################################
 #######################################################################
 # Starting Balance
+#
+#
+my_stock_items = GetHoldingsButLoginFirst("BEFORE TRADE", "roguequant1@gmail.com", pwd0)
+
 startingBalance_default = float(100000.0)
 print("\nEnter Starting Balance (", startingBalance_default, "  [0=exit]):")
 startingBalance = input()
 if startingBalance == "-":
+    openUrls(my_stock_items)
     exit("exiting...-")
 if startingBalance == "0":
+    openUrls(my_stock_items)
     exit("exiting...0")
 if startingBalance == "":
     print("  Defaulting Starting Balance to ", startingBalance_default)
@@ -594,7 +904,9 @@ print("Today's Date and Time in NYC (EDT) is:",dtstr)
 #     #sys.exit()
 # if(tt<930 and tt>1415):
 #     print("\n] Markets are Open!\n\n\n")
+ 
 
+ 
 
 
 keepLooping = LOOPMax # Set keepLooping to a value greater than 0 to enter the loop
