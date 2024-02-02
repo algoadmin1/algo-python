@@ -257,10 +257,11 @@ def sendStockOrder( buySell, qty, symbol0 , assettype, mktLimit, price0):
 
 
 
+def sendOptionLimitOrder(symbol0,qty,price0,expdate,strike0,putcall,buysell):
+    sendOptionOrder( symbol0,qty,price0,expdate,strike0,putcall,buysell ,"limit" )
 
 
-
-def sendOptionOrder(symbol0,qty,price0,expdate,strike0,putcall,buysell):
+def sendOptionOrder(symbol0,qty,price0,expdate,strike0,putcall,buysell,mktOrLimitStr):  #   mktOrLimitStr ="mkt" or "limit"
     #  Buy 5 $150 May 1st, 2020 SPY puts if the price per contract is $1.00. Good until cancelled.
     # robin_stocks.order_buy_option_limit('open','debit',1.00,'SPY',5,'2020-05-01',150,'put','gtc')
     # dur='gtc'
@@ -268,10 +269,18 @@ def sendOptionOrder(symbol0,qty,price0,expdate,strike0,putcall,buysell):
         print(" Zero qty ==0 , exiting send0ption0rder()")
         return
     acct0='497177477'
-    if(buysell=="BUY"):
-        rs.robinhood.order_buy_option_limit('open','debit',price0,symbol0, qty, expdate,strike0,putcall,acct0)
-    if(buysell=="SELL"):
-        rs.robinhood.order_sell_option_limit('close','credit',price0,symbol0, qty, expdate,strike0,putcall,acct0)
+    if(mktOrLimitStr=="limit"):
+        if(buysell=="BUY"):
+            rs.robinhood.order_buy_option_limit('open','debit',price0,symbol0, qty, expdate,strike0,putcall,acct0)
+        if(buysell=="SELL"):
+            rs.robinhood.order_sell_option_limit('close','credit',price0,symbol0, qty, expdate,strike0,putcall,acct0)
+    if(mktOrLimitStr=="mkt"):
+        print("Option Market Order Detected, returning did nothing.")
+        print("     1st  -  GET BID/ASK FOR ABC symbol's Option at strike for expdate  ")
+        print("     2nd  -  IF BUY,  mktPrice = ASK FOR ABC symbol's Option at strike for expdate  ")
+        print("     3rd  -  IF SELL, mktPrice = BID FOR ABC symbol's Option at strike for expdate  ")
+        print("     4th  -  Execute order as LIMIT order with slippage  slipUSD/slipPct    ")
+        print("\n")
 
 def GetHoldingsButLoginFirst(str, username0, pwd0): 
 
@@ -462,7 +471,7 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
         # buySell0    ="BUY"
         # # buySell0    ="SELL"
         # print(".robinhood *SENDING Order" , sym0,qty0,price0,expdate,strike0,putcall, buySell0)
-        # sendOptionOrder(sym0,qty0,price0,expdate,strike0,putcall, buySell0)
+        # se ndOptionLimitOrder(sym0,qty0,price0,expdate,strike0,putcall, buySell0)
 
         ###################################### 
         qty0        =   0
@@ -471,7 +480,7 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
         price0      =  6
         expdate     =   "2024-02-09"
         strike0     =   195
-        buySell0  =   "BUY"
+        buySell0    =   "BUY"
         # buySell0    =   "SELL"
 
         # qty0        =   1
@@ -483,9 +492,9 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
         # # buySell0  =   "BUY"
         # buySell0    =   "SELL"
 
-
-       # print(".robinhood *SENDING Order" , sym0, qty0, price0, expdate, strike0, putcall, buySell0)
-        # sendOptionOrder(sym0,qty0,price0,expdate,strike0,putcall, buySell0)
+        qty0        =   0
+        print(".robinhood *SENDING Order" , sym0, qty0, price0, expdate, strike0, putcall, buySell0 )
+        sendOptionLimitOrder( sym0,qty0,price0,expdate,strike0,putcall, buySell0 )
 
 
         # qty0        =   1
@@ -499,7 +508,7 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
         # buySell0    ="BUY"
         # # buySell0    ="SELL"
         # print(".robinhood *SENDING Order" , sym0,qty0,price0,expdate,strike0,putcall, buySell0)
-        # sendOptionOrder(sym0,qty0,price0,expdate,strike0,putcall, buySell0)
+        # sendOptionLimitOrder(sym0,qty0,price0,expdate,strike0,putcall, buySell0)
 
 
 
