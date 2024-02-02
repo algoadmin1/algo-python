@@ -482,7 +482,7 @@ while keepLooping > 0:
 
 # except Exception as e:
 #     print(f"An error occurred: {str(e)}")
-
+ 
 
     # check if there is no data
     if(len(data_to_sendLast) > MIN_DATA_STRING_LEN):
