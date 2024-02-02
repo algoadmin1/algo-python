@@ -123,6 +123,17 @@ def delayLoop(secs):
 def Check_data(array, datastr):
     return datastr in array
 
+
+def removeCharsFromLeftRight(str0,leftRightStr, numchars):
+    modified_string="nil"
+    if(leftRightStr=='left'):
+        modified_string = str0[numchars:]
+    if(leftRightStr=='right'):
+        numchars = numchars * -1
+        modified_string = str0[:numchars]
+        # modified_string = original_string[:-5]
+    return modified_string
+
 def CheckPositions(name, account):
     print("Checking Positions, build_holdings...", account, " for ", name)
     my_stocks =  rs.robinhood.build_holdings()
@@ -156,6 +167,7 @@ def cancelOrders(assettype):
         rs.robinhood.orders.cancel_all_option_orders()
     if(assettype=="crypto"):
         rs.robinhood.orders.cancel_all_crypto_orders()
+
 
 def sendStockOrder( buySell, qty, symbol0 , assettype, mktLimit, price0):
     # if(mktLimit<>"" and mktLimit<>""):
@@ -254,6 +266,54 @@ def sendStockOrder( buySell, qty, symbol0 , assettype, mktLimit, price0):
 
 
 
+def removeChar(input_str, char_to_remove):
+    """
+    Remove specified characters from the input string.
+
+    Parameters:
+    - input_str (str): The input string.
+    - char_to_remove (str): The characters to be removed.
+
+    Returns:
+    - str: The result string after removing specified characters.
+
+    Example:
+    >>> removeChar("2024-02-09", "-")
+    '20240209'
+    """
+    result_str = input_str.replace(char_to_remove, "")
+    return result_str
+
+# https://robin-stocks.readthedocs.io/en/latest/_modules/robin_stocks/robinhood/options.html
+# robinhood examples
+
+def padStringLeft(input_str, char_str, max_chars):
+    """
+    Pad the input string with characters to the left.
+
+    Parameters:
+    - input_str (str): The input string.
+    - char_str (str): The characters to pad with.
+    - max_chars (int): The maximum number of characters after padding.
+
+    Returns:
+    - str: The result string after padding to the left.
+
+    Example:
+    >>> padStringLeft("175", "0", 10)
+    '0000000175'
+    """
+    padding_size = max(0, max_chars - len(input_str))
+    padded_str = char_str * padding_size + input_str
+    return padded_str
+
+# # Example usage:
+# input_string = "175"
+# char_to_pad = "0"
+# max_characters = 10
+# result_string = padStringLeft(input_string, char_to_pad, max_characters)
+# print(result_string)
+
 
 
 
@@ -300,6 +360,15 @@ def GetHoldingsButLoginFirst(str, username0, pwd0):
         h+=1
     return my_items
 
+def FindOptions(symbol, expiration_date, strike0, option_type, username0, pwd0):
+    days0 = 5
+    secsInADay = 86400
+    totalseconds = secsInADay * days0
+    rs.robinhood.authentication.login(username=username0, password=pwd0, expiresIn=totalseconds, scope='internal', by_sms=True, store_session=True, mfa_code=None, pickle_name='')
+
+    result0 = rs.robinhood.find_tradable_options( symbol, expiration_date, strike0, option_type )  
+    return result0
+
 
 def GetHoldings(str):
     print("] Your Holdings ",str," :")
@@ -314,6 +383,28 @@ def GetHoldings(str):
     return my_items
 
 
+
+# def get_chains(symbol, info=None):
+#     """Returns the chain information of an option.
+
+#     :param symbol: The ticker of the stock.
+#     :type symbol: str
+#     :param info: Will filter the results to get a specific value.
+#     :type info: Optional[str]
+#     :returns: Returns a dictionary of key/value pairs for the option. If info parameter is provided, \
+#     a list of strings is returned where the strings are the value of the key that matches info.
+
+#     """
+#     try:
+#         symbol = symbol.upper().strip()
+#     except AttributeError as message:
+#         print(message, file=get_output())
+#         return None
+
+#     url = chains_url(symbol)
+#     data = request_get(url)
+
+#     return(filter_data(data, info))
 
 
 def GetOpenPositions(assettype0):
@@ -361,15 +452,13 @@ def WithDrawFundsToBankAccount():
     # Returns a list of dictionaries of key/value pairs for the transaction.
 
 
-
-
 # robin_stocks Docs:  https://robin-stocks.readthedocs.io/en/latest/robinhood.html#logging-in-and-out
 def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
     print("CheckPostionsRobinhood() Positions for ", username0)
     
     # UNCOMMENT FOR NO ORDER FLOW
     # ordersLIVE= 0
-    getOptionsPOSS=0
+    getOptionsPOSS=1
     
     days0 = 1
     secsInADay = 86400
@@ -685,10 +774,65 @@ print("] Attempted & Completed Mock Portfolio Object Operations:   AFTER...")
 
 
 print("\n\n\nAttempting Robinhood Access...")
-# pwd0="C"+pwd0+"2011"
 pwd0="c"+pwd0+"2011"
 simLIVE=1       # 0 = off, 1 = live
 EnterPostionsRobinhood( "roguequant1@gmail.com", pwd0 , simLIVE )
+
+
+
+
+
+# ] **************************************** optionSymbol =  AAPL_240209c175
+# option_chain= [{'chain_id': '7dd906e5-7d4b-4161-a3fe-2c3b62038482', 
+# 'chain_symbol': 'AAPL', 'created_at': '2023-12-28T02:05:38.841588Z', 
+# 'expiration_date': '2024-02-09', 'id': 'c54349d7-0ef3-4874-ab27-6933f2c2b114', 
+# 'issue_date': '2023-12-28', 'min_ticks': {'above_tick': '0.05', 'below_tick': '0.01', 'cutoff_price': '3.00'}, 
+# 'rhs_tradability': 'tradable', 'state': 'active', 'strike_price': '175.0000', 'tradability': 'tradable', 
+# 'type': 'call', 'updated_at': '2023-12-28T02:05:38.841591Z', 'url': 'https://api.robinhood.com/options/instruments/c54349d7-0ef3-4874-ab27-6933f2c2b114/', 
+# 'sellout_datetime': '2024-02-09T20:30:00+00:00', 'long_strategy_code': 'c54349d7-0ef3-4874-ab27-6933f2c2b114_L1', 
+# 'short_strategy_code': 'c54349d7-0ef3-4874-ab27-6933f2c2b114_S1'}]
+
+# Option details
+symbol = "AAPL"
+strike0 = 175
+expiration_date = "2024-02-09"
+option_type = "put"   # "call"
+option_chain = FindOptions( symbol, expiration_date, strike0, option_type, "roguequant1@gmail.com", pwd0 )  
+
+aPCstr =option_type[0]
+
+char_to_remove = "-"
+result_string = removeChar(expiration_date, char_to_remove)
+
+result_string1=removeCharsFromLeftRight(result_string,"left", 2)
+
+result_strikePadded = padStringLeft(str(strike0), "0", 5)
+
+optionsymbol=symbol+"  "+result_string1+ aPCstr.upper() + result_strikePadded
+print("] **************************************** optionSymbol = " , optionsymbol)
+print("option_chain=",option_chain)
+# Get option instrument data
+
+bid_price = 0.0 
+ask_price = 0.0  
+# gg = rs.robinhood.options.find_options_by_expiration(['aapl','amzn','msft'],expdate,putcall)
+option_instruments = rs.robinhood.options.find_options_by_expiration(
+    symbol,
+    expirationDate=expiration_date,
+    optionType=option_type
+    # strikePrice=strike0
+)
+print("] option_instrument==",option_instruments)
+option_instrument = option_instruments[0]           # Extract the first option instrument
+bid_price = float(option_instrument['bid_price'])
+ask_price = float(option_instrument['ask_price'])
+
+# Print bid and ask prices
+print(f"Bid Price: {bid_price}")
+print(f"Ask Price: {ask_price}")
+# Logout from Robinhood
+# rs.logout()
+######################################################
 
 
 
@@ -760,7 +904,9 @@ print("Today's Date and Time in NYC (EDT) is:",dtstr)
 #     #sys.exit()
 # if(tt<930 and tt>1415):
 #     print("\n] Markets are Open!\n\n\n")
+ 
 
+ 
 
 
 keepLooping = LOOPMax # Set keepLooping to a value greater than 0 to enter the loop
