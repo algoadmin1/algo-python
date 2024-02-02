@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "4.4";
+                                                      $vers = "4.21";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
@@ -29,7 +29,7 @@ $utime0 = isset($_GET['t']) ? $_GET['t'] : '2500';
 $uname0 = isset($_GET['name']) ? $_GET['name'] : 'Creator';
 $acct0  = isset($_GET['acct']) ? $_GET['acct'] : '12345354911';
 $msg0=0;
-$msg0   = isset($_GET['msg']) ? $_GET['msg'] : '0';
+$msg0   = isset($_GET['msg']) ? $_GET['msg'] : 'nil';
 
 
 $prgname="recpost1db.php";
@@ -243,10 +243,10 @@ echo $result; // Output: abcd123efgh
 $FincialDisclaimerStr1= "Financial Disclaimer: Not Financial Advice. ";
 $FincialDisclaimerStr= "Financial Disclaimer: Not Financial Advice. This content and any and all trade and investment information, positions, entry and exit points, buy or sell signals, fundamental or technical information is not financial advice and is for information and educational purposes only. Seek a licensed professional investment advisor to handle your investments and trades. Any algos or algorithms presented herein are for informational purposes only. Algo Investor, Algoz, OptionsHunter, Roi, APM and WatchDog SaaS Programs Copyright (c) by Algo Investor Inc.  All Rights Reserved.<br /><br />Algo Investor Inc. <br />6543 S. Las Vegas Blvd<br />Las Vegas, NV 89119";
 
-$pstr8= "  $prgname   $vers is running, Time in NYC =   $timeNYC  ... <br />";
+$pstr8= "<br />  $prgname   $vers is running, Time in NYC =   $timeNYC  ... <br />";
 echoColor($pstr8,"red");
 
-// echo "<br /><br />";
+echo "<br /><br />";
 
 // echo "*****************<br /><br />";
 
@@ -265,9 +265,9 @@ echoColor( $pstr00, "gray" );
 //echo "*****************\n";
 
 //echo "\n*\n] Accessing https://algoinvestorr.com/*_". $dbname. "[". $username"]_". $tblname. "\n*\n*\n*\n";
-if($msg0==1) echo "*****************<br />";
+echo "*****************<br />";
 
-if($msg0==1) PrintUserInputs( $udate0, $utime0, $uname0, $acct0 , $msg0 );
+PrintUserInputs( $udate0, $utime0, $uname0, $acct0 , $msg0 );
  
 $timeNYC =  date("Y-m-d\TH:i:s");
 $happy1.= GetEntryNums();
@@ -289,7 +289,7 @@ if($tof9==true) $tradedatestr=$datestr;
 
 $fname = "intradaytradesServer_". $tradedatestr. ".txt"; // Replace with your file name
 
-$pstr= "] After date verify.  <br /><br />] Attempting file read of: ". $fname. "<br />";
+$pstr= "<br />] After date verify.  <br /><br />] Attempting file read of: ". $fname. "<br />";
 echoColor( $pstr, "orange");
 
 //$fname = "intradaytradesServer_2023-12-20.txt"; // Replace with your file name
@@ -593,10 +593,10 @@ try {
                 $insertdb=0;
                 if ($result) {
                     $insertdb=0;
-                    if($msg0==1) echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
+                    echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
                 } else {
                     $insertdb=1;
-                    if($msg0==1) echo "<br />] NO RawTrade found for tradeHash $tradeHashToQuery.  insertdb= $insertdb ;  INSERTing to db.trades ...<br />";
+                    echo "<br />] NO RawTrade found for tradeHash $tradeHashToQuery.  insertdb= $insertdb ;  INSERTing to db.trades ...<br />";
                 }
 
 
