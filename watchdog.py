@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "3.54"
+versionStr =                    "3.64"
 
 import time
 import datetime
@@ -29,6 +29,57 @@ colorGray  ="90"
 
 colorArray = [ colorRed, colorBlue, colorGreen, colorOrange, colorCyan, colorAqua, colorYellow ,colorPurple, colorMagenta,colorBrown ]
 colorArrayLen = len(colorArray)
+
+
+
+def timeNow(strchar):   # ="" or ":"
+    if(strchar!="" and strchar!=":" ):
+        strchar=":" 
+
+    # Set the time zone to New York
+    new_york_timezone = pytz.timezone('America/New_York')
+    
+    # Get the current time in New York
+    ny_time = datetime.datetime.now(new_york_timezone)
+    
+    # Format the time as HH:MM
+    formatstr1='%H'
+    formatstr2='%M'
+    fstr=formatstr1+ strchar +formatstr2
+    # formatted_time = ny_time.strftime('%H:%M')
+    formatted_time = ny_time.strftime(fstr)  #('%H:%M')
+    return formatted_time
+
+
+def leftRightStr(input_str, LR_str, num_chars):
+    if LR_str == "right":
+        return input_str[-num_chars:]
+    elif LR_str == "left":
+        return input_str[:num_chars]
+    else:
+        return "Invalid LR_str, please use 'left' or 'right'."
+
+
+# ie  tradestaTimeStr = "1130" - "0930" = 120
+def getMinutesFromDayStart(tradestaTimeStr0):
+    lstr = leftRightStr(tradestaTimeStr0, "left", 2)
+    hrs0 = int(lstr)
+    rstr = leftRightStr(tradestaTimeStr0, "right", 2)
+    mins0= int(rstr)
+    mins = ( hrs0 * 60 ) + mins0
+    return mins
+
+def getMinutesFromOpen(tradestaTimeStr):
+    strmkt="0930"
+    minsMktStart = getMinutesFromDayStart(strmkt)
+    minsToCompare= getMinutesFromDayStart(tradestaTimeStr)
+    return minsToCompare - minsMktStart
+
+def getMinutesFromClose(tradestaTimeStr):
+    strmkt="1600"
+    minsMktClose = getMinutesFromDayStart(strmkt)
+    minsToCompare= getMinutesFromDayStart(tradestaTimeStr)
+    return minsMktClose - minsToCompare
 
 
 def printTodaysDate():
@@ -766,6 +817,47 @@ portfolio1.print()
 print("] Attempted & Completed Mock Portfolio Object Operations:   AFTER...")
 
 #########
+
+hrsmins="1145"
+mins9 = getMinutesFromOpen( hrsmins )
+print(hrsmins, " mins fromOpen = " , mins9)
+
+hrsmins="1330"
+mins9 = getMinutesFromOpen( hrsmins )
+print(hrsmins, " mins fromOpen = " , mins9)
+
+hrsmins="0945"
+mins9 = getMinutesFromOpen( hrsmins )
+print(hrsmins, " mins fromOpen = " , mins9)
+
+hrsmins="1015"
+mins9 = getMinutesFromOpen( hrsmins )
+print(hrsmins, " mins fromOpen = " , mins9)
+
+
+hrsmins="1245"
+mins9 = getMinutesFromClose( hrsmins )
+print(hrsmins, " mins fromClose = " , mins9)
+
+hrsmins="1545"
+mins9 = getMinutesFromClose( hrsmins )
+print(hrsmins, " mins fromClose = " , mins9)
+
+hrsmins="0935"
+mins9 = getMinutesFromClose( hrsmins )
+print(hrsmins, " mins fromClose = " , mins9)
+
+gtstr = timeNow("")
+print(gtstr)
+hrsmins=gtstr #"0935"
+mins9 = getMinutesFromClose( hrsmins )
+print("TIME IN NYC:",hrsmins, " mins fromClose = " , mins9)
+
+gtstr = timeNow(":")
+print(gtstr)
+gtstr = timeNow("=")
+print(gtstr)
+
 ######### 
 ##################################################### CLASS STRUCTURE TESTS END ###########
 
@@ -793,39 +885,47 @@ EnterPostionsRobinhood( "roguequant1@gmail.com", pwd0 , simLIVE )
 # 'short_strategy_code': 'c54349d7-0ef3-4874-ab27-6933f2c2b114_S1'}]
 
 # Option details
+findoptions=False
 symbol = "AAPL"
 strike0 = 175
 expiration_date = "2024-02-09"
 option_type = "put"   # "call"
-option_chain = FindOptions( symbol, expiration_date, strike0, option_type, "roguequant1@gmail.com", pwd0 )  
-
-aPCstr =option_type[0]
+aPCstr=leftRightStr(option_type.upper(),"left",1)
+if(findoptions):
+    option_chain = FindOptions( symbol, expiration_date, strike0, option_type, "roguequant1@gmail.com", pwd0 )  
+    aPCstr =option_type[0]
 
 char_to_remove = "-"
 result_string = removeChar(expiration_date, char_to_remove)
-
-result_string1=removeCharsFromLeftRight(result_string,"left", 2)
-
+result_string1= removeCharsFromLeftRight(result_string,"left", 2)
 result_strikePadded = padStringLeft(str(strike0), "0", 5)
-
 optionsymbol=symbol+"  "+result_string1+ aPCstr.upper() + result_strikePadded
 print("] **************************************** optionSymbol = " , optionsymbol)
-print("option_chain=",option_chain)
+
+# this Works!!
+if(findoptions):
+    print("option_chain=",option_chain)
 # Get option instrument data
 
 bid_price = 0.0 
 ask_price = 0.0  
-# gg = rs.robinhood.options.find_options_by_expiration(['aapl','amzn','msft'],expdate,putcall)
-option_instruments = rs.robinhood.options.find_options_by_expiration(
-    symbol,
-    expirationDate=expiration_date,
-    optionType=option_type
-    # strikePrice=strike0
-)
-print("] option_instrument==",option_instruments)
-option_instrument = option_instruments[0]           # Extract the first option instrument
-bid_price = float(option_instrument['bid_price'])
-ask_price = float(option_instrument['ask_price'])
+
+if(findoptions):
+    # gg = rs.robinhood.options.find_options_by_expiration(['aapl','amzn','msft'],expdate,putcall)
+    option_instruments = rs.robinhood.options.find_options_by_expiration(
+        symbol,
+        expirationDate=expiration_date,
+        optionType=option_type
+        # strikePrice=strike0
+    )
+    # print("] option_instrument==",option_instruments)
+    option_instrument = option_instruments[0]           # Extract the first option instrument
+
+    bid_price = float(option_instrument['bid_price'])
+    ask_price = float(option_instrument['ask_price'])
+
+
+
 
 # Print bid and ask prices
 print(f"Bid Price: {bid_price}")
@@ -885,6 +985,12 @@ dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
 print("Today's Date and Time in NYC (EDT) is:",dtstr)
 
 
+gtstr = timeNow("")
+print(gtstr)
+hrsmins=gtstr #"0935"
+mins9 = getMinutesFromClose( hrsmins )
+print("TIME IN NYC:",hrsmins, " mins fromClose = " , mins9)
+
 
 # Print current time in New York as HH:MM:SS
 # tstr =(f"{current_time_ny.strftime('%H:%M:%S')}")
@@ -921,6 +1027,7 @@ tstr =(f"{current_time_ny.strftime('%H:%M:%S')}")
 print(">",tstr, end="", flush=True)
 lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 
+print("]  TASK*** Get INI FILE ...")
 
 MaxMinutes = (keepLooping * (timeDelay+0 )/60 ) 
 print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:",MaxMinutes," Max HOURS=",MaxMinutes/60,"\n\n" )
@@ -946,15 +1053,36 @@ while keepLooping > 0:
     
     # Wait for 3 seconds then open local file... (adjust for longer durations like 5 sec+ )
 
-    print("BrokerageRequest[ 'RobinhoodAPI', 'GetPositions' ...")
+    print("] TASK*** BrokerageRequest[ 'RobinhoodAPI', 'GetPositions' ...")
     # CheckPositions("Gianni", "12345354911")
+
+
+    print("] TASK***   .../Gettrades.php  :  RETURNING:  'buy' or 'sell' signals...")
+
+    print("] TASK***  IF INI FILE HAS CHANGED IN FILESIZE, Get INI FILE ...")
+
+    print("] TASK***  LOOP THRU ALL TRADES FROM GETTRADES ")  
+    print("] TASK***        IF there IS a buy/sell signals within Epsilon minutes from signal'sMinutesFromOpen? ")  
+    print("] TASK*** ")  
+    print("] TASK***          YES,  INI-interpret buy/sell signals into trade and ")
+    print("] TASK***                SUBMIT TRADE...")
+    print("] TASK*** ")  
+    print("] TASK***        LOOP THRU ALL INI CSV CMD_   ")  
+    print("] TASK***          IF CMD_ VALID FOUND THEN ")
+    print("] TASK***                SUBMIT TRADE...")
 
 
     current_date_time_ny = datetime.datetime.now(new_york_timezone)
     dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
     print("\n======================>Today's Date and Time in NYC (EDT) is:",dtstr)
-   
-  
+    
+    
+    gtstr = timeNow("")
+    # print(gtstr)
+    hrsmins=gtstr #"0935"
+    mins9 = getMinutesFromClose( hrsmins )
+    print("TIME NOW IN NYC is ",hrsmins, ", or mins fromClose = " , mins9)
+
 #### End of Loop
     # Decrement keepLooping to eventually exit the loop
     keepLooping -= 1  # You might have a condition to break the loop based on a certain condition
@@ -968,136 +1096,3 @@ print("\n] Exiting LOOP.\n")
 
 
 
-
-
-##### base class order() fn
-# @login_required
-# def order(symbol, quantity, side, limitPrice=None, stopPrice=None, account_number=None, timeInForce='gtc', extendedHours=False, jsonify=True):
-#     """A generic order function.
-
-#     :param symbol: The stock ticker of the stock to sell.
-#     :type symbol: str
-#     :param quantity: The number of stocks to sell.
-#     :type quantity: int
-#     :param side: Either 'buy' or 'sell'
-#     :type side: str
-#     :param limitPrice: The price to trigger the market order.
-#     :type limitPrice: float
-#     :param stopPrice: The price to trigger the limit or market order.
-#     :type stopPrice: float
-#     :param account_number: the robinhood account number.
-#     :type account_number: Optional[str]
-#     :param timeInForce: Changes how long the order will be in effect for. 'gtc' = good until cancelled. \
-#     'gfd' = good for the day.
-#     :type timeInForce: str
-#     :param extendedHours: Premium users only. Allows trading during extended hours. Should be true or false.
-#     :type extendedHours: Optional[str]
-#     :param jsonify: If set to False, function will return the request object which contains status code and headers.
-#     :type jsonify: Optional[str]
-#     :returns: Dictionary that contains information regarding the purchase or selling of stocks, \
-#     such as the order id, the state of order (queued, confired, filled, failed, canceled, etc.), \
-#     the price, and the quantity.
-
-#     """ 
-#     try:
-#         symbol = symbol.upper().strip()
-#     except AttributeError as message:
-#         print(message, file=get_output())
-#         return None
-
-#     orderType = "market"
-#     trigger = "immediate"
-
-#     if side == "buy":
-#         priceType = "ask_price"
-#     else:
-#         priceType = "bid_price"
-
-#     if limitPrice and stopPrice:
-#         price = round_price(limitPrice)
-#         stopPrice = round_price(stopPrice)
-#         orderType = "limit"
-#         trigger = "stop"
-#     elif limitPrice:
-#         price = round_price(limitPrice)
-#         orderType = "limit"
-#     elif stopPrice:
-#         stopPrice = round_price(stopPrice)
-#         if side == "buy":
-#             price = stopPrice
-#         else:
-#             price = None
-#         trigger = "stop"
-#     else:
-#         price = round_price(next(iter(get_latest_price(symbol, priceType, extendedHours)), 0.00))
-#     payload = {
-#         'account': load_account_profile(account_number=account_number, info='url'),
-#         'instrument': get_instruments_by_symbols(symbol, info='url')[0],
-#         'symbol': symbol,
-#         'price': price,
-#         'quantity': quantity,
-#         'ref_id': str(uuid4()),
-#         'type': orderType,
-#         'stop_price': stopPrice,
-#         'time_in_force': timeInForce,
-#         'trigger': trigger,
-#         'side': side,
-#         'extended_hours': extendedHours
-#     }
-#     # BEGIN PATCH FOR NEW ROBINHOOD BUY FORM (GuitarGuyChrisB 5/26/2023)
-#     if side == "buy":
-#         payload['order_form_version'] = "2"
-#         payload['preset_percent_limit'] = "0.05"
-#     # END PATCH FOR NEW ROBINHOOD BUY FORM (GuitarGuyChrisB 5/26/2023)
-
-#     url = orders_url()
-
-
-#     data = request_post(url, payload, jsonify_data=jsonify)
-
-#     return(data)
-#
-#
-#
-#
-# #
-# When you call
-
-# r.order_buy_limit
-
-# which has a signature of:
-
-# order_buy_limit(symbol, quantity, limitPrice, account_number=None, timeInForce='gtc', extendedHours=False, jsonify=True)
-
-# That method calls
-
-# order(symbol, quantity, "buy", account_number, limitPrice, None, timeInForce, extendedHours, jsonify)
-
-# When your parameters are passed in, the resulting call is
-
-# order("BBCP", 1, "buy", "XXXXXX", "8.42000000", None, 'gfd', True, True)
-
-# The original signature for the order method is
-
-# order(symbol, quantity, side, limitPrice=None, stopPrice=None, account_number=None, timeInForce='gtc', extendedHours=False, jsonify=True, market_hours='regular_hours')
-
-# When your parameters are passed in according to position, you get:
-
-# order(symbol="BBCP", quantity=1, side="buy", limitPrice="XXXXXX", stopPrice="8.42000000", account_number=None, timeInForce='gfd', extendedHours=True, jsonify=True, market_hours='regular_hours')
-
-# The order method calls
-
-# round_price(limitPrice)
-
-# which in your case is
-
-# round_price("XXXXXX")
-
-# ...
-
-# @justindavies I think that's what's causing your error. In order to avoid it, I would probably just use the order method and explicitly pass in your parameters while defining side = 'buy', stopPrice=None.
-
-# ...
-# @jmfernandes , would it be unreasonable to refactor the methods to call the order method using keyword arguments instead of positional arguments?
-
-# Thanks, I enjoy your repo and would love to help out however possible :) !
