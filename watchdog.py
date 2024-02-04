@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "3.64"
+versionStr =                    "3.74"
 
 import time
 import datetime
@@ -33,7 +33,7 @@ colorArrayLen = len(colorArray)
 
 
 def timeNow(strchar):   # ="" or ":"
-    if(strchar!="" and strchar!=":" ):
+    if(strchar!="" and strchar!=":" and strchar!="_" and strchar!="-" and strchar!="." ):
         strchar=":" 
 
     # Set the time zone to New York
@@ -135,6 +135,7 @@ import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
 # from datetime import datetime 
+print("]  Still importing Python modules...")
 
 import json
 import robin_stocks as rs
