@@ -834,6 +834,8 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
 ###################
 ######################################################
 
+    ordersLIVE=0
+    
     if(ordersLIVE==1):
         qty0        =   0
         assettype0  = "stock"
