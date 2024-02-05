@@ -186,6 +186,225 @@ def removeCharsFromLeftRight(str0,leftRightStr, numchars):
         # modified_string = original_string[:-5]
     return modified_string
 
+
+
+####################################### from gettrades.py
+#
+def TodaysDate():
+    # today_date = datetime.today().strftime('%Y-%m-%d') 
+    today_date = datetime.datetime.now(new_york_timezone).date().strftime('%Y-%m-%d')
+
+    # today_date = datetime.now().strftime("%Y-%m-%d")
+    return today_date
+ 
+
+# def print_colored(text, color_code): 
+#     print(f"\033[{color_code}m{text}\033[0m") 
+
+def DaysDifference(udate1, udate2):
+    date_format = "%Y-%m-%d" 
+    parsed_date1 = datetime.strptime(udate1, date_format) 
+    parsed_date2 = datetime.strptime(udate2, date_format) 
+    difference = parsed_date2 - parsed_date1
+    return difference.days
+
+
+def GetStockPrice(stock_symbol): 
+    stock = yf.Ticker(stock_symbol) 
+    current_price = stock.history(period="1d")["Close"].iloc[-1] 
+    return current_price 
+    
+# Replace "AAPL" with the symbol of the stock you want to get the price for stock_symbol = "AAPL" 
+# Example: Apple Inc. price = GetStockPrice(stock_symbol) 
+#                     print(f"The current price of {stock_symbol} is: {price}")
+
+def PrintDollars(prefixstr, amt):
+    #prefixstr = "\tTrade #" + str(TradeCount) + ":   WIN!, rnd# = " + str(RandomPct) + " Gain = " + str(RandomPctGain) + "%,    "
+    txt = "\t  ${:.2f}"
+    print(prefixstr , txt.format(amt, ','))
+
+def round_down(num, modulo):
+    return num // modulo * modulo
+
+def ReadFile(fname):
+    arrStr = []
+    try:
+        with open(fname, 'r') as file:
+            for line in file:
+                if(len(line)>16):
+                    arrStr.append(line.strip())  # Removing newline characters
+    except FileNotFoundError:
+        print(f"File '{fname}' not found.")
+    return arrStr
+
+# Example usage:
+# file_name = 'your_file.txt'  # Replace 'your_file.txt' with your file name
+# lines = Re adFile(file_name)
+# print(lines)  # This will print the lines read from the file into the array
+def StringParts(input_str,char0):
+    # arr_str = input_str.split(',')
+    arr_str = input_str.split(char0)
+    return arr_str
+
+
+def GetTrades(url):
+    arrTrades = []
+    MIN_LINE_LEN=6
+
+    try:   
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            # lines = response.text.split('\n')
+            lines = response.text.split('<br />')
+            i=0
+            for line in lines:
+                #print(i,line )
+                i=i+1
+                if(len(line)>MIN_LINE_LEN):
+                    arrTrades.append(line)
+                # if line[:8] == "RAWTRADES":
+                #     arrTrades.append(line)
+    except:
+        pass
+
+    return arrTrades
+
+# Example usage:
+urlbase = 'https://algoinvestorr.com/trades/gettrades.php?d='
+url0    = 'https://algoinvestorr.com/trades/gettrades.php'
+
+#
+#################################################                   from gettrades.py   
+
+
+
+
+
+
+
+#################################################     JSON HANDLOING    
+#
+
+def getJSON(url):
+    try:
+        response = requests.get(url)
+        # Check if the request was successful (status code 200)
+        response.raise_for_status()
+        json_payload = response.json()
+        return json_payload
+    except requests.exceptions.RequestException as e:
+        print(f"Error retrieving JSON from {url}: {e}")
+        return None
+
+
+def prettyPrintJSON(json_data):
+    if json_data:
+        # Use indent parameter to specify the number of spaces for indentation
+        pretty_json = json.dumps(json_data, indent=2)
+        print(" \n", pretty_json)
+        # print("Pretty Printed JSON:\n", pretty_json)
+
+
+def checkJSONdata(json_data, date0, time0, symbol0):
+    filtered_records = []
+
+    for record in json_data:
+        try:
+            # Check if the required fields exist in the current record
+            if "tradeDate" in record and "tradeTime" in record and "symbol" in record:
+                # Check if the fields match the specified values
+                if record["tradeDate"] == date0 and record["tradeTime"] == time0 and record["symbol"] == symbol0:
+                    filtered_records.append(record)
+        except KeyError:
+            # Handle the case where one of the required fields is missing in the record
+            print("Error: Missing required field in JSON record.")
+    
+    return filtered_records
+
+def checkJSONdataStock(json_data, date0, time0, symbol0):
+    filtered_records = []
+
+    for record in json_data:
+        try:
+            # Check if the required fields exist in the current record
+            if "tradeDate" in record and "tradeTime" in record and "symbol" in record:
+                # Check if the fields match the specified values
+                if record["tradeDate"] == date0 and record["symbol"] == symbol0:  #record["tradeTime"] == time0 and 
+                    filtered_records.append(record)
+        except KeyError:
+            # Handle the case where one of the required fields is missing in the record
+            print("Error: Missing required field in JSON record.")
+    
+    return filtered_records
+
+
+def checkJSONdataTime(json_data, date0, time0, symbol0):
+    filtered_records = []
+
+    for record in json_data:
+        try:
+            # Check if the required fields exist in the current record
+            if "tradeDate" in record and "tradeTime" in record and "symbol" in record:
+                # Check if the fields match the specified values
+                if record["tradeDate"] == date0 and record["tradeTime"] == time0: #and record["symbol"] == symbol0:
+                    filtered_records.append(record)
+        except KeyError:
+            # Handle the case where one of the required fields is missing in the record
+            print("Error: Missing required field in JSON record.")
+    
+    return filtered_records
+
+
+def checkJSONdataDate(json_data, date0, time0, symbol0):
+    filtered_records = []
+
+    for record in json_data:
+        try:
+            # Check if the required fields exist in the current record
+            if "tradeDate" in record and "tradeTime" in record and "symbol" in record:
+                # Check if the fields match the specified values
+                if record["tradeDate"] == date0 : #and record["tradeTime"] == time0 and record["symbol"] == symbol0:
+                    filtered_records.append(record)
+        except KeyError:
+            # Handle the case where one of the required fields is missing in the record
+            print("Error: Missing required field in JSON record.")
+    
+    return filtered_records
+
+# Example usage:
+# json_data = [
+#     {"tradeDate": "2022-01-01", "tradeTime": "12:30", "symbol": "AAPL"},
+#     {"tradeDate": "2022-01-01", "tradeTime": "14:45", "symbol": "GOOGL"},
+#     {"tradeDate": "2022-01-02", "tradeTime": "10:15", "symbol": "AAPL"},
+#     # ... additional JSON records
+# ]
+
+# date_to_check = "2022-01-01"
+# time_to_check = "12:30"
+# symbol_to_check = "AAPL"
+
+# filtered_records = checkJSONdata(json_data, date_to_check, time_to_check, symbol_to_check)
+
+# print("Filtered Records:")
+# for record in filtered_records:
+#     print(record)
+
+
+
+
+
+#
+#################################################     JSON HANDLOING    
+
+
+
+
+
+
+#################################################   functions for : stock / options
+#
+
 def CheckPositions(name, account):
     print("Checking Positions, build_holdings...", account, " for ", name)
     my_stocks =  rs.robinhood.build_holdings()
@@ -200,6 +419,13 @@ def ClosePositions(name, account):
 def printJson(dict0, str0):
     json1 = json.dumps(dict0, indent=10)
     print( str0," json=",json1)
+
+
+
+
+
+
+
 
 def sendOrderSell( buySell, qty0, symbol0 , assettype, priceLimit ):
     # Get the instrument URL for the stock
@@ -940,13 +1166,50 @@ print(f"Ask Price: {ask_price}")
 
 
 #######################################################################
-####################################################################### LOOP
+#######################################################################  PREP LOOP
 #######################################################################
 #######################################################################
 # Starting Balance
 #
 #
 my_stock_items = GetHoldingsButLoginFirst("BEFORE TRADE", "roguequant1@gmail.com", pwd0)
+
+
+
+
+
+####################################################################################  DATE & Time input
+#
+
+todaysDate0=TodaysDate()
+
+pstr= "\n",str(current_date_ny),"] ENTER trades Date (default="+todaysDate0+"): "  
+print_colored(pstr,colorRed)
+input0 = input()
+if input0 == "":
+    print("\n] Defaulting Date to ", todaysDate0 )
+    input0 = todaysDate0
+todaysDate0 = input0
+
+
+tnow = timeNow("")
+print("] Enter  Simulated TIME  in HHSS [default="+tnow+"]:  " )
+input1 = input()
+if len( input1 ) == 3:
+    print("\n] ADDING LEADING 0 to TIME  ", input1 )
+    tnow= "0"+input1
+else:
+    if input1 == "" :
+        print("\n] Defaulting TIME to ", tnow )
+        input1 = tnow
+    tnow = input1
+
+print("\n] ReDirecting TIME NOW = ", tnow )
+
+
+
+####################################################################################  RISK input
+#
 
 startingBalance_default = float(100000.0)
 print("\nEnter Starting Balance (", startingBalance_default, "  [0=exit]):")
@@ -1028,11 +1291,42 @@ tstr =(f"{current_time_ny.strftime('%H:%M:%S')}")
 print(">",tstr, end="", flush=True)
 lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 
-print("]  TASK*** Get INI FILE ...")
+
+print("]  TASK*** Getting INI FILE ...")
+fname="trades_ini.txt"
+arrINIcsvfile = ReadFile(fname)
+print(arrINIcsvfile)
+print_colored("] Finished reading: " +fname+ " for " , colorYellow )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 MaxMinutes = (keepLooping * (timeDelay+0 )/60 ) 
 print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:",MaxMinutes," Max HOURS=",MaxMinutes/60,"\n\n" )
+
+#######################################################################   
+#######################################################################   ```````` LOOP
+#######################################################################                      LOOP
+#######################################################################    LOOP
 ###################### STARTING LOOP ****************************************
+
 
 while keepLooping > 0:
     current_time_ny = datetime.datetime.now(new_york_timezone).time()
@@ -1054,14 +1348,76 @@ while keepLooping > 0:
     
     # Wait for 3 seconds then open local file... (adjust for longer durations like 5 sec+ )
 
+
+
+
+
+
     print("] TASK*** BrokerageRequest[ 'RobinhoodAPI', 'GetPositions' ...")
     # CheckPositions("Gianni", "12345354911")
 
 
+
+
+
+
+
     print("] TASK***   .../Gettrades.php  :  RETURNING:  'buy' or 'sell' signals...")
 
+    # todaysDate0=TodaysDate()
+    #check override
+    url1=url0                        
+    if(len(str(todaysDate0))==10):
+        url1=urlbase+todaysDate0
+    print("] Attemping live trade retrieval for", url1, " on ", current_date_ny)
+
+    todaysTrades = GetTrades(url1)
+    # if(msg00==1):
+    print("] just hit gettrades.php on server, got todaysTrades[] text.  Attempting to get cuedtrades_"+todaysDate0)
+    # print(todaysTrades)
+    extstr = ".json"   #".csv"
+    url2= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"+todaysDate0+extstr
+
+    json_data = getJSON(url2)
+
+    if json_data:
+        print("] JSON Payload RECIEVED!!!")
+        # prettyPrintJSON(json_data)
+
+        symbol1="TSLA"  
+
+        filtered_records = checkJSONdataStock(json_data, todaysDate0, tnow, symbol1 )
+        # filtered_records = checkJSONdataDate(json_data, todaysDate0, tnow, symbol )  # only compares date
+
+        print("] Filtered Records for ",symbol1,":")
+        for record in filtered_records:
+            prettyPrintJSON(record)
+            # print(record)
+
+        filtered_records1 = checkJSONdataTime(filtered_records, todaysDate0, tnow, symbol1 ) # "TSLA" )
+        print("] Filtered Records TIME:")
+        for record in filtered_records1:
+            prettyPrintJSON(record)
+            # print(record)
+
+
+
+    # todaysCuedTrades = GetTrades(url2)
+    # print(todaysCuedTrades)
+
+
+
+
+
+
+    print("\n")
     print("] TASK***  IF INI FILE HAS CHANGED IN FILESIZE, Get INI FILE ...")
 
+
+
+
+
+    print("\n")
     print("] TASK***  LOOP THRU ALL TRADES FROM GETTRADES ")  
     print("] TASK***        IF there IS a buy/sell signals within Epsilon minutes from signal'sMinutesFromOpen? ")  
     print("] TASK*** ")  
