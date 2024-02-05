@@ -1,6 +1,8 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "3.74"
+versionStr =                    "4.1"
+
+cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
 import time
 import datetime
@@ -322,6 +324,7 @@ def checkJSONdata(json_data, date0, time0, symbol0):
     
     return filtered_records
 
+
 def checkJSONdataStock(json_data, date0, time0, symbol0):
     filtered_records = []
 
@@ -339,7 +342,24 @@ def checkJSONdataStock(json_data, date0, time0, symbol0):
     return filtered_records
 
 
+# both are strings in "0930" or "1145" "1545" format
+def GetAbsMinutes( tradeTime, time0 , sym0):
+
+    mins_trade = getMinutesFromOpen( tradeTime )
+    mins_cmp   = getMinutesFromOpen( time0 )
+    mins_abs   = abs(mins_trade - mins_cmp)
+ 
+    print("] ",sym0,"G3tAbsMinutes(): trademins(2), cmpTime(2), absTime=",tradeTime, mins_trade,"  ,  ", time0, mins_cmp, mins_abs )
+    return(mins_abs)
+
+
+# in 0930 or 1545 -style units - minutes
+timeInMinsDifference = 60
+
 def checkJSONdataTime(json_data, date0, time0, symbol0):
+    global timeInMinsDifference
+    global tnow 
+    
     filtered_records = []
 
     for record in json_data:
@@ -347,14 +367,21 @@ def checkJSONdataTime(json_data, date0, time0, symbol0):
             # Check if the required fields exist in the current record
             if "tradeDate" in record and "tradeTime" in record and "symbol" in record:
                 # Check if the fields match the specified values
-                if record["tradeDate"] == date0 and record["tradeTime"] == time0: #and record["symbol"] == symbol0:
-                    filtered_records.append(record)
+                if record["tradeDate"] == date0:
+                    timeNear=False
+
+                    tradeTime=record["tradeTime"]
+                    numMins= GetAbsMinutes( tradeTime, time0 , record["symbol"] )
+                    if(numMins < timeInMinsDifference ):
+                        timeNear=True
+
+                    if(timeNear): #and record["tradeTime"] == time0: #and record["symbol"] == symbol0:
+                        filtered_records.append(record)
         except KeyError:
             # Handle the case where one of the required fields is missing in the record
             print("Error: Missing required field in JSON record.")
     
     return filtered_records
-
 
 def checkJSONdataDate(json_data, date0, time0, symbol0):
     filtered_records = []
@@ -365,6 +392,7 @@ def checkJSONdataDate(json_data, date0, time0, symbol0):
             if "tradeDate" in record and "tradeTime" in record and "symbol" in record:
                 # Check if the fields match the specified values
                 if record["tradeDate"] == date0 : #and record["tradeTime"] == time0 and record["symbol"] == symbol0:
+
                     filtered_records.append(record)
         except KeyError:
             # Handle the case where one of the required fields is missing in the record
@@ -1207,22 +1235,39 @@ else:
 print("\n] ReDirecting TIME NOW = ", tnow )
 
 
+####################################################################################  SYMBOL input
+#
+symInput=True
+defaultSymbol="AMZN"
+if(symInput):
+    print("\nEnter SYMBOL [ default=", defaultSymbol, " ]: ")
+    insym = input()
+    if insym == "":
+        print("  Defaulting Max Loss to ", defaultSymbol)
+        insym = defaultSymbol
+    defaultSymbol = insym
+
+defaultSymbol = defaultSymbol.upper()
+print(" user SYMBOL = ", defaultSymbol ) 
 
 ####################################################################################  RISK input
 #
 
 startingBalance_default = float(100000.0)
-print("\nEnter Starting Balance (", startingBalance_default, "  [0=exit]):")
-startingBalance = input()
-if startingBalance == "-":
-    openUrls(my_stock_items)
-    exit("exiting...-")
-if startingBalance == "0":
-    openUrls(my_stock_items)
-    exit("exiting...0")
-if startingBalance == "":
-    print("  Defaulting Starting Balance to ", startingBalance_default)
-    startingBalance = startingBalance_default
+startingBalance = startingBalance_default
+riskInput =False
+if(riskInput):
+    print("\nEnter Starting Balance (", startingBalance_default, "  [0=exit]):")
+    startingBalance = input()
+    if startingBalance == "-":
+        openUrls(my_stock_items)
+        exit("exiting...-")
+    if startingBalance == "0":
+        openUrls(my_stock_items)
+        exit("exiting...0")
+    if startingBalance == "":
+        print("  Defaulting Starting Balance to ", startingBalance_default)
+        startingBalance = startingBalance_default
 
 AcctStart = int(startingBalance)
 AcctCurr  = AcctStart
@@ -1230,13 +1275,15 @@ AcctMax   = AcctStart
 
 # Max Dollar Loss
 MaxDollarLoss = AcctStart / 2;
-print("\nEnter Maximum Loss Allowed $ (", MaxDollarLoss, "): ")
-MaxDL = input()
-if MaxDL == "":
-    print("  Defaulting Max Loss to ", MaxDollarLoss)
-    MaxDL = MaxDollarLoss
+MaxDL = MaxDollarLoss
 
-MaxDollarLoss = int(MaxDL)
+if(riskInput):
+    print("\nEnter Maximum Loss Allowed $ (", MaxDollarLoss, "): ")
+    MaxDL = input()
+    if MaxDL == "":
+        print("  Defaulting Max Loss to ", MaxDollarLoss)
+        MaxDL = MaxDollarLoss
+    MaxDollarLoss = int(MaxDL)
 
 
 
@@ -1376,7 +1423,8 @@ while keepLooping > 0:
     print("] just hit gettrades.php on server, got todaysTrades[] text.  Attempting to get cuedtrades_"+todaysDate0)
     # print(todaysTrades)
     extstr = ".json"   #".csv"
-    url2= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"+todaysDate0+extstr
+    # url2= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"+todaysDate0+extstr  
+    url2=  cuedtradesPrefixStr+todaysDate0+extstr
 
     json_data = getJSON(url2)
 
@@ -1384,21 +1432,27 @@ while keepLooping > 0:
         print("] JSON Payload RECIEVED!!!")
         # prettyPrintJSON(json_data)
 
-        symbol1="TSLA"  
+        symbol1=defaultSymbol
 
         filtered_records = checkJSONdataStock(json_data, todaysDate0, tnow, symbol1 )
         # filtered_records = checkJSONdataDate(json_data, todaysDate0, tnow, symbol )  # only compares date
 
-        print("] Filtered Records for ",symbol1,":")
-        for record in filtered_records:
-            prettyPrintJSON(record)
-            # print(record)
+        print("] Filtered Records for ",symbol1," on date=",todaysDate0,":")
+        if len(filtered_records) == 0:
+            print(" [The =SYMBOL array is empty]")
+        else:
+            for record in filtered_records:
+                prettyPrintJSON(record)
+                 # print(record)
 
         filtered_records1 = checkJSONdataTime(filtered_records, todaysDate0, tnow, symbol1 ) # "TSLA" )
         print("] Filtered Records TIME:")
-        for record in filtered_records1:
-            prettyPrintJSON(record)
-            # print(record)
+        if len(filtered_records1) == 0:
+            print(" [The =TIME array is empty]  Nothing to trade at the momement.")
+        else:
+            for record in filtered_records1:
+                prettyPrintJSON(record)
+                # print(record)
 
 
 
