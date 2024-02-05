@@ -1,6 +1,8 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "3.54"
+versionStr =                    "4.1"
+
+cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
 import time
 import datetime
@@ -29,6 +31,57 @@ colorGray  ="90"
 
 colorArray = [ colorRed, colorBlue, colorGreen, colorOrange, colorCyan, colorAqua, colorYellow ,colorPurple, colorMagenta,colorBrown ]
 colorArrayLen = len(colorArray)
+
+
+
+def timeNow(strchar):   # ="" or ":"
+    if(strchar!="" and strchar!=":" and strchar!="_" and strchar!="-" and strchar!="." ):
+        strchar=":" 
+
+    # Set the time zone to New York
+    new_york_timezone = pytz.timezone('America/New_York')
+    
+    # Get the current time in New York
+    ny_time = datetime.datetime.now(new_york_timezone)
+    
+    # Format the time as HH:MM
+    formatstr1='%H'
+    formatstr2='%M'
+    fstr=formatstr1+ strchar +formatstr2
+    # formatted_time = ny_time.strftime('%H:%M')
+    formatted_time = ny_time.strftime(fstr)  #('%H:%M')
+    return formatted_time
+
+
+def leftRightStr(input_str, LR_str, num_chars):
+    if LR_str == "right":
+        return input_str[-num_chars:]
+    elif LR_str == "left":
+        return input_str[:num_chars]
+    else:
+        return "Invalid LR_str, please use 'left' or 'right'."
+
+
+# ie  tradestaTimeStr = "1130" - "0930" = 120
+def getMinutesFromDayStart(tradestaTimeStr0):
+    lstr = leftRightStr(tradestaTimeStr0, "left", 2)
+    hrs0 = int(lstr)
+    rstr = leftRightStr(tradestaTimeStr0, "right", 2)
+    mins0= int(rstr)
+    mins = ( hrs0 * 60 ) + mins0
+    return mins
+
+def getMinutesFromOpen(tradestaTimeStr):
+    strmkt="0930"
+    minsMktStart = getMinutesFromDayStart(strmkt)
+    minsToCompare= getMinutesFromDayStart(tradestaTimeStr)
+    return minsToCompare - minsMktStart
+
+def getMinutesFromClose(tradestaTimeStr):
+    strmkt="1600"
+    minsMktClose = getMinutesFromDayStart(strmkt)
+    minsToCompare= getMinutesFromDayStart(tradestaTimeStr)
+    return minsMktClose - minsToCompare
 
 
 def printTodaysDate():
@@ -84,6 +137,7 @@ import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
 # from datetime import datetime 
+print("]  Still importing Python modules...")
 
 import json
 import robin_stocks as rs
@@ -134,6 +188,251 @@ def removeCharsFromLeftRight(str0,leftRightStr, numchars):
         # modified_string = original_string[:-5]
     return modified_string
 
+
+
+####################################### from gettrades.py
+#
+def TodaysDate():
+    # today_date = datetime.today().strftime('%Y-%m-%d') 
+    today_date = datetime.datetime.now(new_york_timezone).date().strftime('%Y-%m-%d')
+
+    # today_date = datetime.now().strftime("%Y-%m-%d")
+    return today_date
+ 
+
+# def print_colored(text, color_code): 
+#     print(f"\033[{color_code}m{text}\033[0m") 
+
+def DaysDifference(udate1, udate2):
+    date_format = "%Y-%m-%d" 
+    parsed_date1 = datetime.strptime(udate1, date_format) 
+    parsed_date2 = datetime.strptime(udate2, date_format) 
+    difference = parsed_date2 - parsed_date1
+    return difference.days
+
+
+def GetStockPrice(stock_symbol): 
+    stock = yf.Ticker(stock_symbol) 
+    current_price = stock.history(period="1d")["Close"].iloc[-1] 
+    return current_price 
+    
+# Replace "AAPL" with the symbol of the stock you want to get the price for stock_symbol = "AAPL" 
+# Example: Apple Inc. price = GetStockPrice(stock_symbol) 
+#                     print(f"The current price of {stock_symbol} is: {price}")
+
+def PrintDollars(prefixstr, amt):
+    #prefixstr = "\tTrade #" + str(TradeCount) + ":   WIN!, rnd# = " + str(RandomPct) + " Gain = " + str(RandomPctGain) + "%,    "
+    txt = "\t  ${:.2f}"
+    print(prefixstr , txt.format(amt, ','))
+
+def round_down(num, modulo):
+    return num // modulo * modulo
+
+def ReadFile(fname):
+    arrStr = []
+    try:
+        with open(fname, 'r') as file:
+            for line in file:
+                if(len(line)>16):
+                    arrStr.append(line.strip())  # Removing newline characters
+    except FileNotFoundError:
+        print(f"File '{fname}' not found.")
+    return arrStr
+
+# Example usage:
+# file_name = 'your_file.txt'  # Replace 'your_file.txt' with your file name
+# lines = Re adFile(file_name)
+# print(lines)  # This will print the lines read from the file into the array
+def StringParts(input_str,char0):
+    # arr_str = input_str.split(',')
+    arr_str = input_str.split(char0)
+    return arr_str
+
+
+def GetTrades(url):
+    arrTrades = []
+    MIN_LINE_LEN=6
+
+    try:   
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            # lines = response.text.split('\n')
+            lines = response.text.split('<br />')
+            i=0
+            for line in lines:
+                #print(i,line )
+                i=i+1
+                if(len(line)>MIN_LINE_LEN):
+                    arrTrades.append(line)
+                # if line[:8] == "RAWTRADES":
+                #     arrTrades.append(line)
+    except:
+        pass
+
+    return arrTrades
+
+# Example usage:
+urlbase = 'https://algoinvestorr.com/trades/gettrades.php?d='
+url0    = 'https://algoinvestorr.com/trades/gettrades.php'
+
+#
+#################################################                   from gettrades.py   
+
+
+
+
+
+
+
+#################################################     JSON HANDLOING    
+#
+
+def getJSON(url):
+    try:
+        response = requests.get(url)
+        # Check if the request was successful (status code 200)
+        response.raise_for_status()
+        json_payload = response.json()
+        return json_payload
+    except requests.exceptions.RequestException as e:
+        print(f"Error retrieving JSON from {url}: {e}")
+        return None
+
+
+def prettyPrintJSON(json_data):
+    if json_data:
+        # Use indent parameter to specify the number of spaces for indentation
+        pretty_json = json.dumps(json_data, indent=2)
+        print(" \n", pretty_json)
+        # print("Pretty Printed JSON:\n", pretty_json)
+
+
+def checkJSONdata(json_data, date0, time0, symbol0):
+    filtered_records = []
+
+    for record in json_data:
+        try:
+            # Check if the required fields exist in the current record
+            if "tradeDate" in record and "tradeTime" in record and "symbol" in record:
+                # Check if the fields match the specified values
+                if record["tradeDate"] == date0 and record["tradeTime"] == time0 and record["symbol"] == symbol0:
+                    filtered_records.append(record)
+        except KeyError:
+            # Handle the case where one of the required fields is missing in the record
+            print("Error: Missing required field in JSON record.")
+    
+    return filtered_records
+
+
+def checkJSONdataStock(json_data, date0, time0, symbol0):
+    filtered_records = []
+
+    for record in json_data:
+        try:
+            # Check if the required fields exist in the current record
+            if "tradeDate" in record and "tradeTime" in record and "symbol" in record:
+                # Check if the fields match the specified values
+                if record["tradeDate"] == date0 and record["symbol"] == symbol0:  #record["tradeTime"] == time0 and 
+                    filtered_records.append(record)
+        except KeyError:
+            # Handle the case where one of the required fields is missing in the record
+            print("Error: Missing required field in JSON record.")
+    
+    return filtered_records
+
+
+# both are strings in "0930" or "1145" "1545" format
+def GetAbsMinutes( tradeTime, time0 , sym0):
+
+    mins_trade = getMinutesFromOpen( tradeTime )
+    mins_cmp   = getMinutesFromOpen( time0 )
+    mins_abs   = abs(mins_trade - mins_cmp)
+ 
+    print("] ",sym0,"G3tAbsMinutes(): trademins(2), cmpTime(2), absTime=",tradeTime, mins_trade,"  ,  ", time0, mins_cmp, mins_abs )
+    return(mins_abs)
+
+
+# in 0930 or 1545 -style units - minutes
+timeInMinsDifference = 60
+
+def checkJSONdataTime(json_data, date0, time0, symbol0):
+    global timeInMinsDifference
+    global tnow 
+    
+    filtered_records = []
+
+    for record in json_data:
+        try:
+            # Check if the required fields exist in the current record
+            if "tradeDate" in record and "tradeTime" in record and "symbol" in record:
+                # Check if the fields match the specified values
+                if record["tradeDate"] == date0:
+                    timeNear=False
+
+                    tradeTime=record["tradeTime"]
+                    numMins= GetAbsMinutes( tradeTime, time0 , record["symbol"] )
+                    if(numMins < timeInMinsDifference ):
+                        timeNear=True
+
+                    if(timeNear): #and record["tradeTime"] == time0: #and record["symbol"] == symbol0:
+                        filtered_records.append(record)
+        except KeyError:
+            # Handle the case where one of the required fields is missing in the record
+            print("Error: Missing required field in JSON record.")
+    
+    return filtered_records
+
+def checkJSONdataDate(json_data, date0, time0, symbol0):
+    filtered_records = []
+
+    for record in json_data:
+        try:
+            # Check if the required fields exist in the current record
+            if "tradeDate" in record and "tradeTime" in record and "symbol" in record:
+                # Check if the fields match the specified values
+                if record["tradeDate"] == date0 : #and record["tradeTime"] == time0 and record["symbol"] == symbol0:
+
+                    filtered_records.append(record)
+        except KeyError:
+            # Handle the case where one of the required fields is missing in the record
+            print("Error: Missing required field in JSON record.")
+    
+    return filtered_records
+
+# Example usage:
+# json_data = [
+#     {"tradeDate": "2022-01-01", "tradeTime": "12:30", "symbol": "AAPL"},
+#     {"tradeDate": "2022-01-01", "tradeTime": "14:45", "symbol": "GOOGL"},
+#     {"tradeDate": "2022-01-02", "tradeTime": "10:15", "symbol": "AAPL"},
+#     # ... additional JSON records
+# ]
+
+# date_to_check = "2022-01-01"
+# time_to_check = "12:30"
+# symbol_to_check = "AAPL"
+
+# filtered_records = checkJSONdata(json_data, date_to_check, time_to_check, symbol_to_check)
+
+# print("Filtered Records:")
+# for record in filtered_records:
+#     print(record)
+
+
+
+
+
+#
+#################################################     JSON HANDLOING    
+
+
+
+
+
+
+#################################################   functions for : stock / options
+#
+
 def CheckPositions(name, account):
     print("Checking Positions, build_holdings...", account, " for ", name)
     my_stocks =  rs.robinhood.build_holdings()
@@ -148,6 +447,13 @@ def ClosePositions(name, account):
 def printJson(dict0, str0):
     json1 = json.dumps(dict0, indent=10)
     print( str0," json=",json1)
+
+
+
+
+
+
+
 
 def sendOrderSell( buySell, qty0, symbol0 , assettype, priceLimit ):
     # Get the instrument URL for the stock
@@ -766,6 +1072,47 @@ portfolio1.print()
 print("] Attempted & Completed Mock Portfolio Object Operations:   AFTER...")
 
 #########
+
+hrsmins="1145"
+mins9 = getMinutesFromOpen( hrsmins )
+print(hrsmins, " mins fromOpen = " , mins9)
+
+hrsmins="1330"
+mins9 = getMinutesFromOpen( hrsmins )
+print(hrsmins, " mins fromOpen = " , mins9)
+
+hrsmins="0945"
+mins9 = getMinutesFromOpen( hrsmins )
+print(hrsmins, " mins fromOpen = " , mins9)
+
+hrsmins="1015"
+mins9 = getMinutesFromOpen( hrsmins )
+print(hrsmins, " mins fromOpen = " , mins9)
+
+
+hrsmins="1245"
+mins9 = getMinutesFromClose( hrsmins )
+print(hrsmins, " mins fromClose = " , mins9)
+
+hrsmins="1545"
+mins9 = getMinutesFromClose( hrsmins )
+print(hrsmins, " mins fromClose = " , mins9)
+
+hrsmins="0935"
+mins9 = getMinutesFromClose( hrsmins )
+print(hrsmins, " mins fromClose = " , mins9)
+
+gtstr = timeNow("")
+print(gtstr)
+hrsmins=gtstr #"0935"
+mins9 = getMinutesFromClose( hrsmins )
+print("TIME IN NYC:",hrsmins, " mins fromClose = " , mins9)
+
+gtstr = timeNow(":")
+print(gtstr)
+gtstr = timeNow("=")
+print(gtstr)
+
 ######### 
 ##################################################### CLASS STRUCTURE TESTS END ###########
 
@@ -793,39 +1140,47 @@ EnterPostionsRobinhood( "roguequant1@gmail.com", pwd0 , simLIVE )
 # 'short_strategy_code': 'c54349d7-0ef3-4874-ab27-6933f2c2b114_S1'}]
 
 # Option details
+findoptions=False
 symbol = "AAPL"
 strike0 = 175
 expiration_date = "2024-02-09"
 option_type = "put"   # "call"
-option_chain = FindOptions( symbol, expiration_date, strike0, option_type, "roguequant1@gmail.com", pwd0 )  
-
-aPCstr =option_type[0]
+aPCstr=leftRightStr(option_type.upper(),"left",1)
+if(findoptions):
+    option_chain = FindOptions( symbol, expiration_date, strike0, option_type, "roguequant1@gmail.com", pwd0 )  
+    aPCstr =option_type[0]
 
 char_to_remove = "-"
 result_string = removeChar(expiration_date, char_to_remove)
-
-result_string1=removeCharsFromLeftRight(result_string,"left", 2)
-
+result_string1= removeCharsFromLeftRight(result_string,"left", 2)
 result_strikePadded = padStringLeft(str(strike0), "0", 5)
-
 optionsymbol=symbol+"  "+result_string1+ aPCstr.upper() + result_strikePadded
 print("] **************************************** optionSymbol = " , optionsymbol)
-print("option_chain=",option_chain)
+
+# this Works!!
+if(findoptions):
+    print("option_chain=",option_chain)
 # Get option instrument data
 
 bid_price = 0.0 
 ask_price = 0.0  
-# gg = rs.robinhood.options.find_options_by_expiration(['aapl','amzn','msft'],expdate,putcall)
-option_instruments = rs.robinhood.options.find_options_by_expiration(
-    symbol,
-    expirationDate=expiration_date,
-    optionType=option_type
-    # strikePrice=strike0
-)
-print("] option_instrument==",option_instruments)
-option_instrument = option_instruments[0]           # Extract the first option instrument
-bid_price = float(option_instrument['bid_price'])
-ask_price = float(option_instrument['ask_price'])
+
+if(findoptions):
+    # gg = rs.robinhood.options.find_options_by_expiration(['aapl','amzn','msft'],expdate,putcall)
+    option_instruments = rs.robinhood.options.find_options_by_expiration(
+        symbol,
+        expirationDate=expiration_date,
+        optionType=option_type
+        # strikePrice=strike0
+    )
+    # print("] option_instrument==",option_instruments)
+    option_instrument = option_instruments[0]           # Extract the first option instrument
+
+    bid_price = float(option_instrument['bid_price'])
+    ask_price = float(option_instrument['ask_price'])
+
+
+
 
 # Print bid and ask prices
 print(f"Bid Price: {bid_price}")
@@ -839,7 +1194,7 @@ print(f"Ask Price: {ask_price}")
 
 
 #######################################################################
-####################################################################### LOOP
+#######################################################################  PREP LOOP
 #######################################################################
 #######################################################################
 # Starting Balance
@@ -847,18 +1202,72 @@ print(f"Ask Price: {ask_price}")
 #
 my_stock_items = GetHoldingsButLoginFirst("BEFORE TRADE", "roguequant1@gmail.com", pwd0)
 
+
+
+
+
+####################################################################################  DATE & Time input
+#
+
+todaysDate0=TodaysDate()
+
+pstr= "\n",str(current_date_ny),"] ENTER trades Date (default="+todaysDate0+"): "  
+print_colored(pstr,colorRed)
+input0 = input()
+if input0 == "":
+    print("\n] Defaulting Date to ", todaysDate0 )
+    input0 = todaysDate0
+todaysDate0 = input0
+
+
+tnow = timeNow("")
+print("] Enter  Simulated TIME  in HHSS [default="+tnow+"]:  " )
+input1 = input()
+if len( input1 ) == 3:
+    print("\n] ADDING LEADING 0 to TIME  ", input1 )
+    tnow= "0"+input1
+else:
+    if input1 == "" :
+        print("\n] Defaulting TIME to ", tnow )
+        input1 = tnow
+    tnow = input1
+
+print("\n] ReDirecting TIME NOW = ", tnow )
+
+
+####################################################################################  SYMBOL input
+#
+symInput=True
+defaultSymbol="AMZN"
+if(symInput):
+    print("\nEnter SYMBOL [ default=", defaultSymbol, " ]: ")
+    insym = input()
+    if insym == "":
+        print("  Defaulting Max Loss to ", defaultSymbol)
+        insym = defaultSymbol
+    defaultSymbol = insym
+
+defaultSymbol = defaultSymbol.upper()
+print(" user SYMBOL = ", defaultSymbol ) 
+
+####################################################################################  RISK input
+#
+
 startingBalance_default = float(100000.0)
-print("\nEnter Starting Balance (", startingBalance_default, "  [0=exit]):")
-startingBalance = input()
-if startingBalance == "-":
-    openUrls(my_stock_items)
-    exit("exiting...-")
-if startingBalance == "0":
-    openUrls(my_stock_items)
-    exit("exiting...0")
-if startingBalance == "":
-    print("  Defaulting Starting Balance to ", startingBalance_default)
-    startingBalance = startingBalance_default
+startingBalance = startingBalance_default
+riskInput =False
+if(riskInput):
+    print("\nEnter Starting Balance (", startingBalance_default, "  [0=exit]):")
+    startingBalance = input()
+    if startingBalance == "-":
+        openUrls(my_stock_items)
+        exit("exiting...-")
+    if startingBalance == "0":
+        openUrls(my_stock_items)
+        exit("exiting...0")
+    if startingBalance == "":
+        print("  Defaulting Starting Balance to ", startingBalance_default)
+        startingBalance = startingBalance_default
 
 AcctStart = int(startingBalance)
 AcctCurr  = AcctStart
@@ -866,13 +1275,15 @@ AcctMax   = AcctStart
 
 # Max Dollar Loss
 MaxDollarLoss = AcctStart / 2;
-print("\nEnter Maximum Loss Allowed $ (", MaxDollarLoss, "): ")
-MaxDL = input()
-if MaxDL == "":
-    print("  Defaulting Max Loss to ", MaxDollarLoss)
-    MaxDL = MaxDollarLoss
+MaxDL = MaxDollarLoss
 
-MaxDollarLoss = int(MaxDL)
+if(riskInput):
+    print("\nEnter Maximum Loss Allowed $ (", MaxDollarLoss, "): ")
+    MaxDL = input()
+    if MaxDL == "":
+        print("  Defaulting Max Loss to ", MaxDollarLoss)
+        MaxDL = MaxDollarLoss
+    MaxDollarLoss = int(MaxDL)
 
 
 
@@ -884,6 +1295,12 @@ current_date_time_ny = datetime.datetime.now(new_york_timezone)
 dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
 print("Today's Date and Time in NYC (EDT) is:",dtstr)
 
+
+gtstr = timeNow("")
+print(gtstr)
+hrsmins=gtstr #"0935"
+mins9 = getMinutesFromClose( hrsmins )
+print("TIME IN NYC:",hrsmins, " mins fromClose = " , mins9)
 
 
 # Print current time in New York as HH:MM:SS
@@ -922,9 +1339,41 @@ print(">",tstr, end="", flush=True)
 lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 
 
+print("]  TASK*** Getting INI FILE ...")
+fname="trades_ini.txt"
+arrINIcsvfile = ReadFile(fname)
+print(arrINIcsvfile)
+print_colored("] Finished reading: " +fname+ " for " , colorYellow )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 MaxMinutes = (keepLooping * (timeDelay+0 )/60 ) 
 print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:",MaxMinutes," Max HOURS=",MaxMinutes/60,"\n\n" )
+
+#######################################################################   
+#######################################################################   ```````` LOOP
+#######################################################################                      LOOP
+#######################################################################    LOOP
 ###################### STARTING LOOP ****************************************
+
 
 while keepLooping > 0:
     current_time_ny = datetime.datetime.now(new_york_timezone).time()
@@ -946,15 +1395,105 @@ while keepLooping > 0:
     
     # Wait for 3 seconds then open local file... (adjust for longer durations like 5 sec+ )
 
-    print("BrokerageRequest[ 'RobinhoodAPI', 'GetPositions' ...")
+
+
+
+
+
+    print("] TASK*** BrokerageRequest[ 'RobinhoodAPI', 'GetPositions' ...")
     # CheckPositions("Gianni", "12345354911")
+
+
+
+
+
+
+
+    print("] TASK***   .../Gettrades.php  :  RETURNING:  'buy' or 'sell' signals...")
+
+    # todaysDate0=TodaysDate()
+    #check override
+    url1=url0                        
+    if(len(str(todaysDate0))==10):
+        url1=urlbase+todaysDate0
+    print("] Attemping live trade retrieval for", url1, " on ", current_date_ny)
+
+    todaysTrades = GetTrades(url1)
+    # if(msg00==1):
+    print("] just hit gettrades.php on server, got todaysTrades[] text.  Attempting to get cuedtrades_"+todaysDate0)
+    # print(todaysTrades)
+    extstr = ".json"   #".csv"
+    # url2= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"+todaysDate0+extstr  
+    url2=  cuedtradesPrefixStr+todaysDate0+extstr
+
+    json_data = getJSON(url2)
+
+    if json_data:
+        print("] JSON Payload RECIEVED!!!")
+        # prettyPrintJSON(json_data)
+
+        symbol1=defaultSymbol
+
+        filtered_records = checkJSONdataStock(json_data, todaysDate0, tnow, symbol1 )
+        # filtered_records = checkJSONdataDate(json_data, todaysDate0, tnow, symbol )  # only compares date
+
+        print("] Filtered Records for ",symbol1," on date=",todaysDate0,":")
+        if len(filtered_records) == 0:
+            print(" [The =SYMBOL array is empty]")
+        else:
+            for record in filtered_records:
+                prettyPrintJSON(record)
+                 # print(record)
+
+        filtered_records1 = checkJSONdataTime(filtered_records, todaysDate0, tnow, symbol1 ) # "TSLA" )
+        print("] Filtered Records TIME:")
+        if len(filtered_records1) == 0:
+            print(" [The =TIME array is empty]  Nothing to trade at the momement.")
+        else:
+            for record in filtered_records1:
+                prettyPrintJSON(record)
+                # print(record)
+
+
+
+    # todaysCuedTrades = GetTrades(url2)
+    # print(todaysCuedTrades)
+
+
+
+
+
+
+    print("\n")
+    print("] TASK***  IF INI FILE HAS CHANGED IN FILESIZE, Get INI FILE ...")
+
+
+
+
+
+    print("\n")
+    print("] TASK***  LOOP THRU ALL TRADES FROM GETTRADES ")  
+    print("] TASK***        IF there IS a buy/sell signals within Epsilon minutes from signal'sMinutesFromOpen? ")  
+    print("] TASK*** ")  
+    print("] TASK***          YES,  INI-interpret buy/sell signals into trade and ")
+    print("] TASK***                SUBMIT TRADE...")
+    print("] TASK*** ")  
+    print("] TASK***        LOOP THRU ALL INI CSV CMD_   ")  
+    print("] TASK***          IF CMD_ VALID FOUND THEN ")
+    print("] TASK***                SUBMIT TRADE...")
 
 
     current_date_time_ny = datetime.datetime.now(new_york_timezone)
     dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
     print("\n======================>Today's Date and Time in NYC (EDT) is:",dtstr)
-   
-  
+    
+    
+    gtstr = timeNow("")
+    # print(gtstr)
+    hrsmins=gtstr #"0935"
+    mins9 = getMinutesFromClose( hrsmins )
+    print("TIME NOW IN NYC is ",hrsmins, ", or mins fromClose = " , mins9)
+
 #### End of Loop
     # Decrement keepLooping to eventually exit the loop
     keepLooping -= 1  # You might have a condition to break the loop based on a certain condition
@@ -968,136 +1507,3 @@ print("\n] Exiting LOOP.\n")
 
 
 
-
-
-##### base class order() fn
-# @login_required
-# def order(symbol, quantity, side, limitPrice=None, stopPrice=None, account_number=None, timeInForce='gtc', extendedHours=False, jsonify=True):
-#     """A generic order function.
-
-#     :param symbol: The stock ticker of the stock to sell.
-#     :type symbol: str
-#     :param quantity: The number of stocks to sell.
-#     :type quantity: int
-#     :param side: Either 'buy' or 'sell'
-#     :type side: str
-#     :param limitPrice: The price to trigger the market order.
-#     :type limitPrice: float
-#     :param stopPrice: The price to trigger the limit or market order.
-#     :type stopPrice: float
-#     :param account_number: the robinhood account number.
-#     :type account_number: Optional[str]
-#     :param timeInForce: Changes how long the order will be in effect for. 'gtc' = good until cancelled. \
-#     'gfd' = good for the day.
-#     :type timeInForce: str
-#     :param extendedHours: Premium users only. Allows trading during extended hours. Should be true or false.
-#     :type extendedHours: Optional[str]
-#     :param jsonify: If set to False, function will return the request object which contains status code and headers.
-#     :type jsonify: Optional[str]
-#     :returns: Dictionary that contains information regarding the purchase or selling of stocks, \
-#     such as the order id, the state of order (queued, confired, filled, failed, canceled, etc.), \
-#     the price, and the quantity.
-
-#     """ 
-#     try:
-#         symbol = symbol.upper().strip()
-#     except AttributeError as message:
-#         print(message, file=get_output())
-#         return None
-
-#     orderType = "market"
-#     trigger = "immediate"
-
-#     if side == "buy":
-#         priceType = "ask_price"
-#     else:
-#         priceType = "bid_price"
-
-#     if limitPrice and stopPrice:
-#         price = round_price(limitPrice)
-#         stopPrice = round_price(stopPrice)
-#         orderType = "limit"
-#         trigger = "stop"
-#     elif limitPrice:
-#         price = round_price(limitPrice)
-#         orderType = "limit"
-#     elif stopPrice:
-#         stopPrice = round_price(stopPrice)
-#         if side == "buy":
-#             price = stopPrice
-#         else:
-#             price = None
-#         trigger = "stop"
-#     else:
-#         price = round_price(next(iter(get_latest_price(symbol, priceType, extendedHours)), 0.00))
-#     payload = {
-#         'account': load_account_profile(account_number=account_number, info='url'),
-#         'instrument': get_instruments_by_symbols(symbol, info='url')[0],
-#         'symbol': symbol,
-#         'price': price,
-#         'quantity': quantity,
-#         'ref_id': str(uuid4()),
-#         'type': orderType,
-#         'stop_price': stopPrice,
-#         'time_in_force': timeInForce,
-#         'trigger': trigger,
-#         'side': side,
-#         'extended_hours': extendedHours
-#     }
-#     # BEGIN PATCH FOR NEW ROBINHOOD BUY FORM (GuitarGuyChrisB 5/26/2023)
-#     if side == "buy":
-#         payload['order_form_version'] = "2"
-#         payload['preset_percent_limit'] = "0.05"
-#     # END PATCH FOR NEW ROBINHOOD BUY FORM (GuitarGuyChrisB 5/26/2023)
-
-#     url = orders_url()
-
-
-#     data = request_post(url, payload, jsonify_data=jsonify)
-
-#     return(data)
-#
-#
-#
-#
-# #
-# When you call
-
-# r.order_buy_limit
-
-# which has a signature of:
-
-# order_buy_limit(symbol, quantity, limitPrice, account_number=None, timeInForce='gtc', extendedHours=False, jsonify=True)
-
-# That method calls
-
-# order(symbol, quantity, "buy", account_number, limitPrice, None, timeInForce, extendedHours, jsonify)
-
-# When your parameters are passed in, the resulting call is
-
-# order("BBCP", 1, "buy", "XXXXXX", "8.42000000", None, 'gfd', True, True)
-
-# The original signature for the order method is
-
-# order(symbol, quantity, side, limitPrice=None, stopPrice=None, account_number=None, timeInForce='gtc', extendedHours=False, jsonify=True, market_hours='regular_hours')
-
-# When your parameters are passed in according to position, you get:
-
-# order(symbol="BBCP", quantity=1, side="buy", limitPrice="XXXXXX", stopPrice="8.42000000", account_number=None, timeInForce='gfd', extendedHours=True, jsonify=True, market_hours='regular_hours')
-
-# The order method calls
-
-# round_price(limitPrice)
-
-# which in your case is
-
-# round_price("XXXXXX")
-
-# ...
-
-# @justindavies I think that's what's causing your error. In order to avoid it, I would probably just use the order method and explicitly pass in your parameters while defining side = 'buy', stopPrice=None.
-
-# ...
-# @jmfernandes , would it be unreasonable to refactor the methods to call the order method using keyword arguments instead of positional arguments?
-
-# Thanks, I enjoy your repo and would love to help out however possible :) !

@@ -512,6 +512,7 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
 
 
 function writeArrayToCSV($arr, $fname) {
+    // Open the CSV file for writing
     $file = fopen($fname, 'w');
 
     // Loop through each line in the array
@@ -731,14 +732,14 @@ if($tof9==true) $tradedatestr=$datestr;
 // $ftimeout = GetDBSafe_NYCTimeNOW(1);   
 // $fnameout = $dirPrefix. "rawtrades_". $tradedatestr . "_recv_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
 
-// $pstr= "<br /><br /><br />] FOUND $j unique RAW trades ( gen erated on $tradedatestr ), and inserted them into ". $arrname. "[] wri ting to $fnameout  at $ftimeout0 ... <br />";
+// $pstr= "<br /><br /><br />] FOUND $j unique RAW trades ( gen erated on $tradedatestr ), and inserted them into ". $arrname. "[] writing to $fnameout  at $ftimeout0 ... <br />";
 // $pstrRej="<br />] FOUND $badlines BAD 'csv-lines' and ignored them. <br />";
 // echoColor( $pstr, "blue");
 // echoColor( $pstrRej, "red");
 
 //$arrstrs = array(/* your array content here */); // Replace this with your array
 
-// // Open the file for wri ting
+// // Open the file for writing
 // $fileout = fopen($fnameout, "w");
 
 // // Write each element of the array to the file
@@ -1243,25 +1244,19 @@ foreach ($rawtrades as $line) {
 $ftimeout    = GetDBSafe_NYCTimeNOW(1);   
 
 $fnameout        = $dirPrefix. "cuedtrades_". $tradedatestr . "_recv_". $ftimeout. ".csv";     
-$fnameoutjson    = $dirPrefix. "cuedtrades_". $tradedatestr . "_recv_". $ftimeout. ".json";  
-
-$fnameoutUdate      = $dirPrefix. "cuedtrades_". $tradedatestr  . ".csv";     
-$fnameoutjsonUdate  = $dirPrefix. "cuedtrades_". $tradedatestr .  ".json";     
-
+$fnameoutjson    = $dirPrefix. "cuedtrades_". $tradedatestr . "_recv_". $ftimeout. ".json";     
 $fnameoutcsv     = $dirPrefix. "cuedtrades.csv";     
 $fnameoutcsvjson = $dirPrefix. "cuedtrades.json";  
 
-echoColor("<br />] END OF GenrateTrades().  Writing server files... ","blue"); // #$fnameoutcsv and $fnameout (log) containing  tradeCsvHeaders==","blue");
+echoColor("<br />] END OF GenrateTrades()... writing $fnameoutcsv and $fnameout (log) containing  tradeCsvHeaders==","blue");
 if($msg0==1) print_r($arrcsv);
 
 
 writeArrayToCSV($arrcsv, $fnameoutcsv);
-// writeArrayToCSV($arrcsv, $fnameout   );
-writeArrayToCSV($arrcsv, $fnameoutUdate   );
+writeArrayToCSV($arrcsv, $fnameout   );
 
    
-// echoColor("<br />] WROTE CSV (w/ Header) FILES: $fnameoutUdate , $fnameoutcsv and $fnameout ","purple");
-echoColor("<br />] WROTE CSV (w/ Header) FILES: $fnameoutUdate    $fnameoutcsv   ","purple");
+echoColor("<br />] WROTE CSV (w/ Header) FILES: $fnameoutcsv and $fnameout ","purple");
 
 
 //make function here reads csv back in converts to json
@@ -1276,12 +1271,11 @@ fclose($fp);
 
 $json = json_encode($data, JSON_PRETTY_PRINT);
 
+// $output_filename = $fnameoutcsvjson ;    //'data.json';
 file_put_contents($fnameoutcsvjson, $json);
-// file_put_contents($fnameoutjson, $json);
-file_put_contents($fnameoutjsonUdate, $json);
+file_put_contents($fnameoutjson, $json);
 
-// echoColor("<br />] WROTE JSON FILES: $fnameoutjsonUdate  , $fnameoutcsvjson and $fnameoutjson ","purple");
-echoColor("<br />] WROTE JSON FILES: $fnameoutjsonUdate   $fnameoutcsvjson   ","purple");
+echoColor("<br />] WROTE JSON FILES: $fnameoutcsvjson and $fnameoutjson ","purple");
 
 $u=0;
 $col0="blue";
