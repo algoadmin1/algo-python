@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "4.1"
+versionStr =                    "4.3"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -308,7 +308,7 @@ def prettyPrintJSON(json_data):
         # print("Pretty Printed JSON:\n", pretty_json)
 
 
-def checkJSONdata(json_data, date0, time0, symbol0):
+def checkJSONdataAnySymbol(json_data, date0, time0, symbol0):
     filtered_records = []
 
     for record in json_data:
@@ -316,7 +316,7 @@ def checkJSONdata(json_data, date0, time0, symbol0):
             # Check if the required fields exist in the current record
             if "tradeDate" in record and "tradeTime" in record and "symbol" in record:
                 # Check if the fields match the specified values
-                if record["tradeDate"] == date0 and record["tradeTime"] == time0 and record["symbol"] == symbol0:
+                if record["tradeDate"] == date0: # and record["tradeTime"] == time0:  # and record["symbol"] == symbol0:
                     filtered_records.append(record)
         except KeyError:
             # Handle the case where one of the required fields is missing in the record
@@ -354,7 +354,7 @@ def GetAbsMinutes( tradeTime, time0 , sym0):
 
 
 # in 0930 or 1545 -style units - minutes
-timeInMinsDifference = 60
+timeInMinsDifference = 20
 
 def checkJSONdataTime(json_data, date0, time0, symbol0):
     global timeInMinsDifference
@@ -836,6 +836,7 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
 
     ordersLIVE=0
     qty0        =   0
+
     if(ordersLIVE==1):
         qty0        =   0
         assettype0  = "stock"
@@ -1221,7 +1222,7 @@ if input0 == "":
     input0 = todaysDate0
 todaysDate0 = input0
 
-
+realtime=False
 tnow = timeNow("")
 print("] Enter  Simulated TIME  in HHSS [default="+tnow+"]:  " )
 input1 = input()
@@ -1230,6 +1231,7 @@ if len( input1 ) == 3:
     tnow= "0"+input1
 else:
     if input1 == "" :
+        realtime=True
         print("\n] Defaulting TIME to ", tnow )
         input1 = tnow
     tnow = input1
@@ -1436,13 +1438,22 @@ while keepLooping > 0:
 
         symbol1=defaultSymbol
 
-        filtered_records = checkJSONdataStock(json_data, todaysDate0, tnow, symbol1 )
-        # filtered_records = checkJSONdataDate(json_data, todaysDate0, tnow, symbol )  # only compares date
 
-        print("] Filtered Records for ",symbol1," on date=",todaysDate0,":")
+        if(realtime):           # if player pressed return "" then default= time in realtime
+            tnow = timeNow("")
+
+        filtered_records = checkJSONdataAnySymbol(json_data, todaysDate0, tnow, symbol1 )
+        # filtered_records = checkJSONdataStock(json_data, todaysDate0, tnow, symbol1 )
+        # filtered_records = checkJSONdataDate(json_data, todaysDate0, tnow, symbol )  # only compares date
+        # print("ANY STOCK filtered_records==",filtered_records)
+
+        # print("] Filtered Records for  ",symbol1," on date=",todaysDate0,":")
+        print("] Filtered Records for  any symbol on date, timeNow=",todaysDate0,tnow ,":")
+
         if len(filtered_records) == 0:
             print(" [The =SYMBOL array is empty]")
         else:
+            print("Today's DATE & TIME=", todaysDate0, tnow )
             for record in filtered_records:
                 prettyPrintJSON(record)
                  # print(record)
