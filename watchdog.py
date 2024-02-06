@@ -130,6 +130,7 @@ import csv
 import shutil
 import sys
 import random
+print("]  Still importing Python modules...")
 
 import os
 
@@ -137,7 +138,7 @@ import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
 # from datetime import datetime 
-print("]  Still importing Python modules...")
+print("]  Still importing ......")
 
 import json
 import robin_stocks as rs
@@ -343,21 +344,22 @@ def checkJSONdataStock(json_data, date0, time0, symbol0):
 
 
 # both are strings in "0930" or "1145" "1545" format
-def GetAbsMinutes( tradeTime, time0 , sym0):
+def GetAbsMinutes( tradeTime, time0 , sym0, buysellstr, rawidstr):
 
     mins_trade = getMinutesFromOpen( tradeTime )
     mins_cmp   = getMinutesFromOpen( time0 )
     mins_abs   = abs(mins_trade - mins_cmp)
  
-    print("] ",sym0,"G3tAbsMinutes(): trademins(2), cmpTime(2), absTime=",tradeTime, mins_trade,"  ,  ", time0, mins_cmp, mins_abs )
+    print("] ",sym0, buysellstr,"rawID=" , rawidstr,"G3tAbsMinutes(): trademins(2), cmpTime(2), absTime=",tradeTime, mins_trade,"  ,  ", time0, mins_cmp, mins_abs )
     return(mins_abs)
 
-
-# in 0930 or 1545 -style units - minutes
-timeInMinsDifference = 20
+# numMinutesDiff0
+# # in 0930 or 1545 -style units - minutes
+# timeInMinsDifference = 20
 
 def checkJSONdataTime(json_data, date0, time0, symbol0):
     global timeInMinsDifference
+    
     global tnow 
     
     filtered_records = []
@@ -371,8 +373,8 @@ def checkJSONdataTime(json_data, date0, time0, symbol0):
                     timeNear=False
 
                     tradeTime=record["tradeTime"]
-                    numMins= GetAbsMinutes( tradeTime, time0 , record["symbol"] )
-                    if(numMins < timeInMinsDifference ):
+                    numMins= GetAbsMinutes( tradeTime, time0 , record["symbol"] , record["tradeType"] , record["rawtradeId"] )
+                    if(numMins < int(timeInMinsDifference) ):
                         timeNear=True
 
                     if(timeNear): #and record["tradeTime"] == time0: #and record["symbol"] == symbol0:
@@ -1239,6 +1241,22 @@ else:
 print("\n] ReDirecting TIME NOW = ", tnow )
 
 
+
+numMinutesDiff0=17
+
+pstr= "\n",str(current_date_ny),"] ENTER Number Minutes diff for Trade (default="+str(numMinutesDiff0)+"): "  
+print_colored(pstr,colorGreen)
+input0 = input()
+if input0 == "":
+    print("\n] Defaulting time diff to ", numMinutesDiff0 )
+    input0 = numMinutesDiff0
+numMinutesDiff0 =int( input0 )
+
+# in 0930 or 1545 -style units - minutes
+timeInMinsDifference = numMinutesDiff0
+
+
+
 ####################################################################################  SYMBOL input
 #
 symInput=True
@@ -1361,6 +1379,8 @@ print_colored("] Finished reading: " +fname+ " for " , colorYellow )
 
 
 
+# initVars()
+rawIDarr=[]
 
 
 
