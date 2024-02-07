@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "4.3"
+versionStr =                    "4.41"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -61,6 +61,75 @@ def leftRightStr(input_str, LR_str, num_chars):
     else:
         return "Invalid LR_str, please use 'left' or 'right'."
 
+#
+# usage:  AddL3adingZero( "930", 3)   ==> 0930
+# usage:  AddL3adingZero( "1", 1)     ==> 01
+#
+def AddLeadingZero(str0, num):
+    str1=str0
+    if len( str0 ) < num:
+        print("\n] ADDING LEADING 0 to   ", str0 )
+        str1= "0"+str0
+    print("\n] AddL3adingZero(",str0,num, ") ==   ", str1 )
+    return(str1)
+
+# totalm1ns from start of day
+def  FormHHMMFromMins( totalmins ):
+        newhrs1     = int(totalmins/60)
+        newhrsmins1 = newhrs1*60
+        newmins1    = totalmins - newhrsmins1        # minutes left over  
+        newhrs1str  = str(newhrs1)  # HH or H
+        newmins1str = str(newmins1)  # MM or M
+        # add leading zero if
+        hhmmstr0= AddLeadingZero( newhrs1str, 2) + AddLeadingZero( newmins1str, 2)
+        print("]  FormHHMMFromMins(",totalmins,"): returning hhmmstr0=", hhmmstr0 )
+        return(hhmmstr0 )
+
+
+
+# usage
+# def G3tHHMM("HHMM", int, "add"|"sub"):    # need to implement sub
+def GetHHMM(hhmmstr, nummins, addSubStr):
+    hhmmstr0="0000"
+    lstr = leftRightStr(hhmmstr, "left", 2)
+    hrs0 = int(lstr)
+    rstr = leftRightStr(hhmmstr, "right", 2)
+    mins0= int(rstr)
+    totalminsAdd  = ( hrs0 * 60 ) + mins0  +  nummins
+    totalminsSub  = ( hrs0 * 60 ) + mins0  -  nummins
+
+    if(  addSubStr=="sub"  ):
+        hhmmstr0 = ( totalminsSub )  
+    if(  addSubStr=="add"  ):
+        hhmmstr0 = FormHHMMFromMins( totalminsAdd )  
+    print("] g3tHHMM():   hhmmstr0====>", hhmmstr0, "<====")
+    return(hhmmstr0)  
+
+
+def GetSimuTime(hrsmins):
+    global tnowStartMinsDiffFromSimuTime
+    global tnowSim 
+
+    print("]  START: GetSimuTime(",hrsmins ,")")
+    mins0=0
+    minstr="2000"
+    if(len(hrsmins)!=4):
+        hrsmins=AddLeadingZero(hrsmins,3)
+    if(len(hrsmins)!=4):
+        print("]  ERROR, c'mon Creator, use HHMM 4 digit time string!, exiting GetS1muTime()... =0")
+    # minsfromopen =getMinutesFromOpen( hrsmins )
+    minsfromDayStart =getMinutesFromDayStart( hrsmins )
+    print("] HHMM:", hrsmins ," m1nsfromDayStart=", str(minsfromDayStart) )
+    print("] tnowStartMinsDiffFromSimuTime = ",  str(tnowStartMinsDiffFromSimuTime) )
+
+    mins0= minsfromDayStart - tnowStartMinsDiffFromSimuTime
+    print("] mins0= minsfromDayStart - tnowStartMinsDiffFromSimuTime == ", str(mins0) )
+    print("] GetHHMM(", "0000",  mins0, "add)" )
+    # minstr1 = GetHHMM( tnowSim, mins0, "add")
+    minstr1 = GetHHMM( "0000", (mins0 + simuTimeInc), "add")
+    print("]   END: GetSimuTime(",hrsmins ,") ==   ======>", minstr1,"<=======: tnowSim, mins0==",tnowSim, mins0 )
+    minstr=minstr1
+    return(minstr)
 
 # ie  tradestaTimeStr = "1130" - "0930" = 120
 def getMinutesFromDayStart(tradestaTimeStr0):
@@ -343,6 +412,15 @@ def checkJSONdataStock(json_data, date0, time0, symbol0):
     return filtered_records
 
 
+# fed in 0940 or 1530
+#ie  GetTimeDiff( "0940", "1530" ):
+def GetTimeDiff( startTimeStr, endTimeStr):
+    mins_st  = getMinutesFromOpen( startTimeStr )
+    mins_end = getMinutesFromOpen( endTimeStr )
+    mins_diff= mins_end  -  mins_st
+    return(mins_diff)  # returns int
+
+
 # both are strings in "0930" or "1145" "1545" format
 def GetAbsMinutes( tradeTime, time0 , sym0, buysellstr, rawidstr):
 
@@ -359,7 +437,6 @@ def GetAbsMinutes( tradeTime, time0 , sym0, buysellstr, rawidstr):
 
 def checkJSONdataTime(json_data, date0, time0, symbol0):
     global timeInMinsDifference
-    
     global tnow 
     
     filtered_records = []
@@ -1078,34 +1155,34 @@ print("] Attempted & Completed Mock Portfolio Object Operations:   AFTER...")
 
 #########
 
-hrsmins="1145"
-mins9 = getMinutesFromOpen( hrsmins )
-print(hrsmins, " mins fromOpen = " , mins9)
+# hrsmins="1145"
+# mins9 = getMinutesFromOpen( hrsmins )
+# print(hrsmins, " mins fromOpen = " , mins9)
 
-hrsmins="1330"
-mins9 = getMinutesFromOpen( hrsmins )
-print(hrsmins, " mins fromOpen = " , mins9)
+# hrsmins="1330"
+# mins9 = getMinutesFromOpen( hrsmins )
+# print(hrsmins, " mins fromOpen = " , mins9)
 
-hrsmins="0945"
-mins9 = getMinutesFromOpen( hrsmins )
-print(hrsmins, " mins fromOpen = " , mins9)
+# hrsmins="0945"
+# mins9 = getMinutesFromOpen( hrsmins )
+# print(hrsmins, " mins fromOpen = " , mins9)
 
-hrsmins="1015"
-mins9 = getMinutesFromOpen( hrsmins )
-print(hrsmins, " mins fromOpen = " , mins9)
+# hrsmins="1015"
+# mins9 = getMinutesFromOpen( hrsmins )
+# print(hrsmins, " mins fromOpen = " , mins9)
 
 
-hrsmins="1245"
-mins9 = getMinutesFromClose( hrsmins )
-print(hrsmins, " mins fromClose = " , mins9)
+# hrsmins="1245"
+# mins9 = getMinutesFromClose( hrsmins )
+# print(hrsmins, " mins fromClose = " , mins9)
 
-hrsmins="1545"
-mins9 = getMinutesFromClose( hrsmins )
-print(hrsmins, " mins fromClose = " , mins9)
+# hrsmins="1545"
+# mins9 = getMinutesFromClose( hrsmins )
+# print(hrsmins, " mins fromClose = " , mins9)
 
-hrsmins="0935"
-mins9 = getMinutesFromClose( hrsmins )
-print(hrsmins, " mins fromClose = " , mins9)
+# hrsmins="0935"
+# mins9 = getMinutesFromClose( hrsmins )
+# print(hrsmins, " mins fromClose = " , mins9)
 
 gtstr = timeNow("")
 print(gtstr)
@@ -1199,7 +1276,7 @@ print(f"Ask Price: {ask_price}")
 
 
 #######################################################################
-#######################################################################  PREP LOOP
+#######################################################################  PREP  BEFORE START-LOOP
 #######################################################################
 #######################################################################
 # Starting Balance
@@ -1224,30 +1301,64 @@ if input0 == "":
     input0 = todaysDate0
 todaysDate0 = input0
 
+
+
+# inputz
+#
+# if user enters a time, simuTime=1 and it will simulate time
+simuTime=0
+simuTimeInc=0
+tnow = timeNow("")  # -->1545  vs 15:45
+tnowStart= tnow
+tnowSim  = tnow
+
 realtime=False
-tnow = timeNow("")
 print("] Enter  Simulated TIME  in HHSS [default="+tnow+"]:  " )
 input1 = input()
+
+if input1 != "" :  # if user entered time simutime it and count it later
+    simuTime=1
+    tnowStart= input1
+    tnowSim=tnowStart
+
 if len( input1 ) == 3:
     print("\n] ADDING LEADING 0 to TIME  ", input1 )
     tnow= "0"+input1
+    tnowStart= "0"+input1
+    tnowSim=tnowStart
+    simuTime=1
 else:
     if input1 == "" :
+        simuTime=0
         realtime=True
         print("\n] Defaulting TIME to ", tnow )
         input1 = tnow
     tnow = input1
 
-print("\n] ReDirecting TIME NOW = ", tnow )
+tnowStartMinsDiffFromSimuTime =  0  
+tnow0 = timeNow("")  
+tnowStartMinsDiffFromSimuTime =  GetTimeDiff( tnowStart,tnow0 )
+print("] ************* userSTARTTime, timeNOW, MINS_diff   ", tnowStart, tnow0, tnowStartMinsDiffFromSimuTime )
+print("] ************* userSTARTTime, timeNOW, MINS_diff   ", tnowStart, tnow0, tnowStartMinsDiffFromSimuTime )
+print("] ************* userSTARTTime, timeNOW, MINS_diff   ", tnowStart, tnow0, tnowStartMinsDiffFromSimuTime )
+
+print("\n] ReDirecting TIME NOW =   tnowStart, tnow0, simuTime ",  tnowStart, tnow0, simuTime )
 
 
 
-numMinutesDiff0=17
+
+
+
+
+
+##########################################################################  TradeTrigger: Time eplsilon
+
+numMinutesDiff0=3
 
 pstr= "\n",str(current_date_ny),"] ENTER Number Minutes diff for Trade (default="+str(numMinutesDiff0)+"): "  
 print_colored(pstr,colorGreen)
 input0 = input()
-if input0 == "":
+if input0 == "" or int(input0)<0:
     print("\n] Defaulting time diff to ", numMinutesDiff0 )
     input0 = numMinutesDiff0
 numMinutesDiff0 =int( input0 )
@@ -1259,7 +1370,8 @@ timeInMinsDifference = numMinutesDiff0
 
 ####################################################################################  SYMBOL input
 #
-symInput=True
+symInput=False
+
 defaultSymbol="AMZN"
 if(symInput):
     print("\nEnter SYMBOL [ default=", defaultSymbol, " ]: ")
@@ -1322,7 +1434,12 @@ gtstr = timeNow("")
 print(gtstr)
 hrsmins=gtstr #"0935"
 mins9 = getMinutesFromClose( hrsmins )
-print("TIME IN NYC:",hrsmins, " mins fromClose = " , mins9)
+if(simuTime==0):
+    print("TIME IN NYC:",hrsmins, " mins fromClose = " , mins9)
+elif (simuTime==1):
+    # simutime=    #= getMinutesFromClose( hrsmins )
+    simutime0= GetSimuTime(hrsmins)
+    print("* SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now = ", hrsmins)
 
 
 # Print current time in New York as HH:MM:SS
@@ -1462,6 +1579,10 @@ while keepLooping > 0:
         if(realtime):           # if player pressed return "" then default= time in realtime
             tnow = timeNow("")
 
+        if(simuTime==1):
+            tnow1 = GetTimeDiff(tnow,tnowStart)
+            pass
+
         filtered_records = checkJSONdataAnySymbol(json_data, todaysDate0, tnow, symbol1 )
         # filtered_records = checkJSONdataStock(json_data, todaysDate0, tnow, symbol1 )
         # filtered_records = checkJSONdataDate(json_data, todaysDate0, tnow, symbol )  # only compares date
@@ -1518,14 +1639,24 @@ while keepLooping > 0:
 
     current_date_time_ny = datetime.datetime.now(new_york_timezone)
     dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
-    print("\n======================>Today's Date and Time in NYC (EDT) is:",dtstr)
+    print("\n==========LOOPING============>Today's Date and Time in NYC (EDT) is:",dtstr)
     
-    
+
     gtstr = timeNow("")
-    # print(gtstr)
-    hrsmins=gtstr #"0935"
+    hrsmins=gtstr 
     mins9 = getMinutesFromClose( hrsmins )
-    print("TIME NOW IN NYC is ",hrsmins, ", or mins fromClose = " , mins9)
+    print("] time right now=", hrsmins, " g3tMinutesFromClose()=", mins9, )
+    # print("TIME NOW IN NYC is ",hrsmins, ", or mins fromClose = " , mins9)
+
+    if(simuTime==0):
+        print("] TIME NOW IN NYC is ",hrsmins, ", or mins fromClose = " , mins9)
+    elif (simuTime==1):
+        simutime0= GetSimuTime(hrsmins)
+        mins9 = getMinutesFromClose( simutime0 )
+
+        print("] * * * * * SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now = ", hrsmins)
+
+        pass
 
 #### End of Loop
     # Decrement keepLooping to eventually exit the loop
@@ -1534,7 +1665,14 @@ while keepLooping > 0:
 
     #END OF THE LOOP
 
-###################### ENDING LOOP **********************************************
+############################################ ENDING LOOP **********************************************
+############################################ ENDING LOOP **********************************************
+############################################ ENDING LOOP **********************************************
+############################################ ENDING LOOP **********************************************
+############################################ ENDING LOOP **********************************************
+############################################ ENDING LOOP **********************************************
+############################################ ENDING LOOP **********************************************
+############################################ ENDING LOOP **********************************************
 
 print("\n] Exiting LOOP.\n")
 
