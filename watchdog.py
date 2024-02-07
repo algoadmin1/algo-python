@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "4.41"
+versionStr =                    "5.10"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -66,11 +66,14 @@ def leftRightStr(input_str, LR_str, num_chars):
 # usage:  AddL3adingZero( "1", 1)     ==> 01
 #
 def AddLeadingZero(str0, num):
+    verbose=False
     str1=str0
     if len( str0 ) < num:
-        print("\n] ADDING LEADING 0 to   ", str0 )
+        if(verbose):
+            print("\n] ADDING LEADING 0 to   ", str0 )
         str1= "0"+str0
-    print("\n] AddL3adingZero(",str0,num, ") ==   ", str1 )
+    if(verbose):
+        print("\n] AddL3adingZero(",str0,num, ") ==   ", str1 )
     return(str1)
 
 # totalm1ns from start of day
@@ -84,7 +87,6 @@ def  FormHHMMFromMins( totalmins ):
         hhmmstr0= AddLeadingZero( newhrs1str, 2) + AddLeadingZero( newmins1str, 2)
         print("]  FormHHMMFromMins(",totalmins,"): returning hhmmstr0=", hhmmstr0 )
         return(hhmmstr0 )
-
 
 
 # usage
@@ -106,11 +108,19 @@ def GetHHMM(hhmmstr, nummins, addSubStr):
     return(hhmmstr0)  
 
 
+def CheckAfterMidnight(hrsmins):
+    mins8 = getMinutesFromDayStart( hrsmins )
+    hrsminsMod=hrsmins
+    if(mins8 <  ( (9*60) +30 )  ):          # if current time is 0230  or 0040
+        mins8 += (24*60)
+        hrsminsMod=GetHHMM("0000", mins8, "add")
+    return( hrsminsMod ) 
+
 def GetSimuTime(hrsmins):
     global tnowStartMinsDiffFromSimuTime
     global tnowSim 
 
-    print("]  START: GetSimuTime(",hrsmins ,")")
+    print("]  START: G3tSimuTime(",hrsmins ,")")
     mins0=0
     minstr="2000"
     if(len(hrsmins)!=4):
@@ -124,7 +134,7 @@ def GetSimuTime(hrsmins):
 
     mins0= minsfromDayStart - tnowStartMinsDiffFromSimuTime
     print("] mins0= minsfromDayStart - tnowStartMinsDiffFromSimuTime == ", str(mins0) )
-    print("] GetHHMM(", "0000",  mins0, "add)" )
+    print("] G3tHHMM(", "0000",  mins0, "add)" )
     # minstr1 = GetHHMM( tnowSim, mins0, "add")
     minstr1 = GetHHMM( "0000", (mins0 + simuTimeInc), "add")
     print("]   END: GetSimuTime(",hrsmins ,") ==   ======>", minstr1,"<=======: tnowSim, mins0==",tnowSim, mins0 )
@@ -1337,6 +1347,7 @@ else:
 
 tnowStartMinsDiffFromSimuTime =  0  
 tnow0 = timeNow("")  
+tnow0= CheckAfterMidnight(tnow0)
 tnowStartMinsDiffFromSimuTime =  GetTimeDiff( tnowStart,tnow0 )
 print("] ************* userSTARTTime, timeNOW, MINS_diff   ", tnowStart, tnow0, tnowStartMinsDiffFromSimuTime )
 print("] ************* userSTARTTime, timeNOW, MINS_diff   ", tnowStart, tnow0, tnowStartMinsDiffFromSimuTime )
@@ -1437,9 +1448,9 @@ mins9 = getMinutesFromClose( hrsmins )
 if(simuTime==0):
     print("TIME IN NYC:",hrsmins, " mins fromClose = " , mins9)
 elif (simuTime==1):
-    # simutime=    #= getMinutesFromClose( hrsmins )
-    simutime0= GetSimuTime(hrsmins)
-    print("* SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now = ", hrsmins)
+    hrsminsMod = CheckAfterMidnight(hrsmins) 
+    simutime0= GetSimuTime(hrsminsMod)
+    print("* SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now, hrsmins = ", hrsmins, " hrsminsMod = ", hrsminsMod )
 
 
 # Print current time in New York as HH:MM:SS
@@ -1575,29 +1586,30 @@ while keepLooping > 0:
 
         symbol1=defaultSymbol
 
+        tnow = timeNow("")
 
         if(realtime):           # if player pressed return "" then default= time in realtime
             tnow = timeNow("")
 
         if(simuTime==1):
-            tnow1 = GetTimeDiff(tnow,tnowStart)
-            pass
+            tnowMod = CheckAfterMidnight(tnow) 
+            tnow1= GetSimuTime(tnowMod)
+            tnow = tnow1
+            print("] PRE_filtering JSON; Retrieved tnow (sim-d) = ", tnow)
+            
 
+        printAllDateMatchJSONs=False
         filtered_records = checkJSONdataAnySymbol(json_data, todaysDate0, tnow, symbol1 )
-        # filtered_records = checkJSONdataStock(json_data, todaysDate0, tnow, symbol1 )
-        # filtered_records = checkJSONdataDate(json_data, todaysDate0, tnow, symbol )  # only compares date
-        # print("ANY STOCK filtered_records==",filtered_records)
 
-        # print("] Filtered Records for  ",symbol1," on date=",todaysDate0,":")
         print("] Filtered Records for  any symbol on date, timeNow=",todaysDate0,tnow ,":")
 
         if len(filtered_records) == 0:
             print(" [The =SYMBOL array is empty]")
         else:
             print("Today's DATE & TIME=", todaysDate0, tnow )
-            for record in filtered_records:
-                prettyPrintJSON(record)
-                 # print(record)
+            if(printAllDateMatchJSONs==True):
+                for record in filtered_records:
+                    prettyPrintJSON(record)
 
         filtered_records1 = checkJSONdataTime(filtered_records, todaysDate0, tnow, symbol1 ) # "TSLA" )
         print("] Filtered Records TIME:")
@@ -1651,12 +1663,16 @@ while keepLooping > 0:
     if(simuTime==0):
         print("] TIME NOW IN NYC is ",hrsmins, ", or mins fromClose = " , mins9)
     elif (simuTime==1):
-        simutime0= GetSimuTime(hrsmins)
+        hrsminsMod = CheckAfterMidnight(hrsmins) 
+        simutime0= GetSimuTime(hrsminsMod)
+        # simutime0= GetSimuTime(hrsmins)
         mins9 = getMinutesFromClose( simutime0 )
+        # print("] * * * * * SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now = ", hrsmins)
+        print("] * * * * * * SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now, hrsmins = ", hrsmins, " hrsminsMod = ", hrsminsMod )
 
-        print("] * * * * * SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now = ", hrsmins)
 
-        pass
+
+
 
 #### End of Loop
     # Decrement keepLooping to eventually exit the loop
