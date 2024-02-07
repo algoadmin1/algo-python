@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "5.10"
+versionStr =                    "6.15"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -1304,7 +1304,7 @@ my_stock_items = GetHoldingsButLoginFirst("BEFORE TRADE", "roguequant1@gmail.com
 todaysDate0=TodaysDate()
 
 pstr= "\n",str(current_date_ny),"] ENTER trades Date (default="+todaysDate0+"): "  
-print_colored(pstr,colorRed)
+print_colored(pstr,colorGreen)
 input0 = input()
 if input0 == "":
     print("\n] Defaulting Date to ", todaysDate0 )

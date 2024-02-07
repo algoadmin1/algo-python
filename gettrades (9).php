@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "6.15";
+                                                      $vers = "5.11";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
@@ -191,25 +191,6 @@ function DetectCharacter($str0, $char0, $num) {
         return false;
     }
 }
-
-function replaceChars($str, $charstr, $replacestr) {
-    $result = str_replace(str_split($charstr), str_split($replacestr), $str);
-    return $result;
-}
-function removeChars($str, $charstr) {
-    $result = str_replace(str_split($charstr), '', $str);
-    return $result;
-}
-function noNilStrings($arr, $replacestr) {
-    foreach ($arr as &$value) {
-        if ($value === null || $value === "") {
-            $value = $replacestr;
-        }
-    }
-    return $arr;
-}
-
-
 function RemoveRightCharacter($str0, $num) {
     if ($num >= 0 && $num < strlen($str0)) {
         return substr($str0, 0, -$num - 1) . substr($str0, -$num);
@@ -381,25 +362,11 @@ function GenerateTrade($arr, $idx, $arrINIcsv) {
     //[RAWTRADE,tradeId], tradeDate,tradeTime,tradeType,tradeSize,              symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,                 tradePivot,       priceDist,       pricePct,tradeStrong,tradeLeg,timestamp
     //  0      ,   1    ,      2   ,    3    ,           4
     // $tradestr0=          $arr[2].",". $arr[3].",". $arr[4].",". $tradesize0.",". $arr[5].",". $arr[6].",". $arr[7].",". $arr[1].",". $arr[8].",". $aboveBelowstr. ",". $S1R1str. ",". $arr[10]. ",". $arr[9]. ",". $tradestrong.",". $arr[11].",". $timestampnow  ;
-    
-    // REMOVE NIL STRs, take care of this case $arr0[] =...onCondor1.15,,,,nil,BUY,0
-    $arr = noNilStrings( $arr, "nil_" );
-
     $tradestr00=                  $arr[2].",". $arr[3].",". $arr[4].",". $tradesize0.",". $arr[5].",". $arr[6].",". $arr[7].",". $arr[1].",". $arr[8].",". $aboveBelowstr. ",". $S1R1str. ",". $arr[10]. ",". $arr[9]. ",". $tradestrong.",". $arr[11].",". $timestampnow  ;
 
-    // we have to turn ar[12]== ,"2024-02-06 20:45:06", ===>  ,2024-02-06T20:45:06,
-    $tstampHere = $arr[12];
-    $thstr0     = replaceChars( $tstampHere, " ", "T" ) ;    // ,"2024-02-06T20:45:06",
-    $thstr1     =  removeChars( $thstr0, '"' );              // ,2024-02-06T20:45:06,
-    $thstr2     =  removeChars( $thstr1, ':' );              // ,2024-02-06T204506,
-    // $thstr2     = replaceChars( $thstr1, ":", "_" ) ;     // ,2024-02-06T20_45_06,
-    $thstr3     =   $thstr2 ;
-
-
-    // $tradestr2 =               $arr[12].",". $arr[13].",". $arr[14].",". $arr[15].",". $arr[16].",". $arr[17].",". $arr[18].",". $arr[19].",". $arr[20].",".$arr[21].",";
-    $tradestr2 =                  $thstr3.  ",". $arr[13].",". $arr[14].",". $arr[15].",". $arr[16].",". $arr[17].",". $arr[18].",". $arr[19].",". $arr[20].",".$arr[21].",";
-    $tradestr2.=                  $arr[22].",". $arr[23].",". $arr[24].",". $arr[25].",".    $arr[26].",". $arr[27].",". $arr[28]. ",".  $arr[29]. ",". $arr[30]. ",". $arr[31] ;   // [31] =0,1,2,3,nilHash
-    $tradestrRest =     $tradestr2. ",1,2,3,nilHash";
+    $tradestr2 =                  $arr[12].",". $arr[13].",". $arr[14].",". $arr[15].",". $arr[16].",". $arr[17].",". $arr[18].",". $arr[19].",". $arr[20].",".$arr[21].",";
+    $tradestr2.=                  $arr[22].",". $arr[23].",". $arr[24].",". $arr[25].",". $arr[26].",". $arr[27].",". $arr[28].",". $arr[29].",". $arr[30].",".$arr[31];  
+    $tradestrRest = $tradestr2;
 
     $tradestr0 =   $tradestr00. ",". $tradestrRest;
 
@@ -1240,6 +1207,7 @@ $arrcsv=[];
 
 //  new
 $tradeCsvHeaders= $tradeCsvHeadersALL;
+
 echoColor( $tradeCsvHeaders, "blue" );
 $arrcsv[]=$tradeCsvHeaders;
 
@@ -1270,18 +1238,6 @@ foreach ($rawtrades as $line) {
     $idx++;
 }
 
-// tradeDate,tradeTime,tradeType,tradeSize,symbol,      tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,
-// tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,  timestamp,tradeRecTimestamp,tradeDateTime,tradeDay,tradeBar,
-//  userId,accountId,tradeRAW,tradeRawId,tradeSize1,    tradePrFilled,tradeDur,tradeStopMke,tradeLimitExit,optionStrategy,
-//  daySRs,wkSRs,moSRs,tradeSpec,tradeSig,              tradeGapPct,tradeStatus,tradeAux1,tradeAux2,tradeHash
-
-// 2024-02-06,1600,SELL,10,TSLA,         atLimit,184.79,1879,4,below, 
-// R1,-0.68,-0.3674%,0,220|210|155|145,  2024-02-07T025501,"2024-02-06 20:45:06", 2024-02-06T160000,tue,15min,
-// Creator,12345354911,raw67,0,100,      0,day,110.874,461.975,IronCondor1.15,
-// a,b,c,nil,SELL,                       0,1,2,3,nil
-
-
-
 
 
 $ftimeout    = GetDBSafe_NYCTimeNOW(1);   
@@ -1298,7 +1254,6 @@ $fnameoutcsvjson = $dirPrefix. "cuedtrades.json";
 echoColor("<br />] END OF GenrateTrades().  Writing server files... ","blue"); // #$fnameoutcsv and $fnameout (log) containing  tra deCsvHeaders==","blue");
 if($msg0==1) print_r($arrcsv);
 
-// tradeDate,tradeTime,tradeType,tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,timestamp,tradeRecTimestamp,tradeDateTime,tradeDay,tradeBar,userId,accountId,tradeRAW,tradeRawId,tradeSize1,tradePrFilled,tradeDur,tradeStopMke,tradeLimitExit,optionStrategy,daySRs,wkSRs,moSRs,tradeSpec,tradeSig,tradeGapPct,tradeStatus,tradeAux1,tradeAux2,tradeHash
 
 writeArrayToCSV($arrcsv, $fnameoutcsv);
 // writeArrayToCSV($arrcsv, $fnameout   );
