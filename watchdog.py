@@ -1451,8 +1451,9 @@ key_to_print = "Cmd_Symbol"
 # loopJSON(json_result, key_to_print)
 InitINICmd_JSON(json_result, key_to_print)
 
+# CMD_Array
 
-
+print(json.dumps(CMD_Array, indent=4))
 
 
 
