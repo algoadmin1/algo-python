@@ -1,7 +1,11 @@
 Cmd_Symbol,Action,Range,Value,TradeType,Aux,SigCnt,QtyShrCons,NumStrikes,Live,THoriz,ExitPref
-CMD_,RISK,MAX,10000,nil,nil,nil,0,1,LIVE,nil,nil
-CMD_,POSITIONS,MAX,4,nil,nil,nil,0,1,LIVE,nil,nil
-CMD_,SPRD_POSITIONS,MAX,2,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,RISKMAX,PORTFOLIO,20000,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,RISKMAX,STOCKS,6000,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,RISKMAX,OPTIONS,3000,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,POSITIONSMAX,OPTIONS,4,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,POSITIONSMAX,STOCKS,4,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,POSITIONSMAX,SPREADS,2,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,TRADESPERDAY,OPTIONS,2,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,POLL,nil,nil,nil,nil,30,0,1,LIVE,nil,nil
 CMD_,STOP,OPTIONS,50,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,EVENT,FMOC,2024-03-15,nil,nil,nil,0,1,LIVE,nil,nil

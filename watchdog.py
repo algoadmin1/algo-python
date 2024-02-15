@@ -1152,9 +1152,9 @@ CMD_Array = [
     { "Label": "PositionsMax",  "Type": "options_spreads", "Value": "1" },
     { "Label": "PositionsMax",  "Type": "portfolio", "Value": "6" },
 
-    { "Label": "RiskDollars",  "Type": "portfolio",    "Value": "35000" },
-    { "Label": "RiskDollars",  "Type": "stocks",       "Value": "12000" },
-    { "Label": "RiskDollars",  "Type": "options",      "Value": "6000" },
+    { "Label": "Risk",  "Type": "portfolio",    "Value": "35000" },
+    { "Label": "Risk",  "Type": "stocks",       "Value": "12000" },
+    { "Label": "Risk",  "Type": "options",      "Value": "6000" },
 
     { "Label": "RiskPct",  "Type": "portfolio",        "Value": "0.350" },
 
