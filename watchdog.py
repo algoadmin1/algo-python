@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "6.15"
+versionStr =                    "6.16"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -209,8 +209,7 @@ import csv
 import shutil
 import sys
 import random
-print("]  Still importing Python modules...")
-
+print("]  Still importing more Python modules...")
 import os
 
 import yfinance as yf
@@ -1060,6 +1059,175 @@ def print_colored_rnd(text):
     r = rand(colorArrayLen)
     print_colored(text, colorArray[r])
 
+
+# import csv
+# import json
+
+def CSV2JSON(arr):
+    # Assuming arr is a list of strings where each string represents a CSV row
+    csv_reader = csv.reader(arr)
+    
+    # Assuming the first row contains the column headers
+    headers = next(csv_reader)
+
+    # Initialize an empty list to store the JSON records
+    json_records = []
+
+    # Iterate through each row in the CSV
+    for row in csv_reader:
+        # Create a dictionary for each row using the headers and row values
+        record_dict = {headers[i]: row[i] for i in range(len(headers))}
+        json_records.append(record_dict)
+
+    return json_records
+
+def CompareJSON(jsondict, key0, val0):
+    tf = False  # Initialize the boolean variable to False
+
+    # Check if the key exists in the JSON dictionary
+    if key0 in jsondict:
+        # Check if the value associated with the key is equal to val0
+        tf = jsondict[key0] == val0
+
+    return tf
+
+
+def valueJSON(jsondict, key0):
+    # Check if the key exists in the JSON dictionary
+    if key0 in jsondict:
+        return jsondict[key0]
+    else:
+        return "nilKey"
+
+# ####################################################################### Globals
+#  MAX Cmd_ affected gl0bals 
+PortfolioPositionsMax  = 2
+StockPositionsMax   = 2
+OptionsPositionsMax = 2
+SpreadPositionsMax  = 2
+
+#  RISK gl0bals affected by
+RiskPortfolioMax    = 10000
+RiskStockTradeMax   = 12000
+RiskOptionTradeMax  =  6000
+OptionsStopPct      = 0.50
+StockStopPct        = 0.2750
+
+# SERVER / Arrays
+PollServerSeconds   = 30
+
+EventArray = [
+    { "Event": "FOMC", "Symbol": "*", "Date": "2024-03-15", "Time": "1430" },
+    { "Event": "JOBSREPORT", "Symbol": "*", "Date": "2024-02-02", "Time": "0830"},
+    { "Event": "EARNINGS", "Symbol": "NVDA", "Date": "2024-02-23", "Time": "1415"}
+]
+Cmd_OrdersArray = [
+     { "Order": "BUY",  "OrderType": "Market", "Symbol": "ROKU", "TradeSize": "100", "Date": "2024-02-15", "Time": "1230", "Instrument": "Stock" },
+     { "Order": "SELL", "OrderType": "Market", "Symbol": "ROKU", "TradeSize": "100", "Date": "2024-02-16", "Time": "0930", "Instrument": "Stock" },
+     { "Order": "BUY",  "OrderType": "Market", "Symbol": "NVDA", "TradeSize": "10",  "Date": "2024-02-23", "Time": "1230", "Instrument": "Call" }
+   
+]
+cmd_BaseStr ="CMD_"
+
+def InitINICmd_JSON(json_array, key0):
+    global PortfolioPositionsMax   
+    global StockPositionsMax    
+    global OptionsPositionsMax  
+    global SpreadPositionsMax   
+
+    global RiskPortfolioMax     
+    global RiskStockTradeMax   
+    global RiskOptionTradeMax  
+    global OptionsStopPct      
+
+    global PollServerSeconds  
+    global EventArray    
+    global Cmd_OrdersArray
+
+    global cmd_BaseStr
+
+    rstr="nil"
+
+    for index, json_dict in enumerate(json_array):
+        if key0 in json_dict:
+            print(f"Index: {index}, {key0}: {json_dict[key0]}")
+            cmd_test0=json_dict[key0].upper()
+            cmd_test=leftRightStr(cmd_test0,"left",4)
+
+            # BASE STRING "CMD_" FOUND
+            if(cmd_test==cmd_BaseStr):
+                ll=len(cmd_test0)
+                print("**** FOUND len, COMMAND: ", ll,cmd_test)
+                actionstr = json_dict["Action"] 
+                # "CMD_" only
+                if(ll==len(cmd_BaseStr)):
+                    print("actionstr==",actionstr)
+                    if(actionstr.upper() == "RISK"):
+                        pass
+                    if(actionstr.upper() == "POSITIONS"):
+                        pass
+                    if(actionstr.upper() == "SPRD_POSITIONS"):
+                        pass
+                    if(actionstr.upper() == "POLL"):
+                        pass
+                    if(actionstr.upper() == "STOP"):
+                        pass
+
+
+
+                #  if "CMD_<SYMBOL>" only ie CMD_NVDA
+                if( ll > len(cmd_BaseStr) ):
+                    rstr = leftRightStr( cmd_test0,"right", (ll-4) )
+                    print("**** FOUND CMD_ with a SYMBOL !!!! ==", rstr)
+                    print(" *TODO* :  append CMD_ symbol array, and always check this during loop for time,date==")
+
+            else:
+                print("SYMBOL FOUND")
+
+        else:
+            print(f"Index: {index}, {key0}: nilKey")
+
+
+
+
+def loopJSON(json_array, key0):
+    for index, json_dict in enumerate(json_array):
+        if key0 in json_dict:
+            print(f"Index: {index}, {key0}: {json_dict[key0]}")
+        else:
+            print(f"Index: {index}, {key0}: nilKey")
+
+# # Example usage:
+# json_array = [
+#     {"Name": "John", "Age": 25, "City": "New York"},
+#     {"Name": "Alice", "Age": 30, "City": "San Francisco"},
+#     {"Name": "Bob", "Age": 28, "City": "Los Angeles"}
+# ]
+
+# key_to_print = "Age"
+# loopJSON(json_array, key_to_print)
+
+
+
+
+# # Example usage:
+# json_data = {
+#     "Name": "John",
+#     "Age": 25,
+#     "City": "New York"
+# }
+
+# key_to_compare = "City"
+# value_to_compare = "New York"
+
+# result = CompareJSON(json_data, key_to_compare, value_to_compare)
+
+# print(f"The key '{key_to_compare}' holds the value '{value_to_compare}' in the JSON dictionary: {result}")
+
+
+# json_result = CSV2J SON(csv_data)
+# print(json.dumps(json_result, indent=2))
+
 # def print_colored_rnd1(text, r):
 #     # r = rand(colorArrayLen)
 #     print_colored(text, colorArray[r])
@@ -1165,35 +1333,6 @@ print("] Attempted & Completed Mock Portfolio Object Operations:   AFTER...")
 
 #########
 
-# hrsmins="1145"
-# mins9 = getMinutesFromOpen( hrsmins )
-# print(hrsmins, " mins fromOpen = " , mins9)
-
-# hrsmins="1330"
-# mins9 = getMinutesFromOpen( hrsmins )
-# print(hrsmins, " mins fromOpen = " , mins9)
-
-# hrsmins="0945"
-# mins9 = getMinutesFromOpen( hrsmins )
-# print(hrsmins, " mins fromOpen = " , mins9)
-
-# hrsmins="1015"
-# mins9 = getMinutesFromOpen( hrsmins )
-# print(hrsmins, " mins fromOpen = " , mins9)
-
-
-# hrsmins="1245"
-# mins9 = getMinutesFromClose( hrsmins )
-# print(hrsmins, " mins fromClose = " , mins9)
-
-# hrsmins="1545"
-# mins9 = getMinutesFromClose( hrsmins )
-# print(hrsmins, " mins fromClose = " , mins9)
-
-# hrsmins="0935"
-# mins9 = getMinutesFromClose( hrsmins )
-# print(hrsmins, " mins fromClose = " , mins9)
-
 gtstr = timeNow("")
 print(gtstr)
 hrsmins=gtstr #"0935"
@@ -1207,6 +1346,34 @@ print(gtstr)
 
 ######### 
 ##################################################### CLASS STRUCTURE TESTS END ###########
+
+
+
+print("\n\n]  Reading INI FILE ...")
+fname="trades_ini.txt"
+arrINIcsvfile = ReadFile(fname)
+print(arrINIcsvfile)
+print_colored("] Finished reading: " +fname+ " for " , colorYellow )
+print("\n\n\n")
+ 
+
+json_result = CSV2JSON(arrINIcsvfile)
+print(json.dumps(json_result, indent=2))
+
+key_to_compare = "Cmd_Symbol"
+value_to_compare = "TSLA"
+result = CompareJSON(json_result, key_to_compare, value_to_compare)
+
+print(f"The key '{key_to_compare}' holds the value '{value_to_compare}' in the JSON dictionary: {result}")
+
+jlen = len(json_result)
+
+print( "jlen = ", jlen) #json_result["Cmd_Symbol"]  )
+key_to_print = "Cmd_Symbol"
+# loopJSON(json_result, key_to_print)
+InitINICmd_JSON(json_result, key_to_print)
+
+
 
 
 
@@ -1489,11 +1656,11 @@ print(">",tstr, end="", flush=True)
 lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 
 
-print("]  TASK*** Getting INI FILE ...")
-fname="trades_ini.txt"
-arrINIcsvfile = ReadFile(fname)
-print(arrINIcsvfile)
-print_colored("] Finished reading: " +fname+ " for " , colorYellow )
+# print("]  TASK*** Getting INI FILE ...")
+# fname="trades_ini.txt"
+# arrINIcsvfile = ReadFile(fname)
+# print(arrINIcsvfile)
+# print_colored("] Finished reading: " +fname+ " for " , colorYellow )
 
 
 
