@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "6.16"
+versionStr =                    "6.17"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -1100,6 +1100,8 @@ def valueJSON(jsondict, key0):
         return "nilKey"
 
 # ####################################################################### Globals
+cmd_BaseStr ="CMD_"
+
 #  MAX Cmd_ affected gl0bals 
 PortfolioPositionsMax  = 2
 StockPositionsMax   = 2
@@ -1110,7 +1112,7 @@ StockTradesPerDayMax    = 2
 OptionsTradesPerDayMax  = 1
     
 #  RISK gl0bals affected by
-RiskPortfolioMax    = 25000
+RiskPortfolioMax    = 35000
 RiskStockTradeMax   = 12000
 RiskOptionTradeMax  =  6000
 OptionsStopPct      = 0.50
@@ -1130,7 +1132,7 @@ Cmd_OrdersArray = [
      { "Order": "BUY",  "OrderType": "Market", "Symbol": "NVDA", "TradeSize": "10",  "Date": "2024-02-23", "Time": "1230", "Instrument": "Call" }
    
 ]
-cmd_BaseStr ="CMD_"
+
 
 def InitINICmd_JSON(json_array, key0):
     global PortfolioPositionsMax   
