@@ -1153,12 +1153,14 @@ def InitINICmd_JSON(json_array, key0):
             print(f"Index: {index}, {key0}: {json_dict[key0]}")
             cmd_test0=json_dict[key0].upper()
             cmd_test=leftRightStr(cmd_test0,"left",4)
+            actionstr = json_dict["Action"] 
+            rangestr = json_dict["Range"] 
+            valuestr = json_dict["Value"] 
 
             # BASE STRING "CMD_" FOUND
             if(cmd_test==cmd_BaseStr):
                 ll=len(cmd_test0)
                 print("**** FOUND len, COMMAND: ", ll,cmd_test)
-                actionstr = json_dict["Action"] 
                 # "CMD_" only
                 if(ll==len(cmd_BaseStr)):
                     print("actionstr==",actionstr)
@@ -1171,6 +1173,11 @@ def InitINICmd_JSON(json_array, key0):
                     if(actionstr.upper() == "POLL"):
                         pass
                     if(actionstr.upper() == "STOP"):
+                        pass
+                    if(actionstr.upper() == "EVENT"):
+                        # really the event like 'FOMC'
+                        print("EVENT   ==",rangestr)
+                        print("DATE    ==",valuestr)
                         pass
 
 
