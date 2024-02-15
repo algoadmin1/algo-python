@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "6.18"
+versionStr =                    "6.17"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -1115,54 +1115,22 @@ OptionsTradesPerDayMax  = 1
 RiskPortfolioMax    = 35000
 RiskStockTradeMax   = 12000
 RiskOptionTradeMax  =  6000
-
-# stops pct
 OptionsStopPct      = 0.50
 StockStopPct        = 0.2750
 
 # SERVER / Arrays
 PollServerSeconds   = 30
 
-CMD_Array = [
-    { "Label": "PositionsMax",  "Type": "stock",     "Value": "3" },
-    { "Label": "PositionsMax",  "Type": "options",   "Value": "1" },
-    { "Label": "PositionsMax",  "Type": "options_spreads", "Value": "1" },
-    { "Label": "PositionsMax",  "Type": "portfolio", "Value": "6" },
-
-    { "Label": "RiskDollars",  "Type": "portfolio",    "Value": "35000" },
-    { "Label": "RiskDollars",  "Type": "stocks",       "Value": "12000" },
-    { "Label": "RiskDollars",  "Type": "options",      "Value": "6000" },
-
-    { "Label": "RiskPct",  "Type": "portfolio",        "Value": "0.350" },
-
-    { "Label": "StopPct",  "Type": "options",           "Value": "0.50" },
-    { "Label": "StopPct",  "Type": "stocks",            "Value": "0.2750" },
-
-    { "Label": "TradesPerDay",  "Type": "options",     "Value": "1" },
-    { "Label": "TradesPerDay",  "Type": "stocks",      "Value": "2" },
-
-    { "Label": "Server",  "Type": "Poll",               "Value": "30" },
-    { "Label": "Server",  "Type": "RefreshINIsecs",     "Value": "600" },
-
-    { "Label": "Event",  "Type": "FOMC",              "Value": "2024-03-15T143000" },
-    { "Label": "Event",  "Type": "JOBSREPORT",        "Value": "2024-03-15T083000" },
-    { "Label": "Event",  "Type": "CPI",               "Value": "2024-02-13T083000" },
-
-    { "Label": "Event",  "Type": "EARNINGS_NVDA",     "Value": "2024-03-15T141500" },
-    { "Label": "Event",  "Type": "EARNINGS_ROKU",     "Value": "2024-02-15T133000" }
-
-]
-
 EventArray = [
     { "Event": "FOMC", "Symbol": "*", "Date": "2024-03-15", "Time": "1430" ,       "DateTime": "2024-03-15T143000" },
     { "Event": "JOBSREPORT", "Symbol": "*", "Date": "2024-02-02", "Time": "0830",  "DateTime": "2024-03-15T083000" },
     { "Event": "EARNINGS", "Symbol": "NVDA", "Date": "2024-02-23", "Time": "1415", "DateTime": "2024-03-15T141500" }
 ]
-
-CMD_OrdersArray = [
+Cmd_OrdersArray = [
      { "Order": "BUY",  "OrderType": "Market", "Symbol": "ROKU", "TradeSize": "100", "Date": "2024-02-15", "Time": "1230", "Instrument": "Stock" },
      { "Order": "SELL", "OrderType": "Market", "Symbol": "ROKU", "TradeSize": "100", "Date": "2024-02-16", "Time": "0930", "Instrument": "Stock" },
      { "Order": "BUY",  "OrderType": "Market", "Symbol": "NVDA", "TradeSize": "10",  "Date": "2024-02-23", "Time": "1230", "Instrument": "Call" }
+   
 ]
 
 
@@ -1181,10 +1149,8 @@ def InitINICmd_JSON(json_array, key0):
     global OptionsStopPct      
 
     global PollServerSeconds  
-
-    global CMD_Array
     global EventArray    
-    global CMD_OrdersArray
+    global Cmd_OrdersArray
 
     global cmd_BaseStr
 
