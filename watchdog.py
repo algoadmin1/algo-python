@@ -1107,7 +1107,7 @@ OptionsPositionsMax = 2
 SpreadPositionsMax  = 2
 
 #  RISK gl0bals affected by
-RiskPortfolioMax    = 10000
+RiskPortfolioMax    = 25000
 RiskStockTradeMax   = 12000
 RiskOptionTradeMax  =  6000
 OptionsStopPct      = 0.50
@@ -1153,9 +1153,10 @@ def InitINICmd_JSON(json_array, key0):
             print(f"Index: {index}, {key0}: {json_dict[key0]}")
             cmd_test0=json_dict[key0].upper()
             cmd_test=leftRightStr(cmd_test0,"left",4)
-            actionstr = json_dict["Action"] 
-            rangestr = json_dict["Range"] 
-            valuestr = json_dict["Value"] 
+            actionstr = json_dict["Action"]  # [1]
+            rangestr = json_dict["Range"]    # [2]
+            valuestr = json_dict["Value"]    # [3]
+            livestr  = json_dict["Live"]    # [3]
 
             # BASE STRING "CMD_" FOUND
             if(cmd_test==cmd_BaseStr):
@@ -1165,7 +1166,11 @@ def InitINICmd_JSON(json_array, key0):
                 if(ll==len(cmd_BaseStr)):
                     print("actionstr==",actionstr)
                     if(actionstr.upper() == "RISK"):
-                        pass
+                        if(rangestr=="MAX"):
+                            print("] RiskPortfolioMax =", RiskPortfolioMax)
+                            RiskPortfolioMax= int(valuestr)
+                            print("] RiskPortfolioMax =", RiskPortfolioMax)
+                                                  
                     if(actionstr.upper() == "POSITIONS"):
                         pass
                     if(actionstr.upper() == "SPRD_POSITIONS"):
