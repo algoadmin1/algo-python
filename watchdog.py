@@ -1106,6 +1106,9 @@ StockPositionsMax   = 2
 OptionsPositionsMax = 2
 SpreadPositionsMax  = 2
 
+StockTradesPerDayMax    = 2
+OptionsTradesPerDayMax  = 1
+    
 #  RISK gl0bals affected by
 RiskPortfolioMax    = 25000
 RiskStockTradeMax   = 12000
@@ -1117,9 +1120,9 @@ StockStopPct        = 0.2750
 PollServerSeconds   = 30
 
 EventArray = [
-    { "Event": "FOMC", "Symbol": "*", "Date": "2024-03-15", "Time": "1430" },
-    { "Event": "JOBSREPORT", "Symbol": "*", "Date": "2024-02-02", "Time": "0830"},
-    { "Event": "EARNINGS", "Symbol": "NVDA", "Date": "2024-02-23", "Time": "1415"}
+    { "Event": "FOMC", "Symbol": "*", "Date": "2024-03-15", "Time": "1430" ,       "DateTime": "2024-03-15T143000" },
+    { "Event": "JOBSREPORT", "Symbol": "*", "Date": "2024-02-02", "Time": "0830",  "DateTime": "2024-03-15T083000" },
+    { "Event": "EARNINGS", "Symbol": "NVDA", "Date": "2024-02-23", "Time": "1415", "DateTime": "2024-03-15T141500" }
 ]
 Cmd_OrdersArray = [
      { "Order": "BUY",  "OrderType": "Market", "Symbol": "ROKU", "TradeSize": "100", "Date": "2024-02-15", "Time": "1230", "Instrument": "Stock" },
@@ -1135,6 +1138,9 @@ def InitINICmd_JSON(json_array, key0):
     global OptionsPositionsMax  
     global SpreadPositionsMax   
 
+    global StockTradesPerDayMax
+    global OptionsTradesPerDayMax
+    
     global RiskPortfolioMax     
     global RiskStockTradeMax   
     global RiskOptionTradeMax  
