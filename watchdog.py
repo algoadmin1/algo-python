@@ -1183,6 +1183,7 @@ def InitINICmd_JSON(json_array, key0):
                         # really the event like 'FOMC'
                         print("EVENT   ==",rangestr)
                         print("DATE    ==",valuestr)
+                        print("PUSH [] JOBS REPORT HERE")
                         pass
 
 
