@@ -1102,7 +1102,7 @@ def valueJSON(jsondict, key0):
 # ####################################################################### Globals
 cmd_BaseStr ="CMD_"
 
-#  MAX Cmd_ affected gl0bals 
+#  MAX Cmd_ affected gl0bals            **************** !!!!!!!  NOW:  MAKE THESE MATCH NAMES in INI files
 PortfolioPositionsMax  = 2
 StockPositionsMax   = 2
 OptionsPositionsMax = 2
