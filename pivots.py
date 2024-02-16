@@ -67,7 +67,19 @@ def GetInterval():
 	#print("TODO: get interval")
 	return '5d'
 
+
 ticker = GetTicker()
+
+# defaultSymbol='NVDA'
+# insym= input()
+# if(insym==""):
+# 	print("  Defaulting Ticker Loss to ", defaultSymbol )
+# 	insym = defaultSymbol
+
+# defaultSymbol = insym
+
+
+
 interval = GetInterval()
 
 print("\n ^^^ Welcome to AlgoZ Pivot Calculator (TM) ^^^\n")

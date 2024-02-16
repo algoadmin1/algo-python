@@ -2,9 +2,11 @@ Cmd_,Action,Range,Value,TradeType,Aux,SigCnt,QtyShrCons,NumStrikes,Live,THoriz,E
 CMD_,RiskMax,PORTFOLIO,20000,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,RiskMax,stocks,6000,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,RiskMax,OPTIONS,3000,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,RiskPct,options,0.15,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,PositionsMax,OPTIONS,4,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,PositionsMax,STOCKS,4,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,PositionsMax,options_spreads,2,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,PositionsPct,stocks,0.10,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,TradesPerDay,options,2,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,TradesPerDay,stocks,3,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,Server,POLL,55,nil,nil,30,0,1,LIVE,nil,nil

@@ -1153,6 +1153,8 @@ CMD_Array = [
     { "Label": "PositionsMax",  "Type": "options_spreads", "Value": "1" },
     { "Label": "PositionsMax",  "Type": "portfolio", "Value": "6" },
 
+    { "Label": "PositionsMax",  "Type": "portfolio", "Value": "6" },
+
     { "Label": "RiskMax",  "Type": "portfolio",    "Value": "35000" },
     { "Label": "RiskMax",  "Type": "stocks",       "Value": "12000" },
     { "Label": "RiskMax",  "Type": "options",      "Value": "6000" },
@@ -1233,6 +1235,7 @@ def RefreshINICmd_VariablesJSON(json_array, key0):
             livestr   = json_dict["Live"]    # [3]
 
             print("[",idx,"]  actionstr,  rangestr , valuestr ==",  actionstr,  rangestr , valuestr )
+
 
             # BASE STRING "CMD_" FOUND !
             if(cmd_test==cmd_BaseStr):
