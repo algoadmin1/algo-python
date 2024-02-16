@@ -51,12 +51,15 @@ import scipy as s
 def GetTicker():
 	#print("TODO: get ticker input")
 	defaultSymbol='NVDA'
-	insym=""
-	insym = input()
-    if( insym == "" ):
-    	print("  Defaulting Ticker Loss to ", defaultSymbol )
-    	insym = defaultSymbol
-    defaultSymbol = insym
+	# insym= input()
+	# if(insym==""):
+	# 	pass
+	# insym=""
+	# insym = input()
+    # if( insym == "" ):
+    # 	print("  Defaulting Ticker Loss to ", defaultSymbol )
+    # 	insym = defaultSymbol
+    # defaultSymbol = insym
 	return defaultSymbol
 
 
