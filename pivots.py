@@ -42,41 +42,100 @@
 ################################################################
 # yfinance reference:  https://pypi.org/project/yfinance/
 
-import yfinance as yahooFinance
+import yfinance as yf
 import pandas as pd
+import datetime as dt
+import scipy as s
 
 # Get Customer choices (ticker, interval)
 def GetTicker():
-	print("TODO: get ticker from 1")
+	#print("TODO: get ticker input")
 	return 'NVDA'
 
 def GetInterval():
-	print("TODO: get interval from user!")
+	#print("TODO: get interval")
 	return '5d'
 
 ticker = GetTicker()
 interval = GetInterval()
 
-print ("ticker is ", ticker)
-print ("interval is ", interval)
+print("\n ^^^ Welcome to AlgoZ Pivot Calculator (TM) ^^^\n")
+print("\n             ", ticker, " ", interval)
+print("\n")
 
-data = yahooFinance.Ticker(ticker)
-
+# Noobs, please note that Ticker() returns a panda dataframe
+data = yf.Ticker(ticker)
 
 # test 1 blindly print all info.. works
 # print(data.info)
 
-# test 2 get all key value pairs that are available
-for key, value in data.info.items():
-	print(key, ":", value)
+# test 2 get all key value pairs that are available..works
+#for key, value in data.info.items():
+#	print(key, ":", value)
 
-# test 3 display for example, PE
-print("Price Earnings Ratio : ", data.info['trailingPE'])
+# test 3 display for example, PE.. works
+#print("Trailing PE: ", data.info['trailingPE'])
 
+# OK do the scrape already
 priceData = data.history(period='5d')
 
-print("\n Price Data: ")
+print("Price Data: ")
 print(priceData)
+print("\n")
+
+# print("\nTry to get High")
+# H = priceData.at['2024-02-09 00:00:00-05:00','High']
+# print ("\tH = ", H)
+
+numRows = len(priceData.index)
+# print("Num Rows = ", numRows)
+
+# print("\nColumn Names?")
+# for colName in priceData.columns:
+#     print(colName)
+
+# print("\nRow Names?")
+# for rowName in priceData.index:
+#     print(rowName)
+
+# note for the Pivots and S3->R3 levels we'll use CAPS for var names
+
+P = [0] * numRows
+R1 = [0] * numRows
+R2 = [0] * numRows
+R3 = [0] * numRows
+S1 = [0] * numRows
+S2 = [0] * numRows
+S3 = [0] * numRows
+
+# we could store these levels in a [numLevels, numRows] array
+# to handle different models.  7 would be [R3,R2,R1,P,S1,S2,S3]
+#numColumns = 7 
+# FIB_Levels = [[0 for c in range(numColumns)] for r in range(numRows)] 
+
+for row in range(numRows):
+	timeStamp = priceData.index[row]
+	H = priceData.at[timeStamp,'High']
+	L = priceData.at[timeStamp,'Low']
+	C = priceData.at[timeStamp,'Close']
+	P[row] = (H + L + C) / 3
+	R1[row] = (2 * P[row]) - L
+	R2[row] = P[row] + H - L
+	R3[row] = H + 2 * (P[row] - L)
+	S1[row] = (2 * P[row]) - H
+	S2[row] = P[row] - H + L
+	S3[row] = L - 2 * (H - P[row])
+
+print("\n\tLevel Blest Levels (reverse Chrono)\n")
+
+for row in range(numRows-1, -1, -1):
+	print("\t\tR3 ", R3[row], "\t\t", priceData.index[row])
+	print("\t\tR2 ", R2[row])
+	print("\t\tR1 ", R1[row])
+	print("\t\tP  ",  P[row])
+	print("\t\tS1 ", S1[row])
+	print("\t\tS2 ", S2[row])
+	print("\t\tS3 ", S3[row], "\n")
 
 ''' 
 Example output for inputs 'NVDA', '5d':
@@ -87,38 +146,7 @@ Date
 2024-02-12 00:00:00-05:00  726.000000  746.109985  712.500000  722.479980  61371000        0.0           0.0
 '''
 
-# end multiline nonsense
-
-# Calc the Daily Pivots for the last 5 days
-# for each day
-#    calc Pivot
-
-# TODO: figure out how to debug python line step
-
-# TODO: use dataframes ?
-# df = pd.DataFrame(priceData)
-# df
-
-# print ("Length of Price Data = ", priceData.info)
-counter = 0
-
-for row in priceData:
-	print ("counter = ", counter, "012 elements are",  row[0] , row[1], row[2])
-	++counter
-
-
-
-# Valid intervals are below. Could display in a scroll bar select
-
-#   1d 5d 1mo 3mo 6mo 1y 2y 5y 10y ytd
-
-#print(data.history(period="max"))
-#print(data.history(period="6mo"))
-
-print("\nYES SIR!\n")
-
-
-# TODO: fix exception w/ bad ticker entry 'NDVA'
+# TODO: fix exception w/ bad ticker entry 'NDVA' - use try-catch
 #  KeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=RsKbvrgHfdXFile "C:\Users\willb\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\models.py", line 1021, in raise_for_status
 #     raise HTTPError(http_error_msg, response=self)
 # requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/NDVA?modules=financialData%2CquoteType%2Cdefault
