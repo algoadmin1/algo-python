@@ -4,7 +4,7 @@ CMD_,RiskMax,stocks,6000,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,RiskMax,OPTIONS,3000,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,PositionsMax,OPTIONS,4,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,PositionsMax,STOCKS,4,nil,nil,nil,0,1,LIVE,nil,nil
-CMD_,PositionsMax,SPREADS,2,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,PositionsMax,options_spreads,2,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,TradesPerDay,OPTIONS,2,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,TradesPerDay,STOCKS,3,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,POLL,ALL,55,nil,nil,30,0,1,LIVE,nil,nil

@@ -1201,7 +1201,7 @@ def refreshValue(jsonDict, labelStr, typeStr, storeValue):
         print("] inside r3frshValue(): v, lstr , typestr, storeVal ==",v, lstr, tstr,  storeValue )
 
 # AINT WeRKING
-        if( lstr.upper() == labelStr.upper() and tstr.upper() == typeStr.upper() ):
+        if( lstr.upper() == labelStr.upper()   and   tstr.upper() == typeStr.upper() ):
             print("]  r3freshValue(): BEFORE:  entry['Value'] = ", entry["Value"] )
             entry["Value"] = storeValue
             print("]  r3freshValue(): AFTER:   entry['Value'] = ", entry["Value"] )
