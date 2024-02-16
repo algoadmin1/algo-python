@@ -1195,11 +1195,17 @@ def refreshValue(jsonDict, labelStr, typeStr, storeValue):
     v=0
     for entry in jsonDict:
         v+=1
-        print("] inside r3frshValue(): ",v)
-        if entry.get("Label") == labelStr and entry.get("Type") == typeStr:
+        lstr =entry.get("Label")
+        tstr = entry.get("Type")
+
+        print("] inside r3frshValue(): v, lstr , typestr, storeVal ==",v, lstr, tstr,  storeValue )
+
+# AINT WeRKING
+        if( lstr.upper() == labelStr.upper() and tstr.upper() == typeStr.upper() ):
             print("]  r3freshValue(): BEFORE:  entry['Value'] = ", entry["Value"] )
             entry["Value"] = storeValue
             print("]  r3freshValue(): AFTER:   entry['Value'] = ", entry["Value"] )
+
     return jsonDict
 
  
@@ -1234,8 +1240,8 @@ def RefreshINICmd_VariablesJSON(json_array, key0):
                 # "CMD_" only
                 # if(ll==len(cmd_BaseStr)):
                 print("actionstr==",actionstr)
-                print("if(actionstr == next... ")
-                print("] PRE - if  CALLINMG CMD_Array1 = r3frshValue().......****")
+                print("if( actionstr ==  ...... ")
+                print("] PRE - if( )  , trying to :  CALL  CMD_Array1 = r3frshValue().......****")
 
                 if(actionstr == "RiskMax" or   actionstr == "RiskPct"  or  actionstr == "TradePerDay" or  actionstr == "PollServerSecs"   or  actionstr == "PositionsMax"  ):
                     print("] CALLINMG CMD_Array1 = r3frshValue().......****")
@@ -1266,8 +1272,8 @@ def RefreshINICmd_VariablesJSON(json_array, key0):
             print(f"Index: {index}, {key0}: nilKey")
 
 # passthru as above, so all vars get refreshed as of now, but with In1tIN!Cmd_VariablesJSON
-def InitINICmd_VariablesJSON(json_array, key0):
-    RefreshINICmd_VariablesJSON(json_array, key0)
+# def InitINICmd_VariablesJSON(json_array, key0):
+#     Re freshINICmd_VariablesJSON(json_array, key0)
 
 
 def loopJSON(json_array, key0):
@@ -1453,6 +1459,10 @@ key_to_print = "Cmd_"
 RefreshINICmd_VariablesJSON(json_result, key_to_print)
 
 print("] AFTER R3freshINICmd_Variable()...")
+
+print("\n\nPress ANY KEY to see POST fn json ")
+input007 = input()
+
 print(json.dumps(CMD_Array, indent=4))
 
 

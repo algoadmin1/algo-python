@@ -1,6 +1,6 @@
 Cmd_,Action,Range,Value,TradeType,Aux,SigCnt,QtyShrCons,NumStrikes,Live,THoriz,ExitPref
 CMD_,RiskMax,PORTFOLIO,20000,nil,nil,nil,0,1,LIVE,nil,nil
-CMD_,RiskMax,STOCKS,6000,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,RiskMax,stocks,6000,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,RiskMax,OPTIONS,3000,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,PositionsMax,OPTIONS,4,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,PositionsMax,STOCKS,4,nil,nil,nil,0,1,LIVE,nil,nil
