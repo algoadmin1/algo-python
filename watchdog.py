@@ -1173,11 +1173,10 @@ CMD_Array = [
     { "Label": "Event",  "Type": "JOBSREPORT",        "Value": "2024-03-24T083000" },
     { "Label": "Event",  "Type": "CPI",               "Value": "2024-02-13T083000" },
 
+    { "Label": "Event",  "Type": "11YRBottom",        "Value": "2031-03-10T083000" },
+
     { "Label": "Event",  "Type": "EARNINGS_NVDA",     "Value": "2024-03-15T141500" },
     { "Label": "Event",  "Type": "EARNINGS_ROKU",     "Value": "2024-02-15T133000" },
-
-    { "Label": "TradePerDay",  "Type": "options",     "Value": "33" },
-    { "Label": "TradePerDay",  "Type": "stocks",     "Value": "33" },
 
     { "Label": "PollServerSecs",  "Type": "ALL",     "Value": "33" }
     
@@ -1195,13 +1194,13 @@ def refreshValue(jsonDict, labelStr, typeStr, storeValue):
     v=0
     for entry in jsonDict:
         v+=1
-        lstr =entry.get("Label")
-        tstr = entry.get("Type")
+        lstr =entry.get("Label").upper()
+        tstr = entry.get("Type").upper()
 
         print("] inside r3frshValue(): v, lstr , typestr, storeVal ==",v, lstr, tstr,  storeValue )
 
 # AINT WeRKING
-        if( lstr.upper() == labelStr.upper()   and   tstr.upper() == typeStr.upper() ):
+        if( lstr == labelStr.upper()   and   tstr == typeStr.upper() ):
             print("]  r3freshValue(): BEFORE:  entry['Value'] = ", entry["Value"] )
             entry["Value"] = storeValue
             print("]  r3freshValue(): AFTER:   entry['Value'] = ", entry["Value"] )
@@ -1233,10 +1232,13 @@ def RefreshINICmd_VariablesJSON(json_array, key0):
             valuestr  = json_dict["Value"]    # [3]
             livestr   = json_dict["Live"]    # [3]
 
+            print("[",idx,"]  actionstr,  rangestr , valuestr ==",  actionstr,  rangestr , valuestr )
+
             # BASE STRING "CMD_" FOUND !
             if(cmd_test==cmd_BaseStr):
                 ll=len(cmd_test0)
-                print("[",idx,"]**** FOUND len, COMMAND: ", ll,cmd_test)
+                # print("[",idx,"]**** FOUND len, COMMAND: ", ll,cmd_test)
+                print("]**** FOUND len, COMMAND: ", ll,cmd_test)
                 # "CMD_" only
                 # if(ll==len(cmd_BaseStr)):
                 print("actionstr==",actionstr)
@@ -1246,7 +1248,7 @@ def RefreshINICmd_VariablesJSON(json_array, key0):
                 if(actionstr == "RiskMax" or   actionstr == "RiskPct"  or  actionstr == "TradePerDay" or  actionstr == "PollServerSecs"   or  actionstr == "PositionsMax"  ):
                     print("] CALLINMG CMD_Array1 = r3frshValue().......****")
                     CMD_Array1 = refreshValue( CMD_Array, actionstr , rangestr, valuestr )
-                    print(json.dumps( CMD_Array1, indent=4) )
+                    # print(json.dumps( CMD_Array1, indent=4) )
                     
 
                 if(actionstr.upper() == "STOP"):
