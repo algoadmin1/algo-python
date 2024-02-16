@@ -5,11 +5,11 @@ CMD_,RiskMax,OPTIONS,3000,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,PositionsMax,OPTIONS,4,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,PositionsMax,STOCKS,4,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,PositionsMax,options_spreads,2,nil,nil,nil,0,1,LIVE,nil,nil
-CMD_,TradesPerDay,OPTIONS,2,nil,nil,nil,0,1,LIVE,nil,nil
-CMD_,TradesPerDay,STOCKS,3,nil,nil,nil,0,1,LIVE,nil,nil
-CMD_,POLL,ALL,55,nil,nil,30,0,1,LIVE,nil,nil
-CMD_,STOP,OPTIONS,0.450,nil,nil,nil,0,1,LIVE,nil,nil
-CMD_,STOP,STOCKS,0.07250,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,TradesPerDay,options,2,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,TradesPerDay,stocks,3,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,Server,POLL,55,nil,nil,30,0,1,LIVE,nil,nil
+CMD_,StopPct,OPTIONS,0.450,nil,nil,nil,0,1,LIVE,nil,nil
+CMD_,StopPct,STOCKS,0.07250,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,EVENT,FMOC,2024-03-15,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,EVENT,JOBSREPORT,2024-02-02T08:30:00,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,EVENT,CPI,2024-02-13T08:30:00,nil,nil,nil,0,1,LIVE,nil,nil
