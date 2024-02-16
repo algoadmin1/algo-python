@@ -50,7 +50,15 @@ import scipy as s
 # Get Customer choices (ticker, interval)
 def GetTicker():
 	#print("TODO: get ticker input")
-	return 'NVDA'
+	defaultSymbol='NVDA'
+	insym=""
+	insym = input()
+    if( insym == "" ):
+    	print("  Defaulting Ticker Loss to ", defaultSymbol )
+    	insym = defaultSymbol
+    defaultSymbol = insym
+	return defaultSymbol
+
 
 def GetInterval():
 	#print("TODO: get interval")
