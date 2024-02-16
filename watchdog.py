@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "6.21"
+versionStr =                    "6.43"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -1100,28 +1100,29 @@ def valueJSON(jsondict, key0):
         return "nilKey"
 
 # ####################################################################### Globals
-cmd_BaseStr ="CMD_"
+# cmd_BaseStr ="CMD_"
 
 #  MAX Cmd_ affected gl0bals            **************** !!!!!!!  NOW:  MAKE THESE MATCH NAMES in INI files
-PortfolioPositionsMax  = 2
-StockPositionsMax   = 2
-OptionsPositionsMax = 2
-SpreadPositionsMax  = 2
+# PortfolioPositionsMax  = 2
+# StockPositionsMax   = 2
+# OptionsPositionsMax = 2
+# SpreadPositionsMax  = 2
 
-StockTradesPerDayMax    = 2
-OptionsTradesPerDayMax  = 1
+# StockTradesPerDayMax    = 2
+# OptionsTradesPerDayMax  = 1
     
-#  RISK gl0bals affected by
-RiskPortfolioMax    = 35000
-RiskStockTradeMax   = 12000
-RiskOptionTradeMax  =  6000
+# #  RISK gl0bals affected by
+# RiskPortfolioMax    = 35000
+# RiskStockTradeMax   = 12000
+# RiskOptionTradeMax  =  6000
 
-# stops pct
-OptionsStopPct      = 0.50
-StockStopPct        = 0.2750
+# # stops pct
+# OptionsStopPct      = 0.50
+# StockStopPct        = 0.2750
 
 # SERVER / Arrays
-PollServerSeconds   = 30
+# PollServerSeconds   = 30
+
 # cmd_ini.json
 #
 #
@@ -1138,7 +1139,7 @@ PollServerSeconds   = 30
 #   THEN, this system will let us have ai or a market-scanning Algo (ie picks up SCMI) write an INI cmd_
 #
 #   I have included the INI file in this email. watchdog.py reads the INI file (trades_INI.txt) and 
-#   translates it into the CMD_Array[] json dictionary inside python for watchdog's main loop.
+#   translates it into the [MD_Array[] json dictionary inside python for watchdog's main loop.
 #
 #         The main loop simply polls https://algoinvestorr.com/trades/gettrades.php?d=2024-02-14 
 #         which in turn writes https://algoinvestorr.com/trades/rawtrades/cuedtrades.json
@@ -1152,14 +1153,15 @@ CMD_Array = [
     { "Label": "PositionsMax",  "Type": "options_spreads", "Value": "1" },
     { "Label": "PositionsMax",  "Type": "portfolio", "Value": "6" },
 
-    { "Label": "Risk",  "Type": "portfolio",    "Value": "35000" },
-    { "Label": "Risk",  "Type": "stocks",       "Value": "12000" },
-    { "Label": "Risk",  "Type": "options",      "Value": "6000" },
+    { "Label": "RiskMax",  "Type": "portfolio",    "Value": "35000" },
+    { "Label": "RiskMax",  "Type": "stocks",       "Value": "12000" },
+    { "Label": "RiskMax",  "Type": "options",      "Value": "6000" },
 
     { "Label": "RiskPct",  "Type": "portfolio",        "Value": "0.350" },
 
     { "Label": "StopPct",  "Type": "options",           "Value": "0.50" },
     { "Label": "StopPct",  "Type": "stocks",            "Value": "0.2750" },
+    { "Label": "StopPct",  "Type": "portfolio",            "Value": "0.1250" },
 
     { "Label": "TradesPerDay",  "Type": "options",     "Value": "1" },
     { "Label": "TradesPerDay",  "Type": "stocks",      "Value": "2" },
@@ -1172,14 +1174,14 @@ CMD_Array = [
     { "Label": "Event",  "Type": "CPI",               "Value": "2024-02-13T083000" },
 
     { "Label": "Event",  "Type": "EARNINGS_NVDA",     "Value": "2024-03-15T141500" },
-    { "Label": "Event",  "Type": "EARNINGS_ROKU",     "Value": "2024-02-15T133000" }
+    { "Label": "Event",  "Type": "EARNINGS_ROKU",     "Value": "2024-02-15T133000" },
 
-]
+    { "Label": "TradePerDay",  "Type": "options",     "Value": "33" },
+    { "Label": "TradePerDay",  "Type": "stocks",     "Value": "33" },
 
-EventArray = [
-    { "Event": "FOMC", "Symbol": "*", "Date": "2024-03-15", "Time": "1430" ,       "DateTime": "2024-03-15T143000" },
-    { "Event": "JOBSREPORT", "Symbol": "*", "Date": "2024-02-02", "Time": "0830",  "DateTime": "2024-03-15T083000" },
-    { "Event": "EARNINGS", "Symbol": "NVDA", "Date": "2024-02-23", "Time": "1415", "DateTime": "2024-03-15T141500" }
+    { "Label": "PollServerSecs",  "Type": "ALL",     "Value": "33" }
+    
+
 ]
 
 CMD_OrdersArray = [
@@ -1189,83 +1191,83 @@ CMD_OrdersArray = [
 ]
 
 
-def InitINICmd_JSON(json_array, key0):
-    global PortfolioPositionsMax   
-    global StockPositionsMax    
-    global OptionsPositionsMax  
-    global SpreadPositionsMax   
+def refreshValue(jsonDict, labelStr, typeStr, storeValue):
+    v=0
+    for entry in jsonDict:
+        v+=1
+        print("] inside r3frshValue(): ",v)
+        if entry.get("Label") == labelStr and entry.get("Type") == typeStr:
+            print("]  r3freshValue(): BEFORE:  entry['Value'] = ", entry["Value"] )
+            entry["Value"] = storeValue
+            print("]  r3freshValue(): AFTER:   entry['Value'] = ", entry["Value"] )
+    return jsonDict
 
-    global StockTradesPerDayMax
-    global OptionsTradesPerDayMax
-    
-    global RiskPortfolioMax     
-    global RiskStockTradeMax   
-    global RiskOptionTradeMax  
-    global OptionsStopPct      
+ 
 
-    global PollServerSeconds  
+cmd_BaseStr ="CMD_"
 
+def RefreshINICmd_VariablesJSON(json_array, key0): 
     global CMD_Array
-    global EventArray    
     global CMD_OrdersArray
-
     global cmd_BaseStr
 
     rstr="nil"
+    idx= 0
 
     for index, json_dict in enumerate(json_array):
-        if key0 in json_dict:
+        idx+=1
+        if key0 in json_dict:  # "Cmd_" is the key
             print(f"Index: {index}, {key0}: {json_dict[key0]}")
-            cmd_test0=json_dict[key0].upper()
-            cmd_test=leftRightStr(cmd_test0,"left",4)
-            actionstr = json_dict["Action"]  # [1]
-            rangestr = json_dict["Range"]    # [2]
-            valuestr = json_dict["Value"]    # [3]
-            livestr  = json_dict["Live"]    # [3]
 
-            # BASE STRING "CMD_" FOUND
+            cmd_test0=json_dict[key0].upper()
+            cmd_test=leftRightStr(cmd_test0,"left",4)   # // explicit ="CMD_"
+
+            actionstr = json_dict["Action"]  # [1]
+            rangestr  = json_dict["Range"]    # [2]
+            valuestr  = json_dict["Value"]    # [3]
+            livestr   = json_dict["Live"]    # [3]
+
+            # BASE STRING "CMD_" FOUND !
             if(cmd_test==cmd_BaseStr):
                 ll=len(cmd_test0)
-                print("**** FOUND len, COMMAND: ", ll,cmd_test)
+                print("[",idx,"]**** FOUND len, COMMAND: ", ll,cmd_test)
                 # "CMD_" only
-                if(ll==len(cmd_BaseStr)):
-                    print("actionstr==",actionstr)
-                    if(actionstr.upper() == "RISK"):
-                        if(rangestr=="MAX"):
-                            print("] RiskPortfolioMax =", RiskPortfolioMax)
-                            RiskPortfolioMax= int(valuestr)
-                            print("] RiskPortfolioMax =", RiskPortfolioMax)
-                                                  
-                    if(actionstr.upper() == "POSITIONS"):
-                        pass
-                    if(actionstr.upper() == "SPRD_POSITIONS"):
-                        pass
-                    if(actionstr.upper() == "POLL"):
-                        pass
-                    if(actionstr.upper() == "STOP"):
-                        pass
-                    if(actionstr.upper() == "EVENT"):
-                        # really the event like 'FOMC'
-                        print("EVENT   ==",rangestr)
-                        print("DATE    ==",valuestr)
-                        print("PUSH [] JOBS REPORT HERE")
+                # if(ll==len(cmd_BaseStr)):
+                print("actionstr==",actionstr)
+                print("if(actionstr == next... ")
+                print("] PRE - if  CALLINMG CMD_Array1 = r3frshValue().......****")
+
+                if(actionstr == "RiskMax" or   actionstr == "RiskPct"  or  actionstr == "TradePerDay" or  actionstr == "PollServerSecs"   or  actionstr == "PositionsMax"  ):
+                    print("] CALLINMG CMD_Array1 = r3frshValue().......****")
+                    CMD_Array1 = refreshValue( CMD_Array, actionstr , rangestr, valuestr )
+                    print(json.dumps( CMD_Array1, indent=4) )
+                    
+
+                if(actionstr.upper() == "STOP"):
+                    pass
+                if(actionstr.upper() == "POLL"):
+                    pass
+                if(actionstr.upper() == "EVENT"):
+                    # really the event like 'FOMC'
+                    print("EVENT   ==",rangestr)
+                    print("DATE    ==",valuestr)
+
+                    print("PUSH vs refreshVariable : for Events []  HERE")
+                    pass
+
+                if(actionstr.upper() == "AUX"):
                         pass
 
-
-
-                #  if "CMD_<SYMBOL>" only ie CMD_NVDA
-                if( ll > len(cmd_BaseStr) ):
-                    rstr = leftRightStr( cmd_test0,"right", (ll-4) )
-                    print("**** FOUND CMD_ with a SYMBOL !!!! ==", rstr)
-                    print(" *TODO* :  append CMD_ symbol array, and always check this during loop for time,date==")
 
             else:
-                print("SYMBOL FOUND")
+                print("SYMBOL FOUND:", )
 
         else:
             print(f"Index: {index}, {key0}: nilKey")
 
-
+# passthru as above, so all vars get refreshed as of now, but with In1tIN!Cmd_VariablesJSON
+def InitINICmd_VariablesJSON(json_array, key0):
+    RefreshINICmd_VariablesJSON(json_array, key0)
 
 
 def loopJSON(json_array, key0):
@@ -1436,23 +1438,21 @@ print("\n\n\n")
  
 
 json_result = CSV2JSON(arrINIcsvfile)
-print(json.dumps(json_result, indent=2))
+print("\n\nConverted CSV to JSON data:")
+tf911=False
+if(tf911==True):
+    print(json.dumps(json_result, indent=2))
 
-key_to_compare = "Cmd_Symbol"
-value_to_compare = "TSLA"
-result = CompareJSON(json_result, key_to_compare, value_to_compare)
 
-print(f"The key '{key_to_compare}' holds the value '{value_to_compare}' in the JSON dictionary: {result}")
 
 jlen = len(json_result)
-
-print( "jlen = ", jlen) #json_result["Cmd_Symbol"]  )
-key_to_print = "Cmd_Symbol"
+print( "jlen = ", jlen)  
+key_to_print = "Cmd_"
 # loopJSON(json_result, key_to_print)
-InitINICmd_JSON(json_result, key_to_print)
 
-# CMD_Array
+RefreshINICmd_VariablesJSON(json_result, key_to_print)
 
+print("] AFTER R3freshINICmd_Variable()...")
 print(json.dumps(CMD_Array, indent=4))
 
 
