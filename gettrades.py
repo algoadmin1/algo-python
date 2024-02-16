@@ -103,6 +103,11 @@ def StringParts(input_str,char0):
     arr_str = input_str.split(char0)
     return arr_str
 
+
+
+
+
+
 # Example usage:
 # csv_string = "12,456,a,bgb,78h,34f,009,23,eol"
 # parts = StringParts(csv_string)

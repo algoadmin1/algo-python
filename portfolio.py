@@ -21,20 +21,21 @@
 import robin_stocks as rs
 
 class Portfolio:
-    def __init__(self, name, accountnumber, pwd, broker, apikey):
-        self.name = name
-        self.accountnumber = accountnumber
-        self.pwd = pwd
-        self.broker = broker
-        self.apikey = apikey
+    def __init__( self, name, emailstr, accountnumber, pwd, broker, apikey ):
+        self.name           = name
+        self.emailstr       = emailstr
+        self.accountnumber  = accountnumber
+        self.pwd            = pwd
+        self.broker         = broker
+        self.apikey         = apikey
 
     def initialize(self):
-        print("Portfolio.initialize() called...")
+        print("Portfolio.initialize() called [ did nothing | stub ]...")
 
     def print(self):
         print("Portfolio.print() called...")
         print("    name, #, pwd, broker, apikey==" )
-        print(self.name, self.accountnumber, self.pwd, self.broker, self.apikey)
+        print( self.name, self.emailstr, self.accountnumber, self.pwd, self.broker, self.apikey )
 
 
 
@@ -59,6 +60,9 @@ class Portfolio:
 
     def authenticate(self):
         print("Portfolio.authenticate() called...")
+        print("returning for now...")
+        return
+    
         # login = rs.login(self.name ,self.pwd )
         days0 = 3
         secsInADay = 86400
@@ -86,6 +90,7 @@ class Portfolio:
 
 
     def getPositions(self):
+        return
         positions_data =  rs.get_current_positions()
  ## Note: This for loop adds the stock ticker to every order, since Robinhood
   ## does not provide that information in the stock orders.

@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "6.250";
+                                                      $vers = "4.4";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
@@ -611,11 +611,6 @@ try {
                         // [ 11..21 ]       buysigcnt,8, [13]R3R2R1_P_P3_S1S2S3=, 159.70,157.16,[16]154.61, 153.09,152.08,  [19]150.54, 149.02, [21]146.47, 
                         //  ...               [22]p-S1=,1.73,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,154.90,152.30,145.37,141.04,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,70ac488fa3488b4669d178ad1011265f69378daa0244605f2fcc890c912a0dd3
 
-//  [36] =>             2023-12-27,1315,wed,15min,-2.3832%,   SELL,100,ROKU,atLimit,94.22,P3day,         
-//                       sellsigcnt,4,[13]R3R2R1_P_P3_S1S2S3=,99.63,98.05,   96.47,93.82,91.35,92.24,89.59,    88.01, [22]==p3-R1=,-2.25,[24]gap=0.0125,[25]0.00,  
-
-//                        [26]0.0,[27]0.0,[28]wkR2R1S1S2=,99.84,95.58,87.89,84.46,[33]moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,afa7e92597ddfd8bee34378261f71beee36f8d26deb92f2def4ab7322fc53000 
-
 
                         $tradeprice =   floatval( $elements[ 9 ] );         // 493.26 ;
                         $leg1 =  FloorIt( $tradeprice  *  1.20 , 5);        // Call Credit spread buy
@@ -649,63 +644,13 @@ try {
                         $tradeStop  =         $tradeprice * 0.60;
                         $tradeLimit =        $tradeprice * 2.50;
 
-
-
-
-
-                        //NEW ***
-
-                        $gapPct    = $elements[ 24 ]. "|". $elements[ 25 ];    
-                        $tradeDur  =  'gfd'    ;    //$elements[ 24 ] ;
-                        
-                        
-                        $daySRs     =   "";
-//       sellsigcnt,4,[13]=R3R2R1_P_P3_S1S2S3=,99.63,98.05,   96.47,93.82,91.35,92.24,89.59,    88.01, [22]==p3-R1=,-2.25,gap=0.0125,0.00,  
-                        $ic=13;
-                        for($ic=13;$ic<22;$ic++){
-                            $daySRs.= $elements[ $ic ]. "|";
-                        }
-
-                        $wkSRs      =   "";
-     //      [26]0.0,[27]0.0,[28]wkR2R1S1S2=,99.84,95.58,87.89,84.46,[33]==moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00, [41]EOL,afa7e92597ddfd8bee34378261f71beee36f8d26deb92f2def4ab7322fc53000 
-                        $ic=28;
-                        for($ic=28;$ic<33;$ic++){
-                            $wkSRs.= $elements[ $ic ]. "|";
-                        }
-
-//         [33]==moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,     [41]EOL,afa7e9259
-                        $moSRs      =   "";
-                        $ic=33;
-                        for($ic=33;$ic<41;$ic++){
-                            $moSRs.= $elements[ $ic ]. "|";
-                        }
-
-//  [36] =>             2023-12-27,1315,wed,15min,-2.3832%,   SELL,100,ROKU,atLimit,94.22,P3day,         
-//                       sellsigcnt,4,[13]R3R2R1_P_P3_S1S2S3=,99.63,98.05,   96.47,93.82,91.35,92.24,89.59,    88.01, [22]==p3-R1=,-2.25,[24]gap=0.0125,[25]0.00,  
-
-//                        [26]0.0,[27]0.0,[28]wkR2R1S1S2=,99.84,95.58,87.89,84.46,[33]moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,afa7e92597ddfd8bee34378261f71beee36f8d26deb92f2def4ab7322fc53000 
-
-// actuals
-// 2024-02-06,1056,tue,1min,0.0264%,BUY,100,META,atLimit,455.33,Pday,buysigcnt,5,R3R2R1_P_P3_S1S2S3=,484.30,476.03,467.75,463.49,157.14,455.21,450.95,442.67,p-S1=,0.12,gap=0.0125,0.00,0.0,0.0,wkR2R1P_473.41_S1S2=,500.09,487.54,460.86,446.73,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL
-// 2024-02-06,1101,tue,1min,-2.6916%,SELL,100,META,atLimit,455.49,P3day,sellsigcnt,5,R3R2R1_P_P3_S1S2S3=,484.30,476.03,467.75,463.49,157.14,455.21,450.95,442.67,p3-R1=,-12.26,gap=0.0125,0.00,0.0,0.0,wkR2R1P_473.41_S1S2=,500.09,487.54,460.86,446.73,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL
-// 2024-02-06,1115,tue,15min,0.1876%,BUY,100,AMZN,atLimit,168.79,Pday,buysigcnt,4,R3R2R1_P_P3_S1S2S3=,173.40,172.36,171.32,169.51,161.75,168.47,166.66,165.62,p-S1=,0.32,gap=0.0125,0.00,0.0,0.0,wkR2R1P_166.37_S1S2=,184.06,177.94,160.25,148.68,moR3R2R1PS1S2S3=,169.32,164.59,159.86,157.00,152.27,149.41,144.68,EOL
-
-/**
- * 
- * 
-
- */
-
-
-                        $insertQuery0a= "INSERT INTO trades ( tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, daySRs, wkSRs, moSRs,   leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES ( CURRENT_TIMESTAMP, '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', 0, '$tradeSize', '$tradeprice', 0.0, '$tradeCond', '$tradeDur', '$tradeStop', '$tradeLimit', '$opStrat',   '$daySRs', '$wkSRs', '$moSRs',    '$leg1', '$leg2', '$leg3', '$leg4', '$buySellCnt', '$buySellPctStr', '$buySellDist', 'nil', '$tradeType', '$gapPct',  'cued', '$humanTrade', '$timeNYC', '$tradeHashToQuery' )";
-                        
-                        $insertQuery0 = "INSERT INTO trades ( tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy,                       leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES ( CURRENT_TIMESTAMP, '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', 0, '$tradeSize', '$tradeprice', 0.0, '$tradeCond', 'day', '$tradeStop', '$tradeLimit', '$opStrat',                                        '$leg1', '$leg2', '$leg3', '$leg4', '$buySellCnt', '$buySellPctStr', '$buySellDist', 'nil', '$tradeType', 0.0 ,       'cued', '$humanTrade', '$timeNYC', '$tradeHashToQuery' )";
+                        $insertQuery0 = "INSERT INTO trades ( tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES ( CURRENT_TIMESTAMP, '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', 0, '$tradeSize', '$tradeprice', 0.0, '$tradeCond', 'day', '$tradeStop', '$tradeLimit', '$opStrat', '$leg1', '$leg2', '$leg3', '$leg4', '$buySellCnt', '$buySellPctStr', '$buySellDist', 'nil', '$tradeType', 0.0, 'cued', '$humanTrade', '$timeNYC', '$tradeHashToQuery' )";
 
                                            
                             // ] insertQuery0 = INSERT INTO trades ( tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES ( CURRENT_TIMESTAMP, '2023-12-27T093000', '2023-12-27', '0930', 'wed', '15min', 'Creator', '12345354911', 'SELL', 'NVDA', 'raw', 0, '100', '493.26', 0.0, 'atLimit', 'day', 0.0, 0.0, 'IronCondor', '590', '565', '415', '390', '7', '-2.1923%', '-4.36', 'nil', 'sell', 0.0, 'cued', 'nilHumanReadableTrade', '2023-12-28T06:48:26', '5bf6f706cb7a0cd92840c7d0dbe9118de9579f39ec04db3ded7b470617e25d51' )
 
 
-                        $conn->exec($insertQuery0a);
+                        $conn->exec($insertQuery0);
                         $lastInsertedId = $conn->lastInsertId();
                         $inserted0++;
 
@@ -722,8 +667,7 @@ try {
 
                         $pstr2= "<br />] Sample trade inserted. Last inserted ID: $lastInsertedId ";
                         echoColor($pstr2,"green");
-                        // $pstr3= "<br />]  insertQuery0 = $insertQuery0 ";
-                        $pstr3= "<br />]  insertQuery0a = $insertQuery0a ";
+                        $pstr3= "<br />]  insertQuery0 = $insertQuery0 ";
                         echoColor($pstr3,"purple");
 
                 }//if insertdb==1

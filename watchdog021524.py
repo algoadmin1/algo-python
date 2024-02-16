@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "6.43"
+versionStr =                    "6.17"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -1100,180 +1100,115 @@ def valueJSON(jsondict, key0):
         return "nilKey"
 
 # ####################################################################### Globals
-# cmd_BaseStr ="CMD_"
+cmd_BaseStr ="CMD_"
 
 #  MAX Cmd_ affected gl0bals            **************** !!!!!!!  NOW:  MAKE THESE MATCH NAMES in INI files
-# PortfolioPositionsMax  = 2
-# StockPositionsMax   = 2
-# OptionsPositionsMax = 2
-# SpreadPositionsMax  = 2
+PortfolioPositionsMax  = 2
+StockPositionsMax   = 2
+OptionsPositionsMax = 2
+SpreadPositionsMax  = 2
 
-# StockTradesPerDayMax    = 2
-# OptionsTradesPerDayMax  = 1
+StockTradesPerDayMax    = 2
+OptionsTradesPerDayMax  = 1
     
-# #  RISK gl0bals affected by
-# RiskPortfolioMax    = 35000
-# RiskStockTradeMax   = 12000
-# RiskOptionTradeMax  =  6000
-
-# # stops pct
-# OptionsStopPct      = 0.50
-# StockStopPct        = 0.2750
+#  RISK gl0bals affected by
+RiskPortfolioMax    = 35000
+RiskStockTradeMax   = 12000
+RiskOptionTradeMax  =  6000
+OptionsStopPct      = 0.50
+StockStopPct        = 0.2750
 
 # SERVER / Arrays
-# PollServerSeconds   = 30
+PollServerSeconds   = 30
 
-# cmd_ini.json
-#
-#
-#
-#           Bro, instead of all these variables, I realized before moving forward with WatchDog and APM
-#                that I should just put everything in a json payload, so we can ship it around the
-#                web if necessary.  I had PositionsMAXStocks= 3 , PositionsMAXOptions= 1 etc.
-#
-#
-#           Ok, I am coding outside my apartment when at 2am a firetruck and an ambulance came in
-#           to scoop up somepoor soul.
-#
-#
-#   THEN, this system will let us have ai or a market-scanning Algo (ie picks up SCMI) write an INI cmd_
-#
-#   I have included the INI file in this email. watchdog.py reads the INI file (trades_INI.txt) and 
-#   translates it into the [MD_Array[] json dictionary inside python for watchdog's main loop.
-#
-#         The main loop simply polls https://algoinvestorr.com/trades/gettrades.php?d=2024-02-14 
-#         which in turn writes https://algoinvestorr.com/trades/rawtrades/cuedtrades.json
-#         It is this cuedtrades.json file which will be rendered in the UI for our 'pivots product'
-#
-#
-
-CMD_Array = [
-    { "Label": "PositionsMax",  "Type": "stock",     "Value": "3" },
-    { "Label": "PositionsMax",  "Type": "options",   "Value": "1" },
-    { "Label": "PositionsMax",  "Type": "options_spreads", "Value": "1" },
-    { "Label": "PositionsMax",  "Type": "portfolio", "Value": "6" },
-
-    { "Label": "RiskMax",  "Type": "portfolio",    "Value": "35000" },
-    { "Label": "RiskMax",  "Type": "stocks",       "Value": "12000" },
-    { "Label": "RiskMax",  "Type": "options",      "Value": "6000" },
-
-    { "Label": "RiskPct",  "Type": "portfolio",        "Value": "0.350" },
-
-    { "Label": "StopPct",  "Type": "options",           "Value": "0.50" },
-    { "Label": "StopPct",  "Type": "stocks",            "Value": "0.2750" },
-    { "Label": "StopPct",  "Type": "portfolio",            "Value": "0.1250" },
-
-    { "Label": "TradesPerDay",  "Type": "options",     "Value": "1" },
-    { "Label": "TradesPerDay",  "Type": "stocks",      "Value": "2" },
-
-    { "Label": "Server",  "Type": "Poll",               "Value": "30" },
-    { "Label": "Server",  "Type": "RefreshINIsecs",     "Value": "600" },
-
-    { "Label": "Event",  "Type": "FOMC",              "Value": "2024-03-15T143000" },
-    { "Label": "Event",  "Type": "JOBSREPORT",        "Value": "2024-03-24T083000" },
-    { "Label": "Event",  "Type": "CPI",               "Value": "2024-02-13T083000" },
-
-    { "Label": "Event",  "Type": "EARNINGS_NVDA",     "Value": "2024-03-15T141500" },
-    { "Label": "Event",  "Type": "EARNINGS_ROKU",     "Value": "2024-02-15T133000" },
-
-    { "Label": "TradePerDay",  "Type": "options",     "Value": "33" },
-    { "Label": "TradePerDay",  "Type": "stocks",     "Value": "33" },
-
-    { "Label": "PollServerSecs",  "Type": "ALL",     "Value": "33" }
-    
-
+EventArray = [
+    { "Event": "FOMC", "Symbol": "*", "Date": "2024-03-15", "Time": "1430" ,       "DateTime": "2024-03-15T143000" },
+    { "Event": "JOBSREPORT", "Symbol": "*", "Date": "2024-02-02", "Time": "0830",  "DateTime": "2024-03-15T083000" },
+    { "Event": "EARNINGS", "Symbol": "NVDA", "Date": "2024-02-23", "Time": "1415", "DateTime": "2024-03-15T141500" }
 ]
-
-CMD_OrdersArray = [
+Cmd_OrdersArray = [
      { "Order": "BUY",  "OrderType": "Market", "Symbol": "ROKU", "TradeSize": "100", "Date": "2024-02-15", "Time": "1230", "Instrument": "Stock" },
      { "Order": "SELL", "OrderType": "Market", "Symbol": "ROKU", "TradeSize": "100", "Date": "2024-02-16", "Time": "0930", "Instrument": "Stock" },
      { "Order": "BUY",  "OrderType": "Market", "Symbol": "NVDA", "TradeSize": "10",  "Date": "2024-02-23", "Time": "1230", "Instrument": "Call" }
+   
 ]
 
 
-def refreshValue(jsonDict, labelStr, typeStr, storeValue):
-    v=0
-    for entry in jsonDict:
-        v+=1
-        lstr =entry.get("Label")
-        tstr = entry.get("Type")
+def InitINICmd_JSON(json_array, key0):
+    global PortfolioPositionsMax   
+    global StockPositionsMax    
+    global OptionsPositionsMax  
+    global SpreadPositionsMax   
 
-        print("] inside r3frshValue(): v, lstr , typestr, storeVal ==",v, lstr, tstr,  storeValue )
+    global StockTradesPerDayMax
+    global OptionsTradesPerDayMax
+    
+    global RiskPortfolioMax     
+    global RiskStockTradeMax   
+    global RiskOptionTradeMax  
+    global OptionsStopPct      
 
-# AINT WeRKING
-        if( lstr.upper() == labelStr.upper()   and   tstr.upper() == typeStr.upper() ):
-            print("]  r3freshValue(): BEFORE:  entry['Value'] = ", entry["Value"] )
-            entry["Value"] = storeValue
-            print("]  r3freshValue(): AFTER:   entry['Value'] = ", entry["Value"] )
+    global PollServerSeconds  
+    global EventArray    
+    global Cmd_OrdersArray
 
-    return jsonDict
-
- 
-
-cmd_BaseStr ="CMD_"
-
-def RefreshINICmd_VariablesJSON(json_array, key0): 
-    global CMD_Array
-    global CMD_OrdersArray
     global cmd_BaseStr
 
     rstr="nil"
-    idx= 0
 
     for index, json_dict in enumerate(json_array):
-        idx+=1
-        if key0 in json_dict:  # "Cmd_" is the key
+        if key0 in json_dict:
             print(f"Index: {index}, {key0}: {json_dict[key0]}")
-
             cmd_test0=json_dict[key0].upper()
-            cmd_test=leftRightStr(cmd_test0,"left",4)   # // explicit ="CMD_"
-
+            cmd_test=leftRightStr(cmd_test0,"left",4)
             actionstr = json_dict["Action"]  # [1]
-            rangestr  = json_dict["Range"]    # [2]
-            valuestr  = json_dict["Value"]    # [3]
-            livestr   = json_dict["Live"]    # [3]
+            rangestr = json_dict["Range"]    # [2]
+            valuestr = json_dict["Value"]    # [3]
+            livestr  = json_dict["Live"]    # [3]
 
-            # BASE STRING "CMD_" FOUND !
+            # BASE STRING "CMD_" FOUND
             if(cmd_test==cmd_BaseStr):
                 ll=len(cmd_test0)
-                print("[",idx,"]**** FOUND len, COMMAND: ", ll,cmd_test)
+                print("**** FOUND len, COMMAND: ", ll,cmd_test)
                 # "CMD_" only
-                # if(ll==len(cmd_BaseStr)):
-                print("actionstr==",actionstr)
-                print("if( actionstr ==  ...... ")
-                print("] PRE - if( )  , trying to :  CALL  CMD_Array1 = r3frshValue().......****")
-
-                if(actionstr == "RiskMax" or   actionstr == "RiskPct"  or  actionstr == "TradePerDay" or  actionstr == "PollServerSecs"   or  actionstr == "PositionsMax"  ):
-                    print("] CALLINMG CMD_Array1 = r3frshValue().......****")
-                    CMD_Array1 = refreshValue( CMD_Array, actionstr , rangestr, valuestr )
-                    print(json.dumps( CMD_Array1, indent=4) )
-                    
-
-                if(actionstr.upper() == "STOP"):
-                    pass
-                if(actionstr.upper() == "POLL"):
-                    pass
-                if(actionstr.upper() == "EVENT"):
-                    # really the event like 'FOMC'
-                    print("EVENT   ==",rangestr)
-                    print("DATE    ==",valuestr)
-
-                    print("PUSH vs refreshVariable : for Events []  HERE")
-                    pass
-
-                if(actionstr.upper() == "AUX"):
+                if(ll==len(cmd_BaseStr)):
+                    print("actionstr==",actionstr)
+                    if(actionstr.upper() == "RISK"):
+                        if(rangestr=="MAX"):
+                            print("] RiskPortfolioMax =", RiskPortfolioMax)
+                            RiskPortfolioMax= int(valuestr)
+                            print("] RiskPortfolioMax =", RiskPortfolioMax)
+                                                  
+                    if(actionstr.upper() == "POSITIONS"):
+                        pass
+                    if(actionstr.upper() == "SPRD_POSITIONS"):
+                        pass
+                    if(actionstr.upper() == "POLL"):
+                        pass
+                    if(actionstr.upper() == "STOP"):
+                        pass
+                    if(actionstr.upper() == "EVENT"):
+                        # really the event like 'FOMC'
+                        print("EVENT   ==",rangestr)
+                        print("DATE    ==",valuestr)
+                        print("PUSH [] JOBS REPORT HERE")
                         pass
 
 
+
+                #  if "CMD_<SYMBOL>" only ie CMD_NVDA
+                if( ll > len(cmd_BaseStr) ):
+                    rstr = leftRightStr( cmd_test0,"right", (ll-4) )
+                    print("**** FOUND CMD_ with a SYMBOL !!!! ==", rstr)
+                    print(" *TODO* :  append CMD_ symbol array, and always check this during loop for time,date==")
+
             else:
-                print("SYMBOL FOUND:", )
+                print("SYMBOL FOUND")
 
         else:
             print(f"Index: {index}, {key0}: nilKey")
 
-# passthru as above, so all vars get refreshed as of now, but with In1tIN!Cmd_VariablesJSON
-# def InitINICmd_VariablesJSON(json_array, key0):
-#     Re freshINICmd_VariablesJSON(json_array, key0)
+
 
 
 def loopJSON(json_array, key0):
@@ -1444,26 +1379,23 @@ print("\n\n\n")
  
 
 json_result = CSV2JSON(arrINIcsvfile)
-print("\n\nConverted CSV to JSON data:")
-tf911=False
-if(tf911==True):
-    print(json.dumps(json_result, indent=2))
+print(json.dumps(json_result, indent=2))
 
+key_to_compare = "Cmd_Symbol"
+value_to_compare = "TSLA"
+result = CompareJSON(json_result, key_to_compare, value_to_compare)
 
+print(f"The key '{key_to_compare}' holds the value '{value_to_compare}' in the JSON dictionary: {result}")
 
 jlen = len(json_result)
-print( "jlen = ", jlen)  
-key_to_print = "Cmd_"
+
+print( "jlen = ", jlen) #json_result["Cmd_Symbol"]  )
+key_to_print = "Cmd_Symbol"
 # loopJSON(json_result, key_to_print)
+InitINICmd_JSON(json_result, key_to_print)
 
-RefreshINICmd_VariablesJSON(json_result, key_to_print)
 
-print("] AFTER R3freshINICmd_Variable()...")
 
-print("\n\nPress ANY KEY to see POST fn json ")
-input007 = input()
-
-print(json.dumps(CMD_Array, indent=4))
 
 
 

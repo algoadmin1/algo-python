@@ -1,5 +1,5 @@
-{
-  //  !!PivotsPython_MTWTF(_Weekly)  ver 10.3.0   jb 2023-12-13, 12-16-23
+{ 
+  //  !!PivotsPython_MTWTF(_Weekly)  ver 10.4.3   jb 2023-12-13, 12-16-23  2024-01-27
   //  
   //     derived from:
   //        !!PivotsMTWTF_Weekly ver 8.0
@@ -8,7 +8,7 @@
   //  
   // - by John Botti - includes R3, R2, R1, P, S1, S2, S3  new + sss + weekly
   //
-  //
+  //   
   // rev 5.5  Weekly S1, P, P3, R1  drawn...
   //
   //
@@ -301,10 +301,12 @@ R3day = (Pday-S1day) + R2day;
  S3Nweek    =  PNweek - ( R2Nweek - S1Nweek );
  R3Nweek    =  (PNweek - S1Nweek) + R2Nweek ;
 
+ 
+//  "Pp3_"+ NumtoStr(Pweek, 2) +"_"+ NumtoStr(P3week, 2)
 
+// weeklyPivotsStr = "wkR2R1"+  "PP3_"+ NumtoStr(Pweek, 2) +"_"+ NumtoStr(P3week, 2)  +"_S1S2=,"+ NumtoStr(R2week, 2) +","+ NumtoStr(R1week, 2) +","+ NumtoStr(S1week, 2) +","+ NumtoStr(S2week, 2) ;
 
-
-weeklyPivotsStr = "wkR2R1S1S2=,"+ NumtoStr(R2week, 2) +","+ NumtoStr(R1week, 2) +","+ NumtoStr(S1week, 2) +","+ NumtoStr(S2week, 2) ;
+weeklyPivotsStr = "wkR2R1"+  "P_"+ NumtoStr(Pweek, 2)   +"_S1S2=,"+ NumtoStr(R2week, 2) +","+ NumtoStr(R1week, 2) +","+ NumtoStr(S1week, 2) +","+ NumtoStr(S2week, 2) ;
 
 
 monthlyPivotsStr = "moR3R2R1PS1S2S3=,"+ NumtoStr(MonthR3,2) + ","+ NumtoStr(MonthR2,2) + ","+ NumtoStr(MonthR1,2) + ","+ NumtoStr(MonthPivot,2) + ","+ NumtoStr(MonthS1,2) + ","+ NumtoStr(MonthS2,2) + ","+ NumtoStr(MonthS3,2)  ;
@@ -596,11 +598,11 @@ Begin
  end;
   Case 1:    // monday
    Begin
-  DayOfWeekString0 = "Monday   ";
-  DayOfWeekString1 = "Friday   ";
-  DayOfWeekString2 = "Thursday ";
-  DayOfWeekString3 = "Wednesday";
-  DayOfWeekString4 = "Tuesday  ";
+  DayOfWeekString0 = "Mon    ";
+  DayOfWeekString1 = "Fri    ";
+  DayOfWeekString2 = "Thu  ";
+  DayOfWeekString3 = "Wed ";
+  DayOfWeekString4 = "Tue  ";
   DayOffset[1]     = 0;
   DayOffset[2]     = 3;   // ie monday-2 =friday
   DayOffset[3]     = 4;
@@ -611,11 +613,11 @@ Begin
  end;
   Case 2:    // tuesday
    Begin
-  DayOfWeekString0 = "Tuesday  ";
-  DayOfWeekString1 = "Monday   ";
-  DayOfWeekString2 = "Friday   ";
-  DayOfWeekString3 = "Thursday ";
-  DayOfWeekString4 = "Wednesday";
+  DayOfWeekString0 = "Tue  ";
+  DayOfWeekString1 = "Mon  ";
+  DayOfWeekString2 = "Fri   ";
+  DayOfWeekString3 = "Thu  ";
+  DayOfWeekString4 = "Wed ";
   DayOffset[1]     = 0;
   DayOffset[2]     = 1;   // ie tue-1 =friday
   DayOffset[3]     = 4;
@@ -626,11 +628,11 @@ Begin
  end;
   Case 3:    // wednesday
    Begin
-  DayOfWeekString0 = "Wednesday";
-  DayOfWeekString1 = "Tuesday  ";
-  DayOfWeekString2 = "Monday   ";
-  DayOfWeekString3 = "Friday   ";
-  DayOfWeekString4 = "Thursday ";
+  DayOfWeekString0 = "Wed ";
+  DayOfWeekString1 = "Tue  ";
+  DayOfWeekString2 = "Mon  ";
+  DayOfWeekString3 = "Fri    ";
+  DayOfWeekString4 = "Thu  ";
   DayOffset[1]     = 0;
   DayOffset[2]     = 1;  
   DayOffset[3]     = 2;
@@ -641,11 +643,11 @@ Begin
  end;
   Case 4:      
    Begin
-  DayOfWeekString0 = "Thursday ";
-  DayOfWeekString1 = "Wednesday";
-  DayOfWeekString2 = "Tuesday  ";
-  DayOfWeekString3 = "Monday   ";
-  DayOfWeekString4 = "Friday   ";
+  DayOfWeekString0 = "Thu  ";
+  DayOfWeekString1 = "Wed y";
+  DayOfWeekString2 = "Tue   ";
+  DayOfWeekString3 = "Mon    ";
+  DayOfWeekString4 = "Fri   ";
   DayOffset[1]     = 0;
   DayOffset[2]     = 1;  
   DayOffset[3]     = 2;
@@ -657,11 +659,11 @@ Begin
   end;
   Case 5:
  Begin      
-  DayOfWeekString0 = "Friday   ";
-  DayOfWeekString1 = "Thursday ";
-  DayOfWeekString2 = "Wednesday";
-  DayOfWeekString3 = "Tuesday  ";
-  DayOfWeekString4 = "Monday   ";
+  DayOfWeekString0 = "Fri    ";
+  DayOfWeekString1 = "Thu  ";
+  DayOfWeekString2 = "Wed ";
+  DayOfWeekString3 = "Tue   ";
+  DayOfWeekString4 = "Mon    ";
   DayOffset[1]     = 0;
   DayOffset[2]     = 1;  
   DayOffset[3]     = 2;

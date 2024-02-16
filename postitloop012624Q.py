@@ -468,48 +468,19 @@ while keepLooping > 0:
     print("\n] END OF Trade Injest. \n] keepLooping==",keepLooping)
 
 
-# # Wrap the request in a try-except block
-# try:
-#     payload = {'data': data_to_send_last_master}
-#     response = requests.post(url, data=payload)
-
-#     # Check if the request was successful (status code 200)
-#     if response.status_code == 200:
-#         print("Request successful")
-#         print(response.text)
-#     else:
-#         print(f"Request failed with status code: {response.status_code}")
-
-# except Exception as e:
-#     print(f"An error occurred: {str(e)}")
- 
 
     # check if there is no data
     if(len(data_to_sendLast) > MIN_DATA_STRING_LEN):
         print("\n] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-----====>>>SENDING data_to_sendLast via _POST...\n")
 
-        # Wrap the request in a try-except block
-        try:
-            payload = {'data': data_to_sendLast }
-            response = requests.post(url, data=payload)
-                    
-            # Check if the request was successful (status code 200)
-            if response.status_code == 200:
-                print("Request successful")
-                print(response.text)
-            else:
-                print(f"Request failed with status code: {response.status_code}")
+        payload = {'data': data_to_sendLast }
+        response = requests.post(url, data=payload)
+        print(response.text)
+        print("\n\n")
 
-            print(response.text)
-            print("\n\n")
-
-            # POST the last line to the PHP script
-            tgt = "intradaytradesServer_"+dstr1+".txt"
-            print("Called & POSTed "+str(data_lines_to_send)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
-
-        except Exception as e:
-            print(f"An error occurred: {str(e)}")
-
+        # POST the last line to the PHP script
+        tgt = "intradaytradesServer_"+dstr1+".txt"
+        print("Called & POSTed "+str(data_lines_to_send)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
     else:
         print("\n] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> *NOT Sending ANY data - NO TRADES FOUND.\n") 
 

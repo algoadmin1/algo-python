@@ -1,28 +1,21 @@
+// recpost.php
 <?php
 //Setting up Error Reporting Level
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "3.2";
+                                                      $vers = "3.0";
 
 $todaysdate = date('Y-m-d');
 
-echo "] recpost.php $vers is running, Time in NYC = ". $todaysdate ;
+echo "\n\n] recpost.php $vers is running, Time in NYC = $todaysdate \n";
+
 
 
 
 //$searchQuery = $_POST["post_query"];
-// $searchQuery = $_POST["data"];#
-$searchQuery="";
-// Check if 'data' key is defined in $_POST
-if (isset($_POST['data'])) {
-    $searchQuery = $_POST['data'];
-
-    echo "Search query: $searchQuery ";
-} else {
-    echo "Error: 'data' key is not defined in the POST request............";
-}
+$searchQuery = $_POST["data"];
 
 $filePath="";
 $filePath1 = "intradaytradesServer"; 
