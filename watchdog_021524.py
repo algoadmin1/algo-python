@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "6.75"
+versionStr =                    "6.54"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -253,26 +253,8 @@ def delayLoop(secs):
 # Example usage:
 #delayLoop(3)  
 
-def Check_data(array, target_str):
-    return target_str in array
-
-def find_index(arr, target_str):
-    if target_str in arr:
-        return arr.index(target_str)
-    else:
-        return -1
-### Example usage:
-# string_array = ["apple", "banana", "orange", "grape"]
-# search_string = "orange"
-# result_index = find_index(string_array, search_string)
-# if result_index != -1:
-#     print(f"The string '{search_string}' is at index {result_index}.")
-# else:
-#     print(f"The string '{search_string}' is not in the array.")
-
-
-
-
+def Check_data(array, datastr):
+    return datastr in array
 
 
 def removeCharsFromLeftRight(str0,leftRightStr, numchars):
@@ -1164,9 +1146,6 @@ def valueJSON(jsondict, key0):
 #         It is this cuedtrades.json file which will be rendered in the UI for our 'pivots product'
 #
 #
-LabelArr = [ "PositionsMax", "PositionsPct", "RiskMax", "RiskPct", "TradesPerDay", "StopPct", 
-             "Event", "Server",  "Aux"   #  , "BuyMkt",
-]
 
 CMD_Array = [
     { "Label": "PositionsMax",  "Type": "stock",     "Value": "3" },
@@ -1201,7 +1180,7 @@ CMD_Array = [
     { "Label": "Event",  "Type": "EARNINGS_NVDA",     "Value": "2024-03-15T141500" },
     { "Label": "Event",  "Type": "EARNINGS_ROKU",     "Value": "2024-02-15T133000" },
 
-    { "Label": "Aux",  "Type": "ALL",     "Value": "0" }
+    { "Label": "PollServerSecs",  "Type": "ALL",     "Value": "33" }
     
 
 ]
@@ -1220,12 +1199,10 @@ def refreshValue(jsonDict, labelStr, typeStr, storeValue):
         lstr =entry.get("Label").upper()
         tstr = entry.get("Type").upper()
 
-        # print("] inside r3frshValue(): v, lstr , typestr, storeVal ==",v, lstr, tstr,  storeValue )
+        print("] inside r3frshValue(): v, lstr , typestr, storeVal ==",v, lstr, tstr,  storeValue )
 
 # AINT WeRKING
         if( lstr == labelStr.upper()   and   tstr == typeStr.upper() ):
-            print("] ===} r3frshValue(): v, lstr , typestr, storeVal ==",v, lstr, tstr,  storeValue )
-
             print("]  r3freshValue(): BEFORE:  entry['Value'] = ", entry["Value"] )
             entry["Value"] = storeValue
             print("]  r3freshValue(): AFTER:   entry['Value'] = ", entry["Value"] )
@@ -1268,18 +1245,14 @@ def RefreshINICmd_VariablesJSON(json_array, key0):
                 # "CMD_" only
                 # if(ll==len(cmd_BaseStr)):
                 print("actionstr==",actionstr)
-                # print("if( actionstr ==  ...... ")
-                # print("] PRE - if( )  , trying to :  CALL  CMD_Array1 = r3frshValue().......****")
+                print("if( actionstr ==  ...... ")
+                print("] PRE - if( )  , trying to :  CALL  CMD_Array1 = r3frshValue().......****")
 
-                tf0 = Check_data( LabelArr, actionstr )
-                if(tf0==True):
-                # if(actionstr == "RiskMax" or   actionstr == "RiskPct"  or  actionstr == "TradePerDay" or  actionstr == "PollServerSecs"   or  actionstr == "PositionsMax"  ):
+                if(actionstr == "RiskMax" or   actionstr == "RiskPct"  or  actionstr == "TradePerDay" or  actionstr == "PollServerSecs"   or  actionstr == "PositionsMax"  ):
                     print("] CALLINMG CMD_Array1 = r3frshValue().......****")
                     CMD_Array1 = refreshValue( CMD_Array, actionstr , rangestr, valuestr )
                     # print(json.dumps( CMD_Array1, indent=4) )
-
-            
-# LabelArr = [ "PositionsMax", "PositionsPct", "RiskMax", "RiskPct", "TradesPerDay", "StopPct", "Event", "Server",  "Aux"]        
+                    
 
                 if(actionstr.upper() == "STOP"):
                     pass
