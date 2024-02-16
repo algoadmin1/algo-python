@@ -66,9 +66,6 @@ print("\n")
 # Noobs, please note that Ticker() returns a panda dataframe
 data = yf.Ticker(ticker)
 
-# test 1 blindly print all info.. works
-# print(data.info)
-
 # test 2 get all key value pairs that are available..works
 #for key, value in data.info.items():
 #	print(key, ":", value)
@@ -108,9 +105,7 @@ S1 = [0] * numRows
 S2 = [0] * numRows
 S3 = [0] * numRows
 
-# we could store these levels in a [numLevels, numRows] array
-# to handle different models.  7 would be [R3,R2,R1,P,S1,S2,S3]
-#numColumns = 7 
+# we could store these levels in a [numLevels, numRows] array to handle different models.  Floor would have 7 would be [R3,R2,R1,P,S1,S2,S3]
 # FIB_Levels = [[0 for c in range(numColumns)] for r in range(numRows)] 
 
 for row in range(numRows):
