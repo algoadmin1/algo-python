@@ -67,6 +67,28 @@ g_Messages.append("--------  Wanna quit ? Enter 'q' ----------\n")
 
 g_FirstTime = True
 
+
+# colors 
+colorGreen ="32"
+colorBlue  ="34"
+colorCyan  ="36"
+colorOrange  ="33"
+colorRed  ="31"
+colorMagenta  ="35"
+colorYellow  ="33"
+colorDarkGreen  ="32;2"
+colorDarkRed  ="31;2"
+colorPurple  ="35;2"
+colorBrown  ="33;2"
+colorWhite  ="97"
+colorLimeGreen  ="92"
+colorAqua  ="96"
+colorGray  ="90"
+
+colorArray = [ colorRed, colorBlue, colorGreen, colorOrange, colorCyan, colorAqua, colorYellow ,colorPurple, colorMagenta,colorBrown ]
+colorArrayLen = len(colorArray)
+
+
 def is_valid_ticker(ticker_symbol):
     try:
         # Attempt to fetch data for the given ticker symbol
@@ -117,11 +139,48 @@ def GetInterval():
 			val = choice
 	return val
 
+
+# def printTodaysDate():
+#     dstr7 = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
+#     print("Today's date in New York:",dstr7 )
+#     return dstr7
+
+def rand(num):
+    return(random.randint(0, (num-1)))
+
+def print_colored(text, color_code): 
+    print(f"\033[{color_code}m{text}\033[0m") 
+
+def print_colored_rnd1(text, r):
+    # r = rand(colorArrayLen)
+    print_colored(text, colorArray[r])
+
+def printWatchDogWelcome():
+    # print("\n ")  
+    # dstr7a= printTodaysDate()
+
+    c=2
+    dog0="                -^_"
+    print_colored_rnd1(dog0,c)
+    dog1="   / \\\\__     o''|\\_____/)"
+    print_colored_rnd1(dog1,c)
+    dog2="  (    @\\___    \\_/|_)     )"
+    print_colored_rnd1(dog2,c)
+    dog3="  /         O      \\  __  /"
+    print_colored_rnd1(dog3,c)
+    dog4=" /   (_____/       (_/ (_/"
+    print_colored_rnd1(dog4,c)
+    dog5="/_____/   U    "
+    print_colored_rnd1(dog5,c)
+
+
 def HelloCustomer():
 	print("\n")
 	print("\t^----------------------------------------------^")
 	print("\t$  Welcome to AlgoZ Pivotal Trading Companion  $")
 	print("\t^----------------------------------------------^\n")
+	printWatchDogWelcome()
+
 	print("\t     (Defaults: ", defaultTicker, ",", defaultPeriod, ")")
 
 def PrintPivots(p:str, i:str):

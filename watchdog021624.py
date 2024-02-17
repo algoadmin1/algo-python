@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "6.91"
+versionStr =                    "6.815"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -525,15 +525,7 @@ def checkJSONdataDate(json_data, date0, time0, symbol0):
 #     print(record)
 
 
-def ExpressTrade(jsonrecord):
-    print("] GOT TO EXPRESS TRADE...") 
-    abstr =     record["tradeAboveBelow"]
-    pivstr =    record["tradePivot"]
-    print("] abstr, pivstr== ",abstr, pivstr) 
 
-    prettyPrintJSON(jsonrecord)
-
-    print("]LEAVING EXPRESS TRADE...") 
 
 
 #
@@ -1250,14 +1242,12 @@ def refreshValue(jsonDict, labelStr, typeStr, storeValue):
 
 
 cmd_BaseStr ="CMD_"
-stockINIarr = []
 
 def RefreshINICmd_VariablesJSON(json_array, key0): 
     global CMD_Array
     global CMD_OrdersArray
     global LabelArr
     global cmd_BaseStr
-    global stockINIarr
 
     rstr="nil"
     idx= 0
@@ -1265,8 +1255,7 @@ def RefreshINICmd_VariablesJSON(json_array, key0):
     for index, json_dict in enumerate(json_array):
         idx+=1
         if key0 in json_dict:  # "Cmd_" is the key
-            print("\n")
-            print(f"Index: {index}, Stock or {key0}: {json_dict[key0]}")
+            print(f"Index: {index}, {key0}: {json_dict[key0]}")
 
             cmd_test0=json_dict[key0].upper()
             cmd_test=leftRightStr(cmd_test0,"left",4)   # // explicit ="CMD_"
@@ -1297,16 +1286,27 @@ def RefreshINICmd_VariablesJSON(json_array, key0):
                     CMD_Array1 = refreshValue( CMD_Array, actionstr , rangestr, valuestr )
                     # print(json.dumps( CMD_Array1, indent=4) )
 
+            
+# LabelArr = [ "PositionsMax", "PositionsPct", "RiskMax", "RiskPct", "TradesPerDay", "StopPct", "Event", "Server",  "Aux"]        
+
+                if(actionstr.upper() == "STOP"):
+                    pass
+                if(actionstr.upper() == "POLL"):
+                    pass
+                if(actionstr.upper() == "EVENT"):
+                    # really the event like 'FOMC'
+                    print("EVENT   ==",rangestr)
+                    print("DATE    ==",valuestr)
+
+                    print("PUSH vs refreshVariable : for Events []  HERE")
+                    pass
 
                 if(actionstr.upper() == "AUX"):
                         pass
 
 
             else:
-                print("SYMBOL FOUND:", cmd_test0)
-                tf1 = Check_data( stockINIarr, cmd_test0 )
-                if(tf1 ==False):
-                    stockINIarr.append(cmd_test0)
+                print("SYMBOL FOUND:", )
 
         else:
             print(f"Index: {index}, {key0}: nilKey")
@@ -1498,7 +1498,7 @@ key_to_print = "Cmd_"
 RefreshINICmd_VariablesJSON(json_result, key_to_print)
 
 print("] AFTER R3freshINICmd_Variable()...")
-print("] st0ckINIarr[]==", stockINIarr)
+
 print("\n\nPress ANY KEY to see POST fn json ")
 input007 = input()
 
@@ -1799,7 +1799,10 @@ lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 
 
 
- 
+
+
+
+# initVars()
 rawIDarr=[]
 
 
@@ -1908,22 +1911,11 @@ while keepLooping > 0:
         if len(filtered_records1) == 0:
             print(" [The =TIME array is empty]  Nothing to trade at the momement.")
         else:
-            print("] FOUND one or more Trades...")
             for record in filtered_records1:
                 prettyPrintJSON(record)
                 # print(record)
-                idstr= "999"
-                kstr = "rawtradeId"
-                if kstr in record:
-                    idstr=  record[kstr]
-                    print(" record[", kstr, "] == ", record[kstr] )
-                    if( Check_data(rawIDarr, idstr)==False):
-                        print("EXECUTE TRADE HERE, appending RAW_ID=", idstr)
-                        rawIDarr.append(idstr)
-                        ExpressTrade(record)
-                    else:
-                        print("* DO NOT EXEC TRADE - It has been expressed already. Raw_ID", idstr, " exists.")
-            print("rawIDarr[]==", rawIDarr)
+
+
 
     # todaysCuedTrades = GetTrades(url2)
     # print(todaysCuedTrades)

@@ -9,7 +9,10 @@ CMD_,PositionsMax,options_spreads,2,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,PositionsPct,stocks,0.10,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,TradesPerDay,options,2,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,TradesPerDay,stocks,3,nil,nil,nil,0,1,LIVE,nil,nil
-CMD_,Server,POLL,55,nil,nil,30,0,1,LIVE,nil,nil
+CMD_,TradesPerDay,PORTFOLIO,13,nil,nil,nil,0,1,LIVE,nil,nil
+
+CMD_,Server,POLL,33,nil,nil,30,0,1,LIVE,nil,nil
+CMD_,Server,RefreshINIsecs,600,nil,nil,30,0,1,LIVE,nil,nil
 CMD_,StopPct,options,0.450,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,StopPct,STOCKS,0.07250,nil,nil,nil,0,1,LIVE,nil,nil
 
@@ -27,9 +30,11 @@ CMD_,BuyMkt,SPY,5,LONG_STOCK,MINS_BEFORE_CLOSE,5,4,1,LIVE,2024-02-01T09:31:00,DA
 AMD,SELL,ABOVE,R1,LONG_PUTS,COUNT,7,3,1,LIVE,nil,nil
 AMD,BUY,BELOW,S1,LONG_CALLS,COUNT,5,4,1,LIVE,nil,nil
 AAPL,BUY,BELOW,S1,LONG_CALLS,COUNT,6,2,3,LIVE,nil,nil
+SMCI,BUY,NEAR,S1,LONG_STOCK,COUNT,6,2,3,LIVE,nil,nil
 META,SELL,NEAR,R1,CREDIT_CALL_SPREAD,COUNT,6,1,1,NOTLIVE,nil,nil
 GS,SELL,NEAR,R1,LONG_PUTS,COUNT,6,0,2,NOTLIVE,nil,nil
 NVDA,SELL,ABOVE,R1,LONG_PUTS,COUNT,6,1,2,NOTLIVE,nil,nil
+NVDA,BUY,NEAR,S1,LONG_STOCK,COUNT,6,1,2,NOTLIVE,nil,nil
 SPY,SELL,ABOVE,R1,LONG_PUTS,COUNT,6,0,1,NOTLIVE,nil,nil
 QQQ,SELL,ABOVE,R1,LONG_PUTS,COUNT,6,0,1,NOTLIVE,nil,nil
 INTC,BUY,BELOW,S1,LONG_CALLS,COUNT,6,0,3,NOTLIVE,nil,nil

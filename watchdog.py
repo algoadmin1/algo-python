@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "6.75"
+versionStr =                    "7.1"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -524,8 +524,204 @@ def checkJSONdataDate(json_data, date0, time0, symbol0):
 # for record in filtered_records:
 #     print(record)
 
+import json
+
+def jsonRecordFind(jsonarr, keystr0, valuestr0):
+    for item in jsonarr:
+        json_obj = item #json.loads(item)
+        if keystr0 in json_obj and json_obj[keystr0] == valuestr0:
+            return json_obj
+    return {}  # Return an empty dictionary if the key or value is not found in any record
+
+def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
+    print("] READY TO EXECUTE TRADE: ", symstr, "\n\nINIrec=")
+    prettyPrintJSON(jsonINIrecord)
+    print("\n] jsonTRADESrecord=")
+    prettyPrintJSON(jsonTRADESrecord)
+
+    print("*** EXECUTE Trade HERE ****")
 
 
+
+def ExpressTrade(jsonrecord):
+    global CMD_Array
+    global jsonINImaster
+
+    print("] GOT TO EXPRESS TRADE...") 
+    abstr =     jsonrecord["tradeAboveBelow"]
+    pivstr =    jsonrecord["tradePivot"]
+    trtypestr = jsonrecord["tradeType"]
+    symstr =    jsonrecord["symbol"]
+    trpricestr= jsonrecord["tradePrice"]
+    trprdiststr=jsonrecord["priceDist"]
+    daypivstr  = jsonrecord["daySRs"]
+    wkpivstr   = jsonrecord["wkSRs"]
+
+    print("] Trade Brief:", trtypestr, symstr, trpricestr , abstr, pivstr, "dist=", trprdiststr) 
+    print("]  Day Pivots:",  daypivstr)
+    print("] Week Pivots:",  wkpivstr)
+
+    print("]  jsonINImaster[]==" , jsonINImaster )  #, Cmd_,Action,Range,Value,)
+    # print("]  CMD_Array[]==" , CMD_Array )  #, Cmd_,Action,Range,Value,)
+
+
+    print("\nNOW check against INI FILE HERE for validation...")
+
+    key_to_find = "Cmd_"
+    value_to_find = symstr
+
+    result = jsonRecordFind(jsonINImaster, key_to_find, value_to_find)
+
+    if result:
+        print(f"The JSON record for key '{key_to_find}' with value '{value_to_find}': {json.dumps(result, indent=2)}")
+        print("] FOUND ",value_to_find, " in INI file:", result["Action"], value_to_find, result["Range"], result["Value"], result["TradeType"],  result["Live"] )
+        
+        # From live trade incoming
+        trytype1 = trtypestr.upper()
+        abstr1 = abstr.upper()
+        pivstr1= pivstr.upper()
+
+        # from ini file...
+        trytype2 = result["Action"].upper()
+        abstr2    = result["Range"].upper()
+        pivstr2=   result["Value"].upper()
+
+        # if BUY     == BUY              BELOW == BELOW  and     S1 =  S1
+        if( trytype1== trytype2  and   abstr1 == abstr2   and   pivstr1 == pivstr2):
+            print("]  *#*#*#*#*#!!!!!   WE FOUND AN INI==Trade MATCH, sending trade to ExecuteTrade( ",  symstr," , jsonINI, jsonTrade)" )# result , jsonrecord ," )")
+            ExecuteTrade( symstr, result , jsonrecord)
+        # ] FOUND  VXX  in INI file: BUY VXX BELOW S1 CREDIT_PUT_SPREAD
+
+            # ] FOUND  NVDA  in INI file: SELL NVDA ABOVE R1 LONG_PUTS NOTLIVE
+            # ]  *#*#*#*#*#!!!!!   WE FOUND AN INI==Trade MATCH, sending trade to ExecuteTrade(  NVDA  , jsonINI, jsonTrade)
+            # ] READY TO EXECUTE TRADE:  NVDA 
+
+            # INIrec=
+            
+            # {
+            # "Cmd_": "NVDA",
+            # "Action": "SELL",
+            # "Range": "ABOVE",
+            # "Value": "R1",
+            # "TradeType": "LONG_PUTS",
+            # "Aux": "COUNT",
+            # "SigCnt": "6",
+            # "QtyShrCons": "1",
+            # "NumStrikes": "2",
+            # "Live": "NOTLIVE",
+            # "THoriz": "nil",
+            # "ExitPref": "nil"
+            # }
+
+            # ] jsonTRADESrecord=
+            
+            # {
+            # "tradeDate": "2024-02-16",
+            # "tradeTime": "1230",
+            # "tradeType": "SELL",
+            # "tradeSize": "10",
+            # "symbol": "NVDA",
+            # "tradeCond": "atLimit",
+            # "tradePrice": "739.15",
+            # "rawtradeId": "2349",
+            # "tradeCnt": "6",
+            # "tradeAboveBelow": "above",
+            # "tradePivot": "R1",
+            # "priceDist": "2.93",
+            # "pricePct": "0.3969%",
+            # "tradeStrong": "1",
+            # "tradeLeg": "885|850|625|590",
+            # "timestamp": "2024-02-17T022710",
+            # "tradeRecTimestamp": "2024-02-16T204050",
+            # "tradeDateTime": "2024-02-16T123000",
+            # "tradeDay": "fri",
+            # "tradeBar": "15min",
+            # "userId": "Creator",
+            # "accountId": "12345354911",
+            # "tradeRAW": "raw37",
+            # "tradeRawId": "0",
+            # "tradeSize1": "100",
+            # "tradePrFilled": "0",
+            # "tradeDur": "gfd",
+            # "tradeStopMke": "443.49",
+            # "tradeLimitExit": "1847.88",
+            # "optionStrategy": "IronCondor1.15",
+            # "daySRs": "R3R2R1_P_P3_S1S2S3=|755.50|745.86|736.21|730.11|726.03|720.46|714.36|704.71|",
+            # "wkSRs": "wkR2R1P_702.05_S1S2=|760.90|741.11|682.26|643.20|",
+            # "moSRs": "moR3R2R1PS1S2S3=|-1.00|-1.00|-1.00|-1.00|-1.00|-1.00|-1.00|",
+            # "tradeSpec": "nil",
+            # "tradeSig": "SELL",
+            # "tradeGapPct": "0",
+            # "tradeStatus": "1",
+            # "tradeAux1": "2",
+            # "tradeAux2": "3",
+            # "tradeHash": "nilHash"
+            # }
+
+        # The JSON record for key 'Cmd_' with value 'VXX': {
+        # "Cmd_": "VXX",
+        # "Action": "BUY",
+        # "Range": "BELOW",
+        # "Value": "S1",
+        # "TradeType": "CREDIT_PUT_SPREAD",
+        # "Aux": "COUNT",
+        # "SigCnt": "5",
+        # "QtyShrCons": "0",
+        # "NumStrikes": "1",
+        # "Live": "LIVE",
+        # "THoriz": "nil",
+        # "ExitPref": "nil"
+        # }
+        # ] FOUND  VXX  in INI file: BUY VXX BELOW S1 CREDIT_PUT_SPREAD
+
+        # NOW check against INI FILE HERE for validation...
+        # The JSON record for key 'Cmd_' with value 'AMZN': {
+        # "Cmd_": "AMZN",
+        # "Action": "BUY",
+        # "Range": "BELOW",
+        # "Value": "S1",
+        # "TradeType": "LONG_CALLS",
+        # "Aux": "COUNT",
+        # "SigCnt": "7",
+        # "QtyShrCons": "3",
+        # "NumStrikes": "1",
+        # "Live": "LIVE",
+        # "THoriz": "nil",
+        # "ExitPref": "nil"
+        # }
+ 
+
+    else:
+        print(f"Key '{key_to_find}' with value '{value_to_find}' not found in any record.")
+
+
+
+
+
+    prettyPrintJSON(jsonrecord)
+
+
+    print("]LEAVING EXPRESS TRADE...") 
+
+
+
+def HandleTrades(filteredRecordsTimely):
+    global rawIDarr
+
+    for record in filtered_recordsTimely:
+        prettyPrintJSON(record)
+        # print(record)
+        idstr= "999"
+        kstr = "rawtradeId"
+        if kstr in record:
+            idstr=  record[kstr]
+            print(" record[", kstr, "] == ", record[kstr] )
+            if( Check_data(rawIDarr, idstr)==False):
+                print("EXECUTE TRADE HERE, appending RAW_ID=", idstr)
+                rawIDarr.append(idstr)
+                ExpressTrade(record)
+            else:
+                print("* DO NOT EXEC TRADE - It has been expressed already. Raw_ID", idstr, " exists.")
 
 
 #
@@ -1164,33 +1360,34 @@ def valueJSON(jsondict, key0):
 #         It is this cuedtrades.json file which will be rendered in the UI for our 'pivots product'
 #
 #
-LabelArr = [ "PositionsMax", "PositionsPct", "RiskMax", "RiskPct", "TradesPerDay", "StopPct", 
-             "Event", "Server",  "Aux"   #  , "BuyMkt",
-]
+    
+
+LabelArr = [ "PositionsMax", "PositionsPct", "RiskMax", "RiskPct", "TradesPerDay","TradesPerWeek", "StopPct",  "Event", "Server",  "Aux"    ]
 
 CMD_Array = [
-    { "Label": "PositionsMax",  "Type": "stock",     "Value": "3" },
-    { "Label": "PositionsMax",  "Type": "options",   "Value": "1" },
-    { "Label": "PositionsMax",  "Type": "options_spreads", "Value": "1" },
-    { "Label": "PositionsMax",  "Type": "portfolio", "Value": "6" },
+    { "Label": "PositionsMax",  "Type": "stocks",     "Value": "999" },
+    { "Label": "PositionsMax",  "Type": "options",   "Value": "999" },
+    { "Label": "PositionsMax",  "Type": "options_spreads", "Value": "999" },
+    { "Label": "PositionsMax",  "Type": "portfolio", "Value": "999" },
 
-    { "Label": "PositionsPct",  "Type": "portfolio", "Value": "0.50" },
+    { "Label": "PositionsPct",  "Type": "portfolio", "Value": "0.9990" },
 
-    { "Label": "RiskMax",  "Type": "portfolio",    "Value": "35000" },
-    { "Label": "RiskMax",  "Type": "stocks",       "Value": "12000" },
-    { "Label": "RiskMax",  "Type": "options",      "Value": "6000" },
+    { "Label": "RiskMax",  "Type": "portfolio",    "Value": "9999" },
+    { "Label": "RiskMax",  "Type": "stocks",       "Value": "9999" },
+    { "Label": "RiskMax",  "Type": "options",      "Value": "999" },
 
-    { "Label": "RiskPct",  "Type": "portfolio",        "Value": "0.350" },
+    { "Label": "RiskPct",  "Type": "portfolio",        "Value": "0.9350" },
+    { "Label": "RiskPct",  "Type": "stocks",        "Value": "0.9350" },
 
-    { "Label": "StopPct",  "Type": "options",           "Value": "0.50" },
-    { "Label": "StopPct",  "Type": "stocks",            "Value": "0.2750" },
-    { "Label": "StopPct",  "Type": "portfolio",            "Value": "0.1250" },
+    { "Label": "StopPct",  "Type": "options",           "Value": "0.950" },
+    { "Label": "StopPct",  "Type": "stocks",            "Value": "0.92750" },
+    { "Label": "StopPct",  "Type": "portfolio",            "Value": "0.91250" },
 
-    { "Label": "TradesPerDay",  "Type": "options",     "Value": "1" },
-    { "Label": "TradesPerDay",  "Type": "stocks",      "Value": "2" },
+    { "Label": "TradesPerDay",  "Type": "options",     "Value": "999" },
+    { "Label": "TradesPerDay",  "Type": "stocks",      "Value": "999" },
 
-    { "Label": "Server",  "Type": "Poll",               "Value": "30" },
-    { "Label": "Server",  "Type": "RefreshINIsecs",     "Value": "600" },
+    { "Label": "Server",  "Type": "Poll",               "Value": "990" },
+    { "Label": "Server",  "Type": "RefreshINIsecs",     "Value": "999" },
 
     { "Label": "Event",  "Type": "FOMC",              "Value": "2024-03-15T143000" },
     { "Label": "Event",  "Type": "JOBSREPORT",        "Value": "2024-03-24T083000" },
@@ -1198,7 +1395,7 @@ CMD_Array = [
 
     { "Label": "Event",  "Type": "11YRBottom",        "Value": "2031-03-10T083000" },
 
-    { "Label": "Event",  "Type": "EARNINGS_NVDA",     "Value": "2024-03-15T141500" },
+    { "Label": "Event",  "Type": "EARNINGS_NVDA",     "Value": "2024-03-23T141500" },
     { "Label": "Event",  "Type": "EARNINGS_ROKU",     "Value": "2024-02-15T133000" },
 
     { "Label": "Aux",  "Type": "ALL",     "Value": "0" }
@@ -1217,29 +1414,38 @@ def refreshValue(jsonDict, labelStr, typeStr, storeValue):
     v=0
     for entry in jsonDict:
         v+=1
-        lstr =entry.get("Label").upper()
-        tstr = entry.get("Type").upper()
+        lstr =entry.get("Label") #.upper()
+        tstr = entry.get("Type") #.upper()
+        # if(entry.get("Type")):
+            # tstr = entry.get("Type").upper()
 
         # print("] inside r3frshValue(): v, lstr , typestr, storeVal ==",v, lstr, tstr,  storeValue )
 
 # AINT WeRKING
-        if( lstr == labelStr.upper()   and   tstr == typeStr.upper() ):
+        # if( lstr == labelStr.upper()   and   tstr == typeStr.upper() ):
+        if( lstr.upper() == labelStr.upper()   and   tstr.upper() == typeStr.upper() ):
             print("] ===} r3frshValue(): v, lstr , typestr, storeVal ==",v, lstr, tstr,  storeValue )
 
             print("]  r3freshValue(): BEFORE:  entry['Value'] = ", entry["Value"] )
             entry["Value"] = storeValue
             print("]  r3freshValue(): AFTER:   entry['Value'] = ", entry["Value"] )
+        # elif( lstr ):
+        #     if( lstr.upper() == labelStr.upper()   ):
+        #         jsondictstr0 =  '{ "Label": "'+ labelStr  +'",  "Type": "'+typeStr+'",     "Value": "'+storeValue+'" } '
+        #         jsonDict.append(jsondictstr0)
 
     return jsonDict
 
- 
 
 cmd_BaseStr ="CMD_"
+stockINIarr = []
 
 def RefreshINICmd_VariablesJSON(json_array, key0): 
     global CMD_Array
     global CMD_OrdersArray
+    global LabelArr
     global cmd_BaseStr
+    global stockINIarr
 
     rstr="nil"
     idx= 0
@@ -1247,7 +1453,8 @@ def RefreshINICmd_VariablesJSON(json_array, key0):
     for index, json_dict in enumerate(json_array):
         idx+=1
         if key0 in json_dict:  # "Cmd_" is the key
-            print(f"Index: {index}, {key0}: {json_dict[key0]}")
+            print("\n")
+            print(f"Index: {index}, Stock or {key0}: {json_dict[key0]}")
 
             cmd_test0=json_dict[key0].upper()
             cmd_test=leftRightStr(cmd_test0,"left",4)   # // explicit ="CMD_"
@@ -1260,45 +1467,34 @@ def RefreshINICmd_VariablesJSON(json_array, key0):
             print("[",idx,"]  actionstr,  rangestr , valuestr ==",  actionstr,  rangestr , valuestr )
 
 
-            # BASE STRING "CMD_" FOUND !
+            #  if     == "CMD_" FOUND !
             if(cmd_test==cmd_BaseStr):
                 ll=len(cmd_test0)
                 # print("[",idx,"]**** FOUND len, COMMAND: ", ll,cmd_test)
-                print("]**** FOUND len, COMMAND: ", ll,cmd_test)
+                # print("]**** FOUND len, COMMAND: ", ll,cmd_test)
                 # "CMD_" only
                 # if(ll==len(cmd_BaseStr)):
-                print("actionstr==",actionstr)
+                print("actionstr==",actionstr)      # really Label
                 # print("if( actionstr ==  ...... ")
                 # print("] PRE - if( )  , trying to :  CALL  CMD_Array1 = r3frshValue().......****")
 
                 tf0 = Check_data( LabelArr, actionstr )
                 if(tf0==True):
                 # if(actionstr == "RiskMax" or   actionstr == "RiskPct"  or  actionstr == "TradePerDay" or  actionstr == "PollServerSecs"   or  actionstr == "PositionsMax"  ):
-                    print("] CALLINMG CMD_Array1 = r3frshValue().......****")
+                    print("] CALLINMG CMD_Array1 = r3frshValue( arr, lbl, rng, value ).......****", actionstr)
                     CMD_Array1 = refreshValue( CMD_Array, actionstr , rangestr, valuestr )
                     # print(json.dumps( CMD_Array1, indent=4) )
 
-            
-# LabelArr = [ "PositionsMax", "PositionsPct", "RiskMax", "RiskPct", "TradesPerDay", "StopPct", "Event", "Server",  "Aux"]        
-
-                if(actionstr.upper() == "STOP"):
-                    pass
-                if(actionstr.upper() == "POLL"):
-                    pass
-                if(actionstr.upper() == "EVENT"):
-                    # really the event like 'FOMC'
-                    print("EVENT   ==",rangestr)
-                    print("DATE    ==",valuestr)
-
-                    print("PUSH vs refreshVariable : for Events []  HERE")
-                    pass
 
                 if(actionstr.upper() == "AUX"):
                         pass
 
 
             else:
-                print("SYMBOL FOUND:", )
+                print("SYMBOL FOUND:", cmd_test0)
+                tf1 = Check_data( stockINIarr, cmd_test0 )
+                if(tf1 ==False):
+                    stockINIarr.append(cmd_test0)
 
         else:
             print(f"Index: {index}, {key0}: nilKey")
@@ -1476,22 +1672,23 @@ print("\n\n\n")
  
 
 json_result = CSV2JSON(arrINIcsvfile)
+jsonINImaster = json_result
 print("\n\nConverted CSV to JSON data:")
 tf911=False
 if(tf911==True):
     print(json.dumps(json_result, indent=2))
-
-
 
 jlen = len(json_result)
 print( "jlen = ", jlen)  
 key_to_print = "Cmd_"
 # loopJSON(json_result, key_to_print)
 
+
+# initialize vars  with INI ---> JSON  
 RefreshINICmd_VariablesJSON(json_result, key_to_print)
 
 print("] AFTER R3freshINICmd_Variable()...")
-
+print("] st0ckINIarr[]==", stockINIarr)
 print("\n\nPress ANY KEY to see POST fn json ")
 input007 = input()
 
@@ -1738,7 +1935,7 @@ if(simuTime==0):
 elif (simuTime==1):
     hrsminsMod = CheckAfterMidnight(hrsmins) 
     simutime0= GetSimuTime(hrsminsMod)
-    print("* SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now, hrsmins = ", hrsmins, " hrsminsMod = ", hrsminsMod )
+    print("* SIMU-dateTIME IN NYC:",todaysDate0,simutime0, " mins fromClose = " , mins9, "    time now, hrsmins = ", hrsmins, " hrsminsMod = ", hrsminsMod )
 
 
 # Print current time in New York as HH:MM:SS
@@ -1792,10 +1989,7 @@ lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 
 
 
-
-
-
-# initVars()
+ 
 rawIDarr=[]
 
 
@@ -1899,16 +2093,28 @@ while keepLooping > 0:
                 for record in filtered_records:
                     prettyPrintJSON(record)
 
-        filtered_records1 = checkJSONdataTime(filtered_records, todaysDate0, tnow, symbol1 ) # "TSLA" )
+        filtered_recordsTimely= checkJSONdataTime(filtered_records, todaysDate0, tnow, symbol1 ) # "TSLA" )
         print("] Filtered Records TIME:")
-        if len(filtered_records1) == 0:
+        if len(filtered_recordsTimely) == 0:
             print(" [The =TIME array is empty]  Nothing to trade at the momement.")
         else:
-            for record in filtered_records1:
-                prettyPrintJSON(record)
-                # print(record)
-
-
+            print("] FOUND one or more Trades...")
+            HandleTrades(filtered_recordsTimely)
+            # for record in filtered_recordsTimely:
+            #     prettyPrintJSON(record)
+            #     # print(record)
+            #     idstr= "999"
+            #     kstr = "rawtradeId"
+            #     if kstr in record:
+            #         idstr=  record[kstr]
+            #         print(" record[", kstr, "] == ", record[kstr] )
+            #         if( Check_data(rawIDarr, idstr)==False):
+            #             print("EXECUTE TRADE HERE, appending RAW_ID=", idstr)
+            #             rawIDarr.append(idstr)
+            #             ExpressTrade(record)
+            #         else:
+            #             print("* DO NOT EXEC TRADE - It has been expressed already. Raw_ID", idstr, " exists.")
+            print("rawIDarr[]==", rawIDarr)
 
     # todaysCuedTrades = GetTrades(url2)
     # print(todaysCuedTrades)
@@ -1956,7 +2162,7 @@ while keepLooping > 0:
         # simutime0= GetSimuTime(hrsmins)
         mins9 = getMinutesFromClose( simutime0 )
         # print("] * * * * * SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now = ", hrsmins)
-        print("] * * * * * * SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now, hrsmins = ", hrsmins, " hrsminsMod = ", hrsminsMod )
+        print("] * * * * * * SIMU-dateTIME IN NYC:", todaysDate0,simutime0, " mins fromClose = " , mins9, "    time now, hrsmins = ", hrsmins, " hrsminsMod = ", hrsminsMod )
 
 
 
