@@ -44,127 +44,245 @@
 
 import yfinance as yf
 import pandas as pd
-import datetime as dt
-import scipy as s
+import calendar
+#from datetime import date, timedelta
+import os
+import random
 
-# Get Customer choices (ticker, interval)
+# import scipy as s
+
+defaultTicker = 'NVDA'
+defaultPeriod = 'Daily and Monthly'
+
+# set this True to print all price data rows from scrapes
+g_debugHistory = False
+
+# let's have some fun
+g_Messages = []
+g_Messages.append("-----------  L E T ' S   G O !  -----------\n")
+g_Messages.append("------- Watch your position sizes. --------\n")
+g_Messages.append("---- D O N ' T   O V E R T R A D E ! ------\n")
+g_Messages.append("--- Trading plan must specify intervals. --\n")
+g_FirstTime = True
+
+def is_valid_ticker(ticker_symbol):
+    try:
+        # Attempt to fetch data for the given ticker symbol
+        stock_data = yf.Ticker(ticker_symbol).info
+        
+        # If no exception is raised, the ticker is likely valid
+        return True
+
+    except ValueError as e:
+        # Check if the error message indicates an invalid ticker
+        if "No data found" in str(e):
+            return False
+        else:
+            # Re-raise the exception if it's a different ValueError
+            raise e
+
 def GetTicker():
-	#print("TODO: get ticker input")
-	defaultSymbol='NVDA'
-	# insym= input()
-	# if(insym==""):
-	# 	pass
-	# insym=""
-	# insym = input()
-    # if( insym == "" ):
-    # 	print("  Defaulting Ticker Loss to ", defaultSymbol )
-    # 	insym = defaultSymbol
-    # defaultSymbol = insym
-	return defaultSymbol
+	global g_FirstTime
+	if g_FirstTime:
+		msg = g_Messages[0]
+	else:
+		msg = random.choice(g_Messages)
+	g_FirstTime = False
+	print("\n\t", msg)
 
+	val = defaultTicker
+	choice = input("\tEnter Ticker: ")
+	if(choice != ""):
+		val = choice
+	return val
+
+def IsPeriodValid(period:str):
+
+	validPeriods = ['1d','5d','1mo','3mo','6mo','1y','2y','5y','10y','ytd','max']
+	#print(validPeriods)
+	for p in validPeriods:
+		if (period == p):
+			return True
+
+	print("\t Invalid period. Please choose 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max")
+	return False
 
 def GetInterval():
-	#print("TODO: get interval")
-	return '5d'
+	val = defaultPeriod
+	choice = input("\tEnter period: ")
+	if (choice != ""):
+		if IsPeriodValid(choice):
+			val = choice
+	return val
+
+def HelloCustomer():
+	print("\n")
+	print("\t^----------------------------------------------^")
+	print("\t$  Welcome to AlgoZ Pivotal Trading Companion  $")
+	print("\t^----------------------------------------------^\n")
+	print("\t     (Defaults: ", defaultTicker, ",", defaultPeriod, ")")
+
+def PrintPivots(p:str, i:str):
+	
+	# do the scrape
+	try:
+		priceData = g_dataFrame.history(period=p, interval=i)
+
+	except ValueError as ve:
+		print(f"Invalid period or ticker symbol: {period}, {ticker_symbol}")
+	except KeyError as ke:
+		print(f"KeyError: {ke}")
+	except IOError as ioe:
+		print(f"IOError: {ioe}")
+	except Exception as e:
+		print(f"An unexpected error occurred: {e}")
+
+	if (g_debugHistory):
+		print("Price Data: ")
+		print(priceData)
+		print("\n")
+
+	numRows = len(priceData.index)
+
+	# note for the Pivots and S3->R3 levels we'll use CAPS for var names
+
+	P = [0] * numRows
+	R1 = [0] * numRows
+	R2 = [0] * numRows
+	R3 = [0] * numRows
+	S1 = [0] * numRows
+	S2 = [0] * numRows
+	S3 = [0] * numRows
+
+	# we could store these levels in a [numLevels, numRows] array to handle different models.  Floor would have 7 would be [R3,R2,R1,P,S1,S2,S3]
+	# FIB_Levels = [[0 for c in range(numColumns)] for r in range(numRows)] 
+
+	for row in range(numRows):
+		timeStamp = priceData.index[row]
+		H = priceData.at[timeStamp,'High']
+		L = priceData.at[timeStamp,'Low']
+		C = priceData.at[timeStamp,'Close']
+		P[row] = (H + L + C) / 3
+		R1[row] = (2 * P[row]) - L
+		R2[row] = P[row] + H - L
+		R3[row] = H + 2 * (P[row] - L)
+		S1[row] = (2 * P[row]) - H
+		S2[row] = P[row] - H + L
+		S3[row] = L - 2 * (H - P[row])
+
+	#TODO need an array of row names as strings - why is this so hard
+	# rowNames = []
+	# for rowName in priceData.index:
+	#      print(rowName)
+	#      rowNames.append(rowName)
+
+	# print("Dumping row names")
+	# for row in range(numRows):
+	# 	print(rowNames[row])
+
+	label = "Daily" if p == "1d" else "Monthly"
+	print("\n\t\t    ", ticker, label, "\t\t      Date\n")
+
+	# figure out how to extract the correct row. monthly will have last 3 mos,  middle row would be prior.  There is prob a better way to do this..
+	startIndex = numRows-1 if p == "1d" else numRows-2
+	endIndex = numRows-2 if p == "1d" else numRows-3
+	for row in range(startIndex, endIndex, -1):
+		timeStamp = priceData.index[row]
+
+		# truncate time stamp for Daily and bigger periods. It's a row label, like "2024-02-09 00:00:00-05:00" 
+		#if interval == "1d" or interval == "1m":
+		#	temp_string = rowNames[row].as_type(str)
+
+		print("\t\tR3 ", R3[row]) 
+		print("\t\tR2 ", R2[row])
+		print("\t\tR1 ", R1[row])
+		print("\t\tP  ",  P[row], "\t\t", timeStamp)
+		print("\t\tS1 ", S1[row])
+		print("\t\tS2 ", S2[row])
+		print("\t\tS3 ", S3[row], "\n")
 
 
-ticker = GetTicker()
+# this block is from ChatGPT I left vars as underscores on purpose.
+from datetime import datetime, timedelta
 
-# defaultSymbol='NVDA'
-# insym= input()
-# if(insym==""):
-# 	print("  Defaulting Ticker Loss to ", defaultSymbol )
-# 	insym = defaultSymbol
+def last_trading_date_of_prior_month(current_date):
+    # Find the last day of the prior month
+    first_day_of_current_month = datetime(current_date.year, current_date.month, 1)
+    last_day_of_prior_month = first_day_of_current_month - timedelta(days=1)
+    
+    # Calculate the last trading day (excluding weekends)
+    while last_day_of_prior_month.weekday() > 4:  # 4 represents Friday, 5 and 6 are Saturday and Sunday
+        last_day_of_prior_month -= timedelta(days=1)
+    
+    return last_day_of_prior_month.date()
 
-# defaultSymbol = insym
+
+#########################
+# start of main program #
+#########################
+
+# clear screen
+os.system('cls' if os.name == 'nt' else 'clear')
+
+# Show useful dates
+todayDate = datetime.now().date()
+lastMonthDate = last_trading_date_of_prior_month(todayDate)
+
+print("Today is ", todayDate, "\t\t\tPrior month ended:", lastMonthDate)
+
+HelloCustomer()
+
+while (True):
+
+	ticker = GetTicker()
+	if (ticker == "q"):
+		break
+
+	if (not is_valid_ticker(ticker)):
+		print("\n\tInvalid ticker")
+		break
+
+	# Noobs, please note that Ticker() returns a panda dataframe.
+	g_dataFrame = yf.Ticker(ticker)
+
+	# print Daily Levels in a Blest manner
+	PrintPivots("1d", "1d")
+	# print Monthly
+	PrintPivots("3mo","1mo")
+
+print("\n\tGood job! Have a Blest Day and thanks for choosing AlgoZ Pivotal.\n")
 
 
+'''
+ TODOS
+ -----
+ 
+   Add 3 day Pivot average.   The golden goose !  consider graphics for "gold on the back", "carrying the gold" , or whatever the sayings are
 
-interval = GetInterval()
+   User could input interval as well idk prob overkill
+ 
+ Reference
+ ---------
+ 
+  How to print column and row names of priceData:
 
-print("\n ^^^ Welcome to AlgoZ Pivot Calculator (TM) ^^^\n")
-print("\n             ", ticker, " ", interval)
-print("\n")
+	 for colName in priceData.columns:
+	    print(colName)
 
-# Noobs, please note that Ticker() returns a panda dataframe
-data = yf.Ticker(ticker)
+	 for rowName in priceData.index:
+	    print(rowName)
 
-# test 2 get all key value pairs that are available..works
-#for key, value in data.info.items():
-#	print(key, ":", value)
+  How to GET TODAYS DATE AND CONVERT IT TO A STRING WITH YYYY-MM-DD FORMAT (YFINANCE EXPECTS THAT FORMAT)
 
-# test 3 display for example, PE.. works
-#print("Trailing PE: ", data.info['trailingPE'])
+    end_date = datetime.now().strftime('%Y-%m-%d')
+    amzn_hist = amzn.history(start='2022-01-01',end=end_date)
+    print(amzn_hist)
 
-# OK do the scrape already
-priceData = data.history(period='5d')
+  How to understand period parameter:
+     The following are the valid values: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max.
 
-print("Price Data: ")
-print(priceData)
-print("\n")
+  What are valid interval params to the .history() method ?  
+     1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo
 
-# print("\nTry to get High")
-# H = priceData.at['2024-02-09 00:00:00-05:00','High']
-# print ("\tH = ", H)
-
-numRows = len(priceData.index)
-# print("Num Rows = ", numRows)
-
-# print("\nColumn Names?")
-# for colName in priceData.columns:
-#     print(colName)
-
-# print("\nRow Names?")
-# for rowName in priceData.index:
-#     print(rowName)
-
-# note for the Pivots and S3->R3 levels we'll use CAPS for var names
-
-P = [0] * numRows
-R1 = [0] * numRows
-R2 = [0] * numRows
-R3 = [0] * numRows
-S1 = [0] * numRows
-S2 = [0] * numRows
-S3 = [0] * numRows
-
-# we could store these levels in a [numLevels, numRows] array to handle different models.  Floor would have 7 would be [R3,R2,R1,P,S1,S2,S3]
-# FIB_Levels = [[0 for c in range(numColumns)] for r in range(numRows)] 
-
-for row in range(numRows):
-	timeStamp = priceData.index[row]
-	H = priceData.at[timeStamp,'High']
-	L = priceData.at[timeStamp,'Low']
-	C = priceData.at[timeStamp,'Close']
-	P[row] = (H + L + C) / 3
-	R1[row] = (2 * P[row]) - L
-	R2[row] = P[row] + H - L
-	R3[row] = H + 2 * (P[row] - L)
-	S1[row] = (2 * P[row]) - H
-	S2[row] = P[row] - H + L
-	S3[row] = L - 2 * (H - P[row])
-
-print("\n\tLevel Blest Levels (reverse Chrono)\n")
-
-for row in range(numRows-1, -1, -1):
-	print("\t\tR3 ", R3[row], "\t\t", priceData.index[row])
-	print("\t\tR2 ", R2[row])
-	print("\t\tR1 ", R1[row])
-	print("\t\tP  ",  P[row])
-	print("\t\tS1 ", S1[row])
-	print("\t\tS2 ", S2[row])
-	print("\t\tS3 ", S3[row], "\n")
-
-''' 
-Example output for inputs 'NVDA', '5d':
-
-                                 Open        High         Low       Close    Volume  Dividends  Stock Splits
-Date
-2024-02-09 00:00:00-05:00  705.330017  721.849976  702.119995  721.330017  43663700        0.0           0.0
-2024-02-12 00:00:00-05:00  726.000000  746.109985  712.500000  722.479980  61371000        0.0           0.0
 '''
 
-# TODO: fix exception w/ bad ticker entry 'NDVA' - use try-catch
-#  KeyStatistics%2CassetProfile%2CsummaryDetail&ssl=true&crumb=RsKbvrgHfdXFile "C:\Users\willb\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\models.py", line 1021, in raise_for_status
-#     raise HTTPError(http_error_msg, response=self)
-# requests.exceptions.HTTPError: 404 Client Error: Not Found for url: https://query2.finance.yahoo.com/v10/finance/quoteSummary/NDVA?modules=financialData%2CquoteType%2Cdefault
