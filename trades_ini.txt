@@ -9,7 +9,10 @@ CMD_,PositionsMax,options_spreads,2,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,PositionsPct,stocks,0.10,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,TradesPerDay,options,2,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,TradesPerDay,stocks,3,nil,nil,nil,0,1,LIVE,nil,nil
-CMD_,Server,POLL,55,nil,nil,30,0,1,LIVE,nil,nil
+CMD_,TradesPerDay,PORTFOLIO,13,nil,nil,nil,0,1,LIVE,nil,nil
+
+CMD_,Server,POLL,33,nil,nil,30,0,1,LIVE,nil,nil
+CMD_,Server,RefreshINIsecs,600,nil,nil,30,0,1,LIVE,nil,nil
 CMD_,StopPct,options,0.450,nil,nil,nil,0,1,LIVE,nil,nil
 CMD_,StopPct,STOCKS,0.07250,nil,nil,nil,0,1,LIVE,nil,nil
 

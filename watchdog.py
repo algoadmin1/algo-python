@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "6.75"
+versionStr =                    "6.815"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -1164,33 +1164,34 @@ def valueJSON(jsondict, key0):
 #         It is this cuedtrades.json file which will be rendered in the UI for our 'pivots product'
 #
 #
-LabelArr = [ "PositionsMax", "PositionsPct", "RiskMax", "RiskPct", "TradesPerDay", "StopPct", 
-             "Event", "Server",  "Aux"   #  , "BuyMkt",
-]
+    
+
+LabelArr = [ "PositionsMax", "PositionsPct", "RiskMax", "RiskPct", "TradesPerDay","TradesPerWeek", "StopPct",  "Event", "Server",  "Aux"    ]
 
 CMD_Array = [
-    { "Label": "PositionsMax",  "Type": "stock",     "Value": "3" },
-    { "Label": "PositionsMax",  "Type": "options",   "Value": "1" },
-    { "Label": "PositionsMax",  "Type": "options_spreads", "Value": "1" },
-    { "Label": "PositionsMax",  "Type": "portfolio", "Value": "6" },
+    { "Label": "PositionsMax",  "Type": "stocks",     "Value": "999" },
+    { "Label": "PositionsMax",  "Type": "options",   "Value": "999" },
+    { "Label": "PositionsMax",  "Type": "options_spreads", "Value": "999" },
+    { "Label": "PositionsMax",  "Type": "portfolio", "Value": "999" },
 
-    { "Label": "PositionsPct",  "Type": "portfolio", "Value": "0.50" },
+    { "Label": "PositionsPct",  "Type": "portfolio", "Value": "0.9990" },
 
-    { "Label": "RiskMax",  "Type": "portfolio",    "Value": "35000" },
-    { "Label": "RiskMax",  "Type": "stocks",       "Value": "12000" },
-    { "Label": "RiskMax",  "Type": "options",      "Value": "6000" },
+    { "Label": "RiskMax",  "Type": "portfolio",    "Value": "9999" },
+    { "Label": "RiskMax",  "Type": "stocks",       "Value": "9999" },
+    { "Label": "RiskMax",  "Type": "options",      "Value": "999" },
 
-    { "Label": "RiskPct",  "Type": "portfolio",        "Value": "0.350" },
+    { "Label": "RiskPct",  "Type": "portfolio",        "Value": "0.9350" },
+    { "Label": "RiskPct",  "Type": "stocks",        "Value": "0.9350" },
 
-    { "Label": "StopPct",  "Type": "options",           "Value": "0.50" },
-    { "Label": "StopPct",  "Type": "stocks",            "Value": "0.2750" },
-    { "Label": "StopPct",  "Type": "portfolio",            "Value": "0.1250" },
+    { "Label": "StopPct",  "Type": "options",           "Value": "0.950" },
+    { "Label": "StopPct",  "Type": "stocks",            "Value": "0.92750" },
+    { "Label": "StopPct",  "Type": "portfolio",            "Value": "0.91250" },
 
-    { "Label": "TradesPerDay",  "Type": "options",     "Value": "1" },
-    { "Label": "TradesPerDay",  "Type": "stocks",      "Value": "2" },
+    { "Label": "TradesPerDay",  "Type": "options",     "Value": "999" },
+    { "Label": "TradesPerDay",  "Type": "stocks",      "Value": "999" },
 
-    { "Label": "Server",  "Type": "Poll",               "Value": "30" },
-    { "Label": "Server",  "Type": "RefreshINIsecs",     "Value": "600" },
+    { "Label": "Server",  "Type": "Poll",               "Value": "990" },
+    { "Label": "Server",  "Type": "RefreshINIsecs",     "Value": "999" },
 
     { "Label": "Event",  "Type": "FOMC",              "Value": "2024-03-15T143000" },
     { "Label": "Event",  "Type": "JOBSREPORT",        "Value": "2024-03-24T083000" },
@@ -1198,7 +1199,7 @@ CMD_Array = [
 
     { "Label": "Event",  "Type": "11YRBottom",        "Value": "2031-03-10T083000" },
 
-    { "Label": "Event",  "Type": "EARNINGS_NVDA",     "Value": "2024-03-15T141500" },
+    { "Label": "Event",  "Type": "EARNINGS_NVDA",     "Value": "2024-03-23T141500" },
     { "Label": "Event",  "Type": "EARNINGS_ROKU",     "Value": "2024-02-15T133000" },
 
     { "Label": "Aux",  "Type": "ALL",     "Value": "0" }
@@ -1217,28 +1218,35 @@ def refreshValue(jsonDict, labelStr, typeStr, storeValue):
     v=0
     for entry in jsonDict:
         v+=1
-        lstr =entry.get("Label").upper()
-        tstr = entry.get("Type").upper()
+        lstr =entry.get("Label") #.upper()
+        tstr = entry.get("Type") #.upper()
+        # if(entry.get("Type")):
+            # tstr = entry.get("Type").upper()
 
         # print("] inside r3frshValue(): v, lstr , typestr, storeVal ==",v, lstr, tstr,  storeValue )
 
 # AINT WeRKING
-        if( lstr == labelStr.upper()   and   tstr == typeStr.upper() ):
+        # if( lstr == labelStr.upper()   and   tstr == typeStr.upper() ):
+        if( lstr.upper() == labelStr.upper()   and   tstr.upper() == typeStr.upper() ):
             print("] ===} r3frshValue(): v, lstr , typestr, storeVal ==",v, lstr, tstr,  storeValue )
 
             print("]  r3freshValue(): BEFORE:  entry['Value'] = ", entry["Value"] )
             entry["Value"] = storeValue
             print("]  r3freshValue(): AFTER:   entry['Value'] = ", entry["Value"] )
+        # elif( lstr ):
+        #     if( lstr.upper() == labelStr.upper()   ):
+        #         jsondictstr0 =  '{ "Label": "'+ labelStr  +'",  "Type": "'+typeStr+'",     "Value": "'+storeValue+'" } '
+        #         jsonDict.append(jsondictstr0)
 
     return jsonDict
 
- 
 
 cmd_BaseStr ="CMD_"
 
 def RefreshINICmd_VariablesJSON(json_array, key0): 
     global CMD_Array
     global CMD_OrdersArray
+    global LabelArr
     global cmd_BaseStr
 
     rstr="nil"
@@ -1260,21 +1268,21 @@ def RefreshINICmd_VariablesJSON(json_array, key0):
             print("[",idx,"]  actionstr,  rangestr , valuestr ==",  actionstr,  rangestr , valuestr )
 
 
-            # BASE STRING "CMD_" FOUND !
+            #  if     == "CMD_" FOUND !
             if(cmd_test==cmd_BaseStr):
                 ll=len(cmd_test0)
                 # print("[",idx,"]**** FOUND len, COMMAND: ", ll,cmd_test)
-                print("]**** FOUND len, COMMAND: ", ll,cmd_test)
+                # print("]**** FOUND len, COMMAND: ", ll,cmd_test)
                 # "CMD_" only
                 # if(ll==len(cmd_BaseStr)):
-                print("actionstr==",actionstr)
+                print("actionstr==",actionstr)      # really Label
                 # print("if( actionstr ==  ...... ")
                 # print("] PRE - if( )  , trying to :  CALL  CMD_Array1 = r3frshValue().......****")
 
                 tf0 = Check_data( LabelArr, actionstr )
                 if(tf0==True):
                 # if(actionstr == "RiskMax" or   actionstr == "RiskPct"  or  actionstr == "TradePerDay" or  actionstr == "PollServerSecs"   or  actionstr == "PositionsMax"  ):
-                    print("] CALLINMG CMD_Array1 = r3frshValue().......****")
+                    print("] CALLINMG CMD_Array1 = r3frshValue( arr, lbl, rng, value ).......****", actionstr)
                     CMD_Array1 = refreshValue( CMD_Array, actionstr , rangestr, valuestr )
                     # print(json.dumps( CMD_Array1, indent=4) )
 
@@ -1481,13 +1489,12 @@ tf911=False
 if(tf911==True):
     print(json.dumps(json_result, indent=2))
 
-
-
 jlen = len(json_result)
 print( "jlen = ", jlen)  
 key_to_print = "Cmd_"
 # loopJSON(json_result, key_to_print)
 
+# initialize vars  with INI ---> JSON  
 RefreshINICmd_VariablesJSON(json_result, key_to_print)
 
 print("] AFTER R3freshINICmd_Variable()...")
