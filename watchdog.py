@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "6.91"
+versionStr =                    "7.1"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -524,16 +524,204 @@ def checkJSONdataDate(json_data, date0, time0, symbol0):
 # for record in filtered_records:
 #     print(record)
 
+import json
+
+def jsonRecordFind(jsonarr, keystr0, valuestr0):
+    for item in jsonarr:
+        json_obj = item #json.loads(item)
+        if keystr0 in json_obj and json_obj[keystr0] == valuestr0:
+            return json_obj
+    return {}  # Return an empty dictionary if the key or value is not found in any record
+
+def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
+    print("] READY TO EXECUTE TRADE: ", symstr, "\n\nINIrec=")
+    prettyPrintJSON(jsonINIrecord)
+    print("\n] jsonTRADESrecord=")
+    prettyPrintJSON(jsonTRADESrecord)
+
+    print("*** EXECUTE Trade HERE ****")
+
+
 
 def ExpressTrade(jsonrecord):
+    global CMD_Array
+    global jsonINImaster
+
     print("] GOT TO EXPRESS TRADE...") 
-    abstr =     record["tradeAboveBelow"]
-    pivstr =    record["tradePivot"]
-    print("] abstr, pivstr== ",abstr, pivstr) 
+    abstr =     jsonrecord["tradeAboveBelow"]
+    pivstr =    jsonrecord["tradePivot"]
+    trtypestr = jsonrecord["tradeType"]
+    symstr =    jsonrecord["symbol"]
+    trpricestr= jsonrecord["tradePrice"]
+    trprdiststr=jsonrecord["priceDist"]
+    daypivstr  = jsonrecord["daySRs"]
+    wkpivstr   = jsonrecord["wkSRs"]
+
+    print("] Trade Brief:", trtypestr, symstr, trpricestr , abstr, pivstr, "dist=", trprdiststr) 
+    print("]  Day Pivots:",  daypivstr)
+    print("] Week Pivots:",  wkpivstr)
+
+    print("]  jsonINImaster[]==" , jsonINImaster )  #, Cmd_,Action,Range,Value,)
+    # print("]  CMD_Array[]==" , CMD_Array )  #, Cmd_,Action,Range,Value,)
+
+
+    print("\nNOW check against INI FILE HERE for validation...")
+
+    key_to_find = "Cmd_"
+    value_to_find = symstr
+
+    result = jsonRecordFind(jsonINImaster, key_to_find, value_to_find)
+
+    if result:
+        print(f"The JSON record for key '{key_to_find}' with value '{value_to_find}': {json.dumps(result, indent=2)}")
+        print("] FOUND ",value_to_find, " in INI file:", result["Action"], value_to_find, result["Range"], result["Value"], result["TradeType"],  result["Live"] )
+        
+        # From live trade incoming
+        trytype1 = trtypestr.upper()
+        abstr1 = abstr.upper()
+        pivstr1= pivstr.upper()
+
+        # from ini file...
+        trytype2 = result["Action"].upper()
+        abstr2    = result["Range"].upper()
+        pivstr2=   result["Value"].upper()
+
+        # if BUY     == BUY              BELOW == BELOW  and     S1 =  S1
+        if( trytype1== trytype2  and   abstr1 == abstr2   and   pivstr1 == pivstr2):
+            print("]  *#*#*#*#*#!!!!!   WE FOUND AN INI==Trade MATCH, sending trade to ExecuteTrade( ",  symstr," , jsonINI, jsonTrade)" )# result , jsonrecord ," )")
+            ExecuteTrade( symstr, result , jsonrecord)
+        # ] FOUND  VXX  in INI file: BUY VXX BELOW S1 CREDIT_PUT_SPREAD
+
+            # ] FOUND  NVDA  in INI file: SELL NVDA ABOVE R1 LONG_PUTS NOTLIVE
+            # ]  *#*#*#*#*#!!!!!   WE FOUND AN INI==Trade MATCH, sending trade to ExecuteTrade(  NVDA  , jsonINI, jsonTrade)
+            # ] READY TO EXECUTE TRADE:  NVDA 
+
+            # INIrec=
+            
+            # {
+            # "Cmd_": "NVDA",
+            # "Action": "SELL",
+            # "Range": "ABOVE",
+            # "Value": "R1",
+            # "TradeType": "LONG_PUTS",
+            # "Aux": "COUNT",
+            # "SigCnt": "6",
+            # "QtyShrCons": "1",
+            # "NumStrikes": "2",
+            # "Live": "NOTLIVE",
+            # "THoriz": "nil",
+            # "ExitPref": "nil"
+            # }
+
+            # ] jsonTRADESrecord=
+            
+            # {
+            # "tradeDate": "2024-02-16",
+            # "tradeTime": "1230",
+            # "tradeType": "SELL",
+            # "tradeSize": "10",
+            # "symbol": "NVDA",
+            # "tradeCond": "atLimit",
+            # "tradePrice": "739.15",
+            # "rawtradeId": "2349",
+            # "tradeCnt": "6",
+            # "tradeAboveBelow": "above",
+            # "tradePivot": "R1",
+            # "priceDist": "2.93",
+            # "pricePct": "0.3969%",
+            # "tradeStrong": "1",
+            # "tradeLeg": "885|850|625|590",
+            # "timestamp": "2024-02-17T022710",
+            # "tradeRecTimestamp": "2024-02-16T204050",
+            # "tradeDateTime": "2024-02-16T123000",
+            # "tradeDay": "fri",
+            # "tradeBar": "15min",
+            # "userId": "Creator",
+            # "accountId": "12345354911",
+            # "tradeRAW": "raw37",
+            # "tradeRawId": "0",
+            # "tradeSize1": "100",
+            # "tradePrFilled": "0",
+            # "tradeDur": "gfd",
+            # "tradeStopMke": "443.49",
+            # "tradeLimitExit": "1847.88",
+            # "optionStrategy": "IronCondor1.15",
+            # "daySRs": "R3R2R1_P_P3_S1S2S3=|755.50|745.86|736.21|730.11|726.03|720.46|714.36|704.71|",
+            # "wkSRs": "wkR2R1P_702.05_S1S2=|760.90|741.11|682.26|643.20|",
+            # "moSRs": "moR3R2R1PS1S2S3=|-1.00|-1.00|-1.00|-1.00|-1.00|-1.00|-1.00|",
+            # "tradeSpec": "nil",
+            # "tradeSig": "SELL",
+            # "tradeGapPct": "0",
+            # "tradeStatus": "1",
+            # "tradeAux1": "2",
+            # "tradeAux2": "3",
+            # "tradeHash": "nilHash"
+            # }
+
+        # The JSON record for key 'Cmd_' with value 'VXX': {
+        # "Cmd_": "VXX",
+        # "Action": "BUY",
+        # "Range": "BELOW",
+        # "Value": "S1",
+        # "TradeType": "CREDIT_PUT_SPREAD",
+        # "Aux": "COUNT",
+        # "SigCnt": "5",
+        # "QtyShrCons": "0",
+        # "NumStrikes": "1",
+        # "Live": "LIVE",
+        # "THoriz": "nil",
+        # "ExitPref": "nil"
+        # }
+        # ] FOUND  VXX  in INI file: BUY VXX BELOW S1 CREDIT_PUT_SPREAD
+
+        # NOW check against INI FILE HERE for validation...
+        # The JSON record for key 'Cmd_' with value 'AMZN': {
+        # "Cmd_": "AMZN",
+        # "Action": "BUY",
+        # "Range": "BELOW",
+        # "Value": "S1",
+        # "TradeType": "LONG_CALLS",
+        # "Aux": "COUNT",
+        # "SigCnt": "7",
+        # "QtyShrCons": "3",
+        # "NumStrikes": "1",
+        # "Live": "LIVE",
+        # "THoriz": "nil",
+        # "ExitPref": "nil"
+        # }
+ 
+
+    else:
+        print(f"Key '{key_to_find}' with value '{value_to_find}' not found in any record.")
+
+
+
+
 
     prettyPrintJSON(jsonrecord)
 
+
     print("]LEAVING EXPRESS TRADE...") 
+
+
+
+def HandleTrades(filteredRecordsTimely):
+    global rawIDarr
+
+    for record in filtered_recordsTimely:
+        prettyPrintJSON(record)
+        # print(record)
+        idstr= "999"
+        kstr = "rawtradeId"
+        if kstr in record:
+            idstr=  record[kstr]
+            print(" record[", kstr, "] == ", record[kstr] )
+            if( Check_data(rawIDarr, idstr)==False):
+                print("EXECUTE TRADE HERE, appending RAW_ID=", idstr)
+                rawIDarr.append(idstr)
+                ExpressTrade(record)
+            else:
+                print("* DO NOT EXEC TRADE - It has been expressed already. Raw_ID", idstr, " exists.")
 
 
 #
@@ -1484,6 +1672,7 @@ print("\n\n\n")
  
 
 json_result = CSV2JSON(arrINIcsvfile)
+jsonINImaster = json_result
 print("\n\nConverted CSV to JSON data:")
 tf911=False
 if(tf911==True):
@@ -1493,6 +1682,7 @@ jlen = len(json_result)
 print( "jlen = ", jlen)  
 key_to_print = "Cmd_"
 # loopJSON(json_result, key_to_print)
+
 
 # initialize vars  with INI ---> JSON  
 RefreshINICmd_VariablesJSON(json_result, key_to_print)
@@ -1745,7 +1935,7 @@ if(simuTime==0):
 elif (simuTime==1):
     hrsminsMod = CheckAfterMidnight(hrsmins) 
     simutime0= GetSimuTime(hrsminsMod)
-    print("* SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now, hrsmins = ", hrsmins, " hrsminsMod = ", hrsminsMod )
+    print("* SIMU-dateTIME IN NYC:",todaysDate0,simutime0, " mins fromClose = " , mins9, "    time now, hrsmins = ", hrsmins, " hrsminsMod = ", hrsminsMod )
 
 
 # Print current time in New York as HH:MM:SS
@@ -1903,26 +2093,27 @@ while keepLooping > 0:
                 for record in filtered_records:
                     prettyPrintJSON(record)
 
-        filtered_records1 = checkJSONdataTime(filtered_records, todaysDate0, tnow, symbol1 ) # "TSLA" )
+        filtered_recordsTimely= checkJSONdataTime(filtered_records, todaysDate0, tnow, symbol1 ) # "TSLA" )
         print("] Filtered Records TIME:")
-        if len(filtered_records1) == 0:
+        if len(filtered_recordsTimely) == 0:
             print(" [The =TIME array is empty]  Nothing to trade at the momement.")
         else:
             print("] FOUND one or more Trades...")
-            for record in filtered_records1:
-                prettyPrintJSON(record)
-                # print(record)
-                idstr= "999"
-                kstr = "rawtradeId"
-                if kstr in record:
-                    idstr=  record[kstr]
-                    print(" record[", kstr, "] == ", record[kstr] )
-                    if( Check_data(rawIDarr, idstr)==False):
-                        print("EXECUTE TRADE HERE, appending RAW_ID=", idstr)
-                        rawIDarr.append(idstr)
-                        ExpressTrade(record)
-                    else:
-                        print("* DO NOT EXEC TRADE - It has been expressed already. Raw_ID", idstr, " exists.")
+            HandleTrades(filtered_recordsTimely)
+            # for record in filtered_recordsTimely:
+            #     prettyPrintJSON(record)
+            #     # print(record)
+            #     idstr= "999"
+            #     kstr = "rawtradeId"
+            #     if kstr in record:
+            #         idstr=  record[kstr]
+            #         print(" record[", kstr, "] == ", record[kstr] )
+            #         if( Check_data(rawIDarr, idstr)==False):
+            #             print("EXECUTE TRADE HERE, appending RAW_ID=", idstr)
+            #             rawIDarr.append(idstr)
+            #             ExpressTrade(record)
+            #         else:
+            #             print("* DO NOT EXEC TRADE - It has been expressed already. Raw_ID", idstr, " exists.")
             print("rawIDarr[]==", rawIDarr)
 
     # todaysCuedTrades = GetTrades(url2)
@@ -1971,7 +2162,7 @@ while keepLooping > 0:
         # simutime0= GetSimuTime(hrsmins)
         mins9 = getMinutesFromClose( simutime0 )
         # print("] * * * * * SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now = ", hrsmins)
-        print("] * * * * * * SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now, hrsmins = ", hrsmins, " hrsminsMod = ", hrsminsMod )
+        print("] * * * * * * SIMU-dateTIME IN NYC:", todaysDate0,simutime0, " mins fromClose = " , mins9, "    time now, hrsmins = ", hrsmins, " hrsminsMod = ", hrsminsMod )
 
 
 
