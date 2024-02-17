@@ -60,9 +60,11 @@ g_debugHistory = False
 # let's have some fun
 g_Messages = []
 g_Messages.append("-----------  L E T ' S   G O !  -----------\n")
-g_Messages.append("------- Watch your position sizes. --------\n")
+g_Messages.append("------- Watch your position sizes! --------\n")
 g_Messages.append("---- D O N ' T   O V E R T R A D E ! ------\n")
-g_Messages.append("--- Trading plan must specify intervals. --\n")
+g_Messages.append("----- Trading plans specify intervals -----\n")
+g_Messages.append("--------  Wanna quit ? Enter 'q' ----------\n")
+
 g_FirstTime = True
 
 def is_valid_ticker(ticker_symbol):
