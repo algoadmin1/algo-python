@@ -566,8 +566,32 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
     # "TradeType": "LONG_PUTS",
     tradetypestr = jsonINIrecord["TradeType"]
     livestr0=jsonINIrecord["Live"]
+    # if( int( jsonINIrecord["SigCnt"])  >= int(jsonTRADESrecord["tradeCnt"])):
+    print("] signal counts (INI,jsonTrades):",   int( jsonINIrecord["SigCnt"]) , int(jsonTRADESrecord["tradeCnt"])  )
+
     if(livestr0=="LIVE"):
         print("] Prepping: ", tradetypestr)
+
+        if(tradetypestr=="LONG_STOCK"):
+            print( jsonINIrecord["Action"], jsonINIrecord["QtyShrCons"],"shares of", jsonINIrecord["Cmd_"]," at Market (",jsonTRADESrecord["TradePrice"],").  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
+            pass
+
+        if(tradetypestr=="SHORT_STOCK"):
+            print( jsonINIrecord["Action"], jsonINIrecord["QtyShrCons"],"shares of", jsonINIrecord["Cmd_"]," at Market (",jsonTRADESrecord["TradePrice"],").  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
+            pass
+
+        if(tradetypestr=="LONG_CALLS"):
+            pass
+
+        if(tradetypestr=="LONG_PUTS"):
+            pass
+
+        if(tradetypestr=="CREDIT_CALL_SPREAD"):
+            pass
+
+        if(tradetypestr=="CREDIT_PUT_SPREAD"):
+            pass
+
 
     print("\n] jsonTRADESrecord=")
     prettyPrintJSON(jsonTRADESrecord)
@@ -626,13 +650,13 @@ def ExpressTrade(jsonrecord):
         # if SELL    == SELL             ABOVE == ABOVE  and     R1 =  R1
         # if BUY     == BUY              BELOW == BELOW  and     S1 =  S1
         if( trytype1== trytype2  and   abstr1 == abstr2   and   pivstr1 == pivstr2):
-            print("]  *#*#*#*#*#!!!!!   WE FOUND AN INI==Trade MATCH, sending trade to ExecuteTrade( ",  symstr," , jsonINI, jsonTrade)" )# result , jsonrecord ," )")
-        #   ExecuteTrade( symstr, resultINI , jsonrecord)
+            print("]  *#*#*#*#*#!!!!!   WE FOUND AN INI==Trade MATCH, sending trade to Ex3cuteTrade( ",  symstr," , jsonINI, jsonTrade)" )# result , jsonrecord ," )")
+        #   E*ecuteTrade( symstr, resultINI , jsonrecord)
             ExecuteTrade( symstr, result , jsonrecord)
         # ] FOUND  VXX  in INI file: BUY VXX BELOW S1 CREDIT_PUT_SPREAD
 
             # ] FOUND  NVDA  in INI file: SELL NVDA ABOVE R1 LONG_PUTS NOTLIVE
-            # ]  *#*#*#*#*#!!!!!   WE FOUND AN INI==Trade MATCH, sending trade to ExecuteTrade(  NVDA  , jsonINI, jsonTrade)
+            # ]  *#*#*#*#*#!!!!!   WE FOUND AN INI==Trade MATCH, sending trade to Ex*cuteTrade(  NVDA  , jsonINI, jsonTrade)
             # ] READY TO EXECUTE TRADE:  NVDA 
 
             # ] jsonTRADESrecord=
