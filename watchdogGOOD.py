@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "4.41"
+versionStr =                    "6.91"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -66,11 +66,14 @@ def leftRightStr(input_str, LR_str, num_chars):
 # usage:  AddL3adingZero( "1", 1)     ==> 01
 #
 def AddLeadingZero(str0, num):
+    verbose=False
     str1=str0
     if len( str0 ) < num:
-        print("\n] ADDING LEADING 0 to   ", str0 )
+        if(verbose):
+            print("\n] ADDING LEADING 0 to   ", str0 )
         str1= "0"+str0
-    print("\n] AddL3adingZero(",str0,num, ") ==   ", str1 )
+    if(verbose):
+        print("\n] AddL3adingZero(",str0,num, ") ==   ", str1 )
     return(str1)
 
 # totalm1ns from start of day
@@ -84,7 +87,6 @@ def  FormHHMMFromMins( totalmins ):
         hhmmstr0= AddLeadingZero( newhrs1str, 2) + AddLeadingZero( newmins1str, 2)
         print("]  FormHHMMFromMins(",totalmins,"): returning hhmmstr0=", hhmmstr0 )
         return(hhmmstr0 )
-
 
 
 # usage
@@ -106,11 +108,19 @@ def GetHHMM(hhmmstr, nummins, addSubStr):
     return(hhmmstr0)  
 
 
+def CheckAfterMidnight(hrsmins):
+    mins8 = getMinutesFromDayStart( hrsmins )
+    hrsminsMod=hrsmins
+    if(mins8 <  ( (9*60) +30 )  ):          # if current time is 0230  or 0040
+        mins8 += (24*60)
+        hrsminsMod=GetHHMM("0000", mins8, "add")
+    return( hrsminsMod ) 
+
 def GetSimuTime(hrsmins):
     global tnowStartMinsDiffFromSimuTime
     global tnowSim 
 
-    print("]  START: GetSimuTime(",hrsmins ,")")
+    print("]  START: G3tSimuTime(",hrsmins ,")")
     mins0=0
     minstr="2000"
     if(len(hrsmins)!=4):
@@ -124,7 +134,7 @@ def GetSimuTime(hrsmins):
 
     mins0= minsfromDayStart - tnowStartMinsDiffFromSimuTime
     print("] mins0= minsfromDayStart - tnowStartMinsDiffFromSimuTime == ", str(mins0) )
-    print("] GetHHMM(", "0000",  mins0, "add)" )
+    print("] G3tHHMM(", "0000",  mins0, "add)" )
     # minstr1 = GetHHMM( tnowSim, mins0, "add")
     minstr1 = GetHHMM( "0000", (mins0 + simuTimeInc), "add")
     print("]   END: GetSimuTime(",hrsmins ,") ==   ======>", minstr1,"<=======: tnowSim, mins0==",tnowSim, mins0 )
@@ -199,8 +209,7 @@ import csv
 import shutil
 import sys
 import random
-print("]  Still importing Python modules...")
-
+print("]  Still importing more Python modules...")
 import os
 
 import yfinance as yf
@@ -244,8 +253,26 @@ def delayLoop(secs):
 # Example usage:
 #delayLoop(3)  
 
-def Check_data(array, datastr):
-    return datastr in array
+def Check_data(array, target_str):
+    return target_str in array
+
+def find_index(arr, target_str):
+    if target_str in arr:
+        return arr.index(target_str)
+    else:
+        return -1
+### Example usage:
+# string_array = ["apple", "banana", "orange", "grape"]
+# search_string = "orange"
+# result_index = find_index(string_array, search_string)
+# if result_index != -1:
+#     print(f"The string '{search_string}' is at index {result_index}.")
+# else:
+#     print(f"The string '{search_string}' is not in the array.")
+
+
+
+
 
 
 def removeCharsFromLeftRight(str0,leftRightStr, numchars):
@@ -498,7 +525,15 @@ def checkJSONdataDate(json_data, date0, time0, symbol0):
 #     print(record)
 
 
+def ExpressTrade(jsonrecord):
+    print("] GOT TO EXPRESS TRADE...") 
+    abstr =     record["tradeAboveBelow"]
+    pivstr =    record["tradePivot"]
+    print("] abstr, pivstr== ",abstr, pivstr) 
 
+    prettyPrintJSON(jsonrecord)
+
+    print("]LEAVING EXPRESS TRADE...") 
 
 
 #
@@ -1050,6 +1085,275 @@ def print_colored_rnd(text):
     r = rand(colorArrayLen)
     print_colored(text, colorArray[r])
 
+
+# import csv
+# import json
+
+def CSV2JSON(arr):
+    # Assuming arr is a list of strings where each string represents a CSV row
+    csv_reader = csv.reader(arr)
+    
+    # Assuming the first row contains the column headers
+    headers = next(csv_reader)
+
+    # Initialize an empty list to store the JSON records
+    json_records = []
+
+    # Iterate through each row in the CSV
+    for row in csv_reader:
+        # Create a dictionary for each row using the headers and row values
+        record_dict = {headers[i]: row[i] for i in range(len(headers))}
+        json_records.append(record_dict)
+
+    return json_records
+
+def CompareJSON(jsondict, key0, val0):
+    tf = False  # Initialize the boolean variable to False
+
+    # Check if the key exists in the JSON dictionary
+    if key0 in jsondict:
+        # Check if the value associated with the key is equal to val0
+        tf = jsondict[key0] == val0
+
+    return tf
+
+
+def valueJSON(jsondict, key0):
+    # Check if the key exists in the JSON dictionary
+    if key0 in jsondict:
+        return jsondict[key0]
+    else:
+        return "nilKey"
+
+# ####################################################################### Globals
+# cmd_BaseStr ="CMD_"
+
+#  MAX Cmd_ affected gl0bals            **************** !!!!!!!  NOW:  MAKE THESE MATCH NAMES in INI files
+# PortfolioPositionsMax  = 2
+# StockPositionsMax   = 2
+# OptionsPositionsMax = 2
+# SpreadPositionsMax  = 2
+
+# StockTradesPerDayMax    = 2
+# OptionsTradesPerDayMax  = 1
+    
+# #  RISK gl0bals affected by
+# RiskPortfolioMax    = 35000
+# RiskStockTradeMax   = 12000
+# RiskOptionTradeMax  =  6000
+
+# # stops pct
+# OptionsStopPct      = 0.50
+# StockStopPct        = 0.2750
+
+# SERVER / Arrays
+# PollServerSeconds   = 30
+
+# cmd_ini.json
+#
+#
+#
+#           Bro, instead of all these variables, I realized before moving forward with WatchDog and APM
+#                that I should just put everything in a json payload, so we can ship it around the
+#                web if necessary.  I had PositionsMAXStocks= 3 , PositionsMAXOptions= 1 etc.
+#
+#
+#           Ok, I am coding outside my apartment when at 2am a firetruck and an ambulance came in
+#           to scoop up somepoor soul.
+#
+#
+#   THEN, this system will let us have ai or a market-scanning Algo (ie picks up SCMI) write an INI cmd_
+#
+#   I have included the INI file in this email. watchdog.py reads the INI file (trades_INI.txt) and 
+#   translates it into the [MD_Array[] json dictionary inside python for watchdog's main loop.
+#
+#         The main loop simply polls https://algoinvestorr.com/trades/gettrades.php?d=2024-02-14 
+#         which in turn writes https://algoinvestorr.com/trades/rawtrades/cuedtrades.json
+#         It is this cuedtrades.json file which will be rendered in the UI for our 'pivots product'
+#
+#
+    
+
+LabelArr = [ "PositionsMax", "PositionsPct", "RiskMax", "RiskPct", "TradesPerDay","TradesPerWeek", "StopPct",  "Event", "Server",  "Aux"    ]
+
+CMD_Array = [
+    { "Label": "PositionsMax",  "Type": "stocks",     "Value": "999" },
+    { "Label": "PositionsMax",  "Type": "options",   "Value": "999" },
+    { "Label": "PositionsMax",  "Type": "options_spreads", "Value": "999" },
+    { "Label": "PositionsMax",  "Type": "portfolio", "Value": "999" },
+
+    { "Label": "PositionsPct",  "Type": "portfolio", "Value": "0.9990" },
+
+    { "Label": "RiskMax",  "Type": "portfolio",    "Value": "9999" },
+    { "Label": "RiskMax",  "Type": "stocks",       "Value": "9999" },
+    { "Label": "RiskMax",  "Type": "options",      "Value": "999" },
+
+    { "Label": "RiskPct",  "Type": "portfolio",        "Value": "0.9350" },
+    { "Label": "RiskPct",  "Type": "stocks",        "Value": "0.9350" },
+
+    { "Label": "StopPct",  "Type": "options",           "Value": "0.950" },
+    { "Label": "StopPct",  "Type": "stocks",            "Value": "0.92750" },
+    { "Label": "StopPct",  "Type": "portfolio",            "Value": "0.91250" },
+
+    { "Label": "TradesPerDay",  "Type": "options",     "Value": "999" },
+    { "Label": "TradesPerDay",  "Type": "stocks",      "Value": "999" },
+
+    { "Label": "Server",  "Type": "Poll",               "Value": "990" },
+    { "Label": "Server",  "Type": "RefreshINIsecs",     "Value": "999" },
+
+    { "Label": "Event",  "Type": "FOMC",              "Value": "2024-03-15T143000" },
+    { "Label": "Event",  "Type": "JOBSREPORT",        "Value": "2024-03-24T083000" },
+    { "Label": "Event",  "Type": "CPI",               "Value": "2024-02-13T083000" },
+
+    { "Label": "Event",  "Type": "11YRBottom",        "Value": "2031-03-10T083000" },
+
+    { "Label": "Event",  "Type": "EARNINGS_NVDA",     "Value": "2024-03-23T141500" },
+    { "Label": "Event",  "Type": "EARNINGS_ROKU",     "Value": "2024-02-15T133000" },
+
+    { "Label": "Aux",  "Type": "ALL",     "Value": "0" }
+    
+
+]
+
+CMD_OrdersArray = [
+     { "Order": "BUY",  "OrderType": "Market", "Symbol": "ROKU", "TradeSize": "100", "Date": "2024-02-15", "Time": "1230", "Instrument": "Stock" },
+     { "Order": "SELL", "OrderType": "Market", "Symbol": "ROKU", "TradeSize": "100", "Date": "2024-02-16", "Time": "0930", "Instrument": "Stock" },
+     { "Order": "BUY",  "OrderType": "Market", "Symbol": "NVDA", "TradeSize": "10",  "Date": "2024-02-23", "Time": "1230", "Instrument": "Call" }
+]
+
+
+def refreshValue(jsonDict, labelStr, typeStr, storeValue):
+    v=0
+    for entry in jsonDict:
+        v+=1
+        lstr =entry.get("Label") #.upper()
+        tstr = entry.get("Type") #.upper()
+        # if(entry.get("Type")):
+            # tstr = entry.get("Type").upper()
+
+        # print("] inside r3frshValue(): v, lstr , typestr, storeVal ==",v, lstr, tstr,  storeValue )
+
+# AINT WeRKING
+        # if( lstr == labelStr.upper()   and   tstr == typeStr.upper() ):
+        if( lstr.upper() == labelStr.upper()   and   tstr.upper() == typeStr.upper() ):
+            print("] ===} r3frshValue(): v, lstr , typestr, storeVal ==",v, lstr, tstr,  storeValue )
+
+            print("]  r3freshValue(): BEFORE:  entry['Value'] = ", entry["Value"] )
+            entry["Value"] = storeValue
+            print("]  r3freshValue(): AFTER:   entry['Value'] = ", entry["Value"] )
+        # elif( lstr ):
+        #     if( lstr.upper() == labelStr.upper()   ):
+        #         jsondictstr0 =  '{ "Label": "'+ labelStr  +'",  "Type": "'+typeStr+'",     "Value": "'+storeValue+'" } '
+        #         jsonDict.append(jsondictstr0)
+
+    return jsonDict
+
+
+cmd_BaseStr ="CMD_"
+stockINIarr = []
+
+def RefreshINICmd_VariablesJSON(json_array, key0): 
+    global CMD_Array
+    global CMD_OrdersArray
+    global LabelArr
+    global cmd_BaseStr
+    global stockINIarr
+
+    rstr="nil"
+    idx= 0
+
+    for index, json_dict in enumerate(json_array):
+        idx+=1
+        if key0 in json_dict:  # "Cmd_" is the key
+            print("\n")
+            print(f"Index: {index}, Stock or {key0}: {json_dict[key0]}")
+
+            cmd_test0=json_dict[key0].upper()
+            cmd_test=leftRightStr(cmd_test0,"left",4)   # // explicit ="CMD_"
+
+            actionstr = json_dict["Action"]  # [1]
+            rangestr  = json_dict["Range"]    # [2]
+            valuestr  = json_dict["Value"]    # [3]
+            livestr   = json_dict["Live"]    # [3]
+
+            print("[",idx,"]  actionstr,  rangestr , valuestr ==",  actionstr,  rangestr , valuestr )
+
+
+            #  if     == "CMD_" FOUND !
+            if(cmd_test==cmd_BaseStr):
+                ll=len(cmd_test0)
+                # print("[",idx,"]**** FOUND len, COMMAND: ", ll,cmd_test)
+                # print("]**** FOUND len, COMMAND: ", ll,cmd_test)
+                # "CMD_" only
+                # if(ll==len(cmd_BaseStr)):
+                print("actionstr==",actionstr)      # really Label
+                # print("if( actionstr ==  ...... ")
+                # print("] PRE - if( )  , trying to :  CALL  CMD_Array1 = r3frshValue().......****")
+
+                tf0 = Check_data( LabelArr, actionstr )
+                if(tf0==True):
+                # if(actionstr == "RiskMax" or   actionstr == "RiskPct"  or  actionstr == "TradePerDay" or  actionstr == "PollServerSecs"   or  actionstr == "PositionsMax"  ):
+                    print("] CALLINMG CMD_Array1 = r3frshValue( arr, lbl, rng, value ).......****", actionstr)
+                    CMD_Array1 = refreshValue( CMD_Array, actionstr , rangestr, valuestr )
+                    # print(json.dumps( CMD_Array1, indent=4) )
+
+
+                if(actionstr.upper() == "AUX"):
+                        pass
+
+
+            else:
+                print("SYMBOL FOUND:", cmd_test0)
+                tf1 = Check_data( stockINIarr, cmd_test0 )
+                if(tf1 ==False):
+                    stockINIarr.append(cmd_test0)
+
+        else:
+            print(f"Index: {index}, {key0}: nilKey")
+
+# passthru as above, so all vars get refreshed as of now, but with In1tIN!Cmd_VariablesJSON
+# def InitINICmd_VariablesJSON(json_array, key0):
+#     Re freshINICmd_VariablesJSON(json_array, key0)
+
+
+def loopJSON(json_array, key0):
+    for index, json_dict in enumerate(json_array):
+        if key0 in json_dict:
+            print(f"Index: {index}, {key0}: {json_dict[key0]}")
+        else:
+            print(f"Index: {index}, {key0}: nilKey")
+
+# # Example usage:
+# json_array = [
+#     {"Name": "John", "Age": 25, "City": "New York"},
+#     {"Name": "Alice", "Age": 30, "City": "San Francisco"},
+#     {"Name": "Bob", "Age": 28, "City": "Los Angeles"}
+# ]
+
+# key_to_print = "Age"
+# loopJSON(json_array, key_to_print)
+
+
+
+
+# # Example usage:
+# json_data = {
+#     "Name": "John",
+#     "Age": 25,
+#     "City": "New York"
+# }
+
+# key_to_compare = "City"
+# value_to_compare = "New York"
+
+# result = CompareJSON(json_data, key_to_compare, value_to_compare)
+
+# print(f"The key '{key_to_compare}' holds the value '{value_to_compare}' in the JSON dictionary: {result}")
+
+
+# json_result = CSV2J SON(csv_data)
+# print(json.dumps(json_result, indent=2))
+
 # def print_colored_rnd1(text, r):
 #     # r = rand(colorArrayLen)
 #     print_colored(text, colorArray[r])
@@ -1155,35 +1459,6 @@ print("] Attempted & Completed Mock Portfolio Object Operations:   AFTER...")
 
 #########
 
-# hrsmins="1145"
-# mins9 = getMinutesFromOpen( hrsmins )
-# print(hrsmins, " mins fromOpen = " , mins9)
-
-# hrsmins="1330"
-# mins9 = getMinutesFromOpen( hrsmins )
-# print(hrsmins, " mins fromOpen = " , mins9)
-
-# hrsmins="0945"
-# mins9 = getMinutesFromOpen( hrsmins )
-# print(hrsmins, " mins fromOpen = " , mins9)
-
-# hrsmins="1015"
-# mins9 = getMinutesFromOpen( hrsmins )
-# print(hrsmins, " mins fromOpen = " , mins9)
-
-
-# hrsmins="1245"
-# mins9 = getMinutesFromClose( hrsmins )
-# print(hrsmins, " mins fromClose = " , mins9)
-
-# hrsmins="1545"
-# mins9 = getMinutesFromClose( hrsmins )
-# print(hrsmins, " mins fromClose = " , mins9)
-
-# hrsmins="0935"
-# mins9 = getMinutesFromClose( hrsmins )
-# print(hrsmins, " mins fromClose = " , mins9)
-
 gtstr = timeNow("")
 print(gtstr)
 hrsmins=gtstr #"0935"
@@ -1198,6 +1473,36 @@ print(gtstr)
 ######### 
 ##################################################### CLASS STRUCTURE TESTS END ###########
 
+
+
+print("\n\n]  Reading INI FILE ...")
+fname="trades_ini.txt"
+arrINIcsvfile = ReadFile(fname)
+print(arrINIcsvfile)
+print_colored("] Finished reading: " +fname+ " for " , colorYellow )
+print("\n\n\n")
+ 
+
+json_result = CSV2JSON(arrINIcsvfile)
+print("\n\nConverted CSV to JSON data:")
+tf911=False
+if(tf911==True):
+    print(json.dumps(json_result, indent=2))
+
+jlen = len(json_result)
+print( "jlen = ", jlen)  
+key_to_print = "Cmd_"
+# loopJSON(json_result, key_to_print)
+
+# initialize vars  with INI ---> JSON  
+RefreshINICmd_VariablesJSON(json_result, key_to_print)
+
+print("] AFTER R3freshINICmd_Variable()...")
+print("] st0ckINIarr[]==", stockINIarr)
+print("\n\nPress ANY KEY to see POST fn json ")
+input007 = input()
+
+print(json.dumps(CMD_Array, indent=4))
 
 
 
@@ -1294,7 +1599,7 @@ my_stock_items = GetHoldingsButLoginFirst("BEFORE TRADE", "roguequant1@gmail.com
 todaysDate0=TodaysDate()
 
 pstr= "\n",str(current_date_ny),"] ENTER trades Date (default="+todaysDate0+"): "  
-print_colored(pstr,colorRed)
+print_colored(pstr,colorGreen)
 input0 = input()
 if input0 == "":
     print("\n] Defaulting Date to ", todaysDate0 )
@@ -1337,6 +1642,7 @@ else:
 
 tnowStartMinsDiffFromSimuTime =  0  
 tnow0 = timeNow("")  
+tnow0= CheckAfterMidnight(tnow0)
 tnowStartMinsDiffFromSimuTime =  GetTimeDiff( tnowStart,tnow0 )
 print("] ************* userSTARTTime, timeNOW, MINS_diff   ", tnowStart, tnow0, tnowStartMinsDiffFromSimuTime )
 print("] ************* userSTARTTime, timeNOW, MINS_diff   ", tnowStart, tnow0, tnowStartMinsDiffFromSimuTime )
@@ -1437,9 +1743,9 @@ mins9 = getMinutesFromClose( hrsmins )
 if(simuTime==0):
     print("TIME IN NYC:",hrsmins, " mins fromClose = " , mins9)
 elif (simuTime==1):
-    # simutime=    #= getMinutesFromClose( hrsmins )
-    simutime0= GetSimuTime(hrsmins)
-    print("* SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now = ", hrsmins)
+    hrsminsMod = CheckAfterMidnight(hrsmins) 
+    simutime0= GetSimuTime(hrsminsMod)
+    print("* SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now, hrsmins = ", hrsmins, " hrsminsMod = ", hrsminsMod )
 
 
 # Print current time in New York as HH:MM:SS
@@ -1478,11 +1784,11 @@ print(">",tstr, end="", flush=True)
 lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 
 
-print("]  TASK*** Getting INI FILE ...")
-fname="trades_ini.txt"
-arrINIcsvfile = ReadFile(fname)
-print(arrINIcsvfile)
-print_colored("] Finished reading: " +fname+ " for " , colorYellow )
+# print("]  TASK*** Getting INI FILE ...")
+# fname="trades_ini.txt"
+# arrINIcsvfile = ReadFile(fname)
+# print(arrINIcsvfile)
+# print_colored("] Finished reading: " +fname+ " for " , colorYellow )
 
 
 
@@ -1493,10 +1799,7 @@ print_colored("] Finished reading: " +fname+ " for " , colorYellow )
 
 
 
-
-
-
-# initVars()
+ 
 rawIDarr=[]
 
 
@@ -1575,40 +1878,52 @@ while keepLooping > 0:
 
         symbol1=defaultSymbol
 
+        tnow = timeNow("")
 
         if(realtime):           # if player pressed return "" then default= time in realtime
             tnow = timeNow("")
 
         if(simuTime==1):
-            tnow1 = GetTimeDiff(tnow,tnowStart)
-            pass
+            tnowMod = CheckAfterMidnight(tnow) 
+            tnow1= GetSimuTime(tnowMod)
+            tnow = tnow1
+            print("] PRE_filtering JSON; Retrieved tnow (sim-d) = ", tnow)
+            
 
+        printAllDateMatchJSONs=False
         filtered_records = checkJSONdataAnySymbol(json_data, todaysDate0, tnow, symbol1 )
-        # filtered_records = checkJSONdataStock(json_data, todaysDate0, tnow, symbol1 )
-        # filtered_records = checkJSONdataDate(json_data, todaysDate0, tnow, symbol )  # only compares date
-        # print("ANY STOCK filtered_records==",filtered_records)
 
-        # print("] Filtered Records for  ",symbol1," on date=",todaysDate0,":")
         print("] Filtered Records for  any symbol on date, timeNow=",todaysDate0,tnow ,":")
 
         if len(filtered_records) == 0:
             print(" [The =SYMBOL array is empty]")
         else:
             print("Today's DATE & TIME=", todaysDate0, tnow )
-            for record in filtered_records:
-                prettyPrintJSON(record)
-                 # print(record)
+            if(printAllDateMatchJSONs==True):
+                for record in filtered_records:
+                    prettyPrintJSON(record)
 
         filtered_records1 = checkJSONdataTime(filtered_records, todaysDate0, tnow, symbol1 ) # "TSLA" )
         print("] Filtered Records TIME:")
         if len(filtered_records1) == 0:
             print(" [The =TIME array is empty]  Nothing to trade at the momement.")
         else:
+            print("] FOUND one or more Trades...")
             for record in filtered_records1:
                 prettyPrintJSON(record)
                 # print(record)
-
-
+                idstr= "999"
+                kstr = "rawtradeId"
+                if kstr in record:
+                    idstr=  record[kstr]
+                    print(" record[", kstr, "] == ", record[kstr] )
+                    if( Check_data(rawIDarr, idstr)==False):
+                        print("EXECUTE TRADE HERE, appending RAW_ID=", idstr)
+                        rawIDarr.append(idstr)
+                        ExpressTrade(record)
+                    else:
+                        print("* DO NOT EXEC TRADE - It has been expressed already. Raw_ID", idstr, " exists.")
+            print("rawIDarr[]==", rawIDarr)
 
     # todaysCuedTrades = GetTrades(url2)
     # print(todaysCuedTrades)
@@ -1651,12 +1966,16 @@ while keepLooping > 0:
     if(simuTime==0):
         print("] TIME NOW IN NYC is ",hrsmins, ", or mins fromClose = " , mins9)
     elif (simuTime==1):
-        simutime0= GetSimuTime(hrsmins)
+        hrsminsMod = CheckAfterMidnight(hrsmins) 
+        simutime0= GetSimuTime(hrsminsMod)
+        # simutime0= GetSimuTime(hrsmins)
         mins9 = getMinutesFromClose( simutime0 )
+        # print("] * * * * * SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now = ", hrsmins)
+        print("] * * * * * * SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now, hrsmins = ", hrsmins, " hrsminsMod = ", hrsminsMod )
 
-        print("] * * * * * SIMU-TIME IN NYC:",simutime0, " mins fromClose = " , mins9, "    time now = ", hrsmins)
 
-        pass
+
+
 
 #### End of Loop
     # Decrement keepLooping to eventually exit the loop
