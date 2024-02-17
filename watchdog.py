@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "7.1"
+versionStr =                    "7.20"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -536,8 +536,39 @@ def jsonRecordFind(jsonarr, keystr0, valuestr0):
     return {}  # Return an empty dictionary if the key or value is not found in any record
 
 def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
-    print("] READY TO EXECUTE TRADE: ", symstr, "\n\nINIrec=")
+    print("] READY TO EXECUTE TRADE: ", symstr, "\n\n")
+
+    # INIrec=
+    # {
+    # "Cmd_": "NVDA",
+    # "Action": "SELL",
+    # "Range": "ABOVE",
+    # "Value": "R1",
+    # "TradeType": "LONG_PUTS",
+    # "Aux": "COUNT",
+    # "SigCnt": "6",
+    # "QtyShrCons": "1",
+    # "NumStrikes": "2",
+    # "Live": "NOTLIVE",
+    # "THoriz": "nil",
+    # "ExitPref": "nil"
+    # }
+
+    # "TradeType": "LONG_STOCK",
+    # "TradeType": "LONG_CALLS",
+    # "TradeType": "LONG_PUTS",
+    # "TradeType": "CREDIT_CALL_SPREAD",
+    # "TradeType": "CREDIT_PUT_SPREAD",
+
+
     prettyPrintJSON(jsonINIrecord)
+    print("] Ex3cuteTrade(...) ", jsonINIrecord["Action"], jsonINIrecord["Cmd_"], jsonINIrecord["Range"], jsonINIrecord["Value"], jsonINIrecord["TradeType"],  jsonINIrecord["Live"] )
+    # "TradeType": "LONG_PUTS",
+    tradetypestr = jsonINIrecord["TradeType"]
+    livestr0=jsonINIrecord["Live"]
+    if(livestr0=="LIVE"):
+        print("] Prepping: ", tradetypestr)
+
     print("\n] jsonTRADESrecord=")
     prettyPrintJSON(jsonTRADESrecord)
 
@@ -579,7 +610,8 @@ def ExpressTrade(jsonrecord):
     if result:
         print(f"The JSON record for key '{key_to_find}' with value '{value_to_find}': {json.dumps(result, indent=2)}")
         print("] FOUND ",value_to_find, " in INI file:", result["Action"], value_to_find, result["Range"], result["Value"], result["TradeType"],  result["Live"] )
-        
+                         # ] FOUND  NVDA  in INI file: SELL NVDA ABOVE R1 LONG_PUTS NOTLIVE
+
         # From live trade incoming
         trytype1 = trtypestr.upper()
         abstr1 = abstr.upper()
@@ -590,32 +622,18 @@ def ExpressTrade(jsonrecord):
         abstr2    = result["Range"].upper()
         pivstr2=   result["Value"].upper()
 
+
+        # if SELL    == SELL             ABOVE == ABOVE  and     R1 =  R1
         # if BUY     == BUY              BELOW == BELOW  and     S1 =  S1
         if( trytype1== trytype2  and   abstr1 == abstr2   and   pivstr1 == pivstr2):
             print("]  *#*#*#*#*#!!!!!   WE FOUND AN INI==Trade MATCH, sending trade to ExecuteTrade( ",  symstr," , jsonINI, jsonTrade)" )# result , jsonrecord ," )")
+        #   ExecuteTrade( symstr, resultINI , jsonrecord)
             ExecuteTrade( symstr, result , jsonrecord)
         # ] FOUND  VXX  in INI file: BUY VXX BELOW S1 CREDIT_PUT_SPREAD
 
             # ] FOUND  NVDA  in INI file: SELL NVDA ABOVE R1 LONG_PUTS NOTLIVE
             # ]  *#*#*#*#*#!!!!!   WE FOUND AN INI==Trade MATCH, sending trade to ExecuteTrade(  NVDA  , jsonINI, jsonTrade)
             # ] READY TO EXECUTE TRADE:  NVDA 
-
-            # INIrec=
-            
-            # {
-            # "Cmd_": "NVDA",
-            # "Action": "SELL",
-            # "Range": "ABOVE",
-            # "Value": "R1",
-            # "TradeType": "LONG_PUTS",
-            # "Aux": "COUNT",
-            # "SigCnt": "6",
-            # "QtyShrCons": "1",
-            # "NumStrikes": "2",
-            # "Live": "NOTLIVE",
-            # "THoriz": "nil",
-            # "ExitPref": "nil"
-            # }
 
             # ] jsonTRADESrecord=
             
@@ -677,22 +695,7 @@ def ExpressTrade(jsonrecord):
         # "ExitPref": "nil"
         # }
         # ] FOUND  VXX  in INI file: BUY VXX BELOW S1 CREDIT_PUT_SPREAD
-
-        # NOW check against INI FILE HERE for validation...
-        # The JSON record for key 'Cmd_' with value 'AMZN': {
-        # "Cmd_": "AMZN",
-        # "Action": "BUY",
-        # "Range": "BELOW",
-        # "Value": "S1",
-        # "TradeType": "LONG_CALLS",
-        # "Aux": "COUNT",
-        # "SigCnt": "7",
-        # "QtyShrCons": "3",
-        # "NumStrikes": "1",
-        # "Live": "LIVE",
-        # "THoriz": "nil",
-        # "ExitPref": "nil"
-        # }
+ 
  
 
     else:
@@ -702,7 +705,8 @@ def ExpressTrade(jsonrecord):
 
 
 
-    prettyPrintJSON(jsonrecord)
+    if(False):
+        prettyPrintJSON(jsonrecord)
 
 
     print("]LEAVING EXPRESS TRADE...") 
@@ -1673,7 +1677,8 @@ print(gtstr)
 print("\n\n]  Reading INI FILE ...")
 fname="trades_ini.txt"
 arrINIcsvfile = ReadFile(fname)
-print(arrINIcsvfile)
+if(False):
+    print(arrINIcsvfile)
 print_colored("] Finished reading: " +fname+ " for " , colorYellow )
 print("\n\n\n")
  
@@ -1698,6 +1703,7 @@ print("] AFTER R3freshINICmd_Variable()...")
 print("] st0ckINIarr[]==", stockINIarr)
 print("\n\nPress ANY KEY to see POST fn json ")
 input007 = input()
+clearScreen()
 
 print(json.dumps(CMD_Array, indent=4))
 
