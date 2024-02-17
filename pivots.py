@@ -42,10 +42,16 @@
 ################################################################
 # yfinance reference:  https://pypi.org/project/yfinance/
 
+
+print("\n\n] *** Importing python modules; this may take a moment on the first run...")
 import yfinance as yf
+print("]  Still importing more Python modules...")
+
 import pandas as pd
 import calendar
 #from datetime import date, timedelta
+print("]  Still importing ......")
+
 import os
 import random
 

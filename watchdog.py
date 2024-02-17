@@ -200,6 +200,8 @@ def printWatchDogWelcome():
 printWatchDogWelcome()
 
 print("\n\n] *** Importing python modules; this may take a moment on the first run...")
+# print("]  Still importing more Python modules...")
+# print("]  Still importing ......")
 
 import requests
 import csv
@@ -561,8 +563,10 @@ def ExpressTrade(jsonrecord):
     print("]  Day Pivots:",  daypivstr)
     print("] Week Pivots:",  wkpivstr)
 
-    print("]  jsonINImaster[]==" , jsonINImaster )  #, Cmd_,Action,Range,Value,)
-    # print("]  CMD_Array[]==" , CMD_Array )  #, Cmd_,Action,Range,Value,)
+    tf9=False
+    if(tf9):
+        print("]  jsonINImaster[]==" , jsonINImaster )  #, Cmd_,Action,Range,Value,)
+        # print("]  CMD_Array[]==" , CMD_Array )  #, Cmd_,Action,Range,Value,)
 
 
     print("\nNOW check against INI FILE HERE for validation...")
@@ -1590,6 +1594,9 @@ def openUrls(my_items0):
         h+=1
     
 
+def clearScreen():
+    # clear screen
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 ################################################################ END OF def FUNCTIONS():
     
@@ -2122,12 +2129,8 @@ while keepLooping > 0:
 
 
 
-
-
     print("\n")
     print("] TASK***  IF INI FILE HAS CHANGED IN FILESIZE, Get INI FILE ...")
-
-
 
 
 
