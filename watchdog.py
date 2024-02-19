@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "9.11"
+versionStr =                    "9.21"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -637,6 +637,9 @@ def jsonRecordFind(jsonarr, keystr0, valuestr0):
     # "ExitPref": "nil"
     # }
 
+def prettyPrintJSON2( jsonrecord, str):
+    print("\n] ",str )
+    prettyPrintJSON(jsonrecord)
 
 def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
     print("] READY TO EXECUTE TRADE: ", symstr, "\n\n")
@@ -656,12 +659,16 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
 
         if(tradetypestr=="LONG_STOCK"):
             print( jsonINIrecord["Action"],":  ", tradetypestr , jsonINIrecord["QtyShrCons"],"shares of", jsonINIrecord["Cmd_"]," at Market (",jsonTRADESrecord["tradePrice"],").  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
+            prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
+            prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
             pass
 
 
 
         if(tradetypestr=="SHORT_STOCK"):
             print( jsonINIrecord["Action"],":  ", tradetypestr , jsonINIrecord["QtyShrCons"],"shares of", jsonINIrecord["Cmd_"]," at Market (",jsonTRADESrecord["tradePrice"],").  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
+            prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
+            prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
             pass
 
 
@@ -680,7 +687,8 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
             expDate = dateAdder(todaysDate0, thorz, True)
 
             print(  jsonINIrecord["Action"],":  ", tradetypestr ,jsonINIrecord["QtyShrCons"],"contracts of", jsonINIrecord["Cmd_"]," CALLS  at "+strikestr0+" expiring "+expDate+", with stock at ",jsonTRADESrecord["tradePrice"],"\n  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
-
+            prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
+            prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
             pass
 
 
@@ -700,6 +708,9 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
 
             print( jsonINIrecord["Action"],":  ", tradetypestr , jsonINIrecord["QtyShrCons"],"contracts of", jsonINIrecord["Cmd_"]," PUTS  at "+strikestr0+" expiring "+expDate+", with stock at ",jsonTRADESrecord["tradePrice"],"\n  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
 
+            prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
+            prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
+
             pass
 
 
@@ -711,8 +722,8 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
             pass
 
 
-    print("\n] jsonTRADESrecord=")
-    prettyPrintJSON(jsonTRADESrecord)
+    # print("\n] jsonTRADESrecord=")
+    # prettyPrintJSON(jsonTRADESrecord)
 
     print("*** EX3CUTE Trade HERE ****")
 
