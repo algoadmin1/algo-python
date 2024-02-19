@@ -9,10 +9,11 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "6.15";
+                                                      $vers = "7.354";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
+$happy2="jb";
 $CurrencyStr="$";
 $todaysdate = date('Y-m-d');
 $filename0 = "trades_ini.txt"; 
@@ -23,6 +24,8 @@ $filename0 = "trades_ini.txt";
 // Get the values from the URL parameters
 $udate0 = isset($_GET['d']) ? $_GET['d'] : $todaysdate ;
 $utime0 = isset($_GET['t']) ? $_GET['t'] : '2500';
+$uuser0 = isset($_GET['u']) ? $_GET['u'] : 'baduser';
+
 
 //$udate0 = isset($_GET['date']) ? $_GET['date'] : $todaysdate ;
 //$utime0 = isset($_GET['time']) ? $_GET['time'] : '2600';
@@ -54,6 +57,9 @@ $tradeCsvHeadersALL=  $tradeCsvHeaders0. $tradeCsvHeaders2;
 // ******************************************************************** INITAL VARS
 // from gettrades.py
 //
+
+if($uuser0=="j" ) $uuser0=$happy2;
+
 $currstr= $CurrencyStr;
 
 
@@ -82,7 +88,27 @@ $colorAqua  ="aqua";
 $colorGray  ="gray";
 
 
+if($uuser0!=$happy2){
+    echo "] Invalid user.  Authentication through payment portal needed for further access.<br />"; 
+    $linkAnnual = "https://buy.stripe.com/00g8zogLO286bSgaEM";
+    $linkMonthly = "https://buy.stripe.com/3cseXM0MQ9Ay6xWeV3";
 
+    $link0 = $linkAnnual;
+    $link1 = $linkMonthly;
+    $link2 = "https://algoinvestorr.com/products.pdf";
+
+    // echo '<p>Click on this <a href="https://algoinvestorr.com" target="_blank">link</a> for more information.</p>';
+    echo '<p>Click on this <a href="'. $link0 . '" target="_blank">link</a> to become a Gold Member.</p>';
+    echo "<br />";
+    echo '<p>Click <a href="'. $link1 . '" target="_blank">here</a> for a lower-cost solution.</p>';
+    echo "<br />";
+    echo '<p>Click <a href="'. $link2 . '" target="_blank">here</a> for all Algo Investor Products.</p>';
+
+    echo "<br />";
+
+    exit("Terminating php kernel.");
+
+}
 
 
 // ******************************************************************** Functions
@@ -1203,11 +1229,12 @@ $conn = null;
 $pstr9= "<br />******** CLOSING DB ACCESS HERE in $prgname *********<br />";
 if($msg0==1) echoColor($pstr9,"red");
 
-
+$tf66=0;
 if($rawtrades ){
 // if($rawtrades && $msg0==1){
         echoColor("]   RAWTRADES !!!!!   concat'd   *** rawtrades strings[] ==<br />","blue");
-    print_r($rawtrades);
+    if($tf66==1)    print_r($rawtrades);
+        else echo "]        rawtrad3s[] exist. Not printing for brevity.";
 }
 
 
