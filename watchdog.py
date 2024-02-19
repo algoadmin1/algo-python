@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "9.21"
+versionStr =                    "9.33"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -17,6 +17,7 @@ current_date_ny = datetime.datetime.now(new_york_timezone).date()
 
 useremail0= "roguequant1@gmail.com" 
 MaxShares =10
+# see dump.js for log file
 
 # colors 
 colorGreen ="32"
