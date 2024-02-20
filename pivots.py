@@ -56,8 +56,6 @@ print("]  Still importing ......")
 import os
 import random
 
-# import scipy as s
-
 defaultTicker = 'NVDA'
 defaultPeriod = 'Daily and Monthly'
 
@@ -69,8 +67,9 @@ g_Messages = []
 g_Messages.append("-----------  L E T ' S   G O !  -----------\n")
 g_Messages.append("------- Watch your position sizes! --------\n")
 g_Messages.append("---- D O N ' T   O V E R T R A D E ! ------\n")
-g_Messages.append("----- Trading plans specify intervals -----\n")
-g_Messages.append("--------  Wanna quit ? Enter 'q' ----------\n")
+g_Messages.append("--------  Wanna quit? Enter 'q' -----------\n")
+g_Messages.append("----- When in Doubt, Close it Out! --------\n")
+g_Messages.append("- D O   Y O U R   O W N   R E S E A R C H -\n")
 
 g_FirstTime = True
 
@@ -328,6 +327,8 @@ print("\n\tGood job! Have a Blest Day and thanks for choosing AlgoZ Pivotal.\n")
    Add 3 day Pivot average.   The golden goose !  consider graphics for "gold on the back", "carrying the gold" , or whatever the sayings are
 
    User could input interval as well idk prob overkill
+
+   MOVE This stuff to the README.md vs this code file
  
  Reference
  ---------
