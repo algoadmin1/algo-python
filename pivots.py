@@ -218,6 +218,9 @@ def PrintPivots(p:str, i:str):
 		print(priceData)
 		print("\n")
 
+	# TODO: determine if market is open, to decide if which row to grab (either 0 or 1)
+	#timeStamp = priceData.index[row]
+
 	numRows = len(priceData.index)
 
 	# note for the Pivots and S3->R3 levels we'll use CAPS for var names
@@ -257,11 +260,16 @@ def PrintPivots(p:str, i:str):
 	# for row in range(numRows):
 	# 	print(rowNames[row])
 
-	label = "Daily" if p == "1d" else "Monthly"
+	label = "Daily" if p == "5d" else "Monthly"
 
-	# We will only print one row. Figure out how to extract. Monthly will have last 3 mos,  middle row would be prior.
-	startIndex = numRows-1 if p == "1d" else numRows-2
-	endIndex = numRows-2 if p == "1d" else numRows-3
+	# We will only print one row. Figure out how to extract.
+	# Daily will be last row, if the market has already closed for day.
+	# Monthly will have last 3 mos,  middle row would be prior.
+	# startIndex = numRows-1 if p == "5d" else numRows-2
+	# endIndex = numRows-2 if p == "5d" else numRows-3
+
+	startIndex = numRows-2
+	endIndex = numRows-3
 	for row in range(startIndex, endIndex, -1):
 		timeStamp = priceData.index[row]
 		C = priceData.at[timeStamp,'Close']
@@ -279,6 +287,32 @@ def PrintPivots(p:str, i:str):
 		print("\t\tS1 ", S1[row])
 		print("\t\tS2 ", S2[row])
 		print("\t\tS3 ", S3[row], "\n")
+
+	# If invoked with daily pivots, And the Market is open, this function prints additional WIP Pivot
+	g_isMarketOpen = True
+	if (p == "5d" and g_isMarketOpen):
+		label = "WIP Pivot"
+		startIndex = numRows-1
+		endIndex = numRows-2
+		for row in range(startIndex, endIndex, -1):
+			timeStamp = priceData.index[row]
+			C = priceData.at[timeStamp,'Close']
+			lastPrice = f"{C:.2f}"
+			print("\n\t\t    ", ticker, label, "\t\t      ", lastPrice, "  ( last Price as of", timeStamp,")\n")
+
+			# truncate time stamp for Daily and bigger periods. It's a row label, like "2024-02-09 00:00:00-05:00" 
+			#if interval == "1d" or interval == "1m":
+			#	temp_string = rowNames[row].as_type(str)
+
+			print("\t\tR3 ", R3[row]) 
+			print("\t\tR2 ", R2[row])
+			print("\t\tR1 ", R1[row])
+			print("\t\tP  ",  P[row])
+			print("\t\tS1 ", S1[row])
+			print("\t\tS2 ", S2[row])
+			print("\t\tS3 ", S3[row], "\n")
+
+	# End of additional PIVOT print
 
 
 # this block is from ChatGPT I left vars as underscores on purpose.
@@ -342,9 +376,10 @@ while (True):
 	# Noobs, please note that Ticker() returns a panda dataframe.
 	g_dataFrame = yf.Ticker(ticker)
 
-	# print Daily Levels in a Blest manner
-	PrintPivots("1d", "1d")
 	# print Monthly
 	PrintPivots("3mo","1mo")
+
+	# Daily Pivots. The call below will print levels for today, WIP levels for tomorrow, and the 3D Pivot
+	PrintPivots("5d", "1d")
 
 print("\n\tGood job! Have a Blest Day and thanks for choosing AlgoZ Pivotal.\n")
