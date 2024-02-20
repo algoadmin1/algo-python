@@ -15,6 +15,8 @@ git log                                                   # shows the changelog 
 
 git push origin <branchname>                              # push my local branch <branchname> to the server (origin)
 
+git log -p -- filename									  # show file history, with patch info (ie change details)
+
 
 #############################################
 
