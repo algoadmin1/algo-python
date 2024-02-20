@@ -2,14 +2,15 @@
 # Displays the pivots for a given ticker
 # (c) 2024 by Level Blest LLC 
 
-# Psuedo Code (trying multiline comment):
-'''
-	Get ticker via textbox (MVP is User Voice2Text)
+''' Psuedo Code (trying multiline comment):
+
+	Get ticker via textbox; Goal is Voice2Text
 	Fetch Ticker data from YF
 	Display Simple, Big Button/Font interface
 	
-	reference:  
-	  https://www.babypips.com/tools/pivot-point-calculator
+	reference:
+		 yfinance:  https://pypi.org/project/yfinance/
+		Pivots UI:  https://www.babypips.com/tools/pivot-point-calculator
 '''
 
 # Different models vary in calculations
@@ -40,8 +41,6 @@
 # 	S3 = L - 2 x (H - P)
 
 ################################################################
-# yfinance reference:  https://pypi.org/project/yfinance/
-
 
 print("\n\n] *** Importing python modules; this may take a moment on the first run...")
 import yfinance as yf
@@ -233,12 +232,13 @@ def PrintPivots(p:str, i:str):
 
 	# we could store these levels in a [numLevels, numRows] array to handle different models.  Floor would have 7 would be [R3,R2,R1,P,S1,S2,S3]
 	# FIB_Levels = [[0 for c in range(numColumns)] for r in range(numRows)] 
-
+	lastPrice = -1.0
 	for row in range(numRows):
 		timeStamp = priceData.index[row]
 		H = priceData.at[timeStamp,'High']
 		L = priceData.at[timeStamp,'Low']
 		C = priceData.at[timeStamp,'Close']
+		lastPrice = f"{C:.2f}"
 		P[row] = (H + L + C) / 3
 		R1[row] = (2 * P[row]) - L
 		R2[row] = P[row] + H - L
@@ -258,13 +258,15 @@ def PrintPivots(p:str, i:str):
 	# 	print(rowNames[row])
 
 	label = "Daily" if p == "1d" else "Monthly"
-	print("\n\t\t    ", ticker, label, "\t\t      Date\n")
 
-	# figure out how to extract the correct row. monthly will have last 3 mos,  middle row would be prior.  There is prob a better way to do this..
+	# We will only print one row. Figure out how to extract. Monthly will have last 3 mos,  middle row would be prior.
 	startIndex = numRows-1 if p == "1d" else numRows-2
 	endIndex = numRows-2 if p == "1d" else numRows-3
 	for row in range(startIndex, endIndex, -1):
 		timeStamp = priceData.index[row]
+		C = priceData.at[timeStamp,'Close']
+		lastPrice = f"{C:.2f}"
+		print("\n\t\t    ", ticker, label, "\t\t      ", lastPrice, "  ( last Price as of", timeStamp,")\n")
 
 		# truncate time stamp for Daily and bigger periods. It's a row label, like "2024-02-09 00:00:00-05:00" 
 		#if interval == "1d" or interval == "1m":
@@ -273,7 +275,7 @@ def PrintPivots(p:str, i:str):
 		print("\t\tR3 ", R3[row]) 
 		print("\t\tR2 ", R2[row])
 		print("\t\tR1 ", R1[row])
-		print("\t\tP  ",  P[row], "\t\t", timeStamp)
+		print("\t\tP  ",  P[row])
 		print("\t\tS1 ", S1[row])
 		print("\t\tS2 ", S2[row])
 		print("\t\tS3 ", S3[row], "\n")
@@ -282,7 +284,7 @@ def PrintPivots(p:str, i:str):
 # this block is from ChatGPT I left vars as underscores on purpose.
 from datetime import datetime, timedelta
 
-def last_trading_date_of_prior_month(current_date):
+def GetPriorMonthLastTradingDate(current_date):
     # Find the last day of the prior month
     first_day_of_current_month = datetime(current_date.year, current_date.month, 1)
     last_day_of_prior_month = first_day_of_current_month - timedelta(days=1)
@@ -293,6 +295,23 @@ def last_trading_date_of_prior_month(current_date):
     
     return last_day_of_prior_month.date()
 
+import pandas_market_calendars as mcal
+
+def get_last_trading_date():
+    # Define the exchange calendar (e.g., 'XNYS' for New York Stock Exchange)
+    exchange = mcal.get_calendar('XNYS')
+
+    # Get today's date
+    today = datetime.today().date()
+
+    # Adjust the date to the previous business day (last trading date)
+    last_trading_date = exchange.valid_days(start_date=today - timedelta(days=7), end_date=today)[-1]
+
+    return last_trading_date.date()
+
+# Example usage
+#last_trading_date = get_last_trading_date()
+#print("Last trading date before today:", last_trading_date)
 
 #########################
 # start of main program #
@@ -303,9 +322,10 @@ os.system('cls' if os.name == 'nt' else 'clear')
 
 # Show useful dates
 todayDate = datetime.now().date()
-lastMonthDate = last_trading_date_of_prior_month(todayDate)
-
+lastMonthDate = GetPriorMonthLastTradingDate(todayDate)
+lastTradingDate = get_last_trading_date()
 print("Today is ", todayDate, "\t\t\tPrior month ended:", lastMonthDate)
+print("Prior is ", lastTradingDate, "  ... Match!! " if (todayDate == lastTradingDate) else "")
 
 HelloCustomer()
 

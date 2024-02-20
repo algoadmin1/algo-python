@@ -4,6 +4,10 @@ This repo has python code for grabbing yahoo finance data, chart graphing, a mon
 
 Note to new team members: No spaghetti code! We need to Code Clean and execute our vision of helping Clients Trade Smarter, with AlgoZ.ai
 
+## Dependencies (stuff we need to import)
+	pip install yfinance
+	pip install pandas_market_calendars
+
 ##########################################
 ## Common Git Commands
 
@@ -99,4 +103,4 @@ IndexError: index -1 is out of bounds for axis 0 with size 0
 
 # Pivots.py - MAC Bug
  Example output [JB please fill in if I don't get to it first]
- 
+
