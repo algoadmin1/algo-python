@@ -59,19 +59,21 @@ import random
 defaultTicker = 'NVDA'
 defaultPeriod = 'Daily and Monthly'
 
+# GLOBALS area.  If we must use globals, please use "g_" as a prefix
 # set this True to print all price data rows from scrapes
 g_debugHistory = False
 
-# let's have some fun
-g_Messages = []
-g_Messages.append("-----------  L E T ' S   G O !  -----------\n")
-g_Messages.append("------- Watch your position sizes! --------\n")
-g_Messages.append("---- D O N ' T   O V E R T R A D E ! ------\n")
-g_Messages.append("--------  Wanna quit? Enter 'q' -----------\n")
-g_Messages.append("----- When in Doubt, Close it Out! --------\n")
-g_Messages.append("- D O   Y O U R   O W N   R E S E A R C H -\n")
+# let's have some fun w/ user facing messages
+g_TipMessages = []
+g_TipMessages.append("-----------  L E T ' S   G O !  -----------\n")
+g_TipMessages.append("------- Watch your position sizes! --------\n")
+g_TipMessages.append("---- D O N ' T   O V E R T R A D E ! ------\n")
+g_TipMessages.append("--------  Wanna quit? Enter 'q' -----------\n")
+g_TipMessages.append("----- When in Doubt, Close it Out! --------\n")
+g_TipMessages.append("- D O   Y O U R   O W N   R E S E A R C H -\n")
 
 g_FirstTime = True
+g_LastMessageIndex = -1
 
 
 # colors 
@@ -111,15 +113,22 @@ def is_valid_ticker(ticker_symbol):
             # Re-raise the exception if it's a different ValueError
             raise e
 
-def GetTicker():
+def ShowTipMessage():
 	global g_FirstTime
-	if g_FirstTime:
-		msg = g_Messages[0]
-	else:
-		msg = random.choice(g_Messages)
+	global g_LastMessageIndex
+	arraySize = len(g_TipMessages)
+	msgIndex = 0 if g_FirstTime else random.choice(range(0,arraySize))
+	if (msgIndex == g_LastMessageIndex):
+		msgIndex += 1
+		msgIndex = msgIndex % arraySize
 	g_FirstTime = False
+	msg = g_TipMessages[msgIndex]
+	g_LastMessageIndex = msgIndex
 	print("\n\t", msg)
 
+def GetTicker():
+
+	ShowTipMessage()
 	val = defaultTicker
 	choice = input("\tEnter Ticker: ")
 	if(choice != ""):
@@ -166,18 +175,19 @@ def printWatchDogWelcome():
     # dstr7a= printTodaysDate()
 
     c=2
-    dog0="                -^_"
+    dog0="\t\t                -^_"
     print_colored_rnd1(dog0,c)
-    dog1="   / \\\\__     o''|\\_____/)"
+    dog1="\t\t   / \\\\__     o''|\\_____/)"
     print_colored_rnd1(dog1,c)
-    dog2="  (    @\\___    \\_/|_)     )"
+    dog2="\t\t  (    @\\___    \\_/|_)     )"
     print_colored_rnd1(dog2,c)
-    dog3="  /         O      \\  __  /"
+    dog3="\t\t  /         O      \\  __  /"
     print_colored_rnd1(dog3,c)
-    dog4=" /   (_____/       (_/ (_/"
+    dog4="\t\t /   (_____/       (_/ (_/"
     print_colored_rnd1(dog4,c)
-    dog5="/_____/   U    "
+    dog5="\t\t/_____/   U    "
     print_colored_rnd1(dog5,c)
+    print("\n")
 
 
 def HelloCustomer():
@@ -187,7 +197,7 @@ def HelloCustomer():
 	print("\t^----------------------------------------------^\n")
 	printWatchDogWelcome()
 
-	print("\t     (Defaults: ", defaultTicker, ",", defaultPeriod, ")")
+	print("\t    ( Defaults: ", defaultTicker, ",", defaultPeriod, ")")
 
 def PrintPivots(p:str, i:str):
 	
