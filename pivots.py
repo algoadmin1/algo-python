@@ -47,7 +47,8 @@ print("\n\n] *** Importing python modules; this may take a moment on the first r
 import yfinance as yf
 print("]  Still importing more Python modules...")
 
-import pandas as pd
+#wcb commenting out panda import, appears unneeded. Prob added during initial testing
+#import pandas as pd
 import calendar
 #from datetime import date, timedelta
 print("]  Still importing ......")
