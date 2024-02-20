@@ -124,7 +124,7 @@ def ShowTipMessage():
 	g_FirstTime = False
 	msg = g_TipMessages[msgIndex]
 	g_LastMessageIndex = msgIndex
-	print("\n\t", msg)
+	print("\n\t\t\t", msg)
 
 def GetTicker():
 
