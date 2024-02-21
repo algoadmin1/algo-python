@@ -27,6 +27,7 @@ git push origin <branchname>						# push my local branch <branchname> to the ser
 
 git log -p -- filename								# show history of specific file, including patch info (ie change details)
 
+git config -l									# show git configuration like user name,  email
 
 #############################################
 
