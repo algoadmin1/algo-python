@@ -49,6 +49,9 @@ print("]  Still importing more Python modules...")
 #wcb commenting out panda import, appears unneeded. Prob added during initial testing
 #import pandas as pd
 import calendar
+import pandas_market_calendars as mcal
+from datetime import datetime, timedelta
+
 #from datetime import date, timedelta
 print("]  Still importing ......")
 
@@ -56,20 +59,26 @@ import os
 import random
 
 defaultTicker = 'NVDA'
-defaultPeriod = 'Daily and Monthly'
 
 # GLOBALS area.  If we must use globals, please use "g_" as a prefix
 # set this True to print all price data rows from scrapes
 g_debugHistory = False
 
+# clean up these globals, for market status
+g_isTradingOverForToday = True
+g_isMarketOpen = False
+
 # let's have some fun w/ user facing messages
 g_TipMessages = []
-g_TipMessages.append("-----------  L E T ' S   G O !  -----------\n")
-g_TipMessages.append("------- Watch your position sizes! --------\n")
-g_TipMessages.append("---- D O N ' T   O V E R T R A D E ! ------\n")
-g_TipMessages.append("--------  Wanna quit? Enter 'q' -----------\n")
-g_TipMessages.append("----- When in Doubt, Close it Out! --------\n")
-g_TipMessages.append("- D O   Y O U R   O W N   R E S E A R C H -\n")
+g_TipMessages.append("|               L E T ' S   G O !              |")
+g_TipMessages.append("|           TRIM those POSITIONS !!            |")
+g_TipMessages.append("|        D O N ' T   O V E R T R A D E         |")
+g_TipMessages.append("|             Wanna quit? Enter 'q'            |")
+g_TipMessages.append("|         When in Doubt, CLOSE it OUT!         |")
+g_TipMessages.append("|    D O   Y O U R   O W N   R E S E A R C H   |")
+g_TipMessages.append("|        Don't go LONG on a DOWN day !         |")
+g_TipMessages.append("|       S T A Y   L E V E L - H E A D E D      |")
+g_TipMessages.append("|          Check the 1-month T-bill            |")
 
 g_FirstTime = True
 g_LastMessageIndex = -1
@@ -123,7 +132,10 @@ def ShowTipMessage():
 	g_FirstTime = False
 	msg = g_TipMessages[msgIndex]
 	g_LastMessageIndex = msgIndex
-	print("\n\t\t\t", msg)
+	#g_TipMessages.app"|               L E T ' S   G O !              |\n")
+	output = "\n\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\t\t\t" + msg
+	print (output)
+	print (    "\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
 
 def GetTicker():
 
@@ -146,13 +158,12 @@ def IsPeriodValid(period:str):
 	return False
 
 def GetInterval():
-	val = defaultPeriod
+	val = "1d"
 	choice = input("\tEnter period: ")
 	if (choice != ""):
 		if IsPeriodValid(choice):
 			val = choice
 	return val
-
 
 # def printTodaysDate():
 #     dstr7 = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
@@ -196,10 +207,12 @@ def HelloCustomer():
 	print("\t^----------------------------------------------^\n")
 	printWatchDogWelcome()
 
-	print("\t    ( Defaults: ", defaultTicker, ",", defaultPeriod, ")")
+	#print("\t\t( Default: ", defaultTicker, ")\n")
 
 def PrintPivots(p:str, i:str):
-	
+	global g_isTradingOverForToday
+	global g_isMarketOpen
+
 	# do the scrape
 	try:
 		priceData = g_dataFrame.history(period=p, interval=i)
@@ -250,6 +263,15 @@ def PrintPivots(p:str, i:str):
 		S2[row] = P[row] - H + L
 		S3[row] = L - 2 * (H - P[row])
 
+	# Calc the 3d pivot
+	threeDayPivot = 0
+	if (p=='5d'):
+		startIndex = numRows -1 if g_isTradingOverForToday else numRows - 2
+		endIndex = startIndex - 3
+		for row in range(startIndex, endIndex, -1):
+			threeDayPivot += P[row]
+		threeDayPivot /= 3 
+
 	#TODO need an array of row names as strings - why is this so hard
 	# rowNames = []
 	# for rowName in priceData.index:
@@ -265,32 +287,36 @@ def PrintPivots(p:str, i:str):
 	# We will only print one row. Figure out how to extract.
 	# Daily will be last row, if the market has already closed for day.
 	# Monthly will have last 3 mos,  middle row would be prior.
-	# startIndex = numRows-1 if p == "5d" else numRows-2
-	# endIndex = numRows-2 if p == "5d" else numRows-3
 
 	startIndex = numRows-2
 	endIndex = numRows-3
-	for row in range(startIndex, endIndex, -1):
+	if (g_isTradingOverForToday and p == '5d'):
+		startIndex = numRows - 1
+
+	for row in range(startIndex, startIndex-1, -1):
 		timeStamp = priceData.index[row]
 		C = priceData.at[timeStamp,'Close']
 		lastPrice = f"{C:.2f}"
-		print("\n\t\t    ", ticker, label, "\t\t      ", lastPrice, "  ( last Price as of", timeStamp,")\n")
+		print("\n\t\t    ", ticker, label, "\t\t      ", lastPrice, "\tas of", timeStamp,"\n")
 
 		# truncate time stamp for Daily and bigger periods. It's a row label, like "2024-02-09 00:00:00-05:00" 
 		#if interval == "1d" or interval == "1m":
 		#	temp_string = rowNames[row].as_type(str)
 
+		# print 3d pivot if needed
+		msg = "\t\t\tP3: " + f"{threeDayPivot:.2f}"
+		if (p != "5d"):
+			msg = " "
 		print("\t\tR3 ", R3[row]) 
 		print("\t\tR2 ", R2[row])
 		print("\t\tR1 ", R1[row])
-		print("\t\tP  ",  P[row])
+		print("\t\tP  ",  P[row], msg)
 		print("\t\tS1 ", S1[row])
 		print("\t\tS2 ", S2[row])
 		print("\t\tS3 ", S3[row], "\n")
 
 	# If invoked with daily pivots, And the Market is open, this function prints additional WIP Pivot
-	g_isMarketOpen = True
-	if (p == "5d" and g_isMarketOpen):
+	if (p == "5d" and g_isMarketOpen == True):
 		label = "WIP Pivot"
 		startIndex = numRows-1
 		endIndex = numRows-2
@@ -316,7 +342,6 @@ def PrintPivots(p:str, i:str):
 
 
 # this block is from ChatGPT I left vars as underscores on purpose.
-from datetime import datetime, timedelta
 
 def GetPriorMonthLastTradingDate(current_date):
     # Find the last day of the prior month
@@ -328,8 +353,6 @@ def GetPriorMonthLastTradingDate(current_date):
         last_day_of_prior_month -= timedelta(days=1)
     
     return last_day_of_prior_month.date()
-
-import pandas_market_calendars as mcal
 
 def get_last_trading_date():
     # Define the exchange calendar (e.g., 'XNYS' for New York Stock Exchange)
