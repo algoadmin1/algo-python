@@ -403,7 +403,7 @@ HelloCustomer()
 while (True):
 
 	ticker = GetTicker()
-	if (ticker == "q"):
+	if (ticker == "q" or ticker == "Q"):
 		break
 
 	if (not IsTickerValid(ticker)):
