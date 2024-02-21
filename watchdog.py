@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "9.33"
+versionStr =                    "9.54"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -409,8 +409,8 @@ def GetTrades(url):
     return arrTrades
 
 # Example usage:
-urlbase = 'https://algoinvestorr.com/trades/gettrades.php?d='
-url0    = 'https://algoinvestorr.com/trades/gettrades.php'
+urlbase = 'https://algoinvestorr.com/trades/gettrades.php?u=j&d='
+url0    = 'https://algoinvestorr.com/trades/gettrades.php?u=j'
 
 #
 #################################################                   from gettrades.py   
