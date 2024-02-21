@@ -44,6 +44,12 @@
 
 print("\n\n] *** Importing python modules; this may take a moment on the first run...")
 import yfinance as yf
+
+# this warning code is for MAC, to work around a deprecation warning.
+import warnings
+# Suppress FutureWarning related to TimedeltaIndex
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 print("]  Still importing more Python modules...")
 
 #wcb commenting out panda import, appears unneeded. Prob added during initial testing

@@ -10,6 +10,12 @@ Testing a one line change from mac, using willbotti@gmail.com GIT vs algoadmin1
 	pip install yfinance
 	pip install pandas_market_calendars
 
+# On MAC, to fix Deprecation Warninig "yfinance/utils.py:775: FutureWarning: The 'unit' keyword i"
+  tried: 
+    $ pip3 install --upgrade yfinance 
+
+    this didn't work, so instead we'll suppress deprecation warnings in the code
+
 ##########################################
 ## Common Git Commands
 
