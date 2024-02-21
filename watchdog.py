@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "9.33"
+versionStr =                    "9.75"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -650,7 +650,7 @@ def prettyPrintJSON2( jsonrecord, str):
 
 ############################################################
 #
-#      to do:
+#      To do:
 #
 #           check LIVE=1
 #           check bar > 15min
