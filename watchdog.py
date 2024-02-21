@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "9.54"
+versionStr =                    "9.75"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -647,6 +647,29 @@ def prettyPrintJSON2( jsonrecord, str):
     print("\n] ",str )
     prettyPrintJSON(jsonrecord)
 
+
+############################################################
+#
+#      To do:
+#
+#           check LIVE=1
+#           check bar > 15min
+#           check NumTradesToday < Max
+#           check get .tradesToday dateTime==todayNow from Database.tradeEntriesToday
+#           check .position Table if trade rawID is placed
+#                 IF yes, update .position Table 
+#           check IF order (rhood)Filled and position exists
+#                 IF yes, update .position Table , update TradeEntriesToday
+#
+##          IF no position to take, check Live positions 
+#
+#
+# position table
+#       id, rawId ,sym,buySell, cond, qty, price, option, strike, expdate, basis, status, dateTimeEntry, dateTimeExit, tHorizDays, 
+#
+# tradeEntriesToday
+#       id, date, time, sym , qty, positionID, option
+#
 def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
     print("] READY TO EXECUTE TRADE: ", symstr, "\n\n")
 
