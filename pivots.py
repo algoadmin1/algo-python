@@ -2,14 +2,15 @@
 # Displays the pivots for a given ticker
 # (c) 2024 by Level Blest LLC 
 
-# Psuedo Code (trying multiline comment):
-'''
-	Get ticker via textbox (MVP is User Voice2Text)
+''' Psuedo Code (trying multiline comment):
+
+	Get ticker via textbox; Goal is Voice2Text
 	Fetch Ticker data from YF
 	Display Simple, Big Button/Font interface
 	
-	reference:  
-	  https://www.babypips.com/tools/pivot-point-calculator
+	reference:
+		 yfinance:  https://pypi.org/project/yfinance/
+		Pivots UI:  https://www.babypips.com/tools/pivot-point-calculator
 '''
 
 # Different models vary in calculations
@@ -40,38 +41,53 @@
 # 	S3 = L - 2 x (H - P)
 
 ################################################################
-# yfinance reference:  https://pypi.org/project/yfinance/
-
 
 print("\n\n] *** Importing python modules; this may take a moment on the first run...")
 import yfinance as yf
+
+# this warning code is for MAC, to work around a deprecation warning.
+import warnings
+# Suppress FutureWarning related to TimedeltaIndex
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 print("]  Still importing more Python modules...")
 
-import pandas as pd
+#wcb commenting out panda import, appears unneeded. Prob added during initial testing
+#import pandas as pd
 import calendar
+import pandas_market_calendars as mcal
+from datetime import datetime, timedelta
+
 #from datetime import date, timedelta
 print("]  Still importing ......")
 
 import os
 import random
 
-# import scipy as s
-
 defaultTicker = 'NVDA'
-defaultPeriod = 'Daily and Monthly'
 
+# GLOBALS area.  If we must use globals, please use "g_" as a prefix
 # set this True to print all price data rows from scrapes
 g_debugHistory = False
 
-# let's have some fun
-g_Messages = []
-g_Messages.append("-----------  L E T ' S   G O !  -----------\n")
-g_Messages.append("------- Watch your position sizes! --------\n")
-g_Messages.append("---- D O N ' T   O V E R T R A D E ! ------\n")
-g_Messages.append("----- Trading plans specify intervals -----\n")
-g_Messages.append("--------  Wanna quit ? Enter 'q' ----------\n")
+# clean up these globals, for market status
+g_isTradingOverForToday = True
+g_isMarketOpen = False
+
+# let's have some fun w/ user facing messages
+g_TipMessages = []
+g_TipMessages.append("|               L E T ' S   G O !              |")
+g_TipMessages.append("|           TRIM those POSITIONS !!            |")
+g_TipMessages.append("|        D O N ' T   O V E R T R A D E         |")
+g_TipMessages.append("|             Wanna quit? Enter 'q'            |")
+g_TipMessages.append("|         When in Doubt, CLOSE it OUT!         |")
+g_TipMessages.append("|    D O   Y O U R   O W N   R E S E A R C H   |")
+g_TipMessages.append("|        Don't go LONG on a DOWN day !         |")
+g_TipMessages.append("|       S T A Y   L E V E L - H E A D E D      |")
+g_TipMessages.append("|          Check the 1-month T-bill            |")
 
 g_FirstTime = True
+g_LastMessageIndex = -1
 
 
 # colors 
@@ -111,15 +127,25 @@ def is_valid_ticker(ticker_symbol):
             # Re-raise the exception if it's a different ValueError
             raise e
 
-def GetTicker():
+def ShowTipMessage():
 	global g_FirstTime
-	if g_FirstTime:
-		msg = g_Messages[0]
-	else:
-		msg = random.choice(g_Messages)
+	global g_LastMessageIndex
+	arraySize = len(g_TipMessages)
+	msgIndex = 0 if g_FirstTime else random.choice(range(0,arraySize))
+	if (msgIndex == g_LastMessageIndex):
+		msgIndex += 1
+		msgIndex = msgIndex % arraySize
 	g_FirstTime = False
-	print("\n\t", msg)
+	msg = g_TipMessages[msgIndex]
+	g_LastMessageIndex = msgIndex
+	#g_TipMessages.app"|               L E T ' S   G O !              |\n")
+	output = "\n\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\t\t\t" + msg
+	print (output)
+	print (    "\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
 
+def GetTicker():
+
+	ShowTipMessage()
 	val = defaultTicker
 	choice = input("\tEnter Ticker: ")
 	if(choice != ""):
@@ -138,13 +164,12 @@ def IsPeriodValid(period:str):
 	return False
 
 def GetInterval():
-	val = defaultPeriod
+	val = "1d"
 	choice = input("\tEnter period: ")
 	if (choice != ""):
 		if IsPeriodValid(choice):
 			val = choice
 	return val
-
 
 # def printTodaysDate():
 #     dstr7 = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
@@ -166,18 +191,19 @@ def printWatchDogWelcome():
     # dstr7a= printTodaysDate()
 
     c=2
-    dog0="                -^_"
+    dog0="\t\t                -^_"
     print_colored_rnd1(dog0,c)
-    dog1="   / \\\\__     o''|\\_____/)"
+    dog1="\t\t   / \\\\__     o''|\\_____/)"
     print_colored_rnd1(dog1,c)
-    dog2="  (    @\\___    \\_/|_)     )"
+    dog2="\t\t  (    @\\___    \\_/|_)     )"
     print_colored_rnd1(dog2,c)
-    dog3="  /         O      \\  __  /"
+    dog3="\t\t  /         O      \\  __  /"
     print_colored_rnd1(dog3,c)
-    dog4=" /   (_____/       (_/ (_/"
+    dog4="\t\t /   (_____/       (_/ (_/"
     print_colored_rnd1(dog4,c)
-    dog5="/_____/   U    "
+    dog5="\t\t/_____/   U    "
     print_colored_rnd1(dog5,c)
+    print("\n")
 
 
 def HelloCustomer():
@@ -187,10 +213,12 @@ def HelloCustomer():
 	print("\t^----------------------------------------------^\n")
 	printWatchDogWelcome()
 
-	print("\t     (Defaults: ", defaultTicker, ",", defaultPeriod, ")")
+	#print("\t\t( Default: ", defaultTicker, ")\n")
 
 def PrintPivots(p:str, i:str):
-	
+	global g_isTradingOverForToday
+	global g_isMarketOpen
+
 	# do the scrape
 	try:
 		priceData = g_dataFrame.history(period=p, interval=i)
@@ -209,6 +237,9 @@ def PrintPivots(p:str, i:str):
 		print(priceData)
 		print("\n")
 
+	# TODO: determine if market is open, to decide if which row to grab (either 0 or 1)
+	#timeStamp = priceData.index[row]
+
 	numRows = len(priceData.index)
 
 	# note for the Pivots and S3->R3 levels we'll use CAPS for var names
@@ -223,12 +254,13 @@ def PrintPivots(p:str, i:str):
 
 	# we could store these levels in a [numLevels, numRows] array to handle different models.  Floor would have 7 would be [R3,R2,R1,P,S1,S2,S3]
 	# FIB_Levels = [[0 for c in range(numColumns)] for r in range(numRows)] 
-
+	lastPrice = -1.0
 	for row in range(numRows):
 		timeStamp = priceData.index[row]
 		H = priceData.at[timeStamp,'High']
 		L = priceData.at[timeStamp,'Low']
 		C = priceData.at[timeStamp,'Close']
+		lastPrice = f"{C:.2f}"
 		P[row] = (H + L + C) / 3
 		R1[row] = (2 * P[row]) - L
 		R2[row] = P[row] + H - L
@@ -236,6 +268,15 @@ def PrintPivots(p:str, i:str):
 		S1[row] = (2 * P[row]) - H
 		S2[row] = P[row] - H + L
 		S3[row] = L - 2 * (H - P[row])
+
+	# Calc the 3d pivot
+	threeDayPivot = 0
+	if (p=='5d'):
+		startIndex = numRows -1 if g_isTradingOverForToday else numRows - 2
+		endIndex = startIndex - 3
+		for row in range(startIndex, endIndex, -1):
+			threeDayPivot += P[row]
+		threeDayPivot /= 3 
 
 	#TODO need an array of row names as strings - why is this so hard
 	# rowNames = []
@@ -247,32 +288,68 @@ def PrintPivots(p:str, i:str):
 	# for row in range(numRows):
 	# 	print(rowNames[row])
 
-	label = "Daily" if p == "1d" else "Monthly"
-	print("\n\t\t    ", ticker, label, "\t\t      Date\n")
+	label = "Daily" if p == "5d" else "Monthly"
 
-	# figure out how to extract the correct row. monthly will have last 3 mos,  middle row would be prior.  There is prob a better way to do this..
-	startIndex = numRows-1 if p == "1d" else numRows-2
-	endIndex = numRows-2 if p == "1d" else numRows-3
-	for row in range(startIndex, endIndex, -1):
+	# We will only print one row. Figure out how to extract.
+	# Daily will be last row, if the market has already closed for day.
+	# Monthly will have last 3 mos,  middle row would be prior.
+
+	startIndex = numRows-2
+	endIndex = numRows-3
+	if (g_isTradingOverForToday and p == '5d'):
+		startIndex = numRows - 1
+
+	for row in range(startIndex, startIndex-1, -1):
 		timeStamp = priceData.index[row]
+		C = priceData.at[timeStamp,'Close']
+		lastPrice = f"{C:.2f}"
+		print("\n\t\t    ", ticker, label, "\t\t      ", lastPrice, "\tas of", timeStamp,"\n")
 
 		# truncate time stamp for Daily and bigger periods. It's a row label, like "2024-02-09 00:00:00-05:00" 
 		#if interval == "1d" or interval == "1m":
 		#	temp_string = rowNames[row].as_type(str)
 
+		# print 3d pivot if needed
+		msg = "\t\t\tP3: " + f"{threeDayPivot:.2f}"
+		if (p != "5d"):
+			msg = " "
 		print("\t\tR3 ", R3[row]) 
 		print("\t\tR2 ", R2[row])
 		print("\t\tR1 ", R1[row])
-		print("\t\tP  ",  P[row], "\t\t", timeStamp)
+		print("\t\tP  ",  P[row], msg)
 		print("\t\tS1 ", S1[row])
 		print("\t\tS2 ", S2[row])
 		print("\t\tS3 ", S3[row], "\n")
 
+	# If invoked with daily pivots, And the Market is open, this function prints additional WIP Pivot
+	if (p == "5d" and g_isMarketOpen == True):
+		label = "WIP Pivot"
+		startIndex = numRows-1
+		endIndex = numRows-2
+		for row in range(startIndex, endIndex, -1):
+			timeStamp = priceData.index[row]
+			C = priceData.at[timeStamp,'Close']
+			lastPrice = f"{C:.2f}"
+			print("\n\t\t    ", ticker, label, "\t\t      ", lastPrice, "  ( last Price as of", timeStamp,")\n")
+
+			# truncate time stamp for Daily and bigger periods. It's a row label, like "2024-02-09 00:00:00-05:00" 
+			#if interval == "1d" or interval == "1m":
+			#	temp_string = rowNames[row].as_type(str)
+
+			print("\t\tR3 ", R3[row]) 
+			print("\t\tR2 ", R2[row])
+			print("\t\tR1 ", R1[row])
+			print("\t\tP  ",  P[row])
+			print("\t\tS1 ", S1[row])
+			print("\t\tS2 ", S2[row])
+			print("\t\tS3 ", S3[row], "\n")
+
+	# End of additional PIVOT print
+
 
 # this block is from ChatGPT I left vars as underscores on purpose.
-from datetime import datetime, timedelta
 
-def last_trading_date_of_prior_month(current_date):
+def GetPriorMonthLastTradingDate(current_date):
     # Find the last day of the prior month
     first_day_of_current_month = datetime(current_date.year, current_date.month, 1)
     last_day_of_prior_month = first_day_of_current_month - timedelta(days=1)
@@ -283,6 +360,21 @@ def last_trading_date_of_prior_month(current_date):
     
     return last_day_of_prior_month.date()
 
+def get_last_trading_date():
+    # Define the exchange calendar (e.g., 'XNYS' for New York Stock Exchange)
+    exchange = mcal.get_calendar('XNYS')
+
+    # Get today's date
+    today = datetime.today().date()
+
+    # Adjust the date to the previous business day (last trading date)
+    last_trading_date = exchange.valid_days(start_date=today - timedelta(days=7), end_date=today)[-1]
+
+    return last_trading_date.date()
+
+# Example usage
+#last_trading_date = get_last_trading_date()
+#print("Last trading date before today:", last_trading_date)
 
 #########################
 # start of main program #
@@ -293,9 +385,10 @@ os.system('cls' if os.name == 'nt' else 'clear')
 
 # Show useful dates
 todayDate = datetime.now().date()
-lastMonthDate = last_trading_date_of_prior_month(todayDate)
-
+lastMonthDate = GetPriorMonthLastTradingDate(todayDate)
+lastTradingDate = get_last_trading_date()
 print("Today is ", todayDate, "\t\t\tPrior month ended:", lastMonthDate)
+print("Prior is ", lastTradingDate, "  ... Match!! " if (todayDate == lastTradingDate) else "")
 
 HelloCustomer()
 
@@ -312,44 +405,10 @@ while (True):
 	# Noobs, please note that Ticker() returns a panda dataframe.
 	g_dataFrame = yf.Ticker(ticker)
 
-	# print Daily Levels in a Blest manner
-	PrintPivots("1d", "1d")
 	# print Monthly
 	PrintPivots("3mo","1mo")
 
+	# Daily Pivots. The call below will print levels for today, WIP levels for tomorrow, and the 3D Pivot
+	PrintPivots("5d", "1d")
+
 print("\n\tGood job! Have a Blest Day and thanks for choosing AlgoZ Pivotal.\n")
-
-
-'''
- TODOS
- -----
- 
-   Add 3 day Pivot average.   The golden goose !  consider graphics for "gold on the back", "carrying the gold" , or whatever the sayings are
-
-   User could input interval as well idk prob overkill
- 
- Reference
- ---------
- 
-  How to print column and row names of priceData:
-
-	 for colName in priceData.columns:
-	    print(colName)
-
-	 for rowName in priceData.index:
-	    print(rowName)
-
-  How to GET TODAYS DATE AND CONVERT IT TO A STRING WITH YYYY-MM-DD FORMAT (YFINANCE EXPECTS THAT FORMAT)
-
-    end_date = datetime.now().strftime('%Y-%m-%d')
-    amzn_hist = amzn.history(start='2022-01-01',end=end_date)
-    print(amzn_hist)
-
-  How to understand period parameter:
-     The following are the valid values: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max.
-
-  What are valid interval params to the .history() method ?  
-     1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo, 3mo
-
-'''
-
