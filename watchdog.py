@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "9.75"
+versionStr =                    "9.88"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -910,7 +910,7 @@ def ExpressTrade(jsonrecord):
 
     if(False):
         prettyPrintJSON(jsonrecord)
-        print("]LEAVING EXPRESS TRADE...") 
+        print("] LEAVING EXPRESS TRADE...") 
 
 
 
