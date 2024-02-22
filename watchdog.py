@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "9.88"
+versionStr =                    "9.99"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -693,23 +693,71 @@ def ValidateBarType(barstr):
         tf=True
 
     return(tf)
-    
-    
+
+
+
+
+# import robin_stocks as rs
+
+# # Log in to your Robinhood account
+# username = "your_username"
+# password = "your_password"
+# rs.login(username, password)
+# rs.robinhood.
+
+# def getInstrumentSymbol(instrument_str):
+#     try:
+#         # Get instruments by symbols
+#         instruments = rs.robinhood.get_instruments_by_symbols(instrument_str)
+        
+#         # Check if instruments are found
+#         if instruments:
+#             # Return the symbol of the first instrument
+#             return instruments[0]['symbol']
+#         else:
+#             return f"No instrument found for {instrument_str}"
+#     except Exception as e:
+#         return f"Error: {str(e)}"
+
+# # Example usage for a stock
+# stock_instrument = "AAPL"
+# stock_symbol = get_symbol(stock_instrument)
+# print(f"Symbol for {stock_instrument}: {stock_symbol}")
+
+# # Example usage for an option
+# option_instrument = "AAPL210219C00300000"  # This is an example option instrument
+# option_symbol = get_symbol(option_instrument)
+# print(f"Symbol for {option_instrument}: {option_symbol}")
+
+# # Logout from Robinhood
+# rs.logout()
+
+
+
+
+
+
+
+
+
+
 ############################################################
 #
 #      To do:
 #
 #           check LIVE=1
 #           check bar > 15min
-#           check NumTradesToday < Max
-    #
+#
+#     >>>>  check NumTradesToday < Max
+#
 #           check get .tradesToday dateTime==todayNow from Database.tradeEntriesToday
+#
 #           check .position Table if trade rawID is placed
 #                 IF yes, update .position Table 
 #           check IF order (rhood)Filled and position exists
 #                 IF yes, update .position Table , update TradeEntriesToday
 #
-##          IF no position to take, check Live positions 
+#           IF no position to take, check Live positions for SELL signal
 #
 #
 # position table
@@ -723,7 +771,7 @@ def ValidateBarType(barstr):
 # 
 #
 def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
-    print("] READY TO EXECUTE TRADE: ", symstr, "\n\n")
+    print("] READY TO EX3CUTE TRADE: ", symstr, "\n\n")
 
     prettyPrintJSON(jsonINIrecord)
     print("] Ex3cuteTrade(...) ", jsonINIrecord["Action"], jsonINIrecord["Cmd_"], jsonINIrecord["Range"], jsonINIrecord["Value"], jsonINIrecord["TradeType"],  jsonINIrecord["Live"] )
@@ -735,6 +783,8 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
 
 
 #   check LIVE=1
+    if(livestr0!="LIVE"):
+        print(jsonINIrecord["Cmd_"], " Trade NOT LIVE. Skipping....")
     if(livestr0=="LIVE"):
         print("] Prepping LIVE Trade: ", tradetypestr)
         print( jsonINIrecord["Action"],":  ", tradetypestr , jsonINIrecord["QtyShrCons"],"shares of", jsonINIrecord["Cmd_"]," at Market (",jsonTRADESrecord["tradePrice"],jsonTRADESrecord["tradeBar"],").  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
@@ -1474,6 +1524,16 @@ def getline(url):
         return f"Error: {str(e)}"
 
 
+def addOneTradeToday(date0str, tradetypestr, sym0, qty0 , rawid):
+    # access database here
+    urlstr = "https://algoinvestorr.com/trades/addonetradetoday.php?d="+date0str+"&type="+tradetypestr+"&sym="+sym0+"&qty="+str(qty0)
+   
+    print("]  exiting NOT accessing rawID= ", rawid , urlstr)
+    # str =getline(urlstr)
+
+    return
+
+
 def getnumtradestoday(date0str):
     # access database here
     urlstr = "https://algoinvestorr.com/trades/getnumtradestoday.php?d="+date0str
@@ -1483,25 +1543,29 @@ def getnumtradestoday(date0str):
 
 tradestodayMax =3
 
-def CheckDatabaseThenSendTradeToMarket( tradetypestr, symtr, numshares, price0, rawID ,    simutime0, simudate0  ):
+def CheckDatabaseThenSendTradeToMarket( tradetypestr, symstr, numshares, price0, rawID ,    simutime0, simudate0  ):
     global tradestodayMax
-    # first check if max trades/day has been reached.
+    global todaysDate0
+
+
+# 1st check if max trades/day has been reached.
     tradestoday=getnumtradestoday(todaysDate0)
     print("] TRADES Today=",tradestoday,", MAX ==",tradestodayMax, " todaysDate0, simudate0 == ",todaysDate0, simudate0 )
-
-
     if(tradestoday >= tradestodayMax):
         print("MAX TRADES ",tradestoday,"REACHED, exiting...")
         return(False)
 
-    # 1st check to see if raw ID exists on Server's database in case power got cut locally to client's python machine
+# 2nd check to see if raw ID exists on Server's database in case power got cut locally to client's python machine
     chkdb = CheckDatabase(rawID)
 
+
     if(chkdb==False):
-        print("No Trade #",rawID,"found in LiveTrade table-database. Sending Trade for" ,tradetypestr,symtr," to the market and INSERTING the  LiveTrade table-database.")
-        EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr, symtr, numshares, price0, rawID , simutime0, simudate0  )
+        print("<SIMULATED> No Trade #",rawID,"found in LiveTrade table-database. Sending Trade for" ,tradetypestr,symstr," to the market and INSERTING the  LiveTrade table-database.")
+        EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr, symstr, numshares, price0, rawID , simutime0, simudate0  )
 #       LONG_STOCK NVDA 1 735.11 2350 1357 2024-02-16
-        
+        #only if position entered
+        addOneTradeToday(todaysDate0, tradetypestr, symstr, numshares , rawID)
+
 
 
     else:
