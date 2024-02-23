@@ -44,6 +44,12 @@
 
 print("\n\n] *** Importing python modules; this may take a moment on the first run...")
 import yfinance as yf
+
+# this warning code is for MAC, to work around a deprecation warning.
+import warnings
+# Suppress FutureWarning related to TimedeltaIndex
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 print("]  Still importing more Python modules...")
 
 #wcb commenting out panda import, appears unneeded. Prob added during initial testing
@@ -65,7 +71,6 @@ defaultTicker = 'NVDA'
 g_debugHistory = False
 
 # clean up these globals, for market status
-g_isTradingOverForToday = True
 g_isMarketOpen = False
 
 # let's have some fun w/ user facing messages
@@ -104,22 +109,34 @@ colorGray  ="90"
 colorArray = [ colorRed, colorBlue, colorGreen, colorOrange, colorCyan, colorAqua, colorYellow ,colorPurple, colorMagenta,colorBrown ]
 colorArrayLen = len(colorArray)
 
+def IsMarketOpen():
+	# Define the market calendar (e.g., New York Stock Exchange)
+	market_cal = mcal.get_calendar('XNYS')
 
-def is_valid_ticker(ticker_symbol):
-    try:
-        # Attempt to fetch data for the given ticker symbol
-        stock_data = yf.Ticker(ticker_symbol).info
-        
-        # If no exception is raised, the ticker is likely valid
-        return True
+	# Get the current date and time
+	current_datetime = datetime.now()
 
-    except ValueError as e:
-        # Check if the error message indicates an invalid ticker
-        if "No data found" in str(e):
-            return False
-        else:
-            # Re-raise the exception if it's a different ValueError
-            raise e
+	# Check if the market is open at the current date and time
+	is_market_open = market_cal.valid_days(start_date=current_datetime.date(), end_date=current_datetime.date()).size > 0
+
+	#if is_market_open:
+	#	print("The market is currently open.")
+	#else:
+	#	print("The market is currently closed.")
+	return is_market_open
+
+def IsTickerValid(ticker_symbol):
+	# Create a Ticker object
+	stock_ticker = yf.Ticker(ticker_symbol)
+	# Fetch historical data
+	historical_data = stock_ticker.history(period="1d")
+	isValid = not historical_data.empty
+	# Check if the historical data is empty
+	#if isValid:
+	#	print(f"Data available for {ticker_symbol}")
+	#else:
+	#	print(f"No data available for {ticker_symbol}")
+	return isValid
 
 def ShowTipMessage():
 	global g_FirstTime
@@ -210,7 +227,6 @@ def HelloCustomer():
 	#print("\t\t( Default: ", defaultTicker, ")\n")
 
 def PrintPivots(p:str, i:str):
-	global g_isTradingOverForToday
 	global g_isMarketOpen
 
 	# do the scrape
@@ -266,7 +282,7 @@ def PrintPivots(p:str, i:str):
 	# Calc the 3d pivot
 	threeDayPivot = 0
 	if (p=='5d'):
-		startIndex = numRows -1 if g_isTradingOverForToday else numRows - 2
+		startIndex = numRows -2 if g_isMarketOpen else numRows - 1
 		endIndex = startIndex - 3
 		for row in range(startIndex, endIndex, -1):
 			threeDayPivot += P[row]
@@ -282,64 +298,63 @@ def PrintPivots(p:str, i:str):
 	# for row in range(numRows):
 	# 	print(rowNames[row])
 
-	label = "Daily" if p == "5d" else "Monthly"
+	label = "Daily  " if p == "5d" else "Monthly"
 
-	# We will only print one row. Figure out how to extract.
-	# Daily will be last row, if the market has already closed for day.
-	# Monthly will have last 3 mos,  middle row would be prior.
+	# Figure out the row. for Daily pivots, we'll print todays (using yesterday data) and a work-in-progress pivot
+	# Monthly will have last 3 mos,  middle row is the prior month and the one we care about
 
-	startIndex = numRows-2
-	endIndex = numRows-3
-	if (g_isTradingOverForToday and p == '5d'):
+	startIndex = numRows - 2
+
+	# if invoked w daily pivots, and the market is not open, figure out the row
+	if (p=="5d" and not g_isMarketOpen):
 		startIndex = numRows - 1
 
 	for row in range(startIndex, startIndex-1, -1):
 		timeStamp = priceData.index[row]
 		C = priceData.at[timeStamp,'Close']
 		lastPrice = f"{C:.2f}"
-		print("\n\t\t    ", ticker, label, "\t\t      ", lastPrice, "\tas of", timeStamp,"\n")
+		print("\n\t\t    ", ticker+" ", label, "\t\t      ", lastPrice, "\t\tas of", timeStamp,"\n")
 
 		# truncate time stamp for Daily and bigger periods. It's a row label, like "2024-02-09 00:00:00-05:00" 
 		#if interval == "1d" or interval == "1m":
 		#	temp_string = rowNames[row].as_type(str)
 
 		# print 3d pivot if needed
-		msg = "\t\t\tP3: " + f"{threeDayPivot:.2f}"
+		goldBlueMsg = "V V V -- GOLD is Heavy -- V V V" if threeDayPivot > P[row] else "^ ^ ^    Skies are BLUE    ^ ^ ^"
+		msg = "\tP3  " + f"{threeDayPivot:.2f}" + "\t\t\t" + goldBlueMsg
 		if (p != "5d"):
 			msg = " "
-		print("\t\tR3 ", R3[row]) 
-		print("\t\tR2 ", R2[row])
-		print("\t\tR1 ", R1[row])
-		print("\t\tP  ",  P[row], msg)
-		print("\t\tS1 ", S1[row])
-		print("\t\tS2 ", S2[row])
-		print("\t\tS3 ", S3[row], "\n")
+		print("\t\tR3 ", f"{R3[row]:.2f}") 
+		print("\t\tR2 ", f"{R2[row]:.2f}")
+		print("\t\tR1 ", f"{R1[row]:.2f}")
+		print("\t\tP  ",  f"{P[row]:.2f}", msg)
+		print("\t\tS1 ", f"{S1[row]:.2f}")
+		print("\t\tS2 ", f"{S2[row]:.2f}")
+		print("\t\tS3 ", f"{S3[row]:.2f}", "\n")
 
-	# If invoked with daily pivots, And the Market is open, this function prints additional WIP Pivot
+	# Block below prints additional WIP pivot, if function invoked with daily And the Market is open
 	if (p == "5d" and g_isMarketOpen == True):
-		label = "WIP Pivot"
+		label = "  WIP  "
+		
 		startIndex = numRows-1
-		endIndex = numRows-2
-		for row in range(startIndex, endIndex, -1):
+		for row in range(startIndex, startIndex-1, -1):
 			timeStamp = priceData.index[row]
 			C = priceData.at[timeStamp,'Close']
 			lastPrice = f"{C:.2f}"
-			print("\n\t\t    ", ticker, label, "\t\t      ", lastPrice, "  ( last Price as of", timeStamp,")\n")
+			print("\n\t\t    ", ticker+" ", label, "\t\t      ", lastPrice, "\t\tas of", timeStamp,"\n")
 
 			# truncate time stamp for Daily and bigger periods. It's a row label, like "2024-02-09 00:00:00-05:00" 
 			#if interval == "1d" or interval == "1m":
 			#	temp_string = rowNames[row].as_type(str)
-
-			print("\t\tR3 ", R3[row]) 
-			print("\t\tR2 ", R2[row])
-			print("\t\tR1 ", R1[row])
-			print("\t\tP  ",  P[row])
-			print("\t\tS1 ", S1[row])
-			print("\t\tS2 ", S2[row])
-			print("\t\tS3 ", S3[row], "\n")
+			print("\t\tR3 ", f"{R3[row]:.2f}") 
+			print("\t\tR2 ", f"{R2[row]:.2f}")
+			print("\t\tR1 ", f"{R1[row]:.2f}")
+			print("\t\tP  ",  f"{P[row]:.2f}")
+			print("\t\tS1 ", f"{S1[row]:.2f}")
+			print("\t\tS2 ", f"{S2[row]:.2f}")
+			print("\t\tS3 ", f"{S3[row]:.2f}", "\n")
 
 	# End of additional PIVOT print
-
 
 # this block is from ChatGPT I left vars as underscores on purpose.
 
@@ -354,6 +369,7 @@ def GetPriorMonthLastTradingDate(current_date):
     
     return last_day_of_prior_month.date()
 
+# TODO: rework logic for getting last trading date BEFORE today
 def get_last_trading_date():
     # Define the exchange calendar (e.g., 'XNYS' for New York Stock Exchange)
     exchange = mcal.get_calendar('XNYS')
@@ -366,10 +382,6 @@ def get_last_trading_date():
 
     return last_trading_date.date()
 
-# Example usage
-#last_trading_date = get_last_trading_date()
-#print("Last trading date before today:", last_trading_date)
-
 #########################
 # start of main program #
 #########################
@@ -377,24 +389,26 @@ def get_last_trading_date():
 # clear screen
 os.system('cls' if os.name == 'nt' else 'clear')
 
-# Show useful dates
+# Show useful dates & Market Status
 todayDate = datetime.now().date()
 lastMonthDate = GetPriorMonthLastTradingDate(todayDate)
 lastTradingDate = get_last_trading_date()
 print("Today is ", todayDate, "\t\t\tPrior month ended:", lastMonthDate)
-print("Prior is ", lastTradingDate, "  ... Match!! " if (todayDate == lastTradingDate) else "")
+g_isMarketOpen = IsMarketOpen()
+#TODO debug this
+print("Prior is ", lastTradingDate, "  ... Match!! " if (todayDate == lastTradingDate) else "", "\tMarket is ", "Open" if g_isMarketOpen else "Closed")
 
 HelloCustomer()
 
 while (True):
 
 	ticker = GetTicker()
-	if (ticker == "q"):
+	if (ticker == "q" or ticker == "Q"):
 		break
 
-	if (not is_valid_ticker(ticker)):
-		print("\n\tInvalid ticker")
-		break
+	if (not IsTickerValid(ticker)):
+		print("\n\tInvalid ticker, try again\n")
+		continue
 
 	# Noobs, please note that Ticker() returns a panda dataframe.
 	g_dataFrame = yf.Ticker(ticker)

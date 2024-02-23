@@ -4,27 +4,36 @@ This repo has python code for grabbing yahoo finance data, chart graphing, a mon
 
 Note to new team members: No spaghetti code! We need to Code Clean and execute our vision of helping Clients Trade Smarter, with AlgoZ.ai
 
+Testing a one line change from mac, using willbotti@gmail.com GIT vs algoadmin1
+
 ## Dependencies (stuff we need to import)
 	pip install yfinance
 	pip install pandas_market_calendars
+
+# On MAC, to fix Deprecation Warninig "yfinance/utils.py:775: FutureWarning: The 'unit' keyword i"
+  tried: 
+    $ pip3 install --upgrade yfinance 
+
+    this didn't work, so instead we'll suppress deprecation warnings in the code
 
 ##########################################
 ## Common Git Commands
 
 git status                                                  
 
-git add <file>										# add to list of files that will be committed 
+git add <file>																# add to list of files that will be committed 
 
 git commit -m "Refactored spaghetti code"			# commits the changes, locally.  They still need to be pushed
 
-git commit -am "Do it in one go"					# adds to index  (staging area) and commits in one step
+git commit -am "Do it in one go"							# adds to index  (staging area) and commits in one step
 
-git changelog										# shows the changelog (list of commits)
+git changelog																	# shows the changelog (list of commits)
 
-git push origin <branchname>						# push my local branch <branchname> to the server (origin)
+git push origin <branchname>									# push my local branch <branchname> to the server (origin)
 
-git log -p -- filename								# show history of specific file, including patch info (ie change details)
+git log -p -- filename												# show history of specific file, including patch info (ie change details)
 
+git config -l																	# show git configuration like user name,  email
 
 #############################################
 
@@ -34,12 +43,12 @@ https://git-scm.com/download/mac.
 
 ## TODO Items for the Botti Bros
 
-Will:  
-	add 3 day pivots, add simple graph. Fix current pivots to show YESTERDAY if we are actively trading, and also show the 'active' pivots intraday, but properly annotated
-		Consider graphics for "gold on the back", "carrying the gold" , or whatever the sayings are around the blue / gold pivot crossover
-	Fix exception on bad ticker entry (see BUG section below)
-	Create diagram of 'computer assisted improvisation' AI product.  The market for AI-assisted music composition is still wide open, relative to other areas
-	Continue dog-fooding  - use products personally and follow the signals, giving feedback etc
+Will:
+	+ Review logic to deal w/ market timing - we are either pre-market, market open, or market closed. Verify Daily Pivot is correct.
+	+ Add simple graph. or NOT, maybe we keep this text ?? 
+	+ if we go graphical, make graphics for "Gold on the Back." etc. 
+	+ Create diagram of 'computer assisted improvisation' AI product.  The market for AI-assisted music composition is still wide open, relative to other areas
+	+ Continue dog-fooding  - use products personally and follow the signals, giving feedback etc
 	
 John: 
 	visit Twin and Nephews in NC. Trust the process. LEVEL BLEST will cover half of ALL expenses incurred in trip, as a minimum.
@@ -47,7 +56,8 @@ John:
 	Finish coding up the Autobot
 	Take care of paying customers on a proactive basis
 	Raise $ and then Raise Hell w/ Fellow Moose and MIT MAFIA
-	Hammer out partner agreement w/ Bro so expectations, exits, what-ifs are properly covered
+	Hammer out partner agreement w/ Bro so expectations, exits, what-ifs are properly covered.
+	If ya can't talk for days, just say that, instead of ghosting teammates. super cringe and teenager-y. Adults set and communicate boundaries
 
 Diego: 
 	Start learning UE 5.3 - we need tutors + he can help on UE 5 promotional materials and plumbing with the new 'ai-assisted production techstack'
@@ -83,24 +93,6 @@ Other notes, comments from python.py
 
 ## BUGS TO FIX
 
-# Pivots.py - fix bad ticker exception.  Example output:
-
-        Enter Ticker: asdf
-ASDF: Period '1d' is invalid, must be one of ['1mo', '3mo', '6mo', 'ytd', '1y', '2y', '5y', '10y', 'max']
-
-                     asdf Daily                       Date
-
-Traceback (most recent call last):
-  File "C:\Users\willb\_dev\Projects\algo-python\pivots.py", line 326, in <module>
-    PrintPivots("1d", "1d")
-  File "C:\Users\willb\_dev\Projects\algo-python\pivots.py", line 267, in PrintPivots
-    timeStamp = priceData.index[row]
-                ~~~~~~~~~~~~~~~^^^^^
-  File "C:\Users\willb\AppData\Local\Programs\Python\Python312\Lib\site-packages\pandas\core\indexes\base.py", line 5365, in __getitem__
-    return getitem(key)
-           ^^^^^^^^^^^^
-IndexError: index -1 is out of bounds for axis 0 with size 0
-
-# Pivots.py - MAC Bug
- Example output [JB please fill in if I don't get to it first]
+# [FIXED ] Pivots.py - fix bad ticker exception.  Example output:
+# [FIXED ] Pivots.py - MAC Bug - added Deprecation warning and note on dependencies
 
