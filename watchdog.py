@@ -1080,9 +1080,11 @@ def sendStockOrder( buySell, qty, symbol0 , assettype, mktLimit, price0):
                 rs.robinhood.order_buy_market(symbol0, qty)  
                 print(".robinhood*BUY  sendMarket0rder(" ,buySell, qty, symbol0 , assettype,") sent to market.")
             
+            # doesn't work
             if(mktLimit=="limit"):
-                rs.robinhood.orders.order_buy_limit(symbol0, qty, float(price0) )  
-                print(".robinhood*BUY  sendMarket0rder(" ,buySell, qty, symbol0 , assettype,") sent to market.")
+                rs.robinhood.order_buy_limit(symbol0, qty, float(price0) )  
+                # rs.robinhood.orders.order_buy_limit(symbol0, qty, float(price0) )  
+                print(".robinhood*BUY  sent LIMIT BUY 0rder(" ,buySell, symbol0, qty  ,float(price0), assettype,") sent to market.")
 
 
             # if(mktLimit=="market"): 
@@ -1322,7 +1324,7 @@ def GetOpenPositions(assettype0):
     # created_at
 
 def WithDrawFundsToBankAccount():
-    print("Withdrawing...")
+    print("<sim>Withdrawing...")
     # robin_stocks.robinhood.account.withdrawl_funds_to_bank_account(ach_relationship, amount, info=None)[source]
     # Submits a post request to withdraw a certain amount of money to a bank account.
 
@@ -1333,7 +1335,15 @@ def WithDrawFundsToBankAccount():
     # Returns:	
     # Returns a list of dictionaries of key/value pairs for the transaction.
 
-
+def findOptions1( sym0,  expdate, strike0):
+    """
+    robin_stocks.robinhood.options.find_options_by_expiration_and_strike(inputSymbols, expirationDate, strikePrice, optionType=None, info=None)[source]
+    Returns a list of all the option orders that match the seach parameters
+    """    
+ 
+    list0 = rs.robinhood.options.find_options_by_expiration_and_strike(sym0, expdate, strike0 ) #, optionType=None, info=None)
+    print("] f1ndOptions(" ,sym0,  expdate, strike0, " )  ==", list0 )
+    
 
 
 
@@ -1409,8 +1419,9 @@ def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr, symstr, numshares, p
         buySell0    = "BUY"
         sym0        =  symstr   
         # SEND BUY STOCK ORDER
-        # se ndStockOrder( buySell0, qty0, sym0, assettype0  , "market", price00 )
-        sendStockOrder( buySell0, qty0, sym0, assettype0  , "limit", price00 )
+        sendStockOrder( buySell0, qty0, sym0, assettype0  , "market", price00 )
+
+        # sendStockOrder( buySell0, qty0, sym0, assettype0  , "limit", price00 )  # doesn't work
         #confirm stock order here / GetHoldings() ?
         sendOrderToDatabaseAndUpdateCmdVariables()
         print("] 3nterP0stionsRobinhoodAndINSERTDatabase()    :                      AFTER TRADE... ")
@@ -1479,6 +1490,42 @@ def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr, symstr, numshares, p
         my_Options_items = rs.robinhood.options.get_open_option_positions(account_number=None, info=None)
         printJson(my_Options_items, "Option OPEN Orders")
 
+# Option OPEN Orders  json= [
+#           {
+#                     "account": "https://api.robinhood.com/accounts/497177477/",
+#                     "account_number": "497177477",
+#                     "average_price": "520.0000",
+#                     "chain_id": "d89ea7cf-0572-44d7-a6de-30b5bb59ed40",
+#                     "chain_symbol": "ROKU",
+#                     "id": "8c711850-ba51-435f-8198-8e3ba6334656",
+#                     "option": "https://api.robinhood.com/options/instruments/4671098d-9334-4bd7-8b1a-8e3150a6b28f/",
+#                     "type": "long",
+#                     "pending_buy_quantity": "0.0000",
+#                     "pending_expired_quantity": "0.0000",
+#                     "pending_expiration_quantity": "0.0000",
+#                     "pending_exercise_quantity": "0.0000",
+#                     "pending_assignment_quantity": "0.0000",
+#                     "pending_sell_quantity": "0.0000",
+#                     "quantity": "2.0000",
+#                     "intraday_quantity": "2.0000",
+#                     "intraday_average_open_price": "520.0000",
+#                     "created_at": "2024-02-23T19:15:03.268410Z",
+#                     "trade_value_multiplier": "100.0000",
+#                     "updated_at": "2024-02-23T19:15:25.244144Z",
+#                     "url": "https://api.robinhood.com/options/positions/8c711850-ba51-435f-8198-8e3ba6334656/",
+#                     "option_id": "4671098d-9334-4bd7-8b1a-8e3150a6b28f"
+#           }
+# ]
+# ] **************************************** optionSymbol =  AAPL  240209P00175
+# Bid Price: 0.0
+# Ask Price: 0.0
+# ] Your Holdings  BEFORE TRADE  :
+# symbol= META    0  )
+# META {'price': '484.015400', 'quantity': '2.00000000', 'average_buy_price': '490.2500', 'equity': '968.03', 'percent_change': '-1.27', 'intraday_percent_change': '-1.27', 'equity_change': '-12.469200', 'type': 'stock', 'name': 'Meta Platforms', 'id': 'ebab2398-028d-4939-9f1d-13bf38f81c50', 'pe_ratio': '32.688000', 'percentage': '8.79'}
+# symbol= AAPL    1  )
+# AAPL {'price': '182.605000', 'quantity': '1.00000000', 'average_buy_price': '182.7800', 'equity': '182.60', 'percent_change': '-0.10', 'intraday_percent_change': '-0.10', 'equity_change': '-0.175000', 'type': 'stock', 'name': 'Apple', 'id': '450dfc6d-5510-4d40-abfb-f633b7d9be3e', 'pe_ratio': '28.686800', 'percentage': '1.66'}
+# symbol= SMCI    2  )
+# SMCI {'price': '861.999900', 'quantity': '2.00000000', 'average_buy_price': '867.4100', 'equity': '1724.00', 'percent_change': '-0.62', 'intraday_percent_change': '-0.62', 'equity_change': '-10.820200', 'type': 'stock', 'name': 'Super Micro Computer', 'id': '7973d19b-db71-4f1c-bf05-7da327f91d34', 'pe_ratio': '76.250000', 'percentage': '15.65'}
 
 
 ###### THIS WORKS !
@@ -2153,6 +2200,23 @@ def clearScreen():
     # clear screen
     os.system('cls' if os.name == 'nt' else 'clear')
 
+
+def getStockPrices(  stockINIarr ):
+    i0=1
+    len0=len(stockINIarr)
+    print("\n\n\n" )    
+
+    for stock_symbol in stockINIarr:
+        print("] Getting #",i0   , stock_symbol)    
+
+        ask_price = rs.robinhood.stocks.get_latest_price(stock_symbol,  'ask_price')
+        bid_price = rs.robinhood.stocks.get_latest_price(stock_symbol,  'bid_price')
+        print("BID / ASK price for",stock_symbol,"=     ",bid_price[0], "  /  ", ask_price[0])
+
+        i0+=1
+
+
+
 ################################################################ END OF def FUNCTIONS():
     
 
@@ -2270,6 +2334,10 @@ EnterPostionsRobinhood( useremail0 , pwd0 , simLIVE )
 
 
 
+
+##########################################################################################################    find 0PTIONS     ########################################################
+
+
 # ] **************************************** optionSymbol =  AAPL_240209c175
 # option_chain= [{'chain_id': '7dd906e5-7d4b-4161-a3fe-2c3b62038482', 
 # 'chain_symbol': 'AAPL', 'created_at': '2023-12-28T02:05:38.841588Z', 
@@ -2280,12 +2348,16 @@ EnterPostionsRobinhood( useremail0 , pwd0 , simLIVE )
 # 'sellout_datetime': '2024-02-09T20:30:00+00:00', 'long_strategy_code': 'c54349d7-0ef3-4874-ab27-6933f2c2b114_L1', 
 # 'short_strategy_code': 'c54349d7-0ef3-4874-ab27-6933f2c2b114_S1'}]
 
-# Option details
+findoptions=True
 findoptions=False
-symbol = "AAPL"
-strike0 = 175
-expiration_date = "2024-02-09"
-option_type = "put"   # "call"
+
+symbol = "ROKU"
+print("\n\n\nAttempting  to retrieve Options DATA: ",  symbol  , "...")
+# Option details
+
+strike0 = 60
+expiration_date = "2024-03-01"
+option_type = "call" # "put"   # "call"
 aPCstr=leftRightStr(option_type.upper(),"left",1)
 if(findoptions):
     option_chain = FindOptions( symbol, expiration_date, strike0, option_type, "roguequant1@gmail.com", pwd0 )  
@@ -2320,15 +2392,14 @@ if(findoptions):
     bid_price = float(option_instrument['bid_price'])
     ask_price = float(option_instrument['ask_price'])
 
-
-
+print("] **************************************** optionSymbol = " , optionsymbol)
 
 # Print bid and ask prices
 print(f"Bid Price: {bid_price}")
 print(f"Ask Price: {ask_price}")
 # Logout from Robinhood
 # rs.logout()
-######################################################
+##################################################################################################################################################################
 
 
 
@@ -2496,6 +2567,7 @@ hrsmins=gtstr #"0935"
 mins9 = getMinutesFromClose( hrsmins )
 if(simuTime==0):
     print("TIME IN NYC:",hrsmins, " mins fromClose = " , mins9)
+    simutime0=hrsmins
 elif (simuTime==1):
     hrsminsMod = CheckAfterMidnight(hrsmins) 
     simutime0= GetSimuTime(hrsminsMod)
@@ -2567,11 +2639,17 @@ rawIDdtarr=[]   #daate time
 MaxMinutes = (keepLooping * (timeDelay+0 )/60 ) 
 print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:",MaxMinutes," Max HOURS=",MaxMinutes/60,"\n\n" )
 
-#######################################################################   
-#######################################################################   ```````` LOOP
-#######################################################################                      LOOP
-#######################################################################    LOOP
-###################### STARTING LOOP ****************************************
+
+
+
+
+########################################################################################        STARTING LOOP ****************************************
+#
+#
+#
+##########################################################################################################################     LOOP
+##########################################################################################################################     LOOP
+##########################################################################################################################     LOOP
 
 
 while keepLooping > 0:
@@ -2603,6 +2681,7 @@ while keepLooping > 0:
     # CheckPositions("Gianni", "12345354911")
 
 
+    getStockPrices(  stockINIarr )
 
 
 
@@ -2705,6 +2784,8 @@ while keepLooping > 0:
 
     if(simuTime==0):
         print("] TIME NOW IN NYC is ",hrsmins, ", or mins fromClose = " , mins9)
+        simutime0=hrsmins
+
     elif (simuTime==1):
         hrsminsMod = CheckAfterMidnight(hrsmins) 
         simutime0= GetSimuTime(hrsminsMod)
