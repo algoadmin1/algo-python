@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "10.1"
+versionStr =                    "11.54"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -10,6 +10,7 @@ import datetime
 from datetime import  timedelta
 
 import pytz
+import math
 
 # Get current date in New York - we need EDT for markets...
 new_york_timezone = pytz.timezone('America/New_York')
@@ -773,7 +774,7 @@ def ValidateBarType(barstr):
 def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
     print("] READY TO EX3CUTE TRADE: ", symstr, "\n\n")
 
-    prettyPrintJSON(jsonINIrecord)
+    # prettyPrintJSON(jsonINIrecord)
     print("] Ex3cuteTrade(...) ", jsonINIrecord["Action"], jsonINIrecord["Cmd_"], jsonINIrecord["Range"], jsonINIrecord["Value"], jsonINIrecord["TradeType"],  jsonINIrecord["Live"] )
     # "TradeType": "LONG_PUTS",
     tradetypestr = jsonINIrecord["TradeType"]
@@ -794,6 +795,8 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
         tf99=ValidateBarType(barstr)
 
         if(tf99==True):
+            qtyMAX10=10
+            strikeSize=5
 
             if(tradetypestr=="LONG_STOCK"):
                 prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
@@ -810,6 +813,21 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
             if(tradetypestr=="LONG_CALLS"):
                 IOTMstr="ITM"
                 strikestr0=jsonINIrecord["NumStrikes"] 
+
+                # from puts now do calls
+                strikesITM=int(jsonINIrecord["NumStrikes"] )
+                # HANDLE NEGATIVE STRIKE AMT HERE
+
+                price0    =float( jsonTRADESrecord["tradePrice"])    # 182.61
+                price01 = math.floor(price0)                         # 182
+                price01a= int(price01/5)                              # 36  [36.4]
+                
+                print("*** price01,price01a ==", price01,price01a)    
+                strike00 = (price01a+0)  * 5                           # 180
+                print("*** strike00==", strike00)
+                strike01= strike00 - (strikesITM*5)   # subtr n strikes ITM  # 180-5 =175 
+
+
                 if(int(strikestr0)<1):
                     IOTMstr="OTM"
                 strikestr0=strikestr0+" strike(s) "+IOTMstr
@@ -820,16 +838,49 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
                     thorz=int(thorz)
                 expDate = dateAdder(todaysDate0, thorz, True)
 
-                print(  jsonINIrecord["Action"],":  ", tradetypestr ,jsonINIrecord["QtyShrCons"],"contracts of", jsonINIrecord["Cmd_"]," CALLS  at "+strikestr0+" expiring "+expDate+", with stock at ",jsonTRADESrecord["tradePrice"],"\n  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
+                print(  jsonINIrecord["Action"],":  ", tradetypestr ,jsonINIrecord["QtyShrCons"],"contracts of", jsonINIrecord["Cmd_"]," CALLS  at "+strikestr0+"  strike,price " , strike01, price0 , " expiring "+expDate+", with stock at ",jsonTRADESrecord["tradePrice"],"\n  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
                 prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
                 prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
+
+
+                ############################################################################  PLACE OPTION ORDER 
+                qty0        =   int(jsonINIrecord["QtyShrCons"])
+                if(qty0>qtyMAX10):
+                    qty0=qtyMAX10      # REMOVE SAFEGUARD
+                sym0        =   jsonINIrecord["Cmd_"]   
+                putcall     =   'call'
+                # price02      =  float(strike01 - price0 + 0.10 )   #FOR PUT STRIKE= PRICE
+                price02a      = float(price0 - strike01   + 0.10 )    #FOR CALL PRICE-STRIKE  IE 182.60 -175.00 == 7.60 + .10  ==%7.70
+                price02b      = int(price02a * 100 )
+                price02       = float(price02b/100)
+
+                expdate     =   expDate  
+                buySell0    =   "BUY"  # to open pos  , # "SELL"  # to close 
+
+                print(".robinhood *SENDING LONG_CALLS OPTION Order" , sym0, qty0, price02, expdate, strike01, putcall, buySell0 )
+                sendOptionLimitOrder( sym0,qty0,price02,expdate,strike01,putcall, buySell0 )
+
                 pass
+
 
 
 
             if(tradetypestr=="LONG_PUTS"):
                 IOTMstr="ITM"
                 strikestr0=jsonINIrecord["NumStrikes"] 
+                # HANDLE NEGATIVE STRIKE AMT HERE
+
+                strikesITM=int(jsonINIrecord["NumStrikes"] )
+                price0    =float( jsonTRADESrecord["tradePrice"])    # 74.3
+                price01 = math.floor(price0)                         # 74
+                price01a= int(price01/5)                              # 14
+                
+                print("*** price01,price01a ==", price01,price01a)   
+                strike00 = (price01a+1)  * 5
+                print("*** strike00==", strike00)
+                strike01= strike00 + (strikesITM*5)   # add n strikes ITM  # 75+5 = 80 
+
+
                 if(int(strikestr0)<1):
                     IOTMstr="OTM"
                 strikestr0=strikestr0+" strike(s) "+IOTMstr
@@ -840,10 +891,39 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
                     thorz=int(thorz)
                 expDate = dateAdder(todaysDate0, thorz, True)
 
-                print( jsonINIrecord["Action"],":  ", tradetypestr , jsonINIrecord["QtyShrCons"],"contracts of", jsonINIrecord["Cmd_"]," PUTS  at "+strikestr0+" expiring "+expDate+", with stock at ",jsonTRADESrecord["tradePrice"],"\n  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
+
+                print( jsonINIrecord["Action"],":  ", tradetypestr , jsonINIrecord["QtyShrCons"],"contracts of", jsonINIrecord["Cmd_"]," PUTS  at "+strikestr0+"  strike,price " , strike01, price0 , " expiring "+expDate+", with stock at ",jsonTRADESrecord["tradePrice"],"\n  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
 
                 prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
                 prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
+
+
+                ############################################################################  PLACE OPTION ORDER 
+                qty0        =   int(jsonINIrecord["QtyShrCons"])
+                if(qty0>qtyMAX10):
+                    qty0=qtyMAX10      # REMOVE SAFEGUARD
+                sym0        =   jsonINIrecord["Cmd_"]   #"AAPL"
+                putcall     =   'put'
+                price02a      =  float(strike01 - price0 + 0.10 )
+                price02b      =  int(price02a * 100 )
+                price02       =  float(price02b/100)
+
+
+
+                expdate     =   expDate  
+                buySell0    =   "BUY"  # to open pos  , # "SELL"  # to close 
+
+                print(".robinhood *SENDING LONG_PUTS OPTION Order" , sym0, qty0, price02, expdate, strike01, putcall, buySell0 )
+                sendOptionLimitOrder( sym0,qty0,price02,expdate,strike01,putcall, buySell0 )
+
+
+# ] Prepping LIVE Trade:  LONG_PUTS
+# SELL :   LONG_PUTS 1 shares of ETSY  at Market ( 74 15min ).  Attempting to Place Trade at 1615 on 2024-02-23      - Live? == LIVE
+# ] barstr = , rstr, leftstr = 15min 15 15
+# SELL :   LONG_PUTS 1 contracts of ETSY  PUTS  at 1 strike(s) ITM  strike,price  79 74  expiring 2024-03-15, with stock at  74 
+# #   Attempting to Place Trade at 1615 on 2024-02-23      - Live? == LIVE
+# .robinhood *SENDING OPTION Order ETSY 1 5.1 2024-03-15 79 put BUY
+# *** Leaving Ex3cuteTrade() Now...
 
                 pass
 
