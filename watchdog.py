@@ -1019,10 +1019,18 @@ def printJson(dict0, str0):
 
 
 
-
-
-
+# rs.robinhood.orders.order_sell_limit(symbol, quantity, limitPrice, account_number=None, timeInForce='gtc', extendedHours=False, jsonify=True) 
+# Submits a limit order to be executed once a certain price is reached.
+#
 def sendOrderSell( buySell, qty0, symbol0 , assettype, priceLimit ):
+    """
+    rs.robinhood.orders.order_sell_limit(symbol, quantity, limitPrice, account_number=None, timeInForce='gtc', extendedHours=False, jsonify=True)[source]
+    Submits a limit order to be executed once a certain price is reached.
+
+    robin_stocks.robinhood.orders.order_sell_market(symbol, quantity, account_number=None, timeInForce='gtc', extendedHours=False, jsonify=True)[source]
+    Submits a market order to be executed immediately.
+    
+    """
     # Get the instrument URL for the stock
     # instrument = rs.robinhood.get_stock_instrument_data(symbol0)[0]['url']
     # # Get the current ask price (market price) for the stock
@@ -1030,7 +1038,7 @@ def sendOrderSell( buySell, qty0, symbol0 , assettype, priceLimit ):
     # # Place a market sell order at  ask price
     # order_id = rs.robinhood.order_sell_market( instrument=instrument, quantity=qty0 )
     #priceLimit=300
-    rs.robinhood.order_sell_limit(symbol0 , qty0, priceLimit )
+    rs.robinhood.orders.order_sell_limit(symbol0 , qty0, priceLimit )
     print(".robinhood*SELL_LIMIT send0rderSell(" ,buySell, qty0, symbol0 , assettype,") sent to market.")
 
 def cancelOrders(assettype):
@@ -1042,40 +1050,41 @@ def cancelOrders(assettype):
         rs.robinhood.orders.cancel_all_crypto_orders()
 
 
+
 def sendStockOrder( buySell, qty, symbol0 , assettype, mktLimit, price0):
     # if(mktLimit<>"" and mktLimit<>""):
     qtyMAX=10
-    qtyMAX=0
     acct0='497177477'
 
     if(qty==0):
-        print("] qty=0, exiting; NO ORDER WAS PLACED")
+        print("] qty=0, exiting; NO ORDER WAS PLACED",  buySell, qty, symbol0 , assettype, mktLimit, price0)
         return
     
     ask_price = rs.robinhood.stocks.get_latest_price(symbol0,  'ask_price')
     # print("ASK price for",symbol0,"= ",ask_price[0])
     bid_price = rs.robinhood.stocks.get_latest_price(symbol0,  'bid_price')
     print("BID / ASK price for",symbol0,"=     ",bid_price[0], "  /  ", ask_price[0])
-    
 
 #  # ask_price = rs.robinhood.stocks.get_latest_price(sym0, includeExtendedHours=True, info='ask_price')
 #             ask_price = rs.robinhood.stocks.get_latest_price(symbol0,  'ask_price')
 #             print("Ask price for",symbol0,"= ",ask_price[0])
 #             # print(f"Current ask price for {sym0}: ${ask_price}")
             
-
-
-
-
     if(assettype=="stock"):
-        qtyMAX=10
+        # TEMPORARILY STOP QTY AT 10
         if(qty>qtyMAX):
             qty=qtyMAX
 
-
         if(buySell=="BUY"):
-            rs.robinhood.order_buy_market(symbol0, qty)  
-            print(".robinhood*BUY  sendMarket0rder(" ,buySell, qty, symbol0 , assettype,") sent to market.")
+            if(mktLimit=="market"):
+                rs.robinhood.order_buy_market(symbol0, qty)  
+                print(".robinhood*BUY  sendMarket0rder(" ,buySell, qty, symbol0 , assettype,") sent to market.")
+            
+            if(mktLimit=="limit"):
+                rs.robinhood.orders.order_buy_limit(symbol0, qty, float(price0) )  
+                print(".robinhood*BUY  sendMarket0rder(" ,buySell, qty, symbol0 , assettype,") sent to market.")
+
+
             # if(mktLimit=="market"): 
             # price1 = ask_price[0]           
             #     print("MARKET BUY ORDER: overriding orig price:", price0, "with ASK=", price1)
@@ -1346,7 +1355,7 @@ def CheckDatabase(rawID):
     return(tf0)
 
 
-def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr,symstr, numshares, price0, rawID , simutime0, todaysDate0  ):
+def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr, symstr, numshares, price0, rawID , simutime0, todaysDate0  ):
     global useremail0
     global pwd0
     global MaxShares
@@ -1354,7 +1363,6 @@ def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr,symstr, numshares, pr
     msg00=0
     holdingsTF=False
     getOptionsPOSS=0
-
 
     print("] 3nterP0stionsRobinhoodAndINSERTDatabase( ... )    : ", tradetypestr,symstr, numshares, price0, rawID , simutime0, todaysDate0)
 
@@ -1367,20 +1375,20 @@ def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr,symstr, numshares, pr
     rs.robinhood.authentication.login(username=useremail0, password=pwd0, expiresIn=totalseconds, scope='internal', by_sms=True, store_session=True, mfa_code=None, pickle_name='')
     print("] 3nterP0stionsRobinhoodAndINSERTDatabase()    : Logged in.")
 
-
-
     print("] 3nterP0stionsRobinhoodAndINSERTDatabase()    : Getting Account Profile in... ")
     prof = rs.robinhood.profiles.load_account_profile(account_number=None, info=None)
     if(msg00==1):
         printJson(prof, "Profile")
 
 
-
     print("] 3nterP0stionsRobinhoodAndINSERTDatabase()    : Getting Open Stock Positions... ")
     poss = rs.robinhood.get_open_stock_positions()
-    if(msg00==1):
+    # if(msg00==1):
+    #     printJson(poss, "Open Stock Positions")
+    if(True):
+        print("\n\n")
         printJson(poss, "Open Stock Positions")
-
+    holdingsTF=True
     if(holdingsTF):
         print("] 3nterP0stionsRobinhoodAndINSERTDatabase()    : G3tHoldings()  BEFORE TRADE... ")
         my_items = GetHoldings("BEFORE TRADE")
@@ -1395,13 +1403,14 @@ def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr,symstr, numshares, pr
         qty0         = numshares
         price00      = price0  
         if(qty0>MaxShares):
-            qty0=2
+            qty0=1
         print("] *** 3nterP0stionsRobin...base()    : BUYing $",(qty0*price00) , " dollars worth of ",symstr, " stock, shares=",qty0)
         assettype0  = "stock"
         buySell0    = "BUY"
         sym0        =  symstr   
         # SEND BUY STOCK ORDER
-        sendStockOrder( buySell0, qty0, sym0, assettype0  , "market", price00 )
+        # se ndStockOrder( buySell0, qty0, sym0, assettype0  , "market", price00 )
+        sendStockOrder( buySell0, qty0, sym0, assettype0  , "limit", price00 )
         #confirm stock order here / GetHoldings() ?
         sendOrderToDatabaseAndUpdateCmdVariables()
         print("] 3nterP0stionsRobinhoodAndINSERTDatabase()    :                      AFTER TRADE... ")
@@ -1496,6 +1505,34 @@ def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr,symstr, numshares, pr
 
     print("] 3nterP0stionsRobinhoodAndINSERTDatabase( ... )    : returning...")
     return
+
+
+
+def cancelOrder( stockOption, orderID ):
+    """
+    robin_stocks.robinhood.orders.cancel_option_order(orderID)[source]
+    Cancels a specific option order.
+    Parameters:	orderID (str) – The ID associated with the order. Can be found using get_all_option_orders(info=None).
+    Returns:	Returns the order information for the order that was cancelled.
+    
+    
+    robin_stocks.robinhood.orders.cancel_stock_order(orderID)[source]
+    Cancels a specific order.
+    Parameters:	orderID (str) – The ID associated with the order. Can be found using get_all_stock_orders(info=None).
+    Returns:	Returns the order information for the order that was cancelled.
+    """
+    stockOption =  stockOption.upper()
+    if(stockOption=="STOCK" or stockOption=="STOCKS"):
+        rs.robinhood.orders.cancel_stock_order(orderID)
+        pass
+        
+
+    if(stockOption=="OPTION" or stockOption=="OPTIONS"):
+        rs.robinhood.orders.cancel_option_order(orderID)
+        pass
+
+        
+
 
 
 # import requests
@@ -1610,11 +1647,8 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
     # portfolio1 = Portfolio("JB", "roguequant1@gmail.com", "354" "Crixus2011", "Robinhood", "E3F266FC2A10034D")
 
     # portfolio1.initialize()
-
     # portfolio1.authenticate()
-
     # portfolio1.getPositions()
-
     # portfolio1.print()
 
     # print("] Attempted Mock Portfolio Object Operations:   AFTER...")
@@ -2162,7 +2196,7 @@ print("\nPlanned: Robinhood API, Fidelity API, Schwab/TD API, E*Trade API, Webul
 
 ##################################################### CLASS STRUCTURE TESTS ###########
 #####
-#####  Start integrating Class structure for tested functions' migration to Portfolio.cancelOrder() or .sendStockOrder()
+#####  Start integrating Class structure for tested functions' migration to Portfolio.cancelOrder() or .sen dStockOrder()
 
 print("] Attempting Mock Portfolio Object Operations: BEFORE...")
 print("] User: CREATOR Logged In. porfolio.initialize() + beginning...")
