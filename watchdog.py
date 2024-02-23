@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "9.99"
+versionStr =                    "11.54"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -10,6 +10,7 @@ import datetime
 from datetime import  timedelta
 
 import pytz
+import math
 
 # Get current date in New York - we need EDT for markets...
 new_york_timezone = pytz.timezone('America/New_York')
@@ -773,7 +774,7 @@ def ValidateBarType(barstr):
 def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
     print("] READY TO EX3CUTE TRADE: ", symstr, "\n\n")
 
-    prettyPrintJSON(jsonINIrecord)
+    # prettyPrintJSON(jsonINIrecord)
     print("] Ex3cuteTrade(...) ", jsonINIrecord["Action"], jsonINIrecord["Cmd_"], jsonINIrecord["Range"], jsonINIrecord["Value"], jsonINIrecord["TradeType"],  jsonINIrecord["Live"] )
     # "TradeType": "LONG_PUTS",
     tradetypestr = jsonINIrecord["TradeType"]
@@ -794,6 +795,8 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
         tf99=ValidateBarType(barstr)
 
         if(tf99==True):
+            qtyMAX10=10
+            strikeSize=5
 
             if(tradetypestr=="LONG_STOCK"):
                 prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
@@ -810,6 +813,21 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
             if(tradetypestr=="LONG_CALLS"):
                 IOTMstr="ITM"
                 strikestr0=jsonINIrecord["NumStrikes"] 
+
+                # from puts now do calls
+                strikesITM=int(jsonINIrecord["NumStrikes"] )
+                # HANDLE NEGATIVE STRIKE AMT HERE
+
+                price0    =float( jsonTRADESrecord["tradePrice"])    # 182.61
+                price01 = math.floor(price0)                         # 182
+                price01a= int(price01/5)                              # 36  [36.4]
+                
+                print("*** price01,price01a ==", price01,price01a)    
+                strike00 = (price01a+0)  * 5                           # 180
+                print("*** strike00==", strike00)
+                strike01= strike00 - (strikesITM*5)   # subtr n strikes ITM  # 180-5 =175 
+
+
                 if(int(strikestr0)<1):
                     IOTMstr="OTM"
                 strikestr0=strikestr0+" strike(s) "+IOTMstr
@@ -820,16 +838,49 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
                     thorz=int(thorz)
                 expDate = dateAdder(todaysDate0, thorz, True)
 
-                print(  jsonINIrecord["Action"],":  ", tradetypestr ,jsonINIrecord["QtyShrCons"],"contracts of", jsonINIrecord["Cmd_"]," CALLS  at "+strikestr0+" expiring "+expDate+", with stock at ",jsonTRADESrecord["tradePrice"],"\n  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
+                print(  jsonINIrecord["Action"],":  ", tradetypestr ,jsonINIrecord["QtyShrCons"],"contracts of", jsonINIrecord["Cmd_"]," CALLS  at "+strikestr0+"  strike,price " , strike01, price0 , " expiring "+expDate+", with stock at ",jsonTRADESrecord["tradePrice"],"\n  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
                 prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
                 prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
+
+
+                ############################################################################  PLACE OPTION ORDER 
+                qty0        =   int(jsonINIrecord["QtyShrCons"])
+                if(qty0>qtyMAX10):
+                    qty0=qtyMAX10      # REMOVE SAFEGUARD
+                sym0        =   jsonINIrecord["Cmd_"]   
+                putcall     =   'call'
+                # price02      =  float(strike01 - price0 + 0.10 )   #FOR PUT STRIKE= PRICE
+                price02a      = float(price0 - strike01   + 0.10 )    #FOR CALL PRICE-STRIKE  IE 182.60 -175.00 == 7.60 + .10  ==%7.70
+                price02b      = int(price02a * 100 )
+                price02       = float(price02b/100)
+
+                expdate     =   expDate  
+                buySell0    =   "BUY"  # to open pos  , # "SELL"  # to close 
+
+                print(".robinhood *SENDING LONG_CALLS OPTION Order" , sym0, qty0, price02, expdate, strike01, putcall, buySell0 )
+                sendOptionLimitOrder( sym0,qty0,price02,expdate,strike01,putcall, buySell0 )
+
                 pass
+
 
 
 
             if(tradetypestr=="LONG_PUTS"):
                 IOTMstr="ITM"
                 strikestr0=jsonINIrecord["NumStrikes"] 
+                # HANDLE NEGATIVE STRIKE AMT HERE
+
+                strikesITM=int(jsonINIrecord["NumStrikes"] )
+                price0    =float( jsonTRADESrecord["tradePrice"])    # 74.3
+                price01 = math.floor(price0)                         # 74
+                price01a= int(price01/5)                              # 14
+                
+                print("*** price01,price01a ==", price01,price01a)   
+                strike00 = (price01a+1)  * 5
+                print("*** strike00==", strike00)
+                strike01= strike00 + (strikesITM*5)   # add n strikes ITM  # 75+5 = 80 
+
+
                 if(int(strikestr0)<1):
                     IOTMstr="OTM"
                 strikestr0=strikestr0+" strike(s) "+IOTMstr
@@ -840,10 +891,39 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
                     thorz=int(thorz)
                 expDate = dateAdder(todaysDate0, thorz, True)
 
-                print( jsonINIrecord["Action"],":  ", tradetypestr , jsonINIrecord["QtyShrCons"],"contracts of", jsonINIrecord["Cmd_"]," PUTS  at "+strikestr0+" expiring "+expDate+", with stock at ",jsonTRADESrecord["tradePrice"],"\n  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
+
+                print( jsonINIrecord["Action"],":  ", tradetypestr , jsonINIrecord["QtyShrCons"],"contracts of", jsonINIrecord["Cmd_"]," PUTS  at "+strikestr0+"  strike,price " , strike01, price0 , " expiring "+expDate+", with stock at ",jsonTRADESrecord["tradePrice"],"\n  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
 
                 prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
                 prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
+
+
+                ############################################################################  PLACE OPTION ORDER 
+                qty0        =   int(jsonINIrecord["QtyShrCons"])
+                if(qty0>qtyMAX10):
+                    qty0=qtyMAX10      # REMOVE SAFEGUARD
+                sym0        =   jsonINIrecord["Cmd_"]   #"AAPL"
+                putcall     =   'put'
+                price02a      =  float(strike01 - price0 + 0.10 )
+                price02b      =  int(price02a * 100 )
+                price02       =  float(price02b/100)
+
+
+
+                expdate     =   expDate  
+                buySell0    =   "BUY"  # to open pos  , # "SELL"  # to close 
+
+                print(".robinhood *SENDING LONG_PUTS OPTION Order" , sym0, qty0, price02, expdate, strike01, putcall, buySell0 )
+                sendOptionLimitOrder( sym0,qty0,price02,expdate,strike01,putcall, buySell0 )
+
+
+# ] Prepping LIVE Trade:  LONG_PUTS
+# SELL :   LONG_PUTS 1 shares of ETSY  at Market ( 74 15min ).  Attempting to Place Trade at 1615 on 2024-02-23      - Live? == LIVE
+# ] barstr = , rstr, leftstr = 15min 15 15
+# SELL :   LONG_PUTS 1 contracts of ETSY  PUTS  at 1 strike(s) ITM  strike,price  79 74  expiring 2024-03-15, with stock at  74 
+# #   Attempting to Place Trade at 1615 on 2024-02-23      - Live? == LIVE
+# .robinhood *SENDING OPTION Order ETSY 1 5.1 2024-03-15 79 put BUY
+# *** Leaving Ex3cuteTrade() Now...
 
                 pass
 
@@ -1019,10 +1099,18 @@ def printJson(dict0, str0):
 
 
 
-
-
-
+# rs.robinhood.orders.order_sell_limit(symbol, quantity, limitPrice, account_number=None, timeInForce='gtc', extendedHours=False, jsonify=True) 
+# Submits a limit order to be executed once a certain price is reached.
+#
 def sendOrderSell( buySell, qty0, symbol0 , assettype, priceLimit ):
+    """
+    rs.robinhood.orders.order_sell_limit(symbol, quantity, limitPrice, account_number=None, timeInForce='gtc', extendedHours=False, jsonify=True)[source]
+    Submits a limit order to be executed once a certain price is reached.
+
+    robin_stocks.robinhood.orders.order_sell_market(symbol, quantity, account_number=None, timeInForce='gtc', extendedHours=False, jsonify=True)[source]
+    Submits a market order to be executed immediately.
+    
+    """
     # Get the instrument URL for the stock
     # instrument = rs.robinhood.get_stock_instrument_data(symbol0)[0]['url']
     # # Get the current ask price (market price) for the stock
@@ -1030,7 +1118,7 @@ def sendOrderSell( buySell, qty0, symbol0 , assettype, priceLimit ):
     # # Place a market sell order at  ask price
     # order_id = rs.robinhood.order_sell_market( instrument=instrument, quantity=qty0 )
     #priceLimit=300
-    rs.robinhood.order_sell_limit(symbol0 , qty0, priceLimit )
+    rs.robinhood.orders.order_sell_limit(symbol0 , qty0, priceLimit )
     print(".robinhood*SELL_LIMIT send0rderSell(" ,buySell, qty0, symbol0 , assettype,") sent to market.")
 
 def cancelOrders(assettype):
@@ -1042,40 +1130,43 @@ def cancelOrders(assettype):
         rs.robinhood.orders.cancel_all_crypto_orders()
 
 
+
 def sendStockOrder( buySell, qty, symbol0 , assettype, mktLimit, price0):
     # if(mktLimit<>"" and mktLimit<>""):
     qtyMAX=10
-    qtyMAX=0
     acct0='497177477'
 
     if(qty==0):
-        print("] qty=0, exiting; NO ORDER WAS PLACED")
+        print("] qty=0, exiting; NO ORDER WAS PLACED",  buySell, qty, symbol0 , assettype, mktLimit, price0)
         return
     
     ask_price = rs.robinhood.stocks.get_latest_price(symbol0,  'ask_price')
     # print("ASK price for",symbol0,"= ",ask_price[0])
     bid_price = rs.robinhood.stocks.get_latest_price(symbol0,  'bid_price')
     print("BID / ASK price for",symbol0,"=     ",bid_price[0], "  /  ", ask_price[0])
-    
 
 #  # ask_price = rs.robinhood.stocks.get_latest_price(sym0, includeExtendedHours=True, info='ask_price')
 #             ask_price = rs.robinhood.stocks.get_latest_price(symbol0,  'ask_price')
 #             print("Ask price for",symbol0,"= ",ask_price[0])
 #             # print(f"Current ask price for {sym0}: ${ask_price}")
             
-
-
-
-
     if(assettype=="stock"):
-        qtyMAX=10
+        # TEMPORARILY STOP QTY AT 10
         if(qty>qtyMAX):
             qty=qtyMAX
 
-
         if(buySell=="BUY"):
-            rs.robinhood.order_buy_market(symbol0, qty)  
-            print(".robinhood*BUY  sendMarket0rder(" ,buySell, qty, symbol0 , assettype,") sent to market.")
+            if(mktLimit=="market"):
+                rs.robinhood.order_buy_market(symbol0, qty)  
+                print(".robinhood*BUY  sendMarket0rder(" ,buySell, qty, symbol0 , assettype,") sent to market.")
+            
+            # doesn't work
+            if(mktLimit=="limit"):
+                rs.robinhood.order_buy_limit(symbol0, qty, float(price0) )  
+                # rs.robinhood.orders.order_buy_limit(symbol0, qty, float(price0) )  
+                print(".robinhood*BUY  sent LIMIT BUY 0rder(" ,buySell, symbol0, qty  ,float(price0), assettype,") sent to market.")
+
+
             # if(mktLimit=="market"): 
             # price1 = ask_price[0]           
             #     print("MARKET BUY ORDER: overriding orig price:", price0, "with ASK=", price1)
@@ -1313,7 +1404,7 @@ def GetOpenPositions(assettype0):
     # created_at
 
 def WithDrawFundsToBankAccount():
-    print("Withdrawing...")
+    print("<sim>Withdrawing...")
     # robin_stocks.robinhood.account.withdrawl_funds_to_bank_account(ach_relationship, amount, info=None)[source]
     # Submits a post request to withdraw a certain amount of money to a bank account.
 
@@ -1324,7 +1415,16 @@ def WithDrawFundsToBankAccount():
     # Returns:	
     # Returns a list of dictionaries of key/value pairs for the transaction.
 
-
+def findOptions1( sym0,  expdate, strike0 ):
+    """
+    robin_stocks.robinhood.options.find_options_by_expiration_and_strike(inputSymbols, expirationDate, strikePrice, optionType=None, info=None)[source]
+    Returns a list of all the option orders that match the seach parameters
+    """    
+ 
+    list0 = rs.robinhood.options.find_options_by_expiration_and_strike(sym0, expdate, strike0 ) # , optionType='call' ) #, optionType=None, info=None)
+    # list0 = rs.robinhood.options.find_options_by_expiration_and_strike(sym0, expdate, strike0, optionType='call' ) #, optionType=None, info=None)
+    print("] f1ndOptions(" ,sym0,  expdate, strike0, " )  ==", list0 )
+    
 
 
 
@@ -1346,7 +1446,7 @@ def CheckDatabase(rawID):
     return(tf0)
 
 
-def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr,symstr, numshares, price0, rawID , simutime0, todaysDate0  ):
+def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr, symstr, numshares, price0, rawID , simutime0, todaysDate0  ):
     global useremail0
     global pwd0
     global MaxShares
@@ -1354,7 +1454,6 @@ def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr,symstr, numshares, pr
     msg00=0
     holdingsTF=False
     getOptionsPOSS=0
-
 
     print("] 3nterP0stionsRobinhoodAndINSERTDatabase( ... )    : ", tradetypestr,symstr, numshares, price0, rawID , simutime0, todaysDate0)
 
@@ -1367,20 +1466,20 @@ def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr,symstr, numshares, pr
     rs.robinhood.authentication.login(username=useremail0, password=pwd0, expiresIn=totalseconds, scope='internal', by_sms=True, store_session=True, mfa_code=None, pickle_name='')
     print("] 3nterP0stionsRobinhoodAndINSERTDatabase()    : Logged in.")
 
-
-
     print("] 3nterP0stionsRobinhoodAndINSERTDatabase()    : Getting Account Profile in... ")
     prof = rs.robinhood.profiles.load_account_profile(account_number=None, info=None)
     if(msg00==1):
         printJson(prof, "Profile")
 
 
-
     print("] 3nterP0stionsRobinhoodAndINSERTDatabase()    : Getting Open Stock Positions... ")
     poss = rs.robinhood.get_open_stock_positions()
-    if(msg00==1):
+    # if(msg00==1):
+    #     printJson(poss, "Open Stock Positions")
+    if(True):
+        print("\n\n")
         printJson(poss, "Open Stock Positions")
-
+    holdingsTF=True
     if(holdingsTF):
         print("] 3nterP0stionsRobinhoodAndINSERTDatabase()    : G3tHoldings()  BEFORE TRADE... ")
         my_items = GetHoldings("BEFORE TRADE")
@@ -1395,13 +1494,15 @@ def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr,symstr, numshares, pr
         qty0         = numshares
         price00      = price0  
         if(qty0>MaxShares):
-            qty0=2
+            qty0=1
         print("] *** 3nterP0stionsRobin...base()    : BUYing $",(qty0*price00) , " dollars worth of ",symstr, " stock, shares=",qty0)
         assettype0  = "stock"
         buySell0    = "BUY"
         sym0        =  symstr   
         # SEND BUY STOCK ORDER
         sendStockOrder( buySell0, qty0, sym0, assettype0  , "market", price00 )
+
+        # sendStockOrder( buySell0, qty0, sym0, assettype0  , "limit", price00 )  # doesn't work
         #confirm stock order here / GetHoldings() ?
         sendOrderToDatabaseAndUpdateCmdVariables()
         print("] 3nterP0stionsRobinhoodAndINSERTDatabase()    :                      AFTER TRADE... ")
@@ -1470,6 +1571,42 @@ def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr,symstr, numshares, pr
         my_Options_items = rs.robinhood.options.get_open_option_positions(account_number=None, info=None)
         printJson(my_Options_items, "Option OPEN Orders")
 
+# Option OPEN Orders  json= [
+#           {
+#                     "account": "https://api.robinhood.com/accounts/497177477/",
+#                     "account_number": "497177477",
+#                     "average_price": "520.0000",
+#                     "chain_id": "d89ea7cf-0572-44d7-a6de-30b5bb59ed40",
+#                     "chain_symbol": "ROKU",
+#                     "id": "8c711850-ba51-435f-8198-8e3ba6334656",
+#                     "option": "https://api.robinhood.com/options/instruments/4671098d-9334-4bd7-8b1a-8e3150a6b28f/",
+#                     "type": "long",
+#                     "pending_buy_quantity": "0.0000",
+#                     "pending_expired_quantity": "0.0000",
+#                     "pending_expiration_quantity": "0.0000",
+#                     "pending_exercise_quantity": "0.0000",
+#                     "pending_assignment_quantity": "0.0000",
+#                     "pending_sell_quantity": "0.0000",
+#                     "quantity": "2.0000",
+#                     "intraday_quantity": "2.0000",
+#                     "intraday_average_open_price": "520.0000",
+#                     "created_at": "2024-02-23T19:15:03.268410Z",
+#                     "trade_value_multiplier": "100.0000",
+#                     "updated_at": "2024-02-23T19:15:25.244144Z",
+#                     "url": "https://api.robinhood.com/options/positions/8c711850-ba51-435f-8198-8e3ba6334656/",
+#                     "option_id": "4671098d-9334-4bd7-8b1a-8e3150a6b28f"
+#           }
+# ]
+# ] **************************************** optionSymbol =  AAPL  240209P00175
+# Bid Price: 0.0
+# Ask Price: 0.0
+# ] Your Holdings  BEFORE TRADE  :
+# symbol= META    0  )
+# META {'price': '484.015400', 'quantity': '2.00000000', 'average_buy_price': '490.2500', 'equity': '968.03', 'percent_change': '-1.27', 'intraday_percent_change': '-1.27', 'equity_change': '-12.469200', 'type': 'stock', 'name': 'Meta Platforms', 'id': 'ebab2398-028d-4939-9f1d-13bf38f81c50', 'pe_ratio': '32.688000', 'percentage': '8.79'}
+# symbol= AAPL    1  )
+# AAPL {'price': '182.605000', 'quantity': '1.00000000', 'average_buy_price': '182.7800', 'equity': '182.60', 'percent_change': '-0.10', 'intraday_percent_change': '-0.10', 'equity_change': '-0.175000', 'type': 'stock', 'name': 'Apple', 'id': '450dfc6d-5510-4d40-abfb-f633b7d9be3e', 'pe_ratio': '28.686800', 'percentage': '1.66'}
+# symbol= SMCI    2  )
+# SMCI {'price': '861.999900', 'quantity': '2.00000000', 'average_buy_price': '867.4100', 'equity': '1724.00', 'percent_change': '-0.62', 'intraday_percent_change': '-0.62', 'equity_change': '-10.820200', 'type': 'stock', 'name': 'Super Micro Computer', 'id': '7973d19b-db71-4f1c-bf05-7da327f91d34', 'pe_ratio': '76.250000', 'percentage': '15.65'}
 
 
 ###### THIS WORKS !
@@ -1496,6 +1633,34 @@ def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr,symstr, numshares, pr
 
     print("] 3nterP0stionsRobinhoodAndINSERTDatabase( ... )    : returning...")
     return
+
+
+
+def cancelOrder( stockOption, orderID ):
+    """
+    robin_stocks.robinhood.orders.cancel_option_order(orderID)[source]
+    Cancels a specific option order.
+    Parameters:	orderID (str) – The ID associated with the order. Can be found using get_all_option_orders(info=None).
+    Returns:	Returns the order information for the order that was cancelled.
+    
+    
+    robin_stocks.robinhood.orders.cancel_stock_order(orderID)[source]
+    Cancels a specific order.
+    Parameters:	orderID (str) – The ID associated with the order. Can be found using get_all_stock_orders(info=None).
+    Returns:	Returns the order information for the order that was cancelled.
+    """
+    stockOption =  stockOption.upper()
+    if(stockOption=="STOCK" or stockOption=="STOCKS"):
+        rs.robinhood.orders.cancel_stock_order(orderID)
+        pass
+        
+
+    if(stockOption=="OPTION" or stockOption=="OPTIONS"):
+        rs.robinhood.orders.cancel_option_order(orderID)
+        pass
+
+        
+
 
 
 # import requests
@@ -1610,11 +1775,8 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
     # portfolio1 = Portfolio("JB", "roguequant1@gmail.com", "354" "Crixus2011", "Robinhood", "E3F266FC2A10034D")
 
     # portfolio1.initialize()
-
     # portfolio1.authenticate()
-
     # portfolio1.getPositions()
-
     # portfolio1.print()
 
     # print("] Attempted Mock Portfolio Object Operations:   AFTER...")
@@ -2119,6 +2281,23 @@ def clearScreen():
     # clear screen
     os.system('cls' if os.name == 'nt' else 'clear')
 
+
+def getStockPrices(  stockINIarr ):
+    i0=1
+    len0=len(stockINIarr)
+    print("\n\n\n" )    
+
+    for stock_symbol in stockINIarr:
+        print("] Getting #",i0   , stock_symbol)    
+
+        ask_price = rs.robinhood.stocks.get_latest_price(stock_symbol,  'ask_price')
+        bid_price = rs.robinhood.stocks.get_latest_price(stock_symbol,  'bid_price')
+        print("BID / ASK price for",stock_symbol,"=     ",bid_price[0], "  /  ", ask_price[0])
+
+        i0+=1
+
+
+
 ################################################################ END OF def FUNCTIONS():
     
 
@@ -2162,7 +2341,7 @@ print("\nPlanned: Robinhood API, Fidelity API, Schwab/TD API, E*Trade API, Webul
 
 ##################################################### CLASS STRUCTURE TESTS ###########
 #####
-#####  Start integrating Class structure for tested functions' migration to Portfolio.cancelOrder() or .sendStockOrder()
+#####  Start integrating Class structure for tested functions' migration to Portfolio.cancelOrder() or .sen dStockOrder()
 
 print("] Attempting Mock Portfolio Object Operations: BEFORE...")
 print("] User: CREATOR Logged In. porfolio.initialize() + beginning...")
@@ -2236,6 +2415,10 @@ EnterPostionsRobinhood( useremail0 , pwd0 , simLIVE )
 
 
 
+
+##########################################################################################################    find 0PTIONS     ########################################################
+
+
 # ] **************************************** optionSymbol =  AAPL_240209c175
 # option_chain= [{'chain_id': '7dd906e5-7d4b-4161-a3fe-2c3b62038482', 
 # 'chain_symbol': 'AAPL', 'created_at': '2023-12-28T02:05:38.841588Z', 
@@ -2246,12 +2429,17 @@ EnterPostionsRobinhood( useremail0 , pwd0 , simLIVE )
 # 'sellout_datetime': '2024-02-09T20:30:00+00:00', 'long_strategy_code': 'c54349d7-0ef3-4874-ab27-6933f2c2b114_L1', 
 # 'short_strategy_code': 'c54349d7-0ef3-4874-ab27-6933f2c2b114_S1'}]
 
-# Option details
+
+findoptions=True
 findoptions=False
-symbol = "AAPL"
-strike0 = 175
-expiration_date = "2024-02-09"
-option_type = "put"   # "call"
+
+symbol = "ROKU"
+print("\n\n\nAttempting  to retrieve Options DATA: ",  symbol  , "...")
+# Option details
+
+strike0 = 60
+expiration_date = "2024-03-01"
+option_type = "call" # "put"   # "call"
 aPCstr=leftRightStr(option_type.upper(),"left",1)
 if(findoptions):
     option_chain = FindOptions( symbol, expiration_date, strike0, option_type, "roguequant1@gmail.com", pwd0 )  
@@ -2286,15 +2474,14 @@ if(findoptions):
     bid_price = float(option_instrument['bid_price'])
     ask_price = float(option_instrument['ask_price'])
 
-
-
+print("] **************************************** optionSymbol = " , optionsymbol)
 
 # Print bid and ask prices
 print(f"Bid Price: {bid_price}")
 print(f"Ask Price: {ask_price}")
 # Logout from Robinhood
 # rs.logout()
-######################################################
+##################################################################################################################################################################
 
 
 
@@ -2462,6 +2649,7 @@ hrsmins=gtstr #"0935"
 mins9 = getMinutesFromClose( hrsmins )
 if(simuTime==0):
     print("TIME IN NYC:",hrsmins, " mins fromClose = " , mins9)
+    simutime0=hrsmins
 elif (simuTime==1):
     hrsminsMod = CheckAfterMidnight(hrsmins) 
     simutime0= GetSimuTime(hrsminsMod)
@@ -2527,17 +2715,24 @@ rawIDdtarr=[]   #daate time
 
 
 
+findOptions1("ROKU", "2023-03-01", 60)
 
 
 
 MaxMinutes = (keepLooping * (timeDelay+0 )/60 ) 
 print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:",MaxMinutes," Max HOURS=",MaxMinutes/60,"\n\n" )
 
-#######################################################################   
-#######################################################################   ```````` LOOP
-#######################################################################                      LOOP
-#######################################################################    LOOP
-###################### STARTING LOOP ****************************************
+
+
+
+
+########################################################################################        STARTING LOOP ****************************************
+#
+#
+#
+##########################################################################################################################     LOOP
+##########################################################################################################################     LOOP
+##########################################################################################################################     LOOP
 
 
 while keepLooping > 0:
@@ -2569,6 +2764,7 @@ while keepLooping > 0:
     # CheckPositions("Gianni", "12345354911")
 
 
+    getStockPrices(  stockINIarr )
 
 
 
@@ -2671,6 +2867,8 @@ while keepLooping > 0:
 
     if(simuTime==0):
         print("] TIME NOW IN NYC is ",hrsmins, ", or mins fromClose = " , mins9)
+        simutime0=hrsmins
+
     elif (simuTime==1):
         hrsminsMod = CheckAfterMidnight(hrsmins) 
         simutime0= GetSimuTime(hrsminsMod)
