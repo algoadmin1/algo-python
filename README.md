@@ -45,19 +45,12 @@ https://git-scm.com/download/mac.
 
 Will:
 	+ Review logic to deal w/ market timing - we are either pre-market, market open, or market closed. Verify Daily Pivot is correct.
-	+ Add simple graph. or NOT, maybe we keep this text ?? 
-	+ if we go graphical, make graphics for "Gold on the Back." etc. 
-	+ Create diagram of 'computer assisted improvisation' AI product.  The market for AI-assisted music composition is still wide open, relative to other areas
 	+ Continue dog-fooding  - use products personally and follow the signals, giving feedback etc
 	
-John: 
-	visit Twin and Nephews in NC. Trust the process. LEVEL BLEST will cover half of ALL expenses incurred in trip, as a minimum.
-	Continue boxing
+John:
 	Finish coding up the Autobot
-	Take care of paying customers on a proactive basis
-	Raise $ and then Raise Hell w/ Fellow Moose and MIT MAFIA
-	Hammer out partner agreement w/ Bro so expectations, exits, what-ifs are properly covered.
-	If ya can't talk for days, just say that, instead of ghosting teammates. super cringe and teenager-y. Adults set and communicate boundaries
+	Continue boxing
+	visit Twin and Nephews in NC. Trust the process. LEVEL BLEST will cover half of ALL expenses incurred in trip, as a minimum.
 
 Diego: 
 	Start learning UE 5.3 - we need tutors + he can help on UE 5 promotional materials and plumbing with the new 'ai-assisted production techstack'
@@ -66,7 +59,6 @@ Matteo:
 	assist Uncle Johnnie w/ Social marketing/ad plan for our initial test products.  Use both AI and IRL network to promote and ID trends/eyeballs
 
 Other notes, comments from python.py
-
 
 ## Other Reference
  
