@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "9.99"
+versionStr =                    "10.1"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -1335,13 +1335,14 @@ def WithDrawFundsToBankAccount():
     # Returns:	
     # Returns a list of dictionaries of key/value pairs for the transaction.
 
-def findOptions1( sym0,  expdate, strike0):
+def findOptions1( sym0,  expdate, strike0 ):
     """
     robin_stocks.robinhood.options.find_options_by_expiration_and_strike(inputSymbols, expirationDate, strikePrice, optionType=None, info=None)[source]
     Returns a list of all the option orders that match the seach parameters
     """    
  
-    list0 = rs.robinhood.options.find_options_by_expiration_and_strike(sym0, expdate, strike0 ) #, optionType=None, info=None)
+    list0 = rs.robinhood.options.find_options_by_expiration_and_strike(sym0, expdate, strike0 ) # , optionType='call' ) #, optionType=None, info=None)
+    # list0 = rs.robinhood.options.find_options_by_expiration_and_strike(sym0, expdate, strike0, optionType='call' ) #, optionType=None, info=None)
     print("] f1ndOptions(" ,sym0,  expdate, strike0, " )  ==", list0 )
     
 
@@ -2348,6 +2349,7 @@ EnterPostionsRobinhood( useremail0 , pwd0 , simLIVE )
 # 'sellout_datetime': '2024-02-09T20:30:00+00:00', 'long_strategy_code': 'c54349d7-0ef3-4874-ab27-6933f2c2b114_L1', 
 # 'short_strategy_code': 'c54349d7-0ef3-4874-ab27-6933f2c2b114_S1'}]
 
+
 findoptions=True
 findoptions=False
 
@@ -2633,6 +2635,7 @@ rawIDdtarr=[]   #daate time
 
 
 
+findOptions1("ROKU", "2023-03-01", 60)
 
 
 
