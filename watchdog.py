@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "11.54"
+versionStr =                    "12.11"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -280,9 +280,6 @@ def find_index(arr, target_str):
 #     print(f"The string '{search_string}' is at index {result_index}.")
 # else:
 #     print(f"The string '{search_string}' is not in the array.")
-
-
-
 
 
 
@@ -738,7 +735,49 @@ def ValidateBarType(barstr):
 
 
 
+# import requests
+def postStringUrl(data_str, url_str):
+    """
+        # Example usage:
+        url_str = "https://algoinvestorr.com/trades/addonetrade.php"
+        data_str = "placedtrade,2024-02-24,1545,Sat,tradeId_22031,creator,123354911,algoinvestorr@gmail.com,BUY,AAPL,10,LONG_STOCK,182.50,limit,filled,exit=2025-06-30,tradeId=BcGfYb0bC0cDA554bDeff1,live,t,u,v,w,x,y,z,EOL"  # +  ' { "a":"b", "c":"d", "e":"f", g:h, i:j } '
 
+
+        result = p0stStringUrl(data_str, url_str)
+        print(result)
+
+        print("] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-----====>>>SENDING data_to_sendLast via _POST...\n")
+
+        payload = {'data': data_to_sendLast }
+        response = requests.post(url, data=payload)
+        print(response.text)
+
+        # POST the last line to the PHP script
+        tgt = "intradaytradesServer_"+dstr1+".txt"
+        print("Called & POSTed "+str(data_lines_to_send)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
+    
+
+    """
+    
+    try:
+        # Check if the input string and URL are not null or empty
+        if not data_str or not url_str:
+            return "Error: Input string or URL cannot be null or empty"
+        # Prepare the data to be sent in the POST request
+        payload = {'data': data_str}
+        # Make a POST request to the URL
+        response = requests.post(url_str, data=payload)
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            print(response.text)
+            print("\n\nSuccess: Data successfully sent")
+            return(response.text)
+            # return f"Success: Data successfully sent to {url_str}"
+        else:
+            return f"Error: Unable to send data to {url_str}. Status code: {response.status_code}"
+    except Exception as e:
+        # Handle exceptions such as connection errors
+        return f"Error: {str(e)}"
 
 
 
@@ -770,7 +809,7 @@ def ValidateBarType(barstr):
 #  
 # ]  AAL BUY rawID= 2371 G3tAbsMinutes(): trademins(2), cmpTime(2), absTime= 1415 285   ,   1409 279 6
 # 
-#
+
 def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
     print("] READY TO EX3CUTE TRADE: ", symstr, "\n\n")
 
@@ -2405,6 +2444,9 @@ print(json.dumps(CMD_Array, indent=4))
 
 
 
+
+
+
 print("\n\n\nAttempting Robinhood Access...")
 pwd0="c"+pwd0+"2011"
 simLIVE=1       # 0 = off, 1 = live
@@ -2485,7 +2527,17 @@ print(f"Ask Price: {ask_price}")
 
 
 
-
+# ##
+# Your Holdings  BEFORE TRADE  :
+# symbol= TSLA    0  )
+# TSLA {'price': '190.560000', 'quantity': '1.00000000', 'average_buy_price': '192.4800', 'equity': '190.56', 'percent_change': '-1.00', 'intraday_percent_change': '0.00', 'equity_change': '-1.920000', 'type': 'stock', 'name': 'Tesla', 'id': 'e39ed23a-7bd1-4587-b060-71988d9ef483', 'pe_ratio': '44.603700', 'percentage': '4.39'}
+# symbol= META    1  )
+# META {'price': '483.650000', 'quantity': '2.00000000', 'average_buy_price': '490.2500', 'equity': '967.30', 'percent_change': '-1.35', 'intraday_percent_change': '0.00', 'equity_change': '-13.200000', 'type': 'stock', 'name': 'Meta Platforms', 'id': 'ebab2398-028d-4939-9f1d-13bf38f81c50', 'pe_ratio': '32.546800', 'percentage': '22.30'}
+# symbol= AAPL    2  )
+# AAPL {'price': '181.990000', 'quantity': '3.00000000', 'average_buy_price': '182.5567', 'equity': '545.97', 'percent_change': '-0.31', 'intraday_percent_change': '0.00', 'equity_change': '-1.700100', 'type': 'stock', 'name': 'Apple', 'id': '450dfc6d-5510-4d40-abfb-f633b7d9be3e', 'pe_ratio': '28.398900', 'percentage': '12.59'}
+# symbol= SMCI    3  )
+# SMCI {'price': '878.010000', 'quantity': '3.00000000', 'average_buy_price': '867.3867', 'equity': '2634.03', 'percent_change': '1.22', 'intraday_percent_change': '0.00', 'equity_change': '31.869900', 'type': 'stock', 'name': 'Super Micro Computer', 'id': '7973d19b-db71-4f1c-bf05-7da327f91d34', 'pe_ratio': '67.221400', 'percentage': '60.72'}
+#
 
 #######################################################################
 #######################################################################  PREP  BEFORE START-LOOP
@@ -2497,7 +2549,31 @@ print(f"Ask Price: {ask_price}")
 my_stock_items = GetHoldingsButLoginFirst("BEFORE TRADE", "roguequant1@gmail.com", pwd0)
 
 
+########################################################################  test portfolio rec/send here...
+#
+#                   recPortfolioTrade.php
+#
+#
+url_str = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
+data_str = "placedtrade,2024-02-24,1545,Sat,tradeId_22031,creator,123354911,algoinvestorr@gmail.com,BUY,AAPL,10,LONG_STOCK,182.50,limit,filled,exit=2025-06-30,tradeId=BcGfYb0bC0cDA554bDeff1,live,t,u,v,w,x,y,z,EOL"  # +  ' { "a":"b", "c":"d", "e":"f", g:h, i:j } '
 
+print("] READY to test ", url_str, " with data: ====>>>" ,data_str ,"<<<====")
+input0 = input()
+
+print("] SENDING ",data_str, " to: ", url_str)
+result = postStringUrl(data_str, url_str)
+
+#  searchQuery, len=200 - _POST msg rec'd OK!
+
+#  params = placedtrade|2024-02-24|1545|Sat|tradeId_22031|creator|123354911|algoinvestorr@gmail.com|BUY|AAPL
+# Found 26 params[] (all lines)...
+
+print("] ***>> AFTER SEND POST! ;   result ==")
+print(result[0])
+print(result[1] )
+print(result[2])
+print(result)
+input0 = input()
 
 
 ####################################################################################  DATE & Time input
