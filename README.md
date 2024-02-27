@@ -36,10 +36,11 @@ git log -p -- filename												# show history of specific file, including pat
 git config -l																	# show git configuration like user name,  email
 
 # user switch test:
-# sample change made while logged in as algoadmin1, but pushed after switching to perimeter-zz
+# I had to change both global and local.  I think on boot-up they might revert to admin1
 git config --global user.name "perimeter-zz"
 git config --global user.email "willbotti@gmail.com"
-
+git config --local  user.name "perimeter-zz"
+git config --local user.email "willbotti@gmail.com"
 #############################################
 
 ## Useful links: 
