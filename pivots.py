@@ -306,7 +306,7 @@ def PrintPivots(p:str, i:str):
 
 	# Calc the 3d pivot
 	threeDayPivot = 0
-	if (p=='5d'):
+	if (p == '5d'):
 		startIndex = numRows -2 if g_market_status == MarketStatus.OPEN else numRows - 1
 		endIndex = startIndex - 3
 		for row in range(startIndex, endIndex, -1):
@@ -327,7 +327,10 @@ def PrintPivots(p:str, i:str):
 
 	label = "Daily  " if p == "5d" else "Monthly"
 	targetIndex = numRows - 1
-	if (p == "3mo" or  (p=="5d" and g_market_status == MarketStatus.OPEN)):
+	# UPDATE: 2/27/24 looks like yfinance api now fetches monthly data starting on 1st vs ending on 31st
+	# so we will use last row not middle for monthly
+	#if (p == "3mo" or  (p=="5d" and g_market_status == MarketStatus.OPEN)):
+	if (p=="5d" and g_market_status == MarketStatus.OPEN):
 		# Monthly will have last 3 mos,  middle row is the prior month and the one we care about
 		# if Market open, Daily will also have an extra row
 		targetIndex = numRows - 2
