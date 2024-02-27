@@ -411,7 +411,7 @@ urlbase = 'https://algoinvestorr.com/trades/gettrades.php?u=j&d='
 url0    = 'https://algoinvestorr.com/trades/gettrades.php?u=j'
 
 #
-#################################################                   from gettrades.py   
+#################################################      from gettrades.py   
 
 
 
@@ -809,6 +809,10 @@ def postStringUrl(data_str, url_str):
 #  
 # ]  AAL BUY rawID= 2371 G3tAbsMinutes(): trademins(2), cmpTime(2), absTime= 1415 285   ,   1409 279 6
 # 
+# .robinhood *SENDING LONG_PUTS OPTION Order ADBE 1 8.62 2024-03-08 560 put BUY
+# *** Leaving Ex3cuteTrade() Now... 
+
+
 
 def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
     print("] READY TO EX3CUTE TRADE: ", symstr, "\n\n")
@@ -2472,7 +2476,6 @@ EnterPostionsRobinhood( useremail0 , pwd0 , simLIVE )
 # 'short_strategy_code': 'c54349d7-0ef3-4874-ab27-6933f2c2b114_S1'}]
 
 
-findoptions=True
 findoptions=False
 
 symbol = "ROKU"
@@ -2558,7 +2561,7 @@ url_str = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
 data_str = "placedtrade,2024-02-24,1545,Sat,tradeId_22031,creator,123354911,algoinvestorr@gmail.com,BUY,AAPL,10,LONG_STOCK,182.50,limit,filled,exit=2025-06-30,tradeId=BcGfYb0bC0cDA554bDeff1,live,t,u,v,w,x,y,z,EOL"  # +  ' { "a":"b", "c":"d", "e":"f", g:h, i:j } '
 
 print("] READY to test ", url_str, " with data: ====>>>" ,data_str ,"<<<====")
-input0 = input()
+# input0 = input()
 
 print("] SENDING ",data_str, " to: ", url_str)
 result = postStringUrl(data_str, url_str)
@@ -2573,8 +2576,13 @@ print(result[0])
 print(result[1] )
 print(result[2])
 print(result)
-input0 = input()
 
+lstr = leftRightStr( result, "left", 4)
+print("] confirmSTRING ==", lstr)
+
+print("] Press ENTER to continue...")
+
+input0 = input()
 
 ####################################################################################  DATE & Time input
 #
