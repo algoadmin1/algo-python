@@ -2,6 +2,9 @@
 # Displays the pivots for a given ticker
 # (c) 2024 by Level Blest LLC 
 
+# set this True to print price data rows from scrapes
+g_debugHistory = False
+
 ''' Psuedo Code (trying multiline comment):
 
 	Get ticker via textbox; Goal is Voice2Text
@@ -56,22 +59,18 @@ print("]  Still importing more Python modules...")
 #import pandas as pd
 import calendar
 import pandas_market_calendars as mcal
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 #from datetime import date, timedelta
 print("]  Still importing ......")
 
 import os
 import random
+from enum import Enum, auto
 
 defaultTicker = 'NVDA'
 
 # GLOBALS area.  If we must use globals, please use "g_" as a prefix
-# set this True to print all price data rows from scrapes
-g_debugHistory = False
-
-# clean up these globals, for market status
-g_isMarketOpen = False
 
 # let's have some fun w/ user facing messages
 g_TipMessages = []
@@ -87,7 +86,6 @@ g_TipMessages.append("|          Check the 1-month T-bill            |")
 
 g_FirstTime = True
 g_LastMessageIndex = -1
-
 
 # colors 
 colorGreen ="32"
@@ -109,21 +107,41 @@ colorGray  ="90"
 colorArray = [ colorRed, colorBlue, colorGreen, colorOrange, colorCyan, colorAqua, colorYellow ,colorPurple, colorMagenta,colorBrown ]
 colorArrayLen = len(colorArray)
 
-def IsMarketOpen():
-	# Define the market calendar (e.g., New York Stock Exchange)
-	market_cal = mcal.get_calendar('XNYS')
+# example of pythone enum
+class MarketStatus(Enum):
+    PRE_MARKET = auto()
+    OPEN = auto()
+    CLOSED = auto()
 
-	# Get the current date and time
-	current_datetime = datetime.now()
+# Default market status to PRE_MARKET
+g_market_status = MarketStatus.PRE_MARKET
 
-	# Check if the market is open at the current date and time
-	is_market_open = market_cal.valid_days(start_date=current_datetime.date(), end_date=current_datetime.date()).size > 0
+############################################ METHODS BELOW HERE #################################################
 
-	#if is_market_open:
-	#	print("The market is currently open.")
-	#else:
-	#	print("The market is currently closed.")
-	return is_market_open
+def set_market_status():
+    # Get current time in UTC
+    #current_time_utc = datetime.utcnow()
+	current_time_utc = datetime.now(timezone.utc)
+
+    # Convert UTC to EST (Eastern Standard Time)
+	est_offset = timedelta(hours=-5)
+	current_time_est = current_time_utc + est_offset
+
+    # Extract hour and minute from the current time
+	hour = current_time_est.hour
+	minute = current_time_est.minute
+
+    # Set market status based on the time
+	global g_market_status
+	if hour < 9 or (hour == 9 and minute < 30):
+		g_market_status = MarketStatus.PRE_MARKET
+	elif hour >= 16 or (hour == 16 and minute >= 30):
+		g_market_status = MarketStatus.CLOSED
+	else:
+		g_market_status = MarketStatus.OPEN
+
+	# for testing, override market status
+	#g_market_status = MarketStatus.CLOSED
 
 def IsTickerValid(ticker_symbol):
 	# Create a Ticker object
@@ -227,7 +245,7 @@ def HelloCustomer():
 	#print("\t\t( Default: ", defaultTicker, ")\n")
 
 def PrintPivots(p:str, i:str):
-	global g_isMarketOpen
+	global g_market_status
 
 	# do the scrape
 	try:
@@ -243,12 +261,19 @@ def PrintPivots(p:str, i:str):
 		print(f"An unexpected error occurred: {e}")
 
 	if (g_debugHistory):
+		# ALERT: the monthlies used to return EOM like 2024-01-31, now I'm seeing output below on Feb 26
+		'''
+				Price Data:
+			                                 Open        High         Low       Close     Volume  Dividends  Stock Splits
+			Date
+			2023-12-01 00:00:00-05:00  465.209087  504.285637  450.060425  495.176453  740951700       0.04           0.0
+			2024-01-01 00:00:00-05:00  492.440002  634.929993  473.200012  615.270020  970385300       0.00           0.0
+			2024-02-01 00:00:00-05:00  621.000000  823.940002  616.500000  790.919983  977536215       0.00           0.0
+		'''
+
 		print("Price Data: ")
 		print(priceData)
 		print("\n")
-
-	# TODO: determine if market is open, to decide if which row to grab (either 0 or 1)
-	#timeStamp = priceData.index[row]
 
 	numRows = len(priceData.index)
 
@@ -282,7 +307,7 @@ def PrintPivots(p:str, i:str):
 	# Calc the 3d pivot
 	threeDayPivot = 0
 	if (p=='5d'):
-		startIndex = numRows -2 if g_isMarketOpen else numRows - 1
+		startIndex = numRows -2 if g_market_status == MarketStatus.OPEN else numRows - 1
 		endIndex = startIndex - 3
 		for row in range(startIndex, endIndex, -1):
 			threeDayPivot += P[row]
@@ -298,18 +323,16 @@ def PrintPivots(p:str, i:str):
 	# for row in range(numRows):
 	# 	print(rowNames[row])
 
+	# THIS BLOCK PRINTS EITHER THE MONTHLY OR DAILY PIVOT
+
 	label = "Daily  " if p == "5d" else "Monthly"
+	targetIndex = numRows - 1
+	if (p == "3mo" or  (p=="5d" and g_market_status == MarketStatus.OPEN)):
+		# Monthly will have last 3 mos,  middle row is the prior month and the one we care about
+		# if Market open, Daily will also have an extra row
+		targetIndex = numRows - 2
 
-	# Figure out the row. for Daily pivots, we'll print todays (using yesterday data) and a work-in-progress pivot
-	# Monthly will have last 3 mos,  middle row is the prior month and the one we care about
-
-	startIndex = numRows - 2
-
-	# if invoked w daily pivots, and the market is not open, figure out the row
-	if (p=="5d" and not g_isMarketOpen):
-		startIndex = numRows - 1
-
-	for row in range(startIndex, startIndex-1, -1):
+	for row in range(targetIndex, targetIndex-1, -1):
 		timeStamp = priceData.index[row]
 		C = priceData.at[timeStamp,'Close']
 		lastPrice = f"{C:.2f}"
@@ -332,12 +355,12 @@ def PrintPivots(p:str, i:str):
 		print("\t\tS2 ", f"{S2[row]:.2f}")
 		print("\t\tS3 ", f"{S3[row]:.2f}", "\n")
 
-	# Block below prints additional WIP pivot, if function invoked with daily And the Market is open
-	if (p == "5d" and g_isMarketOpen == True):
+	# THIS BLOCK PRINTS Additional WIP pivot, if needed. 
+	if (p == "5d" and g_market_status == MarketStatus.OPEN):
 		label = "  WIP  "
 		
-		startIndex = numRows-1
-		for row in range(startIndex, startIndex-1, -1):
+		targetIndex = numRows-1
+		for row in range(targetIndex, targetIndex-1, -1):
 			timeStamp = priceData.index[row]
 			C = priceData.at[timeStamp,'Close']
 			lastPrice = f"{C:.2f}"
@@ -376,9 +399,13 @@ def get_last_trading_date():
 
     # Get today's date
     today = datetime.today().date()
+    yesterday = today - timedelta(days=1)
+    #print("yeseterday: ", yesterday)
 
     # Adjust the date to the previous business day (last trading date)
-    last_trading_date = exchange.valid_days(start_date=today - timedelta(days=7), end_date=today)[-1]
+    last_trading_date = exchange.valid_days(start_date=today - timedelta(days=7), end_date= yesterday )[0]
+
+    #last_trading_date = exchange.valid_days(start_date=today - timedelta(days=7), end_date=today )[-1]
 
     return last_trading_date.date()
 
@@ -393,10 +420,12 @@ os.system('cls' if os.name == 'nt' else 'clear')
 todayDate = datetime.now().date()
 lastMonthDate = GetPriorMonthLastTradingDate(todayDate)
 lastTradingDate = get_last_trading_date()
+# set the market status
+set_market_status()
+
 print("Today is ", todayDate, "\t\t\tPrior month ended:", lastMonthDate)
-g_isMarketOpen = IsMarketOpen()
 #TODO debug this
-print("Prior is ", lastTradingDate, "  ... Match!! " if (todayDate == lastTradingDate) else "", "\tMarket is ", "Open" if g_isMarketOpen else "Closed")
+print("\t\tCurrent market status:", g_market_status)
 
 HelloCustomer()
 
@@ -419,4 +448,4 @@ while (True):
 	# Daily Pivots. The call below will print levels for today, WIP levels for tomorrow, and the 3D Pivot
 	PrintPivots("5d", "1d")
 
-print("\n\tGood job! Have a Blest Day and thanks for choosing AlgoZ Pivotal.\n")
+print("\n\tThanks for choosing AlgoZ Pivotal. Have a Blest Day! \n")
