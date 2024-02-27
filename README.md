@@ -35,6 +35,11 @@ git log -p -- filename												# show history of specific file, including pat
 
 git config -l																	# show git configuration like user name,  email
 
+# user switch test:
+# sample change made while logged in as algoadmin1, but pushed after switching to perimeter-zz
+git config --global user.name "perimeter-zz"
+git config --global user.email "willbotti@gmail.com"
+
 #############################################
 
 ## Useful links: 
