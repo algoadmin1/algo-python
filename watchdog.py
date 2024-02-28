@@ -2572,6 +2572,8 @@ print("] ***>> AFTER SEND POST! ;   result ==")
 print(result[0])
 print(result[1] )
 print(result[2])
+if(result[0]=="O" and result[1]=="K" and result[1]=="G" ):
+    print("] Server Response: OK go !")
 print(result)
 input0 = input()
 
