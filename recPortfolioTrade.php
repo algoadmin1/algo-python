@@ -94,7 +94,7 @@ $splitChars = ",";
   //
   if (empty($searchQuery)) {
     echo "searchQuery is empty, exiting.\n";
-    exit("recpost.php execution terminated.\n\n");
+    exit("recPortfolioTrade.php execution terminated.\n\n");
 
   } else {
     echo " searchQuery, len=". strlen($searchQuery). " - _POST msg rec'd OK!\n";
@@ -111,35 +111,7 @@ echo "\nFound $cnt params[] (all lines)...\n";
 
 
 
-
-// // Check if data is received via POST
-// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//     // Check if the 'data' parameter exists in the POST request
-//     if (isset($_POST['data'])) {
-//         // Retrieve the POST data
-//         $recPOSTstr = $_POST['data'];
-//         // Use explode to create an array of strings by splitting with ","
-//         $arrStrsJB = explode(",", $recPOSTstr);
-        
-//         // Check if the array is not empty
-//         if (!empty($arrStrsJB)) {
-//             // Print the received string and the array of strings
-//             echo "Received POST String: $recPOSTstr\n";
-//              // Use the function to print the array of strings
-//             printArray($arrStrs, "portfolioTrade");
-
-//             echo "Array of Strings:\n";
-//             print_r($arrStrsJB);
-//         } else {
-//             echo "Error: Received POST string is empty or not in the expected format.";
-//         }
-//     } else {
-//         echo "Error: 'data' parameter not found in the POST request.";
-//     }
-// } else {
-//     echo "Error: This script should be accessed via a POST request.";
-// }
-
+ 
 // $retstr0 ="] returning from ". $prgname. " ...";
 // return  ( $retstr0);
 
