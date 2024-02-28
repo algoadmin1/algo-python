@@ -2595,8 +2595,8 @@ my_stock_items = GetHoldingsButLoginFirst("BEFORE TRADE", "roguequant1@gmail.com
 url_str  = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
 data_str = "placedtrade,2024-02-27,1545,Sat,tradeId_22033,creator,123354911,algoinvestorr@gmail.com,BUY,AAPL,4,LONG_STOCK,179.50,limit,filled,exit=2025-06-30,tradeId=BcGfYb0bC0cDA554bDeff1,live,t,u,v,w,x,y,z,EOL"  # +  ' { "a":"b", "c":"d", "e":"f", g:h, i:j } '
 
-resultstr = sendDataString( data_str, url_str+"?u=err" )  # test NOGO server response
-# resultstr = sendDataString( data_str, url_str+"?u=jb" )
+# resultstr = sendDataString( data_str, url_str+"?u=err" )  # test NOGO server response
+resultstr = sendDataString( data_str, url_str+"?u=jb" )
 print("resultstr==",resultstr)
 
 if(resultstr=="OKGO"):
