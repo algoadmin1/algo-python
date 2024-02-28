@@ -108,6 +108,7 @@ $cnt=count($params);
 echo "\nFound $cnt params[] (all lines)...\n";
 
 
+echo "<p>Copyright &copy; 1999-" . date("Y") . " Algo Investor Inc.</p>";
 
 
 
