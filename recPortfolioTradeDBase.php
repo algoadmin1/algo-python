@@ -31,6 +31,10 @@ $msg0=0;
 $msg0   = isset($_GET['msg']) ? $_GET['msg'] : '0';
 
 
+
+
+// ******************************************************************** INITAL VARS
+//
 $prgname="recpost1db.php";
 $happy1.="s";
 $servername = "localhost"; // Replace with your server name
@@ -41,10 +45,6 @@ $dbname = "u151710353_algotrades";
 $tblname ="positions";
 
 $timeNYC =  date("Y-m-d\TH:i:s");
-
-// ******************************************************************** INITAL VARS
-
-
 
 
 
