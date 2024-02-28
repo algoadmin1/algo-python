@@ -1,6 +1,7 @@
+# willdog.py derived from watchdog.py
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "12.11"
+versionStr =                    "01.01.01"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -16,7 +17,7 @@ import math
 new_york_timezone = pytz.timezone('America/New_York')
 current_date_ny = datetime.datetime.now(new_york_timezone).date()
 
-useremail0= "roguequant1@gmail.com" 
+useremail0= "willbotti@gmail.com" 
 MaxShares =10
 # see dump.js for log file
 
@@ -2575,8 +2576,6 @@ print("] ***>> AFTER SEND POST! ;   result ==")
 print(result[0])
 print(result[1] )
 print(result[2])
-if(result[0]=="O" and result[1]=="K" and result[1]=="G" ):
-    print("] Server Response: OK go !")
 print(result)
 
 lstr = leftRightStr( result, "left", 4)

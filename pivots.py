@@ -55,10 +55,9 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 print("]  Still importing more Python modules...")
 
-#wcb commenting out panda import, appears unneeded. Prob added during initial testing
-#import pandas as pd
 import calendar
 import pandas_market_calendars as mcal
+import pandas as pd
 from datetime import datetime, timedelta, timezone
 
 #from datetime import date, timedelta
@@ -242,8 +241,6 @@ def HelloCustomer():
 	print("\t^----------------------------------------------^\n")
 	printWatchDogWelcome()
 
-	#print("\t\t( Default: ", defaultTicker, ")\n")
-
 def PrintPivots(p:str, i:str):
 	global g_market_status
 
@@ -259,6 +256,11 @@ def PrintPivots(p:str, i:str):
 		print(f"IOError: {ioe}")
 	except Exception as e:
 		print(f"An unexpected error occurred: {e}")
+
+	# Convert index to datetime
+	priceData.index = pd.to_datetime(priceData.index)
+	# Format datetime index to string, but only show date
+	priceData.index = priceData.index.strftime("%Y-%m-%d")
 
 	if (g_debugHistory):
 		# ALERT: the monthlies used to return EOM like 2024-01-31, now I'm seeing output below on Feb 26
@@ -306,7 +308,7 @@ def PrintPivots(p:str, i:str):
 
 	# Calc the 3d pivot
 	threeDayPivot = 0
-	if (p=='5d'):
+	if (p == '5d'):
 		startIndex = numRows -2 if g_market_status == MarketStatus.OPEN else numRows - 1
 		endIndex = startIndex - 3
 		for row in range(startIndex, endIndex, -1):
@@ -327,7 +329,10 @@ def PrintPivots(p:str, i:str):
 
 	label = "Daily  " if p == "5d" else "Monthly"
 	targetIndex = numRows - 1
-	if (p == "3mo" or  (p=="5d" and g_market_status == MarketStatus.OPEN)):
+	# UPDATE: 2/27/24 looks like yfinance api now fetches monthly data starting on 1st vs ending on 31st
+	# so we will use last row not middle for monthly
+	#if (p == "3mo" or  (p=="5d" and g_market_status == MarketStatus.OPEN)):
+	if (p=="5d" and g_market_status == MarketStatus.OPEN):
 		# Monthly will have last 3 mos,  middle row is the prior month and the one we care about
 		# if Market open, Daily will also have an extra row
 		targetIndex = numRows - 2
@@ -336,7 +341,7 @@ def PrintPivots(p:str, i:str):
 		timeStamp = priceData.index[row]
 		C = priceData.at[timeStamp,'Close']
 		lastPrice = f"{C:.2f}"
-		print("\n\t\t    ", ticker+" ", label, "\t\t      ", lastPrice, "\t\tas of", timeStamp,"\n")
+		print("\n\t\t    ", ticker+" ", label, "Pivots for ", timeStamp, "\tClosing Price:  ", lastPrice,"\n")
 
 		# truncate time stamp for Daily and bigger periods. It's a row label, like "2024-02-09 00:00:00-05:00" 
 		#if interval == "1d" or interval == "1m":
@@ -392,23 +397,6 @@ def GetPriorMonthLastTradingDate(current_date):
     
     return last_day_of_prior_month.date()
 
-# TODO: rework logic for getting last trading date BEFORE today
-def get_last_trading_date():
-    # Define the exchange calendar (e.g., 'XNYS' for New York Stock Exchange)
-    exchange = mcal.get_calendar('XNYS')
-
-    # Get today's date
-    today = datetime.today().date()
-    yesterday = today - timedelta(days=1)
-    #print("yeseterday: ", yesterday)
-
-    # Adjust the date to the previous business day (last trading date)
-    last_trading_date = exchange.valid_days(start_date=today - timedelta(days=7), end_date= yesterday )[0]
-
-    #last_trading_date = exchange.valid_days(start_date=today - timedelta(days=7), end_date=today )[-1]
-
-    return last_trading_date.date()
-
 #########################
 # start of main program #
 #########################
@@ -419,12 +407,10 @@ os.system('cls' if os.name == 'nt' else 'clear')
 # Show useful dates & Market Status
 todayDate = datetime.now().date()
 lastMonthDate = GetPriorMonthLastTradingDate(todayDate)
-lastTradingDate = get_last_trading_date()
 # set the market status
 set_market_status()
 
 print("Today is ", todayDate, "\t\t\tPrior month ended:", lastMonthDate)
-#TODO debug this
 print("\t\tCurrent market status:", g_market_status)
 
 HelloCustomer()

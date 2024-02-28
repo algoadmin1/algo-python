@@ -46,7 +46,7 @@ function printArray($arrStrs, $msgStr) {
     }
 }
 
-echo "354MOOSE] Attempting RECEIVE data: [ prg vers= $vers ]  ......"; //<br />";
+echo "OKGO354MOOSE] Attempting RECEIVE data: [ prg vers= $vers ]  ......"; //<br />";
 
 
 echo "] recpost.php $vers is running, Time in NYC = ". $todaysdate."    ____________-->" ;
