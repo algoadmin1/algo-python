@@ -21,9 +21,9 @@ $prgname= "recPortfolioTrade.php";
 // // ******************************************************************** INITAL VARS
 
 // // Get the values from the URL parameters
-// $udate0 = isset($_GET['d']) ? $_GET['d'] : $todaysdate ;
+$udate0 = isset($_GET['d']) ? $_GET['d'] : $todaysdate ;
 // $utime0 = isset($_GET['t']) ? $_GET['t'] : '2500';
-// $uuser0 = isset($_GET['u']) ? $_GET['u'] : 'baduser';
+$uuser0 = isset($_GET['u']) ? $_GET['u'] : 'baduser';
 
 
 // //$udate0 = isset($_GET['date']) ? $_GET['date'] : $todaysdate ;
@@ -45,10 +45,17 @@ function printArray($arrStrs, $msgStr) {
         // echo "<br />";
     }
 }
+ 
 
-echo "OKGO354MOOSE] Attempting RECEIVE data: [ prg vers= $vers ]  ......"; //<br />";
 
+// INITIAL ACK / NAK
+if($uuser0=="err"){
+  echo "NOGO"; 
+}else{
+  echo "OKGO"; 
+}
 
+echo "354MOOSE] Attempting RECEIVE data: [ prg vers= $vers ]  ......";
 echo "] recpost.php $vers is running, Time in NYC = ". $todaysdate."    ____________-->" ;
 
 
