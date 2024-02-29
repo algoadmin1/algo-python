@@ -21,9 +21,9 @@ $prgname= "recPortfolioTrade.php";
 // // ******************************************************************** INITAL VARS
 
 // // Get the values from the URL parameters
-// $udate0 = isset($_GET['d']) ? $_GET['d'] : $todaysdate ;
+$udate0 = isset($_GET['d']) ? $_GET['d'] : $todaysdate ;
 // $utime0 = isset($_GET['t']) ? $_GET['t'] : '2500';
-// $uuser0 = isset($_GET['u']) ? $_GET['u'] : 'baduser';
+$uuser0 = isset($_GET['u']) ? $_GET['u'] : 'baduser';
 
 
 // //$udate0 = isset($_GET['date']) ? $_GET['date'] : $todaysdate ;
@@ -45,10 +45,17 @@ function printArray($arrStrs, $msgStr) {
         // echo "<br />";
     }
 }
+ 
 
-echo "OKGO354MOOSE] Attempting RECEIVE data: [ prg vers= $vers ]  ......"; //<br />";
 
+// INITIAL ACK / NAK
+if($uuser0=="err"){
+  echo "NOGO"; 
+}else{
+  echo "OKGO"; 
+}
 
+echo "354MOOSE] Attempting RECEIVE data: [ prg vers= $vers ]  ......";
 echo "] recpost.php $vers is running, Time in NYC = ". $todaysdate."    ____________-->" ;
 
 
@@ -87,7 +94,7 @@ $splitChars = ",";
   //
   if (empty($searchQuery)) {
     echo "searchQuery is empty, exiting.\n";
-    exit("recpost.php execution terminated.\n\n");
+    exit("recPortfolioTrade.php execution terminated.\n\n");
 
   } else {
     echo " searchQuery, len=". strlen($searchQuery). " - _POST msg rec'd OK!\n";
@@ -101,38 +108,11 @@ $cnt=count($params);
 echo "\nFound $cnt params[] (all lines)...\n";
 
 
+echo "<p>Copyright &copy; 1999-" . date("Y") . " Algo Investor Inc.</p>";
 
 
 
-
-// // Check if data is received via POST
-// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//     // Check if the 'data' parameter exists in the POST request
-//     if (isset($_POST['data'])) {
-//         // Retrieve the POST data
-//         $recPOSTstr = $_POST['data'];
-//         // Use explode to create an array of strings by splitting with ","
-//         $arrStrsJB = explode(",", $recPOSTstr);
-        
-//         // Check if the array is not empty
-//         if (!empty($arrStrsJB)) {
-//             // Print the received string and the array of strings
-//             echo "Received POST String: $recPOSTstr\n";
-//              // Use the function to print the array of strings
-//             printArray($arrStrs, "portfolioTrade");
-
-//             echo "Array of Strings:\n";
-//             print_r($arrStrsJB);
-//         } else {
-//             echo "Error: Received POST string is empty or not in the expected format.";
-//         }
-//     } else {
-//         echo "Error: 'data' parameter not found in the POST request.";
-//     }
-// } else {
-//     echo "Error: This script should be accessed via a POST request.";
-// }
-
+ 
 // $retstr0 ="] returning from ". $prgname. " ...";
 // return  ( $retstr0);
 
