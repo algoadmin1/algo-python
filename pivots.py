@@ -3,6 +3,7 @@
 # (c) 2024 by Level Blest LLC 
 
 # set this True to print price data rows from scrapes
+# UPDATE: user can now enter 'debug' at prompt to toggle this flag. Amazing !
 g_debugHistory = False
 
 ''' Psuedo Code (trying multiline comment):
@@ -73,15 +74,16 @@ defaultTicker = 'NVDA'
 
 # let's have some fun w/ user facing messages
 g_TipMessages = []
-g_TipMessages.append("|               L E T ' S   G O !              |")
-g_TipMessages.append("|           TRIM those POSITIONS !!            |")
-g_TipMessages.append("|        D O N ' T   O V E R T R A D E         |")
-g_TipMessages.append("|             Wanna quit? Enter 'q'            |")
-g_TipMessages.append("|         When in Doubt, CLOSE it OUT!         |")
-g_TipMessages.append("|    D O   Y O U R   O W N   R E S E A R C H   |")
-g_TipMessages.append("|        Don't go LONG on a DOWN day !         |")
-g_TipMessages.append("|       S T A Y   L E V E L - H E A D E D      |")
-g_TipMessages.append("|          Check the 1-month T-bill            |")
+g_TipMessages.append("$                   L E T ' S   G O !                  $")
+g_TipMessages.append("$   TRIM those POSITIONS they're so damn hairy, OH !   $")
+g_TipMessages.append("$            D O N ' T   O V E R T R A D E             $")
+g_TipMessages.append("$                 Wanna quit? Enter 'q'                $")
+g_TipMessages.append("$             When in DOUBT, CLOSE it OUT!             $")
+g_TipMessages.append("$        D O   Y O U R   O W N   R E S E A R C H       $")
+g_TipMessages.append("$            DON'T go LONG on a DOWN day !             $")
+g_TipMessages.append("$           S T A Y   L E V E L - H E A D E D          $")
+g_TipMessages.append("$              CHECK the 1-month T-BILL                $")
+g_TipMessages.append("$  An INVESTMENT in KNOWLEDGE pays the most DIVIDENDS  $")
 
 g_FirstTime = True
 g_LastMessageIndex = -1
@@ -140,7 +142,7 @@ def set_market_status():
 		g_market_status = MarketStatus.OPEN
 
 	# for testing, override market status
-	#g_market_status = MarketStatus.CLOSED
+	#g_market_status = MarketStatus.PRE_MARKET
 
 def IsTickerValid(ticker_symbol):
 	# Create a Ticker object
@@ -166,10 +168,9 @@ def ShowTipMessage():
 	g_FirstTime = False
 	msg = g_TipMessages[msgIndex]
 	g_LastMessageIndex = msgIndex
-	#g_TipMessages.app"|               L E T ' S   G O !              |\n")
-	output = "\n\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\t\t\t" + msg
+	output = "\n\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\t\t\t" + msg
 	print (output)
-	print (    "\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+	print (    "\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
 
 def GetTicker():
 
@@ -180,29 +181,24 @@ def GetTicker():
 		val = choice
 	return val
 
-def IsPeriodValid(period:str):
+# def IsPeriodValid(period:str):
 
-	validPeriods = ['1d','5d','1mo','3mo','6mo','1y','2y','5y','10y','ytd','max']
-	#print(validPeriods)
-	for p in validPeriods:
-		if (period == p):
-			return True
+# 	validPeriods = ['1d','5d','1mo','3mo','6mo','1y','2y','5y','10y','ytd','max']
+# 	#print(validPeriods)
+# 	for p in validPeriods:
+# 		if (period == p):
+# 			return True
 
-	print("\t Invalid period. Please choose 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max")
-	return False
+# 	print("\t Invalid period. Please choose 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max")
+# 	return False
 
-def GetInterval():
-	val = "1d"
-	choice = input("\tEnter period: ")
-	if (choice != ""):
-		if IsPeriodValid(choice):
-			val = choice
-	return val
-
-# def printTodaysDate():
-#     dstr7 = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
-#     print("Today's date in New York:",dstr7 )
-#     return dstr7
+# def GetInterval():
+# 	val = "1d"
+# 	choice = input("\tEnter period: ")
+# 	if (choice != ""):
+# 		if IsPeriodValid(choice):
+# 			val = choice
+# 	return val
 
 def rand(num):
     return(random.randint(0, (num-1)))
@@ -219,26 +215,26 @@ def printWatchDogWelcome():
     # dstr7a= printTodaysDate()
 
     c=2
-    dog0="\t\t                -^_"
+    dog0="\t\t\t                -^_"
     print_colored_rnd1(dog0,c)
-    dog1="\t\t   / \\\\__     o''|\\_____/)"
+    dog1="\t\t\t   / \\\\__     o''|\\_____/)"
     print_colored_rnd1(dog1,c)
-    dog2="\t\t  (    @\\___    \\_/|_)     )"
+    dog2="\t\t\t  (    @\\___    \\_/|_)     )"
     print_colored_rnd1(dog2,c)
-    dog3="\t\t  /         O      \\  __  /"
+    dog3="\t\t\t  /         O      \\  __  /"
     print_colored_rnd1(dog3,c)
-    dog4="\t\t /   (_____/       (_/ (_/"
+    dog4="\t\t\t /   (_____/       (_/ (_/"
     print_colored_rnd1(dog4,c)
-    dog5="\t\t/_____/   U    "
+    dog5="\t\t\t/_____/   U    "
     print_colored_rnd1(dog5,c)
     print("\n")
 
 
 def HelloCustomer():
 	print("\n")
-	print("\t^----------------------------------------------^")
-	print("\t$  Welcome to AlgoZ Pivotal Trading Companion  $")
-	print("\t^----------------------------------------------^\n")
+	print("\t\t^----------------------------------------------^")
+	print("\t\t$  Welcome to AlgoZ Pivotal Trading Companion  $")
+	print("\t\t^----------------------------------------------^\n")
 	printWatchDogWelcome()
 
 def PrintPivots(p:str, i:str):
@@ -260,7 +256,7 @@ def PrintPivots(p:str, i:str):
 	# Convert index to datetime
 	priceData.index = pd.to_datetime(priceData.index)
 	# Format datetime index to string, but only show date
-	priceData.index = priceData.index.strftime("%Y-%m-%d")
+	priceData.index = priceData.index.strftime("%m-%d-%Y")
 
 	if (g_debugHistory):
 		# ALERT: the monthlies used to return EOM like 2024-01-31, now I'm seeing output below on Feb 26
@@ -397,9 +393,9 @@ def GetPriorMonthLastTradingDate(current_date):
     
     return last_day_of_prior_month.date()
 
-#########################
-# start of main program #
-#########################
+##############################################################################################
+#                                   start of main program                                    #
+##############################################################################################
 
 # clear screen
 os.system('cls' if os.name == 'nt' else 'clear')
@@ -407,11 +403,11 @@ os.system('cls' if os.name == 'nt' else 'clear')
 # Show useful dates & Market Status
 todayDate = datetime.now().date()
 lastMonthDate = GetPriorMonthLastTradingDate(todayDate)
-# set the market status
+
 set_market_status()
 
-print("Today is ", todayDate, "\t\t\tPrior month ended:", lastMonthDate)
-print("\t\tCurrent market status:", g_market_status)
+print("\tToday is ", todayDate.strftime("%m-%d-%y"), "\t\t\tPrior month ended:", lastMonthDate.strftime("%m-%d-%Y"))
+print("\n\t\t\tMarket is ", g_market_status.name )
 
 HelloCustomer()
 
@@ -420,6 +416,11 @@ while (True):
 	ticker = GetTicker()
 	if (ticker == "q" or ticker == "Q"):
 		break
+
+	if (ticker == "debug"):
+		g_debugHistory = not g_debugHistory
+		print("\n\t\tOk then! Debug Mode is", "ON\n" if g_debugHistory else "OFF\n")
+		continue
 
 	if (not IsTickerValid(ticker)):
 		print("\n\tInvalid ticker, try again\n")
