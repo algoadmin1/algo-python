@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "12.24"
+versionStr =                    "12.54"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -1485,6 +1485,8 @@ def CheckDatabase(rawID):
     # tf0=True
     tf0=False   
     print("Ch3ckDatabase(): checking database on raw trade id#", rawID, "...   TradeEXIST==", tf0)
+
+    # here we should call recP0rtfolioTrade
     return(tf0)
 
 
@@ -1750,10 +1752,9 @@ def getnumtradestoday(date0str):
 
 tradestodayMax =3
 
-def CheckDatabaseThenSendTradeToMarket( tradetypestr, symstr, numshares, price0, rawID ,    simutime0, simudate0  ):
+def CheckDatabaseThenSendTradeToMarket( tradetypestr, symstr, numshares, price0, rawID , simutime0, simudate0  ):
     global tradestodayMax
     global todaysDate0
-
 
 # 1st check if max trades/day has been reached.
     tradestoday=getnumtradestoday(todaysDate0)
@@ -1763,8 +1764,9 @@ def CheckDatabaseThenSendTradeToMarket( tradetypestr, symstr, numshares, price0,
         return(False)
 
 # 2nd check to see if raw ID exists on Server's database in case power got cut locally to client's python machine
+    hash01="45911354ABCD"
+    # chkdb = CheckDatabase(rawID., hash01 )
     chkdb = CheckDatabase(rawID)
-
 
     if(chkdb==False):
         print("<SIMULATED> No Trade #",rawID,"found in LiveTrade table-database. Sending Trade for" ,tradetypestr,symstr," to the market and INSERTING the  LiveTrade table-database.")
@@ -2590,6 +2592,19 @@ my_stock_items = GetHoldingsButLoginFirst("BEFORE TRADE", "roguequant1@gmail.com
 ########################################################################  test portfolio rec/send here...
 #
 #                   recPortfolioTrade.php
+#
+#
+#    as per Ted Larkin's call Saturday night 2024-03-02, advice on specifics of generating a live trade
+#
+#           1.  unsent
+#           2.  sending
+#           3.  sent
+#           4.  ACK  or Rejected
+#           5.  partial Fill  or Rejected 
+#           6.  Filled    or Rejected
+#
+#
+#
 #
 
 url_str  = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
