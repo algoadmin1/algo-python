@@ -1,5 +1,5 @@
 <?php
-//standardFunctions.php
+//standardFunctions.php  ver 2.0
 
 // ******************************************************************** Functions
 //
@@ -44,7 +44,7 @@ function HashIt($str0){
   */
   return $hashstr;
 }
-function PrintArray( $arrstrs , $arrstrs0 ){
+function PrintArray0( $arrstrs , $arrstrs0 ){
   // Print the resulting array
   echo "<br /><br /><br />] resulting array = ". $arrstrs0. "[] == <br />";
   print_r($arrstrs);

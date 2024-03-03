@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "12.23"
+versionStr =                    "12.24"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -2597,7 +2597,10 @@ data_str = "placedtrade,2024-02-27,1545,Sat,tradeId_22033,creator,123354911,algo
 
 # resultstr = sendDataString( data_str, url_str+"?u=err" )  # test NOGO server response
 resultstr = sendDataString( data_str, url_str+"?u=jb" )
-print("resultstr==",resultstr)
+print("] resultstr==",resultstr)
+
+print("] resultstr RIGHT==",leftRightStr(resultstr, "right", 4) )
+      
 
 if(resultstr=="OKGO"):
     print("] Server Ok to go <SIM>. Go ahead and place new attemptedPosition into .positions ...")
