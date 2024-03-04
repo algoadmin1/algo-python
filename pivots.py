@@ -84,6 +84,7 @@ g_TipMessages.append("$            DON'T go LONG on a DOWN day !             $")
 g_TipMessages.append("$           S T A Y   L E V E L - H E A D E D          $")
 g_TipMessages.append("$              CHECK the 1-month T-BILL                $")
 g_TipMessages.append("$  An INVESTMENT in KNOWLEDGE pays the most DIVIDENDS  $")
+g_TipMessages.append("$           Buy MORE of the GREAT Performers           $")
 
 g_FirstTime = True
 g_LastMessageIndex = -1
