@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "12.54"
+versionStr =                    "13.33"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -840,16 +840,27 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
             qtyMAX10=10
             strikeSize=5
 
+
+
+
+#  LONG_STOCK  ENTRY
+
             if(tradetypestr=="LONG_STOCK"):
                 prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
                 prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
                 CheckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  )
-                pass
+
+
+
+#  SHORT_STOCK  ENTRY
 
             if(tradetypestr=="SHORT_STOCK"):
                 prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
                 prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
-                pass
+                # CheckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  )
+
+
+
 
 
             if(tradetypestr=="LONG_CALLS"):
@@ -901,11 +912,13 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
 
                 print(".robinhood *SENDING LONG_CALLS OPTION Order" , sym0, qty0, price02, expdate, strike01, putcall, buySell0 )
                 sendOptionLimitOrder( sym0,qty0,price02,expdate,strike01,putcall, buySell0 )
-
-                pass
-
+                # CheckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  )
 
 
+
+
+
+#  LONG_PUTS  ENTRY
 
             if(tradetypestr=="LONG_PUTS"):
                 IOTMstr="ITM"
@@ -957,7 +970,7 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
 
                 print(".robinhood *SENDING LONG_PUTS OPTION Order" , sym0, qty0, price02, expdate, strike01, putcall, buySell0 )
                 sendOptionLimitOrder( sym0,qty0,price02,expdate,strike01,putcall, buySell0 )
-
+                # CheckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  )
 
 # ] Prepping LIVE Trade:  LONG_PUTS
 # SELL :   LONG_PUTS 1 shares of ETSY  at Market ( 74 15min ).  Attempting to Place Trade at 1615 on 2024-02-23      - Live? == LIVE
@@ -971,12 +984,15 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
 
 
 
+
+
+#  SPREADS  ENTRY
+
             if(tradetypestr=="CREDIT_CALL_SPREAD"):
                 pass
 
             if(tradetypestr=="CREDIT_PUT_SPREAD"):
                 pass
-
 
     # print("\n] jsonTRADESrecord=")
     # prettyPrintJSON(jsonTRADESrecord)
