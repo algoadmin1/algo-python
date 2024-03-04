@@ -84,6 +84,7 @@ g_TipMessages.append("$            DON'T go LONG on a DOWN day !             $")
 g_TipMessages.append("$           S T A Y   L E V E L - H E A D E D          $")
 g_TipMessages.append("$              CHECK the 1-month T-BILL                $")
 g_TipMessages.append("$  An INVESTMENT in KNOWLEDGE pays the most DIVIDENDS  $")
+g_TipMessages.append("$           Buy MORE of the GREAT Performers           $")
 
 g_FirstTime = True
 g_LastMessageIndex = -1
@@ -237,7 +238,7 @@ def HelloCustomer():
 	print("\t\t^----------------------------------------------^\n")
 	printWatchDogWelcome()
 
-def PrintPivots(p:str, i:str):
+def PrintPivots(p:str, i:str) -> bool:
 	global g_market_status
 
 	# do the scrape
@@ -252,6 +253,15 @@ def PrintPivots(p:str, i:str):
 		print(f"IOError: {ioe}")
 	except Exception as e:
 		print(f"An unexpected error occurred: {e}")
+
+	# check for empty dataframe - prefer column check to row check but either would suffice for us
+	if len(priceData.columns) == 0:
+		print("\t\t*** Empty dataframe - no Columns ***\n")
+		return False
+
+	if len(priceData.index) == 0:
+		print("\t\t*** Empty dataframe - no Rows ***\n")
+		return False
 
 	# Convert index to datetime
 	priceData.index = pd.to_datetime(priceData.index)
@@ -379,6 +389,7 @@ def PrintPivots(p:str, i:str):
 			print("\t\tS3 ", f"{S3[row]:.2f}", "\n")
 
 	# End of additional PIVOT print
+	return True
 
 # this block is from ChatGPT I left vars as underscores on purpose.
 
@@ -414,25 +425,28 @@ HelloCustomer()
 while (True):
 
 	ticker = GetTicker()
+	print("\n")
 	if (ticker == "q" or ticker == "Q"):
 		break
 
 	if (ticker == "debug"):
 		g_debugHistory = not g_debugHistory
-		print("\n\t\tOk then! Debug Mode is", "ON\n" if g_debugHistory else "OFF\n")
+		print("\t\tOk then! Debug Mode is", "ON\n" if g_debugHistory else "OFF\n")
 		continue
 
 	if (not IsTickerValid(ticker)):
-		print("\n\tInvalid ticker, try again\n")
+		print("\tInvalid ticker, try again\n")
 		continue
 
 	# Noobs, please note that Ticker() returns a panda dataframe.
 	g_dataFrame = yf.Ticker(ticker)
 
 	# print Monthly
-	PrintPivots("3mo","1mo")
-
-	# Daily Pivots. The call below will print levels for today, WIP levels for tomorrow, and the 3D Pivot
+	ok = PrintPivots("3mo","1mo")
+	if not ok:
+		continue
+	# PrintPivots() prints levels for today, WIP for tomorrow, and the 3 Day Pivot
+	# we don't need to test the return value if the first call succeeded
 	PrintPivots("5d", "1d")
 
 print("\n\tThanks for choosing AlgoZ Pivotal. Have a Blest Day! \n")
