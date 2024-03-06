@@ -866,7 +866,7 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
     keysCsvStr = keysCsvStr0 +",ini=,"+keysCsvStr1 +",portfolioTrade=,"+  keysCsvStr2 
     print("] Ex3cuteTrade(...)   keysCsvStr==",keysCsvStr )
 
-
+    print("] Ex3cuteTrade(...) \n")
     valuesCsvStr0="unsent,portfolioTrade,"+  livestr0
     valuesCsvStr1 = makeCSVString(jsonINIrecord, "value" , ",")
     valuesCsvStr2 = makeCSVString(jsonTRADESrecord, "value" , ",")
@@ -900,7 +900,7 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
             if(tradetypestr=="LONG_STOCK"):
                 prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
                 prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
-                CheckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  , valuesCsvStr  )
+                CheckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  , valuesCsvStr  , keysCsvStr)
 
 
 #  SHORT_STOCK  ENTRY
@@ -1543,12 +1543,11 @@ def findOptions1( sym0,  expdate, strike0 ):
 
 def sendOrderToDatabaseAndUpdateCmdVariables():
     # send order to database
-
     # update Cmd_ JSON Vars
-
     pass
 
-def CheckDatabaseForUniquePortfolioTrade(rawID, fullsendStr):
+
+def CheckDatabaseForUniquePortfolioTrade(rawID, fullsendStr, fullSendKeysStr):
     # tf0=True
     tf0=False   
     print("Ch3ckDatabaseForUniquePortfolioTrade(): checking database on raw trade id#", rawID, "...   TradeEXIST, fullsendStr ==", tf0,  fullsendStr)
@@ -1822,7 +1821,7 @@ def getnumtradestoday(date0str):
 
 tradestodayMax =3
 
-def CheckDatabaseThenSendTradeToMarket( tradetypestr, symstr, numshares, price0, rawID , simutime0, simudate0  , fullSendStr ):
+def CheckDatabaseThenSendTradeToMarket( tradetypestr, symstr, numshares, price0, rawID , simutime0, simudate0  , fullSendStr, fullSendKeysStr ):
     global tradestodayMax
     global todaysDate0
 
@@ -1836,10 +1835,10 @@ def CheckDatabaseThenSendTradeToMarket( tradetypestr, symstr, numshares, price0,
 
 # 2nd check to see if raw ID exists on Server's database in case power got cut locally to client's python machine
     hash01="45911354ABCD"
-    chkdb = CheckDatabaseForUniquePortfolioTrade(rawID , fullSendStr )
+    chkdb = CheckDatabaseForUniquePortfolioTrade(rawID , fullSendStr , fullSendKeysStr)
 
     if(chkdb==False):
-        print("<SIMULATED> No Trade #",rawID,"found in LiveTrade table-database. Sending Trade for" ,tradetypestr,symstr," to the market and INSERTING the  LiveTrade table-database.")
+        print("< * SIMULATED * > No Trade #",rawID,"found in LiveTrade table-database. Sending Trade for" ,tradetypestr,symstr," to the market and INSERTING the  LiveTrade table-database.")
         EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr, symstr, numshares, price0, rawID , simutime0, simudate0  )
 #       LONG_STOCK NVDA 1 735.11 2350 1357 2024-02-16
         #only if position entered
