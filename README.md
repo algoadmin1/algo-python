@@ -4,7 +4,7 @@ This repo has python code for grabbing yahoo finance data, chart graphing, a mon
 
 Note to new team members: No spaghetti code! We need to Code Clean and execute our vision of helping Clients Trade Smarter, with AlgoZ.ai
 
-Testing a one line change from mac, using willbotti@gmail.com GIT vs algoadmin1
+Testing a one line change from Will new PC (really D old PC)
 
 ## Dependencies (stuff we need to import)
 	pip install yfinance
