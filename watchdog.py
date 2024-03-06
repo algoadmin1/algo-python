@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "13.33"
+versionStr =                    "15.54"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -673,7 +673,6 @@ lastbarminutes  = 0
 #note should come in from CMD_
 minBarMins      = 15
 #
-#
 # sets lastbarminutes and returns T/F
 #
 def ValidateBarType(barstr):
@@ -811,7 +810,41 @@ def postStringUrl(data_str, url_str):
 # .robinhood *SENDING LONG_PUTS OPTION Order ADBE 1 8.62 2024-03-08 560 put BUY
 # *** Leaving Ex3cuteTrade() Now... 
 
+#  < 0: > not included in hash.
+#   <0:[unsent,portfolioTrade]>, 
+#            <1:[Cmd_,Action,Range,Value,TradeType,Aux,SigCnt,QtyShrCons,NumStrikes,Live,THoriz,ExitPref]>, 
+#                           <2:[tradeDate,tradeTime,tradeType,tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,timestamp,tradeRecTimestamp,tradeDateTime,tradeDay,tradeBar,userId,accountId,tradeRAW,tradeRawId,tradeSize1,tradePrFilled,tradeDur,tradeStopMke,tradeLimitExit,optionStrategy,daySRs,wkSRs,moSRs,tradeSpec,tradeSig,tradeGapPct,tradeStatus,tradeAux1,tradeAux2,tradeHash]>
+#
+def makeCSVString(jsonRec, keyOrValueStr, sepstr):
+    # Check if the input arguments are not null
+    if jsonRec is None or keyOrValueStr is None or sepstr is None:
+        return "Error: Input arguments cannot be null."
 
+    sepstr = leftRightStr(sepstr,"left",1)
+    print("]  sepstr =",sepstr)
+    # Check if keyOrValueStr is either "key" or "value"
+    if keyOrValueStr not in ["key", "value"]:
+        return "Error: Invalid value for keyOrValueStr. It should be either 'key' or 'value'"
+    csv_string="nil"
+    # Extract keys or values based on the specified mode
+    if keyOrValueStr == "key":
+        csv_string = ",".join(jsonRec.keys())
+    else:
+        if  keyOrValueStr == "value":
+            csv_string = ",".join(map(str, jsonRec.values()))
+
+    return csv_string
+
+# # Example usage:
+# json_record = {"key1": "a", "key2": "b", "key3": "c"}
+
+# # Get CSV string of values
+# values_csv = makeCSVString(json_record, "value" , ",")
+# print("Values CSV String:", values_csv)
+
+# # Get CSV string of keys
+# keys_csv = makeCSVString(json_record, "key"  , ","))
+# print("Keys CSV String:", keys_csv)
 
 def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
     print("] READY TO EX3CUTE TRADE: ", symstr, "\n\n")
@@ -825,13 +858,36 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
     print("] signal counts (INI,jsonTrades):",   int( jsonINIrecord["SigCnt"]) , int(jsonTRADESrecord["tradeCnt"])  )
 
 
+
+#    prep long csv <init0>,<ini_csv>,<trade_csv>
+    keysCsvStr0 = "<init0>,<ini_csv>,<trade_csv>"
+    keysCsvStr1 = makeCSVString(jsonINIrecord, "key" , ",")
+    keysCsvStr2 = makeCSVString(jsonTRADESrecord, "key" , ",")
+    keysCsvStr = keysCsvStr0 +",ini=,"+keysCsvStr1 +",portfolioTrade=,"+  keysCsvStr2 
+    print("] Ex3cuteTrade(...)   keysCsvStr==",keysCsvStr )
+
+
+    valuesCsvStr0="unsent,portfolioTrade,"+  livestr0
+    valuesCsvStr1 = makeCSVString(jsonINIrecord, "value" , ",")
+    valuesCsvStr2 = makeCSVString(jsonTRADESrecord, "value" , ",")
+    valuesCsvStr = valuesCsvStr0 +",ini,"+valuesCsvStr1 +",portfolioTrade,"+ valuesCsvStr2 
+    print("] Ex3cuteTrade(...)   valuesCsvStr==",valuesCsvStr )
+
+# ] Ex3cuteTrade(...)     keysCsvStr== <init0>,<ini_csv>,<trade_csv>,ini=,Cmd_,Action,Range,Value,TradeType,Aux,SigCnt,QtyShrCons,NumStrikes,Live,THoriz,ExitPref,portfolioTrade=,tradeDate,tradeTime,tradeType,tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,timestamp,tradeRecTimestamp,tradeDateTime,tradeDay,tradeBar,userId,accountId,tradeRAW,tradeRawId,tradeSize1,tradePrFilled,tradeDur,tradeStopMke,tradeLimitExit,optionStrategy,daySRs,wkSRs,moSRs,tradeSpec,tradeSig,tradeGapPct,tradeStatus,tradeAux1,tradeAux2,tradeHash
+# ] Ex3cuteTrade(...)   valuesCsvStr== unsent,portfolioTrade,LIVE,ini,TSLA,BUY,BELOW,S1,LONG_STOCK,COUNT,4,1,0,LIVE,19,nil,portfolioTrade,2024-03-05,1545,BUY,10,TSLA,atLimit,180.02,3198,4,below,S1,-3.3,-1.8313%,1,215|205|150|140,2024-03-05T233422,2024-03-05T203003,2024-03-05T154500,tue,15min,Creator,12345354911,raw103,0,100,0,gfd,108.012,450.05,IronCondor1.15,R3R2R1_P_P3_S1S2S3=|212.78|204.56|196.35|191.53|201.90|183.32|178.50|170.29|,wkR2R1P_200.08_S1S2=|213.68|208.17|194.57|186.48|,moR3R2R1PS1S2S3=|222.07|215.31|208.54|198.84|192.07|182.37|175.60|,nil,BUY,0,1,2,3,nilHash
+
 #   check LIVE=1
     if(livestr0!="LIVE"):
         print(jsonINIrecord["Cmd_"], " Trade NOT LIVE. Skipping....")
     if(livestr0=="LIVE"):
         print("] Prepping LIVE Trade: ", tradetypestr)
         print( jsonINIrecord["Action"],":  ", tradetypestr , jsonINIrecord["QtyShrCons"],"shares of", jsonINIrecord["Cmd_"]," at Market (",jsonTRADESrecord["tradePrice"],jsonTRADESrecord["tradeBar"],").  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
+        
+        print("] HERE SEND STATUS:  <sending> to database")
+
         barstr = jsonTRADESrecord["tradeBar"]
+
+
 
 #       check bar > 15min
         tf99=ValidateBarType(barstr)
@@ -840,24 +896,18 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
             qtyMAX10=10
             strikeSize=5
 
-
-
-
 #  LONG_STOCK  ENTRY
-
             if(tradetypestr=="LONG_STOCK"):
                 prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
                 prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
-                CheckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  )
-
+                CheckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  , valuesCsvStr  )
 
 
 #  SHORT_STOCK  ENTRY
-
             if(tradetypestr=="SHORT_STOCK"):
                 prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
                 prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
-                # CheckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  )
+                # Che ckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0 , valuesCsvStr )
 
 
 
@@ -912,7 +962,7 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
 
                 print(".robinhood *SENDING LONG_CALLS OPTION Order" , sym0, qty0, price02, expdate, strike01, putcall, buySell0 )
                 sendOptionLimitOrder( sym0,qty0,price02,expdate,strike01,putcall, buySell0 )
-                # CheckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  )
+                # Chec kDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  , valuesCsvStr)
 
 
 
@@ -970,7 +1020,8 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
 
                 print(".robinhood *SENDING LONG_PUTS OPTION Order" , sym0, qty0, price02, expdate, strike01, putcall, buySell0 )
                 sendOptionLimitOrder( sym0,qty0,price02,expdate,strike01,putcall, buySell0 )
-                # CheckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  )
+                # Che ckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  , valuesCsvStr )
+
 
 # ] Prepping LIVE Trade:  LONG_PUTS
 # SELL :   LONG_PUTS 1 shares of ETSY  at Market ( 74 15min ).  Attempting to Place Trade at 1615 on 2024-02-23      - Live? == LIVE
@@ -1497,10 +1548,13 @@ def sendOrderToDatabaseAndUpdateCmdVariables():
 
     pass
 
-def CheckDatabase(rawID):
+def CheckDatabaseForUniquePortfolioTrade(rawID, fullsendStr):
     # tf0=True
     tf0=False   
-    print("Ch3ckDatabase(): checking database on raw trade id#", rawID, "...   TradeEXIST==", tf0)
+    print("Ch3ckDatabaseForUniquePortfolioTrade(): checking database on raw trade id#", rawID, "...   TradeEXIST, fullsendStr ==", tf0,  fullsendStr)
+
+    resultstr= sendDataString( fullsendStr , url007_str+"?u=jb")
+    print("Ch3ckDatabaseForUniquePortfolioTrade(): resultstr==", resultstr) #checking database on raw trade id#", rawID, "...   TradeEXIST, fullsendStr ==", tf0,  fullsendStr)
 
     # here we should call recP0rtfolioTrade
     return(tf0)
@@ -1768,9 +1822,10 @@ def getnumtradestoday(date0str):
 
 tradestodayMax =3
 
-def CheckDatabaseThenSendTradeToMarket( tradetypestr, symstr, numshares, price0, rawID , simutime0, simudate0  ):
+def CheckDatabaseThenSendTradeToMarket( tradetypestr, symstr, numshares, price0, rawID , simutime0, simudate0  , fullSendStr ):
     global tradestodayMax
     global todaysDate0
+
 
 # 1st check if max trades/day has been reached.
     tradestoday=getnumtradestoday(todaysDate0)
@@ -1781,8 +1836,7 @@ def CheckDatabaseThenSendTradeToMarket( tradetypestr, symstr, numshares, price0,
 
 # 2nd check to see if raw ID exists on Server's database in case power got cut locally to client's python machine
     hash01="45911354ABCD"
-    # chkdb = CheckDatabase(rawID., hash01 )
-    chkdb = CheckDatabase(rawID)
+    chkdb = CheckDatabaseForUniquePortfolioTrade(rawID , fullSendStr )
 
     if(chkdb==False):
         print("<SIMULATED> No Trade #",rawID,"found in LiveTrade table-database. Sending Trade for" ,tradetypestr,symstr," to the market and INSERTING the  LiveTrade table-database.")
@@ -2623,11 +2677,11 @@ my_stock_items = GetHoldingsButLoginFirst("BEFORE TRADE", "roguequant1@gmail.com
 #
 #
 
-url_str  = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
+url007_str  = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
 data_str = "placedtrade,2024-02-27,1545,Sat,tradeId_22033,creator,123354911,algoinvestorr@gmail.com,BUY,AAPL,4,LONG_STOCK,179.50,limit,filled,exit=2025-06-30,tradeId=BcGfYb0bC0cDA554bDeff1,live,t,u,v,w,x,y,z,EOL"  # +  ' { "a":"b", "c":"d", "e":"f", g:h, i:j } '
 
 # resultstr = sendDataString( data_str, url_str+"?u=err" )  # test NOGO server response
-resultstr = sendDataString( data_str, url_str+"?u=jb" )
+resultstr = sendDataString( data_str, url007_str+"?u=jb" )
 print("] resultstr==",resultstr)
 
 print("] resultstr RIGHT==",leftRightStr(resultstr, "right", 4) )
