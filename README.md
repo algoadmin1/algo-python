@@ -50,7 +50,6 @@ https://git-scm.com/download/mac.
 ## TODO Items for the Botti Bros
 
 Will:
-	+ Review logic to deal w/ market timing - we are either pre-market, market open, or market closed. Verify Daily Pivot is correct.
 	+ Continue dog-fooding  - use products personally and follow the signals, giving feedback etc
 	
 John:
