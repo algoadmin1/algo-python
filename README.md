@@ -4,8 +4,6 @@ This repo has python code for grabbing yahoo finance data, chart graphing, a mon
 
 Note to new team members: No spaghetti code! We need to Code Clean and execute our vision of helping Clients Trade Smarter, with AlgoZ.ai
 
-Testing a one line change from mac, using willbotti@gmail.com GIT vs algoadmin1
-
 ## Dependencies (stuff we need to import)
 	pip install yfinance
 	pip install pandas_market_calendars
@@ -35,6 +33,12 @@ git log -p -- filename												# show history of specific file, including pat
 
 git config -l																	# show git configuration like user name,  email
 
+# user switch test:
+# I had to change both global and local.  I think on boot-up they might revert to admin1
+git config --global user.name "perimeter-zz"
+git config --global user.email "willbotti@gmail.com"
+git config --local  user.name "perimeter-zz"
+git config --local user.email "willbotti@gmail.com"
 #############################################
 
 ## Useful links: 
@@ -44,7 +48,6 @@ https://git-scm.com/download/mac.
 ## TODO Items for the Botti Bros
 
 Will:
-	+ Review logic to deal w/ market timing - we are either pre-market, market open, or market closed. Verify Daily Pivot is correct.
 	+ Continue dog-fooding  - use products personally and follow the signals, giving feedback etc
 	
 John:

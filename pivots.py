@@ -3,6 +3,7 @@
 # (c) 2024 by Level Blest LLC 
 
 # set this True to print price data rows from scrapes
+# UPDATE: user can now enter 'debug' at prompt to toggle this flag. Amazing !
 g_debugHistory = False
 
 ''' Psuedo Code (trying multiline comment):
@@ -55,10 +56,9 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 print("]  Still importing more Python modules...")
 
-#wcb commenting out panda import, appears unneeded. Prob added during initial testing
-#import pandas as pd
 import calendar
 import pandas_market_calendars as mcal
+import pandas as pd
 from datetime import datetime, timedelta, timezone
 
 #from datetime import date, timedelta
@@ -74,15 +74,17 @@ defaultTicker = 'NVDA'
 
 # let's have some fun w/ user facing messages
 g_TipMessages = []
-g_TipMessages.append("|               L E T ' S   G O !              |")
-g_TipMessages.append("|           TRIM those POSITIONS !!            |")
-g_TipMessages.append("|        D O N ' T   O V E R T R A D E         |")
-g_TipMessages.append("|             Wanna quit? Enter 'q'            |")
-g_TipMessages.append("|         When in Doubt, CLOSE it OUT!         |")
-g_TipMessages.append("|    D O   Y O U R   O W N   R E S E A R C H   |")
-g_TipMessages.append("|        Don't go LONG on a DOWN day !         |")
-g_TipMessages.append("|       S T A Y   L E V E L - H E A D E D      |")
-g_TipMessages.append("|          Check the 1-month T-bill            |")
+g_TipMessages.append("$                   L E T ' S   G O !                  $")
+g_TipMessages.append("$   TRIM those POSITIONS they're so damn hairy, OH !   $")
+g_TipMessages.append("$            D O N ' T   O V E R T R A D E             $")
+g_TipMessages.append("$                 Wanna quit? Enter 'q'                $")
+g_TipMessages.append("$             When in DOUBT, CLOSE it OUT!             $")
+g_TipMessages.append("$        D O   Y O U R   O W N   R E S E A R C H       $")
+g_TipMessages.append("$            DON'T go LONG on a DOWN day !             $")
+g_TipMessages.append("$           S T A Y   L E V E L - H E A D E D          $")
+g_TipMessages.append("$              CHECK the 1-month T-BILL                $")
+g_TipMessages.append("$  An INVESTMENT in KNOWLEDGE pays the most DIVIDENDS  $")
+g_TipMessages.append("$           Buy MORE of the GREAT Performers           $")
 
 g_FirstTime = True
 g_LastMessageIndex = -1
@@ -141,7 +143,7 @@ def set_market_status():
 		g_market_status = MarketStatus.OPEN
 
 	# for testing, override market status
-	#g_market_status = MarketStatus.CLOSED
+	#g_market_status = MarketStatus.PRE_MARKET
 
 def IsTickerValid(ticker_symbol):
 	# Create a Ticker object
@@ -167,10 +169,9 @@ def ShowTipMessage():
 	g_FirstTime = False
 	msg = g_TipMessages[msgIndex]
 	g_LastMessageIndex = msgIndex
-	#g_TipMessages.app"|               L E T ' S   G O !              |\n")
-	output = "\n\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\t\t\t" + msg
+	output = "\n\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\t\t\t" + msg
 	print (output)
-	print (    "\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+	print (    "\t\t\t ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
 
 def GetTicker():
 
@@ -181,29 +182,24 @@ def GetTicker():
 		val = choice
 	return val
 
-def IsPeriodValid(period:str):
+# def IsPeriodValid(period:str):
 
-	validPeriods = ['1d','5d','1mo','3mo','6mo','1y','2y','5y','10y','ytd','max']
-	#print(validPeriods)
-	for p in validPeriods:
-		if (period == p):
-			return True
+# 	validPeriods = ['1d','5d','1mo','3mo','6mo','1y','2y','5y','10y','ytd','max']
+# 	#print(validPeriods)
+# 	for p in validPeriods:
+# 		if (period == p):
+# 			return True
 
-	print("\t Invalid period. Please choose 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max")
-	return False
+# 	print("\t Invalid period. Please choose 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max")
+# 	return False
 
-def GetInterval():
-	val = "1d"
-	choice = input("\tEnter period: ")
-	if (choice != ""):
-		if IsPeriodValid(choice):
-			val = choice
-	return val
-
-# def printTodaysDate():
-#     dstr7 = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
-#     print("Today's date in New York:",dstr7 )
-#     return dstr7
+# def GetInterval():
+# 	val = "1d"
+# 	choice = input("\tEnter period: ")
+# 	if (choice != ""):
+# 		if IsPeriodValid(choice):
+# 			val = choice
+# 	return val
 
 def rand(num):
     return(random.randint(0, (num-1)))
@@ -220,31 +216,29 @@ def printWatchDogWelcome():
     # dstr7a= printTodaysDate()
 
     c=2
-    dog0="\t\t                -^_"
+    dog0="\t\t\t                -^_"
     print_colored_rnd1(dog0,c)
-    dog1="\t\t   / \\\\__     o''|\\_____/)"
+    dog1="\t\t\t   / \\\\__     o''|\\_____/)"
     print_colored_rnd1(dog1,c)
-    dog2="\t\t  (    @\\___    \\_/|_)     )"
+    dog2="\t\t\t  (    @\\___    \\_/|_)     )"
     print_colored_rnd1(dog2,c)
-    dog3="\t\t  /         O      \\  __  /"
+    dog3="\t\t\t  /         O      \\  __  /"
     print_colored_rnd1(dog3,c)
-    dog4="\t\t /   (_____/       (_/ (_/"
+    dog4="\t\t\t /   (_____/       (_/ (_/"
     print_colored_rnd1(dog4,c)
-    dog5="\t\t/_____/   U    "
+    dog5="\t\t\t/_____/   U    "
     print_colored_rnd1(dog5,c)
     print("\n")
 
 
 def HelloCustomer():
 	print("\n")
-	print("\t^----------------------------------------------^")
-	print("\t$  Welcome to AlgoZ Pivotal Trading Companion  $")
-	print("\t^----------------------------------------------^\n")
+	print("\t\t^----------------------------------------------^")
+	print("\t\t$  Welcome to AlgoZ Pivotal Trading Companion  $")
+	print("\t\t^----------------------------------------------^\n")
 	printWatchDogWelcome()
 
-	#print("\t\t( Default: ", defaultTicker, ")\n")
-
-def PrintPivots(p:str, i:str):
+def PrintPivots(p:str, i:str) -> bool:
 	global g_market_status
 
 	# do the scrape
@@ -259,6 +253,20 @@ def PrintPivots(p:str, i:str):
 		print(f"IOError: {ioe}")
 	except Exception as e:
 		print(f"An unexpected error occurred: {e}")
+
+	# check for empty dataframe - prefer column check to row check but either would suffice for us
+	if len(priceData.columns) == 0:
+		print("\t\t*** Empty dataframe - no Columns ***\n")
+		return False
+
+	if len(priceData.index) == 0:
+		print("\t\t*** Empty dataframe - no Rows ***\n")
+		return False
+
+	# Convert index to datetime
+	priceData.index = pd.to_datetime(priceData.index)
+	# Format datetime index to string, but only show date
+	priceData.index = priceData.index.strftime("%m-%d-%Y")
 
 	if (g_debugHistory):
 		# ALERT: the monthlies used to return EOM like 2024-01-31, now I'm seeing output below on Feb 26
@@ -306,7 +314,7 @@ def PrintPivots(p:str, i:str):
 
 	# Calc the 3d pivot
 	threeDayPivot = 0
-	if (p=='5d'):
+	if (p == '5d'):
 		startIndex = numRows -2 if g_market_status == MarketStatus.OPEN else numRows - 1
 		endIndex = startIndex - 3
 		for row in range(startIndex, endIndex, -1):
@@ -327,7 +335,10 @@ def PrintPivots(p:str, i:str):
 
 	label = "Daily  " if p == "5d" else "Monthly"
 	targetIndex = numRows - 1
-	if (p == "3mo" or  (p=="5d" and g_market_status == MarketStatus.OPEN)):
+	# UPDATE: 2/27/24 looks like yfinance api now fetches monthly data starting on 1st vs ending on 31st
+	# so we will use last row not middle for monthly
+	#if (p == "3mo" or  (p=="5d" and g_market_status == MarketStatus.OPEN)):
+	if (p=="5d" and g_market_status == MarketStatus.OPEN):
 		# Monthly will have last 3 mos,  middle row is the prior month and the one we care about
 		# if Market open, Daily will also have an extra row
 		targetIndex = numRows - 2
@@ -336,7 +347,7 @@ def PrintPivots(p:str, i:str):
 		timeStamp = priceData.index[row]
 		C = priceData.at[timeStamp,'Close']
 		lastPrice = f"{C:.2f}"
-		print("\n\t\t    ", ticker+" ", label, "\t\t      ", lastPrice, "\t\tas of", timeStamp,"\n")
+		print("\n\t\t    ", ticker+" ", label, "Pivots for ", timeStamp, "\tClosing Price:  ", lastPrice,"\n")
 
 		# truncate time stamp for Daily and bigger periods. It's a row label, like "2024-02-09 00:00:00-05:00" 
 		#if interval == "1d" or interval == "1m":
@@ -378,6 +389,7 @@ def PrintPivots(p:str, i:str):
 			print("\t\tS3 ", f"{S3[row]:.2f}", "\n")
 
 	# End of additional PIVOT print
+	return True
 
 # this block is from ChatGPT I left vars as underscores on purpose.
 
@@ -392,26 +404,9 @@ def GetPriorMonthLastTradingDate(current_date):
     
     return last_day_of_prior_month.date()
 
-# TODO: rework logic for getting last trading date BEFORE today
-def get_last_trading_date():
-    # Define the exchange calendar (e.g., 'XNYS' for New York Stock Exchange)
-    exchange = mcal.get_calendar('XNYS')
-
-    # Get today's date
-    today = datetime.today().date()
-    yesterday = today - timedelta(days=1)
-    #print("yeseterday: ", yesterday)
-
-    # Adjust the date to the previous business day (last trading date)
-    last_trading_date = exchange.valid_days(start_date=today - timedelta(days=7), end_date= yesterday )[0]
-
-    #last_trading_date = exchange.valid_days(start_date=today - timedelta(days=7), end_date=today )[-1]
-
-    return last_trading_date.date()
-
-#########################
-# start of main program #
-#########################
+##############################################################################################
+#                                   start of main program                                    #
+##############################################################################################
 
 # clear screen
 os.system('cls' if os.name == 'nt' else 'clear')
@@ -419,33 +414,39 @@ os.system('cls' if os.name == 'nt' else 'clear')
 # Show useful dates & Market Status
 todayDate = datetime.now().date()
 lastMonthDate = GetPriorMonthLastTradingDate(todayDate)
-lastTradingDate = get_last_trading_date()
-# set the market status
+
 set_market_status()
 
-print("Today is ", todayDate, "\t\t\tPrior month ended:", lastMonthDate)
-#TODO debug this
-print("\t\tCurrent market status:", g_market_status)
+print("\tToday is ", todayDate.strftime("%m-%d-%y"), "\t\t\tPrior month ended:", lastMonthDate.strftime("%m-%d-%Y"))
+print("\n\t\t\tMarket is ", g_market_status.name )
 
 HelloCustomer()
 
 while (True):
 
 	ticker = GetTicker()
+	print("\n")
 	if (ticker == "q" or ticker == "Q"):
 		break
 
+	if (ticker == "debug"):
+		g_debugHistory = not g_debugHistory
+		print("\t\tOk then! Debug Mode is", "ON\n" if g_debugHistory else "OFF\n")
+		continue
+
 	if (not IsTickerValid(ticker)):
-		print("\n\tInvalid ticker, try again\n")
+		print("\tInvalid ticker, try again\n")
 		continue
 
 	# Noobs, please note that Ticker() returns a panda dataframe.
 	g_dataFrame = yf.Ticker(ticker)
 
 	# print Monthly
-	PrintPivots("3mo","1mo")
-
-	# Daily Pivots. The call below will print levels for today, WIP levels for tomorrow, and the 3D Pivot
+	ok = PrintPivots("3mo","1mo")
+	if not ok:
+		continue
+	# PrintPivots() prints levels for today, WIP for tomorrow, and the 3 Day Pivot
+	# we don't need to test the return value if the first call succeeded
 	PrintPivots("5d", "1d")
 
 print("\n\tThanks for choosing AlgoZ Pivotal. Have a Blest Day! \n")

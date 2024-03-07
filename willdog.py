@@ -1,6 +1,7 @@
+# willdog.py derived from watchdog.py
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "15.54"
+versionStr =                    "01.01.01"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 
@@ -16,7 +17,7 @@ import math
 new_york_timezone = pytz.timezone('America/New_York')
 current_date_ny = datetime.datetime.now(new_york_timezone).date()
 
-useremail0= "roguequant1@gmail.com" 
+useremail0= "willbotti@gmail.com" 
 MaxShares =10
 # see dump.js for log file
 
@@ -68,6 +69,7 @@ def leftRightStr(input_str, LR_str, num_chars):
         return input_str[:num_chars]
     else:
         return "Invalid LR_str, please use 'left' or 'right'."
+
 #
 # usage:  AddL3adingZero( "930", 3)   ==> 0930
 # usage:  AddL3adingZero( "1", 1)     ==> 01
@@ -673,6 +675,7 @@ lastbarminutes  = 0
 #note should come in from CMD_
 minBarMins      = 15
 #
+#
 # sets lastbarminutes and returns T/F
 #
 def ValidateBarType(barstr):
@@ -810,41 +813,7 @@ def postStringUrl(data_str, url_str):
 # .robinhood *SENDING LONG_PUTS OPTION Order ADBE 1 8.62 2024-03-08 560 put BUY
 # *** Leaving Ex3cuteTrade() Now... 
 
-#  < 0: > not included in hash.
-#   <0:[unsent,portfolioTrade]>, 
-#            <1:[Cmd_,Action,Range,Value,TradeType,Aux,SigCnt,QtyShrCons,NumStrikes,Live,THoriz,ExitPref]>, 
-#                           <2:[tradeDate,tradeTime,tradeType,tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,timestamp,tradeRecTimestamp,tradeDateTime,tradeDay,tradeBar,userId,accountId,tradeRAW,tradeRawId,tradeSize1,tradePrFilled,tradeDur,tradeStopMke,tradeLimitExit,optionStrategy,daySRs,wkSRs,moSRs,tradeSpec,tradeSig,tradeGapPct,tradeStatus,tradeAux1,tradeAux2,tradeHash]>
-#
-def makeCSVString(jsonRec, keyOrValueStr, sepstr):
-    # Check if the input arguments are not null
-    if jsonRec is None or keyOrValueStr is None or sepstr is None:
-        return "Error: Input arguments cannot be null."
 
-    sepstr = leftRightStr(sepstr,"left",1)
-    print("]  sepstr =",sepstr)
-    # Check if keyOrValueStr is either "key" or "value"
-    if keyOrValueStr not in ["key", "value"]:
-        return "Error: Invalid value for keyOrValueStr. It should be either 'key' or 'value'"
-    csv_string="nil"
-    # Extract keys or values based on the specified mode
-    if keyOrValueStr == "key":
-        csv_string = ",".join(jsonRec.keys())
-    else:
-        if  keyOrValueStr == "value":
-            csv_string = ",".join(map(str, jsonRec.values()))
-
-    return csv_string
-
-# # Example usage:
-# json_record = {"key1": "a", "key2": "b", "key3": "c"}
-
-# # Get CSV string of values
-# values_csv = makeCSVString(json_record, "value" , ",")
-# print("Values CSV String:", values_csv)
-
-# # Get CSV string of keys
-# keys_csv = makeCSVString(json_record, "key"  , ","))
-# print("Keys CSV String:", keys_csv)
 
 def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
     print("] READY TO EX3CUTE TRADE: ", symstr, "\n\n")
@@ -858,36 +827,13 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
     print("] signal counts (INI,jsonTrades):",   int( jsonINIrecord["SigCnt"]) , int(jsonTRADESrecord["tradeCnt"])  )
 
 
-
-#    prep long csv <init0>,<ini_csv>,<trade_csv>
-    keysCsvStr0 = "<init0>,<ini_csv>,<trade_csv>"
-    keysCsvStr1 = makeCSVString(jsonINIrecord, "key" , ",")
-    keysCsvStr2 = makeCSVString(jsonTRADESrecord, "key" , ",")
-    keysCsvStr = keysCsvStr0 +",ini=,"+keysCsvStr1 +",portfolioTrade=,"+  keysCsvStr2 
-    print("] Ex3cuteTrade(...)   keysCsvStr==",keysCsvStr )
-
-    print("] Ex3cuteTrade(...) \n")
-    valuesCsvStr0="unsent,portfolioTrade,"+  livestr0
-    valuesCsvStr1 = makeCSVString(jsonINIrecord, "value" , ",")
-    valuesCsvStr2 = makeCSVString(jsonTRADESrecord, "value" , ",")
-    valuesCsvStr = valuesCsvStr0 +",ini,"+valuesCsvStr1 +",portfolioTrade,"+ valuesCsvStr2 
-    print("] Ex3cuteTrade(...)   valuesCsvStr==",valuesCsvStr )
-
-# ] Ex3cuteTrade(...)     keysCsvStr== <init0>,<ini_csv>,<trade_csv>,ini=,Cmd_,Action,Range,Value,TradeType,Aux,SigCnt,QtyShrCons,NumStrikes,Live,THoriz,ExitPref,portfolioTrade=,tradeDate,tradeTime,tradeType,tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,timestamp,tradeRecTimestamp,tradeDateTime,tradeDay,tradeBar,userId,accountId,tradeRAW,tradeRawId,tradeSize1,tradePrFilled,tradeDur,tradeStopMke,tradeLimitExit,optionStrategy,daySRs,wkSRs,moSRs,tradeSpec,tradeSig,tradeGapPct,tradeStatus,tradeAux1,tradeAux2,tradeHash
-# ] Ex3cuteTrade(...)   valuesCsvStr== unsent,portfolioTrade,LIVE,ini,TSLA,BUY,BELOW,S1,LONG_STOCK,COUNT,4,1,0,LIVE,19,nil,portfolioTrade,2024-03-05,1545,BUY,10,TSLA,atLimit,180.02,3198,4,below,S1,-3.3,-1.8313%,1,215|205|150|140,2024-03-05T233422,2024-03-05T203003,2024-03-05T154500,tue,15min,Creator,12345354911,raw103,0,100,0,gfd,108.012,450.05,IronCondor1.15,R3R2R1_P_P3_S1S2S3=|212.78|204.56|196.35|191.53|201.90|183.32|178.50|170.29|,wkR2R1P_200.08_S1S2=|213.68|208.17|194.57|186.48|,moR3R2R1PS1S2S3=|222.07|215.31|208.54|198.84|192.07|182.37|175.60|,nil,BUY,0,1,2,3,nilHash
-
 #   check LIVE=1
     if(livestr0!="LIVE"):
         print(jsonINIrecord["Cmd_"], " Trade NOT LIVE. Skipping....")
     if(livestr0=="LIVE"):
         print("] Prepping LIVE Trade: ", tradetypestr)
         print( jsonINIrecord["Action"],":  ", tradetypestr , jsonINIrecord["QtyShrCons"],"shares of", jsonINIrecord["Cmd_"]," at Market (",jsonTRADESrecord["tradePrice"],jsonTRADESrecord["tradeBar"],").  Attempting to Place Trade at",simutime0,"on",todaysDate0,"     - Live? ==" ,  jsonINIrecord["Live"] )
-        
-        print("] HERE SEND STATUS:  <sending> to database")
-
         barstr = jsonTRADESrecord["tradeBar"]
-
-
 
 #       check bar > 15min
         tf99=ValidateBarType(barstr)
@@ -896,21 +842,16 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
             qtyMAX10=10
             strikeSize=5
 
-#  LONG_STOCK  ENTRY
             if(tradetypestr=="LONG_STOCK"):
                 prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
                 prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
-                CheckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  , valuesCsvStr  , keysCsvStr)
+                CheckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  )
+                pass
 
-
-#  SHORT_STOCK  ENTRY
             if(tradetypestr=="SHORT_STOCK"):
                 prettyPrintJSON2( jsonINIrecord, "INI Trade Match : "+tradetypestr)
                 prettyPrintJSON2( jsonTRADESrecord, "INCOMING jsonTRADE:" )
-                # Che ckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0 , valuesCsvStr )
-
-
-
+                pass
 
 
             if(tradetypestr=="LONG_CALLS"):
@@ -962,13 +903,11 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
 
                 print(".robinhood *SENDING LONG_CALLS OPTION Order" , sym0, qty0, price02, expdate, strike01, putcall, buySell0 )
                 sendOptionLimitOrder( sym0,qty0,price02,expdate,strike01,putcall, buySell0 )
-                # Chec kDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  , valuesCsvStr)
+
+                pass
 
 
 
-
-
-#  LONG_PUTS  ENTRY
 
             if(tradetypestr=="LONG_PUTS"):
                 IOTMstr="ITM"
@@ -1020,7 +959,6 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
 
                 print(".robinhood *SENDING LONG_PUTS OPTION Order" , sym0, qty0, price02, expdate, strike01, putcall, buySell0 )
                 sendOptionLimitOrder( sym0,qty0,price02,expdate,strike01,putcall, buySell0 )
-                # Che ckDatabaseThenSendTradeToMarket( tradetypestr, jsonINIrecord["Cmd_"],  int( jsonINIrecord["QtyShrCons"]), float(jsonTRADESrecord["tradePrice"]), int(jsonTRADESrecord["rawtradeId"]),  simutime0,todaysDate0  , valuesCsvStr )
 
 
 # ] Prepping LIVE Trade:  LONG_PUTS
@@ -1035,15 +973,12 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
 
 
 
-
-
-#  SPREADS  ENTRY
-
             if(tradetypestr=="CREDIT_CALL_SPREAD"):
                 pass
 
             if(tradetypestr=="CREDIT_PUT_SPREAD"):
                 pass
+
 
     # print("\n] jsonTRADESrecord=")
     # prettyPrintJSON(jsonTRADESrecord)
@@ -1543,19 +1478,15 @@ def findOptions1( sym0,  expdate, strike0 ):
 
 def sendOrderToDatabaseAndUpdateCmdVariables():
     # send order to database
+
     # update Cmd_ JSON Vars
+
     pass
 
-
-def CheckDatabaseForUniquePortfolioTrade(rawID, fullsendStr, fullSendKeysStr):
+def CheckDatabase(rawID):
     # tf0=True
     tf0=False   
-    print("Ch3ckDatabaseForUniquePortfolioTrade(): checking database on raw trade id#", rawID, "...   TradeEXIST, fullsendStr ==", tf0,  fullsendStr)
-
-    resultstr= sendDataString( fullsendStr , url007_str+"?u=jb")
-    print("Ch3ckDatabaseForUniquePortfolioTrade(): resultstr==", resultstr) #checking database on raw trade id#", rawID, "...   TradeEXIST, fullsendStr ==", tf0,  fullsendStr)
-
-    # here we should call recP0rtfolioTrade
+    print("Ch3ckDatabase(): checking database on raw trade id#", rawID, "...   TradeEXIST==", tf0)
     return(tf0)
 
 
@@ -1821,7 +1752,7 @@ def getnumtradestoday(date0str):
 
 tradestodayMax =3
 
-def CheckDatabaseThenSendTradeToMarket( tradetypestr, symstr, numshares, price0, rawID , simutime0, simudate0  , fullSendStr, fullSendKeysStr ):
+def CheckDatabaseThenSendTradeToMarket( tradetypestr, symstr, numshares, price0, rawID ,    simutime0, simudate0  ):
     global tradestodayMax
     global todaysDate0
 
@@ -1834,11 +1765,11 @@ def CheckDatabaseThenSendTradeToMarket( tradetypestr, symstr, numshares, price0,
         return(False)
 
 # 2nd check to see if raw ID exists on Server's database in case power got cut locally to client's python machine
-    hash01="45911354ABCD"
-    chkdb = CheckDatabaseForUniquePortfolioTrade(rawID , fullSendStr , fullSendKeysStr)
+    chkdb = CheckDatabase(rawID)
+
 
     if(chkdb==False):
-        print("< * SIMULATED * > No Trade #",rawID,"found in LiveTrade table-database. Sending Trade for" ,tradetypestr,symstr," to the market and INSERTING the  LiveTrade table-database.")
+        print("<SIMULATED> No Trade #",rawID,"found in LiveTrade table-database. Sending Trade for" ,tradetypestr,symstr," to the market and INSERTING the  LiveTrade table-database.")
         EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr, symstr, numshares, price0, rawID , simutime0, simudate0  )
 #       LONG_STOCK NVDA 1 735.11 2350 1357 2024-02-16
         #only if position entered
@@ -2410,42 +2341,6 @@ def getStockPrices(  stockINIarr ):
         i0+=1
 
 
-def sendDataString( data_str, url_str ):
-    retStr="NoData"
-    print("] s3ndDataString(d,u): READY to send POST to url:", url_str, " with data: ====>>>" ,data_str ,"<<<====")
-    # input0 = input()
-
-    print("] SENDING ",data_str, " to: ", url_str)
-    result = postStringUrl(data_str, url_str)
-
-    #  searchQuery, len=200 - _POST msg rec'd OK!
-
-    #  params = placedtrade|2024-02-24|1545|Sat|tradeId_22031|creator|123354911|algoinvestorr@gmail.com|BUY|AAPL
-    # Found 26 params[] (all lines)...
-
-    print("] ***>> AFTER SEND POST! ;   result ==")
-    print(result, " [ 1st 3 chars...   --jb ]" )
-
-    print(result[0] )
-    print(result[1] )
-    print(result[2] )
-
-    lstr = leftRightStr( result, "left", 4 )
-    print("] confirmSTRING ==", lstr)
-    if(lstr=="Erro"):
-        print("] Server Response: ERROR ! Could not connect.")
-        retStr="NOGO"
-
-    # if(result[0]=="O" and result[1]=="K" and result[1]=="G" ):
-    if(lstr=="OKGO"):
-        print("] Server Response: OK go :",lstr)
-        retStr=lstr
- 
-
-    print("] Press ENTER to continue...  returning: retStr==",retStr )
-    input0 = input()
-
-    return retStr
 
 ################################################################ END OF def FUNCTIONS():
     
@@ -2663,37 +2558,33 @@ my_stock_items = GetHoldingsButLoginFirst("BEFORE TRADE", "roguequant1@gmail.com
 #                   recPortfolioTrade.php
 #
 #
-#    as per Ted Larkin's call Saturday night 2024-03-02, advice on specifics of generating a live trade
-#
-#           1.  unsent
-#           2.  sending
-#           3.  sent
-#           4.  ACK  or Rejected
-#           5.  partial Fill  or Rejected 
-#           6.  Filled    or Rejected
-#
-#
-#
-#
+url_str = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
+data_str = "placedtrade,2024-02-24,1545,Sat,tradeId_22031,creator,123354911,algoinvestorr@gmail.com,BUY,AAPL,10,LONG_STOCK,182.50,limit,filled,exit=2025-06-30,tradeId=BcGfYb0bC0cDA554bDeff1,live,t,u,v,w,x,y,z,EOL"  # +  ' { "a":"b", "c":"d", "e":"f", g:h, i:j } '
 
-url007_str  = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
-data_str = "placedtrade,2024-02-27,1545,Sat,tradeId_22033,creator,123354911,algoinvestorr@gmail.com,BUY,AAPL,4,LONG_STOCK,179.50,limit,filled,exit=2025-06-30,tradeId=BcGfYb0bC0cDA554bDeff1,live,t,u,v,w,x,y,z,EOL"  # +  ' { "a":"b", "c":"d", "e":"f", g:h, i:j } '
+print("] READY to test ", url_str, " with data: ====>>>" ,data_str ,"<<<====")
+# input0 = input()
 
-# resultstr = sendDataString( data_str, url_str+"?u=err" )  # test NOGO server response
-resultstr = sendDataString( data_str, url007_str+"?u=jb" )
-print("] resultstr==",resultstr)
+print("] SENDING ",data_str, " to: ", url_str)
+result = postStringUrl(data_str, url_str)
 
-print("] resultstr RIGHT==",leftRightStr(resultstr, "right", 4) )
-      
+#  searchQuery, len=200 - _POST msg rec'd OK!
 
-if(resultstr=="OKGO"):
-    print("] Server Ok to go <SIM>. Go ahead and place new attemptedPosition into .positions ...")
+#  params = placedtrade|2024-02-24|1545|Sat|tradeId_22031|creator|123354911|algoinvestorr@gmail.com|BUY|AAPL
+# Found 26 params[] (all lines)...
 
-if(resultstr=="NoData" or resultstr=="NOGO"):
-    print("] Server INSERT Halted; NOT Ok to go <SIM>.  Similiar or Identical PositionFound.  EXITING... " ) 
+print("] ***>> AFTER SEND POST! ;   result ==")
+print(result[0])
+print(result[1] )
+print(result[2])
+print(result)
 
+lstr = leftRightStr( result, "left", 4)
+print("] confirmSTRING ==", lstr)
 
-    
+print("] Press ENTER to continue...")
+
+input0 = input()
+
 ####################################################################################  DATE & Time input
 #
 

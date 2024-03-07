@@ -271,7 +271,7 @@ if($msg0==1) PrintUserInputs( $udate0, $utime0, $uname0, $acct0 , $msg0 );
  
 $timeNYC =  date("Y-m-d\TH:i:s");
 $happy1.= GetEntryNums();
-
+ 
 ///// *************************************************************************************************
 
 
@@ -690,7 +690,11 @@ try {
 // 2024-02-06,1101,tue,1min,-2.6916%,SELL,100,META,atLimit,455.49,P3day,sellsigcnt,5,R3R2R1_P_P3_S1S2S3=,484.30,476.03,467.75,463.49,157.14,455.21,450.95,442.67,p3-R1=,-12.26,gap=0.0125,0.00,0.0,0.0,wkR2R1P_473.41_S1S2=,500.09,487.54,460.86,446.73,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL
 // 2024-02-06,1115,tue,15min,0.1876%,BUY,100,AMZN,atLimit,168.79,Pday,buysigcnt,4,R3R2R1_P_P3_S1S2S3=,173.40,172.36,171.32,169.51,161.75,168.47,166.66,165.62,p-S1=,0.32,gap=0.0125,0.00,0.0,0.0,wkR2R1P_166.37_S1S2=,184.06,177.94,160.25,148.68,moR3R2R1PS1S2S3=,169.32,164.59,159.86,157.00,152.27,149.41,144.68,EOL
 
+/**
+ * 
+ * 
 
+ */
 
 
                         $insertQuery0a= "INSERT INTO trades ( tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, daySRs, wkSRs, moSRs,   leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES ( CURRENT_TIMESTAMP, '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', 0, '$tradeSize', '$tradeprice', 0.0, '$tradeCond', '$tradeDur', '$tradeStop', '$tradeLimit', '$opStrat',   '$daySRs', '$wkSRs', '$moSRs',    '$leg1', '$leg2', '$leg3', '$leg4', '$buySellCnt', '$buySellPctStr', '$buySellDist', 'nil', '$tradeType', '$gapPct',  'cued', '$humanTrade', '$timeNYC', '$tradeHashToQuery' )";

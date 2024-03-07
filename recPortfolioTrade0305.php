@@ -108,7 +108,7 @@ $splitChars = ",";
 $i=0;
 
 $params = explode (",", $searchQuery);
-echo "\n params = ". $params[0]. ", ". $params[1]. ", ". $params[2]. ",| ".  $params[3]. "|". $params[4]. "|". $params[5]. "|". $params[6]. "|". $params[7]. "|". $params[8]. "|". $params[9];
+echo "\n params = ". $params[0]. "|". $params[1]. "|". $params[2]. "|".  $params[3]. "|". $params[4]. "|". $params[5]. "|". $params[6]. "|". $params[7]. "|". $params[8]. "|". $params[9];
 $cnt=count($params);
 
 
@@ -119,95 +119,6 @@ $insertdb=0;
 
 echo "\nFound $cnt params[] (all lines)...\n  hastr0== $hastr0";
 
-
-// NEW...
-$ii=0;
-$newstr="";
-$statusStr = $params[0]; 
-$statusStr = strtolower($statusStr);
-
-if( $statusStr=='unsent' || $statusStr=='sending' || $statusStr=='sent' ){
-    
-    //skip [0] ==statusstr
-    for($ii=1; $ii<$cnt; $ii++){
-      $newstr.= $params[$ii];
-      if($ii != ($cnt-1) ){
-        $newstr.= ",";
-      }// add , iff not last one
-    }
-
-    // now hash it
-    echo "]  newstr ==    ======>". $newstr. "<=======";
-    $newstrHash = HashIt($newstr);
-    echo "]  newstr# ==   ###===>". $newstrHash. "<====###";
-    
-/*
-======>portfolioTrade,LIVE,ini,M,BUY,ABOVE,S1,LONG_STOCK,COUNT,5,1,0,LIVE,19,nil,portfolioTrade,2024-03-06,1515,BUY,10,M,atLimit,20.1,3251,11,above,S1,0.3,1.5091%,0,20|20|15|15,2024-03-06T184834,2024-03-06T200011,2024-03-06T151500,wed,15min,Creator,12345354911,raw45,0,100,0,gfd,12.06,50.25,IronCondor1.15,R3R2R1_P_P3_S1S2S3=|21.77|21.27|20.78|20.29|18.70|19.80|19.31|18.82|,wkR2R1P_18.63_S1S2=|22.28|20.15|16.50|14.98|,moR3R2R1PS1S2S3=|24.41|22.08|19.74|18.43|16.09|14.78|12.44|,nil,BUY,0,1,2,3,nilHash<=======
-]  newstr# ==   ###===>bf207fe05fcf847920c80ae1f6f2edeb18e9657987531e30cfcc0079d389c1ef<====
- */
-
-
-
-
-
-    
-
-// ATTEMPT ACCESS
-// try {
-//   // Connect to MySQL using PDO
-//   $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);
-//   // Set PDO to throw exceptions for errors
-//   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-// ######################################################### Start code HERE
-
- //                             // $query = "SELECT * FROM ". $tblname. " WHERE tradeHash = :tradeHash";
-//         $query = "SELECT * FROM positions WHERE tradeHash = :tradeHash";
-//         $stmt = $conn->prepare($query);
-//         $stmt->bindParam(':tradeHash', $tradeHashToQuery);
-//         $stmt->execute();
-//         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-//         $insertdb=0;
-//         if ($result) {  // if there is a hash == found
-//             $insertdb=0;
-//             if($msg0==1) echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
-//         } else {
-//             $insertdb=1;
-//             if($msg0==1) echo "<br />] NO RawTrade found for tradeHash $tradeHashToQuery.  insertdb= $insertdb ;  INSERTing to db.trades ...<br />";
-//         }
-
-//         if($insertdb==1){
-//                     // $insertQuery0 = "INSERT INTO trades ( tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy,                       leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES ( CURRENT_TIMESTAMP, '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', 0, '$tradeSize', '$tradeprice', 0.0, '$tradeCond', 'day', '$tradeStop', '$tradeLimit', '$opStrat',                                        '$leg1', '$leg2', '$leg3', '$leg4', '$buySellCnt', '$buySellPctStr', '$buySellDist', 'nil', '$tradeType', 0.0 ,       'cued', '$humanTrade', '$timeNYC', '$tradeHashToQuery' )";
-//           $insertQuery0 = "INSERT INTO positions ( tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy,                       leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES ( CURRENT_TIMESTAMP, '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', 0, '$tradeSize', '$tradeprice', 0.0, '$tradeCond', 'day', '$tradeStop', '$tradeLimit', '$opStrat',                                        '$leg1', '$leg2', '$leg3', '$leg4', '$buySellCnt', '$buySellPctStr', '$buySellDist', 'nil', '$tradeType', 0.0 ,       'cued', '$humanTrade', '$timeNYC', '$tradeHashToQuery' )";
-          
-//           // $conn->exec($insertQuery0a);
-//           // $lastInsertedId = $conn->lastInsertId();
-//           // $inserted0++;
-//           // $pstr2= "<br />] Sample trade inserted. Last inserted ID: $lastInsertedId ";
-//           // echoColor($pstr2,"green");
-
-
-//           // $pstr3= "<br />] Sample trade inserted; insertQuery0a = $insertQuery0a ";
-//           $pstr3= "<br />] Sample  trade NOT   inserted but insertQuery0a = $insertQuery0a ";
-//           echoColor($pstr3,"blue");
-
-//         }else{
-
-//          echo "<br />] insertdb = $insertdb  ___ NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery "; 
-          
-          
-//         }
-
-//     } catch (PDOException $e) {
-//         echo "<br />] Connection failed: " . $e->getMessage();
-//     }
-//     // Close the PDO connection
-//     $conn = null;
-
-
-
-}
 
 // echo "<p>Copyright &copy; 1999-" . date("Y") . " Algo Investor Inc.</p>";
 
