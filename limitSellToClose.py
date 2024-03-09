@@ -1,5 +1,8 @@
-
 # Price Calculator: Limit Sell To Close (c) 2024 by Level Blest, LLC
+# This can be generalized, but for now we are specifically focusing on closing long options positions.
+# Perfect for the 'Thursday afternoon RogueQuant Special Snipe setup" - where we go long an options contract one week out,
+# but are looking to close the next morning if price moves favorably
+# This calculator also accounts for an after-hours price move, which is common on volatile stocks like SMCI
 
 import tkinter as tk
 from datetime import datetime, timedelta
