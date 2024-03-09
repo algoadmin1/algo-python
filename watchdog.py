@@ -1,8 +1,9 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "15.54"
+versionStr =                    "16.54"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
+url007_str  = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
 
 import time
 import datetime
@@ -16,6 +17,8 @@ import math
 new_york_timezone = pytz.timezone('America/New_York')
 current_date_ny = datetime.datetime.now(new_york_timezone).date()
 
+# gExtensionStr = "?u=jb&msg=1"
+gExtensionStr = "?u=jb"
 useremail0= "roguequant1@gmail.com" 
 MaxShares =10
 # see dump.js for log file
@@ -869,7 +872,17 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
     print("] Ex3cuteTrade(...) \n")
     valuesCsvStr0="unsent,portfolioTrade,"+  livestr0
     valuesCsvStr1 = makeCSVString(jsonINIrecord, "value" , ",")
+
+
+    jsonTRADESrecord["timestamp"]="nil"
+    jsonTRADESrecord["tradeRecTimestamp"]="nil"
     valuesCsvStr2 = makeCSVString(jsonTRADESrecord, "value" , ",")
+
+#     "timestamp": "2024-03-09T003640",
+#   "tradeRecTimestamp": "2024-03-08T193008",
+#   "tradeDateTime": "2024-03-08T150000",
+#     we need to ignore [16]  and [17]
+
     valuesCsvStr = valuesCsvStr0 +",ini,"+valuesCsvStr1 +",portfolioTrade,"+ valuesCsvStr2 
     print("] Ex3cuteTrade(...)   valuesCsvStr==",valuesCsvStr )
 
@@ -886,11 +899,10 @@ def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
         print("] HERE SEND STATUS:  <sending> to database")
 
         barstr = jsonTRADESrecord["tradeBar"]
-
-
-
 #       check bar > 15min
         tf99=ValidateBarType(barstr)
+
+
 
         if(tf99==True):
             qtyMAX10=10
@@ -1539,7 +1551,7 @@ def findOptions1( sym0,  expdate, strike0 ):
 
 
 
-
+# gE xtensionStr = "?u=jb&msg=1"
 
 def sendOrderToDatabaseAndUpdateCmdVariables():
     # send order to database
@@ -1548,11 +1560,20 @@ def sendOrderToDatabaseAndUpdateCmdVariables():
 
 
 def CheckDatabaseForUniquePortfolioTrade(rawID, fullsendStr, fullSendKeysStr):
-    # tf0=True
+    global gExtensionStr
+
     tf0=False   
     print("Ch3ckDatabaseForUniquePortfolioTrade(): checking database on raw trade id#", rawID, "...   TradeEXIST, fullsendStr ==", tf0,  fullsendStr)
 
-    resultstr= sendDataString( fullsendStr , url007_str+"?u=jb")
+    resultstr= sendDataString( fullsendStr , url007_str+gExtensionStr )  
+    # resultstr= sendDataString( fullsendStr , url007_str+"?u=jb&msg=1")
+
+    endCmdLen=12
+    # endCmdStr = leftRightStr(resultstr, "right", endCmdLen)
+    endCmdStr = leftRightStr(resultstr, "right", 12)
+
+    print("] resultstr RIGHTMOST:[", endCmdLen ,"]==",endCmdStr )
+    print("] ")
     print("Ch3ckDatabaseForUniquePortfolioTrade(): resultstr==", resultstr) #checking database on raw trade id#", rawID, "...   TradeEXIST, fullsendStr ==", tf0,  fullsendStr)
 
     # here we should call recP0rtfolioTrade
@@ -1587,9 +1608,7 @@ def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr, symstr, numshares, p
 
     print("] 3nterP0stionsRobinhoodAndINSERTDatabase()    : Getting Open Stock Positions... ")
     poss = rs.robinhood.get_open_stock_positions()
-    # if(msg00==1):
-    #     printJson(poss, "Open Stock Positions")
-    if(True):
+    if(False):
         print("\n\n")
         printJson(poss, "Open Stock Positions")
     holdingsTF=True
@@ -1713,7 +1732,7 @@ def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr, symstr, numshares, p
 # ] **************************************** optionSymbol =  AAPL  240209P00175
 # Bid Price: 0.0
 # Ask Price: 0.0
-# ] Your Holdings  BEFORE TRADE  :
+# ] Your Holdings  BEF ORE TRADE  :
 # symbol= META    0  )
 # META {'price': '484.015400', 'quantity': '2.00000000', 'average_buy_price': '490.2500', 'equity': '968.03', 'percent_change': '-1.27', 'intraday_percent_change': '-1.27', 'equity_change': '-12.469200', 'type': 'stock', 'name': 'Meta Platforms', 'id': 'ebab2398-028d-4939-9f1d-13bf38f81c50', 'pe_ratio': '32.688000', 'percentage': '8.79'}
 # symbol= AAPL    1  )
@@ -1922,7 +1941,8 @@ def EnterPostionsRobinhood( username0, pwd0, ordersLIVE ):
     # rs.robinhood.order_buy_market('AMD',2,  "gtc", extendedHours=True )
     # rs.robinhood.order_buy_market(  'AMD',1,timeInForce='gtc', extendedHours=True )
 
-    my_items = GetHoldings("BEFORE TRADE")
+    if(False):
+        my_items = GetHoldings("BEFORE TRADE")
 
 
 ######################################################
@@ -2250,11 +2270,15 @@ def RefreshINICmd_VariablesJSON(json_array, key0):
     rstr="nil"
     idx= 0
 
+    locmsg=False
+
     for index, json_dict in enumerate(json_array):
         idx+=1
         if key0 in json_dict:  # "Cmd_" is the key
             print("\n")
-            print(f"Index: {index}, Stock or {key0}: {json_dict[key0]}")
+
+            if(locmsg==True):
+                print(f"Index: {index}, Stock or {key0}: {json_dict[key0]}")
 
             cmd_test0=json_dict[key0].upper()
             cmd_test=leftRightStr(cmd_test0,"left",4)   # // explicit ="CMD_"
@@ -2264,7 +2288,8 @@ def RefreshINICmd_VariablesJSON(json_array, key0):
             valuestr  = json_dict["Value"]    # [3]
             livestr   = json_dict["Live"]    # [3]
 
-            print("[",idx,"]  actionstr,  rangestr , valuestr ==",  actionstr,  rangestr , valuestr )
+            if(locmsg==True):
+                print("[",idx,"]  actionstr,  rangestr , valuestr ==",  actionstr,  rangestr , valuestr )
 
 
             #  if     == "CMD_" FOUND !
@@ -2430,20 +2455,22 @@ def sendDataString( data_str, url_str ):
     print(result[1] )
     print(result[2] )
 
-    lstr = leftRightStr( result, "left", 4 )
-    print("] confirmSTRING ==", lstr)
-    if(lstr=="Erro"):
-        print("] Server Response: ERROR ! Could not connect.")
-        retStr="NOGO"
+    retStr=result
+    
+    # lstr = leftRightStr( result, "left", 4 )
+    # print("] confirmSTRING ==", lstr)
+    # if(lstr=="Erro"):
+    #     print("] Server Response: ERROR ! Could not connect.")
+    #     retStr="NOGO"
 
-    # if(result[0]=="O" and result[1]=="K" and result[1]=="G" ):
-    if(lstr=="OKGO"):
-        print("] Server Response: OK go :",lstr)
-        retStr=lstr
+    # # if(result[0]=="O" and result[1]=="K" and result[1]=="G" ):
+    # if(lstr=="OKGO"):
+    #     print("] Server Response: OK go :",lstr)
+    #     retStr=lstr
  
-
-    print("] Press ENTER to continue...  returning: retStr==",retStr )
-    input0 = input()
+    # if(False):
+    #     print("] Press ENTER to continue...  returning: retStr==",retStr )
+    #     input0 = input()
 
     return retStr
 
@@ -2530,9 +2557,9 @@ print("\n\n\n")
 
 json_result = CSV2JSON(arrINIcsvfile)
 jsonINImaster = json_result
-print("\n\nConverted CSV to JSON data:")
-tf911=True
+tf911=False
 if(tf911==True):
+    print("\n\nConverted CSV to JSON data:")
     print(json.dumps(json_result, indent=2))
 
 jlen = len(json_result)
@@ -2546,11 +2573,12 @@ RefreshINICmd_VariablesJSON(json_result, key_to_print)
 
 print("] AFTER R3freshINICmd_Variable()...")
 print("] st0ckINIarr[]==", stockINIarr)
-print("\n\nPress ANY KEY to see POST fn json ")
-input007 = input()
-clearScreen()
 
-print(json.dumps(CMD_Array, indent=4))
+if(False):
+    print("\n\nPress ANY KEY to see POST fn json ")
+    input007 = input()
+    clearScreen()
+    print(json.dumps(CMD_Array, indent=4))
 
 
 
@@ -2676,21 +2704,19 @@ my_stock_items = GetHoldingsButLoginFirst("BEFORE TRADE", "roguequant1@gmail.com
 #
 #
 
-url007_str  = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
-data_str = "placedtrade,2024-02-27,1545,Sat,tradeId_22033,creator,123354911,algoinvestorr@gmail.com,BUY,AAPL,4,LONG_STOCK,179.50,limit,filled,exit=2025-06-30,tradeId=BcGfYb0bC0cDA554bDeff1,live,t,u,v,w,x,y,z,EOL"  # +  ' { "a":"b", "c":"d", "e":"f", g:h, i:j } '
+# url007_str  = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
 
-# resultstr = sendDataString( data_str, url_str+"?u=err" )  # test NOGO server response
-resultstr = sendDataString( data_str, url007_str+"?u=jb" )
-print("] resultstr==",resultstr)
-
-print("] resultstr RIGHT==",leftRightStr(resultstr, "right", 4) )
+if(False):
+    data_str = "placedtrade,2024-02-27,1545,Sat,tradeId_22033,creator,123354911,algoinvestorr@gmail.com,BUY,AAPL,4,LONG_STOCK,179.50,limit,filled,exit=2025-06-30,tradeId=BcGfYb0bC0cDA554bDeff1,live,t,u,v,w,x,y,z,EOL"  # +  ' { "a":"b", "c":"d", "e":"f", g:h, i:j } '
+    resultstr = sendDataString( data_str, url007_str+gExtensionStr ) #"?u=jb&msg=1" )
+    print("] resultstr==",resultstr)
+    print("] resultstr RIGHT==",leftRightStr(resultstr, "right", 4) )
       
+    if(resultstr=="OKGO"):
+        print("] Server Ok to go <SIM>. Go ahead and place new attemptedPosition into .positions ...")
 
-if(resultstr=="OKGO"):
-    print("] Server Ok to go <SIM>. Go ahead and place new attemptedPosition into .positions ...")
-
-if(resultstr=="NoData" or resultstr=="NOGO"):
-    print("] Server INSERT Halted; NOT Ok to go <SIM>.  Similiar or Identical PositionFound.  EXITING... " ) 
+    if(resultstr=="NoData" or resultstr=="NOGO"):
+        print("] Server INSERT Halted; NOT Ok to go <SIM>.  Similiar or Identical PositionFound.  EXITING... " ) 
 
 
     
@@ -2760,7 +2786,7 @@ print("\n] ReDirecting TIME NOW =   tnowStart, tnow0, simuTime ",  tnowStart, tn
 
 ##########################################################################  TradeTrigger: Time eplsilon
 
-numMinutesDiff0=3
+numMinutesDiff0=10
 
 pstr= "\n",str(current_date_ny),"] ENTER Number Minutes diff for Trade (default="+str(numMinutesDiff0)+"): "  
 print_colored(pstr,colorGreen)
