@@ -1,0 +1,138 @@
+# bugs JAN 26 2024  postitloop1.py  # UNEXPECTED
+
+
+] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> *NOT Sending ANY data - NO TRADES FOUND.
+
+
+======================>Today's Date and Time in NYC (EDT) is: 2024-01-26T11:00:42 comparing dstr to  2024-01-26  to dstrnew  2024-01-26
+
+] Attempting to Loop 49793 times, with a 12 second delay between reading the local file, for a
+Max # minutes of: 10080.0 Max HOURS=165.97666666666666
+
+
+.
+ Opening local csv file: intradaytrades.txt
+
+Closed file.
+ Read 880rows, UNIQUE lines found: 0
+
+]  ***** The LAST ITEM:
+EDT tstrHHMM= 1100
+
+
+Today's Trades Extracted today 2024-01-26 : dataToday[][] at time= 1100
+
+] END OF Trade Injest.
+] keepLooping== 49793
+
+] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> *NOT Sending ANY data - NO TRADES FOUND.
+
+
+======================>Today's Date and Time in NYC (EDT) is: 2024-01-26T11:00:54 comparing dstr to  2024-01-26  to dstrnew  2024-01-26
+
+] Attempting to Loop 49792 times, with a 12 second delay between reading the local file, for a
+Max # minutes of: 10080.0 Max HOURS=165.97333333333333
+
+
+.
+ Opening local csv file: intradaytrades.txt
+
+] row= 880 . The current string IS NOT FOUND in dataMaster[], adding:
+ 2024-01-26,1114,fri,13min,-0.7352%,SELL,100,AAPL,atLimit,194.51,P3day,sellsigcnt,11,R3R2R1_P_P3_S1S2S3=,199.43,197.68,195.94,194.52,194.60,192.78,191.36,189.62,p3-R1=,-1.43,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,193.57,192.58,189.96,188.33,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL
+
+] dataMaster[588] :  ADDING:arrstrM= 2024-01-26,1114,fri,13min,-0.7352%,SELL,100,AAPL,atLimit,194.51,P3day,sellsigcnt,11,R3R2R1_P_P3_S1S2S3=,199.43,197.68,195.94,194.52,194.60,192.78,191.36,189.62,p3-R1=,-1.43,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,193.57,192.58,189.96,188.33,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL
+] uniques= 0 ['2024-01-26', '1114', 'fri', '13min', '-0.7352%', 'SELL', '100', 'AAPL', 'atLimit', '194.51', 'P3day', 'sellsigcnt', '11', 'R3R2R1_P_P3_S1S2S3=', '199.43', '197.68', '195.94', '194.52', '194.60', '192.78', '191.36', '189.62', 'p3-R1=', '-1.43', 'gap=0.0125', '0.00', '0.0', '0.0', 'wkR2R1S1S2=', '193.57', '192.58', '189.96', '188.33', 'moR3R2R1PS1S2S3=', '-1.00', '-1.00', '-1.00', '-1.00', '-1.00', '-1.00', '-1.00', 'EOL']
+
+Trade date ( 2024-01-26 ) trade array:  data[0] =   ['2024-01-26', '1114', 'fri', '13min', '-0.7352%', 'SELL', '100', 'AAPL', 'atLimit', '194.51', 'P3day', 'sellsigcnt', '11', 'R3R2R1_P_P3_S1S2S3=', '199.43', '197.68', '195.94', '194.52', '194.60', '192.78', '191.36', '189.62', 'p3-R1=', '-1.43', 'gap=0.0125', '0.00', '0.0', '0.0', 'wkR2R1S1S2=', '193.57', '192.58', '189.96', '188.33', 'moR3R2R1PS1S2S3=', '-1.00', '-1.00', '-1.00', '-1.00', '-1.00', '-1.00', '-1.00', 'EOL']   adding to data_to_sendLast...
+
+uniques= 0 :   2024-01-26,1114,fri,13min,-0.7352%,SELL,100,AAPL,atLimit,194.51,P3day,sellsigcnt,11,R3R2R1_P_P3_S1S2S3=,199.43,197.68,195.94,194.52,194.60,192.78,191.36,189.62,p3-R1=,-1.43,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,193.57,192.58,189.96,188.33,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL
+*** Strong SELL signal !!!
+
+
+Closed file.
+ Read 881rows, UNIQUE lines found: 1
+
+]  ***** The LAST ITEM:
+EDT tstrHHMM= 1100
+
+
+Today's Trades Extracted today 2024-01-26 : dataToday[][] at time= 1100
+0 :  2024-01-26
+
+] END OF Trade Injest.
+] keepLooping== 49792
+
+] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-----====>>>SENDING data_to_sendLast via _POST...
+
+Traceback (most recent call last):
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\urllib3\connectionpool.py", line 467, in _make_request
+    self._validate_conn(conn)
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\urllib3\connectionpool.py", line 1096, in _validate_conn
+    conn.connect()
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\urllib3\connection.py", line 642, in connect
+    sock_and_verified = _ssl_wrap_socket_and_match_hostname(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\urllib3\connection.py", line 782, in _ssl_wrap_socket_and_match_hostname
+    ssl_sock = ssl_wrap_socket(
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\urllib3\util\ssl_.py", line 470, in ssl_wrap_socket
+    ssl_sock = _ssl_wrap_socket_impl(sock, context, tls_in_tls, server_hostname)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\urllib3\util\ssl_.py", line 514, in _ssl_wrap_socket_impl
+    return ssl_context.wrap_socket(sock, server_hostname=server_hostname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.496.0_x64__qbz5n2kfra8p0\Lib\ssl.py", line 455, in wrap_socket
+    return self.sslsocket_class._create(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.496.0_x64__qbz5n2kfra8p0\Lib\ssl.py", line 1046, in _create
+    self.do_handshake()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.496.0_x64__qbz5n2kfra8p0\Lib\ssl.py", line 1321, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLEOFError: [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\urllib3\connectionpool.py", line 790, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\urllib3\connectionpool.py", line 491, in _make_request
+    raise new_e
+urllib3.exceptions.SSLError: [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\requests\adapters.py", line 486, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\urllib3\connectionpool.py", line 844, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\urllib3\util\retry.py", line 515, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='algoinvestorr.com', port=443): Max retries exceeded with url: /trades/recpost.php (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\_dev\Projects\algo-python\postitloop1.py", line 453, in <module>
+    response = requests.post(url, data=payload)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rogue\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\LocalCache\local-packages\Python312\site-packages\requests\adapters.py", line 517, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='algoinvestorr.com', port=443): Max retries exceeded with url: /trades/recpost.php (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))
+PS C:\_dev\Projects\algo-python>

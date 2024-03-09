@@ -1,0 +1,14 @@
+Past performance does not guarantee future results. Options carry significant risk and may not be appropriate for all investors. Options transactions are often complex and may involve the loss of principal. Investors should consider their investment objectives and risks carefully before investing in options. Any probability analysis provided herein is theoretical in nature, and not guaranteed, and may not reflect the degree of certainty of an event occurring. In addition, advanced options strategies (e.g., multi-leg strategies) often involve greater risk. To learn more about the risks associated with options, please read the Characteristics and Risks of Standardized Options carefully before you begin trading options. Supporting documentation for any claims, if applicable, will be provided upon request.
+
+"Chance of profit" is an estimate based on model assumptions and does not guarantee future results. Numerous factors that are not reducible to a model determine the actual chance of profit for a particular option contract or strategy.
+
+Please note, the Watchlist Position tool provides hypothetical returns based on when you select a contract to be added to the watchlist, and does not guarantee future results. The Watchlist is for informational purposes only and should not be considered a personalized recommendation or investment advice. All values listed here are hypothetical and shown for illustrative purposes only. No contract has been bought or sold. Actual profits or losses may differ based on a number of factors not accounted for in these assumptions.
+
+Volume is the number of contracts—both opening and closing transactions—traded over a certain period. Open Interest is the number of contracts in existence in the market on a certain option. Implied Volatility is a gauge of the market’s prediction for its future fluctuation,but like any prediction, it may or may not hold true.
+
+Delta is a measure of how much an option price changes when the underlying security price changes. Gamma is a measure of how much the delta changes when the price of the underlying security changes. Rho is an estimate of how much the price of an option (its premium) changes when the interest rate changes. Theta is the rate at which premium decays per unit of time as expiration nears. Vega is an estimate of how much an option price changes when the volatility assumption changes. The Greeks are computed using options pricing models and are therefore theoretical estimates.
+
+Certain pricing or market data, or other information, is provided by third party data providers which may include The Options Price Reporting Authority, Nasdaq Inc., and/or other third party providers. Robinhood does not make any warranty or guarantee relating to the accuracy, timeliness or completeness of any third-party information.
+
+Securities trading offered through Robinhood Financial LLC, Member SIPC and FINRA, and a subsidiary of Robinhood Markets, Inc.
+Show Less

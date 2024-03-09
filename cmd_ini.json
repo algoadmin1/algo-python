@@ -1,0 +1,53 @@
+# cmd_ini.json
+#
+#
+#
+#           Bro, instead of all these variables, I realized before moving forward with WatchDog and APM
+#                that I should just put everything in a json payload, so we can ship it around the
+#                web if necessary.  I had PositionsMAXStocks= 3 , PositionsMAXOptions= 1 etc.
+#
+#
+#           Ok, I am coding outside my apartment when at 2am a firetruck and an ambulance came in
+#           to scoop up somepoor soul.
+#
+#
+#   THEN, this system will let us have ai or a market-scanning Algo (ie picks up SCMI) write an INI cmd_
+#
+#   I have included the INI file in this email. watchdog.py reads the INI file (trades_INI.txt) and 
+#   translates it into the CMD_Array[] json dictionary inside python for watchdog's main loop.
+#
+#         The main loop simply polls https://algoinvestorr.com/trades/gettrades.php?d=2024-02-14 
+#         which in turn writes https://algoinvestorr.com/trades/rawtrades/cuedtrades.json
+#         It is this cuedtrades.json file which will be rendered in the UI for our 'pivots product'
+#
+#
+
+CMD_Array = [
+    { "Label": "PositionsMax",  "Type": "stock",     "Value": "3" },
+    { "Label": "PositionsMax",  "Type": "options",   "Value": "1" },
+    { "Label": "PositionsMax",  "Type": "options_spreads", "Value": "1" },
+    { "Label": "PositionsMax",  "Type": "portfolio", "Value": "6" },
+
+    { "Label": "RiskDollars",  "Type": "portfolio",    "Value": "35000" },
+    { "Label": "RiskDollars",  "Type": "stocks",       "Value": "12000" },
+    { "Label": "RiskDollars",  "Type": "options",      "Value": "6000" },
+
+    { "Label": "RiskPct",  "Type": "portfolio",        "Value": "0.350" },
+
+    { "Label": "StopPct",  "Type": "options",           "Value": "0.50" },
+    { "Label": "StopPct",  "Type": "stocks",            "Value": "0.2750" },
+
+    { "Label": "TradesPerDay",  "Type": "options",     "Value": "1" },
+    { "Label": "TradesPerDay",  "Type": "stocks",      "Value": "2" },
+
+    { "Label": "Server",  "Type": "Poll",               "Value": "30" },
+    { "Label": "Server",  "Type": "RefreshINIsecs",     "Value": "600" },
+
+    { "Label": "Event",  "Type": "FOMC",              "Value": "2024-03-15T143000" },
+    { "Label": "Event",  "Type": "JOBSREPORT",        "Value": "2024-03-24T083000" },
+    { "Label": "Event",  "Type": "CPI",               "Value": "2024-02-13T083000" },
+
+    { "Label": "Event",  "Type": "EARNINGS_NVDA",     "Value": "2024-03-15T141500" },
+    { "Label": "Event",  "Type": "EARNINGS_ROKU",     "Value": "2024-02-15T133000" }
+
+]

@@ -9,12 +9,14 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "1.50";
+                                                      $vers = "7.354";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
+$happy2="jb";
 $CurrencyStr="$";
 $todaysdate = date('Y-m-d');
+$filename0 = "trades_ini.txt"; 
 
 //echo "\n\n] recpost1.php $vers is running, Time in NYC = $todaysdate \n";
 // ******************************************************************** INITAL VARS
@@ -22,6 +24,8 @@ $todaysdate = date('Y-m-d');
 // Get the values from the URL parameters
 $udate0 = isset($_GET['d']) ? $_GET['d'] : $todaysdate ;
 $utime0 = isset($_GET['t']) ? $_GET['t'] : '2500';
+$uuser0 = isset($_GET['u']) ? $_GET['u'] : 'baduser';
+
 
 //$udate0 = isset($_GET['date']) ? $_GET['date'] : $todaysdate ;
 //$utime0 = isset($_GET['time']) ? $_GET['time'] : '2600';
@@ -41,11 +45,70 @@ $dbname = "u151710353_algotrades";
 $tblname ="trades";
 
 $timeNYC =  date("Y-m-d\TH:i:s");
+$tradeCsvHeaders  =  "tradeDate,tradeTime,tradeType,tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,timestamp";
+
+$tradeCsvHeaders0 =  "tradeDate,tradeTime,tradeType,tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,timestamp";
+$tradeCsvHeaders2 =  ",tradeRecTimestamp,tradeDateTime,tradeDay,tradeBar,userId,accountId,tradeRAW,tradeRawId,tradeSize1,tradePrFilled,";
+$tradeCsvHeaders2.=  "tradeDur,tradeStopMke,tradeLimitExit,optionStrategy,daySRs,wkSRs,moSRs,tradeSpec,tradeSig,tradeGapPct,";
+$tradeCsvHeaders2.=  "tradeStatus,tradeAux1,tradeAux2,tradeHash";
+
+$tradeCsvHeadersALL=  $tradeCsvHeaders0. $tradeCsvHeaders2;
 
 // ******************************************************************** INITAL VARS
+// from gettrades.py
+//
+
+if($uuser0=="j" ) $uuser0=$happy2;
+
+$currstr= $CurrencyStr;
 
 
+ $numoptionslegGlobal=0; 
+ $tradestr1GlobalStr="";   
+ $tradestr2GlobalStr="";   
+ $tradestr3GlobalStr="";   
+ $tradestr4GlobalStr=""; 
 
+$colorGreen ="green";
+$colorBlue  ="blue";
+$colorCyan  ="cyan";
+$colorOrange  ="orange";
+
+$colorRed  ="red";
+$colorMagenta  ="magenta";
+$colorYellow  ="yellow";
+$colorDarkGreen  ="darkgreen";
+$colorDarkRed  ="darkred";
+$colorPurple  ="purple";
+$colorBrown  ="brown";
+
+$colorWhite  ="white";
+$colorLimeGreen  ="green";
+$colorAqua  ="aqua";
+$colorGray  ="gray";
+
+
+if($uuser0!=$happy2){
+    echo "] Invalid user.  Authentication through payment portal needed for further access.<br />"; 
+    $linkAnnual = "https://buy.stripe.com/00g8zogLO286bSgaEM";
+    $linkMonthly = "https://buy.stripe.com/3cseXM0MQ9Ay6xWeV3";
+
+    $link0 = $linkAnnual;
+    $link1 = $linkMonthly;
+    $link2 = "https://algoinvestorr.com/products.pdf";
+
+    // echo '<p>Click on this <a href="https://algoinvestorr.com" target="_blank">link</a> for more information.</p>';
+    echo '<p>Click on this <a href="'. $link0 . '" target="_blank">link</a> to become a Gold Member.</p>';
+    echo "<br />";
+    echo '<p>Click <a href="'. $link1 . '" target="_blank">here</a> for a lower-cost solution.</p>';
+    echo "<br />";
+    echo '<p>Click <a href="'. $link2 . '" target="_blank">here</a> for all Algo Investor Products.</p>';
+
+    echo "<br />";
+
+    exit("Terminating php kernel.");
+
+}
 
 
 // ******************************************************************** Functions
@@ -112,10 +175,15 @@ function GetNYDateTime(){
   $timeNYC0 =  date("Y-m-d\TH:i:s");
   return $timeNYC0;
 }
+
+function print_colored($printstr, $colorstr){   // colorstr = " red blue  green black white yellow purple orange gray"
+    echo '<p style="color: '. $colorstr. ';">'. $printstr. '</p>';
+  }
 function echoColor($printstr, $colorstr){   // colorstr = " red blue  green black white yellow purple orange gray"
-  echo '<p style="color: '. $colorstr. ';">'. $printstr. '</p>';
- // echo '<p style="color: green;">The file '. $fname. ' exists.</p>';
-}
+    echo '<p style="color: '. $colorstr. ';">'. $printstr. '</p>';
+   // echo '<p style="color: green;">The file '. $fname. ' exists.</p>';
+  }
+  
 function RaiseCharacter($str, $num) {
     if ($num >= 0 && $num < strlen($str)) {
         $str[$num] = strtoupper($str[$num]);
@@ -149,6 +217,25 @@ function DetectCharacter($str0, $char0, $num) {
         return false;
     }
 }
+
+function replaceChars($str, $charstr, $replacestr) {
+    $result = str_replace(str_split($charstr), str_split($replacestr), $str);
+    return $result;
+}
+function removeChars($str, $charstr) {
+    $result = str_replace(str_split($charstr), '', $str);
+    return $result;
+}
+function noNilStrings($arr, $replacestr) {
+    foreach ($arr as &$value) {
+        if ($value === null || $value === "") {
+            $value = $replacestr;
+        }
+    }
+    return $arr;
+}
+
+
 function RemoveRightCharacter($str0, $num) {
     if ($num >= 0 && $num < strlen($str0)) {
         return substr($str0, 0, -$num - 1) . substr($str0, -$num);
@@ -201,6 +288,370 @@ function SendEmailTo($receiverEmail, $senderEmail, $subject, $msg) {
         return "Failed to send email. Check your server's configuration or try again later.";
     }
 }
+
+function ReadArrayFile($fname) {
+    $strarr = []; // Initialize an empty array to store lines from the file
+
+    // Open the file for reading
+    $file = fopen($fname, "r");
+
+    // Check if the file was opened successfully
+    if ($file) {
+        // Read the file line by line until the end of the file
+        while (($line = fgets($file)) !== false) {
+            // Add each line to the array
+            $strarr[] = $line;
+        }
+
+        // Close the file handle
+        fclose($file);
+    } else {
+        // If the file couldn't be opened, handle the error (you can modify this according to your needs)
+        echo "Unable to open file: $fname";
+    }
+
+    // Return the array containing lines from the file
+    return $strarr;
+}
+
+function GenerateTrade($arr, $idx, $arrINIcsv) {
+    global $CurrencyStr;
+    $currstr= $CurrencyStr;
+    global $msg0;
+
+    # colors 
+    global $colorGreen;
+    global $colorBlue  ;
+    global $colorCyan  ;
+    global $colorOrange ;
+
+    global $colorRed  ;
+    global $colorMagenta  ;
+    global $colorYellow  ;
+    global $colorDarkGreen ;
+    global $colorDarkRed  ;
+    global $colorPurple  ;
+    global $colorBrown ;
+
+    global $colorWhite   ;
+    global $colorLimeGreen   ;
+    global $colorAqua ;
+    global $colorGray  ;
+    global $tradestrGlobalArr; 
+
+    global $numoptionslegGlobal; 
+    global $tradestr1GlobalStr;   
+    global $tradestr2GlobalStr;   
+    global $tradestr3GlobalStr;   
+    global $tradestr4GlobalStr;   
+    global $vers;   
+
+
+    if($msg0==1){
+            echo "] G3nerateTrade() v_ $vers  arr == ";  
+    // echo "] G3nerateTrade()    arr == ";  
+            print_r($arr);
+    }  
+
+    $tradestr0="";
+    $tradestr1="";
+    
+
+    $S1R1str = "S1";
+    $col = $colorLimeGreen; // Assuming $colorLimeGreen is defined elsewhere in your code
+    $buystrong  =1;
+    $sellstrong =1;
+    $tradestrong =1;
+
+    if ($arr[4] == "SELL") {
+        $S1R1str = "R1";
+        $col = $colorRed; // Assuming $colorRed is defined elsewhere in your code
+    }
+ 
+    $aboveBelowstr = "above";
+    $pct0str = $arr[9];
+
+    if ($pct0str[0] == '-') {
+        $aboveBelowstr = "below";
+        if ($arr[4] == "SELL") {
+            $col = $colorDarkRed; // Assuming $colorDarkRed is defined elsewhere in your code
+            $sellstrong =0;         // this sell signal is below R1 NOT strong
+                                    // check for 'close enough'
+            $tradestrong =0;
+
+        }
+    } else {
+        if ($arr[4] == "BUY") {
+            $col = $colorDarkGreen; // Assuming $colorDarkGreen is defined elsewhere in your code
+            $buystrong =0;         // this buy signal is below R1 NOT strong
+                                    // check for 'close enough'
+            $tradestrong =0;
+
+        }
+    }
+
+
+//      tradeDate,tradeTime,tradeType,tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,   priceDist,pricePct,tradeStrong,tradeLeg,timestamp
+    $tradeLeg="1";
+    $timestampnow = GetDBSafe_NYCTimeNOW(1);
+    $tradesize0=10;
+
+
+
+// $tradeCsvHeaders0 =  "tradeDate,tradeTime,tradeType,tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,timestamp";
+//                              12
+// $tradeCsvHeaders2 =  ",tradeRecTimestamp,tradeDateTime,tradeDay,tradeBar,userId,accountId,tradeRAW,tradeRawId,tradeSize1,tradePrFilled,";
+// $tradeCsvHeaders2.=  "tradeDur,tradeStopMke,tradeLimitExit,optionStrategy,daySRs,wkSRs,moSRs,tradeSpec,tradeSig,tradeGapPct,";
+// $tradeCsvHeaders2.=  "tradeStatus,tradeAux1,tradeAux2,tradeHash";
+
+    //[RAWTRADE,tradeId], tradeDate,tradeTime,tradeType,tradeSize,              symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,                 tradePivot,       priceDist,       pricePct,tradeStrong,tradeLeg,timestamp
+    //  0      ,   1    ,      2   ,    3    ,           4
+    // $tradestr0=          $arr[2].",". $arr[3].",". $arr[4].",". $tradesize0.",". $arr[5].",". $arr[6].",". $arr[7].",". $arr[1].",". $arr[8].",". $aboveBelowstr. ",". $S1R1str. ",". $arr[10]. ",". $arr[9]. ",". $tradestrong.",". $arr[11].",". $timestampnow  ;
+    
+    // REMOVE NIL STRs, take care of this case $arr0[] =...onCondor1.15,,,,nil,BUY,0
+    $arr = noNilStrings( $arr, "nil_" );
+
+    $tradestr00=                  $arr[2].",". $arr[3].",". $arr[4].",". $tradesize0.",". $arr[5].",". $arr[6].",". $arr[7].",". $arr[1].",". $arr[8].",". $aboveBelowstr. ",". $S1R1str. ",". $arr[10]. ",". $arr[9]. ",". $tradestrong.",". $arr[11].",". $timestampnow  ;
+
+    // we have to turn ar[12]== ,"2024-02-06 20:45:06", ===>  ,2024-02-06T20:45:06,
+    $tstampHere = $arr[12];
+    $thstr0     = replaceChars( $tstampHere, " ", "T" ) ;    // ,"2024-02-06T20:45:06",
+    $thstr1     =  removeChars( $thstr0, '"' );              // ,2024-02-06T20:45:06,
+    $thstr2     =  removeChars( $thstr1, ':' );              // ,2024-02-06T204506,
+    // $thstr2     = replaceChars( $thstr1, ":", "_" ) ;     // ,2024-02-06T20_45_06,
+    $thstr3     =   $thstr2 ;
+
+
+    // $tradestr2 =               $arr[12].",". $arr[13].",". $arr[14].",". $arr[15].",". $arr[16].",". $arr[17].",". $arr[18].",". $arr[19].",". $arr[20].",".$arr[21].",";
+    $tradestr2 =                  $thstr3.  ",". $arr[13].",". $arr[14].",". $arr[15].",". $arr[16].",". $arr[17].",". $arr[18].",". $arr[19].",". $arr[20].",".$arr[21].",";
+    $tradestr2.=                  $arr[22].",". $arr[23].",". $arr[24].",". $arr[25].",".    $arr[26].",". $arr[27].",". $arr[28]. ",".  $arr[29]. ",". $arr[30]. ",". $arr[31] ;   // [31] =0,1,2,3,nilHash
+    $tradestrRest =     $tradestr2. ",1,2,3,nilHash";
+
+    $tradestr0 =   $tradestr00. ",". $tradestrRest;
+
+
+
+
+    $pstr = $idx . ") at". " " . $arr[3]. " ". $arr[1] . " ". $arr[2] . " " . $arr[4] . " " . $arr[5] . " " . $arr[6] . " " . $currstr . $arr[7] . " count=" . $arr[8] . " " . $currstr . $arr[10] . " or " . $arr[9] . " " . $aboveBelowstr . " " . $S1R1str;
+    if($msg0==1) print_colored($pstr, $col); // Assuming print_colored is a defined function in your code
+
+    $buySell = $arr[4];
+    $symbol0 = $arr[5];
+
+    $leg1 = 10.6;
+    $leg2 = 20.1;
+    $leg3 = 5.4;
+    $leg4 = 2.5;
+
+    $pctSize = 0.15;
+    $linecnt = 0;
+    $strikeSize = 5;
+    $optionentry="buyToOpen";
+    $optionTrade=0;
+    $numoptionslegGlobal = $optionTrade;
+
+    if ($col == $colorDarkGreen || $col == $colorDarkRed) {
+        $dummy9 = 0;
+    } else {
+        foreach ($arrINIcsv as $lineini) {
+            $lineiniarr = explode(',', $lineini);
+
+            $optionTrade=0;
+
+            if ($symbol0 == $lineiniarr[0] && $buySell == $lineiniarr[1]) {
+                $pstr9 = "(ini." . $linecnt . ") " . $lineiniarr[0] . " " . $lineiniarr[1] . "<<=====" . " " . $aboveBelowstr . " " . $S1R1str . " Trade: " . $symbol0 . " " . $lineiniarr[4];
+                if($msg0==1) print_colored($pstr9, $colorGray); // Assuming $colorGray is defined elsewhere in your code
+
+                $price1 = floatval($arr[7]);
+
+                $leg1 = round($price1 * (1.0 + $pctSize), 10);  
+                $leg1 =FloorIt( $leg1, $strikeSize );
+          
+                $leg2 = $leg1 + $strikeSize; 
+                $leg2_2 = $leg1 + ($strikeSize * 0.50);  
+
+
+                $leg3 = round($price1 * (1.0 - $pctSize), 10);  
+                $leg3 =FloorIt( $leg3, $strikeSize );
+
+                $leg4 = $leg3 - $strikeSize;  
+                $leg4_2 = $leg3 - ($strikeSize * 0.50);  
+
+                $pstr8sell = "] Price =" . $price1."  " . ($pctSize * 100) . "% CallCreditSpread= _~" . $leg2 . " __|__ " . $leg1 . "~________[" . $currstr . $price1 . "]__ ";
+                $pstr8buy = "] Price =" . $price1 ."  ". ($pctSize * 100) . "% PutCreditSpread=" . " __[" . $currstr . $price1 . "]________~" . $leg3 . " __|__ " . $leg4 . "~_ ";
+
+                $pstrIronCondor1 = "] Price =" . $price1 . " IronCondor=" . $leg2 . "__|__" . $leg1 . " _~|~_ " . $leg3 . "__|__" . $leg4;
+                $pstrIronCondor_5 = "] Price =" . $price1 . " IronCondor=" . $leg2_2 . "__|__" . $leg1 . " _~|~_ " . $leg3 . "__|__" . $leg4_2;
+
+                if ($price1 > 350.0) {
+                    if($msg0==1) print_colored($pstrIronCondor1, $colorBlue);
+                } else {
+                    if($msg0==1) print_colored($pstrIronCondor_5, $colorGray);
+                }
+
+                if ($lineiniarr[1] == "BUY") {
+                    if($msg0==1) print_colored($pstr8buy, $colorGreen);
+                    if ($lineiniarr[4] == "LONG_CALLS") {
+                        $optionentry="buyToOpen_CALL";
+                        $optionentry1="";
+                        $optionTrade=1;
+                    }else if ($lineiniarr[4] == "CREDIT_PUT_SPREAD") {
+                        $optionentry ="buyToOpen_PUT";
+                        $optionentry1="sellToOpen_PUT";
+                        $optionTrade=2;
+                    }
+                }
+
+                if ($lineiniarr[1] == "SELL") {
+                    if($msg0==1) print_colored($pstr8sell, $colorRed);
+                    if ($lineiniarr[4] == "LONG_PUTS") {
+                        $optionentry="buyToOpen_PUT";
+                        $optionentry1="";
+                        $optionTrade=1;
+
+                    }else if ($lineiniarr[4] == "CREDIT_CALL_SPREAD") {
+                        $optionentry ="buyToOpen_CALL";
+                        $optionentry1="sellToOpen_CALL";
+                        $optionTrade=2;
+                    }
+                }
+
+/* 
+    Symbol,Action,Range,Value,TradeType,Aux,SigCnt,NumShares,NumStrikes
+        AMD,SELL,ABOVE,R1,LONG_PUTS,COUNT,7,3,1
+        AMD,BUY,BELOW,S1,LONG_CALLS,COUNT,5,4,1
+
+        TSLA,SELL,ABOVE,R1,CREDIT_CALL_SPREAD,COUNT,6,0,1
+        VXX,BUY,BELOW,S1,CREDIT_PUT_SPREAD,COUNT,5,0,1
+
+
+*/
+
+
+                $numoptionslegGlobal = $optionTrade;
+                $tradestr1="";
+                $tradestr2=""; 
+                $tradestr3="";
+                $tradestr4="";
+
+
+                if( $optionTrade > 0 ){
+                    $tradesize0a  = $lineiniarr[7];
+                    $strikePrice0 =  $arr[7] ;
+                    $strikePrice1 =  $strikePrice0;
+                    $strikePrice1a =  $strikePrice1 + $strikeSize ;
+
+                    $strikePrice2below =  FloorIt( $strikePrice1,  $strikeSize );
+                    $strikePrice2above =  FloorIt( $strikePrice1a, $strikeSize );
+
+                    $strikestr="STRIKE";
+
+                    $strikePrice2c = $strikePrice2below;  // default
+                    if($lineiniarr[1]=="BUY")  $strikePrice2c = $strikePrice2below;
+                    if($lineiniarr[1]=="SELL") $strikePrice2c = $strikePrice2above;
+
+//                                       tradeDate,tradeTime,tradeType,                                     tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,timestamp
+                    // 
+                    $strikePrice2d =      $S1R1str ;             
+
+                    if($optionTrade==2 &&  ($lineiniarr[4] == "CREDIT_CALL_SPREAD") ){
+                        $strikePrice2c = $leg2;
+                        $strikePrice2d = $leg1;
+                    }
+                    
+                    if($optionTrade==2 &&  ($lineiniarr[4] == "CREDIT_PUT_SPREAD") ){
+                        $strikePrice2c = $leg4;
+                        $strikePrice2d = $leg3;
+                    }
+
+                    
+                    // 1st leg
+                    // $tradestr1 = $arr[2].",". $arr[3].",". $optionentry. "_". $optionentry1. ",". $tradesize0a.",". $arr[5].",". $arr[6].",". $arr[7].",". $arr[1].",". $strikePrice2c.",". $strikestr. ",". $strikePrice2d. ",". $arr[10]. ",". $arr[9]. ",". $tradestrong.",". $tradeLeg.",". $timestampnow   ;
+                    $tradestr1 = $arr[2].",". $arr[3].",". $optionentry. "_". $optionentry1. ",". $tradesize0a.",". $arr[5].",". $arr[6].",". $arr[7].",". $arr[1].",". $strikePrice2c.",". $strikestr. ",". $strikePrice2d. ",". $arr[10]. ",". $arr[9]. ",". $tradestrong.",". $arr[11].",". $timestampnow   ;
+
+                    // 2nd leg
+                    // if( $optionTrade ==2 ){   $tradestr2= "";  }
+
+                    //  $numoptionslegGlobal = $optionTrade; 
+                     $tradestr1GlobalStr  = $tradestr1.",". $tradestrRest;   
+
+                     //reserved unused
+                     $tradestr2GlobalStr  = $tradestr2;   
+                     $tradestr3GlobalStr  = $tradestr3;   
+                     $tradestr4GlobalStr  = $tradestr4;   
+                    // $tradestrGlobalArr[]=$tradestr1;
+
+                }
+
+
+                // 2024-01-02,1130,buyToOpen_CALL_,4,ROKU,atLimit,89.49,436,85,STRIKE,S1,-1.02,-1.1435%,1,1,2024-01-18T070952
+                // 2024-01-02,1000,SELL,10,AAPL,atLimit,192.6,426,5,below,R1,-1.44,-0.7459%,0,1,2024-01-18T070952
+                // 2024-01-02,1130,buyToOpen_CALL_,4,ROKU,atLimit,89.49,436,85,STRIKE,S1,-1.02,-1.1435%,1,1,2024-01-18T070952
+                // 2024-01-02,0945,SELL          ,10,META,atLimit,354.71,425,5,below,R1,-4.02,-1.1330%,0,1,2024-01-18T070952
+                // 2024-01-02,1130,buyToOpen_CALL_,4,ROKU,atLimit,89.49,436 ,85,STRIKE,S1,-1.02,-1.1435%,1,1,2024-01-18T070952
+
+                $pstr5 = "___________# optionTrades= $optionTrade __________**_________". $tradestr1 ;
+                if($msg0==1) print_colored($pstr5, $colorGray);
+            }
+
+            $linecnt++;
+        }
+    }
+    return( $tradestr0 );
+}
+
+
+function writeArrayToCSV($arr, $fname) {
+    $file = fopen($fname, 'w');
+
+    // Loop through each line in the array
+    foreach ($arr as $line) {
+        // Write the line to the CSV file
+        fputcsv($file, explode(',', $line));
+    }
+
+    // Close the file handle
+    fclose($file);
+}
+/*
+// Example usage:
+$linesArray = ["a,b,c", "d,e,f", "h,i,j"];
+$fnameout1 = "csvtrades.csv";
+
+writeArrayToCSV($linesArray, $fnameout1);
+
+
+
+
+// Example usage:
+$arr0 = "a,b,c";
+$fnameout1 = "csvtrades.csv";
+
+writeArrayToCSV($arr0, $fnameout1);
+
+
+
+
+
+$fp = fopen('data.csv', 'r');
+$headers = fgetcsv($fp); // Get column headers
+
+$data = array();
+while (($row = fgetcsv($fp)) !== false) {
+    $data[] = array_combine($headers, $row);
+}
+fclose($fp);
+
+$json = json_encode($data, JSON_PRETTY_PRINT);
+
+$output_filename = 'data.json';
+file_put_contents($output_filename, $json);
+
+
+
+
+*/
+
 
 // ********************************************************************  
 //
@@ -370,14 +821,14 @@ if($tof9==true) $tradedatestr=$datestr;
 // $ftimeout = GetDBSafe_NYCTimeNOW(1);   
 // $fnameout = $dirPrefix. "rawtrades_". $tradedatestr . "_recv_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
 
-// $pstr= "<br /><br /><br />] FOUND $j unique RAW trades ( generated on $tradedatestr ), and inserted them into ". $arrname. "[] writing to $fnameout  at $ftimeout0 ... <br />";
+// $pstr= "<br /><br /><br />] FOUND $j unique RAW trades ( gen erated on $tradedatestr ), and inserted them into ". $arrname. "[] wri ting to $fnameout  at $ftimeout0 ... <br />";
 // $pstrRej="<br />] FOUND $badlines BAD 'csv-lines' and ignored them. <br />";
 // echoColor( $pstr, "blue");
 // echoColor( $pstrRej, "red");
 
 //$arrstrs = array(/* your array content here */); // Replace this with your array
 
-// // Open the file for writing
+// // Open the file for wri ting
 // $fileout = fopen($fnameout, "w");
 
 // // Write each element of the array to the file
@@ -629,6 +1080,7 @@ try {
                 $stmt->execute();
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
               
+                $rawtrades = [];
 
                 // Display the results
                 foreach ($result as $trade) {
@@ -649,6 +1101,10 @@ try {
                       echo "<br />";
                     //echo "\n";
 
+
+
+                    // used by gettrades.py
+                    //
                     echo "RAWTRADE,";
                     echo  $trade['tradeId'] . ",";
                     echo  $trade['tradeDate'] . ",";
@@ -662,10 +1118,74 @@ try {
                     echo  $trade['buySellDist'] . ",";
                     echo  $trade['leg1'] . "|". $trade['leg2'] . "|". $trade['leg3'] . "|". $trade['leg4'] .",";
 
-                    
+                    $rawtradestr = "RAWTRADE,".
+                       $trade['tradeId'] . ",".
+                       $trade['tradeDate'] . ",".
+                       $trade['tradeTime'] . ",".
+                       $trade['tradeType'] . ",".
+                       $trade['symbol'] . ",".
+                       $trade['tradeCond'] . ",".
+                       $trade['tradePrice'] . ",".
+                       $trade['buySellCnt'] . ",".
+                       $trade['buySellPct'] . ",".
+                       $trade['buySellDist'] . ",".
+                       $trade['leg1'] . "|". $trade['leg2'] . "|". $trade['leg3'] . "|". $trade['leg4'] .",";
+
+//    $tradeCsvHeaders0 = "tradeDate,tradeTime,tradeType,tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,timestamp";
+//    $tradeCsvHeaders2 =  ",tradeRecTimestamp,tradeDateTime,tradeDay,tradeBar     ,userId,accountId,tradeRAW,tradeRawId,tradeSize1,   tradePrFilled,";
+//    $tradeCsvHeaders2.=  "tradeDur,tradeStopMkt,tradeLimitExit,        optionStrategy,daySRs,wkSRs,moSRs, tradeSpec,tradeSig,tradeGapPct,";
+//    $tradeCsvHeaders2.=  "tradeStatus,tradeAux1,tradeAux2,tradeHash";
+
+//    $trade CsvHeadersALL=  $tradeCsvHeaders0. $tradeCsvHeaders2;
+                            
+                        $rawtradestr2 = $trade['tradeRecTimestamp']. ",". $trade['tradeDateTime']. ",". $trade['tradeDay']. ",". $trade['tradeBar']. ",";
+                        $rawtradestr2.= $trade['userId']. ",". $trade['accountId']. ",". $trade['tradeRAW']. ",". $trade['tradeRawId']. ",". $trade['tradeSize']. ",";
+                        $rawtradestr2.= $trade['tradePrFilled']. ",". $trade['tradeDur']. ",". $trade['tradeStopMkt']. ",". $trade['tradeLimitExit']. ",";
+                        $rawtradestr2.= $trade['optionStrategy']. ",". $trade['daySRs']. ",". $trade['wkSRs']. ",". $trade['moSRs']. ",";
+                        $rawtradestr2.= $trade['tradeSpec']. ",". $trade['tradeSig']. ",". $trade['tradeGapPct']. ",". $trade['tradeStatus']. ",";
+                        $rawtradestr2.= $trade['tradeAux1']. ",". $trade['tradeAux2']. ",". $trade['tradeHash']. ",";
+
+                       $rawtradestr.= $rawtradestr2;
+
+
+/*
+
+    //[RAWTRADE,tradeId], tradeDate,tradeTime,tradeType,tradeSize,              symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,   priceDist,pricePct,tradeStrong,tradeLeg,timestamp
+    //  0      ,   1    ,      2   ,    3    ,    4
+    $tradestr0=          $arr[2].",". $arr[3].",". $arr[4].",". $tradesize0.",". $arr[5].",". $arr[6].",". $arr[7].",". $arr[1].",". $arr[8].",". $aboveBelowstr. ",". $S1R1str. ",". $arr[10]. ",". $arr[9]. ",". $tradestrong.",". $tradeLeg.",". $timestampnow  ;
+
+{
+        "tradeDate": "2024-02-02",
+        "tradeTime": "1530",
+        "tradeType": "SELL",
+        "tradeSize": "10",
+        "symbol": "TSLA",
+        "tradeCond": "atLimit",
+        "tradePrice": "187.83",
+        "rawtradeId": "1758",
+        "tradeCnt": "9",
+        "tradeAboveBelow": "below",
+        "tradePivot": "R1",
+        "priceDist": "-3.19",
+        "pricePct": "-1.7001%",
+        "tradeStrong": "0",
+        "tradeLeg": "1",
+        "timestamp": "2024-02-04T202402"
+    },
+*/
+//      current:
+//    $tra deCsvHeaders = "tradeDate,tradeTime,tradeType,tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,timestamp";
+                       
+// ORIGINAL
+// "INSERT INTO trades (tradeId, tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) 
+//               VALUES (NULL, current_timestamp(), '2023-12-27', '2023-12-27T130000', '1300', 'wed', '15min', 'creator', '12345354', 'SELL', 'ALB', 'YES', '0', '100', '149.66', '0.0', 'atLimit', 'Day', '0.0', '0.0', 'noOptions', '0.0', '0.0', '0.0', '0.0', '5', '-2.9118%', '-4.36', 'nil', 'sell', '0.0', 'cued', 'nil', 'nil', '7475bf6f706cb7a0cd92840c7d0dbe8de9579f39ec04db3ded7b470617e25d51')";
+
+
+                    // append
+                    $rawtrades[]= $rawtradestr;
+
                     // echo "<br />";
                     //echo "\n";
-
 
                 }
 
@@ -683,91 +1203,6 @@ try {
                      echo "<br />] NO TRADES FOUND.<br />";
                 }
 
-
-
-            //     if($insertdb==1){
-
-            //            // ORIGINal
-            //            // $insertQuery0 = "INSERT INTO trades (tradeId, tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES (NULL, current_timestamp(), '2023-12-27', '2023-12-27T130000', '1300', 'wed', '15min', 'creator', '12345354', 'SELL', 'ALB', 'YES', '0', '100', '149.66', '0.0', 'atLimit', 'Day', '0.0', '0.0', 'noOptions', '0.0', '0.0', '0.0', '0.0', '5', '-2.9118%', '-4.36', 'nil', 'sell', '0.0', 'cued', 'nil', 'nil', '7475bf6f706cb7a0cd92840c7d0dbe8de9579f39ec04db3ded7b470617e25d51')";
-
-            //             // ] arrstrs[ 0 ]= 
-            //             // [ 0..10 ]     2023-12-21,945,thu,15min,1.1383%,    BUY, 100,AMZN,atLimit,152.28,Pday,
-            //             // [ 11..21 ]       buysigcnt,8, [13]R3R2R1_P_P3_S1S2S3=, 159.70,157.16,[16]154.61, 153.09,152.08,  [19]150.54, 149.02, [21]146.47, 
-            //             //  ...               [22]p-S1=,1.73,gap=0.0125,0.00,0.0,0.0,wkR2R1S1S2=,154.90,152.30,145.37,141.04,moR3R2R1PS1S2S3=,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,-1.00,EOL,70ac488fa3488b4669d178ad1011265f69378daa0244605f2fcc890c912a0dd3
-
-
-            //             $tradeprice =   floatval( $elements[ 9 ] );         // 493.26 ;
-            //             $leg1 =  FloorIt( $tradeprice  *  1.20 , 5);        // Call Credit spread buy
-            //             $leg2 =  FloorIt( $tradeprice  *  1.15 , 5);        // Call Credit spread sell
-            //             $leg3 =  FloorIt( $tradeprice  *  0.85 , 5);        //  Put Credit spread sell
-            //             $leg4 =  FloorIt( $tradeprice  *  0.80 , 5);        //  Put Credit spread buy
-
-
-            //             $tradeDate0 =     $date0str ;    //$elements[ 0 ];    //'2023-12-27';
-            //             $tradeTime0 =     $t0str;            //'930';
-            //             if(strlen($tradeTime0)==3) $tradeTime0= "0". $tradeTime0;   // 945==>0945
-            //             $tradeDateTime0 =  $tradeDate0. "T". $tradeTime0. "00";     //'2023-12-27 T 0945 00'  ==> '2023-12-27T094500';  
-
-            //             $tradeDay   =     $dayofwk0;          //'wed';
-            //             $tradeBar   =     $elements[ 3 ];    // '15min';
-            //             $userId     =      $uname0;
-            //             $acctId     =      $acct0 ;
-
-            //             $tradeType  =      $buySellstr;         //"SELL";
-            //             $tradeSize  =      intval(  $elements[ 6 ] );     //100;
-
-            //             $buySellCnt =      $buySellSigCnt0;      // 7;
-            //             $buySellPctStr =   $pctNearS1R1;        // '-2.1923%';
-            //             $buySellDist =     floatval($elements[ 23 ] );   // -4.36;
-
-            //             $humanTrade =      $humanReadableTradeStr; //'nilHumanReadableTrade';
-            //             $symbol     =       $elements[ 7 ];   //'NVDA';
-            //             $opStrat    =       'IronCondor1.15';
-            //             $rawstr     =       'raw'. $c ;
-            //             $tradeCond  =        $elements[ 8 ] ;       //atLimit
-            //             $tradeStop  =         $tradeprice * 0.60;
-            //             $tradeLimit =        $tradeprice * 2.50;
-
-            //             $insertQuery0 = "INSERT INTO trades ( tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES ( CURRENT_TIMESTAMP, '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', 0, '$tradeSize', '$tradeprice', 0.0, '$tradeCond', 'day', '$tradeStop', '$tradeLimit', '$opStrat', '$leg1', '$leg2', '$leg3', '$leg4', '$buySellCnt', '$buySellPctStr', '$buySellDist', 'nil', '$tradeType', 0.0, 'cued', '$humanTrade', '$timeNYC', '$tradeHashToQuery' )";
-
-                                           
-            //                 // ] insertQuery0 = INSERT INTO trades ( tradeRecTimestamp, tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId, tradeSize, tradePrice, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy, leg1, leg2, leg3, leg4, buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, tradeAux2, tradeHash) VALUES ( CURRENT_TIMESTAMP, '2023-12-27T093000', '2023-12-27', '0930', 'wed', '15min', 'Creator', '12345354911', 'SELL', 'NVDA', 'raw', 0, '100', '493.26', 0.0, 'atLimit', 'day', 0.0, 0.0, 'IronCondor', '590', '565', '415', '390', '7', '-2.1923%', '-4.36', 'nil', 'sell', 0.0, 'cued', 'nilHumanReadableTrade', '2023-12-28T06:48:26', '5bf6f706cb7a0cd92840c7d0dbe9118de9579f39ec04db3ded7b470617e25d51' )
-
-
-            //             $conn->exec($insertQuery0);
-            //             $lastInsertedId = $conn->lastInsertId();
-            //             $inserted0++;
-
-
-            //             // $emailMes sageStr.= "<br /><br />]  [". $lastInsertedId.  "]  ". $humanReadableTradeStr. "  [ $leg1 | $leg2  :  $leg3 | $leg4 ] ";
-            //             //$emailMessageStr.= "  ". $humanReadableTradeShortStr; //. "  [ $leg1 | $leg2  :  $leg3 | $leg4 ] ";
-
-            //             // $humanReadableTradeShortStr .= $dayofwk. " ". $date1str." ". $timeofday.  "  ". $elements[ 5 ].   " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ".$CurrencyStr  .  $elements[ 9 ].  "with a ". $buySellSigCount. " of ". $elements[ 12 ]. ") ".  $pctNearS1R1. " or ". $CurrencyStr. $aboveBelowAmtStr." ". $aboveBelowStr. " ".  $SRstr ." of ".$CurrencyStr  . $SuppResisStr. "<br />";
-                        
-            //             // $humanReadableTradeShortStr.= $tradeType." ".$symbol. " at ". $tradeprice. " ".  $date1str." ". $timeofday. " ;  ";
-            //             $humanReadableTradeShortStr.= $tradeType." ".$symbol. " at ". $tradeprice ." ". $timeofday. " ";
-            //             // $humanReadableTradeShortStr.= " ".$dayofwk. " ". $date1str." ". $timeofday.  "  ". $elements[ 5 ].   " ".  $elements[ 7 ]. " ".  $elements[ 8 ]. " ". $CurrencyStr.  $elements[ 9 ] . "<br />";
-               
-
-            //             $pstr2= "<br />] Sample trade inserted. Last inserted ID: $lastInsertedId ";
-            //             echoColor($pstr2,"green");
-            //             $pstr3= "<br />]  insertQuery0 = $insertQuery0 ";
-            //             echoColor($pstr3,"purple");
-
-            //     }//if insertdb==1
-
-
-            //     echoColor($pstr.$hastr, "purple");
-            //     //if($buySellSigCnt0>7) $trstr = BoldString($trstr);            // NEEDs better filtering of above/below R1,S1 etc
-            //     echoColor($trstr, $col007);
-
-            //     if($msg0=="1") print_r($elements);
-            //     $c++;
-
-            // }//foreach($arrstrs
-
-
-            // $maxTradesToInsert=$c;
 
 
 
@@ -794,10 +1229,288 @@ $conn = null;
 $pstr9= "<br />******** CLOSING DB ACCESS HERE in $prgname *********<br />";
 if($msg0==1) echoColor($pstr9,"red");
 
+$tf66=0;
+if($rawtrades ){
+// if($rawtrades && $msg0==1){
+        echoColor("]   RAWTRADES !!!!!   concat'd   *** rawtrades strings[] ==<br />","blue");
+    if($tf66==1)    print_r($rawtrades);
+        else echo "]        rawtrad3s[] exist. Not printing for brevity.";
+}
+
+
+echoColor("] Reading INI File $filename0 <br />","red");
+$arrINIcsvfile = ReadArrayFile( $filename0 );
+$ii=0;
+foreach ($arrINIcsvfile as $line) {
+        if ($line[0] === '#'  ) {
+        ; // do nil
+    }else {
+        // echo  "<br />____".  $line ."    == ";  
+        echo  "<br />____" ;  
+        $linecsv = str_getcsv($line);
+        foreach ($linecsv as $csvelems) {
+            if($ii==0){ 
+                echo $csvelems. "_|_";
+            }else echo $csvelems. " | ";
+        }
+    }
+    $ii++;
+}
+
+
+
+echo "<br />";
+echoColor("] INI file read.<br />","red");
+
+$tradestrGlobalArr=[];
+$arrcsv=[];
+
+//  new
+$tradeCsvHeaders= $tradeCsvHeadersALL;
+echoColor( $tradeCsvHeaders, "blue" );
+$arrcsv[]=$tradeCsvHeaders;
+
+// here $line is just a string not arr
+$idx=0;
+foreach ($rawtrades as $line) {
+        if ($line[0] === '#'  ) {
+        ; // do nil
+    }else {
+        if($msg0==1){
+            echo " $idx ]";
+            print_r($line);
+        }
+        $lineArray = explode(",", $line);
+        
+        // $tradestrGlobalArr=[];
+        $arrcsv[]= GenerateTrade($lineArray ,$idx, $arrINIcsvfile);
+
+        //add aux trades
+        if($numoptionslegGlobal>=1 && strlen($tradestr1GlobalStr)> $minstrlen )  $arrcsv[]= $tradestr1GlobalStr;   
+
+        // if($numoptionslegGlobal>=2 && strlen($tradestr2GlobalStr)> $minstrlen )  $arrcsv[]= $tradestr2GlobalStr;   
+        // if($numoptionslegGlobal>=3 && strlen($tradestr3GlobalStr)> $minstrlen )  $arrcsv[]= $tradestr3GlobalStr;   
+        // if($numoptionslegGlobal==4 && strlen($tradestr4GlobalStr)> $minstrlen )  $arrcsv[]= $tradestr4GlobalStr;   
+ 
+        // print_r($arrcsv);
+    }
+    $idx++;
+}
+
+// tradeDate,tradeTime,tradeType,tradeSize,symbol,      tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,
+// tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,  timestamp,tradeRecTimestamp,tradeDateTime,tradeDay,tradeBar,
+//  userId,accountId,tradeRAW,tradeRawId,tradeSize1,    tradePrFilled,tradeDur,tradeStopMke,tradeLimitExit,optionStrategy,
+//  daySRs,wkSRs,moSRs,tradeSpec,tradeSig,              tradeGapPct,tradeStatus,tradeAux1,tradeAux2,tradeHash
+
+// 2024-02-06,1600,SELL,10,TSLA,         atLimit,184.79,1879,4,below, 
+// R1,-0.68,-0.3674%,0,220|210|155|145,  2024-02-07T025501,"2024-02-06 20:45:06", 2024-02-06T160000,tue,15min,
+// Creator,12345354911,raw67,0,100,      0,day,110.874,461.975,IronCondor1.15,
+// a,b,c,nil,SELL,                       0,1,2,3,nil
 
 
 
 
+
+$ftimeout    = GetDBSafe_NYCTimeNOW(1);   
+
+$fnameout        = $dirPrefix. "cuedtrades_". $tradedatestr . "_recv_". $ftimeout. ".csv";     
+$fnameoutjson    = $dirPrefix. "cuedtrades_". $tradedatestr . "_recv_". $ftimeout. ".json";  
+
+$fnameoutUdate      = $dirPrefix. "cuedtrades_". $tradedatestr  . ".csv";     
+$fnameoutjsonUdate  = $dirPrefix. "cuedtrades_". $tradedatestr .  ".json";     
+
+$fnameoutcsv     = $dirPrefix. "cuedtrades.csv";     
+$fnameoutcsvjson = $dirPrefix. "cuedtrades.json";  
+
+echoColor("<br />] END OF GenrateTrades().  Writing server files... ","blue"); // #$fnameoutcsv and $fnameout (log) containing  tra deCsvHeaders==","blue");
+if($msg0==1) print_r($arrcsv);
+
+// tradeDate,tradeTime,tradeType,tradeSize,symbol,tradeCond,tradePrice,rawtradeId,tradeCnt,tradeAboveBelow,tradePivot,priceDist,pricePct,tradeStrong,tradeLeg,timestamp,tradeRecTimestamp,tradeDateTime,tradeDay,tradeBar,userId,accountId,tradeRAW,tradeRawId,tradeSize1,tradePrFilled,tradeDur,tradeStopMke,tradeLimitExit,optionStrategy,daySRs,wkSRs,moSRs,tradeSpec,tradeSig,tradeGapPct,tradeStatus,tradeAux1,tradeAux2,tradeHash
+
+writeArrayToCSV($arrcsv, $fnameoutcsv);
+// writeArrayToCSV($arrcsv, $fnameout   );
+writeArrayToCSV($arrcsv, $fnameoutUdate   );
+
+   
+// echoColor("<br />] WROTE CSV (w/ Header) FILES: $fnameoutUdate , $fnameoutcsv and $fnameout ","purple");
+echoColor("<br />] WROTE CSV (w/ Header) FILES: $fnameoutUdate    $fnameoutcsv   ","purple");
+
+
+//make function here reads csv back in converts to json
+$fp = fopen($fnameoutcsv, 'r');
+$headers = fgetcsv($fp); // Get column headers
+
+$data = array();
+while (($row = fgetcsv($fp)) !== false) {
+    $data[] = array_combine($headers, $row);
+}
+fclose($fp);
+
+$json = json_encode($data, JSON_PRETTY_PRINT);
+
+file_put_contents($fnameoutcsvjson, $json);
+// file_put_contents($fnameoutjson, $json);
+file_put_contents($fnameoutjsonUdate, $json);
+
+// echoColor("<br />] WROTE JSON FILES: $fnameoutjsonUdate  , $fnameoutcsvjson and $fnameoutjson ","purple");
+echoColor("<br />] WROTE JSON FILES: $fnameoutjsonUdate   $fnameoutcsvjson   ","purple");
+
+$u=0;
+$col0="blue";
+foreach ($arrcsv as $line0) {
+    $col0="blue";
+    $startrade="     ";
+
+    $arr0 = explode(",", $line0);
+    if($arr0[2]=="BUY" || $arr0[2]=="buyToOpen_PUT_sellToOpen_PUT"  ||  $arr0[2]=="buyToOpen_CALL_" ){
+        // $col0="darkgreen";    
+        $col0="gray";    
+        if($arr0[13]=="1"){
+              $col0="green"; 
+              $startrade="^***^";
+        }
+    }
+    
+    if( $arr0[2]=="SELL" || $arr0[2]=="buyToOpen_CALL_sellToOpen_CALL"  ||  $arr0[2]=="buyToOpen_PUT_"  ) {
+        // $col0="darkred";  
+        $col0="gray";    
+  
+        if($arr0[13]=="1") {
+             $col0="red"; 
+             $startrade="v***v";
+        }
+        
+    }
+
+
+    // echoColor($u. ")  ". $line0. "<br/ >", "blue");
+    echoColor($u. ")  ". $startrade. " " . $line0. "<br/ >", $col0);
+    $u++;
+
+}//foreach
+
+
+if($msg0==1) echo $json;
+
+
+
+/*
+
+
+$ftimeout0 = GetDBSafe_NYCTimeNOW(0);   
+$ftimeout = GetDBSafe_NYCTimeNOW(1);   
+$fnameout = $dirPrefix. "rawtrades_". $tradedatestr . "_recv_". $ftimeout. ".txt";     //$fnameout = "rawtrades_". $tradedatestr. ".txt";  
+
+
+
+
+
+
+
+('\n', '2024-01-11', '] ENTER trades Date (default=2024-01-11): ')
+2024-01-09
+] Attemping live trade retrieval for https://algoinvestorr.com/trades/gettrades.php?d=2024-01-09  on  2024-01-11
+['# trades_ini.txt', 'AMD,SELL,ABOVE,R1,LONG_PUTS,COUNT,7', 'AMD,BUY,BELOW,S1,LONG_CALLS,COUNT,5', 'AAPL,BUY,BELOW,S1,LONG_CALLS,COUNT,6', 'META,SELL,NEAR,R1,CREDIT_CALL_SPREAD,COUNT,6', 'GS,SELL,NEAR,R1,LONG_PUTS,COUNT,6', 'NVDA,SELL,ABOVE,R1,LONG_PUTS,COUNT,6', 'SPY,SELL,ABOVE,R1,LONG_PUTS,COUNT,6', 'QQQ,SELL,ABOVE,R1,LONG_PUTS,COUNT,6', 'INTC,BUY,BELOW,S1,LONG_CALLS,COUNT,6', 'TSLA,BUY,BELOW,S1,LONG_CALLS,COUNT,6', 'TSLA,SELL,ABOVE,R1,CREDIT_CALL_SPREAD,COUNT,6', 'ADBE,SELL,ABOVE,R1,CREDIT_CALL_SPREAD,COUNT,6', 'TSLA,BUY,NEAR,S1,PUT_CALL_SPREAD,COUNT,6', 'ROKU,BUY,BELOW,S1,LONG_CALLS,COUNT,5', 'VXX,BUY,BELOW,S1,LONG_CALLS,COUNT,5', 'ROKU,SELL,ABOVE,R1,LONG_PUTS,COUNT,7', 'INTC,SELL,ABOVE,R1,LONG_PUTS,COUNT,7', 'QQQ,BUY,NEAR,S1,LONG_STOCK,COUNT,7', 'AMZN,BUY,BELOW,S1,LONG_CALLS,COUNT,7']
+] Finished reading: trades_ini.txt for gettrades.py
+] trades_INI.txt =
+0 # trades_ini.txt
+1 AMD,SELL,ABOVE,R1,LONG_PUTS,COUNT,7
+2 AMD,BUY,BELOW,S1,LONG_CALLS,COUNT,5
+3 AAPL,BUY,BELOW,S1,LONG_CALLS,COUNT,6
+4 META,SELL,NEAR,R1,CREDIT_CALL_SPREAD,COUNT,6
+5 GS,SELL,NEAR,R1,LONG_PUTS,COUNT,6
+6 NVDA,SELL,ABOVE,R1,LONG_PUTS,COUNT,6
+7 SPY,SELL,ABOVE,R1,LONG_PUTS,COUNT,6
+8 QQQ,SELL,ABOVE,R1,LONG_PUTS,COUNT,6
+9 INTC,BUY,BELOW,S1,LONG_CALLS,COUNT,6
+10 TSLA,BUY,BELOW,S1,LONG_CALLS,COUNT,6
+11 TSLA,SELL,ABOVE,R1,CREDIT_CALL_SPREAD,COUNT,6
+12 ADBE,SELL,ABOVE,R1,CREDIT_CALL_SPREAD,COUNT,6
+13 TSLA,BUY,NEAR,S1,PUT_CALL_SPREAD,COUNT,6
+14 ROKU,BUY,BELOW,S1,LONG_CALLS,COUNT,5
+15 VXX,BUY,BELOW,S1,LONG_CALLS,COUNT,5
+16 ROKU,SELL,ABOVE,R1,LONG_PUTS,COUNT,7
+17 INTC,SELL,ABOVE,R1,LONG_PUTS,COUNT,7
+18 QQQ,BUY,NEAR,S1,LONG_STOCK,COUNT,7
+19 AMZN,BUY,BELOW,S1,LONG_CALLS,COUNT,7
+] trades_INI.txt =====================
+1) at 1600 SELL AMD atLimit $149.31 count=4 $0.5 or 0.3364% above R1
+(ini.1)  AMD SELL<<===== above R1  Trade: AMD LONG_PUTS
+] Price =149.31 IronCondor=172.5|170.0  _|_  120.0|117.5
+] Price =149.3115.0% CallCreditSpread=  _~175.0 | 170.0~________[$149.31]__ 
+______________________________
+2) at 1600 BUY VXX atLimit $14.86 count=4 $-0.07 or -0.4487% below S1
+(ini.15)  VXX BUY<<===== below S1  Trade: VXX LONG_CALLS
+] Price =14.86 IronCondor=12.5|10.0  _|_  10.0|7.5
+] Price =14.8615.0%  PutCreditSpread= __[$14.86]________~10.0 | 5.0~_
+______________________________
+3) at 1545 BUY QQQ atLimit $405.72 count=4 $5.58 or 1.3745% above S1
+4) at 1545 BUY SPY atLimit $473.87 count=4 $3.54 or 0.7477% above S1
+5) at 1530 SELL MSFT atLimit $375.18 count=4 $-1.73 or -0.4605% below R1
+6) at 1515 BUY META atLimit $358.6 count=6 $4.47 or 1.2474% above S1
+7) at 1515 BUY GS atLimit $382.78 count=10 $-1.53 or -0.4006% below S1
+8) at 1400 SELL NVDA atLimit $538.69 count=10 $6.75 or 1.2537% above R1
+(ini.6)  NVDA SELL<<===== above R1  Trade: NVDA LONG_PUTS
+] Price =538.69 IronCondor=615.0|610.0  _|_  450.0|445.0
+] Price =538.6915.0% CallCreditSpread=  _~615.0 | 610.0~________[$538.69]__ 
+______________________________
+9) at 1400 SELL AMZN atLimit $151.43 count=15 $1.15 or 0.7565% above R1
+10) at 1400 SELL AMD atLimit $149.34 count=4 $0.53 or 0.3519% above R1
+(ini.1)  AMD SELL<<===== above R1  Trade: AMD LONG_PUTS
+] Price =149.34 IronCondor=172.5|170.0  _|_  120.0|117.5
+] Price =149.3415.0% CallCreditSpread=  _~175.0 | 170.0~________[$149.34]__ 
+______________________________
+11) at 1345 SELL MSFT atLimit $375.52 count=11 $-1.38 or -0.3684% below R1
+12) at 1345 SELL INTC atLimit $48.42 count=8 $-0.72 or -1.4939% below R1
+13) at 1345 SELL SPY atLimit $474.33 count=9 $-2.44 or -0.5144% below R1
+14) at 1345 SELL QQQ atLimit $405.98 count=12 $-1.57 or -0.3864% below R1
+15) at 1345 BUY VXX atLimit $14.91 count=12 $-0.02 or -0.1118% below S1
+(ini.15)  VXX BUY<<===== below S1  Trade: VXX LONG_CALLS
+] Price =14.91 IronCondor=12.5|10.0  _|_  10.0|7.5
+] Price =14.9115.0%  PutCreditSpread= __[$14.91]________~10.0 | 5.0~_
+______________________________
+16) at 1300 SELL TSLA atLimit $234.91 count=7 $-7.74 or -3.2953% below R1
+17) at 1245 SELL AMD atLimit $148.55 count=4 $-0.26 or -0.1773% below R1
+18) at 1245 SELL AAPL atLimit $184.51 count=8 $-2.42 or -1.3128% below R1
+19) at 1245 SELL GS atLimit $385.44 count=5 $-5.92 or -1.5365% below R1
+20) at 1200 SELL META atLimit $358.82 count=5 $-2.24 or -0.6240% below R1
+21) at 1145 SELL ROKU atLimit $92.55 count=4 $-3.4 or -3.6773% below R1
+22) at 1115 BUY TSLA atLimit $233.49 count=6 $-3.21 or -1.3748% below S1
+(ini.10)  TSLA BUY<<===== below S1  Trade: TSLA LONG_CALLS
+] Price =233.49 IronCondor=262.5|260.0  _|_  190.0|187.5
+] Price =233.4915.0%  PutCreditSpread= __[$233.49]________~190.0 | 185.0~_
+______________________________
+(ini.13)  TSLA BUY<<===== below S1  Trade: TSLA PUT_CALL_SPREAD
+] Price =233.49 IronCondor=262.5|260.0  _|_  190.0|187.5
+] Price =233.4915.0%  PutCreditSpread= __[$233.49]________~190.0 | 185.0~_
+______________________________
+23) at 1115 SELL AMD atLimit $147.63 count=6 $-1.18 or -0.7963% below R1
+24) at 1100 SELL NVDA atLimit $523.12 count=17 $-8.82 or -1.6860% below R1
+25) at 1100 BUY INTC atLimit $48.05 count=4 $0.69 or 1.4430% above S1
+26) at 1100 BUY MSFT atLimit $372.21 count=4 $1.5 or 0.4030% above S1
+27) at 1045 SELL VXX atLimit $15.27 count=8 $-0.27 or -1.7541% below R1
+28) at 1000 SELL MSFT atLimit $374.52 count=20 $-2.38 or -0.6361% below R1
+29) at 1000 SELL AAPL atLimit $185.28 count=9 $-1.65 or -0.8917% below R1
+30) at 1000 SELL QQQ atLimit $404.69 count=18 $-2.86 or -0.7070% below R1
+31) at 1000 SELL META atLimit $358.05 count=6 $-3.01 or -0.8410% below R1
+32) at 1000 SELL SPY atLimit $474.02 count=28 $-2.75 or -0.5811% below R1
+33) at 0945 BUY INTC atLimit $48.37 count=6 $1.02 or 2.1086% above S1
+34) at 0945 SELL TSLA atLimit $240.65 count=8 $-2 or -0.8329% below R1
+35) at 0945 BUY ROKU atLimit $93.72 count=4 $2.81 or 2.9982% above S1
+36) at 0945 BUY AMD atLimit $146.11 count=6 $4.3 or 2.9452% above S1
+
+]  END OF PROGRAM: gettrades.py
+
+*/
+
+
+
+
+
+
+
+
+// print($arrayFromFile);
 
 // $emailSubjectStr        = $uname0. ", ". $inserted0. " Trade Alerts at ". $timeNYC. " New York Time"; 
 

@@ -60,6 +60,7 @@ import shutil
 import sys
 
 import os
+import random
 
 ################################################ for TESTING
 #
@@ -97,6 +98,30 @@ MIN_DATA_STRING_LEN = 32
 LOOPMax =  7  * 24 * 60 * 5   
 SECSMax =12   # 20 loops * 12 secs
 
+
+
+# colors 
+colorGreen ="32"
+colorBlue  ="34"
+colorCyan  ="36"
+colorOrange  ="33"
+colorRed  ="31"
+colorMagenta  ="35"
+colorYellow  ="33"
+colorDarkGreen  ="32;2"
+colorDarkRed  ="31;2"
+colorPurple  ="35;2"
+colorBrown  ="33;2"
+colorWhite  ="97"
+colorLimeGreen  ="92"
+colorAqua  ="96"
+colorGray  ="90"
+
+colorArray = [ colorRed, colorBlue, colorGreen, colorOrange, colorCyan, colorAqua, colorYellow ,colorPurple, colorMagenta,colorBrown ]
+colorArrayLen = len(colorArray)
+
+
+
 # Get current date in New York - we need EDT for markets...
 new_york_timezone = pytz.timezone('America/New_York')
 current_date_ny = datetime.datetime.now(new_york_timezone).date()
@@ -105,9 +130,26 @@ current_date_ny = datetime.datetime.now(new_york_timezone).date()
 #print(f"Current date in New York: {current_date_ny.strftime('%Y-%m-%d')}")
 dstr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
 dstr1 = dstr  # dstr1 = doesnt change in code todays DATE in NYC
-
+dstrlast = dstr
 print("Today's date in New York:",dstr1)
 
+
+##################################################### FUNCTIONS
+
+def get_udate():
+    datestr = ( f"{current_date_ny.strftime('%Y-%m-%d')}" )
+    return datestr
+
+def rand(num):
+    return(random.randint(0, (num-1)))
+
+def print_colored(text, color_code): 
+    print(f"\033[{color_code}m{text}\033[0m") 
+
+def print_colored_rnd(text):
+    r = rand(colorArrayLen)
+    print_colored(text, colorArray[r])
+ 
 
 def Check_data(array, datastr):
     return datastr in array
@@ -250,16 +292,40 @@ if(injest0==1):
 # check if there is no data
 if(len(data_to_sendLastMaster) > MIN_DATA_STRING_LEN):
     print("\n] =====================================================================>>>INIT_SENDING data_to_sendLastMaster (1st TIME) via _POST...\n")
+    print("\n]  ok we're running, john will, here is data_to_sendLastMaster  ...  ") #, data_to_sendLastMaster)
+    print("\n \n]<=====================try-catch-ing(url:data354)========>>>\n\n")
 
-    payload = {'data': data_to_sendLastMaster }
-    response = requests.post(url, data=payload)
-    print(response.text)
-    print("<<<=============================\n\n")
-
-    # print the info line to the console
     tgt = "intradaytradesServer_"+dstr1+".txt"
-    print("Called & POSTed "+str(dataMasterLen)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
-else:
+
+    # Wrap the request in a try-except block
+    try:
+        payload = {'data': data_to_sendLastMaster }
+        response = requests.post(url, data=payload)
+        print("<<<=============================\n\n")
+
+    # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            print("Request successful")
+            print(response.text)
+            print("<<<=============================\n\n")
+
+            # print the info line to the console
+            ## tgt = "intradaytradesServer_"+dstr1+".txt"
+            print("Called & POSTed "+str(dataMasterLen)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
+
+        else:
+            print(f"Request failed with status code: {response.status_code}")
+            print("Did not write target file: ",tgt)
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        print_colored("Did not write target file: "+tgt, "red")
+        print_colored("Did not write target file: "+tgt, "red")
+        print_colored("Did NOT write target file: "+tgt, "red")
+
+
+
+else: ## str len not long enough
     print("\n] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> *NOT Sending ANY INITIAL data - NO TRADES FOUND in data_to_sendLastMaster.\n") 
 
 
@@ -286,7 +352,10 @@ lastminute = tstrHHMM =(f"{current_time_ny.strftime('%H%M')}")
 
 
 MaxMinutes = (keepLooping * (timeDelay+0 )/60 ) 
-print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:",MaxMinutes," Max HOURS=",MaxMinutes/60,"\n\n" )
+# print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:",MaxMinutes," Max HOURS=",MaxMinutes/60,"\n\n" )
+attemptStr="\n] Attempting to Loop "+str( keepLooping)+" times, with a " +str(timeDelay)+" second delay between reading the local file, for a \nMax # minutes of:"+str(MaxMinutes)+" Max HOURS="+str(MaxMinutes/60)+"\n\n" 
+print_colored_rnd(attemptStr)
+
 ###################### STARTING LOOP ****************************************
 
 while keepLooping > 0:
@@ -399,32 +468,73 @@ while keepLooping > 0:
     print("\n] END OF Trade Injest. \n] keepLooping==",keepLooping)
 
 
+# # Wrap the request in a try-except block
+# try:
+#     payload = {'data': data_to_send_last_master}
+#     response = requests.post(url, data=payload)
+
+#     # Check if the request was successful (status code 200)
+#     if response.status_code == 200:
+#         print("Request successful")
+#         print(response.text)
+#     else:
+#         print(f"Request failed with status code: {response.status_code}")
+
+# except Exception as e:
+#     print(f"An error occurred: {str(e)}")
+ 
 
     # check if there is no data
     if(len(data_to_sendLast) > MIN_DATA_STRING_LEN):
         print("\n] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-----====>>>SENDING data_to_sendLast via _POST...\n")
 
-        payload = {'data': data_to_sendLast }
-        response = requests.post(url, data=payload)
-        print(response.text)
-        print("\n\n")
+        # Wrap the request in a try-except block
+        try:
+            payload = {'data': data_to_sendLast }
+            response = requests.post(url, data=payload)
+                    
+            # Check if the request was successful (status code 200)
+            if response.status_code == 200:
+                print("Request successful")
+                print(response.text)
+            else:
+                print(f"Request failed with status code: {response.status_code}")
 
-        # POST the last line to the PHP script
-        tgt = "intradaytradesServer_"+dstr1+".txt"
-        print("Called & POSTed "+str(data_lines_to_send)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
+            print(response.text)
+            print("\n\n")
+
+            # POST the last line to the PHP script
+            tgt = "intradaytradesServer_"+dstr1+".txt"
+            print("Called & POSTed "+str(data_lines_to_send)+ " lines (Trades) to: ",url, "----> ", urlbase+tgt)
+
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+
     else:
         print("\n] ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~> *NOT Sending ANY data - NO TRADES FOUND.\n") 
 
 
     current_date_time_ny = datetime.datetime.now(new_york_timezone)
     dtstr= (f"{current_date_time_ny.strftime('%Y-%m-%dT%H:%M:%S')}")
-    print("\n======================>Today's Date and Time in NYC (EDT) is:",dtstr)
+    dstrnew = get_udate()
+    print("\n======================>Today's Date and Time in NYC (EDT) is:",dtstr, "comparing dstr to ", dstr , " to dstrnew ",dstrnew )
+    if(dstr == dstrnew ):
+        dumdum0=0
+    else:
+        print("\n****==================>Today's Date CHANGED from: dstr=", dstr, " to dstrnew=", dstrnew   )
+        dstr=dstrnew
+        
+
     
 #### End of Loop
     # Decrement keepLooping to eventually exit the loop
     keepLooping -= 1  # You might have a condition to break the loop based on a certain condition
-    print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 )," and Max # HOURS=", (keepLooping * (timeDelay+0 )/60 )/60  ,"\n\n" )
+    # print("\n] Attempting to Loop",keepLooping," times, with a" , timeDelay, " second delay between reading the local file, for a \nMax # minutes of:", (keepLooping * (timeDelay+0 )/60 )," and Max # HOURS=", (keepLooping * (timeDelay+0 )/60 )/60  ,"\n\n" )
+    attemptStr="\n] Attempting to Loop "+str( keepLooping)+" times, with a " +str(timeDelay)+" second delay between reading the local file, for a \nMax # minutes of: "+str(MaxMinutes)+" Max HOURS="+str(  (keepLooping * (timeDelay+0 )/60 )/60 )+"\n\n" 
+    print_colored_rnd(attemptStr)
 
+    # if abc  dstr = get_udate()
+    #
     #END OF THE LOOP
 
 ###################### ENDING LOOP **********************************************
