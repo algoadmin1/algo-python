@@ -2457,9 +2457,6 @@ def sendDataString( data_str, url_str ):
 
     retStr=result
     
-    # here make sure we get the nil,nil placed in that timestamp field up on php
-
-    
     # lstr = leftRightStr( result, "left", 4 )
     # print("] confirmSTRING ==", lstr)
     # if(lstr=="Erro"):
