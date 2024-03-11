@@ -1,5 +1,5 @@
 # pivots.py
-# Displays the pivots for a given ticker
+# Displays the Pivot Points for a given ticker
 # (c) 2024 by Level Blest LLC 
 
 # set this True to print price data rows from scrapes
@@ -17,7 +17,7 @@ g_debugHistory = False
 		Pivots UI:  https://www.babypips.com/tools/pivot-point-calculator
 '''
 
-# Different models vary in calculations
+# Different models vary in calculations.  PP = Pivot Point
 
 # Tom DeMark
 # 	If Close < Open: X = H + (2 x L) + C
@@ -25,6 +25,7 @@ g_debugHistory = False
 # 	If Close = Open: X = H + L + (2 x C)
 # 	R1 = (X / 2) - L
 # 	S1 = (X / 2) - H
+#	PP = X / 4 
 
 # Fibonachos
 # 	R3 = PP + ((High - Low) x 1.000)
@@ -72,16 +73,17 @@ defaultTicker = 'NVDA'
 
 # GLOBALS area.  If we must use globals, please use "g_" as a prefix
 
-# let's have some fun w/ user facing messages
+# Funspirational (fun, inspirational) messages to show our customers and get em psyched
+
 g_TipMessages = []
 g_TipMessages.append("$                   L E T ' S   G O !                  $")
-g_TipMessages.append("$   TRIM those POSITIONS they're so damn hairy, OH !   $")
 g_TipMessages.append("$            D O N ' T   O V E R T R A D E             $")
+g_TipMessages.append("$        D O   Y O U R   O W N   R E S E A R C H       $")
+g_TipMessages.append("$           S T A Y   L E V E L - H E A D E D          $")
 g_TipMessages.append("$                 Wanna quit? Enter 'q'                $")
 g_TipMessages.append("$             When in DOUBT, CLOSE it OUT!             $")
-g_TipMessages.append("$        D O   Y O U R   O W N   R E S E A R C H       $")
 g_TipMessages.append("$            DON'T go LONG on a DOWN day !             $")
-g_TipMessages.append("$           S T A Y   L E V E L - H E A D E D          $")
+g_TipMessages.append("$   TRIM those POSITIONS they're so damn hairy, OH !   $")
 g_TipMessages.append("$              CHECK the 1-month T-BILL                $")
 g_TipMessages.append("$  An INVESTMENT in KNOWLEDGE pays the most DIVIDENDS  $")
 g_TipMessages.append("$           Buy MORE of the GREAT Performers           $")
@@ -426,7 +428,7 @@ while (True):
 
 	ticker = GetTicker()
 	print("\n")
-	if (ticker == "q" or ticker == "Q"):
+	if (ticker == "q" or ticker == "Q" or ticker == "quit"):
 		break
 
 	if (ticker == "debug"):
