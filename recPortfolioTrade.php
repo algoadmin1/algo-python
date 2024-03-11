@@ -248,6 +248,9 @@ try{
 insertQuery0 = INSERT INTO positions ( tradeRecTimestamp,  tradeDateTime,      tradeDate,   tradeTime,      tradeDay,   tradeBar, userId, accountId,           tradeType, symbol, tradeRAW,      tradeRawId,  tradeSize,     tradePrice, securityType, tradePrFilled,     tradeCond, tradeDur,    tradeStopMkt, tradeLimitExit, optionStrategy,  buySellCnt,     tradeStatus,    tradeAux1,      iniStr,         tradeHash) VALUES 
                                    ( CURRENT_TIMESTAMP,  '2024-03-08T1500', '2024-03-08', '1500', 'fri', '30min', 'Creator_rhood', '12345354911', 'BUY', 'QQQ', 'pos', '3302',                                '10',         '440.35', 'LONG_STOCK',   '440.35,            'atLimit', 'gfd',    '0', '0',                         'LONG_STOCK',    '6',              'unsent', 'nil' ,    'QQQ|BUY|BELOW|S1|LONG_STOCK|COUNT|5|1|0|LIVE|19|nil|',   'd8e19e3d8bfa1d8070d7853a479ce639a6f8348b4ec4bf72e80e158f423d7f87'  )
 
+
+
+                                   ERROR:  Connection failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'atLimit', 'gfd', '0', '0', 'LONG_STOCK',    '6',   'unsent', 'nil' ,  'QQQ|BU...' at line 10123456789NOGO
                         */
 
 
