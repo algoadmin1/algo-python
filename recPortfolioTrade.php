@@ -238,7 +238,7 @@ try{
           //$inistr           =
           //$tradeHashToQuery =
 
-/*  //mysql0
+/*  //mysql0 csv sting input:
     newstr ==    ======>[1]portfolioTrade,LIVE,ini,QQQ,BUY,BELOW,S1,[8]LONG_STOCK,COUNT,5,1,0,LIVE,19,nil,
                         [16]portfolioTrade,[17]2024-03-08,1500,[19]BUY,[20]10,[21]QQQ,atLimit,[23]440.35,[24]3302,[25]6,below,S1,-1.67,-0.3785%,[30]1,
                         [31]525|505|370|350,nil,nil,2024-03-08T150000,[35]fri,[36]30min,Creator,[38]12345354911,raw14,0,
