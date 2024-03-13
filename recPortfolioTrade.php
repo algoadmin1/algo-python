@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 date_default_timezone_set("America/New_York"); 
 
 include 'standardfunctions.php';
-                                                      $vers = "5.31";
+                                                      $vers = "17.54";
                                                       // from  gettrades.php
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
@@ -228,10 +228,10 @@ try{
           $tradeCond    =$params[22];
           $tradeDur     ="gfd";
 
-          $tradeStop    = '0.0' ;
-          $tradeLimit   = '0.0' ;
+          $tradeStop    = "0.0" ;
+          $tradeLimit   = "0.0" ;
           $opStrat      = $params[8];
-          $buySellCnt   =$params[25];  
+          $buySellCnt   = $params[25];  
           $tradeStatus  = "unsent";
           $tradeAux1    = "nil";
 
@@ -264,7 +264,7 @@ insertQuery0 = INSERT INTO positions ( tradeRecTimestamp,  tradeDateTime,      t
           $insertQuery0b = " ( CURRENT_TIMESTAMP,  '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', '$tradeRawId', '$tradeSize', '$tradeprice', '$secType', '$tradePrFilled, '$tradeCond', '$tradeDur', '$tradeStop', '$tradeLimit', '$opStrat',  '$leg1', '$leg2', '$leg3', '$leg4',  '$buySellCnt',   '$tradeStatus', '$tradeAux1' ,  '$inistr',   '$tradeHashToQuery'  )";
           $insertQuery0 = $insertQuery00. $insertQuery0a. $insertQuery0b ;
 
-          echo "*************************]  INSERT  var ==". $insertQuery0 ;
+          echo "*************************]  INSERT  ins3rtQuery0  var ==". $insertQuery0 ;
 
 
 // INSERT  var ==INSERT INTO positions ( tradeRecTimestamp,  tradeDateTime,      tradeDate,   tradeTime,      tradeDay,   tradeBar, userId, accountId,           tradeType, symbol, tradeRAW,      tradeRawId,  tradeSize,     tradePrice, securityType, tradePrFilled,     tradeCond, tradeDur,    tradeStopMkt, tradeLimitExit, optionStrategy,   leg1,leg2,leg3,leg4 ,              buySellCnt, tradeStatus,    tradeAux1,      iniStr,      tradeHash) VALUES  ( CURRENT_TIMESTAMP,  '2024-03-12T1000', '2024-03-12', '1000', 'tue', '15min', 'Creator_rhood', '12345354911', 'BUY', 'META', 'pos', '3372', '10', '489.07', 'LONG_STOCK', '489.07, 'atLimit', 'gfd', '0.0', '0.0', 'LONG_STOCK',  '0.0', '0.0', '0.0', '0.0',  '5',   'unsent', 'nil' ,  'META|BUY|ABOVE|S1|LONG_STOCK|COUNT|5|1|0|LIVE|19|nil|',   '60905cf4eb28ca28f0bcce7e2794b0df08dc5cd8dcd18ba6d85397f9d34f7e5e'  )<br />ERROR:  Connection failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'atLimit', 'gfd', '0.0', '0.0', 'LONG_STOCK',  '0.0', '0.0', '0.0', '0.0',  '5...' at line 10123456789NOGO
