@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "17.89"
+versionStr =                    "18.91"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 url007_str  = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
@@ -16,6 +16,7 @@ import math
 # Get current date in New York - we need EDT for markets...
 new_york_timezone = pytz.timezone('America/New_York')
 current_date_ny = datetime.datetime.now(new_york_timezone).date()
+lastPositionId = -1
 
 # gExtensionStr = "?u=jb&msg=1"
 gExtensionStr = "?u=jb"
@@ -849,6 +850,48 @@ def makeCSVString(jsonRec, keyOrValueStr, sepstr):
 # keys_csv = makeCSVString(json_record, "key"  , ","))
 # print("Keys CSV String:", keys_csv)
 
+def returnStringInside(string0, char0):
+    # Check if string exists and is not None
+    if string0 is None:
+        return "*Error: Input string0 cannot be null."
+
+    # Check if char is a single character
+    if len(char0) != 1:
+        return "*Error: Input character must be a single character."
+
+    # Find the positions of the first two occurrences of char
+    pos1 = string0.find(char0)
+    pos2 = string0.find(char0, pos1 + 1)
+
+    # Check if both occurrences are found
+    if pos1 == -1 or pos2 == -1:
+        return "Error: Unable to find two occurrences of char0 in string0."
+
+    # Extract the string between the first two occurrences of char
+    result = string0[pos1 + 1:pos2]
+
+    return result
+
+# Test the function
+# string = "This is a test string to extract data from."
+# char = "s"
+
+# print("Original String:", string)
+# print("Character to find:", char)
+
+# result = returnStringInside(string, char)
+# if result.startswith("Error"):
+#     print("Error:", result)
+# else:
+#     print("String between first two occurrences of '", char, "':", result)
+
+
+
+
+
+
+
+
 def ExecuteTrade( symstr, jsonINIrecord , jsonTRADESrecord):
     print("] READY TO EX3CUTE TRADE: ", symstr, "\n\n")
 
@@ -1561,6 +1604,7 @@ def sendOrderToDatabaseAndUpdateCmdVariables():
 
 def CheckDatabaseForUniquePortfolioTrade(rawID, fullsendStr, fullSendKeysStr):
     global gExtensionStr
+    global lastPositionId
 
     tf0=False   
     print("Ch3ckDatabaseForUniquePortfolioTrade(): checking database on raw trade id#", rawID, "...   TradeEXIST, fullsendStr ==", tf0,  fullsendStr)
@@ -1568,14 +1612,36 @@ def CheckDatabaseForUniquePortfolioTrade(rawID, fullsendStr, fullSendKeysStr):
     resultstr= sendDataString( fullsendStr , url007_str+gExtensionStr )  
     # resultstr= sendDataString( fullsendStr , url007_str+"?u=jb&msg=1")
 
-    endCmdLen=12
+    endCmdLen=16
+    endCmdLen4=4
     # endCmdStr = leftRightStr(resultstr, "right", endCmdLen)
-    endCmdStr = leftRightStr(resultstr, "right", 12)
+    endCmdStr = leftRightStr(resultstr, "right", endCmdLen)
 
+    endCmdStr4 = leftRightStr(endCmdStr, "right", endCmdLen4)
+
+# from recPortfolioTrade.php
+    #   echo "0123456789NOGO";    == no INSERT      not INSERTED, send back True ie  UNIQUE==true, hash exists !
+    #      or
+    #   echo "0123456789OKGO";   == YES unique position, INSERTED as unsent, send back False ie NO UNIQUE==false
+    lastPositionId =-1;
+
+    if(endCmdStr4=="OKGO"):
+        tf0=False   
+        numstr= returnStringInside(endCmdStr, "_")
+        lastPositionId=int(numstr)
+    if(endCmdStr4=="NOGO"):
+        tf0=True   
+        lastPositionId =-1;  # force it
+
+
+    print("Ch3ckDatabaseForUniquePortfolioTrade():  * algoz.positions lastPositionId= ",  lastPositionId ) 
     print("] resultstr RIGHTMOST:[", endCmdLen ,"]==",endCmdStr )
+    print("] resultstr RIGHTMOST:[", endCmdLen4 ,"]==, tf0== ",endCmdStr4, tf0 )
     print("] ")
-    print("Ch3ckDatabaseForUniquePortfolioTrade(): resultstr==", resultstr) #checking database on raw trade id#", rawID, "...   TradeEXIST, fullsendStr ==", tf0,  fullsendStr)
+    # print("Ch3ckDatabaseForUniquePortfolioTrade(): resultstr==", resultstr) #checking database on raw trade id#", rawID, "...   TradeEXIST, fullsendStr ==", tf0,  fullsendStr)
 
+
+    # tf0 == False = we have not found UNIQUE position
     # here we should call recP0rtfolioTrade
     return(tf0)
 
@@ -1584,6 +1650,48 @@ def CheckDatabaseForUniquePortfolioTrade(rawID, fullsendStr, fullSendKeysStr):
 
 # INSERT  var ==INSERT INTO positions ( tradeRecTimestamp,  tradeDateTime,      tradeDate,   tradeTime,      tradeDay,   tradeBar, userId, accountId,           tradeType, symbol, tradeRAW,      tradeRawId,  tradeSize,     tradePrice, securityType, tradePrFilled,     tradeCond, tradeDur,    tradeStopMkt, tradeLimitExit, optionStrategy,  buySellCnt,     tradeStatus,    tradeAux1,      iniStr,      tradeHash) 
 #               VALUES  ( CURRENT_TIMESTAMP,  '2024-03-12T1000', '2024-03-12', '1000', 'tue', '15min', 'Creator_rhood', '12345354911', 'BUY', 'META', 'pos', '3372', '10', '489.07', 'LONG_STOCK', '489.07, 'atLimit', 'gfd', '0.0', '0.0', 'LONG_STOCK',    '5',   'unsent', 'nil' ,  'META|BUY|ABOVE|S1|LONG_STOCK|COUNT|5|1|0|LIVE|19|nil|',   '60905cf4eb28ca28f0bcce7e2794b0df08dc5cd8dcd18ba6d85397f9d34f7e5e'  )
+
+# ]  newstr# ==   ###===>f39e23fac997c75bb7739ca1dae5a4193587e49057b842c98d1fc0d52f47f7c4<====###] NO RawTrade found for tradeHash f39e23fac997c75bb7739ca1dae5a4193587e49057b842c98d1fc0d52f47f7c4.  insertdb= 1 ;  INSERTing to db.trades ...<br />*************************]  INSERT  ins3rtQuery0(sub)     var ==INSERT INTO positions ( tradeRecTimestamp,  tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol,  tradeRAW, tradeRawId,  tradeSize, tradePrice, securityType, tradeStatus, tradeHash  ) VALUES  ( CURRENT_TIMESTAMP,  '2024-03-13T1130', '2024-03-13', '1130', 'wed', '15min', 'Creator', '12345354911_rhood', 'BUY', 'TSLA', 'pos', '3429', '5', '171.74', 'LONG_STOCK', 'unsent', 'f39e23fac997c75bb7739ca1dae5a4193587e49057b842c98d1fc0d52f47f7c4'  )<br />] Sample trade inserted. Last inserted ID: 10 <br />] Sample  trade [almost]  * inserted  , insertQuery0 = INSERT INTO positions ( tradeRecTimestamp,  tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol,  tradeRAW, tradeRawId,  tradeSize, tradePrice, securityType, tradeStatus, tradeHash  ) VALUES  ( CURRENT_TIMESTAMP,  '2024-03-13T1130', '2024-03-13', '1130', 'wed', '15min', 'Creator', '12345354911_rhood', 'BUY', 'TSLA', 'pos', '3429', '5', '171.74', 'LONG_STOCK', 'unsent', 'f39e23fac997c75bb7739ca1dae5a4193587e49057b842c98d1fc0d52f47f7c4'  ) 9876543210_10_OKGO
+
+
+# Success: Data successfully sent
+# ] ***>> AFTER SEND POST! ;   result ==
+# ACKUSearch query: unsent,portfolioTrade,LIVE,ini,TSLA,BUY,BELOW,S1,LONG_STOCK,COUNT,4,5,0,LIVE,19,nil,portfolioTrade,2024-03-13,1130,BUY,10,TSLA,atLimit,171.74,3429,10,below,S1,-1.74,-1.0131%,1,205|195|145|135,nil,nil,2024-03-13T113000,wed,15min,Creator,12345354911,raw17,0,100,0,gfd,103.044,429.35,IronCondor1.15,R3R2R1_P_P3_S1S2S3=|186.45|183.48|180.50|176.46|177.85|173.48|169.44|166.46|,wkR2R1P_182.93_S1S2=|208.98|192.16|166.11|156.88|,moR3R2R1PS1S2S3=|212.15|208.69|205.24|201.84|198.39|194.99|191.54|,nil,BUY,0,1,2,3,nilHash  searchQuery, len=513 - _POST msg rec'd OK!
+# ]  newstr ==    ======>portfolioTrade,LIVE,ini,TSLA,BUY,BELOW,S1,LONG_STOCK,COUNT,4,5,0,LIVE,19,nil,portfolioTrade,2024-03-13,1130,BUY,10,TSLA,atLimit,171.74,3429,10,below,S1,-1.74,-1.0131%,1,205|195|145|135,nil,nil,2024-03-13T113000,wed,15min,Creator,12345354911,raw17,0,100,0,gfd,103.044,429.35,IronCondor1.15,R3R2R1_P_P3_S1S2S3=|186.45|183.48|180.50|176.46|177.85|173.48|169.44|166.46|,wkR2R1P_182.93_S1S2=|208.98|192.16|166.11|156.88|,moR3R2R1PS1S2S3=|212.15|208.69|205.24|201.84|198.39|194.99|191.54|,nil,BUY,0,1,2,3,nilHash<=======]  newstr# ==   ###===>f39e23fac997c75bb7739ca1dae5a4193587e49057b842c98d1fc0d52f47f7c4<====###] NO RawTrade found for tradeHash f39e23fac997c75bb7739ca1dae5a4193587e49057b842c98d1fc0d52f47f7c4.  insertdb= 1 ;  INSERTing to db.trades ...<br />*************************]  INSERT  ins3rtQuery0(sub)     var ==INSERT INTO positions ( tradeRecTimestamp,  tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol,  tradeRAW, tradeRawId,  tradeSize, tradePrice, securityType, tradeStatus, tradeHash  ) VALUES  ( CURRENT_TIMESTAMP,  '2024-03-13T1130', '2024-03-13', '1130', 'wed', '15min', 'Creator', '12345354911_rhood', 'BUY', 'TSLA', 'pos', '3429', '5', '171.74', 'LONG_STOCK', 'unsent', 'f39e23fac997c75bb7739ca1dae5a4193587e49057b842c98d1fc0d52f47f7c4'  )<br />] Sample trade inserted. Last inserted ID: 10 <br />] Sample  trade [almost]  * inserted  , insertQuery0 = INSERT INTO positions ( tradeRecTimestamp,  tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol,  tradeRAW, tradeRawId,  tradeSize, tradePrice, securityType, tradeStatus, tradeHash  ) VALUES  ( CURRENT_TIMESTAMP,  '2024-03-13T1130', '2024-03-13', '1130', 'wed', '15min', 'Creator', '12345354911_rhood', 'BUY', 'TSLA', 'pos', '3429', '5', '171.74', 'LONG_STOCK', 'unsent', 'f39e23fac997c75bb7739ca1dae5a4193587e49057b842c98d1fc0d52f47f7c4'  ) 9876543210_10_OKGO  [ 1st 3 chars...   --jb ]
+# A
+# C
+# K
+# Ch3ckDatabaseForUniquePortfolioTrade():  * algoz.positions lastPositionId=  10
+# ] resultstr RIGHTMOST:[ 16 ]== 76543210_10_OKGO
+# ] resultstr RIGHTMOST:[ 4 ]==, tf0==  OKGO False
+# ] 
+# < * ACTUAL DB * > No Position for RawTrade # 3429  found in .positions table. Sending Trade for LONG_STOCK TSLA  to the market and INSERTING the unsent trade into the .positions table.
+# ] 3nterP0stionsRobinhoodAndINSERTDatabase( ... )    :  LONG_STOCK TSLA 5 171.74 3429 1129 2024-03-13
+# ] 3nterP0stionsRobinhoodAndINSERTDatabase()    : Logging in... 
+# ] 3nterP0stionsRobinhoodAndINSERTDatabase()    : Logged in.
+# ] 3nterP0stionsRobinhoodAndINSERTDatabase()    : Getting Account Profile in... 
+# ] 3nterP0stionsRobinhoodAndINSERTDatabase()    : Getting Open Stock Positions... 
+# ] 3nterP0stionsRobinhoodAndINSERTDatabase()    : G3tHoldings()  BEFORE TRADE... 
+# ] Your Holdings  BEFORE TRADE  :
+# symbol= TSLA    0  
+# TSLA {'price': '168.250000', 'quantity': '0.00000000', 'average_buy_price': '0.0000', 'equity': '0.00', 'percent_change': '0.00', 'intraday_percent_change': '0.00', 'equity_change': '0.000000', 'type': 'stock', 'name': 'Tesla', 'id': 'e39ed23a-7bd1-4587-b060-71988d9ef483', 'pe_ratio': '41.251000', 'percentage': '0.00'}
+# symbol= META    1  
+# META {'price': '498.830000', 'quantity': '7.00000000', 'average_buy_price': '495.8143', 'equity': '3491.81', 'percent_change': '0.61', 'intraday_percent_change': '0.45', 'equity_change': '21.109900', 'type': 'stock', 'name': 'Meta Platforms', 'id': 'ebab2398-028d-4939-9f1d-13bf38f81c50', 'pe_ratio': '33.603900', 'percentage': '6.21'}
+# symbol= AAPL    2  
+# AAPL {'price': '172.000000', 'quantity': '0.00000000', 'average_buy_price': '0.0000', 'equity': '0.00', 'percent_change': '0.00', 'intraday_percent_change': '0.00', 'equity_change': '0.000000', 'type': 'stock', 'name': 'Apple', 'id': '450dfc6d-5510-4d40-abfb-f633b7d9be3e', 'pe_ratio': '26.953500', 'percentage': '0.00'}
+# symbol= NVDA    3  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr, symstr, numshares, price0, rawID , simutime0, todaysDate0  ):
@@ -1859,21 +1967,21 @@ def CheckDatabaseThenSendTradeToMarket( tradetypestr, symstr, numshares, price0,
         return(False)
 
 # 2nd check to see if raw ID exists on Server's database in case power got cut locally to client's python machine
-    hash01="45911354ABCD"
+    hash01="45911354ABCD"   # unused
+
     chkdb = CheckDatabaseForUniquePortfolioTrade(rawID , fullSendStr , fullSendKeysStr)
 
     if(chkdb==False):
-        print("< * SIMULATED * > No Trade #",rawID,"found in LiveTrade table-database. Sending Trade for" ,tradetypestr,symstr," to the market and INSERTING the  LiveTrade table-database.")
+        print("< * ACTUAL DB * > No Position for RawTrade #",rawID," found in .positions table. Sending Trade for" ,tradetypestr,symstr," to the market and INSERTING the unsent trade into the .positions table.")
         EnterPostionsRobinhoodAndINSERTDatabase(  tradetypestr, symstr, numshares, price0, rawID , simutime0, simudate0  )
 #       LONG_STOCK NVDA 1 735.11 2350 1357 2024-02-16
         #only if position entered
         addOneTradeToday(todaysDate0, tradetypestr, symstr, numshares , rawID)
 
-
-
-    else:
-        print("WARNING: Trade #",rawID,"found in LiveTrade table-database. Taking no further action. Exiting.")
-        return(False)
+    if(chkdb==True):
+    # else:
+        print("WARNING: A new Postision for RawTrade #",rawID," EXISTS, NOT UNIQUE found in LiveTrade .positions table. Taking no further action. NO INSERTion. Exiting.")
+        # return(False)
 
 
 

@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 date_default_timezone_set("America/New_York"); 
 
 include 'standardfunctions.php';
-                                                      $vers = "17.89";
+                                                      $vers = "18.91";
                                                       // from  gettrades.php
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
@@ -51,9 +51,9 @@ function printArray($arrStrs, $msgStr) {
 
 // INITIAL ACK / NAK
 if($uuser0=="err"){
-  echo "NOGO"; 
+  echo "ERRU"; 
 }else{
-  echo "OKGO"; 
+  echo "ACKU"; 
 }
 
 // $res0 = GetEntryNums();
@@ -198,10 +198,11 @@ try{
             $insertdb=0;
             // if($msg==1) echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
             // echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
-            echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  ".    print_r($result, true); // . "</pre>";
+            // echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  ".    print_r($result, true); // . "</pre>";
+            echo "] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery "; //, result=  ".    print_r($result, true); // . "</pre>";
           } else {
             $insertdb=1;
-              echo "<br />] NO RawTrade found for tradeHash $tradeHashToQuery.  insertdb= $insertdb ;  INSERTing to db.trades ...<br />";
+              echo "] NO RawTrade found for tradeHash $tradeHashToQuery.  insertdb= $insertdb ;  INSERTing to db.trades ...<br />";
         }
 
         if($insertdb==1){
@@ -213,14 +214,15 @@ try{
           $tradeDay  =$params[35];
           $tradeBar  =$params[36];
           // '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', '$tradeRawId', '$tradeSize', '$tradeprice', '$secType',  '$tradeHashToQuery' 
-          $userId    =$uname0. "_". $brokerage; 
-          $acctId    =$acct0;
+          $userId    =$uname0; 
+          $acctId    =$acct0. "_". $brokerage; 
 
           $tradeType    =$params[19];
           $symbol       =$params[21];
           $rawstr       ="pos"; 
           $tradeRawId   =$params[24];
-          $tradeSize    =$params[20];
+          // $tradeSize    =$params[20];   // take tradesize from ini
+          $tradeSize    =$params[11];
 
           $tradeprice   =$params[23];
           $secType      =$params[8] ;
@@ -266,8 +268,8 @@ insertQuery0 = INSERT INTO positions ( tradeRecTimestamp,  tradeDateTime,      t
           // $insertQuery0a = " ( tradeRecTimestamp,  tradeDateTime,      tradeDate,   tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId,  tradeSize, tradePrice, securityType, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy,   leg1,leg2,leg3,leg4 ,              buySellCnt, tradeStatus,    tradeAux1,      iniStr,      tradeHash) VALUES ";
           // $insertQuery0b = " ( CURRENT_TIMESTAMP,  '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', '$tradeRawId', '$tradeSize', '$tradeprice', '$secType', '$tradePrFilled, '$tradeCond', '$tradeDur', '$tradeStop', '$tradeLimit', '$opStrat',  '$leg1', '$leg2', '$leg3', '$leg4',  '$buySellCnt',   '$tradeStatus', '$tradeAux1' ,  '$inistr',   '$tradeHashToQuery'  )";
       
-          $insertQuery0a = " ( tradeRecTimestamp,  tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol,  tradeRAW, tradeRawId,  tradeSize, tradePrice, securityType, tradeHash  ) VALUES ";     // "tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy,   leg1,leg2,leg3,leg4 ,              buySellCnt, tradeStatus,    tradeAux1,      iniStr,      tradeHash) VALUES ";
-          $insertQuery0b = " ( CURRENT_TIMESTAMP,  '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', '$tradeRawId', '$tradeSize', '$tradeprice', '$secType',  '$tradeHashToQuery'  )";    //     //  "    '$tradePrFilled, '$tradeCond', '$tradeDur', '$tradeStop', '$tradeLimit', '$opStrat',  '$leg1', '$leg2', '$leg3', '$leg4',  '$buySellCnt',   '$tradeStatus', '$tradeAux1' ,  '$inistr',   '$tradeHashToQuery'  )";
+          $insertQuery0a = " ( tradeRecTimestamp,  tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol,  tradeRAW, tradeRawId,  tradeSize, tradePrice, securityType, tradeStatus, tradeHash  ) VALUES ";     // "tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy,   leg1,leg2,leg3,leg4 ,              buySellCnt, tradeStatus,    tradeAux1,      iniStr,      tradeHash) VALUES ";
+          $insertQuery0b = " ( CURRENT_TIMESTAMP,  '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', '$tradeRawId', '$tradeSize', '$tradeprice', '$secType', '$tradeStatus', '$tradeHashToQuery'  )";    //     //  "    '$tradePrFilled, '$tradeCond', '$tradeDur', '$tradeStop', '$tradeLimit', '$opStrat',  '$leg1', '$leg2', '$leg3', '$leg4',  '$buySellCnt',   '$tradeStatus', '$tradeAux1' ,  '$inistr',   '$tradeHashToQuery'  )";
           $insertQuery0 = $insertQuery00. $insertQuery0a. $insertQuery0b ;
 
           echo "*************************]  INSERT  ins3rtQuery0(sub)     var ==". $insertQuery0 ;
@@ -276,7 +278,14 @@ insertQuery0 = INSERT INTO positions ( tradeRecTimestamp,  tradeDateTime,      t
 // INSERT  var ==INSERT INTO positions ( tradeRecTimestamp,  tradeDateTime,      tradeDate,   tradeTime,      tradeDay,   tradeBar, userId, accountId,           tradeType, symbol, tradeRAW,      tradeRawId,  tradeSize,     tradePrice, securityType, tradePrFilled,     tradeCond, tradeDur,    tradeStopMkt, tradeLimitExit, optionStrategy,   leg1,leg2,leg3,leg4 ,              buySellCnt, tradeStatus,    tradeAux1,      iniStr,      tradeHash) VALUES  ( CURRENT_TIMESTAMP,  '2024-03-12T1000', '2024-03-12', '1000', 'tue', '15min', 'Creator_rhood', '12345354911', 'BUY', 'META', 'pos', '3372', '10', '489.07', 'LONG_STOCK', '489.07, 'atLimit', 'gfd', '0.0', '0.0', 'LONG_STOCK',  '0.0', '0.0', '0.0', '0.0',  '5',   'unsent', 'nil' ,  'META|BUY|ABOVE|S1|LONG_STOCK|COUNT|5|1|0|LIVE|19|nil|',   '60905cf4eb28ca28f0bcce7e2794b0df08dc5cd8dcd18ba6d85397f9d34f7e5e'  )<br />ERROR:  Connection failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'atLimit', 'gfd', '0.0', '0.0', 'LONG_STOCK',  '0.0', '0.0', '0.0', '0.0',  '5...' at line 10123456789NOGO
 
 
+/*
+*************************]  INSERT  ins3rtQuery0(sub)     var ==INSERT INTO positions ( tradeRecTimestamp,  tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol,  tradeRAW, tradeRawId,  tradeSize, tradePrice, securityType, tradeHash  ) VALUES  ( CURRENT_TIMESTAMP,  '2024-03-13T1130', '2024-03-13', '1130', 'wed', '15min', 'Creator_rhood', '12345354911', 'BUY', 'TSLA', 'pos', '3429', '10', '171.74', 'LONG_STOCK',  '5c73b28f4362dcddeccc2dd29bd5705092a43ef8737e710ef621e2d3eb49e0a8'  )<br />] Sample trade inserted. Last inserted ID: 6 <br />] Sample  trade [almost]  * inserted  , insertQuery0 = INSERT INTO positions ( tradeRecTimestamp,  tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol,  tradeRAW, tradeRawId,  tradeSize, tradePrice, securityType, tradeHash  ) VALUES  ( CURRENT_TIMESTAMP,  '2024-03-13T1130', '2024-03-13', '1130', 'wed', '15min', 'Creator_rhood', '12345354911', 'BUY', 'TSLA', 'pos', '3429', '10', '171.74', 'LONG_STOCK',  '5c73b28f4362dcddeccc2dd29bd5705092a43ef8737e710ef621e2d3eb49e0a8'  ) 0123456789OKGO
 
+
+Success: Data successfully sent
+] ***>> AFTER SEND POST! ;   result ==
+OKGOSearch query: unsent,portfolioTrade,LIVE,ini,TSLA,BUY,BELOW,S1,LONG_STOCK,COUNT,4,2,0,LIVE,19,nil,portfolioTrade,2024-03-13,1130,BUY,10,TSLA,atLimit,171.74,3429,10,below,S1,-1.74,-1.0131%,1,205|195|145|135,nil,nil,2024-03-13T113000,wed,15min,Creator,12345354911,raw17,0,100,0,gfd,103.044,429.35,IronCondor1.15,R3R2R1_P_P3_S1S2S3=|186.45|183.48|180.50|176.46|177.85|173.48|169.44|166.46|,wkR2R1P_182.93_S1S2=|208.98|192.16|166.11|156.88|,moR3R2R1PS1S2S3=|212.15|208.69|205.24|201.84|198.39|194.99|191.54|,nil,BUY,0,1,2,3,nilHash  searchQuery, len=513 - _POST msg rec'd OK!
+*/
 
 
           $conn->exec($insertQuery0);
@@ -309,9 +318,10 @@ $conn = null;
 
 // INITIAL ACK / NAK
 if( $uuser0=="err"  ||  $insertdb<1 ){   // ==0 or == -10
-  echo "0123456789NOGO"; 
+  echo "0123456789_NOGO"; 
 }else if( $insertdb==1 ){
-  echo "0123456789OKGO"; 
+  echo "9876543210_". $lastInsertedId. "_". "OKGO" ;
+  // echo "0123456789OKGO"; 
 }
 
 
