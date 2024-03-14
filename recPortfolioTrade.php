@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 date_default_timezone_set("America/New_York"); 
 
 include 'standardfunctions.php';
-                                                      $vers = "17.64";
+                                                      $vers = "17.89";
                                                       // from  gettrades.php
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
