@@ -155,5 +155,48 @@ function SendEmailTo($receiverEmail, $senderEmail, $subject, $msg) {
         return "Failed to send email. Check your server's configuration or try again later.";
     }
 }
+ 
+ 
+// function returnStringInside($str, $char0) {
+//     // Check if $str exists and is not null
+//     if (!isset($str) || is_null($str)) {
+//         return "Error: Input string \$str cannot be null or undefined.";
+//     }
+
+//     // Check if $char0 is one character only
+//     if (strlen($char0) !== 1) {
+//         return "Error: Input character \$char0 must be one character only.";
+//     }
+
+//     // Find the positions of the first two occurrences of $char0
+//     $pos1 = strpos($str, $char0);
+//     $pos2 = strpos($str, $char0, $pos1 + 1);
+
+//     // Check if both occurrences are found
+//     if ($pos1 === false || $pos2 === false) {
+//         return "Error: Unable to find two occurrences of \$char0 in \$str.";
+//     }
+
+//     // Extract the string between the first two occurrences of $char0
+//     $result = substr($str, $pos1 + 1, $pos2 - $pos1 - 1);
+
+//     return $result;
+// }
+
+// // Test the function
+// $str = "This is a test string to extract data from.";
+// $char0 = "s";
+
+// echo "Original String: $str<br>";
+// echo "Character to find: $char0<br>";
+
+// $result = returnStringInside($str, $char0);
+// if (substr($result, 0, 5) === "Error") {
+//     echo "Error: $result";
+// } else {
+//     echo "String between first two occurrences of '$char0': $result";
+// }
+
+ 
 
 ?>
