@@ -22,6 +22,8 @@ var timerElapses = 0;
 var timerDisplay = document.getElementById("timer");
 var roundDisplay = document.getElementById("round");
 
+var reststr =" ";
+
 // Function to convert time string to seconds
 function timeStringToSeconds(timeString) {
     var timeParts = timeString.split(":");
@@ -36,8 +38,8 @@ function updateTimerDisplay(seconds) {
 }
 
 // Function to update the round display
-function updateRoundDisplay(rounds) {
-    roundDisplay.textContent = "Round: " + rounds;
+function updateRoundDisplay(rounds, reststr0) {
+    roundDisplay.textContent = "Round: " + rounds + reststr0 ;
 }
 
 // Function to play the sound effect
@@ -53,26 +55,28 @@ function startCountdown() {
 
     var countdownInterval = setInterval(function () {
         updateTimerDisplay(currentSeconds);
-        updateRoundDisplay(rounds);
+        updateRoundDisplay(rounds, reststr);
 
         if (currentSeconds <= 0) {
             // playSoundEffect("sfxbeep1.mp3");
             clearInterval(countdownInterval);
             timerElapses++;
 
-            // if (rounds % 2 === 1) {
+            // if (ro unds % 2 === 1) {
             if (timerElapses % 2 == 1) {
                 playSoundEffect("sfxbelltwice.mp3");
                 // If odd timerElapses, switch to alert time
                 startSeconds = alertSeconds0;   // ie 01:00
-
+                reststr = " (Rest) ";
             } else {
                 rounds++;
-                updateRoundDisplay(rounds);
-                startSeconds = startSeconds0;   // ie 03:00
+                reststr =" ";
 
+                updateRoundDisplay(rounds, reststr);
+                startSeconds = startSeconds0;   // ie 03:00
+                reststr =" ";
                 playSoundEffect("sfxbellonce.mp3");
-                // If even timerElapses, switch back to start time and increment rounds
+                // If even timerElapses, switch back to start time and increment roun ds
                 // startSeconds = timeStringToSeconds(startTime);
             }
 

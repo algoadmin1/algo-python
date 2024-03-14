@@ -212,7 +212,7 @@ try{
           $tradeTime0=$params[18];
           $tradeDay  =$params[35];
           $tradeBar  =$params[36];
-
+          // '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', '$tradeRawId', '$tradeSize', '$tradeprice', '$secType',  '$tradeHashToQuery' 
           $userId    =$uname0. "_". $brokerage; 
           $acctId    =$acct0;
 
@@ -261,11 +261,13 @@ insertQuery0 = INSERT INTO positions ( tradeRecTimestamp,  tradeDateTime,      t
           $insertQuery00 = "INSERT INTO ". $tblname ;  
           // $insertQuery0a = "( tradeRecTimestamp,  tradeDateTime,      tradeDate,   tradeTime,      tradeDay,   tradeBar, userId, accountId,           tradeType, symbol, tradeRAW,      tradeRawId,  tradeSize,     tradePrice, securityType, tradePrFilled,     tradeCond, tradeDur,    tradeStopMkt, tradeLimitExit, optionStrategy, *** daySRs, wkSRs, moSRs,  leg1, leg2, leg3, leg4, **** buySellCnt, buySellPct, buySellDist, tradeSpec, tradeSig, tradeGapPct, tradeStatus, tradeAux1, iniStr, tradeHash) VALUES ";
       
+
+
           // $insertQuery0a = " ( tradeRecTimestamp,  tradeDateTime,      tradeDate,   tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol, tradeRAW, tradeRawId,  tradeSize, tradePrice, securityType, tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy,   leg1,leg2,leg3,leg4 ,              buySellCnt, tradeStatus,    tradeAux1,      iniStr,      tradeHash) VALUES ";
           // $insertQuery0b = " ( CURRENT_TIMESTAMP,  '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', '$tradeRawId', '$tradeSize', '$tradeprice', '$secType', '$tradePrFilled, '$tradeCond', '$tradeDur', '$tradeStop', '$tradeLimit', '$opStrat',  '$leg1', '$leg2', '$leg3', '$leg4',  '$buySellCnt',   '$tradeStatus', '$tradeAux1' ,  '$inistr',   '$tradeHashToQuery'  )";
       
-          $insertQuery0a = " ( tradeRecTimestamp,  tradeDateTime,      tradeDate,   tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol,  tradeRAW, tradeRawId,  tradeSize, tradePrice, securityType,   tradeHash      ) VALUES ";     // "tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy,   leg1,leg2,leg3,leg4 ,              buySellCnt, tradeStatus,    tradeAux1,      iniStr,      tradeHash) VALUES ";
-          $insertQuery0b = " ( CURRENT_TIMESTAMP,  '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', '$tradeRawId', '$tradeSize', '$tradeprice', '$secType',  '$tradeHashToQuery'  )";//     //  "    '$tradePrFilled, '$tradeCond', '$tradeDur', '$tradeStop', '$tradeLimit', '$opStrat',  '$leg1', '$leg2', '$leg3', '$leg4',  '$buySellCnt',   '$tradeStatus', '$tradeAux1' ,  '$inistr',   '$tradeHashToQuery'  )";
+          $insertQuery0a = " ( tradeRecTimestamp,  tradeDateTime, tradeDate, tradeTime, tradeDay, tradeBar, userId, accountId, tradeType, symbol,  tradeRAW, tradeRawId,  tradeSize, tradePrice, securityType, tradeHash  ) VALUES ";     // "tradePrFilled, tradeCond, tradeDur, tradeStopMkt, tradeLimitExit, optionStrategy,   leg1,leg2,leg3,leg4 ,              buySellCnt, tradeStatus,    tradeAux1,      iniStr,      tradeHash) VALUES ";
+          $insertQuery0b = " ( CURRENT_TIMESTAMP,  '$tradeDateTime0', '$tradeDate0', '$tradeTime0', '$tradeDay', '$tradeBar', '$userId', '$acctId', '$tradeType', '$symbol', '$rawstr', '$tradeRawId', '$tradeSize', '$tradeprice', '$secType',  '$tradeHashToQuery'  )";    //     //  "    '$tradePrFilled, '$tradeCond', '$tradeDur', '$tradeStop', '$tradeLimit', '$opStrat',  '$leg1', '$leg2', '$leg3', '$leg4',  '$buySellCnt',   '$tradeStatus', '$tradeAux1' ,  '$inistr',   '$tradeHashToQuery'  )";
           $insertQuery0 = $insertQuery00. $insertQuery0a. $insertQuery0b ;
 
           echo "*************************]  INSERT  ins3rtQuery0(sub)     var ==". $insertQuery0 ;
