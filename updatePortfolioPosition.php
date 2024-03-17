@@ -1,5 +1,6 @@
 <?php
-// jb      recPortfolioTrade.php by John Botti Copyright (c) 2020-2025 by Algo Investor Inc. All Rights Reserved.
+// jb    updatePortfolioPosition.php derived from    recPortfolioTrade.php by John Botti 
+//                                                                      Copyright (c) 2020-2025 by Algo Investor Inc. All Rights Reserved.
 //
 // Setting up Error Reporting Level
 //
@@ -8,18 +9,16 @@ error_reporting(E_ALL);
 date_default_timezone_set("America/New_York"); 
 
 include 'standardfunctions.php';
-                                                      $vers = "18.91";
+
+                                                      $vers = "1.1";
                                                       // from  gettrades.php
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
-$happy  = "Delta"; 
-$happy0 = "Gamma"; 
 $happy1 = "Vega"; 
-$happy3 = "Thega"; 
 $happy2="jb";
 $CurrencyStr="$";
 $todaysdate = date('Y-m-d');
-$prgname= "recPortfolioTrade.php";
+$prgname= "updatePortfolioPosition.php";
 $brokerage="rhood";
 // $filename0 = "trades_ini.txt"; 
 
@@ -196,17 +195,26 @@ try{
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
+
+
         $insertdb=0;
-        if ($result) {  // if there is a hash == found
-            $insertdb=0;
-            // if($msg==1) echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
-            // echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
-            // echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  ".    print_r($result, true); // . "</pre>";
-            echo "] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery "; //, result=  ".    print_r($result, true); // . "</pre>";
-          } else {
-            $insertdb=1;
-              echo "] NO RawTrade found for tradeHash $tradeHashToQuery.  insertdb= $insertdb ;  INSERTing to db.trades ...<br />";
-        }
+
+
+        // if ($result) {  // if there is a hash == found
+        //     $insertdb=0;
+        //     // if($msg==1) echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
+        //     // echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
+        //     // echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  ".    print_r($result, true); // . "</pre>";
+        //     echo "] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery "; //, result=  ".    print_r($result, true); // . "</pre>";
+        //   } else {
+        //     $insertdb=1;
+        //       echo "] NO RawTrade found for tradeHash $tradeHashToQuery.  insertdb= $insertdb ;  INSERTing to db.trades ...<br />";
+        // }
+
+
+
+
+
 
         if($insertdb==1){
           // newstr ==    ======>portfolioTrade,LIVE,ini,QQQ,BUY,BELOW,S1,LONG_STOCK,COUNT,5,1,0,LIVE,19,nil,portfolioTrade,2024-03-08,1500,BUY,10,QQQ,atLimit,440.35,3302,6,below,S1,-1.67,-0.3785%,1,525|505|370|350,nil,nil,2024-03-08T150000,fri,30min,Creator,12345354911,raw14,0,100,0,gfd,264.21,1100.88,IronCondor1.15,R3R2R1_P_P3_S1S2S3=|452.58|450.23|447.87|444.37|440.23|442.01|438.51|436.15|,wkR2R1P_442.18_S1S2=|454.46|450.07|437.79|429.90|,moR3R2R1PS1S2S3=|459.55|452.76|445.96|433.80|427.00|414.84|408.04|,nil,BUY,0,1,2,3,nilHash<=======
@@ -303,6 +311,7 @@ OKGOSearch query: unsent,portfolioTrade,LIVE,ini,TSLA,BUY,BELOW,S1,LONG_STOCK,CO
           $pstr3= "<br />] Sample  trade [almost]  * inserted  , insertQuery0 = $insertQuery0 ";
           echo $pstr3 ;
           // echoColor($pstr3,"blue");
+
 
         }else if($insertdb==0){
            echo "<br />] insertdb = $insertdb  ___ NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery "; 
