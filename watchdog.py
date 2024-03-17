@@ -5,6 +5,7 @@ versionStr =                    "18.91"
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 url007_str  = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
 url008_str  = "https://algoinvestorr.com/trades/getPortfolioPositions.php"
+url009_str  = "https://algoinvestorr.com/trades/updatePortfolioPosition.php"
 
 import time
 import datetime
@@ -2853,6 +2854,21 @@ if input0 == "":
 todaysDate0 = input0
 
 
+
+##########################################    testing UPDATE positions php
+#  
+        
+
+postsendStr  = "updatepositions,status,=,johnnie,nil,nil,nil,EOL"
+
+# portfoliostr = sendDataString( postsendStr , url008_str+"?d="+todaysDate0  )  
+portfoliostr = sendDataString(  postsendStr , url009_str    )  
+
+print("]  portfoliostr=",portfoliostr)
+pstr= "\n"+str(current_date_ny)+"] PRESS ENTER: "  
+print_colored(pstr,colorRed)
+input0 = input()
+         
 
 ##########################################    testing get positions php
 # getPortfolioPositions
