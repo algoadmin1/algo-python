@@ -2856,37 +2856,38 @@ todaysDate0 = input0
 
 
 ##########################################    testing UPDATE positions php
-#  
-        
+#  update testing
 
-postsendStr  = "updatepositions,status,=,johnnie,nil,nil,nil,EOL"
+if(True):
+    postsendStr  = "updatepositions,tradeStatus,=,sending,4,nil,nil,EOL"
+    postsendStr  = "updatepositions,tradeAux1,=,Te_is_lazy,8,nil,nil,EOL"
 
-# portfoliostr = sendDataString( postsendStr , url008_str+"?d="+todaysDate0  )  
-portfoliostr = sendDataString(  postsendStr , url009_str    )  
+    # portfoliostr = sendDataString( postsendStr , url008_str+"?d="+todaysDate0  )  
+    portfoliostr = sendDataString(   postsendStr , url009_str    )  
 
-print("]  portfoliostr=",portfoliostr)
-pstr= "\n"+str(current_date_ny)+"] PRESS ENTER: "  
-print_colored(pstr,colorRed)
-input0 = input()
-         
+    print("]  portfoliostr=", portfoliostr)
+    pstr= "\n"+str(current_date_ny)+"] PRESS ENTER: "  
+    print_colored(pstr,colorRed)
+    input0 = input()
+            
 
 ##########################################    testing get positions php
 # getPortfolioPositions
-        
-# postsendStr  = "getpositions,tradeTime,=,0945,nil,nil,nil,EOL"
-# postsendStr  = "getpositions,symbol,=,AAPL,EOL,nil,nil,nil,EOL"
+if(False):
+    # postsendStr  = "getpositions,tradeTime,=,0945,nil,nil,nil,EOL"
+    # postsendStr  = "getpositions,symbol,=,AAPL,EOL,nil,nil,nil,EOL"
 
-postsendStr  = "getpositions,tradeDate,=,2024-03-13,nil,nil,nil,EOL"
-# postsendStr  = "getpositions,tradeDay,=,fri,EOL,nil,nil,nil,EOL"
-# postsendStr  = "getpositions,positionId,=,6,EOL,nil,nil,nil,EOL"
+    postsendStr  = "getpositions,tradeDate,=,2024-03-13,nil,nil,nil,EOL"
+    # postsendStr  = "getpositions,tradeDay,=,fri,EOL,nil,nil,nil,EOL"
+    # postsendStr  = "getpositions,positionId,=,6,EOL,nil,nil,nil,EOL"
 
-portfoliostr = sendDataString( postsendStr , url008_str+"?d="+todaysDate0  )  
+    portfoliostr = sendDataString( postsendStr , url008_str+"?d="+todaysDate0  )  
 
-print("]  portfoliostr=",portfoliostr)
-pstr= "\n"+str(current_date_ny)+"] PRESS ENTER: "  
-print_colored(pstr,colorBlue)
-input0 = input()
-         
+    print("]  portfoliostr=",portfoliostr)
+    pstr= "\n"+str(current_date_ny)+"] PRESS ENTER: "  
+    print_colored(pstr,colorBlue)
+    input0 = input()
+            
 
 
 ########################################## 

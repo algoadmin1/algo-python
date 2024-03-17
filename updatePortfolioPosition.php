@@ -10,7 +10,7 @@ date_default_timezone_set("America/New_York");
 
 include 'standardfunctions.php';
 
-                                                      $vers = "1.1";
+                                                      $vers = "1.54";
                                                        
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
@@ -105,6 +105,11 @@ $splitChars = ",";
 //$afterAdrsee = strpbrk($searchQuery,$splitChars);
 //$avName      =  strtok($searchQuery,$splitChars);    // us erName trying to sign in, above, pwd
 
+// $hastr0="creatorNIL";  // not in positions.tradeHash
+$hastr0="creatorHash";
+$inserted0=0;
+$insertdb=0;
+
 
 
 
@@ -119,6 +124,8 @@ $splitChars = ",";
 
   }
 
+
+
 $i=0;
 $params = explode (",", $searchQuery);
 $paramstr = "] _POST params = " ; //. $params[0]. ", ". $params[1]. ", ". $params[2]. ",| ".  $params[3]. "|". $params[4]. "|". $params[5]. "|". $params[6]. "|". $params[7]. "|". $params[8]. "|". $params[9];
@@ -131,34 +138,34 @@ for( $jj=0; $jj<$cnt ;$jj++ ){
 }
 echo "] paramstr = $paramstr";
 
+
+
 // _POST params = [0]getpositions [1]tradeDay [2]= [3]fri [4]EOL [5]nil [6]nil [7]nil [8] 
 // Found 9 params[] (all lines)...
 
 // default to aux for UPDAT3
 $fieldname ="tradeAux";
 $fieldsrch = $udate0;   // user input'd ?d="" or auto-gen'd YYYY-MM-DD
+$posId=-1;
 
 if( $params[2]=="="){
+
   // we have a tradeDay = fri  -or-
   //         a symbol = AAPL 
   $fieldname=$params[1];
   $fieldsrch=$params[3];
+  $posId    =$params[4];
+  // postsendStr  = "updatepositions,status,=,johnnie,4,nil,nil,EOL"
+
 }
 
-$queryMaster  = "SELECT * FROM ".  $tblname.  " WHERE ".  $fieldname. " = :". $fieldname ;
-$bindMaster   = ':'.  $fieldname ;    //  for this :   $stmt->bindParam($bindMaster, $tradeHashToQuery);
+// $queryMaster  = "SELECT * FROM ".  $tblname.  " WHERE ".  $fieldname. " = :". $fieldname ;
+$bindMaster   = ':positionId' ;     
+$queryU       =  "UPDATE ". $tblname. " SET ". $fieldname. " = '$fieldsrch'  WHERE positionId = :positionId";
 
-
-// $hastr0="creatorNIL";  // not in positions.tradeHash
-$hastr0="creatorHash";
-$inserted0=0;
-$insertdb=0;
-
-$queryU  = "UPDATE ". $tblname. " SET ". $fieldname. " = ". $fieldsrch.  " WHERE positionId = :positionId";
 echo "] queryU = $queryU ";
-
 // if($msg==1) echo "\nFound $cnt params[] (all lines)...\n  hastr0== $hastr0";
- echo "]  bindMaster= $bindMaster , = $fieldsrch ?  |  queryMaster = $queryMaster  |  Found $cnt params[] (all lines)...";  //\n  hastr0== $hastr0";
+ echo "]  bindMaster= $bindMaster , = $fieldsrch ?  |  queryU = $queryU  |  Found $cnt params[] (all lines)...";  //\n  hastr0== $hastr0";
 
 
 
@@ -231,8 +238,8 @@ echo "] queryU = $queryU ";
 
 ///  #########################################################  
 
-// echo '] before ATTEMPTing DB ACCESS...';
-exit( '] Exiting before ATTEMPTing DB ACCESS...');
+echo '] before ATTEMPTing DB ACCESS...';
+// exit( '] Exiting before ATTEMPTing DB ACCESS...');
 
 ///  #########################################################  
  
@@ -247,19 +254,22 @@ try{
 
 // // ######################################################### Start code HERE
 
-        // $tradeHashToQuery = $hastr0 ;
+// $tradeHashToQuery = $hastr0 ;
         
   //    UPDATE `positions` SET `userId` = 'Creator' WHERE `positions`.`positionId` = 7;
 
-        $queryU  = "UPDATE ". $tblname. " SET ". $fieldname. " = ". $fieldsrch.  " WHERE positionId = :positionId";
+        // $queryU  = "UPDATE ". $tblname. " SET ". $fieldname. " = ". $fieldsrch.  " WHERE positionId = :positionId";
 
         //   UPDATE `positions` SET `userId` = 'john', `tradeAux1` = 'testAux' WHERE `positions`.`positionId` = 4;
-        $query  =  $queryMaster ;  
+        $query  =  $queryU ;  
+        // $query  =  $queryMaster ;  
         // $query  = "SELECT * FROM ". $tblname. " WHERE tradeDay = :tradeDay";
         // $query = "SELECT * FROM positions WHERE tradeHash = :tradeHash";
         $stmt = $conn->prepare($query);
 
-        $stmt->bindParam( $bindMaster,  $fieldsrch  );
+        // ie  $stmt->bindParam(':positionId', $posId );
+        $stmt->bindParam( $bindMaster,  $posId  );
+        // $stmt->bindParam( $bindMaster,  $fieldsrch  );
         // $stmt->bindParam(':tradeHash', $tradeHashToQuery);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
