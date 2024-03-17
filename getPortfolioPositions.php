@@ -258,6 +258,9 @@ try{
         $resultValid = 0;
 
          if ($result) {  
+            echo "] print_r result=" ;
+            print_r($result);
+
             $resultValid=1;
             $resultstr = arr2str($result);
             echo "] result=". $resultstr ;      //]  resultValid= $resultValid , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";

@@ -2860,9 +2860,9 @@ todaysDate0 = input0
 # postsendStr  = "getpositions,tradeTime,=,0945,nil,nil,nil,EOL"
 # postsendStr  = "getpositions,symbol,=,AAPL,EOL,nil,nil,nil,EOL"
 
-# postsendStr  = "getpositions,tradeDate,=,2024-03-13,nil,nil,nil,EOL"
+postsendStr  = "getpositions,tradeDate,=,2024-03-13,nil,nil,nil,EOL"
 # postsendStr  = "getpositions,tradeDay,=,fri,EOL,nil,nil,nil,EOL"
-postsendStr  = "getpositions,positionId,=,6,EOL,nil,nil,nil,EOL"
+# postsendStr  = "getpositions,positionId,=,6,EOL,nil,nil,nil,EOL"
 
 portfoliostr = sendDataString( postsendStr , url008_str+"?d="+todaysDate0  )  
 
