@@ -1,5 +1,5 @@
 <?php
-//standardFunctions.php  ver 2.0
+//standardFunctions.php  ver 3.0
 
 // ******************************************************************** Functions
 //
@@ -156,6 +156,33 @@ function SendEmailTo($receiverEmail, $senderEmail, $subject, $msg) {
     }
 }
  
+
+function arr2str($arr) {
+    // Check if array is empty
+    if (empty($arr)) {
+        return "Error: Input array is empty.";
+    }
+
+    // Convert array to CSV string
+    $csvString = implode(',', $arr);
+
+    return $csvString;
+}
+
+// Test the function
+// $array = array("apple", "banana", "orange", "grape");
+// $result = arr2str($array);
+// echo "Array: " . implode(", ", $array) . "\n";
+// echo "CSV String: " . $result . "\n";
+
+
+
+
+
+
+
+
+
  
 // function returnStringInside($str, $char0) {
 //     // Check if $str exists and is not null

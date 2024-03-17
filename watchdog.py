@@ -4,6 +4,7 @@ versionStr =                    "18.91"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 url007_str  = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
+url008_str  = "https://algoinvestorr.com/trades/getPortfolioPositions.php"
 
 import time
 import datetime
@@ -2835,14 +2836,15 @@ if(False):
     if(resultstr=="NoData" or resultstr=="NOGO"):
         print("] Server INSERT Halted; NOT Ok to go <SIM>.  Similiar or Identical PositionFound.  EXITING... " ) 
 
-
-    
-####################################################################################  DATE & Time input
-#
-
 todaysDate0=TodaysDate()
 
-pstr= "\n",str(current_date_ny),"] ENTER trades Date (default="+todaysDate0+"): "  
+    
+        
+##########################################  DATE & Time input
+#
+
+
+pstr= "\n"+str(current_date_ny)+"] ENTER trades Date (default="+todaysDate0+"): "  
 print_colored(pstr,colorGreen)
 input0 = input()
 if input0 == "":
@@ -2850,6 +2852,29 @@ if input0 == "":
     input0 = todaysDate0
 todaysDate0 = input0
 
+
+
+##########################################    testing get positions php
+# getPortfolioPositions
+        
+# postsendStr  = "getpositions,tradeTime,=,0945,nil,nil,nil,EOL"
+# postsendStr  = "getpositions,symbol,=,AAPL,EOL,nil,nil,nil,EOL"
+
+# postsendStr  = "getpositions,tradeDate,=,2024-03-13,nil,nil,nil,EOL"
+# postsendStr  = "getpositions,tradeDay,=,fri,EOL,nil,nil,nil,EOL"
+postsendStr  = "getpositions,positionId,=,6,EOL,nil,nil,nil,EOL"
+
+portfoliostr = sendDataString( postsendStr , url008_str+"?d="+todaysDate0  )  
+
+print("]  portfoliostr=",portfoliostr)
+pstr= "\n"+str(current_date_ny)+"] PRESS ENTER: "  
+print_colored(pstr,colorBlue)
+input0 = input()
+         
+
+
+########################################## 
+########################################## 
 
 
 # inputz
