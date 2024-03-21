@@ -256,6 +256,40 @@ function convertDate(udateStr) {
 
 
 
+function removeChar(string0, char0, charNum) {
+    // Check if charNum is out of range
+    if (charNum < 0 || charNum >= string0.length) {
+        console.error('Error: charNum is out of range.');
+        return null;
+    }
+
+    // Check if string0 is null or empty
+    if (!string0) {
+        console.error('Error: string0 is null or empty.');
+        return null;
+    }
+
+    // Extract the character at charNum position in string0
+    const charAtIndex = string0[charNum];
+
+    // Check if charAtIndex is equal to char0
+    if (charAtIndex === char0) {
+        // Remove the character at charNum position from string0
+        const modifiedString = string0.slice(0, charNum) + string0.slice(charNum + 1);
+        return modifiedString;
+    } else {
+        // Return the original string if characters are not the same
+        return string0;
+    }
+}
+
+// // Example usage
+// const string0 = "hello";
+// const char0 = "l";
+// const charNum = 2;
+// console.log(removeChar(string0, char0, charNum)); // Output: "helo"
+
+
 
 
 
@@ -281,27 +315,51 @@ const postMethods = () =>{
         
         let emoji0 ="⭐"; 
         let emoji1 ="👍"; 
+        let emojidn="🔻";
+        let emojiup="💚";
+        let emojiup1="💚";
+
+        let upordownemoji = emojidn;
+        if(postData.tradeType=="BUY") upordownemoji = emojiup;
+
         let starz =""; 
         let cnt= postData.tradeCnt-3;
         let k=0;
         for(k=0;k<cnt;k++){
-            starz = starz + emoji1;
+            // starz = starz + emoji1;
+            starz = starz + upordownemoji;
         }
+
+
+
+        let pctstr = removeChar(postData.pricePct, "-", 0);  
+        // console.log(pctstr);
+
+        // let infostr ="";
+        // let infostr =  postData.pricePct+" " +postData.tradeAboveBelow +" "+ postData.tradePivot;
+        let infostr = pctstr+" " +postData.tradeAboveBelow +" "+ postData.tradePivot;
 
         let pivotstr = postData.daySRs;
         let  p_day= chopString(pivotstr, "|", 4 ) ;
         let s1_day= chopString(pivotstr, "|", 6 ) ;
         let r1_day= chopString(pivotstr, "|", 3 ) ;
 
-        // let dateSimple = "";
-
-        // udateStr =  postData.tradeDate ;  //"2024-03-21";
-        // dateSimple= convertDate(udateStr);   // Output: "Mar 21"
-
-
 //                      [0]         R3           [3]     P [4]        [6]           [8]
 //                      [0]         [1]          [3]    [4]            [6]           [8]
 // "daySRs": "R3R2R1_P_P3_S1S2S3=|427.79|425.65|423.51|419.53|419.44|417.39|413.41|411.27|",
+
+
+        let dateSimple = "";
+        udateStr =  postData.tradeDate ;  //"2024-03-21";
+        dateSimple= convertDate(udateStr);   // Output: "Mar 21"
+        // console.log(dateSimple);
+
+
+
+
+
+//         <p class="description">${postData.tradeType} (${starz}) at $${postData.tradePrice}, ${infostr} at ${postData.tradeTime} on ${postData.tradeDate}. Pivot:$${p_day} S1:$${s1_day} R1:$${r1_day}  </p>
+
 
 
         postElement.innerHTML=`
@@ -314,7 +372,7 @@ const postMethods = () =>{
         </div>
         <div class="card-content">
         <h2 class="name">${postData.symbol}</h2>
-        <p class="description">${postData.tradeType} (${starz}) at $${postData.tradePrice} on ${postData.tradeDate} at ${postData.tradeTime} EDT. </p>
+        <p class="description">${postData.tradeType} (${starz}) at $${postData.tradePrice}, ${infostr} at ${postData.tradeTime} on ${dateSimple}. Pivot:$${p_day} S1:$${s1_day} R1:$${r1_day}  </p>
             <button class="button">Get Chart</button>
         </div>
         </div>  
