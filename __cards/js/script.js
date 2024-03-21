@@ -372,7 +372,7 @@ const postMethods = () =>{
         </div>
         <div class="card-content">
         <h2 class="name">${postData.symbol}</h2>
-        <p class="description">${postData.tradeType} (${starz}) at $${postData.tradePrice}, ${infostr} at ${postData.tradeTime} on ${dateSimple}. Pivot:$${p_day} S1:$${s1_day} R1:$${r1_day}  </p>
+        <p class="description">${postData.tradeType} Signal (${starz}) at $${postData.tradePrice}, ${infostr} at ${postData.tradeTime} on ${dateSimple}. Pivot:$${p_day} S1:$${s1_day} R1:$${r1_day}  </p>
             <button class="button">Get Chart</button>
         </div>
         </div>  
