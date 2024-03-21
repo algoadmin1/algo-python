@@ -99,6 +99,41 @@ const trades0 = [
 ];
 
 
+let trades0a = [
+    {
+        "tradeDate":  "2024-03-20",
+        "tradeTime": "1600",
+        "tradeType": "SELL",
+        "tradeSize": "10",
+        "symbol": "MSFT",
+    },
+    { 
+        "tradeDate": "2024-03-20",
+        "tradeTime": "1600",
+        "tradeType": "SELL",
+        "tradeSize": "10",
+        "symbol": "AMZN",
+    }
+];
+
+
+let trades1 = [
+    {
+        tradeDate:   "2024-03-20",
+        tradeTime:  "1600",
+        tradeType:  "SELL",
+        tradeSize:  "10",
+        symbol:  "MSFT",
+    },
+    { 
+        tradeDate:  "2024-03-20",
+        tradeTime:  "1600",
+        tradeType:  "SELL",
+        tradeSize:  "10",
+        symbol:  "AMZN",
+    }
+];
+
 
 /// #######################################################
 
