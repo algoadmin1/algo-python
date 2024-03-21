@@ -1,0 +1,126 @@
+/* styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body{
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #EFEFEF;
+
+}
+.slide-content{
+    margin 0 40px;
+
+}
+.card{
+    width: 320px;
+    border-radius: 25px;
+    background-color: #FFF;
+}
+
+.image-content,
+.card-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 14px;
+
+}
+.image-content{
+    row-gap: 5px;
+}
+.card-image{
+    position: relative;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    background: #FFF;
+    padding: 3px;
+
+}
+
+.card-image .card-img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid #767676;
+
+}
+.name{
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+}
+.description{
+    font-size: 14px;
+    color: #707070;
+    text-align: center;
+}
+/*
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.timer, .round {
+    font-size: 4em;
+    font-weight: bold;
+}
+*/
+
+/* Add this to your styles.css file */
+
+@font-face {
+    font-family: 'Digital-7';
+    /* src: url('https://algoinvestorr.com/timer/digital-7.ttf') format('truetype'); */
+    /* src: url('digital_7/digital-7.ttf') format('truetype'); */
+    src: url('digital_7/digital-7mi.ttf') format('truetype');
+    /* Replace 'path-to-your-font/Digital-7.ttf' with the actual path to your font file */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.round {
+    font-size: 3em;
+    font-weight: bold;
+    /* font-family: 'Digital-7', sans-serif; */
+    font-family: 'Trebuchet MS', sans-serif;
+
+    color: rgb(25, 12, 209);
+}
+
+.timer {
+    font-size: 9em;
+    font-weight: bold;
+
+    /* font-family: 'Courier New', monospace;  sans-serif; */
+    font-family: 'Digital-7', sans-serif; 
+    color: rgb(198, 11, 42);
+}

@@ -1,0 +1,147 @@
+dummywatch.txt
+
+IA,VXX,AAPL,AMZN,FB,NFLX,NVDA,AMD,TSLA,ZM,SLV,GLD,VXX,TBT,GBTC,IMMU,ROKU,T,ETSY,LULU,U,UBER,BA,CCL,SNAP,NKLA,M,F,V,GS,NCLH,DAL,MRNS,INO,WYNN,INO,MU,BAC,PTON,PINS,DKNG,TWTR,SBSW,PLAY,FCX,XOM, 
+     case  0:
+       ComputeAndRenderCandles( candlesSPY );
+     break;
+     case  1:
+       ComputeAndRenderCandles( candlesQQQ );
+     break;
+     case  2:
+       ComputeAndRenderCandles( candlesDIA );
+     break;
+     case  3:
+       ComputeAndRenderCandles( candlesVXX );
+     break;
+     case  4:
+       ComputeAndRenderCandles( candlesAAPL );
+     break;
+     case  5:
+       ComputeAndRenderCandles( candlesAMZN );
+     break;
+     case  6:
+       ComputeAndRenderCandles( candlesFB );
+     break;
+     case  7:
+       ComputeAndRenderCandles( candlesNFLX );
+     break;
+     case  8:
+       ComputeAndRenderCandles( candlesNVDA );
+     break;
+     case  9:
+       ComputeAndRenderCandles( candlesAMD );
+     break;
+     case  10:
+       ComputeAndRenderCandles( candlesTSLA );
+     break;
+     case  11:
+       ComputeAndRenderCandles( candlesZM );
+     break;
+     case  12:
+       ComputeAndRenderCandles( candlesSLV );
+     break;
+     case  13:
+       ComputeAndRenderCandles( candlesGLD );
+     break;
+     case  14:
+       ComputeAndRenderCandles( candlesVXX );
+     break;
+     case  15:
+       ComputeAndRenderCandles( candlesTBT );
+     break;
+     case  16:
+       ComputeAndRenderCandles( candlesGBTC );
+     break;
+     case  17:
+       ComputeAndRenderCandles( candlesIMMU );
+     break;
+     case  18:
+       ComputeAndRenderCandles( candlesROKU );
+     break;
+     case  19:
+       ComputeAndRenderCandles( candlesT );
+     break;
+     case  20:
+       ComputeAndRenderCandles( candlesETSY );
+     break;
+     case  21:
+       ComputeAndRenderCandles( candlesLULU );
+     break;
+     case  22:
+       ComputeAndRenderCandles( candlesU );
+     break;
+     case  23:
+       ComputeAndRenderCandles( candlesUBER );
+     break;
+     case  24:
+       ComputeAndRenderCandles( candlesBA );
+     break;
+     case  25:
+       ComputeAndRenderCandles( candlesCCL );
+     break;
+     case  26:
+       ComputeAndRenderCandles( candlesSNAP );
+     break;
+     case  27:
+       ComputeAndRenderCandles( candlesNKLA );
+     break;
+     case  28:
+       ComputeAndRenderCandles( candlesM );
+     break;
+     case  29:
+       ComputeAndRenderCandles( candlesF );
+     break;
+     case  30:
+       ComputeAndRenderCandles( candlesV );
+     break;
+     case  31:
+       ComputeAndRenderCandles( candlesGS );
+     break;
+     case  32:
+       ComputeAndRenderCandles( candlesNCLH );
+     break;
+     case  33:
+       ComputeAndRenderCandles( candlesDAL );
+     break;
+     case  34:
+       ComputeAndRenderCandles( candlesMRNS );
+     break;
+     case  35:
+       ComputeAndRenderCandles( candlesINO );
+     break;
+     case  36:
+       ComputeAndRenderCandles( candlesWYNN );
+     break;
+     case  37:
+       ComputeAndRenderCandles( candlesINO );
+     break;
+     case  38:
+       ComputeAndRenderCandles( candlesMU );
+     break;
+     case  39:
+       ComputeAndRenderCandles( candlesBAC );
+     break;
+     case  40:
+       ComputeAndRenderCandles( candlesPTON );
+     break;
+     case  41:
+       ComputeAndRenderCandles( candlesPINS );
+     break;
+     case  42:
+       ComputeAndRenderCandles( candlesDKNG );
+     break;
+     case  43:
+       ComputeAndRenderCandles( candlesTWTR );
+     break;
+     case  44:
+       ComputeAndRenderCandles( candlesSBSW );
+     break;
+     case  45:
+       ComputeAndRenderCandles( candlesPLAY );
+     break;
+     case  46:
+       ComputeAndRenderCandles( candlesFCX );
+     break;
+     case  47:
+       ComputeAndRenderCandles( candlesXOM );
+     break;

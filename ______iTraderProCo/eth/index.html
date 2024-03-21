@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>ETHbot</title>
+        <style> 
+            body {background: rgb(69, 7, 191); color: rgb(234, 238, 15) ; font-family: courier;}
+            .panel { width: 600; height: 160; font-size: 14px; padding: 10px; border:solid rgba(68, 240, 237, 0.933) 2px;}
+            .panel1 { width: 600; height: 440; font-size: 12px; padding: 10px; border:solid rgb(243, 5, 255) 2px;}
+            .panel2 { width: 600; height: 140; font-size: 10px;  padding: 10px; border:solid rgb(255, 243, 5) 4px;}
+            #left { width:700px; }
+            #right { float:  right;}
+            #container {width:1600;}
+        </style>
+        <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+    </head>
+    <body>
+
+        <div id="container">
+            <div id="right">
+                <h1>Quotes</h1>
+                <div id="quotes" class ="panel"></div>
+                <h1>Trades</h1>
+                <div id="trades" class ="panel"></div>
+                <h1>Algo Orders</h1>
+                <div id="orders"   class ="panel2"></div>
+                <h1>Earnings / **** Bars</h1>
+                <div id="bars"   class ="panel1"></div>
+            </div>
+            <div id="left">
+                <h1>Algo Investor Crypto Chart: ETH</h1>
+                <div id="chart"></div>
+            </div>
+        </div>
+
+       
+        <script src="gridbotjb.js"></script>
+    </body>
+
+
+</html>
