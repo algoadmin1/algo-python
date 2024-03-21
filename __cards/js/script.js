@@ -302,7 +302,8 @@ function removeChar(string0, char0, charNum) {
 const postContainer = document.querySelector('.card-wrapper');
 
 const postMethods = () =>{
-    cardData.map((postData)=>{
+    // cardData.map((postData)=>{
+    cardData0.map((postData)=>{
         console.log(postData);
 
         
@@ -331,7 +332,9 @@ const postMethods = () =>{
         }
 
 
-
+        let symstr = removeChar(postData.symbol, "@", 0);  
+        symstr = symstr.toLowerCase();
+        
         let pctstr = removeChar(postData.pricePct, "-", 0);  
         // console.log(pctstr);
 
