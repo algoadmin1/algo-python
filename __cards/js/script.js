@@ -196,6 +196,66 @@ async function readBigStringUrl(urlStr) {
 }
 
 
+function chopString(string0, char0, elemNum) {
+    // Check if string0 is null, empty, or undefined
+    if (!string0) {
+        console.error('Error: string0 is null or empty.');
+        return null;
+    }
+
+    // Check if char0 is null, empty, or not a single character
+    if (!char0 || char0.length !== 1) {
+        console.error('Error: char0 is null, empty, or not a single character.');
+        return null;
+    }
+
+    // Parse the string using the character char0
+    const parsed = string0.split(char0);
+
+    // Check if elemNum is in range
+    if (elemNum < 0 || elemNum >= parsed.length) {
+        console.error('Error: elemNum is out of range.');
+        return null;
+    }
+
+    // Return the parsed element at index elemNum
+    return parsed[elemNum];
+}
+
+// // Example usage
+// const string0 = "apple,banana,cherry,date";
+// const char0 = ",";
+// const elemNum = 2;
+// console.log(chopString(string0, char0, elemNum)); // Output: "cherry"
+
+
+
+function convertDate(udateStr) {
+    // Check if the input string is in the correct format
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateRegex.test(udateStr)) {
+        console.error('Error: udateStr is not in the correct format ("YYYY-MM-DD").');
+        return null;
+    }
+
+    // Parse the date string
+    const [year, month, day] = udateStr.split('-');
+
+    // Get the month abbreviation
+    const monthAbbreviation = new Date(udateStr).toLocaleString('en-us', { month: 'short' });
+
+    // Construct the converted date string
+    const convertedDate = `${monthAbbreviation} ${parseInt(day, 10)}`;
+
+    return convertedDate;
+}
+
+// // Example usage
+// const udateStr = "2024-03-21";
+// console.log(convertDate(udateStr)); // Output: "Mar 21"
+
+
+
 
 
 
@@ -228,6 +288,20 @@ const postMethods = () =>{
             starz = starz + emoji1;
         }
 
+        let pivotstr = postData.daySRs;
+        let  p_day= chopString(pivotstr, "|", 4 ) ;
+        let s1_day= chopString(pivotstr, "|", 6 ) ;
+        let r1_day= chopString(pivotstr, "|", 3 ) ;
+
+        // let dateSimple = "";
+
+        // udateStr =  postData.tradeDate ;  //"2024-03-21";
+        // dateSimple= convertDate(udateStr);   // Output: "Mar 21"
+
+
+//                      [0]         R3           [3]     P [4]        [6]           [8]
+//                      [0]         [1]          [3]    [4]            [6]           [8]
+// "daySRs": "R3R2R1_P_P3_S1S2S3=|427.79|425.65|423.51|419.53|419.44|417.39|413.41|411.27|",
 
 
         postElement.innerHTML=`
