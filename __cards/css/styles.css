@@ -6,7 +6,7 @@
     --gColRed:   #fe2121; 
     --gColGreen: #11e92e; 
     --gColorButton1: #265DF2;
-    --gColorSwiperBG: grey;
+    --gColorSwiperBG: rgb(255, 255, 255);
 }
 
 *{
@@ -26,7 +26,7 @@ body{
 .slide-container{
     max-width: 1120px;
     width: 100%;
-    background: var(--gColorSwiperBG);  // rgb(127, 222, 243);
+    background: var(--gColorSwiperBG);
     padding: 40px 0;
 }
 .slide-content{
@@ -37,6 +37,7 @@ body{
     width: 320px;
     border-radius: 25px;
     background-color: #FFF;
+    box-shadow: 0 0 .4rem .4rem rgba(0,0,0,0.2);
 }
 
 .image-content,
@@ -91,7 +92,7 @@ body{
     top: 0;
     height: 100%;
     width: 100%;
-    background-color: var(--gColor1); // #4070F4;
+    background-color: var(--gColor1);  
     border-radius: 25px 25px 0 25px;
 }
 .overlay::before,
@@ -102,11 +103,11 @@ body{
     bottom: -40px;
     height: 40px;
     width: 40px;
-    background-color: var(--gColor1);  // #4070F4;
+    background-color: var(--gColor1);   
 }
 .overlay::after{
     border-radius: 0 25px 0 0 ;
-    background-color: #FFF;   //#265DF2;
+    background-color: #FFF;    
 
 }
 .button{
