@@ -7,6 +7,16 @@
     --gColGreen: #11e92e; 
     --gColorButton1: #265DF2;
     --gColorSwiperBG: rgb(255, 255, 255);
+
+
+    --gsearchBGcol0: #7ac6ef;
+    --gsearchBGcol: #c9d8f6;   /* #9bb9f4;*/
+    /* --gsearchFocus: #c9d8f6; */
+    --gsearchFocus: #eaf0fb;
+
+    --cardW:          360px;
+    --cardWslideCont: 440px;
+    --cardWsearch: 380px;
 }
 
 *{
@@ -24,7 +34,7 @@ body{
 
 }
 .slide-container{
-    max-width: 1120px;
+    max-width: var(--cardWslideCont) ; /* 1120px; */
     width: 100%;
     background: var(--gColorSwiperBG);
     padding: 40px 0;
@@ -34,7 +44,7 @@ body{
 
 }
 .card{
-    width: 320px;
+    width: var(--cardW);
     border-radius: 25px;
     background-color: #FFF;
     box-shadow: 0 0 .4rem .4rem rgba(0,0,0,0.2);
@@ -75,8 +85,18 @@ body{
     border: 3px solid var(--gColor1);
     
 }
+
+.trendingFlat{
+    color: #639ee6;
+}
+.trendingUp{
+    color: #10d03d;
+}
+.trendingDown{
+    color: #cf0820;
+}
 .name{
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 500;
     color: #333;
 }

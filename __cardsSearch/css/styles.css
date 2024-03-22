@@ -14,9 +14,9 @@
     /* --gsearchFocus: #c9d8f6; */
     --gsearchFocus: #eaf0fb;
 
-    --cardW: 420px;
-    --cardWslideCont: 500px;
-    --cardWsearch: 380px;
+    --cardW: 380px;
+    --cardWslideCont: 460px;
+    --cardWsearch: 400px;
 
 }
 
@@ -191,7 +191,14 @@ body{
 
 }
 
-
+ 
+@font-face {
+    font-family: 'Digital-7';
+    /* src: url('https://algoinvestorr.com/timer/digital-7.ttf') format('truetype'); */
+    /* src: url('digital_7/digital-7.ttf') format('truetype'); */
+    src: url('digital_7/digital-7mi.ttf') format('truetype');
+    /* Replace 'path-to-your-font/Digital-7.ttf' with the actual path to your font file */
+}
 /*
 body {
     display: flex;
@@ -204,36 +211,7 @@ body {
 
 header {
     margin-bottom: 20px;
-}
-
-.timer, .round {
-    font-size: 4em;
-    font-weight: bold;
-}
-*/
-
-/* Add this to your styles.css file */
-
-@font-face {
-    font-family: 'Digital-7';
-    /* src: url('https://algoinvestorr.com/timer/digital-7.ttf') format('truetype'); */
-    /* src: url('digital_7/digital-7.ttf') format('truetype'); */
-    src: url('digital_7/digital-7mi.ttf') format('truetype');
-    /* Replace 'path-to-your-font/Digital-7.ttf' with the actual path to your font file */
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
-}
-
-header {
-    margin-bottom: 20px;
-}
+}*/
 
 .round {
     font-size: 3em;
@@ -262,6 +240,9 @@ header {
 .search{
     --padding: 14px;
     
+    position: fixed;
+    bottom: 0;
+
     width: max-content;
     display: flex;
     /* align-items: center; */
