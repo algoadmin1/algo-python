@@ -390,7 +390,6 @@ let urlbase=  "https://itraderpro.co/candlesticks.php?sym=";
 let sym1    = postData.symbol ;
 let urlbase1= "&uname=guest&email=johnbotti9000@gmail.com&key=8a2b18a0";
 let urlfinal = urlbase+ sym1 +urlbase1;
-
 // <button class="button" onclick="window.open('https://algoinvestorr.com/fire')">Get Chart</button>
 
 
