@@ -190,7 +190,11 @@ body {
   <h1 style="text-align:center;font-family:fantasy;color:cyan;font-size:64px;">Algo Investor<sup style="font-family:Helvetica;color:cyan;font-size:24px;">TM</sup></h1>
   <!-- <p style="text-align:center;font-family:fantasy;color:white;font-size:64px;">Algo Investor<sup>TM superscript</sup> today...</p> -->
 
-<!-- font-family:verdana; tahoma; Garamond; -->
+<!-- font-family:verdana; tahoma; Garamond;
+            var gGET_SymbolStr  =  document.getElementById("datasym").innerHTML; 
+
+-->
+
 <input  style="font-size:64px; text-transform: uppercase;" type="text" id="bigText"  placeholder="i.e. MSFT" name="sym" value="" style="width: 74; height: 80px;"><br>
 <!--         <input type="text" class="bigText"  name=" item" align="left" />
 -->

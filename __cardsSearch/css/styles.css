@@ -1,0 +1,248 @@
+/* styles.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+:root {
+    --gColor1:   #658cf7; 
+    --gColor2:   #4070F4; 
+    --gColRed:   #fe2121; 
+    --gColGreen: #11e92e; 
+    --gColorButton1: #265DF2;
+    --gColorSwiperBG: rgb(255, 255, 255);
+
+    --gsearchBGcol0: #7ac6ef;
+    --gsearchBGcol: #c9d8f6;   /* #9bb9f4;*/
+    /* --gsearchFocus: #c9d8f6; */
+    --gsearchFocus: #eaf0fb;
+
+    --cardW: 420px;
+    --cardWslideCont: 500px;
+    --cardWsearch: 380px;
+
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body{
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #EFEFEF;
+
+}
+.slide-container{
+    max-width: var(--cardWslideCont); 
+    /* max-width: 1120px; */
+    width: 100%;
+    background: var(--gColorSwiperBG);
+    padding: 40px 0;
+}
+.slide-content{
+    margin: 0 40px;
+
+}
+.card{
+    /* width: 320px; */
+    width: var(--cardW); 
+    border-radius: 25px;
+    background-color: #FFF;
+    box-shadow: 0 0 .4rem .4rem rgba(0,0,0,0.2);
+}
+
+.image-content,
+.card-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 14px;
+
+}
+
+.image-content{
+    position: relative;
+    row-gap: 5px;
+    border-radius: 25px 25px 0 25px;
+    padding: 25px 0;
+}
+
+.card-image{
+    position: relative;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    background: #FFF;
+    padding: 3px;
+
+}
+
+.card-image .card-img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    /* border: 3px solid #4070F4;  */
+    border: 3px solid var(--gColor1);
+    
+}
+.name{
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+}
+.description{
+    font-size: 14px;
+    color: #707070;
+    text-align: center;
+}
+
+.overlay{
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: var(--gColor1);  
+    border-radius: 25px 25px 0 25px;
+}
+.overlay::before,
+.overlay::after{
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -40px;
+    height: 40px;
+    width: 40px;
+    background-color: var(--gColor1);   
+}
+.overlay::after{
+    border-radius: 0 25px 0 0 ;
+    background-color: #FFF;    
+
+}
+.button{
+    border: none;
+    font-size: 16px;
+    color: #FFF;
+    padding: 8px 16px;
+    background-color: var(--gColorButton1); // #4070f4;
+    border-radius: 6px;
+    margin: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+}
+.button-hover{
+    background: var(--gColorButton1); //#265DF2;
+
+}
+
+
+/*
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.timer, .round {
+    font-size: 4em;
+    font-weight: bold;
+}
+*/
+
+/* Add this to your styles.css file */
+
+@font-face {
+    font-family: 'Digital-7';
+    /* src: url('https://algoinvestorr.com/timer/digital-7.ttf') format('truetype'); */
+    /* src: url('digital_7/digital-7.ttf') format('truetype'); */
+    src: url('digital_7/digital-7mi.ttf') format('truetype');
+    /* Replace 'path-to-your-font/Digital-7.ttf' with the actual path to your font file */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+header {
+    margin-bottom: 20px;
+}
+
+.round {
+    font-size: 3em;
+    font-weight: bold;
+    /* font-family: 'Digital-7', sans-serif; */
+    font-family: 'Trebuchet MS', sans-serif;
+
+    color: rgb(25, 12, 209);
+}
+
+.timer {
+    font-size: 9em;
+    font-weight: bold;
+
+    /* font-family: 'Courier New', monospace;  sans-serif; */
+    font-family: 'Digital-7', sans-serif; 
+    color: rgb(198, 11, 42);
+}
+
+
+/* search */
+.search{
+    --padding: 14px;
+
+    width: max-content;
+    display: flex;
+    /* align-items: center; */
+    align-items: left;
+    padding: var(--padding);
+    border-radius: 28px;
+    background: var(--gsearchBGcol);
+    /* width: 600px; */
+    /* transition: background 0.25s; */
+    transition: box-shadow   0.25s;
+    
+}
+
+.search:focus-within{
+    background: var(--gsearchFocus);
+
+    box-shadow:  0 0 6px rgba(  0,0,0,0.75);
+    
+
+}
+ 
+
+.search-input{
+    font-size: 16px;
+    font-family: 'Lexend', sans-serif;
+    color:#333333;
+    margin-left:  var(--padding);
+    outline: none;
+    border: none;
+    background-color: transparent;
+
+    width: var(--cardWsearch);
+    /* width: 350px; */
+    /* flex: 1; */
+}
+
+.search-input::placeholder,
+.search-icon{
+    color: rgba(0,0,0,0.25);
+}
