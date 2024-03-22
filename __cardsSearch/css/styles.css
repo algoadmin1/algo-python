@@ -1,7 +1,8 @@
 /* styles.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 :root {
-    --gColor1:   #658cf7; 
+    /* --gColor1:   #658cf7;  */
+    --gColor1:   #8aaaf0; 
     --gColor2:   #4070F4; 
     --gColRed:   #fe2121; 
     --gColGreen: #11e92e; 
@@ -87,14 +88,65 @@ body{
     border: 3px solid var(--gColor1);
     
 }
+
 .name{
     font-size: 18px;
     font-weight: 500;
     color: #333;
 }
+
+.name1{
+    font-size: 18px;
+    font-weight: 500;
+}
+.trendingFlat{
+    color: #639ee6;
+}
+.trendingUp{
+    color: #10d03d;
+}
+.trendingDown{
+    color: #cf0820;
+}
 .description{
     font-size: 14px;
     color: #707070;
+    text-align: center;
+}
+.description1{
+    font-size: 18px;
+    color: #707070;
+    text-align: center;
+}
+
+.descriptionR1{
+    font-size: 14px;
+    color: #7d1919;
+    text-align: center;
+}
+.descriptionG1{
+    font-size: 14px;
+    color: #197d1c;
+    text-align: center;
+}
+.descriptionR{
+    font-size: 18px;
+    color: #7d1919;
+    text-align: center;
+}
+.descriptionG{
+    font-size: 18px;
+    color: #197d1c;
+    text-align: center;
+}
+.descriptionB1{
+    font-size: 14px;
+    color: #19437d;
+    text-align: center;
+}
+.descriptionB{
+    font-size: 18px;
+    color: #19437d;
     text-align: center;
 }
 

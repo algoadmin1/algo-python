@@ -361,14 +361,42 @@ const postMethods = () =>{
         // let infostr =  postData.pricePct+" " +postData.tradeAboveBelow +" "+ postData.tradePivot;
         let infostr = pctstr+" " +postData.tradeAboveBelow +" "+ postData.tradePivot;
 
-        let pivotstr = postData.daySRs;
-        let  p_day= chopString(pivotstr, "|", 4 ) ;
-        let s1_day= chopString(pivotstr, "|", 6 ) ;
-        let r1_day= chopString(pivotstr, "|", 3 ) ;
 
 //                      [0]         R3           [3]     P [4]        [6]           [8]
 //                      [0]         [1]          [3]    [4]            [6]           [8]
 // "daySRs": "R3R2R1_P_P3_S1S2S3=|427.79|425.65|423.51|419.53|419.44|417.39|413.41|411.27|",
+
+        let pivotstr = postData.daySRs; 
+        let   p_day= chopString(pivotstr, "|", 4 ) ;
+        let  p3_day= chopString(pivotstr, "|", 5 ) ;
+        let  p_day1= p_day+"  (P3: "+p3_day+")";
+
+          let s1_day= chopString(pivotstr, "|", 6 ) ;
+        let s2_day= chopString(pivotstr, "|", 7 ) ;
+        let s3_day= chopString(pivotstr, "|", 8 ) ;
+        
+          let r1_day= chopString(pivotstr, "|", 3 ) ;
+        let r2_day= chopString(pivotstr, "|", 2 ) ;
+        let r3_day= chopString(pivotstr, "|", 1 ) ;
+
+        let  p_day_num = parseInt(p_day);
+        let p3_day_num = parseInt(p3_day);
+        let trendingstr = "Daily Trend: ";
+        let trendingStylestr = "trendingDown";
+
+        if( p_day_num < p3_day_num ){
+            trendingstr=trendingstr+"DOWN";
+            trendingStylestr = "trendingDown";
+        }else { //if( p_day_num > p3_day_num ) {
+            trendingstr=trendingstr+"UP";
+            trendingStylestr = "trendingUp";
+
+        }
+        // else{
+        //      trendingstr=trendingstr+"Flat";
+        //     trendingStylestr = "trendingFlat";
+        // }
+ 
 
 
         let dateSimple = "";
@@ -391,25 +419,122 @@ let sym1    = postData.symbol ;
 let urlbase1= "&uname=guest&email=johnbotti9000@gmail.com&key=8a2b18a0";
 let urlfinal = urlbase+ sym1 +urlbase1;
 // <button class="button" onclick="window.open('https://algoinvestorr.com/fire')">Get Chart</button>
+//      <h2 class="name">trending! </h2>
+
+   //     <h2 class="trendingDown">${trendingstr} </h2>
+// 
 
 
-        postElement.innerHTML=`
-        <div class="card">   
-        <div class="image-content">
-            <span class="overlay"></span>
-            <div class="card-image">
-                <img src="img/${symbolLower}.png" alt="" class="card-img">
-            </div>
+
+
+
+
+// if( p_day_num < p3_day_num ){
+//     postElement.innerHTML=`
+//     <div class="card">   
+//     <div class="image-content">
+//         <span class="overlay"></span>
+//         <div class="card-image">
+//             <img src="img/${symbolLower}.png" alt="" class="card-img">
+//         </div>
+//     </div>
+//     <div class="card-content">
+//     <h2 class="name2">${postData.symbol} Pivots for ${dateSimple}</h2>
+//     <h2 class="${trendingStylestr}">${trendingstr} </h2>
+//     <p class="descriptionR1">Resistance R3: $${r3_day}  </p>
+//     <p class="descriptionR1">Resistance R2: $${r2_day}  </p>
+//     <p class="descriptionR">Resistance R1: $${r1_day}  </p>
+//     <p class="descriptionB1">Pivot 3-day:   $${p3_day}   </p>
+//     <p class="descriptionB">Pivot:         $${p_day}   </p>
+//     <p class="descriptionG">Suppport S1:   $${s1_day}  </p>
+//     <p class="descriptionG1">Suppport S2:   $${s2_day}  </p>
+//     <p class="descriptionG1">Suppport S3:   $${s3_day}  </p>
+//         <button class="button" onclick="window.open('${urlfinal}')">Get Chart</button>
+//     </div>
+//     </div>  
+//     `
+// }else{
+// postElement.innerHTML=`
+// <div class="card">   
+// <div class="image-content">
+//     <span class="overlay"></span>
+//     <div class="card-image">
+//         <img src="img/${symbolLower}.png" alt="" class="card-img">
+//     </div>
+// </div>
+// <div class="card-content">
+// <h2 class="name2">${postData.symbol} Pivots for ${dateSimple}</h2>
+// <h2 class="${trendingStylestr}">${trendingstr} </h2>
+// <p class="descriptionR1">Resistance R3: $${r3_day}  </p>
+// <p class="descriptionR1">Resistance R2: $${r2_day}  </p>
+// <p class="descriptionR">Resistance R1: $${r1_day}  </p>
+// <p class="descriptionB">Pivot:         $${p_day}   </p>
+// <p class="descriptionB1">Pivot 3-day:   $${p3_day}   </p>
+// <p class="descriptionG">Suppport S1:   $${s1_day}  </p>
+// <p class="descriptionG1">Suppport S2:   $${s2_day}  </p>
+// <p class="descriptionG1">Suppport S3:   $${s3_day}  </p>
+//     <button class="button" onclick="window.open('${urlfinal}')">Get Chart</button>
+// </div>
+// </div>  
+// `
+
+// }
+
+
+
+if( p_day_num < p3_day_num ){
+    postElement.innerHTML=`
+    <div class="card">   
+    <div class="image-content">
+        <span class="overlay"></span>
+        <div class="card-image">
+            <img src="img/${symbolLower}.png" alt="" class="card-img">
         </div>
-        <div class="card-content">
-        <h2 class="name">${postData.symbol} PIVOTS for ${dateSimple}</h2>
-        <p class="description">Resistance R1: $${r1_day}  </p>
-        <p class="description">Pivot:         $${p_day}   </p>
-        <p class="description">Suppport S1:   $${s1_day}  </p>
-            <button class="button" onclick="window.open('${urlfinal}')">Get Chart</button>
-        </div>
-        </div>  
-        `
+    </div>
+    <div class="card-content">
+    <h2 class="name2">${postData.symbol} Pivots for ${dateSimple}</h2>
+    <h2 class="${trendingStylestr}">${trendingstr} </h2>
+    <p class="descriptionR1">R3: $${r3_day}  </p>
+    <p class="descriptionR1">R2: $${r2_day}  </p>
+    <p class="descriptionR">Resistance R1: $${r1_day}  </p>
+    <p class="descriptionB1">P3:   $${p3_day}   </p>
+    <p class="descriptionB">Pivot:         $${p_day}   </p>
+    <p class="descriptionG">Support S1:   $${s1_day}  </p>
+    <p class="descriptionG1">S2:   $${s2_day}  </p>
+    <p class="descriptionG1">S3:   $${s3_day}  </p>
+        <button class="button" onclick="window.open('${urlfinal}')">Get Chart</button>
+    </div>
+    </div>  
+    `
+}else{
+postElement.innerHTML=`
+<div class="card">   
+<div class="image-content">
+    <span class="overlay"></span>
+    <div class="card-image">
+        <img src="img/${symbolLower}.png" alt="" class="card-img">
+    </div>
+</div>
+<div class="card-content">
+<h2 class="name2">${postData.symbol} Pivots for ${dateSimple}</h2>
+<h2 class="${trendingStylestr}">${trendingstr} </h2>
+<p class="descriptionR1">R3: $${r3_day}  </p>
+<p class="descriptionR1">R2: $${r2_day}  </p>
+<p class="descriptionR">Resistance R1: $${r1_day}  </p>
+<p class="descriptionB">Pivot:         $${p_day}   </p>
+<p class="descriptionB1">P3:   $${p3_day}   </p>
+<p class="descriptionG">Support S1:   $${s1_day}  </p>
+<p class="descriptionG1">S2:   $${s2_day}  </p>
+<p class="descriptionG1">S3:   $${s3_day}  </p>
+    <button class="button" onclick="window.open('${urlfinal}')">Get Chart</button>
+</div>
+</div>  
+`
+
+}
+
+
+
         postContainer.appendChild(postElement)
         
     })
