@@ -115,7 +115,7 @@ body{
     font-size: 16px;
     color: #FFF;
     padding: 8px 16px;
-    background-color: var(--gColorButton1); // #4070f4;
+    background-color: var(--gColorButton1);  
     border-radius: 6px;
     margin: 14px;
     cursor: pointer;
@@ -123,7 +123,7 @@ body{
 
 }
 .button-hover{
-    background: var(--gColorButton1); //#265DF2;
+    background: var(--gColorButton1);  
 
 }
 
@@ -157,7 +157,7 @@ header {
     src: url('digital_7/digital-7mi.ttf') format('truetype');
     /* Replace 'path-to-your-font/Digital-7.ttf' with the actual path to your font file */
 }
-
+/* 
 body {
     display: flex;
     flex-direction: column;
@@ -165,12 +165,12 @@ body {
     justify-content: center;
     height: 100vh;
     margin: 0;
-}
+} 
 
 header {
     margin-bottom: 20px;
 }
-
+*/
 .round {
     font-size: 3em;
     font-weight: bold;
