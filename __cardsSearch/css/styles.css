@@ -254,10 +254,14 @@ header {
 }
 
 
-/* search */
+/* search 
+ position: fixed;
+    bottom: 0;
+   
+    */
 .search{
     --padding: 14px;
-
+    
     width: max-content;
     display: flex;
     /* align-items: center; */
