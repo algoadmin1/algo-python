@@ -1,0 +1,46 @@
+
+
+@font-face {
+    font-family: 'Digital-7';
+    /* src: url('https://algoinvestorr.com/timer/digital-7.ttf') format('truetype'); */
+    /* src: url('digital_7/digital-7.ttf') format('truetype'); */
+    src: url('digital_7/digital-7mi.ttf') format('truetype');
+    /* Replace 'path-to-your-font/Digital-7.ttf' with the actual path to your font file */
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.container{
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container video{
+    height: 100%;
+}
+
+.textbox{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #000000;
+    height: 100vh;
+    width: 100vw;
+    color: aliceblue;
+    font-size: 12rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Digital-7', sans-serif; 
+/*    font-family: cursive;*/
+    mix-blend-mode: multiply;
+
+}

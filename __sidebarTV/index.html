@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>algoz.ai</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="shortcut icon" type="image/png"  href="img/favicon.ico" />
+    <!-- https://fontawesome.com/v4/icons/ -->
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo items">
+                <img src="img/a1.png" alt="">
+                <span class="mainHead para">
+                    <!-- <h5>algo</h5> -->
+                    <!-- <h4>Investor<sup>TM</sup></h4> -->
+                    <h4>algoz.ai<sup style="font-size: 50%;">TM</sup></h4>
+                    <!-- <h4>Investor</h4> -->
+                </span>
+            </div>
+
+            <li class="items">
+                <i class="fa-solid fa-house"></i>
+                <!-- <i class="fa-solid fa-fort-awesome"></i>  -->
+                <p class="para">Home</p>
+            </li>
+            <li class="items">
+                <i class="fa-solid fa-search"></i>
+                <p class="para">ai Prompt</p>
+            </li> 
+<!-- 
+            <li class="items">
+                <i class="fa-solid fa-search"></i>
+                <p class="para">Search</p>
+            </li>  -->
+            <li class="items">
+                <i class="fa-solid fa-list-alt"></i>
+                <p class="para">Pivots</p>
+            </li> 
+            <!-- 
+            <li class="items">
+                <i class="fa-solid fa-user"></i>
+                <p class="para">Account</p>
+            </li> -->
+            <li class="items">
+                <!-- <a href="https://algoinvestorr.com/algoz0"> -->
+                    <i class="fa-solid fa-line-chart"></i>
+                    <!-- <p class="para style=font-size: 90%;">Buy Signals</p> -->
+                    <!-- <p class="para style=font-size: 100%;">⬆️ ⬇️Signals</p> -->
+                    <p class="para style=font-size: 100%;">Signals ⬆ ⬇</p>
+                    <!-- <p class="para style=font-size: 100%;">Buy Signals</p> -->
+                <!-- </a> -->
+            </li> 
+            <!-- <li class="items">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <p class="para">Notification</p>
+            </li> -->
+            <li class="items">
+                <i class="fa fa-newspaper"></i>
+                <!-- <i class="fa fa-newspaper-o"></i> -->
+                <p class="para">Newsletter</p>
+            </li>
+
+            <li class="items">
+                <!-- <i class="fa fa-film" aria-hidden="true"></i> -->
+                <i class="fa-solid fa fa-film"></i>
+                <!-- <i class="fa-solid fa-user-plus"></i> -->
+                <p class="para">Webinar</p>
+            </li>
+            <li class="items">
+                <i class="fa-solid fa-phone"></i>
+                <p class="para">Book Call</p>
+            </li>  
+            <li class="items">
+                <i class="fa-solid fa-calendar-days"></i>
+                <p class="para">Events</p>
+            </li>
+           
+            <li class="items">
+                <i class="fa-solid fa-envelope"></i>
+                <p class="para">Messages</p>
+            </li>
+            <li class="items">
+                <i class="fa-solid fa-gear"></i>
+                <p class="para">Settings</p>
+            </li>
+            <li class="items logout-btn">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <p class="para">Logout</p>
+            </li>
+        </div>
+
+        <div class="toggler">
+            <i class="fa-solid fa-bars" id="toggle-bars"></i>
+            <i class="fa-solid fa-xmark" id="toggle-cross"></i>
+        </div>
+
+    </div>
+
+<!-- TradingView Widget Embed Code -->
+<div class="tradingview-widget-container">
+    <div id="tradingview_123456789"></div>
+  </div>
+  
+  <!-- TradingView Embed Script -->
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script type="text/javascript">
+    new TradingView.widget(
+    {
+      "autosize": true,
+      "symbol": "NASDAQ:AMZN",
+      "interval": "D",
+      "timezone": "Etc/UTC",
+      "theme": "light",
+      "style": "1",
+      "locale": "en",
+      "toolbar_bg": "#f1f3f6",
+      "enable_publishing": false,
+      "hide_side_toolbar": false,
+      "allow_symbol_change": true,
+      "save_image": false,
+      "container_id": "tradingview_123456789"
+    });
+  </script>
+  
+
+    <script src="script.js"></script>
+</body>
+</html>
