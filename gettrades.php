@@ -9,7 +9,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 date_default_timezone_set("America/New_York"); 
-                                                      $vers = "7.354";
+                                                      $vers = "8.04";
 $minstrlen = 32; 
 $dirPrefix="rawtrades/";
 $happy1 = "Vega"; 
@@ -1322,6 +1322,8 @@ $fnameoutjsonUdate  = $dirPrefix. "cuedtrades_". $tradedatestr .  ".json";
 $fnameoutcsv     = $dirPrefix. "cuedtrades.csv";     
 $fnameoutcsvjson = $dirPrefix. "cuedtrades.json";  
 
+$fnameoutcsvjs   = $dirPrefix. "cuedtrades.js";  
+
 echoColor("<br />] END OF GenrateTrades().  Writing server files... ","blue"); // #$fnameoutcsv and $fnameout (log) containing  tra deCsvHeaders==","blue");
 if($msg0==1) print_r($arrcsv);
 
@@ -1347,10 +1349,13 @@ while (($row = fgetcsv($fp)) !== false) {
 fclose($fp);
 
 $json = json_encode($data, JSON_PRETTY_PRINT);
+$json1 = "const cardData0 =". $json. ";";
 
 file_put_contents($fnameoutcsvjson, $json);
 // file_put_contents($fnameoutjson, $json);
 file_put_contents($fnameoutjsonUdate, $json);
+
+file_put_contents($fnameoutcsvjs, $json1 );
 
 // echoColor("<br />] WROTE JSON FILES: $fnameoutjsonUdate  , $fnameoutcsvjson and $fnameoutjson ","purple");
 echoColor("<br />] WROTE JSON FILES: $fnameoutjsonUdate   $fnameoutcsvjson   ","purple");

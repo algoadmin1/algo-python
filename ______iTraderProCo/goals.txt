@@ -1,0 +1,39 @@
+//goals.txt
+
+/*
+
+0.
+
+		RESIZE    ,   RENDER ALL OTHER TYPES   ,   DEBUG ,    ALGO EMAIL,    SECURITY{eventPOST}
+
+
+
+1.	check Ytop, Ybottom for validity  - yscale 
+1a.    - put into rect in mousemove, mouseup/down (e)? 
+1b.    -
+1c.    - record dailyWeeklycsv  [].obj   {o: h: l: c: v: d: }
+1c.    - record dailyMonthlycsv [].obj
+1d.    -
+1e.    -
+
+
+2.  check into click'd date--> Actually going long the trade
+2a.   [X] - print the ongoing P&L, and
+2b.   [X] -  print the last trade taken 'BOUGHT 1000 Shares at $324.15 for: $324,150.00'
+2c.   [X] -  print the last trade taken 'SOLD   1000 Shares at $324.15 for: $341,000.00;  +$17,150 PnL'
+2d.    - 
+2e.    - review /fire code for (i) animtionFrame  ,(ii) innerH.,W.
+
+
+
+3a.    - datapost.php {"   user@abc.com, userKEY, userIP, scrW,scrH, time, {userWatchlist},     "}
+3b.    -  RECEIVE USER OK, KEY STATUS
+3c.    - 
+3d.    -  TIMER ACTIVE - redrawing tiny UPPER LEFT Rect{}
+3e.    - 
+3f.    - 
+
+
+
+
+*/ 				
