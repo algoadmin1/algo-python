@@ -91,9 +91,8 @@ body{
 .logo1 {
     margin-bottom: 10px; /* Add some space between logo and buttons */
 }
-
 .logo1 img {
-    max-width: 50%; /* Ensure the logo stays within its container */
+    max-width: 100%; /* Ensure the logo stays within its container */
     height: auto; /* Maintain aspect ratio */
 }
 
