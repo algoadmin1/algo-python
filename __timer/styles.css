@@ -1,4 +1,40 @@
 /* styles.css  
+*/
+
+:root {
+    --gColor1:   #4070F4; 
+    --gColor2:   #4070F4; 
+    --gColRed:   #fe2121; 
+    --gColGreen: #11e92e; 
+    --gColorButton1: #265DF2;
+    --gColorSwiperBG: rgb(255, 255, 255);
+
+    --gBut2Col: #5ccbdc;
+    --gsearchBGcol0: #7ac6ef;
+    --gsearchBGcol: #c9d8f6;   /* #9bb9f4;*/
+    /* --gsearchFocus: #c9d8f6; */
+    --gsearchFocus: #eaf0fb;
+
+    --cardW:          360px;
+    --cardWslideCont: 440px;
+    --cardWsearch: 380px;
+}
+
+*{
+    /*margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+   */ 
+    font-family: 'Poppins', sans-serif;
+}
+
+/*
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
 
 body {
     display: flex;
@@ -20,7 +56,6 @@ header {
 */
 
 /* Add this to your styles.css file */
-
 @font-face {
     font-family: 'Digital-7';
     /* src: url('https://algoinvestorr.com/timer/digital-7.ttf') format('truetype'); */
