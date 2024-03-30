@@ -9,6 +9,10 @@ d_low    = security(syminfo.tickerid, tf,   low[1], barmerge.gaps_off, barmerge.
 d_close  = security(syminfo.tickerid, tf, close[1], barmerge.gaps_off, barmerge.lookahead_on  )
 Pivot    = (d_high+d_low+d_close)/3
 
+# close of the previous day
+# prev_high = request.security(syminfo.tickerid, "D", high[1], lookahead=true)
+# prev_low = request.security(syminfo.tickerid, "D", low[1], lookahead=true)
+# prev_close = request.security(syminfo.tickerid, "D", close[1], lookahead=true)
 
 
 d_high2   = security(syminfo.tickerid, tf,  high[2], barmerge.gaps_off, barmerge.lookahead_on  )
