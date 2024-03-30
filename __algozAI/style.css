@@ -7,13 +7,13 @@
     --gColorButton1: #265DF2;
     --gColorSwiperBG: rgb(255, 255, 255);
 
-    --gBut1Col: #1cb6e9;
+    --gBut1Col: #1eea81;
     --gBut1Col1: #0de856;
     --gBut2Col: #30e67f;
 
 
-    --BGBut1Hover: #2650e8;
-    --BGBut1Hover2: #3c50e8;
+    --BGBut1Hover: #1ff08e;
+    --BGBut1Hover2: #1af1bb;
     --BGBut1Hover1: #4de323;
 
 
@@ -63,10 +63,38 @@ body{
 .container{
     display: flex;
     flex-direction: column;
-    gap: 120px;
+    gap: 100;
+
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+/* 
+.container {
+    display: flex;
+    flex-direction: column;
+    
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+} */
+
+.logo {
+    margin-bottom: 20px; /* Add some space between logo and buttons */
 }
 
+.logo img {
+    max-width: 100%; /* Ensure the logo stays within its container */
+    height: auto; /* Maintain aspect ratio */
+}
 
+.logo1 {
+    margin-bottom: 10px; /* Add some space between logo and buttons */
+}
+.logo1 img {
+    max-width: 100%; /* Ensure the logo stays within its container */
+    height: auto; /* Maintain aspect ratio */
+}
 
 
 /* 
@@ -86,7 +114,7 @@ body{
     /* font-family: 'Trebuchet MS', sans-serif; */
     font-family: 'Digital-7', sans-serif; 
 
-    font-size: 24px;
+    font-size: 20px;
     overflow: hidden;
     /* border-radius: 15px; */
     border-radius: 40px;
@@ -124,9 +152,9 @@ body{
     padding: 15px 25px;
     letter-spacing: 2px;
     text-decoration: none;
-    color: #e80d0d;
+    color: #23dc2d;
     font-family: 'Trebuchet MS', sans-serif;
-    font-size: 14px;
+    font-size: 16px;
     overflow: hidden;
     /* border-radius: 15px; */
     border-radius: 40px;
@@ -136,11 +164,12 @@ body{
 
 
 .neon_btn2:hover{
-    box-shadow: 0 0 10px #5ccbdc,
-                0 0 20px #5ccbdc,
-                0 0 60px #5ccbdc;
-    text-shadow: 0 0 20px #5ccbdc,
-                 0 0 40px #5ccbdc;            
+    box-shadow: 0 0 10px var(--BGBut1Hover2),
+                0 0 20px var(--BGBut1Hover2),
+                0 0 60px var(--BGBut1Hover2);
+
+    text-shadow: 0 0 20px var(--BGBut1Hover2),
+                 0 0 40px var(--BGBut1Hover2);           
 }
 
 
