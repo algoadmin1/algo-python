@@ -1,6 +1,6 @@
 # watchdog.py   by John Botti Copyright (c) 2024 by Algo Investor Inc.
 #
-versionStr =                    "18.91"
+versionStr =                    "19.29"
 
 cuedtradesPrefixStr= "https://algoinvestorr.com/trades/rawtrades/cuedtrades_"  
 url007_str  = "https://algoinvestorr.com/trades/recPortfolioTrade.php"
