@@ -7,12 +7,12 @@
     --gColorButton1: #265DF2;
     --gColorSwiperBG: rgb(255, 255, 255);
 
-    --gBut1Col: #1eea81;
+    --gBut1Col: #1e65ea;
     --gBut1Col1: #0de856;
-    --gBut2Col: #30e67f;
+    --gBut2Col: #3064e6;
 
 
-    --BGBut1Hover: #1ff08e;
+    --BGBut1Hover: #1f7af0;
     --BGBut1Hover2: #1af1bb;
     --BGBut1Hover1: #4de323;
 
@@ -152,7 +152,9 @@ body{
     padding: 15px 25px;
     letter-spacing: 2px;
     text-decoration: none;
-    color: #23dc2d;
+    /* color: #23dc2d; */
+    color: var(--gBut2Col);
+
     font-family: 'Trebuchet MS', sans-serif;
     font-size: 16px;
     overflow: hidden;
