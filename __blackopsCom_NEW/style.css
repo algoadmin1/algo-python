@@ -1,0 +1,209 @@
+/* Add this to your styles.css file */
+:root {
+    --gColor1:   #4070F4; 
+    --gColor2:   #4070F4; 
+    --gColRed:   #fe2121; 
+    --gColGreen: #11e92e; 
+    --gColorButton1: #265DF2;
+    --gColorSwiperBG: rgb(255, 255, 255);
+
+    --gBut1Col: #1eea81;
+    --gBut1Col1: #0de856;
+    --gBut2Col: #30e67f;
+
+
+    --BGBut1Hover: #1ff08e;
+    --BGBut1Hover2: #1af1bb;
+    --BGBut1Hover1: #4de323;
+
+
+
+    --gsearchBGcol0: #7ac6ef;
+    --gsearchBGcol: #c9d8f6;   /* #9bb9f4;*/
+    /* --gsearchFocus: #c9d8f6; */
+    --gsearchFocus: #eaf0fb;
+
+    --cardW:          360px;
+    --cardWslideCont: 440px;
+    --cardWsearch: 380px;
+}
+
+
+/*
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+    font-family: 'Poppins', sans-serif;
+}
+*/
+
+@font-face {
+    font-family: 'Digital-7';
+    /* src: url('https://algoinvestorr.com/timer/digital-7.ttf') format('truetype'); */
+    /* src: url('digital_7/digital-7.ttf') format('truetype'); */
+    src: url('digital_7/digital-7mi.ttf') format('truetype');
+    /* Replace 'path-to-your-font/Digital-7.ttf' with the actual path to your font file */
+}
+
+
+
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #020a11;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    gap: 100;
+
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+/* 
+.container {
+    display: flex;
+    flex-direction: column;
+    
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+} */
+
+.logo {
+    margin-bottom: 20px; /* Add some space between logo and buttons */
+}
+
+.logo img {
+    max-width: 100%; /* Ensure the logo stays within its container */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.logo1 {
+    margin-bottom: 10px; /* Add some space between logo and buttons */
+}
+.logo1 img {
+    max-width: 100%; /* Ensure the logo stays within its container */
+    height: auto; /* Maintain aspect ratio */
+}
+
+
+/* 
+     #########################  BUTTON 2
+*/
+
+.neon_btn1{
+    position:  relative;
+   /* position: center; relative;*/
+    display: inline-block;
+    padding: 15px 25px;
+    letter-spacing: 2px;
+    text-decoration: none;
+    /* color: #0de856;   */
+    color: var(--gBut1Col);
+
+    /* font-family: 'Trebuchet MS', sans-serif; */
+    font-family: 'Digital-7', sans-serif; 
+
+    font-size: 24px;
+    overflow: hidden;
+    /* border-radius: 15px; */
+    border-radius: 40px;
+    transition: 0.2s;
+    text-align: center; /* Center aligns the text */
+}
+.neon_btn1:hover{
+    color: #042644;
+    /* background: #4de323;
+    box-shadow: 0 0 10px #4de323,
+                0 0 40px #4de323,
+                0 0 80px #4de323; */
+
+    background: var(--BGBut1Hover) ;
+    box-shadow: 0 0 10px var(--BGBut1Hover) ,
+                0 0 40px var(--BGBut1Hover) ,
+                0 0 80px var(--BGBut1Hover) ;                
+}
+
+
+
+
+/* 
+     #########################  BUTTON 2
+
+
+      blackops entertainment
+      
+*/
+
+.neon_btn2{
+    position: relative;
+   /* position: center; relative;*/
+    display: inline-block;
+    padding: 15px 25px;
+    letter-spacing: 2px;
+    text-decoration: none;
+    color: #23dc2d;
+    font-family: 'Trebuchet MS', sans-serif;
+    font-size: 18px;
+    overflow: hidden;
+    /* border-radius: 15px; */
+    border-radius: 40px;
+    transition: 0.2s;
+    text-align: center; /* Center aligns the text */
+}
+
+
+.neon_btn2:hover{
+    box-shadow: 0 0 10px var(--BGBut1Hover2),
+                0 0 20px var(--BGBut1Hover2),
+                0 0 60px var(--BGBut1Hover2);
+
+    text-shadow: 0 0 20px var(--BGBut1Hover2),
+                 0 0 40px var(--BGBut1Hover2);           
+}
+
+
+
+/* 
+.neon_btn2orig{
+    position: relative;
+    display: inline-block;
+    padding: 15px 25px;
+    letter-spacing: 2px;
+    text-decoration: none;
+    color: #5ccbdc;
+    font-family: 'Digital-7', sans-serif; 
+
+    font-size: 24px;
+    overflow: hidden;
+    border: 4px solid #5ccbdc;
+    border-radius: 15px;
+    transition: 0.2s;
+}
+
+.neon_btn2orig:hover{
+    box-shadow: 0 0 10px #5ccbdc,
+                0 0 20px #5ccbdc,
+                0 0 60px #5ccbdc;
+    text-shadow: 0 0 20px #5ccbdc,
+                 0 0 40px #5ccbdc;            
+}  */
+
+
+
+
+
+
+
+
+
