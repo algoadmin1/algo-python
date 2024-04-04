@@ -25,6 +25,8 @@
 ////date_default_timezone_set('America/Los_Angeles');
 //date_default_timezone_set('America/New_York');
 
+include 'standardfunctions.php';
+
  if(isset( $_GET['sym'] )){
         $sym = $_GET['sym'] ;
     }else{
@@ -181,21 +183,28 @@ $sym = strtoupper($sym);
     // let modifiedString = RemoveChars(originalString, allowedCharacters);
     // console.log(modifiedString); // Output will be "Hello World"
 
+        let url7a="https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol=";
+        let url7b="&market=USD&apikey=5B4L3BMV41G6BCDH";
+
+
         let url9a= "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=";
         let url9b= "&outputsize=compact&datatype=json&apikey=5B4L3BMV41G6BCDH";
         gGET_SymbolStr1=gGET_SymbolStr.toUpperCase();
         let gGET_SymbolStr2 =  RemoveChars(gGET_SymbolStr1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ-");
 
         let url9 = url9a+ gGET_SymbolStr2 + url9b;
-        
+        let urlStocks=url9;
 
-        function getData0(urlstr) {
-            result = readJsonUrl9(urlstr);
-            console.log("result=",result);
-        }
+        let url7 = url7a+ gGET_SymbolStr2 + url7b;
+        let urlCrypto=url7;
+
+        // function getData0(urlstr) {
+        //     result = readJsonUrl9(urlstr);
+        //     console.log("result=",result);
+        // }
 
         function myFunction1() {
-            console.log("CALLING getData0()")
+            console.log("CALLING getData0()");
           //getData0(url9);
 
           document.getElementById("frm1").submit();
