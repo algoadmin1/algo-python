@@ -4,13 +4,42 @@
 
 let gCryptoSym="BTC";
 let gSecurityType="stocks";
+let gCurrency="$"; 
 let jb_json = [    {a:"b", c:"d", e:"f"}  ];
+let urlLocal="";
+
+// def globals
+let P3day = 0;
+let Pday  =  0; // ( High + Low + Close ) / 3;
+let R1day = 0; //  (Pday *2)-Low;
+let S1day = 0; //  (Pday *2)-High;
+let R2day =  0; // Pday + High - Low;
+let S2day =  0; // Pday - High + Low;
+let R3day =  0; // (Pday-S1day) + R2day;
+let R4day = 0; //  High+ 3*(Pday-Low) ;
+let S3day = 0; //  Pday - (R2day-S1day);
+let S4day = 0; //  Low- 3*(High-Pday) ;
+
+
+let p_day="";
+let p3_day="";
+
+let s1_day="";
+let r1_day="";
+let s2_day="";
+let r2_day="";
+let s3_day="";
+let r3_day="";
+let s4_day="";
+let r4_day="";
+
 
 const data_today      = { date:"YYYY-MM-DD", sym:"nil_", sectype:"stocks", op:0.0, hi:0.0, lo:0.0, cl:0.0, v:0.0, p:0.0, p3:0.0, s1:0.0, s2:0.0, s3:0.0, s4:0.0, r1:0.0, r2:0.0, r3:0.0, r4:0.0  };
 const data_yesterday  = { date:"YYYY-MM-DD", sym:"nil_", sectype:"stocks", op:0.0, hi:0.0, lo:0.0, cl:0.0, v:0.0, p:0.0, p3:0.0, s1:0.0, s2:0.0, s3:0.0, s4:0.0, r1:0.0, r2:0.0, r3:0.0, r4:0.0  };
 const data_yesterday1 = { date:"YYYY-MM-DD", sym:"nil_", sectype:"stocks", op:0.0, hi:0.0, lo:0.0, cl:0.0, v:0.0, p:0.0, p3:0.0, s1:0.0, s2:0.0, s3:0.0, s4:0.0, r1:0.0, r2:0.0, r3:0.0, r4:0.0  };
 const data_yesterday2 = { date:"YYYY-MM-DD", sym:"nil_", sectype:"stocks", op:0.0, hi:0.0, lo:0.0, cl:0.0, v:0.0, p:0.0, p3:0.0, s1:0.0, s2:0.0, s3:0.0, s4:0.0, r1:0.0, r2:0.0, r3:0.0, r4:0.0  };
 const data_yesterday3 = { date:"YYYY-MM-DD", sym:"nil_", sectype:"stocks", op:0.0, hi:0.0, lo:0.0, cl:0.0, v:0.0, p:0.0, p3:0.0, s1:0.0, s2:0.0, s3:0.0, s4:0.0, r1:0.0, r2:0.0, r3:0.0, r4:0.0  };
+
 
 
 const cardDataADBE = [
@@ -1064,7 +1093,6 @@ function displayKeys(jsonObj, indent = 0) {
 
 function CalculatePivots(){
     
-
     //calc YESTERDAY's pivot p_1, by using h,l,c from yest-1 =data_yesterday1
     let hi1  = parseFloat(data_yesterday1.hi) ;
     let lo1  = parseFloat(data_yesterday1.lo) ;
@@ -1089,7 +1117,7 @@ function CalculatePivots(){
 
   
     //calc TODAY's pivot P3, using above's data
-    let P3day = ( p_1 + p_2 + p_3 ) / 3;
+     P3day = ( p_1 + p_2 + p_3 ) / 3;
     data_today.p3  = P3day.toString();     
 
     //calc TODAY's pivot P, using yesterday's h, l, c
@@ -1098,24 +1126,23 @@ function CalculatePivots(){
     let Close = parseFloat(data_yesterday.cl) ;
 
 
-    let Pday  = ( High + Low + Close ) / 3;
+      Pday  = ( High + Low + Close ) / 3;
 
-    let R1day = (Pday *2)-Low;
-    let S1day = (Pday *2)-High;
+      R1day = (Pday *2)-Low;
+      S1day = (Pday *2)-High;
 
-    let R2day = Pday + High - Low;
-    let S2day = Pday - High + Low;
+      R2day = Pday + High - Low;
+      S2day = Pday - High + Low;
 
-    let R3day = (Pday-S1day) + R2day;
-    let R4day = High+ 3*(Pday-Low) ;
+      R3day = (Pday-S1day) + R2day;
+      R4day = High+ 3*(Pday-Low) ;
 
-    let S3day = Pday - (R2day-S1day);
-    let S4day = Low- 3*(High-Pday) ;
+      S3day = Pday - (R2day-S1day);
+      S4day = Low- 3*(High-Pday) ;
 
 
     data_today.p  = Pday.toString();     //.toFixed(6);
-    // data_today.p3 = Pday.toString();  
-
+    // data_today.p3 = P3day.toString();  
     data_today.s1 = S1day.toString();
     data_today.r1 = R1day.toString();
 
@@ -1128,10 +1155,28 @@ function CalculatePivots(){
     data_today.s4 = S4day.toString();
     data_today.r4 = R4day.toString();
 
+
+
+
+    p_day   = Pday.toString(); 
+    p3_day  = P3day.toString();  
+
+    s1_day = S1day.toString();
+    r1_day = R1day.toString();
+
+    s2_day = S2day.toString();
+    r2_day = R2day.toString();
+
+    s3_day = S3day.toString();
+    r3_day = R3day.toString();
+
+    s4_day = S4day.toString();
+    r4_day = R4day.toString();
+
 }
 
 
-// function ProcessFetched( arg , objTarget , symstr, seriesInterval, assettype0) {
+// function Proc essFetched( arg , objTarget , symstr, seriesInterval, assettype0) {
 function ProcessFetched( argJson ){  
 
     console.log( "] Pr0cessFetched() ... "); 
@@ -1139,11 +1184,10 @@ function ProcessFetched( argJson ){
     let objTarget = JSON.parse( argJson );  
     console.log(  "] objTarget ==" );
     console.log(  objTarget );
-    console.log(  objTarget );
+    // console.log(  objTarget );
     //  displayKeys1(objTarget);
 
     let secsym=gGET_SymbolStr2+"("+gSecurityType+")";
-        
 
     let j=0;
     let k=0;
@@ -1259,12 +1303,15 @@ function ProcessFetched( argJson ){
 
                     CalculatePivots();
 
-                    console.log("] after CalcPivots() :   data_today, yest, yest1, yest2, yest3==");
-                    console.log( data_today );
-                    console.log( data_yesterday );
-                    console.log( data_yesterday1 );
-                    console.log( data_yesterday2 );
-                    console.log( data_yesterday3 );
+                    let tf987=true;
+                    if(tf987==true){
+                        console.log("] after CalcPivots() :   data_today, yest, yest1, yest2, yest3==");
+                        console.log( data_today );
+                        console.log( data_yesterday );
+                        console.log( data_yesterday1 );
+                        console.log( data_yesterday2 );
+                        console.log( data_yesterday3 );
+                     }
 
                 }
 
@@ -1278,7 +1325,6 @@ function ProcessFetched( argJson ){
     }
 
 
-
     const subObject1= getJsonObj(objTarget, "Meta Data");    
     console.log("subObject1=", subObject1);
 
@@ -1287,8 +1333,17 @@ function ProcessFetched( argJson ){
     // console.log("Subobject with key 'Time Series (Digital Currency Daily)':", subObject2);
 
 
+    console.log("] CALLING p0stMethods()");
+    postMethods();
+
     return(  objTarget );
 }
+
+
+
+
+
+
 /*
 
 //stocks
@@ -1418,6 +1473,7 @@ script17.js:1090      9)  SOL(crypto)[2024-04-04]: 6. market cap (USD): 3773747.
     }
 */
 
+
 function getJsonUrlJB(urlTarget){
 
       fetch(urlTarget)
@@ -1441,53 +1497,38 @@ const postMethods = () =>{
     // from https  *.js    
     // cardData0.map((postData)=>{
         console.log(postData);
-        console.log("jbs url9=", url9);
-        console.log("] gGET_SymbolStr=",gGET_SymbolStr);
-
-        console.log("] gGET_SymbolStr2====>",gGET_SymbolStr2,"<====");
-        console.log("] urlStocks====>",urlStocks,"<====");
-
-        let urlLocal=urlStocks;
-        let ty="stocks";
-        ty = GetSecurityType( gGET_SymbolStr2 );
-        gSecurityType = ty;
 
 
-        if(gSecurityType=="crypto"){
-            gGET_SymbolStr2 = gCryptoSym ;
-            urlCrypto= url7a + gCryptoSym + url7b;
-            console.log("] urlCrypto== **** ==>",urlCrypto,"<====");
-            urlLocal=urlCrypto;
-
-            // jb_json=getJsonUrl( urlCrypto) ;
-        }else{
-            console.log("] urlStocks== **** ==>",urlStocks,"<====");
-            urlLocal=urlStocks;
-
-            // jb_json=getJsonUrl( urlStocks) ;
-
-        }
-        console.log("jb_json=",jb_json);
-
-        // console.log("jb_json[0]=",jb_json[0]);
-
-        // const subObject2 = getJsonObj(jb_json, "Time Series (Digital Currency Daily)");
-        // console.log("subObject2=",subObject2);
-        // const subObject1= getJsonObj(jb_json, "Meta Data");   // [PromiseResult]
-        // console.log("subObject1=",subObject1);
 
 
-        // // const inputJsonPromise = fetch('https://api.example.com/data');
-        // const inputJsonPromise = fetch(urlLocal);
-        // const objJson = await getPromiseResult(inputJsonPromise);
-        // console.log(objJson); // This will log the resolved value of the inputJsonPromise
-
-        // getJsonPromiseObj(urlLocal);
 
 
-        let jb_json1=  getJsonUrlJB(urlLocal);
+
+        // console.log("jbs url9=", url9);
+        // console.log("] gGET_SymbolStr=",gGET_SymbolStr);
+        // console.log("] gGET_SymbolStr2====>",gGET_SymbolStr2,"<====");
+        // // console.log("] urlStocks====>",urlStocks,"<====");
+
+        // let urlLocal=urlStocks;
+        // let ty="stocks";
+        // ty = GetSecurityType( gGET_SymbolStr2 );
+        // gSecurityType = ty;
+
+        // if(gSecurityType=="crypto"){
+        //     gGET_SymbolStr2 = gCryptoSym ;
+        //     urlCrypto= url7a + gCryptoSym + url7b;
+        //     console.log("] urlCrypto== **** ==>",urlCrypto,"<====");
+        //     urlLocal=urlCrypto;
+
+        // }else{
+        //     console.log("] urlStocks== **** ==>",urlStocks,"<====");
+        //     urlLocal=urlStocks;
+
+        // }
+        // console.log("jb_json=",jb_json);
+
+        // let jb_json1=  getJsonUrlJB(urlLocal);
         
-
 
 
         const postElement = document.createElement('div');
@@ -1530,25 +1571,31 @@ const postMethods = () =>{
 // "daySRs": "R3R2R1_P_P3_S1S2S3=|427.79|425.65|423.51|419.53|419.44|417.39|413.41|411.27|",
 
         let pivotstr = postData.daySRs; 
-        let   p_day= chopString(pivotstr, "|", 4 ) ;
-        let  p3_day= chopString(pivotstr, "|", 5 ) ;
-        let  p_day1= p_day+"  (P3: "+p3_day+")";
+  
 
-          let s1_day= chopString(pivotstr, "|", 6 ) ;
-        let s2_day= chopString(pivotstr, "|", 7 ) ;
-        let s3_day= chopString(pivotstr, "|", 8 ) ;
+
+        let tf999=false;
+        if(tf999==true){
+            p_day= chopString(pivotstr, "|", 4 ) ;
+           p3_day= chopString(pivotstr, "|", 5 ) ;
+
+         let  p_day1= p_day+"  (P3: "+p3_day+")";
+
+            s1_day= chopString(pivotstr, "|", 6 ) ;
+          s2_day= chopString(pivotstr, "|", 7 ) ;
+          s3_day= chopString(pivotstr, "|", 8 ) ;
         
-          let r1_day= chopString(pivotstr, "|", 3 ) ;
-        let r2_day= chopString(pivotstr, "|", 2 ) ;
-        let r3_day= chopString(pivotstr, "|", 1 ) ;
+            r1_day= chopString(pivotstr, "|", 3 ) ;
+          r2_day= chopString(pivotstr, "|", 2 ) ;
+          r3_day= chopString(pivotstr, "|", 1 ) ;
+
+        }
 
 
+//  re assign elsewhere
 
-//  re assign here
-
-        let s4_day="";
-        let r4_day="";
-
+        //   s4_day="";
+        //   r4_day="";
 
         // p_day = data_today.p;
         // p3_day = data_today.p3;
@@ -1681,6 +1728,28 @@ let symbolLowerFname=checkForGraphixReturnFname(symbolLower, ".png", "ai_.png");
 
 
 dateSimple= "Today";
+let digz=2;
+
+if(gSecurityType=="stocks"){
+    digz=2;
+}else{  // assume crypto here
+    digz=6;
+}
+
+        p_day  = parseFloat(data_today.p).toFixed(digz);
+        p3_day = parseFloat(data_today.p3).toFixed(digz);
+
+        s1_day = parseFloat(data_today.s1).toFixed(digz);
+        s2_day = parseFloat(data_today.s2).toFixed(digz);
+        s3_day = parseFloat(data_today.s3).toFixed(digz);
+        s4_day = parseFloat(data_today.s4).toFixed(digz);
+
+        r1_day = parseFloat(data_today.r1).toFixed(digz);
+        r2_day = parseFloat(data_today.r2).toFixed(digz);
+        r3_day = parseFloat(data_today.r3).toFixed(digz);
+        r4_day = parseFloat(data_today.r4).toFixed(digz);
+
+        
 
 
 if( p_day_num < p3_day_num ){
@@ -1781,9 +1850,41 @@ const jsonUrl = 'https://algoinvestorr.com/trades/rawtrades/cuedtrades.json';
 
 
 
-    console.log("PRE postM3thods()");
+console.log("PRE postM3thods()");
 
-postMethods();
+
+
+
+
+
+
+console.log("jbs url9=", url9);
+console.log("] gGET_SymbolStr=",gGET_SymbolStr);
+console.log("] gGET_SymbolStr2====>",gGET_SymbolStr2,"<====");
+// console.log("] urlStocks====>",urlStocks,"<====");
+
+ urlLocal=urlStocks;
+let ty="stocks";
+ty = GetSecurityType( gGET_SymbolStr2 );
+gSecurityType = ty;
+
+if(gSecurityType=="crypto"){
+    gGET_SymbolStr2 = gCryptoSym ;
+    urlCrypto= url7a + gCryptoSym + url7b;
+    console.log("] urlCrypto== **** ==>",urlCrypto,"<====");
+    urlLocal=urlCrypto;
+
+}else{
+    console.log("] urlStocks== **** ==>",urlStocks,"<====");
+    urlLocal=urlStocks;
+
+}
+console.log("jb_json=",jb_json);
+
+let jb_json1=  getJsonUrlJB(urlLocal);
+
+
+// postMethods();
 
 
 
