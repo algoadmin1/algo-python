@@ -4,7 +4,9 @@
 
 let gCryptoSym="BTC";
 let gSecurityType="stocks";
-
+let jb_json = [
+    {a:"b", c:"d", e:"f"}
+];
 
 const cardDataADBE = [
     {
@@ -776,13 +778,13 @@ function CheckFileExist(filenamestr){
 //     let sym007 = gGET_SymbolStr;
 //     // if(datatype0=="crypto") 
 
-//     fetch(urlTarget)
-//     .then( x0 => x0.text())
-//     .then( y0 => ProcessFetched( y0 , objTarget , sym007, seriesInterval , "stocks") )    
-//     .catch(error => {
-//         // element.parentElement.innerHTML = `Error: ${error}`;
-//         console.error("] The error==", error);
-//     });
+    // fetch(urlTarget)
+    // .then( x0 => x0.text())
+    // .then( y0 => ProcessFetched( y0 , objTarget , sym007, seriesInterval , "stocks") )    
+    // .catch(error => {
+    //     // element.parentElement.innerHTML = `Error: ${error}`;
+    //     console.error("] The error==", error);
+    // });
 
 
 // // EOFn
@@ -799,6 +801,48 @@ function CheckFileExist(filenamestr){
 
 
 
+async function getJsonUrl(urlstr) {
+    // Check if urlstr is null or an empty string
+    if (!urlstr || urlstr.trim() === "") {
+        console.error("Error: URL is null or empty");
+        return null;
+    }
+
+    try {
+        // Fetch the JSON data from the provided URL
+        const response = await fetch(urlstr);
+        
+        // If response is not successful, throw an error
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        // Extract JSON payload
+        const jsonPayload = await response.json();
+        
+        // Return the JSON payload
+        return jsonPayload;
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
+}
+
+// // Example usage:
+// const url = "https://example.com/data.json"; // Replace with your desired URL
+
+// getJsonUrl(url)
+//     .then(jsonData => {
+//         if (jsonData) {
+//             console.log("Received JSON data:", jsonData);
+//             // Further processing of the JSON data can be done here
+//         } else {
+//             console.log("No JSON data received.");
+//         }
+//     })
+//     .catch(error => {
+//         console.error("Error:", error);
+//     });
 
 
 
@@ -830,8 +874,14 @@ const postMethods = () =>{
         if(gSecurityType=="crypto"){
             gGET_SymbolStr2 = gCryptoSym ;
             urlCrypto= url7a + gCryptoSym + url7b;
-            console.log("] urlCrypto==**==>",urlCrypto,"<====");
+            console.log("] urlCrypto==*** ==>",urlCrypto,"<====");
+            jb_json=getJsonUrl( urlCrypto) ;
+        }else{
+            console.log("] urlStocks==*** ==>",urlStocks,"<====");
+            jb_json=getJsonUrl( urlStocks) ;
+
         }
+        console.log("jb_json=",jb_json);
 
 
         const postElement = document.createElement('div');
