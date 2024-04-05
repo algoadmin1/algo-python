@@ -1256,12 +1256,6 @@ function ProcessFetched( argJson ){
 
                 }else if(k==6){    // if k<6
 
-                    // console.log("data_today, yest, yest1, yest2, yest3==");
-                    // console.log( data_today );
-                    // console.log(data_yesterday );
-                    // console.log(data_yesterday1 );
-                    // console.log(data_yesterday2 );
-                    // console.log(data_yesterday3 );
 
                     CalculatePivots();
 
@@ -1548,8 +1542,34 @@ const postMethods = () =>{
         let r2_day= chopString(pivotstr, "|", 2 ) ;
         let r3_day= chopString(pivotstr, "|", 1 ) ;
 
-        let  p_day_num = parseInt(p_day);
-        let p3_day_num = parseInt(p3_day);
+
+
+//  re assign here
+
+        let s4_day="";
+        let r4_day="";
+
+
+        // p_day = data_today.p;
+        // p3_day = data_today.p3;
+
+        // s1_day = data_today.s1;
+        // s2_day = data_today.s2;
+        // s3_day = data_today.s3;
+        // s4_day = data_today.s4;
+
+        // r1_day = data_today.r1;
+        // r2_day = data_today.r2;
+        // r3_day = data_today.r3;
+        // r4_day = data_today.r4;
+
+
+
+        // let  p_day_num = parseInt(p_day);
+        // let p3_day_num = parseInt(p3_day);
+        let  p_day_num = parseFloat(p_day);
+        let p3_day_num = parseFloat(p3_day);
+
         let trendingstr = "Daily Trend: ";
         let trendingStylestr = "trendingDown";
 
@@ -1660,7 +1680,7 @@ let symbolLowerFname=checkForGraphixReturnFname(symbolLower, ".png", "ai_.png");
 
 
 
-
+dateSimple= "Today";
 
 
 if( p_day_num < p3_day_num ){
@@ -1675,6 +1695,7 @@ if( p_day_num < p3_day_num ){
     <div class="card-content">
     <h2 class="name2">${sym0} Pivots for ${dateSimple}</h2>
     <h2 class="${trendingStylestr}">${trendingstr} </h2>
+    <p class="descriptionR1">R4: $${r4_day}  </p>
     <p class="descriptionR1">R3: $${r3_day}  </p>
     <p class="descriptionR1">R2: $${r2_day}  </p>
     <p class="descriptionR">Resistance R1: $${r1_day}  </p>
@@ -1683,6 +1704,7 @@ if( p_day_num < p3_day_num ){
     <p class="descriptionG">Support S1:   $${s1_day}  </p>
     <p class="descriptionG1">S2:   $${s2_day}  </p>
     <p class="descriptionG1">S3:   $${s3_day}  </p>
+    <p class="descriptionG1">S4:   $${s4_day}  </p>
         <button class="button" onclick="window.open('${urlfinal}')">Get Chart</button>
     </div>
     </div>  
@@ -1699,6 +1721,7 @@ postElement.innerHTML=`
 <div class="card-content">
 <h2 class="name2">${sym0} Pivots for ${dateSimple}</h2>
 <h2 class="${trendingStylestr}">${trendingstr} </h2>
+<p class="descriptionR1">R4: $${r4_day}  </p>
 <p class="descriptionR1">R3: $${r3_day}  </p>
 <p class="descriptionR1">R2: $${r2_day}  </p>
 <p class="descriptionR">Resistance R1: $${r1_day}  </p>
@@ -1707,6 +1730,7 @@ postElement.innerHTML=`
 <p class="descriptionG">Support S1:   $${s1_day}  </p>
 <p class="descriptionG1">S2:   $${s2_day}  </p>
 <p class="descriptionG1">S3:   $${s3_day}  </p>
+<p class="descriptionG1">S4:   $${s4_day}  </p>
     <button class="button" onclick="window.open('${urlfinal}')">Get Chart</button>
 </div>
 </div>  
