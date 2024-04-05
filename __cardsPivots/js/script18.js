@@ -4,9 +4,14 @@
 
 let gCryptoSym="BTC";
 let gSecurityType="stocks";
-let jb_json = [
-    {a:"b", c:"d", e:"f"}
-];
+let jb_json = [    {a:"b", c:"d", e:"f"}  ];
+
+const data_today      = { date:"YYYY-MM-DD", sym:"nil_", sectype:"stocks", op:0.0, hi:0.0, lo:0.0, cl:0.0, v:0.0, p:0.0, p3:0.0, s1:0.0, s2:0.0, s3:0.0, s4:0.0, r1:0.0, r2:0.0, r3:0.0, r4:0.0  };
+const data_yesterday  = { date:"YYYY-MM-DD", sym:"nil_", sectype:"stocks", op:0.0, hi:0.0, lo:0.0, cl:0.0, v:0.0, p:0.0, p3:0.0, s1:0.0, s2:0.0, s3:0.0, s4:0.0, r1:0.0, r2:0.0, r3:0.0, r4:0.0  };
+const data_yesterday1 = { date:"YYYY-MM-DD", sym:"nil_", sectype:"stocks", op:0.0, hi:0.0, lo:0.0, cl:0.0, v:0.0, p:0.0, p3:0.0, s1:0.0, s2:0.0, s3:0.0, s4:0.0, r1:0.0, r2:0.0, r3:0.0, r4:0.0  };
+const data_yesterday2 = { date:"YYYY-MM-DD", sym:"nil_", sectype:"stocks", op:0.0, hi:0.0, lo:0.0, cl:0.0, v:0.0, p:0.0, p3:0.0, s1:0.0, s2:0.0, s3:0.0, s4:0.0, r1:0.0, r2:0.0, r3:0.0, r4:0.0  };
+const data_yesterday3 = { date:"YYYY-MM-DD", sym:"nil_", sectype:"stocks", op:0.0, hi:0.0, lo:0.0, cl:0.0, v:0.0, p:0.0, p3:0.0, s1:0.0, s2:0.0, s3:0.0, s4:0.0, r1:0.0, r2:0.0, r3:0.0, r4:0.0  };
+
 
 const cardDataADBE = [
     {
@@ -1045,7 +1050,85 @@ function displayKeys(jsonObj, indent = 0) {
 // // Call the function to display keys recursively
 // displayKeys(jsonData);
 
+/*
+    R4day = High+ 3*(Pday-Low) ;
+    R3day = (Pday-S1day) + R2day;
+    R2day = Pday + High - Low;
+    R1day = (Pday *2)-Low;
+    Pday  = (High + Low + Close )/3 ;
+    S1day = (Pday *2)-High;
+    S2day = Pday – High + Low;
+    S3day = Pday – (R2day-S1day);
+    s4day = Low- 3*(High-Pday) ;
+*/
 
+function CalculatePivots(){
+    
+
+    //calc YESTERDAY's pivot p_1, by using h,l,c from yest-1 =data_yesterday1
+    let hi1  = parseFloat(data_yesterday1.hi) ;
+    let lo1  = parseFloat(data_yesterday1.lo) ;
+    let cl1  = parseFloat(data_yesterday1.cl) ;
+    let p_1  = ( hi1 + lo1 + cl1 ) / 3;
+    data_yesterday.p = p_1.toString();
+
+    //calc YESTERDAY-1's pivot p_2, by using h,l,c from yest-2 =data_yesterday2
+    let hi2  = parseFloat(data_yesterday2.hi) ;
+    let lo2  = parseFloat(data_yesterday2.lo) ;
+    let cl2  = parseFloat(data_yesterday2.cl) ;
+    let p_2  = ( hi2 + lo2 + cl2 ) / 3;
+    data_yesterday1.p = p_2.toString(); 
+
+    //calc YESTERDAY-2's pivot p_3, by using h,l,c from yest-3 =data_yesterday3
+    let hi3  = parseFloat(data_yesterday3.hi) ;
+    let lo3  = parseFloat(data_yesterday3.lo) ;
+    let cl3  = parseFloat(data_yesterday3.cl) ;
+    let p_3  = ( hi3 + lo3 + cl3 ) / 3;
+    data_yesterday2.p = p_3.toString();
+
+
+  
+    //calc TODAY's pivot P3, using above's data
+    let P3day = ( p_1 + p_2 + p_3 ) / 3;
+    data_today.p3  = P3day.toString();     
+
+    //calc TODAY's pivot P, using yesterday's h, l, c
+    let High  = parseFloat(data_yesterday.hi) ;
+    let Low   = parseFloat(data_yesterday.lo) ;
+    let Close = parseFloat(data_yesterday.cl) ;
+
+
+    let Pday  = ( High + Low + Close ) / 3;
+
+    let R1day = (Pday *2)-Low;
+    let S1day = (Pday *2)-High;
+
+    let R2day = Pday + High - Low;
+    let S2day = Pday - High + Low;
+
+    let R3day = (Pday-S1day) + R2day;
+    let R4day = High+ 3*(Pday-Low) ;
+
+    let S3day = Pday - (R2day-S1day);
+    let S4day = Low- 3*(High-Pday) ;
+
+
+    data_today.p  = Pday.toString();     //.toFixed(6);
+    // data_today.p3 = Pday.toString();  
+
+    data_today.s1 = S1day.toString();
+    data_today.r1 = R1day.toString();
+
+    data_today.s2 = S2day.toString();
+    data_today.r2 = R2day.toString();
+
+    data_today.s3 = S3day.toString();
+    data_today.r3 = R3day.toString();
+
+    data_today.s4 = S4day.toString();
+    data_today.r4 = R4day.toString();
+
+}
 
 
 // function ProcessFetched( arg , objTarget , symstr, seriesInterval, assettype0) {
@@ -1064,6 +1147,7 @@ function ProcessFetched( argJson ){
 
     let j=0;
     let k=0;
+    let m=0;
     for (let key in objTarget) {
         if(j==1){
             // we're on time series data
@@ -1071,17 +1155,124 @@ function ProcessFetched( argJson ){
 
             k=0;
             for (let keysub in objTarget1) {
+ 
+                if(k<6){
+                    console.log( 'k='+k+']    ' + keysub + ': ' + objTarget1[keysub] );
 
-                if(k<5){
-                    console.log( k+']  ' + keysub + ': ' + objTarget1[keysub] );
 
                     let objTarget2 =  objTarget1[keysub] ;  
-                    // date obj
+                    m=0;
                     for (let key2 in objTarget2) {
-                        console.log(secsym+ '['+keysub +']: ' + key2 + ': ' + objTarget2[key2]  );
-                    }
-                }
+                        console.log('     m=['+ m+']  '+secsym+ '_'+keysub +'_  ' + key2 + ': ' + objTarget2[key2]  );
+                        let udate0=keysub;
 
+                        if(gSecurityType=="stocks"){
+                            switch(k){
+                                // alphavantage stocks daily hist. data only go til yesterday=[0], vs crypto yest=[1]
+                                case 0:  // yesterday    
+                                    if(m==1) data_yesterday.hi=objTarget2[key2];
+                                    if(m==2) data_yesterday.lo=objTarget2[key2];
+                                    if(m==3) data_yesterday.cl=objTarget2[key2];
+                                    data_yesterday.date     = udate0;
+                                    data_yesterday.sym      = gGET_SymbolStr2;
+                                    data_yesterday.sectype  = gSecurityType;
+
+                                    data_today.sym      = gGET_SymbolStr2;
+                                    data_today.sectype  = gSecurityType;
+                                break;
+                                case 1:  // yesterday -1
+                                    if(m==1) data_yesterday1.hi=objTarget2[key2];
+                                    if(m==2) data_yesterday1.lo=objTarget2[key2];
+                                    if(m==3) data_yesterday1.cl=objTarget2[key2];
+                                    data_yesterday1.date     = udate0;
+                                    data_yesterday1.sym      = gGET_SymbolStr2;
+                                    data_yesterday1.sectype  = gSecurityType;
+                                break;
+                                case 2:  // yesterday -2 
+                                    if(m==1) data_yesterday2.hi=objTarget2[key2];
+                                    if(m==2) data_yesterday2.lo=objTarget2[key2];
+                                    if(m==3) data_yesterday2.cl=objTarget2[key2];
+                                    data_yesterday2.date     = udate0;
+                                    data_yesterday2.sym      = gGET_SymbolStr2;
+                                    data_yesterday2.sectype  = gSecurityType;
+                                break;
+                                case 3:  // yesterday -3
+                                    if(m==1) data_yesterday3.hi=objTarget2[key2];
+                                    if(m==2) data_yesterday3.lo=objTarget2[key2];
+                                    if(m==3) data_yesterday3.cl=objTarget2[key2];
+                                    data_yesterday3.date     = udate0;
+                                    data_yesterday3.sym      = gGET_SymbolStr2;
+                                    data_yesterday3.sectype  = gSecurityType;
+                                break;
+                            }//sw
+
+                        }else if(gSecurityType=="crypto"){ 
+                                switch(k){
+                                    case 0: 
+                                        data_today.date = udate0;
+                                        data_today.sym      = gGET_SymbolStr2;
+                                        data_today.sectype  = gSecurityType;    
+
+                                    break;
+                                    case 1:  // yesterday                 ie 7)  SOL(crypto)[2024-04-04]: 4b. close (USD): 184.00000000
+                                        if(m==3) data_yesterday.hi=objTarget2[key2];
+                                        if(m==5) data_yesterday.lo=objTarget2[key2];
+                                        if(m==7) data_yesterday.cl=objTarget2[key2];
+                                        data_yesterday.date     = udate0;
+                                        data_yesterday.sym      = gGET_SymbolStr2;
+                                        data_yesterday.sectype  = gSecurityType;
+
+                                    break;
+                                    case 2:  // yesterday -1
+                                        if(m==3) data_yesterday1.hi=objTarget2[key2];
+                                        if(m==5) data_yesterday1.lo=objTarget2[key2];
+                                        if(m==7) data_yesterday1.cl=objTarget2[key2];
+                                        data_yesterday1.date     = udate0;
+                                        data_yesterday1.sym      = gGET_SymbolStr2;
+                                        data_yesterday1.sectype  = gSecurityType;
+                                    break;
+                                    case 3:  // yesterday -2 
+                                        if(m==3) data_yesterday2.hi=objTarget2[key2];
+                                        if(m==5) data_yesterday2.lo=objTarget2[key2];
+                                        if(m==7) data_yesterday2.cl=objTarget2[key2];
+                                        data_yesterday2.date     = udate0;
+                                        data_yesterday2.sym      = gGET_SymbolStr2;
+                                        data_yesterday2.sectype  = gSecurityType;
+                                    break;
+                                    case 4:  // yesterday -3
+                                        if(m==3) data_yesterday3.hi=objTarget2[key2];
+                                        if(m==5) data_yesterday3.lo=objTarget2[key2];
+                                        if(m==7) data_yesterday3.cl=objTarget2[key2];
+                                        data_yesterday3.date     = udate0;
+                                        data_yesterday3.sym      = gGET_SymbolStr2;
+                                        data_yesterday3.sectype  = gSecurityType;
+                                    break;
+                                }//sw
+
+                        }
+
+                        m++;
+                    }
+
+                }else if(k==6){    // if k<6
+
+                    // console.log("data_today, yest, yest1, yest2, yest3==");
+                    // console.log( data_today );
+                    // console.log(data_yesterday );
+                    // console.log(data_yesterday1 );
+                    // console.log(data_yesterday2 );
+                    // console.log(data_yesterday3 );
+
+                    CalculatePivots();
+
+                    console.log("] after CalcPivots() :   data_today, yest, yest1, yest2, yest3==");
+                    console.log( data_today );
+                    console.log( data_yesterday );
+                    console.log( data_yesterday1 );
+                    console.log( data_yesterday2 );
+                    console.log( data_yesterday3 );
+
+                }
 
                 // if(k<5) console.log( k+']  ' + keysub + ': ' + objTarget1[keysub] );
                 k++;
@@ -1105,6 +1296,60 @@ function ProcessFetched( argJson ){
     return(  objTarget );
 }
 /*
+
+//stocks
+0]  2024-04-04: [object Object]
+script17.js:1090      0)  NFLX(stocks)[2024-04-04]: 1. open: 633.21
+script17.js:1090          1)  NFLX(stocks)[2024-04-04]: 2. high: 638.0
+script17.js:1090          2)  NFLX(stocks)[2024-04-04]: 3. low: 616.58
+script17.js:1090          3)  NFLX(stocks)[2024-04-04]: 4. close: 617.14
+script17.js:1090      4)  NFLX(stocks)[2024-04-04]: 5. adjusted close: 617.14
+script17.js:1090      5)  NFLX(stocks)[2024-04-04]: 6. volume: 3008557
+script17.js:1090      6)  NFLX(stocks)[2024-04-04]: 7. dividend amount: 0.0000
+script17.js:1090      7)  NFLX(stocks)[2024-04-04]: 8. split coefficient: 1.0
+script17.js:1084 1]  2024-04-03: [object Object]
+script17.js:1090      0)  NFLX(stocks)[2024-04-03]: 1. open: 612.745
+script17.js:1090      1)  NFLX(stocks)[2024-04-03]: 2. high: 630.41
+script17.js:1090      2)  NFLX(stocks)[2024-04-03]: 3. low: 611.5
+script17.js:1090      3)  NFLX(stocks)[2024-04-03]: 4. close: 630.08
+script17.js:1090      4)  NFLX(stocks)[2024-04-03]: 5. adjusted close: 630.08
+script17.js:1090      5)  NFLX(stocks)[2024-04-03]: 6. volume: 2913989
+script17.js:1090      6)  NFLX(stocks)[2024-04-03]: 7. dividend amount: 0.0000
+script17.js:1090      7)  NFLX(stocks)[2024-04-03]: 8. split coefficient: 1.0
+script17.js:1084 
+
+
+
+
+
+//crypto
+script17.js:1090 0]  2024-04-05: [object Object]
+script17.js:1090      0)  SOL(crypto)[2024-04-05]: 1a. open (USD): 184.00000000
+script17.js:1090      1)  SOL(crypto)[2024-04-05]: 1b. open (USD): 184.00000000
+script17.js:1090      2)  SOL(crypto)[2024-04-05]: 2a. high (USD): 185.07000000
+script17.js:1090           3)  SOL(crypto)[2024-04-05]: 2b. high (USD): 185.07000000
+script17.js:1090      4)  SOL(crypto)[2024-04-05]: 3a. low (USD): 182.94000000
+script17.js:1090           5)  SOL(crypto)[2024-04-05]: 3b. low (USD): 182.94000000
+script17.js:1090      6)  SOL(crypto)[2024-04-05]: 4a. close (USD): 184.16000000
+script17.js:1090            7)  SOL(crypto)[2024-04-05]: 4b. close (USD): 184.16000000
+script17.js:1090      8)  SOL(crypto)[2024-04-05]: 5. volume: 100135.00000000
+script17.js:1090      9)  SOL(crypto)[2024-04-05]: 6. market cap (USD): 100135.00000000
+script17.js:1084 1]  2024-04-04: [object Object]
+script17.js:1090      0)  SOL(crypto)[2024-04-04]: 1a. open (USD): 185.05000000
+script17.js:1090      1)  SOL(crypto)[2024-04-04]: 1b. open (USD): 185.05000000
+script17.js:1090      2)  SOL(crypto)[2024-04-04]: 2a. high (USD): 190.13000000
+script17.js:1090      3)  SOL(crypto)[2024-04-04]: 2b. high (USD): 190.13000000
+script17.js:1090      4)  SOL(crypto)[2024-04-04]: 3a. low (USD): 180.02000000
+script17.js:1090      5)  SOL(crypto)[2024-04-04]: 3b. low (USD): 180.02000000
+script17.js:1090      6)  SOL(crypto)[2024-04-04]: 4a. close (USD): 184.00000000
+script17.js:1090      7)  SOL(crypto)[2024-04-04]: 4b. close (USD): 184.00000000
+script17.js:1090      8)  SOL(crypto)[2024-04-04]: 5. volume: 3773747.36000000
+script17.js:1090      9)  SOL(crypto)[2024-04-04]: 6. market cap (USD): 3773747.36000000
+
+
+
+
+
 {
     "Meta Data": {
         "1. Information": "Daily Prices and Volumes for Digital Currency",
@@ -1520,26 +1765,62 @@ postMethods();
 
 
 
+// Meta Data: [object Object]
+// script16.js:1076 0]  2024-04-04: [object Object]
+// script16.js:1081 NFLX(stocks)[2024-04-04]: 1. open: 633.21
+// script16.js:1081 NFLX(stocks)[2024-04-04]: 2. high: 638.0
+// script16.js:1081 NFLX(stocks)[2024-04-04]: 3. low: 616.58
+// script16.js:1081 NFLX(stocks)[2024-04-04]: 4. close: 617.14
+// script16.js:1081 NFLX(stocks)[2024-04-04]: 5. adjusted close: 617.14
+// script16.js:1081 NFLX(stocks)[2024-04-04]: 6. volume: 3008557
+// script16.js:1081 NFLX(stocks)[2024-04-04]: 7. dividend amount: 0.0000
+// script16.js:1081 NFLX(stocks)[2024-04-04]: 8. split coefficient: 1.0
+// script16.js:1076 1]  2024-04-03: [object Object]
+// script16.js:1081 NFLX(stocks)[2024-04-03]: 1. open: 612.745
+// script16.js:1081 NFLX(stocks)[2024-04-03]: 2. high: 630.41
+// script16.js:1081 NFLX(stocks)[2024-04-03]: 3. low: 611.5
+// script16.js:1081 NFLX(stocks)[2024-04-03]: 4. close: 630.08
+// script16.js:1081 NFLX(stocks)[2024-04-03]: 5. adjusted close: 630.08
+// script16.js:1081 NFLX(stocks)[2024-04-03]: 6. volume: 2913989
+// script16.js:1081 NFLX(stocks)[2024-04-03]: 7. dividend amount: 0.0000
+// script16.js:1081 NFLX(stocks)[2024-04-03]: 8. split coefficient: 1.0
+// script16.js:1076 
 
 
 
-
-
-
-// // Swiper 
-// var swiper = new Swiper(".slide-content", {
-//             slidesPerView: 3,
-//             spaceBetween: 30,
-//             slidesPerGroup: 3,
-//             loop: true,
-//             loopFillGroupWithBlank: true,
-//             pagination:{
-//                 el: ".swiper-pagination",
-//                 clickable: true,
-//             },
-//             navigation:{
-//                 nextEl: ".swiper-button-next", 
-//                 prevEl: ".swiper-button-prev", 
-//             },
-
-// });
+// // crypto start at [1] for yesterday... (today = 2024-04-05)
+//
+// Meta Data: [object Object]
+// script16.js:1076 0]  2024-04-05: [object Object]
+// script16.js:1081 SOL(crypto)[2024-04-05]: 1a. open (USD): 184.00000000
+// script16.js:1081 SOL(crypto)[2024-04-05]: 1b. open (USD): 184.00000000
+// script16.js:1081 SOL(crypto)[2024-04-05]: 2a. high (USD): 185.07000000
+// script16.js:1081 SOL(crypto)[2024-04-05]: 2b. high (USD): 185.07000000
+// script16.js:1081 SOL(crypto)[2024-04-05]: 3a. low (USD): 182.94000000
+// script16.js:1081 SOL(crypto)[2024-04-05]: 3b. low (USD): 182.94000000
+// script16.js:1081 SOL(crypto)[2024-04-05]: 4a. close (USD): 184.16000000
+// script16.js:1081 SOL(crypto)[2024-04-05]: 4b. close (USD): 184.16000000
+// script16.js:1081 SOL(crypto)[2024-04-05]: 5. volume: 100135.00000000
+// script16.js:1081 SOL(crypto)[2024-04-05]: 6. market cap (USD): 100135.00000000
+// script16.js:1076 1]  2024-04-04: [object Object]
+// script16.js:1081 SOL(crypto)[2024-04-04]: 1a. open (USD): 185.05000000
+// script16.js:1081 SOL(crypto)[2024-04-04]: 1b. open (USD): 185.05000000
+// script16.js:1081 SOL(crypto)[2024-04-04]: 2a. high (USD): 190.13000000
+// script16.js:1081 SOL(crypto)[2024-04-04]: 2b. high (USD): 190.13000000
+// script16.js:1081 SOL(crypto)[2024-04-04]: 3a. low (USD): 180.02000000
+// script16.js:1081 SOL(crypto)[2024-04-04]: 3b. low (USD): 180.02000000
+// script16.js:1081 SOL(crypto)[2024-04-04]: 4a. close (USD): 184.00000000
+// script16.js:1081 SOL(crypto)[2024-04-04]: 4b. close (USD): 184.00000000
+// script16.js:1081 SOL(crypto)[2024-04-04]: 5. volume: 3773747.36000000
+// script16.js:1081 SOL(crypto)[2024-04-04]: 6. market cap (USD): 3773747.36000000
+// script16.js:1076 2]  2024-04-03: [object Object]
+// script16.js:1081 SOL(crypto)[2024-04-03]: 1a. open (USD): 181.53000000
+// script16.js:1081 SOL(crypto)[2024-04-03]: 1b. open (USD): 181.53000000
+// script16.js:1081 SOL(crypto)[2024-04-03]: 2a. high (USD): 192.00000000
+// script16.js:1081 SOL(crypto)[2024-04-03]: 2b. high (USD): 192.00000000
+// script16.js:1081 SOL(crypto)[2024-04-03]: 3a. low (USD): 176.92000000
+// script16.js:1081 SOL(crypto)[2024-04-03]: 3b. low (USD): 176.92000000
+// script16.js:1081 SOL(crypto)[2024-04-03]: 4a. close (USD): 185.05000000
+// script16.js:1081 SOL(crypto)[2024-04-03]: 4b. close (USD): 185.05000000
+// script16.js:1081 SOL(crypto)[2024-04-03]: 5. volume: 5010275.57000000
+// script16.js:1081 SOL(crypto)[2024-04-03]: 6. market cap (USD): 
