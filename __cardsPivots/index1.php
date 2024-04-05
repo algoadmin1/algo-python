@@ -233,7 +233,7 @@ $sym = strtoupper($sym);
      <!-- <script src="https://algoinvestorr.com/trades/rawtrades/cuedtrades0.js"></script> -->
      <!-- <script src="https://algoinvestorr.com/trades/rawtrades/cuedtrades.js"></script> -->
      <script src="https://algoinvestorr.com/pivots/js/singlecard.js"></script>
-     <script src="js/script.js"></script>
+     <script src="js/script00.js"></script>
      <!-- <script src="js/accessaa.js"></script> -->
 
 </html>
