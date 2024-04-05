@@ -1,4 +1,7 @@
 // script.js for /search endpoint ui data for user
+// const fs = require('fs');
+
+
 let gCryptoSym="BTC";
 let gSecurityType="stocks";
 
@@ -351,14 +354,445 @@ function GetSecurityType( sym0 ){
 
 }
 
-function checkForGraphix(symL){
-    // if(symL != arr[]){
-//          symL  = "ai_.png"
-    // }
 
-    return(symL);
+function checkForGraphixReturnFname(symL, extstr, defaultstr){
+    // if(symL != arr[])  symL  = defaultstr;  //"ai_.png"
+    let fname=symL;
+    let fname1=fname+extstr;        // ie  aapl.png or doge.png 
+    let tf01=CheckFileExist( fname1 );
+
+    if(tf01==0){
+        fnamestr= defaultstr ;   // ie ai_.png logo img
+        // fnamestr= "blank.gif" ;  // test
+    }else if(tf01==1){
+        fnamestr=fname1;  
+    }
+    return(fnamestr);
 }
+
+let gGeoPoliticalEvents=[
+    // an array of obj's
+    
+    { udate: "2009-03-17", ev:"11-yr Cycle: Stock Market Bottoms: Housing Crash", tag:"tag" },
+    { udate: "2009-03-17", ev:"11-yr Cycle: Stock Market Bottoms: Housing Crash", tag:"tag" },
+    { udate: "2009-03-17", ev:"11-yr Cycle: Stock Market Bottoms: Housing Crash", tag:"tag" }
+];
+        
  
+// const fs = require('fs');
+function checkArray(arr, filenamestr) {
+    // Loop through the array
+    for (let i = 0; i < arr.length; i++) {
+        // Check if the current element matches filenamestr
+        if (arr[i] === filenamestr) {
+            // If found, return true
+            return true;
+        }
+    }
+    // If not found, return false
+    return false;
+}
+
+// // Example usage:
+// const filenames = ["file1.txt", "file2.txt", "file3.txt"];
+// const filenameToCheck = "file2.txt";
+// console.log(checkArray(filenames, filenameToCheck)); // Output: true
+// const filenameToCheck2 = "file4.txt";
+// console.log(checkArray(filenames, filenameToCheck2)); // Output: false
+
+function CheckFileExist(filenamestr){
+    let tf=checkArray( gImgFiles, filenamestr );
+    return(tf);
+}
+
+// function Che ckFileExist(filenamepathstr){
+//         try {
+//         // Check if the file exists
+//         fs.accessSync(filenamepathstr, fs.constants.F_OK);
+//         // If the file exists, return 1
+//         return 1;
+//     } catch (err) {
+//         // If the file does not exist or there is an error, return 0
+//         return 0;
+//     }
+// }
+
+// Example usage:
+// const result1 = Chec  kFileExist("path/to/your/file.txt");
+// console.log(result1); // Output will be 1 if the file exists, otherwise 0
+
+// const result2 = Check FileExist("nonexistentfile.txt");
+// console.log(result2); // Output will be 0 as the file does not exist
+
+
+
+// ###########################################
+
+// let fetchedObj=[];
+// //
+// //  note : seriesInterval is like datatype  TESTer fn !!!!
+// //function G3tAlphaAdvantageStockDataNewTES Tfetch("quote", fet chedObj , "nil")
+// //
+// function GetAlphaVantageStockDataNewTESTfetch(seriesInterval, objTarget, insetFlagStr)
+// {
+//   let urlTarget;     
+//   gRenderInsetFlag =0;
+
+// // this is the incoming target, so it is nullified
+//   objTarget=[];
+
+//       console.log("G3tAlphaAdvantageStockData()  interval/datatype=, obj, insetFlagStr=");
+//       console.log(seriesInterval);
+//       console.log(insetFlagStr);
+      
+//       if(insetFlagStr=="insert"){
+//          gRenderInsetFlag =1;
+
+//       }
+ 
+//  // default for indicators (e.g., RSI, STOCH) & some commodities
+// let seriesIntervalTime = "daily";
+
+// const urlsample ='https://itraderpro.co/jsonsample.php'; //https://www.alphavantage.co/query?function=CASH_FLOW&symbol='+ gGET_SymbolStr +  apikeyStr;
+
+//  // stocks intraday
+// const urlcsv = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=' + gGET_SymbolStr + '&interval='+seriesInterval+
+//     apikeyStr+'&datatype=csv';
+
+// const urlcsvFull = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=' + gGET_SymbolStr + '&interval='+seriesInterval+
+//    '&outputsize=full'+ apikeyStr+'&datatype=csv';
+
+// const urlIntradayFull = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=' + gGET_SymbolStr + '&interval='+seriesInterval+
+//    '&outputsize=full'+ apikeyStr ;
+
+//     // &interval=5min&outputsize=full&apikey=demo
+
+// // stocks monthly
+//    const urlMonthlyFull = 'https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=' + gGET_SymbolStr+  apikeyStr ; 
+//    // const urlMonthlyFull = 'https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=' + gGET_SymbolStr+  apikeyStr ; 
+
+// // stocks weekly
+//   const urlWeeklyFull = 'https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=' + gGET_SymbolStr+  apikeyStr ; 
+//   // const urlWeeklyFull = 'https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=' + gGET_SymbolStr+  apikeyStr ; 
+
+// // stocks daily
+//    // https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=demo
+//   const urlDailyCompact= 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=' + gGET_SymbolStr + apikeyStr ; 
+//   // https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&outputsize=full&apikey=demo
+//   const urlDailyFull = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=' + gGET_SymbolStr+ '&outputsize=full'+ apikeyStr ; 
+
+// // https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&apikey=demo
+// const urlQuote = 'https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol='+ gGET_SymbolStr + apikeyStr  ;
+    
+// //https://www.alphavantage.co/query?function=EARNINGS_CALENDAR&horizon=3month&apikey=demo
+// const urlEarningsAll = 'https://www.alphavantage.co/query?function=EARNINGS_CALENDAR&horizon=3month' + apikeyStr  ;
+// //https://www.alphavantage.co/query?function=EARNINGS_CALENDAR&symbol=IBM&horizon=12month&apikey=demo
+// const urlEarnings = 'https://www.alphavantage.co/query?function=EARNINGS_CALENDAR&symbol='+ gGET_SymbolStr +'&horizon=12month' + apikeyStr  ;
+
+
+// //
+// //
+// // new fed, gdp, etc
+// let maturitytype = seriesInterval;     // &maturity= 3month, 2year, 5year, 7year, 10year, and 30year in the case of treasuries
+//    // interval=monthly. Strings == daily, weekly, and monthly
+// const urltreas  =  'https://www.alphavantage.co/query?function=TREASURY_YIELD&interval=daily' +'&maturity='+maturitytype + apikeyStr;
+
+// //
+// //   FED '7'
+// //
+// // interval=monthly. Strings daily, weekly, and monthly 
+// const urlfed   =  'https://www.alphavantage.co/query?function=FEDERAL_FUNDS_RATE&interval='+seriesInterval+ apikeyStr ;
+// const urlgdp   =  'https://www.alphavantage.co/query?function=REAL_GDP&interval='+seriesInterval+ apikeyStr ;
+// const urlcpi   =  'https://www.alphavantage.co/query?function=CPI&interval='+seriesInterval+ apikeyStr ;
+// // annual yearly only
+// const urlinflation     =  'https://www.alphavantage.co/query?function=INFLATION'+apikeyStr;
+// const urlretailsales   =  'https://www.alphavantage.co/query?function=RETAIL_SALES' +apikeyStr;
+// const urlunemployment   =  'https://www.alphavantage.co/query?function=UNEMPLOYMENT' +apikeyStr;
+// const urlconsumer       =  'https://www.alphavantage.co/query?function=CONSUMER_SENTIMENT' +apikeyStr;
+// //
+// //
+// //
+
+// const urlcashflow ='https://www.alphavantage.co/query?function=CASH_FLOW&symbol='+ gGET_SymbolStr +  apikeyStr;
+
+// const urlrsi    = 'https://www.alphavantage.co/query?function=RSI&symbol='    + gGET_SymbolStr + '&interval='+seriesIntervalTime+ '&time_period=10&series_type=open'+ apikeyStr ;
+// // https://www.alphavantage.co/query?function=RSI&symbol=IBM&interval=weekly&time_period=10&series_type=open&apikey=demo
+
+// const urlstoch  = 'https://www.alphavantage.co/query?function=STOCH&symbol='  + gGET_SymbolStr +'&interval='+seriesIntervalTime+ apikeyStr ; 
+// const urlobv    = 'https://www.alphavantage.co/query?function=OBV&symbol='    + gGET_SymbolStr +'&interval='+seriesIntervalTime+ apikeyStr ; 
+
+// // intraday only
+// const urlvwap   = 'https://www.alphavantage.co/query?function=VWAP&symbol='  + gGET_SymbolStr +'&interval='+seriesInterval+ apikeyStr ; 
+
+// //
+// // 1min, 5min, 15min, 30min, 60min, daily, weekly, monthly
+// const urlcci    =  'https://www.alphavantage.co/query?function=CCI'+ '&symbol=' + gGET_SymbolStr  +'&interval='+seriesIntervalTime+   '&time_period=10'  + apikeyStr ; 
+
+// const urladx    =  'https://www.alphavantage.co/query?function=ADX'+ '&symbol=' + gGET_SymbolStr  +'&interval='+seriesIntervalTime+   '&time_period=10'  + apikeyStr ; 
+// // https://www.alphavantage.co/query?function=ADX&symbol=IBM&interval=daily&time_period=10&apikey=demo
+
+// const urlbbands =  'https://www.alphavantage.co/query?function=BBANDS'+ '&symbol=' + gGET_SymbolStr  +'&interval='+seriesIntervalTime+'&time_period=5&series_type=close&nbdevup=3&nbdevdn=3'  + apikeyStr ; 
+// //https://www.alphavantage.co/query?function=BBANDS&symbol=IBM&interval=weekly&time_period=5&series_type=close&nbdevup=3&nbdevdn=3&apikey=demo
+
+
+
+// const urlatr    =  'https://www.alphavantage.co/query?function=ATR'+ '&symbol=' + gGET_SymbolStr  +'&interval='+seriesIntervalTime+   '&time_period=14'  + apikeyStr ; 
+// // https://www.alphavantage.co/query?function=ATR&symbol=IBM&interval=daily&time_period=14&apikey=demo
+
+// const urlsma    =  'https://www.alphavantage.co/query?function=SMA'+ '&symbol=' + gGET_SymbolStr  +'&interval='+seriesIntervalTime+   '&time_period=200&series_type=open'  + apikeyStr ; 
+// //https://www.alphavantage.co/query?function=SMA&symbol=IBM&interval=weekly&time_period=10&series_type=open&apikey=demo
+
+// const urlmacd    =  'https://www.alphavantage.co/query?function=MACD'+ '&symbol=' + gGET_SymbolStr  +'&interval='+seriesIntervalTime+   '&series_type=open'  + apikeyStr ; 
+// // https://www.alphavantage.co/query?function=MACD&symbol=IBM&interval=daily&series_type=open&apikey=demo
+
+// // const urlpeband =""; 
+// // const urldivhist =""; 
+
+// // commodities
+// const urlwti      =  'https://www.alphavantage.co/query?function=WTI&interval='+seriesIntervalTime+  apikeyStr ; 
+// //https://www.alphavantage.co/query?function=WTI&interval=monthly&apikey=demo
+
+// const urlbrent    =  'https://www.alphavantage.co/query?function=BRENT&interval='+seriesIntervalTime+   apikeyStr ; 
+// //https://www.alphavantage.co/query?function=WTI&interval=monthly&apikey=demo
+
+// const urlnatgas    =  'https://www.alphavantage.co/query?function=NATURAL_GAS&interval='+seriesIntervalTime+   apikeyStr ; 
+// // https://www.alphavantage.co/query?function=NATURAL_GAS&interval=monthly&apikey=demo
+
+// const urlcopper       =  'https://www.alphavantage.co/query?function=COPPER&interval=monthly' +  apikeyStr ; 
+// // https://www.alphavantage.co/query?function=COPPER&interval=monthly&apikey=demo
+
+// const urlaluminum       =  'https://www.alphavantage.co/query?function=ALUMINUM&interval=monthly' +  apikeyStr ; 
+// // https://www.alphavantage.co/query?function=ALUMINUM&interval=monthly&apikey=demo
+ 
+//  // resrvd
+//  const urlnews = "";
+
+// //
+// // forex
+// //
+// let fxFrom = "EUR",  fxTo   = "USD";
+// const urlfx        =  'https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=' + fxFrom+'&to_symbol=' + fxTo +  apikeyStr ; 
+// // const urlfx        =  'https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=EUR&to_symbol=USD' +  apikeyStr ; 
+// // https://www.alphavantage.co/query?function=FX_DAILY&from_symbol=EUR&to_symbol=USD&apikey=demo
+
+
+// // btnmore
+  
+ 
+// let JSONok = 1;
+
+// // seriesInterval="earningsAll" "10year",  "15min" "consumer" ;
+//       seriesInterval= seriesInterval.toLowerCase();
+//       console.log("seriesInterval==");
+//       console.log(seriesInterval);
+
+//       switch(seriesInterval){
+//         case "earningsAll":
+//         case "earningsall":
+//            urlTarget =  urlEarningsAll; 
+//            JSONok = 0;
+ 
+//           break;
+//         case "earnings":
+//            urlTarget =  urlEarnings;  
+//            JSONok = 0;
+
+//           break;
+//         case "quote":
+//            urlTarget =  urlQuote;  
+//           break;
+
+//    // timeseries data here       
+//         case "m":
+//         case "mo":
+//         case "month":
+//         case "mon":
+//         case "monthly":
+//            urlTarget =  urlMonthlyFull;  
+//           break;
+//         case "w":
+//         case "wk":
+//         case "week":
+//         case "weekly":
+//            urlTarget =  urlWeeklyFull;
+//           break;
+
+//        case "dailyCompact":
+//        case "dailycompact":
+//        case "dailysmall":
+//           urlTarget = urlDailyCompact;
+//           break;
+//        case "daily":
+//        case "day":
+//        case "d":
+//            urlTarget = urlDailyFull;
+//           break;
+//        case "1min":
+//            urlTarget = urlIntradayFull;
+//           break;
+//        case "5min":
+//            urlTarget = urlIntradayFull;
+//           break;
+//        case "10min":
+//            urlTarget = urlIntradayFull;
+//           break;
+//        case "15min":
+//            urlTarget = urlIntradayFull;
+//           break;
+//        case "30min":
+//            urlTarget = urlIntradayFull;
+//           break;
+//        case "60min":    
+//           urlTarget = urlIntradayFull;
+//           break;
+
+// // new
+//     // treasuries
+//      case "30year":
+//      case "10year":
+//      case "7year":
+//      case "5year":
+//      case "2year":
+//      case "3month":
+//        urlTarget= urltreas;
+//       break;
+//       // case "jsonsample":
+//       //  urlTarget= urlsample;
+//       // break;
+
+//       // fed data
+//      case "fed":
+//       urlTarget= urlfed;
+//       break;
+//      case "gdp":
+//       urlTarget= urlgdp;
+//       break;
+//      case "cpi":
+//        urlTarget= urlcpi;
+//      break;   
+//      case "inflation":
+//        urlTarget= urlinflation;
+//      break;
+//      case "retailsales":
+//        urlTarget= urlretailsales;
+//      break;
+//      case "consumer":
+//        urlTarget= urlconsumer;
+//      break;
+//      case "unemployment":
+//        urlTarget= urlunemployment;
+//      break;
+
+// // stock-specific
+//      case "rsi":
+//       urlTarget= urlrsi;
+//       break;
+//      case "stoch":
+//        urlTarget= urlstoch;
+//      break;
+//      case "obv":
+//       urlTarget= urlobv;
+//       break;
+//      case "vwap":
+//        urlTarget= urlvwap;
+//      break;
+
+//     case "cashflow":
+//       urlTarget= urlcashflow;
+//       break;
+
+//      case "cci":
+//        urlTarget= urlcci;
+//      break;
+
+//      case "adx":
+//        urlTarget= urladx;
+//      break;
+
+//      case "bbands":
+//        urlTarget= urlbbands;
+//      break;
+
+
+//      case "atr":
+//        urlTarget= urlatr;
+//      break;
+
+//      case "sma":
+//        urlTarget= urlsma;
+//      break;
+
+//      case "macd":
+//        urlTarget= urlmacd;
+//      break;
+
+//      case "wti":
+//        urlTarget= urlwti;
+//      break;
+
+ 
+//      case "brent":
+//        urlTarget= urlbrent;
+//      break;
+
+ 
+//      case "natgas":
+//        urlTarget= urlnatgas;
+//      break;
+
+
+
+//      case "copper":
+//        urlTarget= urlcopper ;
+//      break;
+
+//      case "aluminum":
+//        urlTarget= urlaluminum ;
+//      break;
+
+
+ 
+//      case "fx":
+//        urlTarget= urlfx ;
+//      break;
+
+
+//        default:
+//        // re-assign global & local var here...
+//         console.log("// default: reached,  urlTarget = daily //")
+//           urlTarget = urlDailyFull;
+//           break;
+     
+//         }//sw
+
+
+//     console.log ("]  fetch-testing... seriesInterval, urlTarget== ");
+//     console.log(seriesInterval, urlTarget);
+
+//     let x0, y0;
+//     // assume stocks for now
+//     let sym007 = gGET_SymbolStr;
+//     // if(datatype0=="crypto") 
+
+//     fetch(urlTarget)
+//     .then( x0 => x0.text())
+//     .then( y0 => ProcessFetched( y0 , objTarget , sym007, seriesInterval , "stocks") )    
+//     .catch(error => {
+//         // element.parentElement.innerHTML = `Error: ${error}`;
+//         console.error("] The error==", error);
+//     });
+
+
+
+
+
+// // EOFn
+
+
+// }//fn G3tAlphaAdvantagStockDataTESTfetch !!!
+
+
+
 
 
 
@@ -398,7 +832,7 @@ const postMethods = () =>{
         postElement.classList.add('card');
         let symbolLower = postData.symbol;
         symbolLower= symbolLower.toLowerCase();
-        // <h2 class="name">${postData.symbol}</h2>   ${symbolLower}
+        // <h2 class="name">${postData.symbol}</h2>   ${sym bolLower}
 
         let emoji0 ="⭐"; 
         let emoji1 ="👍"; 
@@ -502,7 +936,7 @@ let urlfinal = urlbase+ sym1 +urlbase1;
 //     <div class="image-content">
 //         <span class="overlay"></span>
 //         <div class="card-image">
-//             <img src="img/${symbolLower}.png" alt="" class="card-img">
+//             <img src="img/${symb olLower}.png" alt="" class="card-img">
 //         </div>
 //     </div>
 //     <div class="card-content">
@@ -526,7 +960,7 @@ let urlfinal = urlbase+ sym1 +urlbase1;
 // <div class="image-content">
 //     <span class="overlay"></span>
 //     <div class="card-image">
-//         <img src="img/${symbolLower}.png" alt="" class="card-img">
+//         <img src="img/${sym bolLower}.png" alt="" class="card-img">
 //     </div>
 // </div>
 // <div class="card-content">
@@ -547,10 +981,18 @@ let urlfinal = urlbase+ sym1 +urlbase1;
 
 // }
 
+
+// override
 let sym0=gGET_SymbolStr2;
 symbolLower= sym0.toLowerCase();
-let symbolLower1=checkForGraphix(symbolLower);
-//             <img src="img/${symbolLower1}.png" alt="" class="card-img">
+let symbolLowerFname=checkForGraphixReturnFname(symbolLower, ".png", "ai_.png");
+
+//             <img src="img/${symb olLowerFname}" alt="" class="card-img">
+//      <img src="img/${symbolLower}.png" alt="" class="card-img">
+
+
+
+
 
 
 if( p_day_num < p3_day_num ){
@@ -559,7 +1001,7 @@ if( p_day_num < p3_day_num ){
     <div class="image-content">
         <span class="overlay"></span>
         <div class="card-image">
-            <img src="img/${symbolLower}.png" alt="" class="card-img">
+            <img src="img/${symbolLowerFname}" alt="" class="card-img">
         </div>
     </div>
     <div class="card-content">
@@ -583,7 +1025,7 @@ postElement.innerHTML=`
 <div class="image-content">
     <span class="overlay"></span>
     <div class="card-image">
-        <img src="img/${symbolLower}.png" alt="" class="card-img">
+        <img src="img/${symbolLowerFname}" alt="" class="card-img">
     </div>
 </div>
 <div class="card-content">
