@@ -329,6 +329,8 @@ const postMethods = () =>{
         console.log("] gGET_SymbolStr=",gGET_SymbolStr);
 
         console.log("] gGET_SymbolStr2====>",gGET_SymbolStr2,"<====");
+        console.log("] urlStocks====>",urlStocks,"<====");
+        console.log("] urlCrypto====>",urlCrypto,"<====");
 
 
         const postElement = document.createElement('div');
@@ -486,7 +488,7 @@ let urlfinal = urlbase+ sym1 +urlbase1;
 // }
 
 let sym0=gGET_SymbolStr2;
-// symbolLower=sym0.toLowerCase();
+symbolLower= sym0.toLowerCase();
 
 
 if( p_day_num < p3_day_num ){
@@ -578,7 +580,12 @@ const jsonUrl = 'https://algoinvestorr.com/trades/rawtrades/cuedtrades.json';
     // console.log("cardData0==");
     // console.log(cardData0[0]);
     // console.log(cardData0[1]);
-    // console.log(cardData0);
+
+
+
+
+
+    console.log("PRE postM3thods()");
 
 postMethods();
 

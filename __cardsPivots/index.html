@@ -174,6 +174,9 @@ $sym = strtoupper($sym);
         let url9b= "&outputsize=compact&datatype=json&apikey=5B4L3BMV41G6BCDH";
         let url9 = url9a+ gGET_SymbolStr + url9b;
 
+        let urlStocks=url9;
+        let urlCrypto ="https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol=BTC&market=USD&apikey=5B4L3BMV41G6BCDH";
+
         function getData0(urlstr) {
             result = readJsonUrl9(urlstr);
             console.log("result=",result);
