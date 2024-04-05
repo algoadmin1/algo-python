@@ -1,0 +1,3 @@
+// PROMPT.TXT
+
+can you write a javascript function getJsonObj( jsonObj, objstr ) which loops through the json object and returns the subobject whos  Key matches objstr i.e. objstr ="Time Series (Digital Currency Daily)" or objstr = "Meta Data" 

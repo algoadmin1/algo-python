@@ -780,7 +780,7 @@ function CheckFileExist(filenamestr){
 
     // fetch(urlTarget)
     // .then( x0 => x0.text())
-    // .then( y0 => ProcessFetched( y0 , objTarget , sym007, seriesInterval , "stocks") )    
+    // .then( y0 => Pro cessFetched( y0 , objTarget , sym007, seriesInterval , "stocks") )    
     // .catch(error => {
     //     // element.parentElement.innerHTML = `Error: ${error}`;
     //     console.error("] The error==", error);
@@ -799,7 +799,7 @@ function CheckFileExist(filenamestr){
 // ###########################################
 // ###########################################
 
-
+let gJsonPayload="";
 
 async function getJsonUrl(urlstr) {
     // Check if urlstr is null or an empty string
@@ -821,6 +821,7 @@ async function getJsonUrl(urlstr) {
         const jsonPayload = await response.json();
         
         // Return the JSON payload
+        gJsonPayload=jsonPayload;
         return jsonPayload;
     } catch (error) {
         console.error("Error:", error);
@@ -831,7 +832,7 @@ async function getJsonUrl(urlstr) {
 // // Example usage:
 // const url = "https://example.com/data.json"; // Replace with your desired URL
 
-// getJsonUrl(url)
+// get JsonUrl(url)
 //     .then(jsonData => {
 //         if (jsonData) {
 //             console.log("Received JSON data:", jsonData);
@@ -845,7 +846,349 @@ async function getJsonUrl(urlstr) {
 //     });
 
 
+function getJsonObj(jsonObj, objstr) {
+    // Check if jsonObj is null or undefined
+    if (!jsonObj) {
+        console.error("Error: JSON object is null or undefined");
+        return null;
+    }
 
+    // Loop through the keys of the JSON object
+    for (let key in jsonObj) {
+        // Check if the current key matches objstr
+        if (key === objstr) {
+            // Return the subobject corresponding to the matched key
+            return jsonObj[key];
+        } else if (typeof jsonObj[key] === 'object') {
+            // Recursively search through nested objects
+            const result = getJsonObj(jsonObj[key], objstr);
+            if (result) {
+                return result;
+            }
+        }
+    }
+
+    // If no matching key is found, return null
+    console.error("Error: No subobject found with key:", objstr);
+    return null;
+}
+
+// // Example usage:
+// const jsonData = {
+//     "Meta Data": {
+//         "Information": "Example",
+//         "Symbol": "BTC"
+//     },
+//     "Time Series (Digital Currency Daily)": {
+//         "2024-04-01": {
+//             "1a. open (USD)": "1000.00",
+//             "1b. open (USD)": "1000.00",
+//             "2a. high (USD)": "1100.00",
+//             "2b. high (USD)": "1100.00",
+//             "3a. low (USD)": "990.00",
+//             "3b. low (USD)": "990.00",
+//             "4a. close (USD)": "1050.00",
+//             "4b. close (USD)": "1050.00"
+//         },
+//         // More data...
+//     }
+// };
+
+// const subObject1 = getJsonObj(jsonData, "Meta Data");
+// console.log("Subobject with key 'Meta Data':", subObject1);
+
+// const subObject2 = getJsonObj(jsonData, "Time Series (Digital Currency Daily)");
+// console.log("Subobject with key 'Time Series (Digital Currency Daily)':", subObject2);
+
+// const subObject3 = getJsonObj(jsonData, "Nonexistent Key");
+// console.log("Subobject with key 'Nonexistent Key':", subObject3);
+
+
+
+async function getPromiseResult(inputJsonPromise) {
+    try {
+        // Wait for the promise to resolve and get the result
+        const objJson = await inputJsonPromise;
+        return objJson;
+    } catch (error) {
+        // If there's an error, log it and return null
+        console.error("Error:", error);
+        return null;
+    }
+}
+
+// // Example usage:
+// const inputJsonPromise = fetch('https://api.example.com/data');
+// const objJson = await getPromiseResult(inputJsonPromise);
+// console.log(objJson); // This will log the resolved value of the inputJsonPromise
+
+
+
+
+
+
+
+
+async function getJsonPromiseObj(urlstr) {
+
+        // const inputJsonPromise = fetch('https://api.example.com/data');
+        const inputJsonPromise = fetch(urlstr);
+
+        const objJson = await getPromiseResult(inputJsonPromise);
+        
+        console.log(objJson); // This will log the resolved value of the inputJsonPromise
+
+    return objJson;
+}
+
+
+function displayKeys1(jsonObj, indent = 0, count = 0) {
+    console.log("] **** inside d1splayKeys1()");
+
+    // Check if jsonObj is an object
+    if (typeof jsonObj === 'object' && jsonObj !== null) {
+        // Loop through the keys of the object
+        for (let key in jsonObj) {
+            // Check if the key matches the format "YYYY-MM-DD" and count is less than 4
+            // 4 because we need yesterday, plus the last 3 days to compute p/P3
+            if (count < 4 && /^\d{4}-\d{2}-\d{2}$/.test(key)) {
+                // Display the key-value pair with appropriate indentation
+                // let displaystr= ' '.repeat(indent) + key + ': ' + jsonObj[key] ;
+                // console.log(displaystr);
+                console.log(' '.repeat(indent) + key + ': ' + jsonObj[key]);
+                count++; // Increment the count of displayed key-value pairs
+            }
+
+            // If the value associated with the key is an object, recursively call displayKeys
+            if (typeof jsonObj[key] === 'object' && jsonObj[key] !== null) {
+                displayKeys1(jsonObj[key], indent + 2, count);
+            }
+        }
+    }
+}
+
+// // Example usage:
+// const jsonData = {
+//     "Meta Data": {
+//         "Information": "Example",
+//         "Symbol": "BTC"
+//     },
+//     "Time Series (Digital Currency Daily)": {
+//         "2024-04-01": {
+//             "1a. open (USD)": "1000.00",
+//             "1b. open (USD)": "1000.00",
+//             "2a. high (USD)": "1100.00",
+//             "2b. high (USD)": "1100.00",
+//             "3a. low (USD)": "990.00",
+//             "3b. low (USD)": "990.00",
+//             "4a. close (USD)": "1050.00",
+//             "4b. close (USD)": "1050.00"
+//         },
+//         "2024-04-02": {
+//             "1a. open (USD)": "1100.00",
+//             "1b. open (USD)": "1100.00",
+//             "2a. high (USD)": "1200.00",
+//             "2b. high (USD)": "1200.00",
+//             "3a. low (USD)": "1050.00",
+//             "3b. low (USD)": "1050.00",
+//             "4a. close (USD)": "1150.00",
+//             "4b. close (USD)": "1150.00"
+//         },
+//         // More data...
+//     }
+// };
+
+// // Call the function to display the first 4 key-value pairs with keys in "YYYY-MM-DD" format
+// displayKeys(jsonData);
+
+
+
+
+
+function displayKeys(jsonObj, indent = 0) {
+    // Check if jsonObj is an object
+    if (typeof jsonObj === 'object' && jsonObj !== null) {
+        // Loop through the keys of the object
+        for (let key in jsonObj) {
+            // Display the key with appropriate indentation
+            console.log(' '.repeat(indent) + key);
+
+            // If the value associated with the key is an object, recursively call displayKeys
+            if (typeof jsonObj[key] === 'object' && jsonObj[key] !== null) {
+                displayKeys(jsonObj[key], indent + 2); // Increase the indentation for better visualization
+            }
+        }
+    }
+}
+
+// Example usage:
+// const jsonData = {
+//     "Meta Data": {
+//         "Information": "Example",
+//         "Symbol": "BTC"
+//     },
+//     "Time Series (Digital Currency Daily)": {
+//         "2024-04-01": {
+//             "1a. open (USD)": "1000.00",
+//             "1b. open (USD)": "1000.00",
+//             "2a. high (USD)": "1100.00",
+//             "2b. high (USD)": "1100.00",
+//             "3a. low (USD)": "990.00",
+//             "3b. low (USD)": "990.00",
+//             "4a. close (USD)": "1050.00",
+//             "4b. close (USD)": "1050.00"
+//         },
+//         // More data...
+//     }
+// };
+
+// // Call the function to display keys recursively
+// displayKeys(jsonData);
+
+
+
+
+// function ProcessFetched( arg , objTarget , symstr, seriesInterval, assettype0) {
+function ProcessFetched( argJson ){  
+
+    console.log( "] Pr0cessFetched() ... "); 
+   
+    let objTarget = JSON.parse( argJson );  
+    console.log(  "] objTarget ==" );
+    console.log(  objTarget );
+    console.log(  objTarget );
+    //  displayKeys1(objTarget);
+
+    let secsym=gGET_SymbolStr2+"("+gSecurityType+")";
+        
+
+    let j=0;
+    let k=0;
+    for (let key in objTarget) {
+        if(j==1){
+            // we're on time series data
+            let objTarget1 = objTarget[key];
+
+            k=0;
+            for (let keysub in objTarget1) {
+
+                if(k<5){
+                    console.log( k+']  ' + keysub + ': ' + objTarget1[keysub] );
+
+                    let objTarget2 =  objTarget1[keysub] ;  
+                    // date obj
+                    for (let key2 in objTarget2) {
+                        console.log(secsym+ '['+keysub +']: ' + key2 + ': ' + objTarget2[key2]  );
+                    }
+                }
+
+
+                // if(k<5) console.log( k+']  ' + keysub + ': ' + objTarget1[keysub] );
+                k++;
+            }
+        }
+
+        console.log(' ' + key + ': ' + objTarget[key]);
+        j++;
+    }
+
+
+
+    const subObject1= getJsonObj(objTarget, "Meta Data");    
+    console.log("subObject1=", subObject1);
+
+    //                                        Time Series (Digital Currency Daily)
+    // const subObject2 = getJsonObj(objTarget, "Time Series (Digital Currency Daily)");
+    // console.log("Subobject with key 'Time Series (Digital Currency Daily)':", subObject2);
+
+
+    return(  objTarget );
+}
+/*
+{
+    "Meta Data": {
+        "1. Information": "Daily Prices and Volumes for Digital Currency",
+        "2. Digital Currency Code": "BTC",
+        "3. Digital Currency Name": "Bitcoin",
+        "4. Market Code": "USD",
+        "5. Market Name": "United States Dollar",
+        "6. Last Refreshed": "2024-04-05 00:00:00",
+        "7. Time Zone": "UTC"
+    },
+    "Time Series (Digital Currency Daily)": {
+        "2024-04-05": {
+            "1a. open (USD)": "68487.80000000",
+            "1b. open (USD)": "68487.80000000",
+            "2a. high (USD)": "68492.60000000",
+            "2b. high (USD)": "68492.60000000",
+            "3a. low (USD)": "68169.01000000",
+            "3b. low (USD)": "68169.01000000",
+            "4a. close (USD)": "68287.40000000",
+            "4b. close (USD)": "68287.40000000",
+            "5. volume": "659.80878000",
+            "6. market cap (USD)": "659.80878000"
+        },
+        "2024-04-04": {
+            "1a. open (USD)": "65963.27000000",
+            "1b. open (USD)": "65963.27000000",
+            "2a. high (USD)": "69309.91000000",
+            "2b. high (USD)": "69309.91000000",
+            "3a. low (USD)": "65064.52000000",
+            "3b. low (USD)": "65064.52000000",
+            "4a. close (USD)": "68487.79000000",
+            "4b. close (USD)": "68487.79000000",
+            "5. volume": "41510.48453000",
+            "6. market cap (USD)": "41510.48453000"
+        },
+        "2024-04-03": {
+            "1a. open (USD)": "65463.99000000",
+            "1b. open (USD)": "65463.99000000",
+            "2a. high (USD)": "66903.63000000",
+            "2b. high (USD)": "66903.63000000",
+            "3a. low (USD)": "64493.07000000",
+            "3b. low (USD)": "64493.07000000",
+            "4a. close (USD)": "65963.28000000",
+            "4b. close (USD)": "65963.28000000",
+            "5. volume": "39887.21778000",
+            "6. market cap (USD)": "39887.21778000"
+        },
+        "2024-04-02": {
+            "1a. open (USD)": "69649.81000000",
+            "1b. open (USD)": "69649.81000000",
+            "2a. high (USD)": "69674.23000000",
+            "2b. high (USD)": "69674.23000000",
+            "3a. low (USD)": "64550.00000000",
+            "3b. low (USD)": "64550.00000000",
+            "4a. close (USD)": "65463.99000000",
+            "4b. close (USD)": "65463.99000000",
+            "5. volume": "71799.82793000",
+            "6. market cap (USD)": "71799.82793000"
+        },
+        "2024-04-01": {
+            "1a. open (USD)": "71280.00000000",
+            "1b. open (USD)": "71280.00000000",
+            "2a. high (USD)": "71288.23000000",
+            "2b. high (USD)": "71288.23000000",
+            "3a. low (USD)": "68062.86000000",
+            "3b. low (USD)": "68062.86000000",
+            "4a. close (USD)": "69649.80000000",
+            "4b. close (USD)": "69649.80000000",
+            "5. volume": "41445.32039000",
+            "6. market cap (USD)": "41445.32039000"
+        },
+    }
+*/
+
+function getJsonUrlJB(urlTarget){
+
+      fetch(urlTarget)
+      .then( x0 => x0.text())
+      .then( y0 => ProcessFetched( y0 ) )    
+      .catch(error => {
+          console.error("] g3tJsonUrlJB() The error==", error);
+      });
+  
+}
 
 //
 //  https://www.youtube.com/watch?v=j6mKJjguA-8
@@ -865,7 +1208,7 @@ const postMethods = () =>{
         console.log("] gGET_SymbolStr2====>",gGET_SymbolStr2,"<====");
         console.log("] urlStocks====>",urlStocks,"<====");
 
-
+        let urlLocal=urlStocks;
         let ty="stocks";
         ty = GetSecurityType( gGET_SymbolStr2 );
         gSecurityType = ty;
@@ -874,14 +1217,38 @@ const postMethods = () =>{
         if(gSecurityType=="crypto"){
             gGET_SymbolStr2 = gCryptoSym ;
             urlCrypto= url7a + gCryptoSym + url7b;
-            console.log("] urlCrypto==*** ==>",urlCrypto,"<====");
-            jb_json=getJsonUrl( urlCrypto) ;
+            console.log("] urlCrypto== **** ==>",urlCrypto,"<====");
+            urlLocal=urlCrypto;
+
+            // jb_json=getJsonUrl( urlCrypto) ;
         }else{
-            console.log("] urlStocks==*** ==>",urlStocks,"<====");
-            jb_json=getJsonUrl( urlStocks) ;
+            console.log("] urlStocks== **** ==>",urlStocks,"<====");
+            urlLocal=urlStocks;
+
+            // jb_json=getJsonUrl( urlStocks) ;
 
         }
         console.log("jb_json=",jb_json);
+
+        // console.log("jb_json[0]=",jb_json[0]);
+
+        // const subObject2 = getJsonObj(jb_json, "Time Series (Digital Currency Daily)");
+        // console.log("subObject2=",subObject2);
+        // const subObject1= getJsonObj(jb_json, "Meta Data");   // [PromiseResult]
+        // console.log("subObject1=",subObject1);
+
+
+        // // const inputJsonPromise = fetch('https://api.example.com/data');
+        // const inputJsonPromise = fetch(urlLocal);
+        // const objJson = await getPromiseResult(inputJsonPromise);
+        // console.log(objJson); // This will log the resolved value of the inputJsonPromise
+
+        // getJsonPromiseObj(urlLocal);
+
+
+        let jb_json1=  getJsonUrlJB(urlLocal);
+        
+
 
 
         const postElement = document.createElement('div');

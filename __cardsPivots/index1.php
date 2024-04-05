@@ -100,7 +100,8 @@ $sym = strtoupper($sym);
         <div class="search">
             <span class="search-icon material-symbols-outlined">search</span>
             <!-- <input class="search-input" type="search" placeholder="search"> -->
-            <input class="search-input" style="font-size:24px; text-transform: uppercase;" type="search" name="sym" placeholder="symbol">
+            <!-- <input class="search-input" style="font-size:24px; text-transform: uppercase;" type="search" name="sym" placeholder="ie aapl zm tsla btc- sol- eth-"> -->
+            <input class="search-input" style="font-size:24px; text-transform: uppercase;" type="search" name="sym" placeholder="ie aapl tsla btc- sol- ">
 
         </div>
         <!-- <input type="button" onclick="myFunction1()" value="Submit"> -->
@@ -234,7 +235,7 @@ $sym = strtoupper($sym);
      <!-- <script src="https://algoinvestorr.com/trades/rawtrades/cuedtrades.js"></script> -->
      <script src="https://algoinvestorr.com/pivots/js/singlecard.js"></script>
      <script src="js/imgfiles.js"></script>
-     <script src="js/script03.js"></script>
+     <script src="js/script16.js"></script>
      <!-- <script src="js/accessaa.js"></script> -->
 
 </html>
