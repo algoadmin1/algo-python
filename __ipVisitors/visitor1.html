@@ -1,0 +1,34 @@
+<!-- visitor1.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World Visitor Counter</title>
+    <script>
+        // Function to update visitor count
+        function updateVisitorCount() {
+            // Check if 'visitors' key exists in localStorage
+            if(localStorage.getItem('visitors')) {
+                // If exists, retrieve and increment the count
+                let count = parseInt(localStorage.getItem('visitors'));
+                count++;
+                localStorage.setItem('visitors', count);
+                document.getElementById('visitorCount').innerText = count;
+            } else {
+                // If doesn't exist, set count to 1
+                localStorage.setItem('visitors', 1);
+                document.getElementById('visitorCount').innerText = 1;
+            }
+        }
+
+        // Execute updateVisitorCount function when the page loads
+        window.onload = updateVisitorCount;
+    </script>
+</head>
+<body>
+    <h1>Hello World Visitor Counter</h1>
+    <p>Welcome to our website!</p>
+    <p>You are visitor number: <span id="visitorCount"></span></p>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!-- visitor3.html -->
+
+
+<body>
+    <h1>Hello World Visitor Counter</h1>
+    <p>Welcome to our website!</p>
+    <p>You are visitor number: <span id="visitorCount"></span></p>
+    
+    <h2>Recent Visitors</h2>
+    <ul id="recentVisitorsList"></ul>
+
+    <script>
+        // Function to update visitor count, record IP address, and display recent visitors
+        function updateVisitorCountRecordIPAndDisplayRecentVisitors() {
+            // Update visitor count and record IP address
+            updateVisitorCountAndRecordIP();
+
+            // Display recent visitors
+            displayRecentVisitors();
+        }
+        
+// To display the IP address of the most recent 4 visitors stored in the array 
+// in the HTML body, you can extend the HTML body as follows:
+
+        // Function to display recent visitors
+        function displayRecentVisitors() {
+            // Retrieve the 'ipAddresses' array from localStorage
+            let ipAddresses = JSON.parse(localStorage.getItem('ipAddresses'));
+
+            // Check if there are recent visitors to display
+            if (ipAddresses && ipAddresses.length > 0) {
+                // Get the last 4 IP addresses (most recent visitors)
+                let recentVisitors = ipAddresses.slice(-4);
+
+                // Get the ul element to append the list items
+                let recentVisitorsList = document.getElementById('recentVisitorsList');
+
+                // Clear previous list items
+                recentVisitorsList.innerHTML = '';
+
+                // Create list items for each recent visitor and append to the ul element
+                recentVisitors.forEach(ipAddress => {
+                    let listItem = document.createElement('li');
+                    listItem.textContent = ipAddress;
+                    recentVisitorsList.appendChild(listItem);
+                });
+            } else {
+                // If there are no recent visitors, display a message
+                let recentVisitorsList = document.getElementById('recentVisitorsList');
+                recentVisitorsList.innerHTML = '<li>No recent visitors</li>';
+            }
+        }
+
+        // Execute updateVisitorCountRecordIPAndDisplayRecentVisitors function when the page loads
+        window.onload = updateVisitorCountRecordIPAndDisplayRecentVisitors;
+    </script>
+</body>

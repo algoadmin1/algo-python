@@ -1,0 +1,59 @@
+<!-- visitor2.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World Visitor Counter</title>
+    <script>
+        // Function to update visitor count and record IP address
+        function updateVisitorCountAndRecordIP() {
+            // Check if 'visitors' key exists in localStorage
+            if(localStorage.getItem('visitors')) {
+                // If exists, retrieve and increment the count
+                let count = parseInt(localStorage.getItem('visitors'));
+                count++;
+                localStorage.setItem('visitors', count);
+                document.getElementById('visitorCount').innerText = count;
+            } else {
+                // If doesn't exist, set count to 1
+                localStorage.setItem('visitors', 1);
+                document.getElementById('visitorCount').innerText = 1;
+            }
+
+//  To extend the JavaScript code to capture the IP address of each visitor and 
+//    push it onto an array stored in the browser's localStorage, you can modify the existing code
+
+            // Get visitor's IP address
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    let ipAddress = data.ip;
+                    // Check if 'ipAddresses' key exists in localStorage
+                    if(localStorage.getItem('ipAddresses')) {
+                        // If exists, retrieve the array and push the new IP address
+                        let ipAddresses = JSON.parse(localStorage.getItem('ipAddresses'));
+                        ipAddresses.push(ipAddress);
+                        localStorage.setItem('ipAddresses', JSON.stringify(ipAddresses));
+                    } else {
+                        // If doesn't exist, create a new array and push the IP address
+                        let ipAddresses = [ipAddress];
+                        localStorage.setItem('ipAddresses', JSON.stringify(ipAddresses));
+                    }
+                    
+                    console.log( JSON.stringify(ipAddresses) ) ;
+
+                })
+                .catch(error => console.error('Error fetching IP address:', error));
+        }
+
+        // Execute updateVisitorCountAndRecordIP function when the page loads
+        window.onload = updateVisitorCountAndRecordIP;
+    </script>
+</head>
+<body>
+    <h1>Hello World Visitor Counter</h1>
+    <p>Welcome to our website!</p>
+    <p>You are visitor number: <span id="visitorCount"></span></p>
+</body>
+</html>
