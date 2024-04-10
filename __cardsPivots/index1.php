@@ -191,7 +191,7 @@ $sym = strtoupper($sym);
         let url9a= "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=";
         let url9b= "&outputsize=compact&datatype=json&apikey=5B4L3BMV41G6BCDH";
         gGET_SymbolStr1=gGET_SymbolStr.toUpperCase();
-        let gGET_SymbolStr2 =  RemoveChars(gGET_SymbolStr1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ-");
+        let gGET_SymbolStr2 =  RemoveChars(gGET_SymbolStr1, "ABCDEFGHIJKLMNOPQRSTUVWXYZ-@");
 
         let url9 = url9a+ gGET_SymbolStr2 + url9b;
         let urlStocks=url9;
