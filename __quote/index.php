@@ -78,6 +78,7 @@ function processJson1($jsonstr) {
     global $json0;
     global $msg0;
     global $padr;
+    global $asstype;
 
     $data = json_decode($jsonstr, true);
     // $padr = "_";
@@ -95,7 +96,7 @@ function processJson1($jsonstr) {
         date_default_timezone_set('America/New_York');
         $datetime = date('Y-m-d H:i:s', $tseconds);
 
-        if($json0==0 ) echo $closeprice. $padr.    $datetime. $padr.     $sym. $padr.    $intr.  $padr. "EOL";
+        if($json0==0 ) echo $closeprice. $padr.    $datetime. $padr.     $sym. $padr.    $intr.  $padr. $asstype. $padr. "EOL";
 
         // Output the results
         if($msg0==1  && $json0==0 ) {
@@ -110,6 +111,7 @@ function processJson1($jsonstr) {
 
 // if( $crypto0 ==1 )
 
+$asstype = "stocks";
 
 $symcrypto = $sym. "%2FUSDT";
 $urlquotecrypto ="https://api.finazon.io/latest/crypto/time_series?dataset=sip_non_pro&ticker=". $symcrypto. "&interval=". $intr. "&apikey=d4e31787de7446b9aaf281437a981748am";
@@ -120,6 +122,7 @@ $urlquotestocks ="https://api.finazon.io/latest/time_series?dataset=sip_non_pro&
 $urlquote= $urlquotestocks;
 if( $crypto0 ==1 ){
     $urlquote= $urlquotecrypto;
+    $asstype = "crypto";
 }
 if($msg0==1)  echo $urlquote;
 
