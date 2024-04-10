@@ -49,6 +49,13 @@ if(isset( $_GET['msg'] )){
     $msg0 = 0;
 }
 
+$crypto0 = 0;
+if(isset( $_GET['crypto'] )){
+    $crypto0 = $_GET['crypto'] ;   // ie =1  for BTC%2FUSDT
+}else{
+    $crypto0 = 0;
+}
+
 $json0 = 0;
 if(isset( $_GET['json'] )){
     $json0 = $_GET['json'] ;
@@ -101,10 +108,23 @@ function processJson1($jsonstr) {
     }
 }
 
+// if( $crypto0 ==1 )
 
-$urlquote="https://api.finazon.io/latest/time_series?dataset=sip_non_pro&ticker=". $sym. "&interval=". $intr. "&apikey=d4e31787de7446b9aaf281437a981748am";
-// echo $urlquote;
 
+$symcrypto = $sym. "%2FUSDT";
+$urlquotecrypto ="https://api.finazon.io/latest/crypto/time_series?dataset=sip_non_pro&ticker=". $symcrypto. "&interval=". $intr. "&apikey=d4e31787de7446b9aaf281437a981748am";
+//               https://api.finazon.io/latest/crypto/time_series?dataset=sip_non_pro&ticker=BTC%2FUSDT&interval=1m&apikey=d4e31787de7446b9aaf281437a981748am
+
+$urlquotestocks ="https://api.finazon.io/latest/time_series?dataset=sip_non_pro&ticker=". $sym. "&interval=". $intr. "&apikey=d4e31787de7446b9aaf281437a981748am";
+
+$urlquote= $urlquotestocks;
+if( $crypto0 ==1 ){
+    $urlquote= $urlquotecrypto;
+}
+if($msg0==1)  echo $urlquote;
+
+
+// get the json data from REST API
 $content = file_get_contents($urlquote);
 
 // Output the content
@@ -137,8 +157,12 @@ https://api.finazon.io/latest/time_series?dataset=sip_non_pro&ticker=AAL&interva
 iTraderpro.co/quote/index.php?sym=m&intr=30m
 
 //crypto
+https://api.finazon.io/latest/crypto/time_series?dataset=sip_non_pro&ticker=BTC%2FUSDT&interval=1m&apikey=d4e31787de7446b9aaf281437a981748am
+https://api.finazon.io/latest/crypto/time_series?dataset=sip_non_pro&ticker=BTC%2FUSDT&interval=1m&apikey=d4e31787de7446b9aaf281437a981748am
 
-https://api.finazon.io/latest/crypto/time_series?dataset=sip_non_pro&ticker=BTC%2FUSDT&interval=1d&apikey=d4e31787de7446b9aaf281437a981748am
+
+
+
 
 ' \
   --header 'Authorization: apikey d4e31787de7446b9aaf281437a981748am
