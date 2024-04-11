@@ -69,7 +69,17 @@ if(isset( $_GET['csvpad'] )){
 }else{
     $padr = "_";
 }
-
+/*
+ global $sym;
+    global $intr;
+    global $json0;
+    global $msg0;
+    global $padr;
+    global $asstype;
+    global $idx;
+    global $backbars;
+    global $numelems;
+*/
 
 $numelems =  15;
 // this is the nth index into the array
@@ -126,7 +136,7 @@ function processJson1($jsonstr) {
     global $idx;
     global $backbars;
     global $numelems;
-
+    
     $data = json_decode($jsonstr, true);
     // $padr = "_";
 
@@ -217,7 +227,6 @@ function processJson1($jsonstr) {
     }
 }
 
-// if( $crypto0 ==1 )
 
 $asstype = "stocks";
 
