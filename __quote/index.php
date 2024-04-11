@@ -228,6 +228,7 @@ function processJson1($jsonstr) {
 }
 
 
+
 $asstype = "stocks";
 
 $symcrypto = $sym. "%2FUSDT";
