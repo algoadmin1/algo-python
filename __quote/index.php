@@ -97,13 +97,49 @@ if(isset( $_GET['idx'] )){
 //}
 
 $backbars=0;
-if(isset( $_GET['backbars'] )){
-    $backbars = $_GET['backbars'] ;
+if(isset( $_GET['barsback'] )){
+    $backbars = $_GET['barsback'] ;
 }else{
     $backbars = 0;
 } 
 
+$help0=0;
+if(isset( $_GET['help'] )){
+    $help0 = $_GET['help'] ;
+}else{
+    $help0 = 0;
+} 
 
+$timespanstr =" 1m 2m 3m 4m 5m 10m 15m 20m 30m 45m 1h 2h 3h 4h 8h 12h 1d 1w 1mo 2mo 3mo 4mo";
+
+if($help0==1){
+
+    $brstr  =  "<br /><br />";
+
+    echo $brstr;
+    echo "    USAGE: ". $brstr;
+    echo "           where 'https://algoz.ai/' = base URL". $brstr;
+    echo "           ". $brstr;
+    echo "           ". $brstr;
+    echo "           https://algoz.ai/quote?sym=nflx&intr=1m&json=0". $brstr.  "    where &intr= ". $timespanstr. $brstr ;
+    echo "           https://algoz.ai/quote?sym=nflx&intr=1d&json=0&idx=0&barsback=5&csvpad=,". $brstr;
+    echo "           https://algoz.ai/quote?sym=nflx&intr=1d&json=0&idx=1&barsback=20&csvpad=|". $brstr;
+    echo "           https://algoz.ai/quote?sym=nflx&intr=1d&json=0&idx=1&barsback=2". $brstr;
+    echo "           https://itraderpro.co/quote/index.php?sym=BTC&intr=1m&json=0&crypto=1&csvpad=,". $brstr;
+    echo "           https://itraderpro.co/quote/?sym=xrp&crypto=1&intr=5m&json=1". $brstr;
+    echo "           https://algoz.ai/quote?sym=aapl&intr=15m&json=1". $brstr;
+    echo "           https://algoz.ai/quote?sym=amzn&intr=1w&json=1". $brstr;
+    echo "           https://algoz.ai/quote?sym=btc&intr=15m&crypto=1". $brstr;
+    echo "           https://algoz.ai/quote?sym=sol&intr=1w&crypto=1&json=1". $brstr;
+    echo "           https://algoz.ai/quote?sym=eth&intr=1d&crypto=1&json=1". $brstr;
+    echo "           https://algoz.ai/quote?sym=msft&msg=1". $brstr. $brstr;
+    echo "           https://algoz.ai/quote?help=1". $brstr;
+
+    exit('Exiting quote endpoint.');
+
+
+
+}
 
 
 
