@@ -39,7 +39,7 @@ $sym = strtoupper($sym);
 if(isset( $_GET['intr'] )){
     $intr = $_GET['intr'] ;
 }else{
-    $intr = "1";
+    $intr = "1m";
 }
 
 $msg0 = 0;
@@ -71,6 +71,50 @@ if(isset( $_GET['csvpad'] )){
 }
 
 
+$numelems =  15;
+// this is the nth index into the array
+$idx    = 0;
+$idxMax = 29;
+
+if(isset( $_GET['idx'] )){
+    $idx = $_GET['idx'] ;
+}else{
+    $idx = 0;
+}
+
+// if($idx>$idxMax){
+//     $idx = $idxMax;
+//}
+
+$backbars=0;
+if(isset( $_GET['backbars'] )){
+    $backbars = $_GET['backbars'] ;
+}else{
+    $backbars = 0;
+} 
+
+
+
+
+
+
+/*
+
+
+
+
+// https://algoinvestorr.com/quote/?sym=wynn&crypto=0&csvpad=,&intr=15m&json=1
+
+{"data":[{"t":1712778300,"o":104.04,"h":104.4,"l":104,"c":104.24,"v":406591},{"t":1712777400,"o":104.265,"h":104.265,"l":103.84,"c":104.05,"v":63046},{"t":1712776500,"o":104.13,"h":104.41,"l":104.0216,"c":104.2899,"v":44061},{"t":1712775600,"o":103.59,"h":104.11,"l":103.57,"c":104.11,"v":51619},{"t":1712774700,"o":104.16,"h":104.17,"l":103.53,"c":103.645,"v":254105},{"t":1712773800,"o":104.25,"h":104.25,"l":104.09,"c":104.1481,"v":22704},{"t":1712772900,"o":104.66,"h":104.68,"l":104.3,"c":104.33,"v":12026},{"t":1712772000,"o":104.85,"h":104.89,"l":104.56,"c":104.575,"v":12089},{"t":1712771100,"o":104.325,"h":104.875,"l":104.325,"c":104.8025,"v":20056},{"t":1712770200,"o":104.705,"h":104.705,"l":104.22,"c":104.35,"v":20784},{"t":1712769300,"o":104.13,"h":104.84,"l":104.03,"c":104.73,"v":25377},{"t":1712768400,"o":104.495,"h":104.495,"l":103.98,"c":104.17,"v":35286},{"t":1712767500,"o":104.57,"h":104.5899,"l":104.35,"c":104.49,"v":21908},{"t":1712766600,"o":104.57,"h":104.77,"l":104.51,"c":104.627,"v":37423},{"t":1712765700,"o":104.7,"h":104.72,"l":104.5,"c":104.57,"v":24002},{"t":1712764800,"o":105,"h":105,"l":104.66,"c":104.68,"v":19154},{"t":1712763900,"o":104.7704,"h":105.07,"l":104.7704,"c":104.97,"v":20882},{"t":1712763000,"o":104.85,"h":104.99,"l":104.77,"c":104.78,"v":31453},{"t":1712762100,"o":105.1,"h":105.14,"l":104.77,"c":104.92,"v":23331},{"t":1712761200,"o":104.885,"h":105.1,"l":104.885,"c":105.0277,"v":15208},{"t":1712760300,"o":105.14,"h":105.14,"l":104.8,"c":104.91,"v":16833},{"t":1712759400,"o":105.03,"h":105.38,"l":104.9,"c":105.2,"v":31992},{"t":1712758500,"o":105.25,"h":105.35,"l":105.07,"c":105.08,"v":26549},{"t":1712757600,"o":105.13,"h":105.21,"l":104.82,"c":105.155,"v":17110},{"t":1712756700,"o":104.91,"h":105.19,"l":104.4792,"c":105.145,"v":27414},{"t":1712755800,"o":104.78,"h":105.1568,"l":104.33,"c":104.97,"v":47714},{"t":1712691900,"o":106.3,"h":106.53,"l":106.26,"c":106.49,"v":221759},{"t":1712691000,"o":106.71,"h":106.735,"l":106.265,"c":106.31,"v":46066},{"t":1712690100,"o":106.15,"h":106.695,"l":106.15,"c":106.695,"v":33507},{"t":1712689200,"o":106.06,"h":106.12,"l":105.9,"c":106.08,"v":25430}]}
+*/
+
+
+
+
+
+
+// ########### Functions....  see include
+
 function processJson1($jsonstr) {
     // Decode the JSON string
     global $sym;
@@ -79,24 +123,88 @@ function processJson1($jsonstr) {
     global $msg0;
     global $padr;
     global $asstype;
+    global $idx;
+    global $backbars;
+    global $numelems;
 
     $data = json_decode($jsonstr, true);
     // $padr = "_";
 
     // Check if decoding was successful and if data array exists
     if ($data && isset($data['data']) && count($data['data']) > 0) {
+        
+        // echo "idx start = ". $idx;
+
+        $cnt =count($data['data']) ;
+        if($idx > ($cnt-1)) $idx = $cnt-1;
+
+        // echo "count = ". $cnt;
+        // echo "idx fin = ". $idx. "   ";
+
+        $idxstr = "[".$idx. "]";
+
         // Extract the first record
-        $firstRecord = $data['data'][0];
+
+        // $firstRecord = $data['data'][0];
+        $firstRecord = $data['data'][$idx];
 
         // Extract values for 't' and 'c' keys
         $tseconds = $firstRecord['t'];
         $closeprice = $firstRecord['c'];
+        $openprice = $firstRecord['o'];
+
+        $highprice = $firstRecord['h'];
+        $lowprice = $firstRecord['l'];
+        $volume0 = $firstRecord['v'];
+        $pivot = (  $closeprice +  $highprice + $lowprice  ) /3;
+        // $pivotstr = number_format($pivot,    4) ; 
+        $pivotstr =$pivot;
 
         // Convert tseconds to Unix timestamp in EDT
         date_default_timezone_set('America/New_York');
         $datetime = date('Y-m-d H:i:s', $tseconds);
 
-        if($json0==0 ) echo $closeprice. $padr.    $datetime. $padr.     $sym. $padr.    $intr.  $padr. $asstype. $padr. "EOL";
+        $onestr= $closeprice. $padr.    $datetime. $padr.     $sym. $padr.    $intr. $padr. $tseconds. $padr. "PivOHLV=". $padr. $pivotstr.  $padr.  $openprice. $padr.  $highprice. $padr. $lowprice. $padr. $volume0. $padr. $asstype. $padr. $idxstr. $padr. $numelems. $padr.  "EOL". $padr;
+        // $onestr= $closeprice. $padr.    $datetime. $padr.     $sym. $padr.    $intr. $padr. "PivOHLV=". $padr. $pivotstr.  $padr.  $openprice. $padr.  $highprice. $padr. $lowprice. $padr. $volume0. $padr. $asstype. $padr. $idxstr. $padr. "EOL";
+        if( $json0==0 ) echo $onestr. "<br />";
+
+
+        //check for backbars req
+        if($backbars>0 && $json0==0 ){
+            if($backbars > ($cnt-1)) $backbars = $cnt-1;
+
+            $idx0=$idx;
+            $i=0;
+            for($i= $idx0+1; $i<($idx0+$backbars); $i++){
+                $idx=$i;
+                $idxstr = "[".$idx. "]";
+                // echo  "<br />";
+                // Extract the nth record
+                // $firstRecord = $data['data'][0];
+                $firstRecord = $data['data'][$idx];
+                // Extract values for 't' and 'c' keys
+                $tseconds = $firstRecord['t'];
+                $closeprice = $firstRecord['c'];
+                $openprice = $firstRecord['o'];
+
+                $highprice = $firstRecord['h'];
+                $lowprice = $firstRecord['l'];
+                $volume0 = $firstRecord['v'];
+                $pivot = (  $closeprice +  $highprice + $lowprice  ) /3;
+                // $pivotstr = number_format($pivot, 4) ; 
+                $pivotstr =$pivot;
+
+                // Convert tseconds to Unix timestamp in EDT
+                date_default_timezone_set('America/New_York');
+                $datetime = date('Y-m-d H:i:s', $tseconds);
+
+                $onestr= $closeprice. $padr.    $datetime. $padr.     $sym. $padr.    $intr. $padr. $tseconds. $padr. "PivOHLV=". $padr. $pivotstr.  $padr.  $openprice. $padr.  $highprice. $padr. $lowprice. $padr. $volume0. $padr. $asstype. $padr. $idxstr. $padr. $numelems. $padr. "EOL". $padr;
+                echo $onestr;
+                echo   "<br />";
+
+            }//for
+        }//if
+
 
         // Output the results
         if($msg0==1  && $json0==0 ) {
