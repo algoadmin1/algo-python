@@ -232,7 +232,7 @@ function convertJsonData($jsonStr) {
         // if($crypto0==2) $asstype0="options";
         $record['sectype'] = $asstype0 ;
 
-        
+
 
 
         $record['tsecs'] = $record['t'];
@@ -351,7 +351,7 @@ function processJson1($jsonstr) {
         date_default_timezone_set('America/New_York');
         $datetime = date('Y-m-d H:i:s', $tseconds);
 
-        $twostr = $sym. " ". $currencystr. $closeprice. " as of ". $datetime;
+        $twostr = $sym. " ". $currencystr. $closeprice. " as of ". $datetime. " EDT";
 
         $onestr= $closeprice. $padr.    $datetime. $padr.     $sym. $padr.    $intr. $padr. $tseconds. $padr. "PivOHLV=". $padr. $pivotstr.  $padr.  $openprice. $padr.  $highprice. $padr. $lowprice. $padr. $volume0. $padr. $asstype. $padr. $idxstr. $padr. $numelems. $padr.  "EOL". $padr;
         // $onestr= $closeprice. $padr.    $datetime. $padr.     $sym. $padr.    $intr. $padr. "PivOHLV=". $padr. $pivotstr.  $padr.  $openprice. $padr.  $highprice. $padr. $lowprice. $padr. $volume0. $padr. $asstype. $padr. $idxstr. $padr. "EOL";
