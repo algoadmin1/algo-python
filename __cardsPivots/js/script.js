@@ -1473,6 +1473,42 @@ script17.js:1090      9)  SOL(crypto)[2024-04-04]: 6. market cap (USD): 3773747.
     }
 */
 
+let gStringFromUrl = "";
+
+async function getStringFromUrl(urlstr) {
+    // Check if the URL string is not null or empty
+    if (urlstr && urlstr.trim() !== "") {
+        try {
+            // Fetch the content of the URL
+            const response = await fetch(urlstr);
+            
+            // Check if the request was successful
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            
+            // Read the response as text
+            const content = await response.text();
+            gStringFromUrl=content;
+
+            // Return the content
+            return content;
+        } catch (error) {
+            // If an error occurs, return an error message
+            return "Error: " + error.message;
+        }
+    } else {
+        // If the URL string is null or empty, return an error message
+        return "Error: URL is null or empty";
+    }
+}
+
+// // Example usage
+// const urlstr = "https://example.com";
+// getS tringFromUrl(urlstr)
+//     .then(result => console.log(result))
+//     .catch(error => console.error(error));
+
 
 function getJsonUrlJB(urlTarget){
 
@@ -1728,6 +1764,24 @@ let symbolLowerFname=checkForGraphixReturnFname(symbolLower, ".png", "ai_.png");
 
 
 dateSimple= "Today";
+
+
+const urlstr77 = "https://algoz.ai/q?sym="+ symbolLower + "&brief=1" ; 
+// let retstr0 = readBigStringUrl(urlstr77);
+let retstr0 = getStringFromUrl(urlstr77);
+
+console.log("url77  ==", urlstr77);
+
+// getStringFromUrl(urlstr77)
+//     .then(result => console.log(result))
+//     .catch(error => console.error(error));
+
+dateSimple=  gStringFromUrl;
+console.log("retstr0  ==",retstr0 );
+console.log("gStringFromUrl  ==",gStringFromUrl );
+
+
+
 let digz=2;
 
 if(gSecurityType=="stocks"){
