@@ -343,6 +343,9 @@ function processJson1($jsonstr) {
     $data = json_decode($jsonstr, true);
     // $padr = "_";
 
+    $decplaces=2;
+    if($crypto0==1) $decplaces=8;
+
     // Check if decoding was successful and if data array exists
     if ($data && isset($data['data']) && count($data['data']) > 0) {
         
@@ -363,22 +366,29 @@ function processJson1($jsonstr) {
 
         // Extract values for 't' and 'c' keys
         $tseconds = $firstRecord['t'];
-        $closeprice = $firstRecord['c'];
-        $openprice = $firstRecord['o'];
+        $closeprice = number_format($firstRecord['c'], $decplaces);
+        $openprice  = number_format($firstRecord['o'], $decplaces);
+        $highprice  = number_format($firstRecord['h'], $decplaces);
+        $lowprice   = number_format($firstRecord['l'], $decplaces);
+        // $closeprice = $firstRecord['c'];
+        // $openprice = $firstRecord['o'];
+        // $highprice = $firstRecord['h'];
+        // $lowprice = $firstRecord['l'];
 
-        $highprice = $firstRecord['h'];
-        $lowprice = $firstRecord['l'];
-        $volume0 = $firstRecord['v'];
+        $volume0 = $firstRecord['v'];  // volm
+
         $pivot = (  $closeprice +  $highprice + $lowprice  ) /3;
-        // $pivotstr = number_format($pivot,    4) ; 
-        $pivotstr =$pivot;
+        $pivotstr =  $pivot;
+        $pivotstr =  number_format($pivot, $decplaces);
+
 
         // Convert tseconds to Unix timestamp in EDT
         date_default_timezone_set('America/New_York');
         $datetime = date('Y-m-d H:i:s', $tseconds);
 
-        $twostr = $sym. " ". $currencystr. $closeprice. " as of ". $datetime. " EDT";
 
+
+        $twostr = $sym. " ". $currencystr. $closeprice. " as of ". $datetime. " EDT";
 
         $dateResult = convertDate($datetime, "date");   // Mar 20
         $timeResult = convertDate($datetime, "time");   // 2:43pm
@@ -484,6 +494,7 @@ if($msg0==1  || $json0==9 ){
 // processJson1($jsonstr);
 processJson1($content);
 
+// $afterNum = number_format($beforeNum, 6);
 
 
 // Example usage
