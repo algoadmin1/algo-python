@@ -101,7 +101,7 @@ int jb_buySigCnt  =0
 string baridx_str = "Hello World!" 
 
 // string baridx_str1 = bar_index.tostring()
-string txtstr = " " + str.tostring( bar_index ,format.mintick )
+string txtstr = " "// + str.tostring( bar_index ,format.mintick )
 
 string txtstrSell = "SELL" + txtstr
 string txtstrBuy  = "BUY" + txtstr
@@ -158,10 +158,10 @@ if isCrossUnderSell ==1
     jb_buySigCnt:=0
 
 if isCrossUnderBuy==1
-    label.new(x=bar_index, y=low-10, text=txtstrBuy2 , style=label.style_label_up, color=color.green)
+    // label.new(x=bar_index, y=low-10, text=txtstrBuy2 , style=label.style_label_up, color=color.green)
     jb_sellSigCnt:=0
 
-    //plotshape(isEqual101, style=shape.triangleup, locati on=location.abovebar, color=color.green, size=size.small)
+plotshape(isCrossUnderBuy, style=shape.triangleup, location=location.belowbar  , color=color.green, size=size.small)
 
 
 // Plotting the pivot value
