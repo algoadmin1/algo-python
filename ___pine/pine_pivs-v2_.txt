@@ -4,6 +4,73 @@
 //@version=5
 indicator("barPivots", overlay=true)
 
+// get daily support resistance
+
+tf="D"
+
+d_high   = request.security(syminfo.tickerid, tf,  high[1], barmerge.gaps_off, barmerge.lookahead_on  )
+d_low    = request.security(syminfo.tickerid, tf,   low[1], barmerge.gaps_off, barmerge.lookahead_on  )
+d_close  = request.security(syminfo.tickerid, tf, close[1], barmerge.gaps_off, barmerge.lookahead_on  )
+float Pivot    = (d_high+d_low+d_close)/3
+
+// close of the previous day
+// prev_high = request.security(syminfo.tickerid, "D", high[1], lookahead=true)
+// prev_low = request.security(syminfo.tickerid, "D", low[1], lookahead=true)
+// prev_close = request.security(syminfo.tickerid, "D", close[1], lookahead=true)
+
+
+d_high2   = request.security(syminfo.tickerid, tf,  high[2], barmerge.gaps_off, barmerge.lookahead_on  )
+d_low2    = request.security(syminfo.tickerid, tf,   low[2], barmerge.gaps_off, barmerge.lookahead_on  )
+d_close2  = request.security(syminfo.tickerid, tf, close[2], barmerge.gaps_off, barmerge.lookahead_on  )
+p_2       = (d_high2+d_low2+d_close2)/3
+
+d_high3   = request.security(syminfo.tickerid, tf,  high[3], barmerge.gaps_off, barmerge.lookahead_on  )
+d_low3    = request.security(syminfo.tickerid, tf,   low[3], barmerge.gaps_off, barmerge.lookahead_on  )
+d_close3  = request.security(syminfo.tickerid, tf, close[3], barmerge.gaps_off, barmerge.lookahead_on  )
+p_3       = (d_high3+d_low3+d_close3)/3
+
+d_high4   = request.security(syminfo.tickerid, tf,  high[4], barmerge.gaps_off, barmerge.lookahead_on  )
+d_low4    = request.security(syminfo.tickerid, tf,   low[4], barmerge.gaps_off, barmerge.lookahead_on  )
+d_close4  = request.security(syminfo.tickerid, tf, close[4], barmerge.gaps_off, barmerge.lookahead_on  )
+p_4       = (d_high4+d_low4+d_close4)/3
+
+Pivot3    = ( p_2 + p_3 + p_4 )/3
+
+colP      =color.rgb(12, 107, 215, 31)
+colP3     =color.rgb(231, 215, 71)
+colS      =color.red
+colR      =color.green
+
+
+// Pivot    = (d_high+d_low+d_close)/3
+
+R1day = (Pivot *2)-d_low
+S1day = (Pivot *2)-d_high
+
+value= 420
+
+hline(   value, title="Daily pivot", color=color.blue , linestyle = hline.style_solid, linewidth = 3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Get the high of the previous bar
 piv = ( high[1] + close[1] + low[1] ) /3
 
