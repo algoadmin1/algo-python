@@ -14,12 +14,15 @@ p4d = ( high[4] + close[4] + low[4] ) /3
 p3 = ( p2d + p3d + p4d )/ 3
 
 // line width
-lw0 = 3
+lw0 = 2
 
 //  TESTING
 
 int jb_bar       = bar_index
 int jb_barlast   = 0
+int jb_barlastBuy   = 0
+int jb_barlastSell  = 0
+
 int jb_barThresh = 3
 int jb_barcnt_Buy  = 0
 int jb_barcnt_Sell = 0
@@ -36,8 +39,14 @@ string txtstr = " " + str.tostring( bar_index ,format.mintick )
 string txtstrSell = "SELL" + txtstr
 string txtstrBuy  = "BUY" + txtstr
 
-//  OPERATIONAL
+string txtstrSell2 = " " 
+string txtstrBuy2  = " " 
 
+string txtstrsell3 = na
+string txtstrbuy3  = na
+
+
+//  OPERATIONAL
 isCrossUnderSell2 = 0
 isCrossUnderSell = if(ta.crossunder(piv, p3) )
     1
@@ -50,26 +59,40 @@ isCrossUnderBuy  = if(ta.crossunder(p3, piv) )
 else
     0
 
-if isCrossUnderSell==1
+
+if isCrossUnderSell ==1
+    // jb_barlastSell :=bar_index
+    txtstrsell3 := " * " + str.tostring( bar_index ,format.mintick )
+
+if isCrossUnderBuy ==1
+    // jb_barlastBuy :=bar_index
+    txtstrbuy3 := " # " + str.tostring( bar_index ,format.mintick )
+
+
+// if gold > blue selling, so cnt until next crossover = strength of BUY
+if p3 > piv
+    jb_buySigCnt := jb_buySigCnt +1
+
+// if blue > gold selling, so cnt until next crossover = strength of SELL
+if piv > p3
     jb_sellSigCnt := jb_sellSigCnt +1
-    // diff0 = bar_index - jb_barlast
-    // if jb_barcnt_Sell > jb_barThresh
-    //     isCrossUnderSell2 := 1
-    //     jb_barlast := bar_index
-
-
 
 
 //    plotshape( isCrossOverBuy, style = shape.arrowup, color = color.red, size = size.large )
 // plotshape( isCrossUnderSell, style = shape.arrowdown, color = color.red,  size = size.large )
 // plotshape( isCrossUnderBuy,  style = shape.arrowup,  color = color.green, size = size.large )
 
+txtstrSell2:=  txtstrSell+"_" //+txtstrbuy3 //sell3 //  str.tostring( jb_barlastBuy  ,format.mintick )
+txtstrBuy2 :=  txtstrBuy +"_" //+txtstrsell3 //buy3  //  str.tostring( jb_barlastSell ,format.price  )
+
 if isCrossUnderSell ==1
-    label.new(x=bar_index, y=high+10, text=txtstrSell, style=label.style_label_down, color=color.red)
+    label.new(x=bar_index, y=high+10, text=txtstrSell2, style=label.style_label_down, color=color.red)
     //label.new(x=bar_index, y=high, text="SELL" + tostring(bar_index), style=label.style_label_down, color=color.red)
+    jb_buySigCnt:=0
 
 if isCrossUnderBuy==1
-    label.new(x=bar_index, y=low-10, text=txtstrBuy , style=label.style_label_up, color=color.green)
+    label.new(x=bar_index, y=low-10, text=txtstrBuy2 , style=label.style_label_up, color=color.green)
+    jb_sellSigCnt:=0
 
     //plotshape(isEqual101, style=shape.triangleup, locati on=location.abovebar, color=color.green, size=size.small)
 
@@ -79,6 +102,7 @@ plot(piv, color=color.blue, linewidth=lw0)
 
 // Plotting the p3 value
 plot(p3, color=color.rgb(243, 229, 33), linewidth=lw0)
+
 
 
 
