@@ -1,4 +1,4 @@
-// script.js for /search endpoint ui data for user
+// script.js for /ccc
 // const fs = require('fs');
 
 
@@ -1474,6 +1474,39 @@ script17.js:1090      9)  SOL(crypto)[2024-04-04]: 6. market cap (USD): 3773747.
 */
 
 
+function roundDownToNearestModulo5(number) {
+    return Math.floor(number / 5) * 5;
+}
+
+// // Test cases
+// console.log(roundDownToNearestModulo5(102.50)); // Output: 100
+// console.log(roundDownToNearestModulo5(217.97)); // Output: 215
+
+
+function GetOptionsExpiryDate(numWeeks) {
+    // Get the current date
+    var currentDate = new Date();
+    
+    // Calculate the target date
+    var targetDate = new Date(currentDate.getTime() + numWeeks * 7 * 24 * 60 * 60 * 1000); // Add numWeeks weeks
+    
+    // Find the Friday of the target week
+    var fridayDate = new Date(targetDate);
+    fridayDate.setDate(fridayDate.getDate() + (5 - fridayDate.getDay()) % 7); // 5 corresponds to Friday
+    
+    // Format the date as "YYYY-MM-DD"
+    var formattedDate = fridayDate.toISOString().split('T')[0];
+    
+    return formattedDate;
+}
+
+// // Example usage:
+// var numWeeks = 2;
+// var expiryDate = GetOp tionsExpiryDate(numWeeks);
+// console.log(expiryDate); // Output: e.g., "2024-04-26"
+
+
+
 function getJsonUrlJB(urlTarget){
 
       fetch(urlTarget)
@@ -1749,7 +1782,24 @@ if(gSecurityType=="stocks"){
         r3_day = parseFloat(data_today.r3).toFixed(digz);
         r4_day = parseFloat(data_today.r4).toFixed(digz);
 
-        
+
+        //new
+        let priceAboveMult = 1.2;
+        let coveredCallStrikePrice0 = (r4_day * priceAboveMult).toFixed(digz);
+        let coveredCallStrikePrice  = roundDownToNearestModulo5(coveredCallStrikePrice0); 
+
+        let cccstr = "Covered Calls Strike $"+coveredCallStrikePrice.toString();
+
+        let blankstr = " ______ ";
+
+        let wk=0;
+
+        wk=4;
+        let weeks1str = "Options "+wk.toString()+" wks out: "+ GetOptionsExpiryDate(wk);    
+        wk=8;
+        let weeks2str = "Options "+wk.toString()+" wks out: "+ GetOptionsExpiryDate(wk);
+        wk=12;
+        let weeks3str = "Options "+wk.toString()+" wks out: "+ GetOptionsExpiryDate(wk);
 
 
 if( p_day_num < p3_day_num ){
@@ -1765,16 +1815,13 @@ if( p_day_num < p3_day_num ){
 
     <h2 class="name2">${sym0} Covered Call Calc</h2>
     <h2 class="${trendingStylestr}">${trendingstr} </h2>
-    <p class="descriptionR1">R4: $${r4_day}  </p>
-    <p class="descriptionR1">R3: $${r3_day}  </p>
-    <p class="descriptionR1">R2: $${r2_day}  </p>
-    <p class="descriptionR">Resistance R1: $${r1_day}  </p>
-    <p class="descriptionB1">P3:   $${p3_day}   </p>
-    <p class="descriptionB">Pivot:         $${p_day}   </p>
-    <p class="descriptionG">Support S1:   $${s1_day}  </p>
-    <p class="descriptionG1">S2:   $${s2_day}  </p>
-    <p class="descriptionG1">S3:   $${s3_day}  </p>
-    <p class="descriptionG1">S4:   $${s4_day}  </p>
+    <p class="descriptionG">${cccstr}  </p>
+    <p class="descriptionB">${weeks1str}  </p>
+    <p class="descriptionB">${weeks2str}  </p>
+    <p class="descriptionB">${weeks3str}  </p>
+    <p class="descriptionB">${blankstr}  </p>
+    <p class="descriptionR">Day Resistance R1: $${r1_day}  </p>
+    <p class="descriptionG">Day Support S1:   $${s1_day}  </p>
         <button class="button" onclick="window.open('${urlfinal}')">Get Chart</button>
     </div>
     </div>  
@@ -1791,16 +1838,13 @@ postElement.innerHTML=`
 <div class="card-content">
 <h2 class="name2">${sym0} Covered Call Calc</h2>
 <h2 class="${trendingStylestr}">${trendingstr} </h2>
-<p class="descriptionR1">R4: $${r4_day}  </p>
-<p class="descriptionR1">R3: $${r3_day}  </p>
-<p class="descriptionR1">R2: $${r2_day}  </p>
-<p class="descriptionR">Resistance R1: $${r1_day}  </p>
-<p class="descriptionB">Pivot:         $${p_day}   </p>
-<p class="descriptionB1">P3:   $${p3_day}   </p>
-<p class="descriptionG">Support S1:   $${s1_day}  </p>
-<p class="descriptionG1">S2:   $${s2_day}  </p>
-<p class="descriptionG1">S3:   $${s3_day}  </p>
-<p class="descriptionG1">S4:   $${s4_day}  </p>
+<p class="descriptionG">${cccstr}  </p>
+<p class="descriptionB">${weeks1str}  </p>
+<p class="descriptionB">${weeks2str}  </p>
+<p class="descriptionB">${weeks3str}  </p>
+<p class="descriptionB">${blankstr}  </p>
+<p class="descriptionR">Day Resistance R1: $${r1_day}  </p>
+<p class="descriptionG">Day Support S1:   $${s1_day}  </p>
     <button class="button" onclick="window.open('${urlfinal}')">Get Chart</button>
 </div>
 </div>  
