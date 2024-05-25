@@ -33,29 +33,5 @@ let gImgFiles =[
     'tsla.png',
     'vxx.png',
     'xrp.png',
-
-
-    'sqqq.png',
-    'tqqq.png',
-    'x.png',
-    'm.png',
-    'mgm.png',
-    'gd.png',
-    'rtx.png',
-    'jwn.png',
-    'mcd.png',
-    'yum.png',
-    'brkb.png',
-    'arkk.png',
-
-    'zm.png',
-    'etsy.png',
-    'avav.png',
-    'snap.png',
-    'hal.png',
-    'gld.png',
-    'k.png',
-
-
     'blank.gif',
 ];
