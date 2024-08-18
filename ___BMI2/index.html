@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Fitness BMI Calculator</h1>
+        <form id="bmiForm">
+            <div class="toggle-group">
+                <label for="unitSystem">Unit System:</label>
+                <select id="unitSystem">
+                    <option value="imperial">Imperial (ft, lbs)</option>
+                    <option value="metric">Metric (cm, kg)</option>
+                </select>
+            </div>
+            <div class="input-group imperial-input">
+                <label for="feet">Height (Feet):</label>
+                <input type="number" id="feet" name="feet" min="0">
+            </div>
+            <div class="input-group imperial-input">
+                <label for="inches">Height (Inches):</label>
+                <input type="number" id="inches" name="inches" min="0" max="11">
+            </div>
+            <div class="input-group metric-input" style="display: none;">
+                <label for="heightCm">Height (cm):</label>
+                <input type="number" id="heightCm" name="heightCm" min="0">
+            </div>
+            <div class="input-group imperial-input">
+                <label for="weightLbs">Weight (Pounds):</label>
+                <input type="number" id="weightLbs" name="weightLbs" min="0">
+            </div>
+            <div class="input-group metric-input" style="display: none;">
+                <label for="weightKg">Weight (kg):</label>
+                <input type="number" id="weightKg" name="weightKg" min="0">
+            </div>
+            <button type="submit">Calculate BMI</button>
+        </form>
+        <div id="result"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
