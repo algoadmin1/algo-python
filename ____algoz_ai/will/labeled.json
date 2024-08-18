@@ -1,0 +1,82 @@
+{
+    "Meta Data": {
+        "1. Information": "Daily Prices (open, high, low, close) and Volumes",
+        "2. Symbol": "IBM",
+        "3. Last Refreshed": "2024-08-16",
+        "4. Output Size": "Compact",
+        "5. Time Zone": "US/Eastern"
+     },
+    "Time Series (Daily)": {
+        "2024-08-16": {
+            "1. open": "193.5800",
+            "2. high": "194.3500",
+            "3. low": "192.8600",
+            "4. close": "193.7800",
+            "5. volume": "2494472"
+        },
+        
+
+        "2024-08-15": {
+            "open": "193.5100",
+            "high": "194.2500",
+            "low": "193.2800",
+            "close": "193.9500",
+            "volume": "2471985",
+
+            
+            "r1_mo": "2471985",
+            "p_mo": "2471985",
+            "s1_mo": "2471985",
+
+
+            "r1_wk": "2471985",
+            "p_wk": "2471985",
+            "p3_wk": "2471985",
+            "s1_wk": "2471985",
+
+            // assume daily
+            "s4": "2471985",
+            "s3": "2471985",
+            "s2": "2471985",
+            "s1": "2471985",
+            "p": "2471985",
+            "p3": "2471985",
+            "r4": "2471985",
+            "r3": "2471985",
+            "r2": "2471985",
+            "r1": "2471985",
+
+            "event": {
+                 "FOMC":    "08:30:00 EST",
+                 "expected": "550bbp"
+            },
+            "event": {
+                 "EARNINGS":   "2024-08-15T05:30:00",
+                 "timezone":   "EST",
+                 "expectedRev":  "1.2%",
+                 "expectedEarn": "1.2%"
+            },
+
+            "gapStart": "45.54",
+            "gapEnd": "40.25"
+
+        },
+
+
+        "2024-08-14": {
+            "1. open": "191.1500",
+            "2. high": "193.0900",
+            "3. low": "190.7300",
+            "4. close": "192.3200",
+            "5. volume": "1895114"
+        },
+
+    "Events Calendar": {
+        "2024-08-16": {
+            "FOMC Meeting": "expected outcome:neutral",
+          },
+          "2024-07-22" : {
+            "GapDown": "$18.50", 
+          },
+    }
+}
