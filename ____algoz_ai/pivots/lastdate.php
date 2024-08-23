@@ -283,7 +283,7 @@ $cl0 =  number_format($cl, 2);
 
 
     echo '<br />';
-    echo $datastr . " Price Levels <br />computed as of: ". $lastdate . " for symbol $sym close=$". $cl0;
+    echo $gPeriod . " Price Levels <br />computed as of: ". $lastdate . " for symbol $sym close=$". $cl0;
     echo '<br />';
 
     echo "R4 = $ $r4". "<br />" ;
