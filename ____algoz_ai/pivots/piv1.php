@@ -111,7 +111,7 @@ function DetermineLastDate($frequency) {
  
 
 function DecodeAlphavantageJson($json0, $num, $datastr) {
-    global $msg, $isFriday, $todayDate0, $todayTime0, $isAfterMarket , $gPeriod;
+    global $msg;
     // Decode the JSON string into a PHP associative array
     $data = json_decode($json0, true);
 
@@ -144,16 +144,11 @@ function DecodeAlphavantageJson($json0, $num, $datastr) {
     }
 
 
-    $isFriday=  CheckIfFridayOnly( $todayDate0 );
-    if($msg==1) echo "Friday = ". $isFriday;
-
 
 
     if($msg==1) echo "] decoding...  $datastr  (last $num items) <br />";
 
-    $i=0;  
-    $computed=0;    // pivots computed =0 false
- 
+    $i=0;   
     // Loop through the $result array
     foreach ($result as $date => $data) {
         // Print the date
@@ -192,22 +187,12 @@ function DecodeAlphavantageJson($json0, $num, $datastr) {
             echo "<br />";
             echo "$date :   [i]= $i     h,l,c= $". $hi. " $". $lo. " $". $cl;
             echo "<br />";
-
-            echo " [date],  today's date,  gPeriod: ".  $date .",  ". $todayDate0  .",  ". $gPeriod;
-
         }
 
-        $gPeriod0 =  strtolower($gPeriod) ;
-
-        if(  $i==0  &&  $gPeriod0=="weekly"  &&  $isFriday==true  &&  $date==$todayDate0  && $isAfterMarket==true  &&  $computed==0 ){
+        if($i==1){
             ComputePivots( $hi, $lo, $cl, $datastr, $date );
-            $computed=1;
-
-        // normally last week is [1] in the sequence
-        }else if( $i==1  &&  $computed==0){
-            ComputePivots( $hi, $lo, $cl, $datastr, $date );
-            $computed=1;
         }
+
 
         $i++;
 
@@ -298,7 +283,7 @@ $cl0 =  number_format($cl, 2);
 
 
     echo '<br />';
-    echo $gPeriod . " Price Levels <br />as of: ". $lastdate . " for $sym closed at $". $cl0;
+    echo $gPeriod . " Price Levels <br />computed as of: ". $lastdate . " for symbol $sym close=$". $cl0;
     echo '<br />';
 
     echo "R4 = $ $r4". "<br />" ;
@@ -319,52 +304,6 @@ $cl0 =  number_format($cl, 2);
 
 
 }
-
-
-function CheckIfFridayOnly($udate) {
-    // Convert the $udate string to a timestamp
-    $timestamp = strtotime($udate);
-
-    // Get the day of the week for the given date (0 for Sunday, 6 for Saturday)
-    $dayOfWeek = date('w', $timestamp);
-
-    // Check if the date is a Friday (5 represents Friday)
-    if ($dayOfWeek != 5) {
-        return false;
-    }else  return true;
- 
-    return false;
-}
-
-
-
-function CheckIfFridayAfterMarket($udate) {
-    // Convert the $udate string to a timestamp
-    $timestamp = strtotime($udate);
-
-    // Get the day of the week for the given date (0 for Sunday, 6 for Saturday)
-    $dayOfWeek = date('w', $timestamp);
-
-    // Check if the date is a Friday (5 represents Friday)
-    if ($dayOfWeek != 5) {
-        return false;
-    }else  return true;
- 
-    // // Get the current time in New York (EST)
-    // $now = new DateTime("now", new DateTimeZone('America/New_York'));
-
-    // // Create a DateTime object for the market close time on the given date
-    // $marketCloseTime = new DateTime($udate . ' 16:20:00', new DateTimeZone('America/New_York'));
-
-    // // Check if the current time is after 4:20 PM on the given date
-    // if ($now > $marketCloseTime) {
-    //     return true;
-    // }
-
-    return false;
-}
-
-
 
 
 
@@ -399,40 +338,7 @@ $query_monthly_adj= "https://www.alphavantage.co/query?function=TIME_SERIES_MONT
 // $d1  =DetermineLastDate( $freq ) ;
 // echo "] date = ". $d1 .", freq=". $freq ;
 
-$todayDate0 = date("Y-m-d");
-$todayTime0 = date("h:i:sa") ;
-$todayAmPm0 = substr( $todayTime0, -2);
-$todayAmPm  = strtolower($todayAmPm0);    // ie "pm"
-
-echo  "Today is " . $todayDate0 .", ";
-echo "time in NY is " .  $todayTime0.  ".<br />";
-// Today is 2024-08-23, the time in NY is 09:02:53pm
-$hour_part = substr($todayTime0, 0, 2);    // 09
-$mins_part = substr($todayTime0, 3, 2);   // 09:02:53pm  ==> 02
-$hr_num = (int)$hour_part;
-$mi_num = (int)$mins_part;
-
-$udate      =  $todayDate0;      //"2024-08-23"; // Example date string
-$isFriday   =  CheckIfFridayOnly($udate);
-// check for after mkt hours
-$isAfterMarket= false;
-if( $todayAmPm=="am"){
-    $isAfterMarket= false;
-}else if( $todayAmPm =="pm"){
-    if($hr_num < 4 )  $isAfterMarket=false; 
-        else if($hr_num ==4 && $mi_num<16)  $isAfterMarket=false; 
-            else   $isAfterMarket=true;
-}
-if($isAfterMarket==true) echo "The US Stock Market is closed.<br />";
-
-if($msg==1){
-
-    echo  "<br />============ FRIDAY?[". $isFriday;
-    echo  "]=== isAfterMarket= $isAfterMarket == hrs min= $hour_part $mins_part == $hr_num + $mi_num=". ($hr_num+$mi_num)  ." == todayAmPm= $todayAmPm == =======";
-
-}
-
-
+ 
 
 if($msg==1) echo "<br />";
 
@@ -448,7 +354,7 @@ $gPeriod="Monthly";
 // $json = file_get_contents('https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=IBM&apikey=demo');
 $json = file_get_contents( $query_monthly );
 // Decode the JSON and get the first 2 entries from the "Weekly Time Series"
-// $result = Dec odeAlphavantageJson($json, 8, "Weekly Time Series");
+// $result = DecodeAlphavantageJson($json, 8, "Weekly Time Series");
 $result = DecodeAlphavantageJson($json, 3,  $tf_monthly );
 // print_r($result);
 
@@ -457,7 +363,7 @@ $result = DecodeAlphavantageJson($json, 3,  $tf_monthly );
 
 // echo "<br />";
 // $json = file_get_contents( $query_daily   );
-// $result = Dec odeAlphavantageJson($json, 45,  $tf_daily  );
+// $result = DecodeAlphavantageJson($json, 45,  $tf_daily  );
 
 
 

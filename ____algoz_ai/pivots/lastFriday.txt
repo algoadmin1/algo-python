@@ -1,0 +1,6 @@
+
+
+write a php function CheckIfFridayAfterMarket( $udate ) which takes a $udate string in unix date format "YYYY-MM-DD" and returns True if the $udate is a Friday, and the time in NYC is after 4:20pm EST
+
+if today==Fri && todayUnxiDate==date[0]
+     and TimeNYC> 4:30p
