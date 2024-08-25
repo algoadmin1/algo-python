@@ -536,7 +536,7 @@ $json = file_get_contents( $query_monthly );
 $result = DecodeAlphavantageJson($json, 26,  $tf_monthly );
 // print_r($result);
 
-
+ 
 
 echo "<br />";
 $gPeriod="Yearly";
