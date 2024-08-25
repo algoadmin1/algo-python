@@ -44,6 +44,7 @@ if(isset( $_GET['sym'] )){
 $sym = strtoupper($sym);
 if($msg==1) echo "] sym = ". $sym ;
 
+$dates = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 
 
@@ -132,7 +133,7 @@ function DetermineLastDate($frequency) {
 
 
 function DecodeAlphavantageJson($json0, $num, $datastr) {
-    global $msg, $isFriday, $todayDate0, $todayTime0, $isAfterMarket , $gPeriod, $prevYearStr, $prevYearClose, $prevYearCloseDate ;
+    global $msg, $isFriday, $isWeekend,  $todayDate0, $todayTime0, $isAfterMarket , $gPeriod, $prevYearStr, $prevYearClose, $prevYearCloseDate ;
     // Decode the JSON string into a PHP associative array
     $data = json_decode($json0, true);
 
@@ -232,6 +233,10 @@ function DecodeAlphavantageJson($json0, $num, $datastr) {
 
 
         if(  $i==0  &&  $gPeriod0=="weekly"  &&  $isFriday==true  &&  $date==$todayDate0  && $isAfterMarket==true  &&  $computed==0 ){
+            ComputePivots( $hi, $lo, $cl, $datastr, $date );
+            $computed=1;
+        // chk weekend case
+        }else   if(  $i==0  &&  $gPeriod0=="weekly"  &&  $isWeekend==true  &&  $computed==0 ){
             ComputePivots( $hi, $lo, $cl, $datastr, $date );
             $computed=1;
         // normally last week is [1] in the sequence
@@ -377,6 +382,24 @@ function CheckIfFridayOnly($udate) {
     return false;
 }
 
+function CheckIfWeekend($udate) {
+        global $dates, $gDayOfWeek;
+        // Convert the $udate string to a timestamp
+        $timestamp = strtotime($udate);
+
+        // Get the day of the week for the given date (0 for Sunday, 6 for Saturday)
+        $dayOfWeek = date('w', $timestamp);
+    
+        $gDayOfWeek= $dates[ $dayOfWeek ];
+
+
+        // Check if the date is a Friday (6 represents Sat, 0=Sun)
+        if ($dayOfWeek == 6  || $dayOfWeek == 0) {    // == SAT OR SUN
+            return  true;
+        }else  return false ;
+     
+        // return false;
+}
 
 
 function CheckIfFridayAfterMarket($udate) {
@@ -493,8 +516,16 @@ $todayTime0 = date("h:i:sa") ;
 $todayAmPm0 = substr( $todayTime0, -2);
 $todayAmPm  = strtolower($todayAmPm0);    // ie "pm"
 
-echo  "Today is " . $todayDate0 .", ";
-echo "time in NY is " .  $todayTime0.  ".<br />";
+// $todayDate3  = strtotime($todayDate0);
+// $todayDate2= date_format($todayDate3,"l, F jS Y");
+
+$dayOfWeek =7;
+$gDayOfWeek="nil";
+$isWeekend=  CheckIfWeekend( $todayDate0 );  // this sets $gDayOfWeek
+
+
+echo  "Today is $gDayOfWeek, " . $todayDate0 .", ";
+echo "NY time is " .  $todayTime0.  ".<br />";
 // Today is 2024-08-23, the time in NY is 09:02:53pm
 $hour_part = substr($todayTime0, 0, 2);    // 09
 $mins_part = substr($todayTime0, 3, 2);   // 09:02:53pm  ==> 02
@@ -512,6 +543,12 @@ if( $todayAmPm=="am"){
         else if($hr_num ==4 && $mi_num<16)  $isAfterMarket=false; 
             else   $isAfterMarket=true;
 }
+
+// $dayOfWeek =7;
+// $gDayOfWeek="nil";
+// $isWeekend=  CheckIfWeekend( $todayDate0 );
+if($isWeekend==true) $isAfterMarket=true;
+
 
 if($isAfterMarket==true) echo "The US Stock Market is closed.<br />";
 
