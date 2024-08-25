@@ -13,6 +13,12 @@ Write a php function DetermineLastDate( $frequency , $udate) which takes  variab
  * 
  * 
  * 
+ * BUGS:
+ * 
+ *      FRI MKT CLOSED, BUT CHK FOR SAT/ SUN, ALSO 08-23 FRI CASE LOOKING ON SAT
+ * 
+ *      CHECK NVDA SPLIT ADJUSTED DATA 2023
+ * 
  * */
 
 
