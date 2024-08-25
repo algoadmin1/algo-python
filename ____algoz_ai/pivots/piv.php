@@ -108,10 +108,25 @@ function DetermineLastDate($frequency) {
 }
 
 
+ function CheckAndUpdatePrevYear( $high0, $low0 ){
+    global $msg, $prevYearHigh , $prevYearLow  , $prevYearClose   ;
+
+
+    if($msg==1) echo "<br />] CheckAndUpdatePrevYear() called with hi lo ==  $high0, $low0 ...";
+
+    if($high0 > $prevYearHigh)  $prevYearHigh= $high0;
+    if( $low0 < $prevYearLow )  $prevYearLow = $low0;
+
+
+    if($msg==1) echo "<br />] prevYearHigh, prevYearLow, prevYearClose == $prevYearHigh, $prevYearLow, $prevYearClose  ...";
  
 
+ }
+
+
+
 function DecodeAlphavantageJson($json0, $num, $datastr) {
-    global $msg, $isFriday, $todayDate0, $todayTime0, $isAfterMarket , $gPeriod;
+    global $msg, $isFriday, $todayDate0, $todayTime0, $isAfterMarket , $gPeriod, $prevYearStr, $prevYearClose, $prevYearCloseDate ;
     // Decode the JSON string into a PHP associative array
     $data = json_decode($json0, true);
 
@@ -144,16 +159,25 @@ function DecodeAlphavantageJson($json0, $num, $datastr) {
     }
 
 
+    // $thisYear= substr($todayDate0, 0, 4);
+    // $prevYear = (int)$thisYear;
+    // $prevYear--;
+    // $prevYearStr=(string)$prevYear;
+
+    // if($msg==1)   echo "<br />] * thisYear=". $thisYear. ", prevYear=". $prevYear. ", prevYearStr=". $prevYearStr.  "<br />";
+
+
+
     $isFriday=  CheckIfFridayOnly( $todayDate0 );
     if($msg==1) echo "Friday = ". $isFriday;
 
 
 
-    if($msg==1) echo "] decoding...  $datastr  (last $num items) <br />";
+    if($msg==1) echo "<br /><br />] decoding...  $datastr  (last $num items) <br />";
 
     $i=0;  
     $computed=0;    // pivots computed =0 false
- 
+  
     // Loop through the $result array
     foreach ($result as $date => $data) {
         // Print the date
@@ -161,6 +185,10 @@ function DecodeAlphavantageJson($json0, $num, $datastr) {
         if($msg==1) echo $date . "[OHLCV]: ";
         // echo $date . "[OLHC adjC V]: ";
 
+        $dateYearStr=  substr($date, 0, 4);   // "2023-12-09"  ===> "2023"
+        $dateMonthStr= substr($date, 5, 2);   // "2023-12-09"  ===> "12"
+
+      
         // Loop through the data for the specific date and concatenate it into a string
         $dataString = [];
 
@@ -188,47 +216,54 @@ function DecodeAlphavantageJson($json0, $num, $datastr) {
         if($msg==1) {
             // Join the data string with commas and print it
             echo implode(", ", $dataString) ; 
-            // echo "<br />";
             echo "<br />";
             echo "$date :   [i]= $i     h,l,c= $". $hi. " $". $lo. " $". $cl;
             echo "<br />";
-
             echo " [date],  today's date,  gPeriod: ".  $date .",  ". $todayDate0  .",  ". $gPeriod;
-
         }
 
         $gPeriod0 =  strtolower($gPeriod) ;
 
+
         if(  $i==0  &&  $gPeriod0=="weekly"  &&  $isFriday==true  &&  $date==$todayDate0  && $isAfterMarket==true  &&  $computed==0 ){
             ComputePivots( $hi, $lo, $cl, $datastr, $date );
             $computed=1;
-
         // normally last week is [1] in the sequence
         }else if( $i==1  &&  $computed==0){
             ComputePivots( $hi, $lo, $cl, $datastr, $date );
             $computed=1;
         }
 
+
+
+        // use monthly data to compute yr pivots
+        if($gPeriod0=="monthly" && $dateYearStr==$prevYearStr){
+            if($dateMonthStr=="12"){
+                $prevYearClose= $cl ;
+                $prevYearCloseDate=$date;
+                if($msg==1) echo "<br />] dateMonthStr= $dateMonthStr ===> prevYrClose= $prevYearClose  on $prevYearCloseDate,  $cl <br />";
+                CheckAndUpdatePrevYear( $hi, $lo );
+
+            }else if($gPeriod0=="monthly"){
+                CheckAndUpdatePrevYear( $hi, $lo );
+            }
+
+        }
+
+
+        if($msg==1) {
+            echo "<br />] i= $i <br />";
+        }
+
         $i++;
 
-        /*
-        ] sym = AMD
-] decoding... Monthly Time Series (last 3 items)
 
-2024-08-22[OLHCV]: 145.0000, 162.0400, 121.8250, 151.7000, 876437465
-2024-07-31[OLHCV]: 161.2500, 187.2800, 134.0500, 144.4800, 1243473153
-2024-06-28[OLHCV]: 170.8200, 171.0800, 153.3400, 162.2100, 959732843
-grabbing weekly
-
-] decoding... Weekly Time Series (last 3 items)
-
-2024-08-22[OLHCV]: 148.4300, 162.0400, 147.7200, 151.7000, 226146515
-2024-08-16[OLHCV]: 134.4400, 149.3693, 133.2300, 148.5600, 192155110
-2024-08-09[OLHCV]: 122.1600, 139.1400, 121.8250, 134.2700, 284841912
-        */
+    }//for
 
 
-    }
+
+
+
 
     // Return the resulting array
     return $result;
@@ -364,7 +399,44 @@ function CheckIfFridayAfterMarket($udate) {
     return false;
 }
 
+/**
+ * Determines if the given date is the last Friday of its month.
+ *
+ * @param string $udate The date in "YYYY-MM-DD" format.
+ * @return bool True if the date is the last Friday of the month, false otherwise.
+ */
+/*
+function isLastFridayOfMonth($udate) {
+    // Create a DateTime object from the input string
+    $date = DateTime::createFromFormat('Y-m-d', $udate);
 
+    // Check if the date is valid
+    if (!$date) {
+        return false;
+    }
+
+    // Check if it's a Friday
+    if ($date->format('N') != 5) {
+        return false;
+    }
+
+    // Clone the date and move to the next Friday
+    $nextFriday = clone $date;
+    $nextFriday->modify('next Friday');
+
+    // If the next Friday is in a different month, this was the last Friday
+    return $nextFriday->format('m') != $date->format('m');
+}
+
+// Example usage:
+$testDate = "2024-08-23";  // This is the last Friday of August 2024
+
+if (isLastFridayOfMonth($testDate)) {
+    echo "$testDate is the last Friday of the month\n";
+} else {
+    echo "$testDate is not the last Friday of the month\n";
+}
+*/
 
 
 
@@ -383,6 +455,8 @@ $tf_weekly_adj=  "Weekly Adjusted Time Series";
 $tf_monthly=    "Monthly Time Series" ;
 $tf_monthly_adj="Monthly Adjusted Time Series";
 
+$tf_yearly=    "Yearly Time Series" ;
+
  
 $query_daily =      "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" . $sym. $paddy ; 
 $query_daily_adj =  "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" . $sym. $paddy ; 
@@ -394,12 +468,21 @@ $query_monthly =    "https://www.alphavantage.co/query?function=TIME_SERIES_MONT
 $query_monthly_adj= "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=" . $sym. $paddy ; 
 
 
-// $freq="monthly";
-// $d1  ="***";  
-// $d1  =DetermineLastDate( $freq ) ;
-// echo "] date = ". $d1 .", freq=". $freq ;
+$prevYearHigh = -10000000.0;
+$prevYearLow  =  10000000.0;   // any low will be < 10M
+$prevYearClose    = "1999-12-31";
+$prevYearCloseDate= -1.00;
+
 
 $todayDate0 = date("Y-m-d");
+$thisYear= substr($todayDate0, 0, 4);
+$prevYear = (int)$thisYear;
+$prevYear--;
+$prevYearStr=(string)$prevYear;
+
+if($msg==1)   echo "<br />] ** thisYear=". $thisYear. ", prevYear=". $prevYear. ", prevYearStr=". $prevYearStr.  "<br />";
+
+
 $todayTime0 = date("h:i:sa") ;
 $todayAmPm0 = substr( $todayTime0, -2);
 $todayAmPm  = strtolower($todayAmPm0);    // ie "pm"
@@ -423,6 +506,7 @@ if( $todayAmPm=="am"){
         else if($hr_num ==4 && $mi_num<16)  $isAfterMarket=false; 
             else   $isAfterMarket=true;
 }
+
 if($isAfterMarket==true) echo "The US Stock Market is closed.<br />";
 
 if($msg==1){
@@ -444,14 +528,28 @@ $result = DecodeAlphavantageJson($json, 3,  $tf_weekly );
 
 if($msg==1) echo "<br />";
 
+echo "<br />";
 $gPeriod="Monthly";
-// $json = file_get_contents('https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=IBM&apikey=demo');
 $json = file_get_contents( $query_monthly );
 // Decode the JSON and get the first 2 entries from the "Weekly Time Series"
 // $result = Dec odeAlphavantageJson($json, 8, "Weekly Time Series");
-$result = DecodeAlphavantageJson($json, 3,  $tf_monthly );
+$result = DecodeAlphavantageJson($json, 26,  $tf_monthly );
 // print_r($result);
 
+
+
+echo "<br />";
+$gPeriod="Yearly";
+$prevYearHigh= number_format($prevYearHigh, 2);
+$prevYearLow=  number_format($prevYearLow, 2);
+$prevYearClose= number_format($prevYearClose, 2);
+
+ComputePivots( $prevYearHigh, $prevYearLow, $prevYearClose, $tf_yearly, $prevYearCloseDate );
+$pryr4=substr( $prevYearCloseDate,0,4 );
+echo "<br />*** Note: Previous Year's ($pryr4) High, Low= $". $prevYearHigh. ", $". $prevYearLow. ", and $sym closed at $". "$prevYearClose on $prevYearCloseDate".". <br />";
+echo "<br />algoz.ai and iTraderPro Copyright (c) 2011-2025 by Algo Investor Inc. All Rights Reserved.";
+echo "<br />";
+echo "<br />";
 
 
 
