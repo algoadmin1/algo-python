@@ -39,7 +39,7 @@ if (isset($_SESSION["user"])) {
         }
         ?>
       <form action="login.php" method="post">
-        <div><h1>Welcome to algoz.ai !</h1></div>
+        <div><h1>Welcome to <strong>algoz.ai</strong> !</h1></div>
   
         <div class="form-group">
             <input type="email" placeholder="Email:" name="email" class="form-control">
@@ -51,7 +51,7 @@ if (isset($_SESSION["user"])) {
             <input type="submit" value="Login" name="login" class="btn btn-primary">
         </div>
       </form>
-     <div><p>Not registered yet <a href="registration.php">Register Here</a></p></div>
+     <div><p>Not registered yet? <a href="registration.php">Sign up here</a></p></div>
     </div>
 </body>
 </html>

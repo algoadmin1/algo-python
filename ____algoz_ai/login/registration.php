@@ -17,28 +17,32 @@ if (isset($_SESSION["user"])) {
 <body>
     <div class="container">
         <?php
+            $password_len=4;
         if (isset($_POST["submit"])) {
            $fullName = $_POST["fullname"];
            $email = $_POST["email"];
            $password = $_POST["password"];
-           $passwordRepeat = $_POST["repeat_password"];
+        //    $passwordRepeat = $_POST["repeat_password"];
            
            $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
            $errors = array();
            
-           if (empty($fullName) OR empty($email) OR empty($password) OR empty($passwordRepeat)) {
-            array_push($errors,"All fields are required");
+        //    if (empty($fullName) OR empty($email) OR empty($password) OR empty($passwordRepeat)) {
+            if (empty($fullName) OR empty($email) OR empty($password)  ) {
+                array_push($errors,"All fields are required");
            }
            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             array_push($errors, "Email is not valid");
            }
-           if (strlen($password)<8) {
-            array_push($errors,"Password must be at least 8 charactes long");
+           if (strlen($password)<$password_len) {
+            array_push($errors,"Password must be at least $password_len charactes long");
            }
-           if ($password!==$passwordRepeat) {
-            array_push($errors,"Password does not match");
-           }
+
+        //    if ($password!==$passwordRepeat) {
+        //     array_push($errors,"Password does not match");
+        //    }
+
            require_once "database.php";
            $sql = "SELECT * FROM users WHERE email = '$email'";
            $result = mysqli_query($conn, $sql);
@@ -68,20 +72,25 @@ if (isset($_SESSION["user"])) {
         }
         ?>
         <form action="registration.php" method="post">
-            <div><h1>Sign up for algoz.ai</h1></div>
+            <div><h1>Sign up for <strong>algoz.ai</strong></h1></div>
 
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <input type="text" class="form-control" name="fullname" placeholder="Full Name:">
-            </div>
+            </div> -->
             <div class="form-group">
-                <input type="emamil" class="form-control" name="email" placeholder="Email:">
+                <input type="email" class="form-control" name="email" placeholder="Email:">
             </div>
             <div class="form-group">
                 <input type="password" class="form-control" name="password" placeholder="Password:">
             </div>
             <div class="form-group">
-                <input type="password" class="form-control" name="repeat_password" placeholder="Repeat Password:">
+                <input type="text" class="form-control" name="fullname" placeholder="Phone #:">
             </div>
+<!--             
+            <div class="form-group">
+                <input type="password" class="form-control" name="repeat_password" placeholder="Repeat Password:">
+            </div> -->
+
             <div class="form-btn">
                 <input type="submit" class="btn btn-primary" value="Register" name="submit">
             </div>
