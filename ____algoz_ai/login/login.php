@@ -17,7 +17,16 @@ if (isset($_SESSION["user"])) {
 <body>
     <div class="container">
         <?php
-         $msg=1;
+        /*
+
+        */
+        //  $msg=1;
+         $msg=0;
+         $user_ipRaw = $_SERVER['REMOTE_ADDR'];   // 2600:8801:3500:7160:51b5:f0eb:bc22:728c
+        //  $user_ip    = htmlspecialchars($user_ip);
+         $user_ip    = $user_ipRaw ;
+
+        echo "UserIP=". $user_ip;
 
 
         if (isset($_POST["login"])) {
@@ -105,6 +114,8 @@ if (isset($_SESSION["user"])) {
             //     // echo "<hr>";
             // }
 
+            
+
 
                 $insertdb=0;
                 if ($result){                                   
@@ -119,7 +130,10 @@ if (isset($_SESSION["user"])) {
 
                 } else {
                         $insertdb=1;
-                        if($msg==1) echo "] NO USER found with that email.<br />";
+                        // if($msg==1) echo "] NO USER found with that email.<br />";
+                        $errorUserNotFound= $email. " not found; try again or Sign Up below.";
+                        echo "<div class='alert alert-danger'>$errorUserNotFound</div>";
+
                         }
 
 
