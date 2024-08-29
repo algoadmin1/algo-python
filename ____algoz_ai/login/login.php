@@ -56,14 +56,37 @@ if (isset($_SESSION["user"])) {
 
 
                 $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                echo "...";
+                // print_r( $result) ;
+                foreach ($result as $key => $value) {
+                    echo $key . ": " . $value . "<br />";
+                }
              //   from OLD   
-                $user   = mysqli_fetch_array($result, MYSQLI_ASSOC);
+            //    $user   = mysqli_fetch_array($result, MYSQLI_ASSOC);          // didnt work
+            //    $user   = mysqli_fetch_array($result, PDO::MYSQLI_ASSOC);    // didnt work
+
+
+            // $results = $stmt->fetchAll(PDO::FETCH_ASSOC);                // didnt work
+
+            // foreach ($result as $result0) {
+            //     echo "Email: " . $result0["email"] . "<br>";
+            //     echo "Password: " . $result0["password"] . "<br>";
+            //     echo "id#: " . $result0["userId"] . "<br>";
+            //     // echo "<hr>";
+            // }
 
 
                 $insertdb=0;
                 if ($result){                                   
                     $insertdb=0;
-                    if($msg==1) echo "] GOOD!! $email found in user table! ";          
+                    // if($msg==1) echo "] $email found in user table! ". $user["password"]. " ". $user["userId"];      
+                    if($msg==1) echo "] $email found in user table! ". $result["password"]. " ". $result["userId"];      
+                   
+                    // session_start();
+                    // $_SESSION["user"] =$email ; 
+                    // header("Location: index.php");
+                    // die();    
+
                 } else {
                         $insertdb=1;
                         if($msg==1) echo "] NO USER found with that email.<br />";
@@ -71,21 +94,21 @@ if (isset($_SESSION["user"])) {
 
 
                             
-            //   from OLD   
-            if ($user) {
-                    // if (password_verify($password, $user["password"])) {
-                    if (password_verify($password, $user["pwdhash"])) {
-                        session_start();
-                            $_SESSION["user"] =$email ; 
-                            header("Location: index.php");
-                            die();
-                        }else{
-                            echo "<div class='alert alert-danger'>Password does not match!</div>";
-                        }
-                    }else{
-                        echo "<div class='alert alert-danger'>Email does not match</div>";
-                    }
-            //   from OLD   
+            // //   from OLD   
+            // if ($user) {
+            //         // if (password_verify($password, $user["password"])) {
+            //         if (password_verify($password, $user["pwdhash"])) {
+            //             session_start();
+            //                 $_SESSION["user"] =$email ; 
+            //                 header("Location: index.php");
+            //                 die();
+            //             }else{
+            //                 echo "<div class='alert alert-danger'>Password does not match!</div>";
+            //             }
+            //         }else{
+            //             echo "<div class='alert alert-danger'>Email does not match</div>";
+            //         }
+            // //   from OLD   
 
 
 
