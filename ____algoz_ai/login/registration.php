@@ -130,9 +130,9 @@ if (isset($_SESSION["user"])) {
            if($insertdb==1){
                     // new start sess if user reg's clean
                     session_start();
-                    $_SESSION["user"] = "yes";
-                    // header("Location: lastdate.php?sym=aapl");
-                    header("Location: lastdateTest.php");
+                    $_SESSION["user"] = $email; //"yes";
+                    header("Location: lastdateTest.php?sym=aapl");
+                    // header("Location: lastdateTest.php");
                     die();
 
             }

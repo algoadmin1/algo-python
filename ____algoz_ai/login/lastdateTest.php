@@ -24,6 +24,9 @@ Write a php function DetermineLastDate( $frequency , $udate) which takes  variab
  session_start();
  if (!isset($_SESSION["user"])) {
     header("Location: login.php");
+ }else{
+    $email1=$_SESSION["user"];
+    echo "<br />Logged in as: $email1";
  }
 
  

@@ -2,7 +2,10 @@
 session_start();
 if (!isset($_SESSION["user"])) {
    header("Location: login.php");
-}
+}else{
+    $email1=$_SESSION["user"];
+    echo "<br />Logged in as: $email1";
+ }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +19,7 @@ if (!isset($_SESSION["user"])) {
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to Dashboard</h1>
+        <h1>Welcome to algoz.ai Dashboard</h1>
         <a href="logout.php" class="btn btn-warning">Logout</a>
     </div>
 </body>
