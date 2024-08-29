@@ -21,7 +21,7 @@ if (isset($_SESSION["user"])) {
             $msg=0;
             $br="<br />";
             $password_len=4;
-            if($msg==1)  echo "ver 2.0";
+            if($msg==1)  echo                                   "ver 2.2";
 
         if (isset($_POST["submit"])) {
            $fullName = $_POST["fullname"];
@@ -126,6 +126,17 @@ if (isset($_SESSION["user"])) {
             $conn = null;
             
            if($msg==1) echo $br. " * PDO conn Closed. *";
+
+           if($insertdb==1){
+                    // new start sess if user reg's clean
+                    session_start();
+                    $_SESSION["user"] = "yes";
+                    // header("Location: lastdate.php?sym=aapl");
+                    header("Location: lastdateTest.php");
+                    die();
+
+            }
+
 
         }
 
