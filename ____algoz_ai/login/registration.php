@@ -17,10 +17,16 @@ if (isset($_SESSION["user"])) {
 <body>
     <div class="container">
         <?php
+            // $msg=1;
+            $msg=0;
+            $br="<br />";
             $password_len=4;
+            if($msg==1)  echo "ver 2.0";
+
         if (isset($_POST["submit"])) {
            $fullName = $_POST["fullname"];
-           $email = $_POST["email"];
+           $phonenum = $fullName;
+           $email    = $_POST["email"];
            $password = $_POST["password"];
         //    $passwordRepeat = $_POST["repeat_password"];
            
@@ -29,47 +35,130 @@ if (isset($_SESSION["user"])) {
            $errors = array();
            
         //    if (empty($fullName) OR empty($email) OR empty($password) OR empty($passwordRepeat)) {
-            if (empty($fullName) OR empty($email) OR empty($password)  ) {
+           if (empty($fullName) OR empty($email) OR empty($password)  ) {
                 array_push($errors,"All fields are required");
-           }
-           if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            array_push($errors, "Email is not valid");
-           }
-           if (strlen($password)<$password_len) {
-            array_push($errors,"Password must be at least $password_len charactes long");
-           }
+            }
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                array_push($errors, "Email is not valid");
+            }
+            if (strlen($password)<$password_len) {
+                array_push($errors,"Password must be at least $password_len charactes long");
+            }
 
         //    if ($password!==$passwordRepeat) {
         //     array_push($errors,"Password does not match");
         //    }
 
+
+
+
+
+
+
+        //    echo $br. "] Pre req'once...";
            require_once "database.php";
-           $sql = "SELECT * FROM users WHERE email = '$email'";
-           $result = mysqli_query($conn, $sql);
-           $rowCount = mysqli_num_rows($result);
-           if ($rowCount>0) {
-            array_push($errors,"Email already exists!");
-           }
-           if (count($errors)>0) {
-            foreach ($errors as  $error) {
-                echo "<div class='alert alert-danger'>$error</div>";
-            }
-           }else{
+        //    echo $br. "] POST req'once." ;
+        if($msg==1)  echo $br. $hostName." . $dbName . ". $dbUser." . $tblname . ". $dbUserOrig ; //." ". $dbPassword. " ";
+        if($msg==1) echo $br." **". $servername." . $dbname . ". $username." . $tblname . ". $dbUserOrig ." ". $passwordHash. " ";
+           
+
+
+            // ATTEMPT DB ACCESS
+            try{
+                
+                $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);           // Connect to MySQL using PDO
+                $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);                         // Set PDO to throw exceptions for errors
+                            // SELECT * FROM `users` WHERE `email` LIKE 'mitcrapsteam@gmail.com'
+                    $query  = "SELECT * FROM ". $tblname. " WHERE email = :email";
+                                                                                                         // $query = "SELECT * FROM positions WHERE tradeHash = :tradeHash";
+                    $stmt = $conn->prepare($query);
+                    $stmt->bindParam(':email', $email);
+                    $stmt->execute();
+                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
             
-            $sql = "INSERT INTO users (full_name, email, password) VALUES ( ?, ?, ? )";
-            $stmt = mysqli_stmt_init($conn);
-            $prepareStmt = mysqli_stmt_prepare($stmt,$sql);
-            if ($prepareStmt) {
-                mysqli_stmt_bind_param($stmt,"sss",$fullName, $email, $passwordHash);
-                mysqli_stmt_execute($stmt);
-                echo "<div class='alert alert-success'>You are registered successfully.</div>";
-            }else{
-                die("Something went wrong");
+
+                    $insertdb=0;
+                    if ($result){                                   // if there is a user == found
+                        $insertdb=0;
+                        // if($msg==1) echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
+                        if($msg==1) echo "] insertdb = $insertdb , NOT INSERTing ; $email  found in user table ";           //   print_r($result, true);
+                    } else {
+                            $insertdb=1;
+                            if($msg==1) echo "] NO USER found for tradeHash $tradeHashToQuery.  insertdb= $insertdb ;  INSERTing to db.trades ...<br />";
+                            }
+            
+                    if($insertdb==1){
+
+                        $insertQuery02 = "INSERT INTO ". $tblname ;  
+
+                            // INSERT INTO `users` (`userId`, `userInitTimestamp`, `phonenum`, `fullName`, `password`, `email`, `aux1`, `lastDateTime`, `lastDate`, `lastTime`, `lastDay`, `brokerId`, `initIPaddr`, `lastIPaddr`, `lastSymbol`, `mostSymbols`, `tradeRawId`, `tradeSize`, `traderAUM`, `lastPrice`, `optionStrategy`) 
+                            // VALUES (NULL, current_timestamp(), '9175556666', 'ned snarkin', 'abcdefghij', 'threaldjgiannib@gmail.com', NULL, NULL, '', '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, '');
+
+                        $insertQuery2a = " ( userId, userInitTimestamp, phonenum,     fullName,      password,     email ,    pwdhash )   VALUES ";      
+                        $insertQuery2b = " ( NULL, CURRENT_TIMESTAMP, '$phonenum', 'new user',  '$password',  '$email' , '$passwordHash') ";    
+                        $insertQuery2 = $insertQuery02. $insertQuery2a. $insertQuery2b ;
+
+
+                        $conn->exec($insertQuery2);
+                        $lastInsertedId = $conn->lastInsertId();
+                        $pstr2= "<br />] User inserted. Last inserted ID: $lastInsertedId ";
+                        if($msg==1) echo $pstr2  ;
+                        // echoColor($pstr2,"green");
+            
+                        $pstr3= "<br />] New User $email  INSERTed :   insertQuery2 = $insertQuery2 ";
+                        if($msg==1) echo $pstr3 ;
+                        // echoColor($pstr3,"blue");
+            
+                        echo "<div class='alert alert-success'>NewUser: $email [$lastInsertedId] ok.</div>";
+
+                    }else if($insertdb==0){
+                        $errorUserFound= "User exists: $email";
+                        echo "<div class='alert alert-danger'>$errorUserFound</div>";
+
+                        if($msg==1)  echo "<br />] insertdb = $insertdb  ___ NOT INSERTing RECORD..."; 
+                    }
+            
+            } catch (PDOException $e) {
+                $insertdb=-10;
+                if($msg==1) echo "<br />ERROR:  Connection failed: " . $e->getMessage();
             }
-           }
-          
+            // Close the PDO connection
+            $conn = null;
+            
+           if($msg==1) echo $br. " * PDO conn Closed. *";
 
         }
+
+
+                        // OLD FORMAT FROM yt
+                        // $sql = "SELECT * FROM users WHERE email = '$email'";
+                        // $result = mysqli_query($conn, $sql);
+                        // $rowCount = mysqli_num_rows($result);
+                        // if ($rowCount>0) {
+                        //         array_push($errors,"Email already exists!");
+                        //     }
+                        //     if (count($errors)>0) {
+                        //         foreach ($errors as  $error) {
+                        //             echo "<div class='alert alert-danger'>$error</div>";
+                        //         }
+                        //     }else{
+                        //     $sql = "INSERT INTO users (full_name, email, password) VALUES ( ?, ?, ? )";
+                        //     $stmt = mysqli_stmt_init($conn);
+                        //     $prepareStmt = mysqli_stmt_prepare($stmt,$sql);
+                        //         if ($prepareStmt) {
+                        //             mysqli_stmt_bind_param($stmt,"sss",$fullName, $email, $passwordHash);
+                        //             mysqli_stmt_execute($stmt);
+                        //             echo "<div class='alert alert-success'>You are registered successfully.</div>";
+                        //         }else{
+                        //             die("Something went wrong");
+                        //         }
+                        //     }
+                        // }//EO_  if (isset($_POST["submit"])) {
+                        
+
+
+
+   
         ?>
         <form action="registration.php" method="post">
             <div><h1>Sign up for <strong>algoz.ai</strong></h1></div>
