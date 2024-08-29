@@ -56,11 +56,41 @@ if (isset($_SESSION["user"])) {
 
 
                 $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                echo "...";
+                // echo "...";
                 // print_r( $result) ;
                 foreach ($result as $key => $value) {
                     echo $key . ": " . $value . "<br />";
                 }
+
+/*
+                ...
+                userId: 2
+                userInitTimestamp: 2024-08-29 04:50:22
+                phonenum: 6175551212
+                fullName: craps team
+                password: abcdefgh
+                email: mitcrapsteam@gmail.com
+                pwdhash:
+                lastDateTime:
+                lastDate:
+                lastTime:
+                lastDay:
+                brokerId:
+                initIPaddr:
+                lastIPaddr:
+                lastSymbol:
+                mostSymbols:
+                tradeRawId: 0
+                tradeSize:
+                traderAUM:
+                lastPrice: 0
+                optionStrategy:
+                ] mitcrapsteam@gmail.com found in user table! abcdefgh 2 * PDO conn Closed. *
+
+*/
+
+
+
              //   from OLD   
             //    $user   = mysqli_fetch_array($result, MYSQLI_ASSOC);          // didnt work
             //    $user   = mysqli_fetch_array($result, PDO::MYSQLI_ASSOC);    // didnt work
