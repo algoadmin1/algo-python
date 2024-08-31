@@ -83,10 +83,17 @@
                 <i class="fa-solid fa-envelope"></i>
                 <p class="para">Messages</p>
             </li>
-            <li class="items">
+
+            <!-- <li class="items">
                 <i class="fa-solid fa-gear"></i>
                 <p class="para">Settings</p>
             </li>
+             -->
+            <li class="items" id="settings-item">
+                <i class="fa-solid fa-gear"></i>
+                <p class="para">Settings</p>
+            </li>
+    
             <li class="items logout-btn">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <p class="para">Logout</p>
@@ -99,6 +106,67 @@
         </div>
 
     </div>
+
+
+ <!--  ADDED...   -->
+
+    <div class="content">
+        <div class="canvas-container">
+            <!-- <canvas id="myCanvas"></canvas>   -->
+            <canvas id="myCanvas" width="500" height="400"></canvas> <!-- Canvas added here -->
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Handle click event for Settings
+            document.querySelector("#settings-item .para").addEventListener("click", function () {
+                // Draw on the canvas when "Settings" is clicked
+                drawRectangles();
+                // Redirect to settings.php
+                //   window.location.href = "settings.php";
+            });
+    
+            // Function to draw two vertical rectangles on the canvas
+            function drawRectangles() {
+                var canvas = document.getElementById("myCanvas");
+                if (canvas.getContext) {
+                    var ctx = canvas.getContext("2d");
+    
+                    // Clear the canvas
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+                    // Canvas dimensions
+                    var canvasWidth = canvas.width;
+                    var canvasHeight = canvas.height;
+    
+                    // Rectangle dimensions
+                    var rectWidth = 16;
+                    var rectHeight = 280;
+                    var offset = 8;
+    
+                    // Calculate the x-coordinates to center the rectangles and apply offset
+                    var centerX = (canvasWidth / 2);
+                    var redRectX = centerX - (rectWidth + offset / 2);  // Left of the center
+                    var greenRectX = centerX + (offset / 2);  // Right of the center
+    
+                    // Y-coordinate to center the rectangles vertically
+                    var centerY = (canvasHeight - rectHeight) / 2;
+    
+                    // Draw the red rectangle
+                    ctx.fillStyle = "red";
+                    ctx.fillRect(redRectX, centerY, rectWidth, rectHeight);
+    
+                    // Draw the green rectangle
+                    ctx.fillStyle = "green";
+                    ctx.fillRect(greenRectX, centerY, rectWidth, rectHeight);
+                }
+            }
+        });
+    </script>
+
+
+
 
 
 

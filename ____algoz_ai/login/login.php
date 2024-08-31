@@ -68,7 +68,11 @@ if (isset($_SESSION["user"])) {
                 // echo "...";
                 // print_r( $result) ;
                 foreach ($result as $key => $value) {
+                    if($key=="pwdhash" || $key=="password"){
+                        echo "password-type field:   ";
+                    }
                     echo $key . ": " . $value . "<br />";
+
                 }
 
 /*
