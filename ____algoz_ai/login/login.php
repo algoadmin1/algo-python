@@ -39,9 +39,7 @@ if (isset($_SESSION["user"])) {
            $passwordHash = encryptPassword($password);
             echo "<br />pwd / hash =". $password ."  " . $passwordHash ."<br />" ;
 
-
             require_once "database.php";
-
 
 
      // new
