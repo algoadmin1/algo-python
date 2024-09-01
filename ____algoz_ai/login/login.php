@@ -36,14 +36,40 @@ if (isset($_SESSION["user"])) {
         }
     </style>
 
+
+    <script>
+        function passStringToPHP() {
+            // Get the content of the div
+            const divContent = document.getElementById('sys-vars').innerText;
+            // Set the content into a hidden input field
+            document.getElementById('hiddenInput').value = divContent;
+        }
+    </script>
+
 </head>
 
 
 
 <body>
+
+<script src="userstats.js"></script>
+
+<div id="sys-vars" style="display: none;">userdataTmp</div>
+<!-- <div id="sys-vars">userdataTmp</div> -->
+
+<script>
+        // document.getElementById('user-data').innerText = getScreenSize()+"|"+ detectDeviceType() +"|"+ detectOS()  +"|"+ detectBrowser();
+        document.getElementById('sys-vars').innerText = getScreenSize()+"|"+ detectDeviceType() +"|"+ detectOS()  +"|"+ detectBrowser();
+</script> 
+
+
+
+
+
     <div class="container">
-        <?php
-        
+      <?php
+        date_default_timezone_set('America/New_York');
+       
         require_once "encrypt.php";
 
         $projectname="algoz";
@@ -56,24 +82,53 @@ if (isset($_SESSION["user"])) {
          $user_ipRaw = $_SERVER['REMOTE_ADDR'];   // 2600:8801:3500:7160:51b5:f0eb:bc22:728c
         //  $user_ip    = htmlspecialchars($user_ip);
          $user_ip    = $user_ipRaw ;
-
-         echo "UserIP=". $user_ip;
-
-        if (isset($_POST["login"])) {
-           $email    = $_POST["email"];
-           $password = $_POST["password"];
-
-           // retr from dbase
-        //    $passwordHash = encryptPassword($password);
-           $passwordHash = sha1($password); 
-           //    if (sha1($str) == "f7ff9e8b7bb2e09b70935a5d785e0cc5d9d0abf0")
-   
-            echo "<br />pwd / hash =". $password ."  /  " . $passwordHash ."<br />" ;
-
-            require_once "database.php";
+         if($msg==1) echo "UserIP=". $user_ip;
 
 
-     // new
+        // Get the current date and time
+        $lastDateTime = date('Y-m-d H:i:s');    // Format: YYYY-MM-DD HH:MM:SS
+        $lastDate = substr($lastDateTime, 0, 10 );
+        $lastTime = substr($lastDateTime, -8);
+        $lastDay = date('l');     // 'l' (lowercase 'L') for full textual representation of the day
+        if($msg==1)  echo "  Current Date and Time in NYC: " . $lastDateTime. ",  $lastDay  $lastDate  time= $lastTime   <br />";
+
+
+
+    if (isset($_POST["login"])) {
+        $email    = $_POST["email"];
+        $password = $_POST["password"];
+        $sysvars  = $_POST["string1"];
+
+        if($msg==1) echo "<br />***sys-vars =". $sysvars . "***<br />" ;
+
+        $userID0= "0";
+        $numvisits=0;
+
+
+
+
+        //  uneeded...
+        //
+        // UPDATE `users` SET `lastIPaddr` = '2600:8801:3500:7160:51b5:f0eb:bc22:728c' WHERE `users`.`userId` = 12;
+        $queryUpdateIP       = "UPDATE ". $tblname. " SET lastIPaddr   = '$user_ip' WHERE userId = :userId";
+        $queryUpdateDateTime = "UPDATE ". $tblname. " SET lastDateTime = '$lastDateTime' WHERE userId = :userId";
+        $queryUpdateSysVars  = "UPDATE ". $tblname. " SET sysvars      = '$sysvars' WHERE userId = :userId";
+
+        // echo "<br />". $queryUpdateIP;
+        // echo "<br />". $queryUpdateDateTime;
+        // echo "<br />". $queryUpdateSysVars;
+        // echo "<br />";
+        
+
+        // retr from dbase
+    //    $passwordHash = encryptPassword($password);
+        $passwordHash = sha1($password); 
+        //    if (sha1($str) == "f7ff9e8b7bb2e09b70935a5d785e0cc5d9d0abf0")
+
+        if($msg==1) echo "<br />pwd / hash =". $password ."  /  " . $passwordHash ."<br />" ;
+
+        require_once "database.php";
+
         try{
 
             $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);           // Connect to MySQL using PDO
@@ -87,46 +142,82 @@ if (isset($_SESSION["user"])) {
 
                 // echo "<br />result==";
                 //  print_r( $result) ;
-
+                $i=0;
                 foreach ($result as $key => $value) {
+                    if($key=="userId"){
+                        $userID0=$value;
+                        // if($msg==1) 
+                        echo "userID0== $userID0 <br />";
+                    }
+
+                    if($key=="numvisits"){
+                        $numvisits=$value;
+                        $numvisits++;
+                        // if($msg==1) 
+                        echo "<br />numvisits== $numvisits <br />";
+                    }
+
+
+                    // pwds
                     if($key=="pwdhash" || $key=="password"){
-                        echo "password-type field:   ";
+                        if($msg==1) echo "<br />password-type field:   ";
 
                             if( $key=="password" ){
                                 if($value== $password){
-                                    echo "Regular PASSWORD  MATCHES!";
+                                    if($msg==1) echo "Regular PASSWORD  MATCHES!";
                                     $passwordMatch=1;
-                                }else  echo "Regular PASSWORD NO Match!";
+                                }else  if($msg==1)  echo "Regular PASSWORD NO Match!";
                             }
 
                             if( $key=="pwdhash" ){
                                 if($value== $passwordHash){
-                                echo "encryptedPASSWORD  MATCHES!";
+                                    if($msg==1) echo "encryptedPASSWORD  MATCHES!";
                                 $passwordHashMatch=1;
-                                }else  echo "encryptedPASSWORD NO Match!";
+                                }else  if($msg==1)  echo "encryptedPASSWORD NO Match!";
                             }
-
                     }
+
+
 
                     if( $key=="project" ){
                         if($value== $projectname){
-                           echo "PROJECT NAME =  $projectname  ";
+                            if($msg==1) echo "PROJECT NAME =  $projectname  ";
                            $projectMatch=1;
-                        }else  echo "PROJECT NAME DOES NOT Match.";
+                        }else   if($msg==1) echo "PROJECT NAME DOES NOT Match.";
                     }
  
-                    echo $key . ": " . $value . "<br />";
+                    echo "<br />". $i.") ". $key . ": " . $value ;
+                    $i++;
 
                 }
 
 
-
                 $insertdb=0;
-                if ($result){                                   
+                if ($result){    
+                    
+                    echo "<br />here check for pwd + hash +project match********* !!";
+
+
                     $insertdb=0;
-                    // if($msg==1) echo "] $email found in user table! ". $user["password"]. " ". $user["userId"];      
-                    if($msg==1) echo "] $email found in user table! ". $result["password"]. " ". $result["userId"];      
-                   
+                    if($msg==1) echo "<br />] $email found in user table! ". $result["password"]. " ". $result["userId"];      
+
+
+                        // UPDATES HERE
+                        //  UPDATE `users` SET `lastDateTime` = '2024-09-01 07:00:00', `sysvars` = 'xyzabcsysVar', `lastIPaddr` = '2600:8801:3500:7160:51b5:f0eb:bc22:9000' WHERE `users`.`userId` = 12;
+                        $queryUpdateUser = "UPDATE ". $tblname. " SET lastDateTime = '$lastDateTime', lastDay = '$lastDay', lastDate = '$lastDate', lastTime = '$lastTime', sysvars = '$sysvars', lastIPaddr = '$user_ip', numvisits = '$numvisits'  WHERE userId = :userId";
+                        if($msg==1) echo "<br />] queryUpdateUser==". $queryUpdateUser;
+                        $stmt = $conn->prepare($queryUpdateUser);
+                        $stmt->bindParam(':userId', $userID0);
+                        $stmt->execute();
+        
+                        // $resultQ1 = $stmt->fetch(PDO::FETCH_ASSOC);
+                        // echo "<br />resultQ1==";
+                        // print_r( $resultQ1 ) ;
+
+
+
+                    // close sess & assign $_SESSION["user"] 
+
                     // session_start();
                     // $_SESSION["user"] =$email ; 
                     // header("Location: index.php");
@@ -141,123 +232,23 @@ if (isset($_SESSION["user"])) {
                         }
 
 
-                            
-            // //   from OLD   
-            // if ($user) {
-            //         // if (password_verify($password, $user["password"])) {
-            //         if (password_verify($password, $user["pwdhash"])) {
-            //             session_start();
-            //                 $_SESSION["user"] =$email ; 
-            //                 header("Location: index.php");
-            //                 die();
-            //             }else{
-            //                 echo "<div class='alert alert-danger'>Password does not match!</div>";
-            //             }
-            //         }else{
-            //             echo "<div class='alert alert-danger'>Email does not match</div>";
-            //         }
-            // //   from OLD   
-
-
-
-            
-        } catch (PDOException $e) {
-            $insertdb=-10;
-            if($msg==1) echo "<br />ERROR:  Connection failed: " . $e->getMessage();
-        }
-        $conn = null;        // Close the PDO connection
-       if($msg==1) echo $br. " * PDO conn Closed. *";
-
-
-
-
-/*
-
-            // ATTEMPT DB ACCESS
-            try{
                 
-                $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);           // Connect to MySQL using PDO
-                $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);                         // Set PDO to throw exceptions for errors
-                            // SELECT * FROM `users` WHERE `email` LIKE 'mitcrapsteam@gmail.com'
-                    $query  = "SELECT * FROM ". $tblname. " WHERE email = :email";
-                                                                                                         // $query = "SELECT * FROM positions WHERE tradeHash = :tradeHash";
-                    $stmt = $conn->prepare($query);
-                    $stmt->bindParam(':email', $email);
-                    $stmt->execute();
-                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-
-                    $insertdb=0;
-                    if ($result){                                   // if there is a user == found
-                        $insertdb=0;
-                        // if($msg==1) echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
-                        if($msg==1) echo "] insertdb = $insertdb , NOT INSERTing ; $email  found in user table ";           //   print_r($result, true);
-                    } else {
-                            $insertdb=1;
-                            if($msg==1) echo "] NO USER found for tradeHash $tradeHashToQuery.  insertdb= $insertdb ;  INSERTing to db.trades ...<br />";
-                            }
-            
-                    if($insertdb==1){
-
-                        $insertQuery02 = "INSERT INTO ". $tblname ;  
-
-                            // INSERT INTO `users` (`userId`, `userInitTimestamp`, `phonenum`, `fullName`, `password`, `email`, `aux1`, `lastDateTime`, `lastDate`, `lastTime`, `lastDay`, `brokerId`, `initIPaddr`, `lastIPaddr`, `lastSymbol`, `mostSymbols`, `tradeRawId`, `tradeSize`, `traderAUM`, `lastPrice`, `optionStrategy`) 
-                            // VALUES (NULL, current_timestamp(), '9175556666', 'ned snarkin', 'abcdefghij', 'threaldjgiannib@gmail.com', NULL, NULL, '', '', '', NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, '');
-
-                        $insertQuery2a = " ( userId, userInitTimestamp, phonenum,     fullName,      password,     email ,    pwdhash )   VALUES ";      
-                        $insertQuery2b = " ( NULL, CURRENT_TIMESTAMP, '$phonenum', 'new user',  '$password',  '$email' , '$passwordHash') ";    
-                        $insertQuery2 = $insertQuery02. $insertQuery2a. $insertQuery2b ;
-
-
-                        $conn->exec($insertQuery2);
-                        $lastInsertedId = $conn->lastInsertId();
-                        $pstr2= "<br />] User inserted. Last inserted ID: $lastInsertedId ";
-                        if($msg==1) echo $pstr2  ;
-                        // echoColor($pstr2,"green");
-            
-                        $pstr3= "<br />] New User $email  INSERTed :   insertQuery2 = $insertQuery2 ";
-                        if($msg==1) echo $pstr3 ;
-                        // echoColor($pstr3,"blue");
-            
-                        echo "<div class='alert alert-success'>NewUser: $email [$lastInsertedId] ok.</div>";
-
-                    }else if($insertdb==0){
-                        $errorUserFound= "User exists: $email";
-                        echo "<div class='alert alert-danger'>$errorUserFound</div>";
-
-                        if($msg==1)  echo "<br />] insertdb = $insertdb  ___ NOT INSERTing RECORD..."; 
-                    }
-            
             } catch (PDOException $e) {
                 $insertdb=-10;
                 if($msg==1) echo "<br />ERROR:  Connection failed: " . $e->getMessage();
             }
-            // Close the PDO connection
-            $conn = null;
-            
-           if($msg==1) echo $br. " * PDO conn Closed. *";
+            $conn = null;        // Close the PDO connection
+            if($msg==1) echo $br. " * PDO conn Closed. *";
 
 
 
-*/
+        }// if  (isset($_POST["login"])) {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        }
         ?>
-      <form action="login.php" method="post">
+
+
+      <form action="login.php" method="post" onsubmit="passStringToPHP()">
+        
         <div style="text-align: center;">
            <h1>Welcome to <strong>algoz.ai</strong> !</h1>
         </div>
@@ -265,9 +256,6 @@ if (isset($_SESSION["user"])) {
         <div class="form-group">
             <input type="email" placeholder="Email:" name="email" class="form-control">
         </div>
-
-
-
 
 
 <!--   old pwd
@@ -281,18 +269,17 @@ if (isset($_SESSION["user"])) {
               <i class="toggle-password" onclick="togglePasswordVisibility()">👁️</i>
         </div>
 
-
-
-
-
-
-
         <div class="form-btn">
-             <input type="hidden" id="hiddenInput" name="string1">
-
+            <input type="hidden" id="hiddenInput" name="string1">
             <input type="submit" value="Login" name="login" class="btn btn-primary">
         </div>
       </form>
+
+
+
+
+
+
       <div style="text-align: center;">
         <p>Not registered yet? <a href="registration.php">Sign up here</a></p>
       </div>
@@ -300,7 +287,7 @@ if (isset($_SESSION["user"])) {
 
       <!-- <div><p id="forgotpwd" style="font-size: 10px;">Forgot Password? <a href="forgotpwd.php">Click here</a></p></div> -->
       <div style="text-align: center;">
-        <p id="forgotpwd" style="font-size: 10px;"> <a href="forgotpwd.php">Forgot Password?</a></p>
+        <p id="forgotpwd" style="font-size: 12px;"> <a href="forgotpwd.php">Forgot Password?</a></p>
       </div>
     
      </div>
