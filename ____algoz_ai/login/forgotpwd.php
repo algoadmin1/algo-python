@@ -10,38 +10,47 @@ if (isset($_SESSION["user"])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>algoz Login</title>
+    <title>algoz Password Recovery</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <?php
-        
-        require_once "encrypt.php";
+        /*
 
-
+        */
         //  $msg=1;
          $msg=0;
          $user_ipRaw = $_SERVER['REMOTE_ADDR'];   // 2600:8801:3500:7160:51b5:f0eb:bc22:728c
         //  $user_ip    = htmlspecialchars($user_ip);
          $user_ip    = $user_ipRaw ;
 
-         echo "UserIP=". $user_ip;
-
+        echo "UserIP=". $user_ip;
 
 
         if (isset($_POST["login"])) {
            $email    = $_POST["email"];
            $password = $_POST["password"];
-
-           // retr from dbase
-           $passwordHash = encryptPassword($password);
-            echo "<br />pwd / hash =". $password ."  " . $passwordHash ."<br />" ;
+           require_once "database.php";
 
 
-            require_once "database.php";
-
+            // old
+            // $sql = "SELECT * FROM users WHERE email = '$email'";
+            // $result = mysqli_query($conn, $sql);
+            // $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
+            // if ($user) {
+            //     if (password_verify($password, $user["password"])) {
+            //         session_start();
+            //         $_SESSION["user"] =$email ;//"yes";
+            //         header("Location: index.php");
+            //         die();
+            //     }else{
+            //         echo "<div class='alert alert-danger'>Password does not match</div>";
+            //     }
+            // }else{
+            //     echo "<div class='alert alert-danger'>Email does not match</div>";
+            // }
 
 
      // new
@@ -54,32 +63,62 @@ if (isset($_SESSION["user"])) {
                 $stmt->bindParam(':email', $email);
                 $stmt->execute();
 
+
                 $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                // echo "<br />result==";
-                //  print_r( $result) ;
-
+                // echo "...";
+                // print_r( $result) ;
                 foreach ($result as $key => $value) {
                     if($key=="pwdhash" || $key=="password"){
                         echo "password-type field:   ";
-
-                       if( $key=="password" ){
-                         if($value== $password){
-                            echo "PASSWORD noSHA MATCHES!";
-                         }else  echo "PASSWORD noSHA NO Match!";
-                       }
-
-                       if( $key=="pwdhash" ){
-                        if($value== $passwordHash){
-                           echo "PASSWORD SHA MATCHES!";
-                        }else  echo "PASSWORD SHA NO Match!";
-                      }
-
                     }
                     echo $key . ": " . $value . "<br />";
 
                 }
 
+/*
+                ...
+                userId: 2
+                userInitTimestamp: 2024-08-29 04:50:22
+                phonenum: 6175551212
+                fullName: craps team
+                password: abcdefgh
+                email: mitcrapsteam@gmail.com
+                pwdhash:
+                lastDateTime:
+                lastDate:
+                lastTime:
+                lastDay:
+                brokerId:
+                initIPaddr:
+                lastIPaddr:
+                lastSymbol:
+                mostSymbols:
+                tradeRawId: 0
+                tradeSize:
+                traderAUM:
+                lastPrice: 0
+                optionStrategy:
+                ] mitcrapsteam@gmail.com found in user table! abcdefgh 2 * PDO conn Closed. *
+
+*/
+
+
+
+             //   from OLD   
+            //    $user   = mysqli_fetch_array($result, MYSQLI_ASSOC);          // didnt work
+            //    $user   = mysqli_fetch_array($result, PDO::MYSQLI_ASSOC);    // didnt work
+
+
+            // $results = $stmt->fetchAll(PDO::FETCH_ASSOC);                // didnt work
+
+            // foreach ($result as $result0) {
+            //     echo "Email: " . $result0["email"] . "<br>";
+            //     echo "Password: " . $result0["password"] . "<br>";
+            //     echo "id#: " . $result0["userId"] . "<br>";
+            //     // echo "<hr>";
+            // }
+
+            
 
 
                 $insertdb=0;
@@ -219,34 +258,24 @@ if (isset($_SESSION["user"])) {
         }
         ?>
       <form action="login.php" method="post">
-        <div style="text-align: center;">
-           <h1>Welcome to <strong>algoz.ai</strong> !</h1>
-        </div>
+      <!-- <div><h1>Welcome to <strong>algoz.ai</strong> !</h1></div> -->
+      <div><h1>Enter your email for algoz.ai</h1></div>
+      <div></div>
+      <div><p>We will send you a link to your email.</p></div>
   
         <div class="form-group">
             <input type="email" placeholder="Email:" name="email" class="form-control">
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
             <input type="password" placeholder="Password:" name="password" class="form-control">
-        </div>
-
+        </div> -->
         <div class="form-btn">
-             <input type="hidden" id="hiddenInput" name="string1">
-
-            <input type="submit" value="Login" name="login" class="btn btn-primary">
+            <input type="submit" value="Email me a password link" name="login" class="btn btn-primary">
         </div>
       </form>
-      <div style="text-align: center;">
-        <p>Not registered yet? <a href="registration.php">Sign up here</a></p>
-      </div>
+      <!-- <div><p>Not registered yet? <a href="registration.php">Sign up here</a></p></div>
       <div></div>
-
-      <!-- <div><p id="forgotpwd" style="font-size: 10px;">Forgot Password? <a href="forgotpwd.php">Click here</a></p></div> -->
-      <div style="text-align: center;">
-        <p id="forgotpwd" style="font-size: 10px;"> <a href="forgotpwd.php">Forgot Password?</a></p>
+      <div><p id="forgotpwd" style="font-size: 10px;">Forgot Password? <a href="forgotpwd.php">Click here</a></p></div> -->
       </div>
-    
-    
-     </div>
 </body>
 </html>

@@ -17,6 +17,9 @@ if (isset($_SESSION["user"])) {
 <body>
     <div class="container">
         <?php
+
+            require_once "encrypt.php";
+
             // $msg=1;
             $msg=0;
             $br="<br />";
@@ -25,12 +28,15 @@ if (isset($_SESSION["user"])) {
 
         if (isset($_POST["submit"])) {
            $fullName = $_POST["fullname"];
+
+           /// FIX !!!!
            $phonenum = $fullName;
            $email    = $_POST["email"];
            $password = $_POST["password"];
         //    $passwordRepeat = $_POST["repeat_password"];
            
-           $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        //    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+           $passwordHash = encryptPassword($password);
 
            $errors = array();
            
@@ -56,8 +62,9 @@ if (isset($_SESSION["user"])) {
 
 
         //    echo $br. "] Pre req'once...";
-           require_once "database.php";
+        require_once "database.php";
         //    echo $br. "] POST req'once." ;
+
         if($msg==1)  echo $br. $hostName." . $dbName . ". $dbUser." . $tblname . ". $dbUserOrig ; //." ". $dbPassword. " ";
         if($msg==1) echo $br." **". $servername." . $dbname . ". $username." . $tblname . ". $dbUserOrig ." ". $passwordHash. " ";
            
@@ -130,47 +137,21 @@ if (isset($_SESSION["user"])) {
            if($insertdb==1){
                     // new start sess if user reg's clean
                     session_start();
-                    $_SESSION["user"] = $email; //"yes";
-                    header("Location: lastdateTest.php?sym=aapl");
+                    $_SESSION["user"] = $email;  
+                    // header("Location: lastdateTest.php?sym=aapl");
+                    header("Location: indexmenu.php");
                     // header("Location: lastdateTest.php");
                     die();
 
             }
 
-
         }
-
-
-                        // OLD FORMAT FROM yt
-                        // $sql = "SELECT * FROM users WHERE email = '$email'";
-                        // $result = mysqli_query($conn, $sql);
-                        // $rowCount = mysqli_num_rows($result);
-                        // if ($rowCount>0) {
-                        //         array_push($errors,"Email already exists!");
-                        //     }
-                        //     if (count($errors)>0) {
-                        //         foreach ($errors as  $error) {
-                        //             echo "<div class='alert alert-danger'>$error</div>";
-                        //         }
-                        //     }else{
-                        //     $sql = "INSERT INTO users (full_name, email, password) VALUES ( ?, ?, ? )";
-                        //     $stmt = mysqli_stmt_init($conn);
-                        //     $prepareStmt = mysqli_stmt_prepare($stmt,$sql);
-                        //         if ($prepareStmt) {
-                        //             mysqli_stmt_bind_param($stmt,"sss",$fullName, $email, $passwordHash);
-                        //             mysqli_stmt_execute($stmt);
-                        //             echo "<div class='alert alert-success'>You are registered successfully.</div>";
-                        //         }else{
-                        //             die("Something went wrong");
-                        //         }
-                        //     }
-                        // }//EO_  if (isset($_POST["submit"])) {
-                        
-
-
 
    
         ?>
+
+
+
         <form action="registration.php" method="post">
             <div><h1>Sign up for <strong>algoz.ai</strong></h1></div>
 
