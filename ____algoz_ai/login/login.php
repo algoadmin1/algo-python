@@ -46,6 +46,7 @@ if (isset($_SESSION["user"])) {
         
         require_once "encrypt.php";
 
+        $projectname="algoz";
 
         //  $msg=1;
          $msg=0;
@@ -101,6 +102,12 @@ if (isset($_SESSION["user"])) {
                            echo "encryptedPASSWORD  MATCHES!";
                         }else  echo "encryptedPASSWORD NO Match!";
                       }
+
+                      if( $key=="project" ){
+                       if($value== $projectname){
+                          echo "PROJECT NAME =  $projectname  !";
+                       }else  echo "PROJECT NAME DOES NOT Match!";
+                     }
 
                     }
                     echo $key . ": " . $value . "<br />";
