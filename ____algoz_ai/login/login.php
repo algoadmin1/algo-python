@@ -13,7 +13,33 @@ if (isset($_SESSION["user"])) {
     <title>algoz Login</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Basic styling for the form and button */
+        .form-group {
+            position: relative; /* Position relative to contain the eye icon */
+            width: 320px; /* Set a width for the form group */
+            margin-bottom: 15px; /* Spacing at the bottom of the input field */
+        }
+
+        .form-control {
+            width: 100%; /* Make the input full width within the form group */
+            padding-right: 40px; /* Add padding on the right to avoid overlap with the eye icon */
+        }
+
+        .toggle-password {
+            position: absolute; /* Position absolute to place it over the input */
+            top: 50%; /* Center vertically */
+            right: 10px; /* Position it near the right edge */
+            transform: translateY(-50%); /* Center it vertically within the input field */
+            cursor: pointer; /* Show pointer cursor on hover */
+        }
+    </style>
+
 </head>
+
+
+
 <body>
     <div class="container">
         <?php
@@ -227,9 +253,27 @@ if (isset($_SESSION["user"])) {
         <div class="form-group">
             <input type="email" placeholder="Email:" name="email" class="form-control">
         </div>
+
+
+
+
+
+<!--   old pwd
         <div class="form-group">
             <input type="password" placeholder="Password:" name="password" class="form-control">
+        </div> -->
+
+        <div class="form-group">
+             <input type="password" placeholder="Password:" name="password" class="form-control" id="password">
+             <!-- Eye icon for toggling password visibility -->
+              <i class="toggle-password" onclick="togglePasswordVisibility()">👁️</i>
         </div>
+
+
+
+
+
+
 
         <div class="form-btn">
              <input type="hidden" id="hiddenInput" name="string1">
@@ -247,7 +291,21 @@ if (isset($_SESSION["user"])) {
         <p id="forgotpwd" style="font-size: 10px;"> <a href="forgotpwd.php">Forgot Password?</a></p>
       </div>
     
-    
      </div>
+
+
+    <script>
+        // JavaScript function to toggle password visibility
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById("password");
+            // Toggle between password and text input types
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+            } else {
+                passwordInput.type = "password";
+            }
+        }
+    </script>
+
 </body>
 </html>
