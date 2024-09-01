@@ -47,6 +47,9 @@ if (isset($_SESSION["user"])) {
         require_once "encrypt.php";
 
         $projectname="algoz";
+        $projectMatch=0;
+        $passwordMatch=0;
+        $passwordHashMatch=0;
 
         //  $msg=1;
          $msg=0;
@@ -55,8 +58,6 @@ if (isset($_SESSION["user"])) {
          $user_ip    = $user_ipRaw ;
 
          echo "UserIP=". $user_ip;
-
-
 
         if (isset($_POST["login"])) {
            $email    = $_POST["email"];
@@ -91,25 +92,29 @@ if (isset($_SESSION["user"])) {
                     if($key=="pwdhash" || $key=="password"){
                         echo "password-type field:   ";
 
-                       if( $key=="password" ){
-                         if($value== $password){
-                            echo "Regular PASSWORD  MATCHES!";
-                         }else  echo "Regular PASSWORD NO Match!";
-                       }
+                            if( $key=="password" ){
+                                if($value== $password){
+                                    echo "Regular PASSWORD  MATCHES!";
+                                    $passwordMatch=1;
+                                }else  echo "Regular PASSWORD NO Match!";
+                            }
 
-                       if( $key=="pwdhash" ){
-                        if($value== $passwordHash){
-                           echo "encryptedPASSWORD  MATCHES!";
-                        }else  echo "encryptedPASSWORD NO Match!";
-                      }
-
-                      if( $key=="project" ){
-                       if($value== $projectname){
-                          echo "PROJECT NAME =  $projectname  !";
-                       }else  echo "PROJECT NAME DOES NOT Match!";
-                     }
+                            if( $key=="pwdhash" ){
+                                if($value== $passwordHash){
+                                echo "encryptedPASSWORD  MATCHES!";
+                                $passwordHashMatch=1;
+                                }else  echo "encryptedPASSWORD NO Match!";
+                            }
 
                     }
+
+                    if( $key=="project" ){
+                        if($value== $projectname){
+                           echo "PROJECT NAME =  $projectname  ";
+                           $projectMatch=1;
+                        }else  echo "PROJECT NAME DOES NOT Match.";
+                    }
+ 
                     echo $key . ": " . $value . "<br />";
 
                 }
