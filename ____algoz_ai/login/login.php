@@ -36,8 +36,11 @@ if (isset($_SESSION["user"])) {
            $password = $_POST["password"];
 
            // retr from dbase
-           $passwordHash = encryptPassword($password);
-            echo "<br />pwd / hash =". $password ."  " . $passwordHash ."<br />" ;
+        //    $passwordHash = encryptPassword($password);
+           $passwordHash = sha1($password); 
+           //    if (sha1($str) == "f7ff9e8b7bb2e09b70935a5d785e0cc5d9d0abf0")
+   
+            echo "<br />pwd / hash =". $password ."  /  " . $passwordHash ."<br />" ;
 
             require_once "database.php";
 
@@ -63,14 +66,14 @@ if (isset($_SESSION["user"])) {
 
                        if( $key=="password" ){
                          if($value== $password){
-                            echo "PASSWORD noSHA MATCHES!";
-                         }else  echo "PASSWORD noSHA NO Match!";
+                            echo "Regular PASSWORD  MATCHES!";
+                         }else  echo "Regular PASSWORD NO Match!";
                        }
 
                        if( $key=="pwdhash" ){
                         if($value== $passwordHash){
-                           echo "PASSWORD SHA MATCHES!";
-                        }else  echo "PASSWORD SHA NO Match!";
+                           echo "encryptedPASSWORD  MATCHES!";
+                        }else  echo "encryptedPASSWORD NO Match!";
                       }
 
                     }

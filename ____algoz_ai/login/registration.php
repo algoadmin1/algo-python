@@ -36,7 +36,12 @@ if (isset($_SESSION["user"])) {
         //    $passwordRepeat = $_POST["repeat_password"];
            
         //    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-           $passwordHash = encryptPassword($password);
+        // $passwordHash = encryptPassword($password);
+        
+        $passwordHash = sha1($password); 
+        //    if (sha1($str) == "f7ff9e8b7bb2e09b70935a5d785e0cc5d9d0abf0")
+
+
 
            $errors = array();
            
