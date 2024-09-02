@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pass String from Div to PHP</title>
+    <script>
+        function passStringToPHP() {
+            // Get the content of the div
+            const divContent = document.getElementById('myDiv').innerText;
+
+            // Set the content into a hidden input field
+            document.getElementById('hiddenInput').value = divContent;
+        }
+    </script>
+</head>
+<body>
+    <!-- The div with the string to pass -->
+    <div id="myDiv">string2pass here is the string!</div>
+
+    <!-- The form to send the data to PHP -->
+    <form action="passstr.php" method="post" onsubmit="passStringToPHP()">
+        <!-- Hidden input field to hold the string -->
+        <input type="hidden" id="hiddenInput" name="string1">
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
+
+
+<!-- php→
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve the string passed from HTML
+    $string1 = $_POST['string1'];
+
+    // Output the string or use it for further processing
+    echo "The string passed is: " . htmlspecialchars($string1);
+}
+?>
