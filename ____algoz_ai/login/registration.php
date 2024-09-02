@@ -76,7 +76,6 @@ if (isset($_SESSION["user"])) {
 
             if($msg==1) echo "<br />] GEO jsonResponse1= ". $response1 ;
             $result1 = ReturnQuotedFields( $response1 );
-            // Print the result
             if($msg==1)  print_r($result1);
             foreach ($result1 as $key => $value) {
                 echo "<br />";
@@ -94,15 +93,13 @@ if (isset($_SESSION["user"])) {
                 if($key=="19") $timezone=$value;
                 if($key=="21") $isp=$value;
 
-
-
- 
                 
             }// foreach
 
-            $location= $city."|".$region."|".$country;
-            echo $br. 'loc==' .$location. "( $lat , $lon )";
-
+            $location= $city."|".$region."|".$country."|".$zip;
+            echo $br. 'isp==' .$location. " ( $lat , $lon )";
+            echo $br. 'timezone(cc)==' .$timezone. "( $countrycode )";
+            echo $br. 'isp==' .$isp ;
 
 
             $password_len=5;
@@ -194,13 +191,13 @@ if (isset($_SESSION["user"])) {
                         
                         $numvisits=1;
 
-                        $insertQuery3a = " ( userId, userInitTimestamp, phonenum,     fullName,      password,     email ,    pwdhash ,  initIPaddr,     numvisits,  lat, lon ,   project      , location  )   VALUES ";      
-                        $insertQuery3b = " ( NULL, CURRENT_TIMESTAMP, '$phonenum', 'new user',  '$password',  '$email' , '$passwordHash', '$user_ip', '$numvisits',  $lat, $lon, '$projectname' ,  $location ) ";    
+                        // good
+                        // $insertQuery2a = " ( userId, userInitTimestamp, phonenum,     fullName,      password,     email ,    pwdhash ,  initIPaddr,     numvisits,    project )   VALUES ";      
+                        // $insertQuery2b = " ( NULL, CURRENT_TIMESTAMP, '$phonenum', 'new user',  '$password',  '$email' , '$passwordHash', '$user_ip', '$numvisits',  '$projectname') ";    
                         
                         $insertQuery2a = " ( userId, userInitTimestamp, phonenum,     fullName,      password,     email ,    pwdhash ,  initIPaddr,     numvisits,    project )   VALUES ";      
                         $insertQuery2b = " ( NULL, CURRENT_TIMESTAMP, '$phonenum', 'new user',  '$password',  '$email' , '$passwordHash', '$user_ip', '$numvisits',  '$projectname') ";    
-                        // $insertQuery2 = $insertQuery02. $insertQuery2a. $insertQuery2b ;
-                        $insertQuery2 = $insertQuery02. $insertQuery3a. $insertQuery3b ;
+                        $insertQuery2 = $insertQuery02. $insertQuery2a. $insertQuery2b ;
 
 
                         $conn->exec($insertQuery2);
