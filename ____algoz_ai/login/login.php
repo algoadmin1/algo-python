@@ -1,5 +1,5 @@
 <?php
-// ver 2.1
+// ver 3.2
 session_start();
 if (isset($_SESSION["user"])) {
    header("Location: index.php");
@@ -53,11 +53,21 @@ if (isset($_SESSION["user"])) {
 
 <body>
 
-<script src="userstats.js"></script>
 
+
+<!--
+        5 steps to integrate sys-vars from js to html to php to mysql:
+
+        1. include src=userstats.js plus 6 lines below
+        2. place these 2 lines under 'if (isset($_POST...' :   $sysvar$ = $_POST["str1ng1"];  // to get the POST'd hidden str1ng1
+        3. place  hidden1nput, ref'in str1ng1 one line above submit
+        4. at top of php's html, before </head> place:  'function passStr1ngToPHP() {...'
+        5. add        <form action="login.php" method="post" onsubmit="passStr1ngToPHP()">
+
+    -->
+<script src="userstats.js"></script>
 <div id="sys-vars" style="display: none;">userdataTmp</div>
 <!-- <div id="sys-vars">userdataTmp</div> -->
-
 <script>
         // document.getElementById('user-data').innerText = getScreenSize()+"|"+ detectDeviceType() +"|"+ detectOS()  +"|"+ detectBrowser();
         document.getElementById('sys-vars').innerText = getScreenSize()+"|"+ detectDeviceType() +"|"+ detectOS()  +"|"+ detectBrowser();
@@ -98,8 +108,8 @@ if (isset($_SESSION["user"])) {
     if (isset($_POST["login"])) {
         $email    = $_POST["email"];
         $password = $_POST["password"];
-        $sysvars  = $_POST["string1"];
 
+        $sysvars  = $_POST["string1"];
         if($msg==1) echo "<br />***sys-vars =". $sysvars . "***<br />" ;
 
         $userID0= "0";
@@ -147,6 +157,7 @@ if (isset($_SESSION["user"])) {
                 foreach ($result as $key => $value) {
                     if($key=="userId"){
                         $userID0=$value;
+
                         // if($msg==1) 
                         echo "userID0== $userID0 <br />";
                     }
@@ -163,6 +174,7 @@ if (isset($_SESSION["user"])) {
                     if($key=="pwdhash" || $key=="password"){
                         if($msg==1) echo "<br />password-type field:   ";
 
+                            // EVENTUALLY ELIM
                             if( $key=="password" ){
                                 if($value== $password){
                                     if($msg==1) echo "Regular PASSWORD  MATCHES!";
@@ -173,7 +185,10 @@ if (isset($_SESSION["user"])) {
                             if( $key=="pwdhash" ){
                                 if($value== $passwordHash){
                                     if($msg==1) echo "encryptedPASSWORD  MATCHES!";
-                                $passwordHashMatch=1;
+                                $passwordHashMatch=1;    // $passwordMatch=1;
+
+
+
                                 }else  if($msg==1)  echo "encryptedPASSWORD NO Match!";
                             }
                     }
@@ -183,7 +198,8 @@ if (isset($_SESSION["user"])) {
                     if( $key=="project" ){
                         if($value== $projectname){
                             if($msg==1) echo "PROJECT NAME =  $projectname  ";
-                           $projectMatch=1;
+                            $projectMatch=1;     // $passwordHashMatch=1;    // $passwordMatch=1;
+
                         }else   if($msg==1) echo "PROJECT NAME DOES NOT Match.";
                     }
  
@@ -219,11 +235,17 @@ if (isset($_SESSION["user"])) {
 
 
                     // close sess & assign $_SESSION["user"] 
+                    if(   $projectMatch==1   &&  $passwordHashMatch==1   && $passwordMatch==1 ){
+                        
+                                        session_start();
+                                        $_SESSION["user"] =$email ; 
+                                        $_SESSION["userId"] = $userID0;    //   from indxmenu.php $userID0=$_SESSION["userId"];
 
-                    // session_start();
-                    // $_SESSION["user"] =$email ; 
-                    // header("Location: index.php");
-                    // die();    
+                                        header("Location: indexmenu.php");
+                                        die();    
+                    }
+
+
 
                 } else {
                         $insertdb=1;

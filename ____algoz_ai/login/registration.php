@@ -1,5 +1,5 @@
 <?php
-// ver 2.1
+// ver 3.2
 session_start();
 if (isset($_SESSION["user"])) {
    header("Location: index.php");
@@ -35,8 +35,38 @@ if (isset($_SESSION["user"])) {
             cursor: pointer; /* Show pointer cursor on hover */
         }
     </style>
+     <script>
+        function passStringToPHP() {
+            // Get the content of the div
+            const divContent = document.getElementById('sys-vars').innerText;
+            // Set the content into a hidden input field
+            document.getElementById('hiddenInput').value = divContent;
+        }
+    </script>
+
 </head>
 <body>
+
+<!--
+        5 steps to integrate sys-vars from js to html to php to mysql:
+
+        1. include src=userstats.js plus 6 lines below
+        2. place these 2 lines under 'if (isset($_POST...' :   $sysvar$ = $_POST["str1ng1"];  // to get the POST'd hidden str1ng1
+        3. place  hidden1nput, ref'in str1ng1 one line above submit
+        4. at top of php's html, before </head> place:  'function passStr1ngToPHP() {...'
+        5. add        <form action="login.php" method="post" onsubmit="passStr1ngToPHP()">
+
+    -->
+<script src="userstats.js"></script>
+<!-- <div id="sys-vars" style="display: none;">userdataTmp</div> -->
+<div id="sys-vars">userdataTmp</div>
+<script>
+        document.getElementById('sys-vars').innerText = getScreenSize()+"|"+ detectDeviceType() +"|"+ detectOS()  +"|"+ detectBrowser();
+</script> 
+
+
+
+
     <div class="container">
         <?php
             date_default_timezone_set('America/New_York');
@@ -57,11 +87,16 @@ if (isset($_SESSION["user"])) {
             if($msg==1) echo "<br />] ip,ip2=".  $user_ip  . " ". $user_ip1;
 
 
+
+
+        // IPaddy to loc
+
             $geoip= "http://ip-api.com/php/";    //2600:8801:3500:7160:51b5:f0eb:bc22:728c
             $geoip.=$user_ip;                    
             $response = getJsonFromUrl( $geoip );   // get the deseriazlized
             $response1 = FixLonLat( $response );
 
+        // data to insert to mysql
             $lon=0; $lat=0; $alt=0;
             $country="USdefault";
             $countrycode="US";
@@ -140,12 +175,18 @@ if (isset($_SESSION["user"])) {
             if($msg==1)  echo                                   "ver 2.2";
 
         if (isset($_POST["submit"])) {
+           /// FIX !!!!
            $fullName = $_POST["fullname"];
-
            /// FIX !!!!
            $phonenum = $fullName;
            $email    = $_POST["email"];
            $password = $_POST["password"];
+
+
+           $sysvars  = $_POST["string1"];
+           if($msg==1) echo "<br />***sys-vars =". $sysvars . "***<br />" ;
+
+
         //    $passwordRepeat = $_POST["repeat_password"];
            
         //    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
@@ -225,13 +266,11 @@ if (isset($_SESSION["user"])) {
                         
                         $numvisits=1;
 
-                        // good
-                        // $insertQuery2a = " ( userId, userInitTimestamp, phonenum,     fullName,      password,     email ,    pwdhash ,  initIPaddr,     numvisits,    project )   VALUES ";      
-                        // $insertQuery2b = " ( NULL, CURRENT_TIMESTAMP, '$phonenum', 'new user',  '$password',  '$email' , '$passwordHash', '$user_ip', '$numvisits',  '$projectname') ";    
                         
-                        $insertQuery2a = " ( userId, userInitTimestamp, phonenum,     fullName,      password,     email ,    pwdhash ,  initIPaddr,     numvisits,  lat, lon,       project ,       country,     countrycode ,  region, regioncode,  city  , zip , tzone, isp, loc)   VALUES ";      
-                        $insertQuery2b = " ( NULL, CURRENT_TIMESTAMP, '$phonenum', 'new user',  '$password',  '$email' , '$passwordHash', '$user_ip', '$numvisits', '$lat' ,'$lon,', '$projectname', '$country', '$countrycode' , '$region', '$regioncode'  ,'$city' , '$zip', '$timezone', '$isp' , '$location') ";    
-                        $insertQuery2 = $insertQuery02. $insertQuery2a. $insertQuery2b ;
+                        $insertQuery4a = " ( userId, userInitTimestamp, phonenum,     fullName,      password,     email ,    pwdhash ,  initIPaddr,  sysvarsinit,     numvisits,  lat, lon,       project ,       country,     countrycode ,  region, regioncode,  city  , zip , tzone, isp, loc)   VALUES ";      
+                        $insertQuery4b = " ( NULL, CURRENT_TIMESTAMP, '$phonenum', 'new user',  '$password',  '$email' , '$passwordHash', '$user_ip', '$sysvars', '$numvisits', '$lat' ,'$lon,', '$projectname', '$country', '$countrycode' , '$region', '$regioncode'  ,'$city' , '$zip', '$timezone', '$isp' , '$location') ";    
+                        
+                        $insertQuery2 = $insertQuery02. $insertQuery4a. $insertQuery4b ;
 
 
                         $conn->exec($insertQuery2);
@@ -279,9 +318,9 @@ if (isset($_SESSION["user"])) {
         ?>
 
 
-
-        <form action="registration.php" method="post">
-            <div><h1>Sign up for <strong>algoz.ai</strong></h1></div>
+        <form action="registration.php" method="post"   onsubmit="passStringToPHP()">
+        <!-- <form action="registration.php" method="post"> -->
+        <div><h1>Sign up for <strong>algoz.ai</strong></h1></div>
 
             <!-- <div class="form-group">
                 <input type="text" class="form-control" name="fullname" placeholder="Full Name:">
@@ -315,6 +354,7 @@ if (isset($_SESSION["user"])) {
             </div> -->
 
             <div class="form-btn">
+                <input type="hidden" id="hiddenInput" name="string1">
                 <input type="submit" class="btn btn-primary" value="   Register   " name="submit">
             </div>
         </form>
