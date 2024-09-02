@@ -24,8 +24,7 @@ if (!isset($_SESSION["user"])) {
     <title>Videos</title>
 
     <!-- custom css stylesheet -->
-    <!-- <link rel="stylesheet" href="css/styletry.css"> -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/styletry.css">
 
 
 
@@ -41,37 +40,37 @@ if (!isset($_SESSION["user"])) {
                 <img src="logo256x144.jpg" alt="Logo">
                 </div>
             </div> -->
-<!-- 
+
         <div class="main-video">
             <div class="video">
                 <video src="img/vid01-01.mp4" controls muted autoplay></video>
                 <h3 class="title">Level 01a The Jab</h3>
             </div>
-        </div> -->
+        </div>
 
         <div class="video-list">
             <div class="vid active">
-                <video src="img/vid01-01.mp4" controls muted autoplay ></video>
+                <video src="img/vid01-01.mp4" muted ></video>
                 <h3 class="title">Level 01-1 The Jab</h3>
             </div>
             <div class="vid">
-                <video src="img/vid01-02.mp4" controls muted autoplay ></video>
+                <video src="img/vid01-02.mp4" muted ></video>
                 <h3 class="title">Level 01-2 The Jab</h3>
             </div>
             <div class="vid">
-                <video src="img/vid01-03.mp4" controls muted autoplay ></video>
+                <video src="img/vid01-03.mp4" muted ></video>
                 <h3 class="title">Level 01-3 The Jab</h3>
             </div>
             <div class="vid">
-                <video src="img/vid01-04.mp4" controls muted autoplay ></video>
+                <video src="img/vid01-04.mp4" muted ></video>
                 <h3 class="title">Level 01-4 The Jab</h3>
             </div>
             <div class="vid">
-                <video src="img/vid01-05.mp4" controls muted autoplay ></video>
+                <video src="img/vid01-05.mp4" muted ></video>
                 <h3 class="title">Level 01-5 The Jab</h3>
             </div>
             <div class="vid">
-                <video src="img/vid01-06.mp4" controls muted autoplay ></video>
+                <video src="img/vid01-06.mp4" muted ></video>
                 <h3 class="title">Level 01-6 The Jab</h3>
             </div>
         </div>
@@ -80,7 +79,7 @@ if (!isset($_SESSION["user"])) {
         
 <!-- conta1ner -->
 </div>
-<!-- 
+
 <script> 
 let listVideo = document.querySelectorAll('.video-list .vid');
 let mainVideo = document.querySelector('.main-video video');
@@ -98,7 +97,5 @@ listVideo.forEach( video =>{
 });
 
 </script>
- -->
-
 </body>
 </html>

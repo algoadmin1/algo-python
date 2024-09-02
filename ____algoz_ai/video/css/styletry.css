@@ -51,7 +51,7 @@ body{
     height: 520px;
     overflow-y: scroll;
 }
-/* 
+
 .container .video-list::-webkit-scrollbar{
     width: 7px;
 }
@@ -108,4 +108,4 @@ body{
     .container{
         grid-template-columns: 1fr;
     }
-} */
+}
