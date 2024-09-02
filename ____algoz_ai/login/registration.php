@@ -58,8 +58,8 @@ if (isset($_SESSION["user"])) {
 
     -->
 <script src="userstats.js"></script>
-<!-- <div id="sys-vars" style="display: none;">userdataTmp</div> -->
-<div id="sys-vars">userdataTmp</div>
+<div id="sys-vars" style="display: none;">userdataTmp</div>
+<!-- <div id="sys-vars">userdataTmp</div> -->
 <script>
         document.getElementById('sys-vars').innerText = getScreenSize()+"|"+ detectDeviceType() +"|"+ detectOS()  +"|"+ detectBrowser();
 </script> 
@@ -68,6 +68,16 @@ if (isset($_SESSION["user"])) {
 
 
     <div class="container">
+
+
+        <div style="text-align: center;">
+
+            <div class="logo1">
+                <img src="logoalgoz.jpg" alt="Logo">
+                </div>
+            </div>
+
+
         <?php
             date_default_timezone_set('America/New_York');
 
@@ -113,8 +123,7 @@ if (isset($_SESSION["user"])) {
             $result1 = ReturnQuotedFields( $response1 );
             if($msg==1)  print_r($result1);
             foreach ($result1 as $key => $value) {
-                echo "<br />";
-                echo "$key ]   $value"; 
+                if($msg==1) echo "<br />". "$key ]   $value"; 
                 // $key1 = (string)$key;
                 // $key1 = strtolower($key1);
 
@@ -166,13 +175,14 @@ if (isset($_SESSION["user"])) {
             }// foreach
 
             $location= $city."|".$region."|".$country."|".$zip;
-            echo $br. 'isp==' .$location. " ( $lat , $lon )";
-            echo $br. 'timezone(cc)==' .$timezone. "( $countrycode )";
-            echo $br. 'isp==' .$isp ;
-
+            if($msg==1) {
+                echo $br. 'loc==' .$location. " ( $lat , $lon )";
+                echo $br. 'timezone(cc)==' .$timezone. "( $countrycode )";
+                echo $br. 'isp==' .$isp ;
+                }
 
             $password_len=5;
-            if($msg==1)  echo                                   "ver 2.2";
+            if($msg==1)  echo                                   "ver 3.2";
 
         if (isset($_POST["submit"])) {
            /// FIX !!!!
@@ -320,7 +330,13 @@ if (isset($_SESSION["user"])) {
 
         <form action="registration.php" method="post"   onsubmit="passStringToPHP()">
         <!-- <form action="registration.php" method="post"> -->
-        <div><h1>Sign up for <strong>algoz.ai</strong></h1></div>
+               
+
+        <div style="text-align: center;">
+        <!-- <h1>Welcome to <strong>algoz.ai</strong> !</h1> -->
+        <h1> <strong>Sign Up</strong> </h1>
+        </div>
+        <!-- <div><h1>Sign up for <strong>algoz.ai</strong></h1></div> -->
 
             <!-- <div class="form-group">
                 <input type="text" class="form-control" name="fullname" placeholder="Full Name:">
@@ -355,7 +371,8 @@ if (isset($_SESSION["user"])) {
 
             <div class="form-btn">
                 <input type="hidden" id="hiddenInput" name="string1">
-                <input type="submit" class="btn btn-primary" value="   Register   " name="submit">
+                <!-- <input type="submit" class="btn btn-primary" value="   Register   " name="submit"> -->
+                <input type="submit" class="btn btn-primary" value="    Sign Up    " name="submit">
             </div>
         </form>
      

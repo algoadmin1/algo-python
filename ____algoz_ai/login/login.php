@@ -76,8 +76,16 @@ if (isset($_SESSION["user"])) {
 
 
 
-
     <div class="container">
+
+        <div style="text-align: center;">
+
+            <div class="logo1">
+                <img src="logoalgoz.jpg" alt="Logo">
+                </div>
+            </div>
+
+
       <?php
         date_default_timezone_set('America/New_York');
        
@@ -274,7 +282,8 @@ if (isset($_SESSION["user"])) {
       <form action="login.php" method="post" onsubmit="passStringToPHP()">
         
         <div style="text-align: center;">
-           <h1>Welcome to <strong>algoz.ai</strong> !</h1>
+        <!-- <h1>Welcome to <strong>algoz.ai</strong> !</h1> -->
+        <h1> <strong>Welcome!</strong> </h1>
         </div>
   
         <div class="form-group" >

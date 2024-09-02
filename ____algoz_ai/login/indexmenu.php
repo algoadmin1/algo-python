@@ -28,7 +28,8 @@ if (!isset($_SESSION["user"])) {
 
         <div class="logo1">
             <!-- <img src="bg.gif" alt="Logo"> -->
-            <img src="logoalgoz.png" alt="Logo">
+            <!-- <img src="logoalgoz.png" alt="Logo"> -->
+            <img src="logoalgoz.jpg" alt="Logo">
             </div>
     </div>
 

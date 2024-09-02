@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION["user"])) {
-   header("Location: index.php");
+   header("Location: indexmenu.php");
 }
 ?>
 <!DOCTYPE html>
@@ -16,6 +16,15 @@ if (isset($_SESSION["user"])) {
 </head>
 <body>
     <div class="container">
+
+
+        <div style="text-align: center;">
+
+            <div class="logo1">
+                <img src="logoalgoz.jpg" alt="Logo">
+                </div>
+            </div>      
+
         <?php
         /*
 
@@ -26,7 +35,7 @@ if (isset($_SESSION["user"])) {
         //  $user_ip    = htmlspecialchars($user_ip);
          $user_ip    = $user_ipRaw ;
 
-        echo "UserIP=". $user_ip;
+        if($msg==1) echo "UserIP=". $user_ip;
 
 
         if (isset($_POST["login"])) {
@@ -257,9 +266,11 @@ if (isset($_SESSION["user"])) {
 
         }
         ?>
+        
       <form action="login.php" method="post">
       <!-- <div><h1>Welcome to <strong>algoz.ai</strong> !</h1></div> -->
-      <div><h1>Enter your email for algoz.ai</h1></div>
+      <!-- <div><h1>Enter your email for algoz.ai</h1></div> -->
+      <div><h1>Enter your email</h1></div>
       <div></div>
       <div><p>We will send you a link to your email.</p></div>
   
