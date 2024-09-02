@@ -85,6 +85,7 @@ if (isset($_SESSION["user"])) {
 
                 if($key=="3") $country=$value;
                 if($key=="5") $countrycode=$value;
+                if($key=="7") $regioncode=$value;
                 if($key=="9") $region=$value;
                 if($key=="11") $city=$value;
                 if($key=="13") $zip=$value;
@@ -93,7 +94,40 @@ if (isset($_SESSION["user"])) {
                 if($key=="19") $timezone=$value;
                 if($key=="21") $isp=$value;
 
-                
+                /*
+                        0 ] status
+                        1 ] success
+                        2 ] country
+                        3 ] United States
+                        4 ] countryCode
+                        5 ] US
+                        6 ] region
+                        7 ] NV
+                        8 ] regionName
+                        9 ] Nevada
+                        10 ] city
+                        11 ] Las Vegas
+                        12 ] zip
+                        13 ] 89108
+                        14 ] lat
+                        15 ] 36.2038
+                        16 ] lon
+                        17 ] -115.2255
+                        18 ] timezone
+                        19 ] America/Los_Angeles
+                        20 ] isp
+                        21 ] Cox Communications Inc.
+                        22 ] org
+                        23 ] Cox Communications Inc
+                        24 ] as
+                        25 ] AS22773 Cox Communications Inc.
+                        26 ] query
+                        27 ] 2600:8801:3500:7160:3ddb:1575:1a1f:6177
+                        isp==Las Vegas|Nevada|United States|89108 ( 36.2038 , -115.2255 )
+                        timezone(cc)==America/Los_Angeles( US )
+                        isp==Cox Communications Inc.
+                                        
+                */
             }// foreach
 
             $location= $city."|".$region."|".$country."|".$zip;
@@ -195,8 +229,8 @@ if (isset($_SESSION["user"])) {
                         // $insertQuery2a = " ( userId, userInitTimestamp, phonenum,     fullName,      password,     email ,    pwdhash ,  initIPaddr,     numvisits,    project )   VALUES ";      
                         // $insertQuery2b = " ( NULL, CURRENT_TIMESTAMP, '$phonenum', 'new user',  '$password',  '$email' , '$passwordHash', '$user_ip', '$numvisits',  '$projectname') ";    
                         
-                        $insertQuery2a = " ( userId, userInitTimestamp, phonenum,     fullName,      password,     email ,    pwdhash ,  initIPaddr,     numvisits,    project )   VALUES ";      
-                        $insertQuery2b = " ( NULL, CURRENT_TIMESTAMP, '$phonenum', 'new user',  '$password',  '$email' , '$passwordHash', '$user_ip', '$numvisits',  '$projectname') ";    
+                        $insertQuery2a = " ( userId, userInitTimestamp, phonenum,     fullName,      password,     email ,    pwdhash ,  initIPaddr,     numvisits,  lat, lon,       project ,       country,     countrycode ,  region, regioncode,  city  , zip , tzone, isp, loc)   VALUES ";      
+                        $insertQuery2b = " ( NULL, CURRENT_TIMESTAMP, '$phonenum', 'new user',  '$password',  '$email' , '$passwordHash', '$user_ip', '$numvisits', '$lat' ,'$lon,', '$projectname', '$country', '$countrycode' , '$region', '$regioncode'  ,'$city' , '$zip', '$timezone', '$isp' , '$location') ";    
                         $insertQuery2 = $insertQuery02. $insertQuery2a. $insertQuery2b ;
 
 
