@@ -1,4 +1,5 @@
 <?php
+// ver 2.1
 session_start();
 if (isset($_SESSION["user"])) {
    header("Location: index.php");
@@ -18,7 +19,7 @@ if (isset($_SESSION["user"])) {
         /* Basic styling for the form and button */
         .form-group {
             position: relative; /* Position relative to contain the eye icon */
-            width: 320px; /* Set a width for the form group */
+            width: 260px; /* Set a width for the form group */
             margin-bottom: 15px; /* Spacing at the bottom of the input field */
         }
 
@@ -187,6 +188,7 @@ if (isset($_SESSION["user"])) {
                     }
  
                     echo "<br />". $i.") ". $key . ": " . $value ;
+
                     $i++;
 
                 }
@@ -253,7 +255,7 @@ if (isset($_SESSION["user"])) {
            <h1>Welcome to <strong>algoz.ai</strong> !</h1>
         </div>
   
-        <div class="form-group">
+        <div class="form-group" >
             <input type="email" placeholder="Email:" name="email" class="form-control">
         </div>
 
@@ -262,8 +264,9 @@ if (isset($_SESSION["user"])) {
         <div class="form-group">
             <input type="password" placeholder="Password:" name="password" class="form-control">
         </div> -->
+         
 
-        <div class="form-group">
+        <div class="form-group" >
              <input type="password" placeholder="Password:" name="password" class="form-control" id="password">
              <!-- Eye icon for toggling password visibility -->
               <i class="toggle-password" onclick="togglePasswordVisibility()">👁️</i>
@@ -271,17 +274,17 @@ if (isset($_SESSION["user"])) {
 
         <div class="form-btn">
             <input type="hidden" id="hiddenInput" name="string1">
-            <input type="submit" value="Login" name="login" class="btn btn-primary">
+            <input type="submit" value="    Login    " name="login" class="btn btn-primary">
         </div>
       </form>
 
-
+      <div></div>
 
 
 
 
       <div style="text-align: center;">
-        <p>Not registered yet? <a href="registration.php">Sign up here</a></p>
+        <p>Not registered? <a href="registration.php">Sign up here</a></p>
       </div>
       <div></div>
 
