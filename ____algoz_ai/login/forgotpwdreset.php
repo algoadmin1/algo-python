@@ -29,7 +29,6 @@ if (isset($_SESSION["user"])) {
         require_once "sendemail.php";
 
         $linkLogin="https://algoz.ai/login";
-        $linkResetPwd="https://algoz.ai/login/forgotpwdreset.php";
         //  $msg=1;
          $msg=0;
          $user_ipRaw = $_SERVER['REMOTE_ADDR'];   // 2600:8801:3500:7160:51b5:f0eb:bc22:728c
@@ -56,7 +55,7 @@ if (isset($_SESSION["user"])) {
  
 
 
-        if (isset($_POST["forgot"])) {
+        if (isset($_POST["resetpwd"])) {
 
             // echo "got PAST FORGOT....";
             // echo "<br />Please check your inbox and spam folder.<br /><br />";
@@ -64,18 +63,17 @@ if (isset($_SESSION["user"])) {
             //    $password = $_POST["password"];
 
             $subject="algoz.ai - RESET PASSWORD LINK";
-            // $message="Please click the link below to enter a new password.<br />". '<div style="text-align: center;"><p><a href="'.$linkResetPwd .'">Click to Login</a></p></div>"';
-            $message="Please click the link to Reset your password: ".  $linkResetPwd."?em=".$email ;
+            $message="Please click the link below to enter a new password.<br />". '<div style="text-align: center;"><p><a href="'.$linkLogin .'">Click to Login</a></p></div>"';
             $from="algoinvestorr@gmail.com";
-            SendEmailToUser($email, $subject, $message, $from);
+           // SendEmailToUser($email, $subject, $message, $from);
 
 
 
             // $email1 = substr($email, 0, 3 );   check your inbox and spam folder
-            // echo "<div class='alert alert-success'>Email sent to  $email </div>";
-            echo "<br />";
-            echo "<div class='alert alert-success'>Check your inbox at: $email </div>";
-            echo "<br />";
+            // echo "<div class='alert alert-success'>Check your inbox at: $email </div>";
+
+
+            echo "<div class='alert alert-success'>Password Reset.</div>";
 
             // echo "<br />Click for Login: ";
             /*
@@ -177,11 +175,11 @@ if (isset($_SESSION["user"])) {
         
 
         <!-- <form action="login.php" method="post"> -->
-        <form action="forgotpwd.php" method="post">
+        <form action="forgotpwdreset.php" method="post">
 
         <div style="text-align: center;">
         <!-- <h1>Welcome to <strong>algoz.ai</strong> !</h1> -->
-        <h1> <strong>Forgot Password</strong> </h1>
+        <h1> <strong>RESET Password</strong> </h1>
         </div>
 
       <!-- <div><h1>Welcome to <strong>algoz.ai</strong> !</h1></div> -->
@@ -189,18 +187,20 @@ if (isset($_SESSION["user"])) {
       <!-- <div><h1>Enter your email</h1></div> -->
       <div></div>
       <div>
-      <p>We will send you a link to your email.</p>
-      <p>   *** DEV: Check email vs Dbase ***</p>
+          <p>Enter your new password.</p>
+          <p>   *** DEV: UPDATE PWD/HASH to Dbase ***</p>
+
       </div>
   
         <div class="form-group">
-            <input type="email" placeholder="Email:" name="email" class="form-control">
+            <!-- <input type="password" placeholder="Email:" name="email" class="form-control"> -->
+            <input type="email" placeholder="New Password:" name="password" class="form-control">
         </div>
         <!-- <div class="form-group">
-            <input type="password" placeholder="Password:" name="password" class="form-control">
+            <input type="password" placeholder="Email:" name="email" class="form-control">
         </div> -->
         <div class="form-btn">
-            <input type="submit" value="Email me a password link" name="forgot" class="btn btn-primary">
+            <input type="submit" value="Reset My Password" name="resetpwd" class="btn btn-primary">
         </div>
       </form>
       <!-- <div><p>Not registered yet? <a href="registration.php">Sign up here</a></p></div>
