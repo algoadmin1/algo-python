@@ -196,6 +196,7 @@ if(isset( $_GET['em'] )){
       <div></div>
       <div>
           <p>Enter your new password.</p>
+          <p>   *** DEV: CHECK email vs Dbase, to be sure vs hackrs ***</p>
           <p>   *** DEV: UPDATE PWD/HASH to Dbase ***</p>
 
       </div>
