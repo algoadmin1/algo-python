@@ -3,6 +3,13 @@ session_start();
 if (isset($_SESSION["user"])) {
    header("Location: indexmenu.php");
 }
+
+//  .php?em=abc@yahoo.com
+if(isset( $_GET['em'] )){
+    $emailPwdReset = $_GET['em'] ;
+}else{
+    $emailPwdReset = "nil";
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -180,6 +187,7 @@ if (isset($_SESSION["user"])) {
         <div style="text-align: center;">
         <!-- <h1>Welcome to <strong>algoz.ai</strong> !</h1> -->
         <h1> <strong>RESET Password</strong> </h1>
+        <p><?php echo "for: ". $emailPwdReset ." "; ?></p>
         </div>
 
       <!-- <div><h1>Welcome to <strong>algoz.ai</strong> !</h1></div> -->

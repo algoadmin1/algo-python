@@ -11,8 +11,10 @@
         // Use the mail function to send the email
         if (mail($email, $subject, $message, $headers)) {
             echo "Email sent successfully to $email";
+            return true;
         } else {
             echo "Failed to send email to $email";
+            return false;
         }
     }
 

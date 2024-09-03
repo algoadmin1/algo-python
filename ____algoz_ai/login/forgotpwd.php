@@ -67,14 +67,18 @@ if (isset($_SESSION["user"])) {
             // $message="Please click the link below to enter a new password.<br />". '<div style="text-align: center;"><p><a href="'.$linkResetPwd .'">Click to Login</a></p></div>"';
             $message="Please click the link to Reset your password: ".  $linkResetPwd."?em=".$email ;
             $from="algoinvestorr@gmail.com";
-            SendEmailToUser($email, $subject, $message, $from);
+            $emailSuccess = SendEmailToUser($email, $subject, $message, $from);
 
 
 
             // $email1 = substr($email, 0, 3 );   check your inbox and spam folder
             // echo "<div class='alert alert-success'>Email sent to  $email </div>";
+                
             echo "<br />";
-            echo "<div class='alert alert-success'>Check your inbox at: $email </div>";
+            if($emailSuccess==true)   echo "<div class='alert alert-success'>Check your inbox at: $email </div>";
+            else   echo "<div class='alert alert-danger'>FAILED to send email. Try again.</div>";
+            echo "<br />";
+    
             echo "<br />";
 
             // echo "<br />Click for Login: ";
