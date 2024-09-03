@@ -1,6 +1,7 @@
 const videosList = [
 {
-	video: 'img/vid01-01.mp4',
+	// video: 'img/vid01-01.mp4',
+	video: 'img/vid01-00.mp4',
 	title: 'Level 1.1 The Jab'
 },
 {
