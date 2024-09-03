@@ -38,28 +38,46 @@ if (isset($_SESSION["user"])) {
         if($msg==1) echo "UserIP=". $user_ip;
 
 
-        if (isset($_POST["login"])) {
-           $email    = $_POST["email"];
-           $password = $_POST["password"];
-           require_once "database.php";
+
+// from registration.php
+//
+        // if (isset($_POST["submit"])) {
+            /// FIX !!!!
+            // $fullName = $_POST["fullname"];
+            // /// FIX !!!!
+            // $phonenum = $fullName;
+            // $email    = $_POST["email"];
+            // $password = $_POST["password"];
+ 
+ 
+            // $sysvars  = $_POST["string1"];
+            // if($msg==1) echo "<br />***sys-vars =". $sysvars . "***<br />" ;
+ 
 
 
-            // old
-            // $sql = "SELECT * FROM users WHERE email = '$email'";
-            // $result = mysqli_query($conn, $sql);
-            // $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
-            // if ($user) {
-            //     if (password_verify($password, $user["password"])) {
-            //         session_start();
-            //         $_SESSION["user"] =$email ;//"yes";
-            //         header("Location: index.php");
-            //         die();
-            //     }else{
-            //         echo "<div class='alert alert-danger'>Password does not match</div>";
-            //     }
-            // }else{
-            //     echo "<div class='alert alert-danger'>Email does not match</div>";
-            // }
+        if (isset($_POST["forgot"])) {
+
+            // echo "got PAST FORGOT....";
+            echo "<br />Please check your inbox and spam folder.<br /><br />";
+            $email    = $_POST["email"];
+            //    $password = $_POST["password"];
+
+            // $email1 = substr($email, 0, 3 );
+            echo "<div class='alert alert-success'>Email sent to  $email </div>";
+
+            // echo "<br />Click for Login: ";
+            /*
+                  <p><a href="https://nytrader.wordpress.com/sniper-trading/">MTWTF</a>   <a href="https://cnbc.com">CNBC.com</a>   <a href="https://stockcharts.com">STOCKCHARTS.com</a>  <a href="https://finance.yahoo.com">YAHOO FINANCE</a> </p>
+            */
+            $linkLogin="https://algoz.ai/login";
+            // <div style="text-align: center;">
+
+            echo '<div style="text-align: center;"><p><a href="'.$linkLogin .'">Click to Login</a></p></div>';
+            // echo '<a href="' . htmlspecialchars($link9) . '" style="color: blue;">' . htmlspecialchars($link) . '</a>';
+
+            die();
+
+        require_once "database.php";
 
 
      // new
@@ -264,13 +282,23 @@ if (isset($_SESSION["user"])) {
 
 
 
-        }
-        ?>
+        }// if (isset($_POST["submit"])) {
+         
+
+    ?>
         
-      <form action="login.php" method="post">
+
+        <!-- <form action="login.php" method="post"> -->
+        <form action="forgotpwd.php" method="post">
+
+        <div style="text-align: center;">
+        <!-- <h1>Welcome to <strong>algoz.ai</strong> !</h1> -->
+        <h1> <strong>Forgot Password</strong> </h1>
+        </div>
+
       <!-- <div><h1>Welcome to <strong>algoz.ai</strong> !</h1></div> -->
       <!-- <div><h1>Enter your email for algoz.ai</h1></div> -->
-      <div><h1>Enter your email</h1></div>
+      <!-- <div><h1>Enter your email</h1></div> -->
       <div></div>
       <div><p>We will send you a link to your email.</p></div>
   
@@ -281,7 +309,7 @@ if (isset($_SESSION["user"])) {
             <input type="password" placeholder="Password:" name="password" class="form-control">
         </div> -->
         <div class="form-btn">
-            <input type="submit" value="Email me a password link" name="login" class="btn btn-primary">
+            <input type="submit" value="Email me a password link" name="forgot" class="btn btn-primary">
         </div>
       </form>
       <!-- <div><p>Not registered yet? <a href="registration.php">Sign up here</a></p></div>
