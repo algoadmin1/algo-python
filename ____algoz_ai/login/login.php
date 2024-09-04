@@ -218,7 +218,7 @@ if (isset($_SESSION["user"])) {
             if ($result){    
             // if($result   &&   $projectMatch==1   &&  $passwordHashMatch==1   && $passwordMatch==1 ){
 
-             echo "<br /> ALERT CHECK IF PASSWORD ACTUALLY MATCHES !!! + pwdhash + IF projectNAME  matches *** !!";
+             echo "<br /> ALERT CHECK IF [ PASSWORD HASH ]  ACTUALLY MATCHES !!! + pwdhash + IF projectNAME  matches *** !!";
 
             $insertdb=0;
                     // if($msg==1) echo "<br />] $email found in user table! ". $result["password"]. " ". $result["userId"];      
