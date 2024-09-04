@@ -181,7 +181,8 @@ if (isset($_SESSION["user"])) {
                 echo $br. 'isp==' .$isp ;
                 }
 
-            $password_len=5;
+            $password_len=5;    // password_len_min use from database.php
+
             if($msg==1)  echo                                   "ver 3.2";
 
         if (isset($_POST["submit"])) {
@@ -220,7 +221,8 @@ if (isset($_SESSION["user"])) {
             }
             if (strlen($password)<$password_len) {
                 array_push($errors,"Password must be at least $password_len charactes long");
-            }
+            }  //        $passwordHash = sha1($password); 
+
 
         //    if ($password!==$passwordRepeat) {
         //     array_push($errors,"Password does not match");

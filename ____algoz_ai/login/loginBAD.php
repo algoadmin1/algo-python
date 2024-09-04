@@ -167,16 +167,15 @@ if (isset($_SESSION["user"])) {
                     if($key=="userId"){
                         $userID0=$value;
 
-                        // if($msg==1) 
-                        echo "userID0== $userID0 <br />";
+                        if($msg==1)  echo "userID0== $userID0 <br />";
                     }
 
                     if($key=="numvisits"){
                         $numvisits=$value;
                         $numvisits++;
-                        // if($msg==1) 
-                        echo "<br />numvisits== $numvisits <br />";
+                        if($msg==1)  echo "<br />numvisits== $numvisits <br />";
                     }
+
 
                     // pwds
                     if($key=="pwdhash" || $key=="password"){
@@ -195,9 +194,12 @@ if (isset($_SESSION["user"])) {
                                     if($msg==1) echo "encryptedPASSWORD  MATCHES!";
                                 $passwordHashMatch=1;    // $passwordMatch=1;
 
+
+
                                 }else  if($msg==1)  echo "encryptedPASSWORD NO Match!";
                             }
                     }
+
 
 
                     if( $key=="project" ){
@@ -207,7 +209,9 @@ if (isset($_SESSION["user"])) {
 
                         }else   if($msg==1) echo "PROJECT NAME DOES NOT Match.";
                     }
-                    echo "<br />". $i.") ". $key . ": " . $value ;
+ 
+                    if($msg==1)  echo "<br />". $i.") ". $key . ": " . $value ;
+
                     $i++;
 
                 }
@@ -216,7 +220,7 @@ if (isset($_SESSION["user"])) {
                 $insertdb=0;
                 if ($result){    
                     
-                    echo "<br />here check for pwd + hash +project match********* !!";
+                    // echo "<br />here check for pwd + hash +project match********* !!";
 
 
                     $insertdb=0;

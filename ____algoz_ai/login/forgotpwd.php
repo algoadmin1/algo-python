@@ -20,15 +20,16 @@ if (isset($_SESSION["user"])) {
         <div style="text-align: center;">
 
             <div class="logo1">
-                <img src="logoalgoz.jpg" alt="Logo">
-                </div>
+            <!-- <img src="logoalgoz.jpg" alt="Logo"> -->
+            <img src="logo.jpg" alt="Logo">
+            </div>
             </div>      
 
         <?php
             require_once "sendemail.php";
             require_once "database.php";
-            $linkLogin="https://algoz.ai/login";
-            $linkResetPwd="https://algoz.ai/login/forgotpwdreset.php";
+            // $linkLogin="https://algoz.ai/login";
+            // $linkResetPwd="https://algoz.ai/login/forgotpwdreset.php";
           
 
             $msg=0;
@@ -58,9 +59,7 @@ if (isset($_SESSION["user"])) {
             $email    = $_POST["email"];
             //    $password = $_POST["password"];
 
-
                 try{
-                    // new
 
                     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);           // Connect to MySQL using PDO
                     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);                         // Set PDO to throw exceptions for errors

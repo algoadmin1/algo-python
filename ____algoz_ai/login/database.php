@@ -5,7 +5,6 @@
 // hit this link for full tutorial
 $youtubeUrl="https://youtu.be/9_kQ2bjqSzk?si=vLISSejcsXVqQNVc";
 
-$website="https://algoz.ai";
 
 
 $servername= "localhost" ; 
@@ -25,7 +24,24 @@ $dbPassword.="4"."!";
 $tblname ="users";
 $happy1=$dbPassword;
 
+
+//
+//   project links
+//
+$website="https://algoz.ai";
+
 $projectName="algoz";    // $projectName="boxing";
+$linkLogin="https://algoz.ai/login";
+$linkResetPwd="https://algoz.ai/login/forgotpwdreset.php";
+          
+$password_len_min=5;
+
+
+
+
+
+
+
 
 
 // // Function to hash a password string
