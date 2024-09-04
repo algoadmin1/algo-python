@@ -63,6 +63,11 @@ if (isset($_SESSION["user"])) {
             $email    = $_POST["email"];
             //    $password = $_POST["password"];
 
+
+// ====================== HERE WE need a link
+
+
+
             $subject="algoz.ai - RESET PASSWORD LINK";
             // $message="Please click the link below to enter a new password.<br />". '<div style="text-align: center;"><p><a href="'.$linkResetPwd .'">Click to Login</a></p></div>"';
             $message="Please click the link to Reset your password: ".  $linkResetPwd."?em=".$email ;
@@ -70,10 +75,10 @@ if (isset($_SESSION["user"])) {
             $emailSuccess = SendEmailToUser($email, $subject, $message, $from);
 
 
-
             // $email1 = substr($email, 0, 3 );   check your inbox and spam folder
             // echo "<div class='alert alert-success'>Email sent to  $email </div>";
-                
+               
+            
             echo "<br />";
             if($emailSuccess==true)   echo "<div class='alert alert-success'>Check your inbox at: $email </div>";
             else   echo "<div class='alert alert-danger'>FAILED to send email. Try again.</div>";

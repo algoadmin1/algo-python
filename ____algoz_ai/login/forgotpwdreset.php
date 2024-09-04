@@ -32,7 +32,7 @@ if(isset( $_GET['em'] )){
                 </div>
             </div>      
 
-        <?php
+    <?php
         require_once "sendemail.php";
 
         $linkLogin="https://algoz.ai/login";
@@ -63,7 +63,6 @@ if(isset( $_GET['em'] )){
 
 
         if (isset($_POST["resetpwd"])) {
-
             // echo "got PAST FORGOT....";
             // echo "<br />Please check your inbox and spam folder.<br /><br />";
             $email    = $_POST["email"];
@@ -74,12 +73,10 @@ if(isset( $_GET['em'] )){
             $from="algoinvestorr@gmail.com";
            // SendEmailToUser($email, $subject, $message, $from);
 
-
-
             // $email1 = substr($email, 0, 3 );   check your inbox and spam folder
             // echo "<div class='alert alert-success'>Check your inbox at: $email </div>";
 
-
+/
             echo "<div class='alert alert-success'>Password Reset.</div>";
 
             // echo "<br />Click for Login: ";
@@ -106,7 +103,6 @@ if(isset( $_GET['em'] )){
                 $stmt = $conn->prepare($query);
                 $stmt->bindParam(':email', $email);
                 $stmt->execute();
-
 
                 $result = $stmt->fetch(PDO::FETCH_ASSOC);
                 // echo "...";
