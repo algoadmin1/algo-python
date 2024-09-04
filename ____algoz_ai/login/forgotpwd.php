@@ -17,7 +17,6 @@ if (isset($_SESSION["user"])) {
 <body>
     <div class="container">
 
-
         <div style="text-align: center;">
 
             <div class="logo1">
@@ -26,18 +25,16 @@ if (isset($_SESSION["user"])) {
             </div>      
 
         <?php
-        require_once "sendemail.php";
+            require_once "sendemail.php";
+            require_once "database.php";
+            $linkLogin="https://algoz.ai/login";
+            $linkResetPwd="https://algoz.ai/login/forgotpwdreset.php";
+          
 
-        $linkLogin="https://algoz.ai/login";
-        $linkResetPwd="https://algoz.ai/login/forgotpwdreset.php";
-        //  $msg=1;
-         $msg=0;
-         $user_ipRaw = $_SERVER['REMOTE_ADDR'];   // 2600:8801:3500:7160:51b5:f0eb:bc22:728c
-        //  $user_ip    = htmlspecialchars($user_ip);
-         $user_ip    = $user_ipRaw ;
-
-        if($msg==1) echo "UserIP=". $user_ip;
-
+            $msg=0;
+            $user_ipRaw = $_SERVER['REMOTE_ADDR'];   // 2600:8801:3500:7160:51b5:f0eb:bc22:728c
+            $user_ip    = $user_ipRaw ;     //  $user_ip    = htmlspecialchars($user_ip);
+            if($msg==1) echo "UserIP=". $user_ip;
 
 
 // from registration.php
@@ -50,11 +47,9 @@ if (isset($_SESSION["user"])) {
             // $email    = $_POST["email"];
             // $password = $_POST["password"];
  
- 
             // $sysvars  = $_POST["string1"];
             // if($msg==1) echo "<br />***sys-vars =". $sysvars . "***<br />" ;
  
-
 
         if (isset($_POST["forgot"])) {
 
@@ -64,67 +59,85 @@ if (isset($_SESSION["user"])) {
             //    $password = $_POST["password"];
 
 
-// ====================== HERE WE need a link
+                try{
+                    // new
+
+                    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);           // Connect to MySQL using PDO
+                    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);                         // Set PDO to throw exceptions for errors
+                        $query  = "SELECT * FROM ". $tblname. " WHERE email = :email";
+                        $stmt = $conn->prepare($query);
+                        $stmt->bindParam(':email', $email);
+                        $stmt->execute();
+
+                        $result = $stmt->fetch(PDO::FETCH_ASSOC);     // print_r( $result) ;
+                        $j=0;
+                        $projectmatch=false;
+
+                        if( $result ){
+                                foreach ($result as $key => $value) {
+                                    // pwd match does NOT matter only email & project
+                                    // if($key=="pwdhash" || $key=="password"){
+                                    //     if($msg==1) echo "password-type field:   ";
+                                    //     if($msg==1) echo $j.") ".$key . ": " . $value . "<br />";
+                                    // }
+                                    if( $key=="project" ){
+                                        if($msg==10 ) {
+                                            echo "project-type field:   ";
+                                            echo $j.") ".$key . ": " . $value . "<br />";
+                                        }
+                                        //loop in case multiple projects
+                                        if($value==$projectName)  $projectmatch=true ;
+                                    }
+                                    if($msg==1)  echo $j.") ".$key . ": " . $value . "<br />";
+                                    $j++;
+                                }//foreach
+                        }//if
 
 
+        // assume no email found ie result==null  and chk   $projectmatch==true 
+                        $insertdb=0;
+                        if ( $result &&  $projectmatch==true ){  
+                                                             
+                            $insertdb=1;
+                            // if($msg==1) echo "] $email found in user table! ". $user["password"]. " ". $user["userId"];      
+                            if($msg==1) echo "] $email found in user table! ". $result["password"]. " ". $result["passwordHash"]. " ". $result["userId"];      
 
-            $subject="algoz.ai - RESET PASSWORD LINK";
-            // $message="Please click the link below to enter a new password.<br />". '<div style="text-align: center;"><p><a href="'.$linkResetPwd .'">Click to Login</a></p></div>"';
-            $message="Please click the link to Reset your password: ".  $linkResetPwd."?em=".$email ;
-            $from="algoinvestorr@gmail.com";
-            $emailSuccess = SendEmailToUser($email, $subject, $message, $from);
+                            SendAndHandleForgotEmail( $email );
 
+                            // die();
 
-            // $email1 = substr($email, 0, 3 );   check your inbox and spam folder
-            // echo "<div class='alert alert-success'>Email sent to  $email </div>";
-               
-            
-            echo "<br />";
-            if($emailSuccess==true)   echo "<div class='alert alert-success'>Check your inbox at: $email </div>";
-            else   echo "<div class='alert alert-danger'>FAILED to send email. Try again.</div>";
-            echo "<br />";
-    
-            echo "<br />";
+                            // to start a sess
+                            // session_start();
+                            // $_SESSION["user"] =$email ; 
+                            // header("Location: index.php");
+                            // die();    
 
-            // echo "<br />Click for Login: ";
-            /*
-                  <p><a href="https://nytrader.wordpress.com/sniper-trading/">MTWTF</a>   <a href="https://cnbc.com">CNBC.com</a>   <a href="https://stockcharts.com">STOCKCHARTS.com</a>  <a href="https://finance.yahoo.com">YAHOO FINANCE</a> </p>
-            */
-            // $linkLogin="https://algoz.ai/login";
-            // <div style="text-align: center;">
+                        } else {
+                                $insertdb=0; $tstr=" ";
+                                if($projectmatch==false){ // email found but
+                                    $tstr="in $projectName project";
 
-            echo '<div style="text-align: center;"><p><a href="'.$linkLogin .'">Click to Login</a></p></div>';
-            // echo '<a href="' . htmlspecialchars($link9) . '" style="color: blue;">' . htmlspecialchars($link) . '</a>';
+                                }
+                                // if($msg==1) echo "] NO USER found with that email.<br />";
+                                $errorUserNotFound= $email. " not found $tstr ; try again or Login/SignUp below.";
+                                echo "<div class='alert alert-danger'>$errorUserNotFound </div>";
+                                }
 
-            die();
-
-
-        require_once "database.php";
-
-     // new
-        try{
-
-            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);           // Connect to MySQL using PDO
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);                         // Set PDO to throw exceptions for errors
-                $query  = "SELECT * FROM ". $tblname. " WHERE email = :email";
-                $stmt = $conn->prepare($query);
-                $stmt->bindParam(':email', $email);
-                $stmt->execute();
-
-
-                $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                // echo "...";
-                // print_r( $result) ;
-                foreach ($result as $key => $value) {
-                    if($key=="pwdhash" || $key=="password"){
-                        echo "password-type field:   ";
+                    } catch (PDOException $e) {
+                        $insertdb=-10;
+                        if($msg==1) echo "<br />ERROR:  Connection failed: " . $e->getMessage();
+                        die();
                     }
-                    echo $key . ": " . $value . "<br />";
+                    $conn = null;    if($msg==1) echo $br. " * PDO conn Closed. *";
 
-                }
+
+        }// if (isset($_POST["submit"])) {
+
+        if($insertdb==1) die();
+
+
 
 /*
-                ...
                 userId: 2
                 userInitTimestamp: 2024-08-29 04:50:22
                 phonenum: 6175551212
@@ -147,43 +160,14 @@ if (isset($_SESSION["user"])) {
                 lastPrice: 0
                 optionStrategy:
                 ] mitcrapsteam@gmail.com found in user table! abcdefgh 2 * PDO conn Closed. *
-
 */
-
-
-                $insertdb=0;
-                if ($result){                                   
-                    $insertdb=0;
-                    // if($msg==1) echo "] $email found in user table! ". $user["password"]. " ". $user["userId"];      
-                    if($msg==1) echo "] $email found in user table! ". $result["password"]. " ". $result["userId"];      
-                   
-                    // session_start();
-                    // $_SESSION["user"] =$email ; 
-                    // header("Location: index.php");
-                    // die();    
-
-                } else {
-                        $insertdb=1;
-                        // if($msg==1) echo "] NO USER found with that email.<br />";
-                        $errorUserNotFound= $email. " not found; try again or Sign Up below.";
-                        echo "<div class='alert alert-danger'>$errorUserNotFound</div>";
-
-                        }
-
-            
-        } catch (PDOException $e) {
-            $insertdb=-10;
-            if($msg==1) echo "<br />ERROR:  Connection failed: " . $e->getMessage();
-        }
-        $conn = null;        // Close the PDO connection
-       if($msg==1) echo $br. " * PDO conn Closed. *";
-
-
-        }// if (isset($_POST["submit"])) {
-         
 
     ?>
         
+
+
+
+
 
         <!-- <form action="login.php" method="post"> -->
         <form action="forgotpwd.php" method="post">
@@ -199,7 +183,6 @@ if (isset($_SESSION["user"])) {
       <div></div>
       <div>
       <p>We will send you a link to your email.</p>
-      <p>   *** DEV: Check email vs Dbase ***</p>
       </div>
   
         <div class="form-group">
@@ -211,7 +194,17 @@ if (isset($_SESSION["user"])) {
         <div class="form-btn">
             <input type="submit" value="Email me a password link" name="forgot" class="btn btn-primary">
         </div>
+
       </form>
+      <div> </div>
+      <div> .</div>
+      <div> </div>
+      <div style="text-align: center;">
+      
+
+        <p><a href="'.$linkLogin .'">Click to Login or SignUp</a></p>
+    </div>
+
       <!-- <div><p>Not registered yet? <a href="registration.php">Sign up here</a></p></div>
       <div></div>
       <div><p id="forgotpwd" style="font-size: 10px;">Forgot Password? <a href="forgotpwd.php">Click here</a></p></div> -->

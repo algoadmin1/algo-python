@@ -25,6 +25,7 @@ $dbPassword.="4"."!";
 $tblname ="users";
 $happy1=$dbPassword;
 
+$projectName="algoz";    // $projectName="boxing";
 
 
 // // Function to hash a password string
