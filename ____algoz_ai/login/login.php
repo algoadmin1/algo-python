@@ -91,8 +91,9 @@ if (isset($_SESSION["user"])) {
         date_default_timezone_set('America/New_York');
        
         require_once "encrypt.php";
+        require_once "database.php";
 
-        $projectname="algoz";
+        // $projec tname="algoz";   // projec tName
         $projectMatch=0;
         $passwordMatch=0;
         $passwordHashMatch=0;
@@ -147,7 +148,7 @@ if (isset($_SESSION["user"])) {
 
         if($msg==1) echo "<br />pwd / hash =". $password ."  /  " . $passwordHash ."<br />" ;
 
-        require_once "database.php";
+        // require_once "database.php";
 
         try{
 
@@ -167,15 +168,13 @@ if (isset($_SESSION["user"])) {
                     if($key=="userId"){
                         $userID0=$value;
 
-                        // if($msg==1) 
-                        echo "userID0== $userID0 <br />";
+                          if($msg==1)   echo "userID0== $userID0 <br />";
                     }
 
                     if($key=="numvisits"){
                         $numvisits=$value;
                         $numvisits++;
-                        // if($msg==1) 
-                        echo "<br />numvisits== $numvisits <br />";
+                         if($msg==1)   echo "<br />numvisits== $numvisits <br />";
                     }
 
                     // pwds
@@ -201,27 +200,31 @@ if (isset($_SESSION["user"])) {
 
 
                     if( $key=="project" ){
-                        if($value== $projectname){
-                            if($msg==1) echo "PROJECT NAME =  $projectname  ";
+                        if($value== $projectName){
+                            // if($msg==1) echo "PROJECT NAME =  $projectName  ";
+                             echo "PROJECT NAME =  $projectName  ";
                             $projectMatch=1;     // $passwordHashMatch=1;    // $passwordMatch=1;
 
-                        }else   if($msg==1) echo "PROJECT NAME DOES NOT Match.";
-                    }
-                    echo "<br />". $i.") ". $key . ": " . $value ;
+                        // }else   if($msg==1) echo "PROJECT NAME DOES NOT Match.";
+                    }else  echo "PROJECT NAME DOES NOT Match.";
+                }
+                    if($msg==1) echo "<br />". $i.") ". $key . ": " . $value ;
                     $i++;
 
                 }
 
 
-                $insertdb=0;
-                if ($result){    
-                    
-                    echo "<br />here check for pwd + hash +project match********* !!";
+            $insertdb=0;
+            if ($result){    
+            // if($result   &&   $projectMatch==1   &&  $passwordHashMatch==1   && $passwordMatch==1 ){
 
+             echo "<br /> ALERT CHECK IF PASSWORD ACTUALLY MATCHES !!! + pwdhash + IF projectNAME  matches *** !!";
 
-                    $insertdb=0;
-                    if($msg==1) echo "<br />] $email found in user table! ". $result["password"]. " ". $result["userId"];      
-
+            $insertdb=0;
+                    // if($msg==1) echo "<br />] $email found in user table! ". $result["password"]. " ". $result["userId"];      
+             echo "<br />] $email found in user table! UPDATING!!!!  ". $result["password"]. " ". $result["userId"]. " UPDATING lastTstamp";
+                
+             echo "<br />  proj,Hash,pwd MATCH = $projectMatch  ,   $passwordHashMatch  ,  $passwordMatch <br />";
 
                         // UPDATES HERE
                         //  UPDATE `users` SET `lastDateTime` = '2024-09-01 07:00:00', `sysvars` = 'xyzabcsysVar', `lastIPaddr` = '2600:8801:3500:7160:51b5:f0eb:bc22:9000' WHERE `users`.`userId` = 12;
@@ -231,26 +234,21 @@ if (isset($_SESSION["user"])) {
                         $stmt->bindParam(':userId', $userID0);
                         $stmt->execute();
         
-                        // $resultQ1 = $stmt->fetch(PDO::FETCH_ASSOC);
-                        // echo "<br />resultQ1==";
-                        // print_r( $resultQ1 ) ;
-
-
 
                     // close sess & assign $_SESSION["user"] 
-                    if(   $projectMatch==1   &&  $passwordHashMatch==1   && $passwordMatch==1 ){
-                        
+                    // if(   $projectMatch==1   &&  $passwordHashMatch==1   && $passwordMatch==1 ){
+                        if(   $projectMatch==1     && $passwordMatch==1 ){
+                                     $conn = null;
                                         session_start();
-                                        $_SESSION["user"] =$email ; 
+                                        $_SESSION["user"]  = $email ; 
                                         $_SESSION["userId"] = $userID0;    //   from indxmenu.php $userID0=$_SESSION["userId"];
 
                                         header("Location: indexmenu.php");
                                         die();    
-                    }
+                   }
 
 
-
-                } else {
+            } else {   
                         $insertdb=1;
                         // if($msg==1) echo "] NO USER found with that email.<br />";
                         $errorUserNotFound= $email. " not found; try again or Sign Up below.";
@@ -267,6 +265,29 @@ if (isset($_SESSION["user"])) {
             $conn = null;        // Close the PDO connection
             if($msg==1) echo $br. " * PDO conn Closed. *";
 
+
+
+
+            // close sess & assign $_SESSION["user"]  if all matches
+            // if(   $projectMatch==1   &&  $passwordHashMatch==1   && $passwordMatch==1 ){
+        //    if(       $passwordHashMatch==1   && $passwordMatch==1 ){
+        //             session_start();
+        //         $_SESSION["user"] =$email ; 
+        //         $_SESSION["userId"] = $userID0;    //   from indxmenu.php $userID0=$_SESSION["userId"];
+
+        //         header("Location: indexmenu.php");
+        //         die();    
+
+        // if(   $projectMatch==1   &&  $passwordHashMatch==1   && $passwordMatch==1 ){
+            if(  $passwordMatch!=1 ){
+                    $errorUserNotFound="Bad Password for project: $projectName, try again.";
+                        echo "<div class='alert alert-danger'>$errorUserNotFound</div>";
+                //  
+            }
+        //     }else {
+        //         $errorUserNotFound="Bad Password for project: $projectName, try again.";
+        //         echo "<div class='alert alert-danger'>$errorUserNotFound</div>";
+        //     }
 
 
         }// if  (isset($_POST["login"])) {
