@@ -8,7 +8,8 @@ if (!isset($_SESSION["user"])) {
     $userId=$_SESSION["userId"];
     // echo "<br />Logged in as: $email1";
  }
-?>
+ require_once "database.php"; 
+ ?>
 <!-- page1.html -->
 <!DOCTYPE html>
 <html lang="en">
@@ -18,7 +19,7 @@ if (!isset($_SESSION["user"])) {
     <link rel="stylesheet" href="styleboe.css">
     <link rel="shortcut icon" type="image/png"  href="/favicon.ico" />
 
-    <title>algoz.ai</title>
+    <title><?php echo $webName; ?></title>
 
 </head>
 <body>
@@ -27,9 +28,7 @@ if (!isset($_SESSION["user"])) {
     <div style="text-align: center;">
 
         <div class="logo1">
-            <!-- <img src="bg.gif" alt="Logo"> -->
-            <!-- <img src="logoalgoz.png" alt="Logo"> -->
-            <img src="logoalgoz.jpg" alt="Logo">
+            <img src="logo.jpg" alt="Logo">
             </div>
     </div>
 
@@ -37,11 +36,13 @@ if (!isset($_SESSION["user"])) {
         <!-- <a href="#" class="neon_btn1">BlackOps.com</a> -->
         <a href="https://algoinvestorr.com/algoz0/" class="neon_btn1">Buy Sell Signals</a>
         <a href="https://algoinvestorr.com/pivots/" class="neon_btn1">Price Levels</a>
-        <a href="https://algoz.ai/ld/piv.php?sym=spy" class="neon_btn1">Week/Month/Yr Price Levels</a>
+        <a href="https://algoz.ai/ld/piv.php?sym=spy" class="neon_btn1">Week/Month/Yr SPY Price Levels</a>
+        <a href="https://algoz.ai/ld/piv.php?sym=qqq" class="neon_btn1">Week/Month/Yr QQQ Price Levels</a>
         <a href="https://algoinvestorr.com/ccc/" class="neon_btn1">Covered Call Calculator</a>
         <a href="https://algoinvestorr.com/newsletter.pdf" class="neon_btn1">Newsletter</a>
         <a href="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0" class="neon_btn1">Charting</a>
         <a href="https://algoz.ai/bmi/index.html" class="neon_btn1">BMI Calc</a>
+        <a href="logout.php" class="neon_btn1">LOGOUT</a>
         <!-- <a href="https://algoz.ai/bmi/index.html" class="neon_btn1">Logout</a> -->
 
 <!-- 

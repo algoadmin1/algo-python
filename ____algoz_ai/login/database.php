@@ -9,7 +9,7 @@
 //                  2.  change imgs: favicon.ico & logo.jpg at 256x144
 //                  3.  in forgotpwd./forgotpwdreset/index./indexmenu/login/registration.php chng <title>algoz Password Recovery</title>
 //                  4.  change index.html
-//                  5. 
+//                  5.  change the Menu in: indexmenu.php
 //                  6. 
 //                  7. 
 //                  8. 
@@ -40,7 +40,9 @@ $dbPassword.="4"."!";
 $tblname ="users";
 $happy1=$dbPassword;
 
-
+// $webName="=*=algoz.ai=*=";
+$webName="algoz.ai";
+$fromEmail="algoinvestorr@gmail.com";
 //
 //   project links
 //

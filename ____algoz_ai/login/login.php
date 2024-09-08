@@ -1,9 +1,11 @@
 <?php
-// ver 3.2
+// ver 3.3
 session_start();
 if (isset($_SESSION["user"])) {
    header("Location: index.php");
 }
+require_once "database.php";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +13,9 @@ if (isset($_SESSION["user"])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>algoz Login</title>
+    <!-- <title>algoz Login</title> -->
+    <title><?php echo $webName; ?> Login</title>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 
@@ -91,7 +95,7 @@ if (isset($_SESSION["user"])) {
         date_default_timezone_set('America/New_York');
        
         require_once "encrypt.php";
-        require_once "database.php";
+        // require_once "database.php";
 
         // $projec tname="algoz";   // projec tName
         $projectMatch=0;

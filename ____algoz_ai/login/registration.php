@@ -1,9 +1,11 @@
 <?php
-// ver 3.2
+// ver 3.3
 session_start();
 if (isset($_SESSION["user"])) {
    header("Location: index.php");
 }
+require_once "database.php";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +13,8 @@ if (isset($_SESSION["user"])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>algoz Sign Up</title>
+    <!-- <title>algoz Sign Up</title> -->
+    <title><?php echo $webName; ?> Sign Up</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <style>
@@ -83,8 +86,8 @@ if (isset($_SESSION["user"])) {
 
             // $msg=1;
             $msg=0;
-            // $projectname=$projectName;
-            $projectname="algoz";
+            $projectname=$projectName;
+            // $projectname="algoz";
             $br="<br />";
 
 
@@ -236,7 +239,7 @@ if (isset($_SESSION["user"])) {
 
 
         //    echo $br. "] Pre req'once...";
-        require_once "database.php";
+        // require_once "database.php";
         //    echo $br. "] POST req'once." ;
 
         if($msg==1)  echo $br. $hostName." . $dbName . ". $dbUser." . $tblname . ". $dbUserOrig ; //." ". $dbPassword. " ";
