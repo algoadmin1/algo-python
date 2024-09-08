@@ -73,7 +73,7 @@ if (isset($_SESSION["user"])) {
         <div style="text-align: center;">
 
             <div class="logo1">
-                <img src="logoalgoz.jpg" alt="Logo">
+                <img src="logo.jpg" alt="Logo">
                 </div>
             </div>
 
@@ -83,6 +83,7 @@ if (isset($_SESSION["user"])) {
 
             // $msg=1;
             $msg=0;
+            // $projectname=$projectName;
             $projectname="algoz";
             $br="<br />";
 

@@ -192,7 +192,7 @@ if (isset($_SESSION["user"])) {
                             if( $key=="pwdhash" ){
                                 if($value== $passwordHash){
                                     if($msg==1) echo "encryptedPASSWORD  MATCHES!";
-                                $passwordHashMatch=1;    // $passwordMatch=1;
+                                      $passwordHashMatch=1;    // $passwordMatch=1;
 
                                 }else  if($msg==1)  echo "encryptedPASSWORD NO Match!";
                             }
