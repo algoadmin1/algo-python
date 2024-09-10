@@ -2,26 +2,10 @@
 //
 // Aug 28 2024
 //
-// Sep 8 2024 : to add another project:
-//
-//                  0.  copy thi \login folder to ..\newproj , for example
-//                  1.  change algoz refs + $projectName in this file
-//                  2.  change imgs: favicon.ico & logo.jpg at 256x144
-//                  3.  in forgotpwd./forgotpwdreset/index./indexmenu/login/registration.php chng <title>algoz Password Recovery</title>
-//                  4.  change index.html
-//                  5.  change the Menu in: indexmenu.php
-//                  6. 
-//                  7. 
-//                  8. 
-//
-//  KNOWN BUGS / MODS-2-DO:
-//
-//                  1.  
-//          
-//
-//
 // hit this link for full tutorial
 $youtubeUrl="https://youtu.be/9_kQ2bjqSzk?si=vLISSejcsXVqQNVc";
+
+
 
 $servername= "localhost" ; 
 $hostName  = "localhost" ;  
@@ -40,9 +24,7 @@ $dbPassword.="4"."!";
 $tblname ="users";
 $happy1=$dbPassword;
 
-// $webName="=*=algoz.ai=*=";
-$webName="algoz.ai";
-$fromEmail="algoinvestorr@gmail.com";
+
 //
 //   project links
 //

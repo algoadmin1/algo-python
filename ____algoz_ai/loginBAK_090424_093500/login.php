@@ -1,11 +1,9 @@
 <?php
-// ver 3.3
+// ver 3.2
 session_start();
 if (isset($_SESSION["user"])) {
    header("Location: index.php");
 }
-require_once "database.php";
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,9 +11,7 @@ require_once "database.php";
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <title>algoz Login</title> -->
-    <title><?php echo $webName; ?> Login</title>
-
+    <title>algoz Login</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
 
@@ -95,7 +91,7 @@ require_once "database.php";
         date_default_timezone_set('America/New_York');
        
         require_once "encrypt.php";
-        // require_once "database.php";
+        require_once "database.php";
 
         // $projec tname="algoz";   // projec tName
         $projectMatch=0;
@@ -196,7 +192,7 @@ require_once "database.php";
                             if( $key=="pwdhash" ){
                                 if($value== $passwordHash){
                                     if($msg==1) echo "encryptedPASSWORD  MATCHES!";
-                                      $passwordHashMatch=1;    // $passwordMatch=1;
+                                $passwordHashMatch=1;    // $passwordMatch=1;
 
                                 }else  if($msg==1)  echo "encryptedPASSWORD NO Match!";
                             }
@@ -222,7 +218,7 @@ require_once "database.php";
             if ($result){    
             // if($result   &&   $projectMatch==1   &&  $passwordHashMatch==1   && $passwordMatch==1 ){
 
-             echo "<br /> ALERT CHECK IF [ PASSWORD HASH ]  ACTUALLY MATCHES !!! + pwdhash + IF projectNAME  matches *** !!";
+             echo "<br /> ALERT CHECK IF PASSWORD ACTUALLY MATCHES !!! + pwdhash + IF projectNAME  matches *** !!";
 
             $insertdb=0;
                     // if($msg==1) echo "<br />] $email found in user table! ". $result["password"]. " ". $result["userId"];      

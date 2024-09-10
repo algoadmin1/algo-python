@@ -1,3 +1,14 @@
+<?php 
+session_start();
+if (!isset($_SESSION["user"])) {
+   header("Location: login.php");
+}else{
+    // there should be isset here... !!!!   FIX !!!!
+    $email1=$_SESSION["user"];
+    $userId=$_SESSION["userId"];
+    // echo "<br />Logged in as: $email1";
+ }
+?>
 <!-- page1.html -->
 <!DOCTYPE html>
 <html lang="en">
@@ -13,11 +24,15 @@
 <body>
     <div class="container">
 
+    <div style="text-align: center;">
 
-    <div class="logo1">
-        <!-- <img src="bg.gif" alt="Logo"> -->
-        <img src="logo.jpg" alt="Logo">
+        <div class="logo1">
+            <!-- <img src="bg.gif" alt="Logo"> -->
+            <!-- <img src="logoalgoz.png" alt="Logo"> -->
+            <img src="logoalgoz.jpg" alt="Logo">
+            </div>
     </div>
+
         <div class="div">...</div>
         <!-- <a href="#" class="neon_btn1">BlackOps.com</a> -->
         <a href="https://algoinvestorr.com/algoz0/" class="neon_btn1">Buy Sell Signals</a>
@@ -27,6 +42,7 @@
         <a href="https://algoinvestorr.com/newsletter.pdf" class="neon_btn1">Newsletter</a>
         <a href="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0" class="neon_btn1">Charting</a>
         <a href="https://algoz.ai/bmi/index.html" class="neon_btn1">BMI Calc</a>
+        <!-- <a href="https://algoz.ai/bmi/index.html" class="neon_btn1">Logout</a> -->
 
 <!-- 
         <a href="https://buy.stripe.com/8wMbKN8V65asgzmeUV?sym=&sdate=" class="neon_btn2">Buy Premium Club 1 Month</a>
@@ -56,7 +72,7 @@
 
         <!-- <a href="https://blackops.com/timer130/" class="neon_btn2">boxing timer</a> -->
 
-    </div>
+        </div>
 
 </body>
 </html>

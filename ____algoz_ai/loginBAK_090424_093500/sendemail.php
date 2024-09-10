@@ -1,8 +1,5 @@
 <?php
 
-// date_default_timezone_set('America/New_York');
-// require_once "database.php"; 
-
 
     function SendEmailToUser($email, $subject, $message, $from) {
         // Set the "From" email address
@@ -24,13 +21,11 @@
 
 
     function SendAndHandleForgotEmail( $email1 ){
-        global $linkLogin, $linkResetPwd, $msg, $fromEmail, $webName ;
+        global $linkLogin, $linkResetPwd, $msg ;
 
-         $subject="algoz.ai - RESET PASSWORD LINK";
-        // $subject= $webName. " - RESET PASSWORD LINK";
+        $subject="algoz.ai - RESET PASSWORD LINK";
         $message="Please click the link to Reset your password: ".  $linkResetPwd."?em=".$email1 ;
         $from="algoinvestorr@gmail.com";
-        // $from=$fromEmail; //"algoinvestorr@gmail.com";
         $emailSuccess = SendEmailToUser($email1, $subject, $message, $from);
         echo "<br />";
         if($emailSuccess==true)   echo "<div class='alert alert-success'>Check your inbox at: $email1 </div>";
