@@ -1,6 +1,16 @@
 <?php 
  
 
+/*
+
+//stripe publishable key
+pk_test_51NRqA2EJfZ5xbPiBMkTD3XspH8G7NNmpSnGNlEY5Oro4dUMwwd5jzOCLlHeoWDEHtsuMRcLmf85kXENQsIQypK7J00b0xHoXvF
+
+
+//stripe test key
+sk_test_51NRqA2EJfZ5xbPiBTrS8vIap45s8j8R8I2AcUkdl3CnoboX94rylI3zIWkUwEITEI0Rwf7tdubrGR7KiNFuWL2fH00M51C8NIp
+
+*/
 $payload = @file_get_contents('php://input');
 $event = null;
 
