@@ -1,5 +1,5 @@
 <?php
-session_start();
+session_start();                                // vers 4.0
 if (!isset($_SESSION["user"])) {
    header("Location: ./login/login.php");
 }else{
@@ -13,6 +13,7 @@ if (!isset($_SESSION["user"])) {
                  
  }
 require_once "./login/database.php";
+
 /*
 
  KNOWN BUGS:
@@ -106,11 +107,11 @@ require_once "./login/database.php";
         <a href="https://algoinvestorr.com/pivots/" class="neon_btn1">Price Levels</a>
         <a href="https://algoz.ai/ld/piv.php?sym=spy" class="neon_btn1">Week/Month/Yr Price Levels</a>
         <a href="https://algoinvestorr.com/ccc/" class="neon_btn1">Covered Call Calculator</a>
-        <a href="https://algoinvestorr.com/newsletter.pdf" class="neon_btn2">Newsletter</a>
-        <a href="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0" class="neon_btn2">Charting</a>
-        <a href="https://algoz.ai/bmi/index.html" class="neon_btn2">BMI Calc</a>
-        <a href="https://buy.stripe.com/fZedTI1QU8wuaOc9AR" class="neon_btn2">Buy Coin Stripe Test</a>
-        <a href="https://algoz.ai/dj.pdf" class="neon_btn2">DJ Gianni B Albums</a>
+        <a href="https://algoinvestorr.com/newsletter.pdf" class="neon_btn1">Newsletter</a>
+        <a href="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0" class="neon_btn1">Charting</a>
+        <a href="https://algoz.ai/bmi/index.html" class="neon_btn1">BMI Calc</a>
+        <a href="https://buy.stripe.com/fZedTI1QU8wuaOc9AR" class="neon_btn1">Buy Coin Stripe Test</a>
+        <a href="https://algoz.ai/dj.pdf" class="neon_btn1">DJ Gianni B Albums</a>
 
         <a href="./login/logout.php" class="btn btn-warning">Logout</a>
     </div>
