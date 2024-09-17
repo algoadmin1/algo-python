@@ -101,6 +101,9 @@ require_once "database.php";
         $projectMatch=0;
         $passwordMatch=0;
         $passwordHashMatch=0;
+        $user_loc="nowhere";
+        $user_lastDateTime="notrecent";
+        $user_lastDay="noday";
 
         //  $msg=1;
          $msg=0;
@@ -181,6 +184,30 @@ require_once "database.php";
                          if($msg==1)   echo "<br />numvisits== $numvisits <br />";
                     }
 
+
+
+
+                    // user loc  
+                    if($key=="loc"){
+                        $user_loc=$value;
+                        $user_loc = str_replace('|', ' ', $user_loc);
+
+                         if($msg==1)   echo "<br />user_loc== $user_loc <br />";
+                    }
+
+                    //   user_ lastDateTime
+                    if($key=="lastDateTime"){
+                        $user_lastDateTime=$value;
+                    }
+
+                    //   user _lastDay
+                    if($key=="lastDay"){
+                        $user_lastDay=$value;
+                    }
+
+                  
+
+
                     // pwds
                     if($key=="pwdhash" || $key=="password"){
                         if($msg==1) echo "<br />password-type field:   ";
@@ -246,8 +273,16 @@ require_once "database.php";
                                         session_start();
                                         $_SESSION["user"]  = $email ; 
                                         $_SESSION["userId"] = $userID0;    //   from indxmenu.php $userID0=$_SESSION["userId"];
+                                        $_SESSION["numvisits"] = $numvisits;
+                                        $_SESSION["userIP"] = $user_ip;
+                                        $_SESSION["user_loc"] = $user_loc;
+                                        
+                                        $_SESSION["user_lastDateTime"] = $user_lastDateTime;
+                                        $_SESSION["user_lastDay"] = $user_lastDay ;
+                 
 
-                                        header("Location: indexmenu.php");
+                                        // header("Location: indexmenu.php");
+                                        header("Location: ../index.php");
                                         die();    
                    }
 
