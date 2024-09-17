@@ -8,8 +8,8 @@ if (!isset($_SESSION["user"])) {
     $userId=$_SESSION["userId"];
     // echo "<br />Logged in as: $email1";
  }
- require_once "database.php"; 
- ?>
+require_once "database.php"; 
+?>
 <!-- page1.html -->
 <!DOCTYPE html>
 <html lang="en">
@@ -42,6 +42,8 @@ if (!isset($_SESSION["user"])) {
         <a href="https://algoinvestorr.com/newsletter.pdf" class="neon_btn1">Newsletter</a>
         <a href="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0" class="neon_btn1">Charting</a>
         <a href="https://algoz.ai/bmi/index.html" class="neon_btn1">BMI Calc</a>
+        <a href="https://buy.stripe.com/fZedTI1QU8wuaOc9AR" class="neon_btn2">Buy Jacks Coin TEST</a>
+
         <a href="logout.php" class="neon_btn1">LOGOUT</a>
         <!-- <a href="https://algoz.ai/bmi/index.html" class="neon_btn1">Logout</a> -->
 
