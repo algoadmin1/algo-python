@@ -49,7 +49,8 @@ $fromEmail="algoinvestorr@gmail.com";
 $website="https://algoz.ai";
 
 $projectName="algoz";    // $projectName="boxing";
-$linkLogin="https://algoz.ai/login";
+// $linkLogin="https://algoz.ai/login";
+$linkLogin="https://algoz.ai/index.php";
 $linkResetPwd="https://algoz.ai/login/forgotpwdreset.php";
           
 $password_len_min=5;

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION["user"])) {
-   header("Location: indexmenu.php");
+   header("Location: ../index.php");
 }
 //  .php?em=abc@yahoo.com
 if(isset( $_GET['em'] )){

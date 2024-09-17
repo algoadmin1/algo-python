@@ -2,7 +2,7 @@
 // ver 3.3
 session_start();
 if (isset($_SESSION["user"])) {
-   header("Location: ../index.php");
+   header("Location: index.php");
 }
 require_once "database.php";
 
@@ -84,8 +84,6 @@ require_once "database.php";
         <?php
             date_default_timezone_set('America/New_York');
 
-            $today0 = date('l F j, Y g:ia');
-
             // $msg=1;
             $msg=0;
             $projectname=$projectName;
@@ -124,8 +122,6 @@ require_once "database.php";
             $isp ="nil";
 
             $location ="nil";   // combo str for las vegas|Nevada|United States
-            $loc0="nil";
-
 
             if($msg==1) echo "<br />] GEO jsonResponse1= ". $response1 ;
             $result1 = ReturnQuotedFields( $response1 );
@@ -182,7 +178,6 @@ require_once "database.php";
                 */
             }// foreach
 
-            $loc0= $city." ".$region." ".$country." ".$zip;
             $location= $city."|".$region."|".$country."|".$zip;
             if($msg==1) {
                 echo $br. 'loc==' .$location. " ( $lat , $lon )";
@@ -326,19 +321,8 @@ require_once "database.php";
                     // new start sess if user reg's clean
                     session_start();
                     $_SESSION["user"] = $email;  
-
-                    $_SESSION["userId"] = $lastInsertedId;   //$userID0;    //   from indxmenu.php $userID0=$_SESSION["userId"];
-                    $_SESSION["numvisits"] = 1;
-                    $_SESSION["userIP"] = $user_ip;
-                    
-                    $_SESSION["user_loc"] = $loc0;
-                    
-                    $_SESSION["user_lastDateTime"] = $today0; //$user_lastDateTime;
-                    $_SESSION["user_lastDay"] = " "; //$user_lastDay ;
-
                     // header("Location: lastdateTest.php?sym=aapl");
-                    // header("Location: indexmenu.php");
-                    header("Location: ../index.php");
+                    header("Location: indexmenu.php");
                     // header("Location: lastdateTest.php");
                     die();
 

@@ -5,6 +5,31 @@ if (isset($_SESSION["user"])) {
    header("Location: index.php");
 }
 require_once "database.php";
+/*
+    WHERE public_html/ == YOUR ROOT OF YOUR WEBSITE i.e. https://algoz.ai/<here>
+
+    public_html/index.php
+    public_html/logo.jpg
+    public_html/favicon.ico
+    public_html/style.css
+    public_html/styleboe.css
+    
+    public_html/login/database.php
+    public_html/login/login.php
+    public_html/login/registration.php
+    public_html/login/forgotpwd.php
+    public_html/login/forgotpwdreset.php
+
+    public_html/login/encrypt.php
+    public_html/login/gethttp.php
+    public_html/login/sendemail.php
+
+    public_html/userstats.html
+    public_html/userstats.js
+    
+
+*/
+
 
 ?>
 <!DOCTYPE html>
@@ -105,8 +130,9 @@ require_once "database.php";
         $user_lastDateTime="notrecent";
         $user_lastDay="noday";
 
-        //  $msg=1;
-         $msg=0;
+         $pwdOn=0;  // pwd-related pwdHASH debugging
+         $msg=0;    // general msgs
+
          $user_ipRaw = $_SERVER['REMOTE_ADDR'];   // 2600:8801:3500:7160:51b5:f0eb:bc22:728c
         //  $user_ip    = htmlspecialchars($user_ip);
          $user_ip    = $user_ipRaw ;
@@ -233,7 +259,7 @@ require_once "database.php";
                     if( $key=="project" ){
                         if($value== $projectName){
                             // if($msg==1) echo "PROJECT NAME =  $projectName  ";
-                             echo "PROJECT NAME =  $projectName  ";
+                            if($msg==1)  echo "PROJECT NAME =  $projectName  ";
                             $projectMatch=1;     // $passwordHashMatch=1;    // $passwordMatch=1;
 
                         // }else   if($msg==1) echo "PROJECT NAME DOES NOT Match.";
@@ -249,13 +275,13 @@ require_once "database.php";
             if ($result){    
             // if($result   &&   $projectMatch==1   &&  $passwordHashMatch==1   && $passwordMatch==1 ){
 
-             echo "<br /> ALERT CHECK IF [ PASSWORD HASH ]  ACTUALLY MATCHES !!! + pwdhash + IF projectNAME  matches *** !!";
+             if($pwdOn==1) echo "<br />] ALERT CHECK IF [ PASSWORD HASH ]  ACTUALLY MATCHES !!! + pwdhash + IF projectNAME  matches *** !!";
 
             $insertdb=0;
                     // if($msg==1) echo "<br />] $email found in user table! ". $result["password"]. " ". $result["userId"];      
-             echo "<br />] $email found in user table! UPDATING!!!!  ". $result["password"]. " ". $result["userId"]. " UPDATING lastTstamp";
+                    if($pwdOn==1)  echo "<br />] $email found in user table! UPDATING!!!!  ". $result["password"]. " ". $result["userId"]. " UPDATING lastTstamp";
                 
-             echo "<br />  proj,Hash,pwd MATCH = $projectMatch  ,   $passwordHashMatch  ,  $passwordMatch <br />";
+                    if($pwdOn==1) echo "<br />  proj,Hash,pwd MATCH = $projectMatch  ,   $passwordHashMatch  ,  $passwordMatch <br />";
 
                         // UPDATES HERE
                         //  UPDATE `users` SET `lastDateTime` = '2024-09-01 07:00:00', `sysvars` = 'xyzabcsysVar', `lastIPaddr` = '2600:8801:3500:7160:51b5:f0eb:bc22:9000' WHERE `users`.`userId` = 12;
@@ -268,7 +294,7 @@ require_once "database.php";
 
                     // close sess & assign $_SESSION["user"] 
                     // if(   $projectMatch==1   &&  $passwordHashMatch==1   && $passwordMatch==1 ){
-                        if(   $projectMatch==1     && $passwordMatch==1 ){
+                        if(   $projectMatch==1     &&   $passwordMatch==1  /* &&  $passwordHashMatch==1 */ ){
                                      $conn = null;
                                         session_start();
                                         $_SESSION["user"]  = $email ; 

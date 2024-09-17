@@ -93,15 +93,19 @@ require_once "./login/database.php";
         <!-- <h1 style="color: green;">Welcome to the <?php echo $webName; ?> Dashboard</h1> -->
         <h1 style="color: green;">Welcome to <?php echo $webName; ?>. </h1>
 
-        <h2 style="color: blue;"> 😊 <?php echo $email1. "[". $userId ."] here ". $numvisits1 ."x, last visit: ". $user_lastDay." ". $user_lastDateTime; ?> 😊 </h2>
+        <h1 style="color: white;"> 😊 <?php echo $email1; ?> 😊 </h1>
+
+
+        <h3 style="color: blue;"> <?php echo "[#". $userId. "] #visits= ". $numvisits1 ."x, last: ". $user_lastDay." ". $user_lastDateTime; ?> </h3>
+
         <h3 style="color: yellow;">  <?php echo "IP=". $userIP ; ?>  </h3>
         <h3 style="color: orange;">  <?php echo " ". $user_loc ; ?>  </h3>
 
         <div class="div">...</div>
-        <a href="https://algoinvestorr.com/algoz0/" class="neon_btn2">Buy Sell Signals</a>
-        <a href="https://algoinvestorr.com/pivots/" class="neon_btn2">Price Levels</a>
-        <a href="https://algoz.ai/ld/piv.php?sym=spy" class="neon_btn2">Week/Month/Yr Price Levels</a>
-        <a href="https://algoinvestorr.com/ccc/" class="neon_btn2">Covered Call Calculator</a>
+        <a href="https://algoinvestorr.com/algoz0/" class="neon_btn1">Buy Sell Signals</a>
+        <a href="https://algoinvestorr.com/pivots/" class="neon_btn1">Price Levels</a>
+        <a href="https://algoz.ai/ld/piv.php?sym=spy" class="neon_btn1">Week/Month/Yr Price Levels</a>
+        <a href="https://algoinvestorr.com/ccc/" class="neon_btn1">Covered Call Calculator</a>
         <a href="https://algoinvestorr.com/newsletter.pdf" class="neon_btn2">Newsletter</a>
         <a href="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0" class="neon_btn2">Charting</a>
         <a href="https://algoz.ai/bmi/index.html" class="neon_btn2">BMI Calc</a>
