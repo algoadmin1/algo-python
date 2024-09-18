@@ -45,11 +45,28 @@ require_once "database.php";
     <link rel="stylesheet" href="style.css">
 
     <style>
+
+        /*.container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+*/
         /* Basic styling for the form and button */
         .form-group {
             position: relative; /* Position relative to contain the eye icon */
-            width: 260px; /* Set a width for the form group */
+           /* width: 260px;   Set a width for the form group */
+            width: 100%; /* Set a width for the form group */
             margin-bottom: 15px; /* Spacing at the bottom of the input field */
+
+/*.input-group */
+/*    margin-bottom: 15px;*/
+            text-align: left;
+
         }
 
         .form-control {
@@ -108,12 +125,10 @@ require_once "database.php";
     <div class="container">
 
         <div style="text-align: center;">
-
             <div class="logo1">
-            <!-- <img src="logoalgoz.jpg" alt="Logo"> -->
             <img src="logo.jpg" alt="Logo">
             </div>
-            </div>
+        </div>
 
 
       <?php

@@ -21,7 +21,7 @@ require_once "database.php";
         /* Basic styling for the form and button */
         .form-group {
             position: relative; /* Position relative to contain the eye icon */
-            width: 260px; /* Set a width for the form group */
+            width: 100%; /* 260px;  Set a width for the form group */
             margin-bottom: 15px; /* Spacing at the bottom of the input field */
         }
 

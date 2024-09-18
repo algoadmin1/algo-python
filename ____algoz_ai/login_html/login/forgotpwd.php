@@ -18,6 +18,31 @@ require_once "database.php";
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
+    <style>
+ 
+        /* Basic styling for the form and button */
+        .form-group {
+            position: relative; /* Position relative to contain the eye icon */
+           /* width: 260px;   Set a width for the form group */
+            width: 100%; /* Set a width for the form group */
+            margin-bottom: 15px; /* Spacing at the bottom of the input field */
+ 
+            text-align: left;
+
+        }
+
+        .form-control {
+            width: 100%; /* Make the input full width within the form group */
+            padding-right: 40px; /* Add padding on the right to avoid overlap with the eye icon */
+        }
+
+        .logo1 {
+            position: relative;
+            width: 100%;
+        }
+
+    </style>
+
 </head>
 <body>
     <div class="container">
@@ -164,12 +189,6 @@ require_once "database.php";
                 lastPrice: 0
                 optionStrategy:
                 ] mitcrapsteam@gmail.com found in user table! abcdefgh 2 * PDO conn Closed. *
-
-
-
-                
-<div><p> <a href="login.php">Login or SignUp here</a></p></div> 
-
 */
 
     ?>
@@ -207,13 +226,14 @@ require_once "database.php";
 
       </form>
       <div> </div>
-      <div> .</div>
       <div> </div>
+
       <div style="text-align: center;">
       
-      <div><p> <a href="login.php">Login or Sign Up here</a></p></div> 
-        <!-- <p><a href="'.$linkLogin .'">Click to Login or SignUp</a></p> -->
-    </div>
+      <!-- <div><p>Already Registered? <a href="login.php">Login here</a></p></div> -->
+      <div><p> <a href="login.php">Login or SignUp here</a></p></div>
+      <!-- <p><a href="'.$linkLogin .'">Click to Login or SignUp</a></p> -->
+      </div>
 
       <!-- <div><p>Not registered yet? <a href="registration.php">Sign up here</a></p></div>
       <div></div>
