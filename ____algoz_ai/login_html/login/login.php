@@ -411,7 +411,7 @@ require_once "database.php";
 
 
       <div style="text-align: center;">
-        <p>Not registered? <a href="registration.php">Sign up here</a></p>
+        <p>Not registered? <a href="registration.php">Sign Up here</a></p>
       </div>
       <div></div>
 
