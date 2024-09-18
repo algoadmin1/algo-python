@@ -23,14 +23,21 @@ document.getElementById('bmiForm').addEventListener('submit', function(event) {
     let category = '';
 
     if (bmi < 18.5) {
-        category = 'Underweight';
-    } else if (bmi >= 18.5 && bmi < 24.9) {
-        category = 'Normal weight';
-    } else if (bmi >= 25 && bmi < 29.9) {
-        category = 'Overweight';
+        category = 'Underweight: BMI less than 18.5';
+    } else if (bmi >= 18.5 && bmi < 24.99) {
+        category = '😉Normal weight: BMI 18.5 to 24.9';
+    } else if (bmi >= 25 && bmi < 29.99) {
+        category = '⚠️Overweight: BMI 25 to 29.9';
+    } else if (bmi >= 30 && bmi < 34.99) {
+        category = '☠️  Obese Class 1: BMI 30 to 34.9';
+    } else if (bmi >= 35 && bmi < 39.99) {
+        category = '☠️☠️ Obese Class 2: BMI 35 to 39.9';
+    } else if (bmi >= 40 && bmi < 49.99) {
+        category = '☠️☠️☠️Obese Class 3: Severe/Morbid Obesity: BMI 40+';
     } else {
-        category = 'Obese';
+        category = '☠️☠️☠️☠️Obese Class 4: You are Morbidly Obese: BMI 50+  SEE A DR!';
     }
+    // ☠️  
 
     document.getElementById('result').textContent = `Your BMI is ${bmiRounded}. You are classified as ${category}.`;
 });
