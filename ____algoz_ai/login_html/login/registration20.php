@@ -1,5 +1,5 @@
 <?php
-// ver 4.3
+// ver 3.3
 session_start();
 if (isset($_SESSION["user"])) {
    header("Location: ../index.php");
@@ -88,7 +88,8 @@ require_once "database.php";
 
             // $msg=1;
             $msg=0;
-            $projectname=$projectName;   // $projectname="algoz";
+            $projectname=$projectName;
+            // $projectname="algoz";
             $br="<br />";
 
 
@@ -264,61 +265,19 @@ require_once "database.php";
                     $stmt->execute();
                     $result = $stmt->fetch(PDO::FETCH_ASSOC);
             
-                    $dbproj = "nil" ; //$result["project"];
 
                     $insertdb=0;
-                    if ($result){   // if there is a user == found
-
-                        // ====================================================================================
-                        // added for projectName != algoz   ...
-                        //
-                        //
-
-                        //  database.php-->$projectName 
-                        // here  we check $result["project"]==  $projectName 
-                        $dbproj = $result["project"];
-    //echo "<br /> ]  ⚠️ THIS_SERVERdatabasePHP_projectName=". $projectName. ", dbProject = ". $dbproj;
-
-
-                        // i.e.
-                        // if 'algoz' !=   'boxing'  [this server  databasePHP.$projectName]
-                        if( $dbproj    !=   $projectName ){
-
-                            $insertdb=1;  // same emails found, but diff proj names;  users.project != $projectName 
-    //   echo "<br /> ]😉INSERTing New user, projectName!=dbproj: >>>". $projectName. "!=". $dbproj. "<<<";
-
-                            }else{
-                                $insertdb=0;
-                                // if($msg==1) echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
-                                if($msg==1) echo "] insertdb = $insertdb , NOT INSERTing ; $email  found in user table ";           //   print_r($result, true);
-                                }//else
-                        
-                        //
-                        //        
-                        // ====================================================================================
-
-
-
-//      old...
-                                // $insertdb=0;
-                                // // if($msg==1) echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
-                                // if($msg==1) echo "] insertdb = $insertdb , NOT INSERTing ; $email  found in user table ";
-//      old...
-
-
-
-
-
+                    if ($result){                                   // if there is a user == found
+                        $insertdb=0;
+                        // if($msg==1) echo "<br />] insertdb = $insertdb , NOT INSERTing RawTrade found for tradeHash $tradeHashToQuery , result=  <pre>" . print_r($result, true) . "</pre>";
+                        if($msg==1) echo "] insertdb = $insertdb , NOT INSERTing ; $email  found in user table ";           //   print_r($result, true);
                     } else {
                             $insertdb=1;
                             if($msg==1) echo "] NO USER found for tradeHash $tradeHashToQuery.  insertdb= $insertdb ;  INSERTing to db.trades ...<br />";
                             }
             
 
-
-
-//              RE-TEST THE FLAG TO MAKE SURE   ======================
-
+                            
                     if($insertdb==1){
 
                         $insertQuery02 = "INSERT INTO ". $tblname ;  
@@ -350,7 +309,7 @@ require_once "database.php";
                         echo "<div class='alert alert-success'>NewUser: $email [$lastInsertedId] ok.</div>";
 
                     }else if($insertdb==0){
-                        $errorUserFound= "⚠️ User $email exists in this project: $dbproj ...";
+                        $errorUserFound= "User exists: $email";
                         echo "<div class='alert alert-danger'>$errorUserFound</div>";
 
                         if($msg==1)  echo "<br />] insertdb = $insertdb  ___ NOT INSERTing RECORD..."; 

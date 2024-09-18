@@ -164,6 +164,12 @@ require_once "database.php";
                 lastPrice: 0
                 optionStrategy:
                 ] mitcrapsteam@gmail.com found in user table! abcdefgh 2 * PDO conn Closed. *
+
+
+
+                
+<div><p> <a href="login.php">Login or SignUp here</a></p></div> 
+
 */
 
     ?>
@@ -205,8 +211,8 @@ require_once "database.php";
       <div> </div>
       <div style="text-align: center;">
       
-
-        <p><a href="'.$linkLogin .'">Click to Login or SignUp</a></p>
+      <div><p> <a href="login.php">Login or Sign Up here</a></p></div> 
+        <!-- <p><a href="'.$linkLogin .'">Click to Login or SignUp</a></p> -->
     </div>
 
       <!-- <div><p>Not registered yet? <a href="registration.php">Sign up here</a></p></div>
