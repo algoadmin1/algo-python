@@ -3,8 +3,11 @@
 
 /*
 
-//stripe publishable key
+//stripe publishable  test  key
 pk_test_51NRqA2EJfZ5xbPiBMkTD3XspH8G7NNmpSnGNlEY5Oro4dUMwwd5jzOCLlHeoWDEHtsuMRcLmf85kXENQsIQypK7J00b0xHoXvF
+
+//stripe publishable  LIVE  key
+pk_live_51NRqA2EJfZ5xbPiBwuP4MraBJ0OnoJPSemYdfzBaH3mWHOtYrk5W2ZqcJnD7xLO899tPS3L4PHhRJWIxpvpabg2g00XZ7iYiGS
 
 
 //stripe test key
