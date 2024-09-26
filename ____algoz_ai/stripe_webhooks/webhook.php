@@ -7,6 +7,42 @@ require_once '../login/database.php';
 require_once '../login/sendemail.php';
 
 
+function cleanJsonForMySQL($payload) {
+  // Step 1: Remove any non-JSON prefix (e.g., "Stripe\Charge JSON:")
+  // Use regular expression to capture the actual JSON string
+  $cleanPayload = preg_replace('/^[^\{]*?({.*})$/s', '$1', $payload);
+  
+  // Step 2: Decode the JSON string to remove invalid characters or formats
+  $jsonArray = json_decode($cleanPayload, true);
+
+  // Step 3: Re-encode the JSON to ensure it's valid and ready for MySQL
+  if (json_last_error() === JSON_ERROR_NONE) {
+      // Step 4: Return a clean, valid JSON string
+      return json_encode($jsonArray, JSON_UNESCAPED_SLASHES);
+  } else {
+      // Handle invalid JSON error
+      return null; // Or throw an exception, based on your needs
+  }
+}
+
+// // Example usage
+// $example = 'Stripe\Charge JSON: {
+//   "id": "ch_3Q3AcPEJfZ5xbPiB04qs5wU9",
+//   "object": "charge",
+//   "amount": 50,
+//   "amount_captured": 50,
+//   "amount_refunded": 0,
+//   ...
+// }';
+//                          $cleanJson = cleanJs0nForMySQL($example);
+// if ($cleanJson) {
+//   echo $cleanJson; // Outputs the cleaned JSON ready for MySQL
+// } else {
+//   echo "Invalid JSON input.";
+// }
+
+
+
 function CheckStringNull($tag0) : string {
     if($tag0==""){
       $tag0="nil";
@@ -237,12 +273,14 @@ $fnamePrefix="./transactions/chargesuc";
 
 $paymentIntent="nil";
 $insertdb=0;
+$paymentIntentCleaned ="nil";
 
 // Handle the event
 switch ($event->type) {
   case 'charge.succeeded':
     $paymentIntent = $event->data->object; 
         // handlePaymentIntentSucceeded($paymentIntent);
+    $paymentIntentCleaned   = cleanJsonForMySQL( $paymentIntent );
     $insertdb=1;
     break;
 
@@ -278,8 +316,8 @@ $mysqlLogstrLite="nilLogLite";
 $insertQuery02 = "INSERT INTO ". $tblnameTrans ;  
 // $insertQuery4a = " ( transactionId, userInitTimestamp, phonenum, fullName, email   ,  stripeId,     payload,     project ,       countrycode,      region,    city  ,   zip )   VALUES ";      
 // $insertQuery4b = " ( NULL, CURRENT_TIMESTAMP,         '$phone0', '$name0',  '$email0' , '$id', '$paymentIntent',  '$projectName', '$country0',  '$state0' ,'$city0' , '$zip0') ";    
-$insertQuery4a = " ( transactionId, userInitTimestamp, phonenum, fullName, email   ,  stripeId,  stripeKey,   project ,       countrycode,      region,    city  ,   zip )   VALUES ";      
-$insertQuery4b = " ( NULL, CURRENT_TIMESTAMP,         '$phone0', '$name0',  '$email0' , '$id',   '$key0',   '$projectName', '$country0',  '$state0' ,'$city0' , '$zip0') ";    
+$insertQuery4a = " ( transactionId, userInitTimestamp, phonenum, fullName, email   ,  stripeId, payload,                stripeKey,   project ,       countrycode,      region,    city  ,   zip )   VALUES ";      
+$insertQuery4b = " ( NULL, CURRENT_TIMESTAMP,         '$phone0', '$name0',  '$email0' , '$id', '$paymentIntentCleaned',  '$key0',   '$projectName', '$country0',  '$state0' ,'$city0' , '$zip0') ";    
 $insertQuery2 = $insertQuery02. $insertQuery4a. $insertQuery4b ;
 
 $argstr.=  "mysql:host=$servername;dbname=$dbname, $username, $happy1". "|". $insertQuery2. "|";
@@ -309,7 +347,13 @@ if($insertdb==1){     // found charge.succeeded
   $success0= SendAndHandleIntroEmail( $email00 , $key0, $receipturl0 );
 
   $success00 = (string)$success0;
-  $argstr1.=$argstr1. "emailedOk=". $success00. "|";
+
+
+  // $lentest='{"id":"ch_3Q3C3BEJfZ5xbPiB1ksGsPRa","object":"charge","amount":50,"amount_captured":50,"amount_refunded":0,"application":null,"application_fee":null,"application_fee_amount":null,"balance_transaction":null,"billing_details":{"address":{"city":"Santa Monica","country":"US","line1":"1127 20th Street","line2":"Suite 2","postal_code":"90403-5688","state":"CA"},"email":"avattire.inc@gmail.com","name":"John Botti","phone":null},"calculated_statement_descriptor":"ALGOINVESTORR.COM","captured":true,"created":1727335426,"currency":"usd","customer":null,"description":null,"destination":null,"dispute":null,"disputed":false,"failure_balance_transaction":null,"failure_code":null,"failure_message":null,"fraud_details":[],"invoice":null,"livemode":true,"metadata":[],"on_behalf_of":null,"order":null,"outcome":{"network_status":"approved_by_network","reason":null,"risk_level":"normal","seller_message":"Payment complete.","type":"authorized"},"paid":true,"payment_intent":"pi_3Q3C3BEJfZ5xbPiB1mt3zkVd","payment_method":"pm_1Q3C3BEJfZ5xbPiB2kxFZjnn","payment_method_details":{"card":{"amount_authorized":50,"authorization_code":"40096W","brand":"mastercard","checks":{"address_line1_check":"pass","address_postal_code_check":"pass","cvc_check":null},"country":"US","exp_month":9,"exp_year":2027,"extended_authorization":{"status":"disabled"},"fingerprint":"PklbcfX4fiYXELnn","funding":"credit","incremental_authorization":{"status":"unavailable"},"installments":null,"last4":"8749","mandate":null,"multicapture":{"status":"unavailable"},"network":"mastercard","network_token":{"used":false},"overcapture":{"maximum_amount_capturable":50,"status":"unavailable"},"three_d_secure":null,"wallet":{"apple_pay":{"type":"apple_pay"},"dynamic_last4":"8749","type":"apple_pay"}},"type":"card"},"radar_options":[],"receipt_email":null,"receipt_number":null,"receipt_url":"https://pay.stripe.com/receipts/payment/CAcQARoXChVhY2N0XzFOUnFBMkVKZlo1eGJQaUIohJjUtwYyBow3XgppTTosFjlo23cQX5qnLy4popg90k342Jeb3i-EEYaNCheBhp498fe5hq6dk3RDcGU","refunded":false,"review":null,"shipping":null,"source":null,"source_transfer":null,"statement_descriptor":null,"statement_descriptor_suffix":null,"status":"succeeded","transfer_data":null,"transfer_group":null}';
+  $len0=strlen( $paymentIntentCleaned );
+  $lenstr= "strlen=". (string)$len0;
+  $argstr1.=$argstr1. "|emailedOk=". $success00. "|". $lenstr. "|";
+  // $argstr1.=$argstr1. $paymentIntentCleaned. "|emailedOk=". $success00. "|". $lenstr. "|";
 
   WriteJson( $payload0, $fnamePrefix, $argstr1 );
 
@@ -324,6 +368,16 @@ http_response_code(200);
 
 INSERT INTO `transactions` (`transactionId`, `userInitTimestamp`, `phonenum`, `fullName`, `password`, `email`, `pwdhash`, `lastDateTime`, `lastDate`, `lastTime`, `lastDay`, `sysvars`, `stripeId`, `payload`, `sysvarsinit`, `mostSymbols`, `tradeRawId`, `numvisits`, `lat`, `lon`, `project`, `country`, `countrycode`, `region`, `regioncode`, `city`, `zip`, `tzone`, `isp`, `loc`) VALUES 
                            (NULL, current_timestamp(), '7025551212', 'gianni b', NULL, 'threaldjgiannib@gmail.com', NULL, NULL, '', '', '', 'insertByHandJB', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'algoz', NULL, 'US', 'Nevada', NULL, 'Las Vegas', '89119', NULL, NULL, NULL);
+
+
+// sample cleand json:
+
+
+// |ch_3Q3C3BEJfZ5xbPiB1ksGsPRa|50|avattire.inc@gmail.com|John Botti|nil|1127 20th Street|Suite 2|Santa Monica|CA|90403-5688|US|usd|UciubEbe6S|mysql:host=localhost;dbname=u184668114_users, u184668114_algozai, Vegas2024!|INSERT INTO transactions ( transactionId, userInitTimestamp, phonenum, fullName, email   ,  stripeId,  stripeKey,   project ,       countrycode,      region,    city  ,   zip )   VALUES  ( NULL, CURRENT_TIMESTAMP,         'nil', 'John Botti',  'avattire.inc@gmail.com' , 'ch_3Q3C3BEJfZ5xbPiB1ksGsPRa',   'UciubEbe6S',   'algoz', 'US',  'CA' ,'Santa Monica' , '90403-5688') |trans#4||ch_3Q3C3BEJfZ5xbPiB1ksGsPRa|50|avattire.inc@gmail.com|John Botti|nil|1127 20th Street|Suite 2|Santa Monica|CA|90403-5688|US|usd|UciubEbe6S|mysql:host=localhost;dbname=u184668114_users, u184668114_algozai, Vegas2024!|INSERT INTO transactions ( transactionId, userInitTimestamp, phonenum, fullName, email   ,  stripeId,  stripeKey,   project ,       countrycode,      region,    city  ,   zip )   VALUES  ( NULL, CURRENT_TIMESTAMP,         'nil', 'John Botti',  'avattire.inc@gmail.com' , 'ch_3Q3C3BEJfZ5xbPiB1ksGsPRa',   'UciubEbe6S',   'algoz', 'US',  'CA' ,'Santa Monica' , '90403-5688') |trans#4|{"id":"ch_3Q3C3BEJfZ5xbPiB1ksGsPRa","object":"charge","amount":50,"amount_captured":50,"amount_refunded":0,"application":null,"application_fee":null,"application_fee_amount":null,"balance_transaction":null,"billing_details":{"address":{"city":"Santa Monica","country":"US","line1":"1127 20th Street","line2":"Suite 2","postal_code":"90403-5688","state":"CA"},"email":"avattire.inc@gmail.com","name":"John Botti","phone":null},"calculated_statement_descriptor":"ALGOINVESTORR.COM","captured":true,"created":1727335426,"currency":"usd","customer":null,"description":null,"destination":null,"dispute":null,"disputed":false,"failure_balance_transaction":null,"failure_code":null,"failure_message":null,"fraud_details":[],"invoice":null,"livemode":true,"metadata":[],"on_behalf_of":null,"order":null,"outcome":{"network_status":"approved_by_network","reason":null,"risk_level":"normal","seller_message":"Payment complete.","type":"authorized"},"paid":true,"payment_intent":"pi_3Q3C3BEJfZ5xbPiB1mt3zkVd","payment_method":"pm_1Q3C3BEJfZ5xbPiB2kxFZjnn","payment_method_details":{"card":{"amount_authorized":50,"authorization_code":"40096W","brand":"mastercard","checks":{"address_line1_check":"pass","address_postal_code_check":"pass","cvc_check":null},"country":"US","exp_month":9,"exp_year":2027,"extended_authorization":{"status":"disabled"},"fingerprint":"PklbcfX4fiYXELnn","funding":"credit","incremental_authorization":{"status":"unavailable"},"installments":null,"last4":"8749","mandate":null,"multicapture":{"status":"unavailable"},"network":"mastercard","network_token":{"used":false},"overcapture":{"maximum_amount_capturable":50,"status":"unavailable"},"three_d_secure":null,"wallet":{"apple_pay":{"type":"apple_pay"},"dynamic_last4":"8749","type":"apple_pay"}},"type":"card"},"radar_options":[],"receipt_email":null,"receipt_number":null,"receipt_url":"https://pay.stripe.com/receipts/payment/CAcQARoXChVhY2N0XzFOUnFBMkVKZlo1eGJQaUIohJjUtwYyBow3XgppTTosFjlo23cQX5qnLy4popg90k342Jeb3i-EEYaNCheBhp498fe5hq6dk3RDcGU","refunded":false,"review":null,"shipping":null,"source":null,"source_transfer":null,"statement_descriptor":null,"statement_descriptor_suffix":null,"status":"succeeded","transfer_data":null,"transfer_group":null}|emailedOk=1|
+// ] New Transaction Entry.  EOF
+
+{"id":"ch_3Q3C3BEJfZ5xbPiB1ksGsPRa","object":"charge","amount":50,"amount_captured":50,"amount_refunded":0,"application":null,"application_fee":null,"application_fee_amount":null,"balance_transaction":null,"billing_details":{"address":{"city":"Santa Monica","country":"US","line1":"1127 20th Street","line2":"Suite 2","postal_code":"90403-5688","state":"CA"},"email":"avattire.inc@gmail.com","name":"John Botti","phone":null},"calculated_statement_descriptor":"ALGOINVESTORR.COM","captured":true,"created":1727335426,"currency":"usd","customer":null,"description":null,"destination":null,"dispute":null,"disputed":false,"failure_balance_transaction":null,"failure_code":null,"failure_message":null,"fraud_details":[],"invoice":null,"livemode":true,"metadata":[],"on_behalf_of":null,"order":null,"outcome":{"network_status":"approved_by_network","reason":null,"risk_level":"normal","seller_message":"Payment complete.","type":"authorized"},"paid":true,"payment_intent":"pi_3Q3C3BEJfZ5xbPiB1mt3zkVd","payment_method":"pm_1Q3C3BEJfZ5xbPiB2kxFZjnn","payment_method_details":{"card":{"amount_authorized":50,"authorization_code":"40096W","brand":"mastercard","checks":{"address_line1_check":"pass","address_postal_code_check":"pass","cvc_check":null},"country":"US","exp_month":9,"exp_year":2027,"extended_authorization":{"status":"disabled"},"fingerprint":"PklbcfX4fiYXELnn","funding":"credit","incremental_authorization":{"status":"unavailable"},"installments":null,"last4":"8749","mandate":null,"multicapture":{"status":"unavailable"},"network":"mastercard","network_token":{"used":false},"overcapture":{"maximum_amount_capturable":50,"status":"unavailable"},"three_d_secure":null,"wallet":{"apple_pay":{"type":"apple_pay"},"dynamic_last4":"8749","type":"apple_pay"}},"type":"card"},"radar_options":[],"receipt_email":null,"receipt_number":null,"receipt_url":"https://pay.stripe.com/receipts/payment/CAcQARoXChVhY2N0XzFOUnFBMkVKZlo1eGJQaUIohJjUtwYyBow3XgppTTosFjlo23cQX5qnLy4popg90k342Jeb3i-EEYaNCheBhp498fe5hq6dk3RDcGU","refunded":false,"review":null,"shipping":null,"source":null,"source_transfer":null,"statement_descriptor":null,"statement_descriptor_suffix":null,"status":"succeeded","transfer_data":null,"transfer_group":null}|emailedOk=1|
+// 
 
 
 
