@@ -7,11 +7,10 @@
 //stripe test key
 $stripeSecretTestKey =      'sk_test_51NRqA2EJfZ5xbPiBTrS8vIap45s8j8R8I2AcUkdl3CnoboX94rylI3zIWkUwEITEI0Rwf7tdubrGR7KiNFuWL2fH00M51C8NIp';
 
-
-//stripe publishable LIVE key
-// $stripeSecretLiveKey =
+//stripe publishable LIVE key    // $stripeSecretLiveKey =
 $stripeSecretKey       =  'pk_live_51NRqA2EJfZ5xbPiBwuP4MraBJ0OnoJPSemYdfzBaH3mWHOtYrk5W2ZqcJnD7xLO899tPS3L4PHhRJWIxpvpabg2g00XZ7iYiGS';
-$endpoint_secretMASTER =  'whsec_SGptRO2C3JqynHfg8wxNd1Hqi8nTxj0f';
+// $endpoint_secretMASTER0 =  'whsec_SGptRO2C3JqynHfg8wxNd1Hqi8nTxj0f';
+$endpoint_secretMASTER   = 'whsec_ckISfj36EIJ3tlECdadiv4XqZzdVCSlr';  
 
 
 //stripe publishable test key

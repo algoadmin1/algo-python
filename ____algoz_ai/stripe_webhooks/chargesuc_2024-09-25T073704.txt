@@ -1,0 +1,130 @@
+{
+  "id": "evt_3Q2pmTEJfZ5xbPiB0vRG04Fp",
+  "object": "event",
+  "api_version": "2024-06-20",
+  "created": 1727249823,
+  "data": {
+    "object": {
+      "id": "ch_3Q2pmTEJfZ5xbPiB0sPwBdcF",
+      "object": "charge",
+      "amount": 99,
+      "amount_captured": 99,
+      "amount_refunded": 0,
+      "application": null,
+      "application_fee": null,
+      "application_fee_amount": null,
+      "balance_transaction": null,
+      "billing_details": {
+        "address": {
+          "city": "Santa Monica",
+          "country": "US",
+          "line1": "1127 20th Street",
+          "line2": "Suite 2",
+          "postal_code": "90403-5688",
+          "state": "CA"
+        },
+        "email": "avattire.inc@gmail.com",
+        "name": "John Botti",
+        "phone": null
+      },
+      "calculated_statement_descriptor": "ALGOINVESTORR.COM",
+      "captured": true,
+      "created": 1727249821,
+      "currency": "usd",
+      "customer": null,
+      "description": null,
+      "destination": null,
+      "dispute": null,
+      "disputed": false,
+      "failure_balance_transaction": null,
+      "failure_code": null,
+      "failure_message": null,
+      "fraud_details": {
+      },
+      "invoice": null,
+      "livemode": true,
+      "metadata": {
+      },
+      "on_behalf_of": null,
+      "order": null,
+      "outcome": {
+        "network_status": "approved_by_network",
+        "reason": null,
+        "risk_level": "normal",
+        "seller_message": "Payment complete.",
+        "type": "authorized"
+      },
+      "paid": true,
+      "payment_intent": "pi_3Q2pmTEJfZ5xbPiB06tlTLgd",
+      "payment_method": "pm_1Q2pmSEJfZ5xbPiBMqHkItAF",
+      "payment_method_details": {
+        "card": {
+          "amount_authorized": 99,
+          "authorization_code": "53323W",
+          "brand": "mastercard",
+          "checks": {
+            "address_line1_check": "pass",
+            "address_postal_code_check": "pass",
+            "cvc_check": null
+          },
+          "country": "US",
+          "exp_month": 9,
+          "exp_year": 2027,
+          "extended_authorization": {
+            "status": "disabled"
+          },
+          "fingerprint": "PklbcfX4fiYXELnn",
+          "funding": "credit",
+          "incremental_authorization": {
+            "status": "unavailable"
+          },
+          "installments": null,
+          "last4": "8749",
+          "mandate": null,
+          "multicapture": {
+            "status": "unavailable"
+          },
+          "network": "mastercard",
+          "network_token": {
+            "used": false
+          },
+          "overcapture": {
+            "maximum_amount_capturable": 99,
+            "status": "unavailable"
+          },
+          "three_d_secure": null,
+          "wallet": {
+            "apple_pay": {
+              "type": "apple_pay"
+            },
+            "dynamic_last4": "8749",
+            "type": "apple_pay"
+          }
+        },
+        "type": "card"
+      },
+      "radar_options": {
+      },
+      "receipt_email": null,
+      "receipt_number": null,
+      "receipt_url": "https://pay.stripe.com/receipts/payment/CAcQARoXChVhY2N0XzFOUnFBMkVKZlo1eGJQaUIon_vOtwYyBr4J-G7KrDosFtKVBq67cq7LJLnlvCItD8_4RVJ3-lueDETM_O7fj41XR6GR-xgbAl_o24o",
+      "refunded": false,
+      "review": null,
+      "shipping": null,
+      "source": null,
+      "source_transfer": null,
+      "statement_descriptor": null,
+      "statement_descriptor_suffix": null,
+      "status": "succeeded",
+      "transfer_data": null,
+      "transfer_group": null
+    }
+  },
+  "livemode": true,
+  "pending_webhooks": 1,
+  "request": {
+    "id": "req_2dz3EsLVxNFHKm",
+    "idempotency_key": "37ea72c0-51b9-40a9-818a-a5e3f6d44ff6"
+  },
+  "type": "charge.succeeded"
+}
