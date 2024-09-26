@@ -7,7 +7,12 @@ require_once '../login/database.php';
 require_once '../login/sendemail.php';
 
 
-
+function CheckStringNull($tag0) : string {
+    if($tag0==""){
+      $tag0="nil";
+    }
+    return $tag0;
+}
 
 function RandomString($int0) {
     // Check if $int0 is greater than 0
@@ -42,20 +47,52 @@ function ValidateEmail($em){
     }
 }
 
+// function SendEmailCc($fromEmail, $toEmail, $ccEmail, $bccEmail, $subject, $message) {
+  function SendEmailCc($fromEmail, $toEmail, $ccEmail, $subject, $message) {
+    // Set headers
+  $headers = "From: " . $fromEmail . "\r\n";
+  $headers .= "CC: " . $ccEmail . "\r\n";
+  // $headers .= "BCC: " . $bccEmail . "\r\n";
+  $headers .= "MIME-Version: 1.0" . "\r\n";
+  $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+  // Send email
+  if (mail($toEmail, $subject, $message, $headers)) {
+      return true; // "Email sent successfully!";
+  } else {
+      return false;  //"Failed to send email.";
+  }
+}
+// // Example usage:
+// $fromEmail = "sender@example.com";
+// $toEmail = "recipient@example.com";
+// $ccEmail = "cc@example.com";
+// $subject = "Test Email";
+// $message = "<h1>Hello!</h1><p>This is a test email with CC.</p>";
+// echo SendEmailCc($fromEmail, $toEmail, $ccEmail, $subject, $message);
+
+function RemoveAt($email) {
+  if( ValidateEmail($email)==false ) return "nil";
+
+  $parts = explode('@', $email);    // Split the email string at the '@' symbol
+  return $parts[0];   // Return the part before the '@' symbol
+}
 
 
 function SendAndHandleIntroEmail( $email1 , $key0, $recpt ){
   global $fromEmail, $webName ;
 
-  $linkIntro ="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=". $email1 ."&key=". $key0 ;  //8a2b18a0";
+  $emailName =  RemoveAt($email1);
+  $linkIntro ="https://itraderpro.co/candlesticks.php?sym=nvda&uname=". $emailName. "&email=". $email1 ."&key=". $key0 ;  //8a2b18a0";
 
   $subject="WELCOME to ". $webName;  // "algoz.ai ";
   // $message="Please click the link to access your product: ".  $linkResetPwd."?em=".$email1 ;
-  $message="Please click the link to access your product: ".  $linkIntro."?em=". $email1 . "   \nHere is your receipt: ". $recpt;
-  $from= $fromEmail ; //"algoinvestorr@gmail.com";
-  $from="algoinvestorr@gmail.com";
-  $emailSuccess = SendEmailToUser($email1, $subject, $message, $from);
-  
+  $message="Please click the link to access your product: ".  $linkIntro."?em=". $email1 . "   \n\nHere is your receipt: ". $recpt;
+  $from= $fromEmail ;   // $from="algoinvestorr@gmail.com";
+  $ccemail0 = "roguequant1@gmail.com";
+  // $emailSuccess = SendEmailToUser($email1, $subject, $message, $from);
+  // $emailSuccess=SendEmailCc(  $from, $email1, $ccemail0, $bccemail0,  $subject, $message);
+  $emailSuccess=SendEmailCc(  $from, $email1, $ccemail0,  $subject, $message);
   
   // echo "<br />";
   // if($emailSuccess==true)   echo "<div class='alert alert-success'>Check your inbox at: $email1 </div>";
@@ -64,8 +101,7 @@ function SendAndHandleIntroEmail( $email1 , $key0, $recpt ){
   // echo "<br />";
   // echo '<div style="text-align: center;"><p><a href="'.$linkLogin .'">Click to Login</a></p></div>';
 
-  return( $emailSuccess );
-
+  return( $emailSuccess );  // t/f
 }//fn
 
 
@@ -99,6 +135,10 @@ function WriteJson($payload, $fnamePrefix, $extraStr) {
     // Return the file name (optional)
     return $filename;
 }
+
+
+
+
 
 \Stripe\Stripe::setApiKey($stripeSecretKey);
 // Replace this endpoint secret with your endpoint's unique secret
@@ -177,14 +217,21 @@ $addy0  = $event->data->object->billing_details->address->line1. "|".
           $event->data->object->billing_details->address->country. "|". 
           $event->data->object->currency   ;
 
+$zip0     = $event->data->object->billing_details->address->postal_code;
+$city0    = $event->data->object->billing_details->address->city;
+$state0   = $event->data->object->billing_details->address->state;
+$country0 = $event->data->object->billing_details->address->country;
+$currency0= $event->data->object->currency   ;
+
 $receipturl0 = $event->data->object->receipt_url;
 
-$argstr0=   "|". $id. "|".  $amt.  "|".  $email0.  "|".  $name0.  "|".  $phone0.  "|". $addy0.  "|". $receipturl0. "|"  ;
+$phone0=CheckStringNull($phone0);
+$name0 =CheckStringNull($name0);
 
+$argstr0=   "|". $id. "|".  $amt.  "|".  $email0.  "|".  $name0.  "|".  $phone0.  "|". $addy0.  "|" ;
+$argstr007=     "|". $id. "|".  $amt.  "|".  $email0.  "|".  $name0.  "|".  $phone0.  "|". $addy0.  "|". $receipturl0. "|"  ;
 
 $argstr.= $argstr0;
-
-
 
 $fnamePrefix="./transactions/chargesuc";
 
@@ -214,31 +261,74 @@ switch ($event->type) {
     error_log('Received unknown event type');
 }
 
-// MUST DETERMINE CUSTOMER LEVEL
+// MUST DETERMINE CUSTOMER LEVEL = len of key0
 $levelCustomer = 10;
 
 $key0=RandomString( $levelCustomer );
 $argstr= $argstr. $key0. "|"  ;
 
-// WriteJson( $payload0, $fnamePrefix, $argstr );
 
-// found charge.succeeded
-if($insertdb==1){
-  // HERE insert to mysql db :  
-  // write JSON:  $paymentIntent = $event->data->object; 
-  WriteJson( $payload0, $fnamePrefix, $argstr );
+// $email00="roguequant1@gmail.com";  // uncomm for debug only, overrides user/stripe email
+$email00=$email0; 
+$tblnameTrans="transactions";
+$mysqlLogstr="nilLog";
+$mysqlLogstrLite="nilLogLite";
 
-  $email00="roguequant1@gmail.com";
-  // and lastly, send welcome email
+
+$insertQuery02 = "INSERT INTO ". $tblnameTrans ;  
+// $insertQuery4a = " ( transactionId, userInitTimestamp, phonenum, fullName, email   ,  stripeId,     payload,     project ,       countrycode,      region,    city  ,   zip )   VALUES ";      
+// $insertQuery4b = " ( NULL, CURRENT_TIMESTAMP,         '$phone0', '$name0',  '$email0' , '$id', '$paymentIntent',  '$projectName', '$country0',  '$state0' ,'$city0' , '$zip0') ";    
+$insertQuery4a = " ( transactionId, userInitTimestamp, phonenum, fullName, email   ,  stripeId,  stripeKey,   project ,       countrycode,      region,    city  ,   zip )   VALUES ";      
+$insertQuery4b = " ( NULL, CURRENT_TIMESTAMP,         '$phone0', '$name0',  '$email0' , '$id',   '$key0',   '$projectName', '$country0',  '$state0' ,'$city0' , '$zip0') ";    
+$insertQuery2 = $insertQuery02. $insertQuery4a. $insertQuery4b ;
+
+$argstr.=  "mysql:host=$servername;dbname=$dbname, $username, $happy1". "|". $insertQuery2. "|";
+
+
+if($insertdb==1){     // found charge.succeeded
+  try{
+      $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);           // Connect to MySQL using PDO
+      $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);                         // Set PDO to throw exceptions for errors
+      
+      $conn->exec($insertQuery2);
+      $lastInsertedId = $conn->lastInsertId();
+      $mysqlLogstr     = "MySql Success .transactions INSERT. Last inserted ID: $lastInsertedId ";
+      $mysqlLogstrLite = "trans#". $lastInsertedId ;
+
+      } catch (PDOException $e) {
+          $insertdb=-10;
+          // if($msg==1) echo "<br />ERROR:  Connection failed: " . $e->getMessage();
+          // $argstr.=  "PDOException $e". "|";
+          $argstr.=  "PDOException". "|";
+      }
+      $conn = null;     // Close the PDO connection
+
+  $argstr1= $argstr. $mysqlLogstrLite. "|";   //tak on last ID inserted to trans. tbl
+
+  // and here we send welcome email
   $success0= SendAndHandleIntroEmail( $email00 , $key0, $receipturl0 );
 
-}
+  $success00 = (string)$success0;
+  $argstr1.=$argstr1. "emailedOk=". $success00. "|";
+
+  WriteJson( $payload0, $fnamePrefix, $argstr1 );
+
+ }// if insertdb
+
 
 http_response_code(200);
 
 
 
 /*
+
+INSERT INTO `transactions` (`transactionId`, `userInitTimestamp`, `phonenum`, `fullName`, `password`, `email`, `pwdhash`, `lastDateTime`, `lastDate`, `lastTime`, `lastDay`, `sysvars`, `stripeId`, `payload`, `sysvarsinit`, `mostSymbols`, `tradeRawId`, `numvisits`, `lat`, `lon`, `project`, `country`, `countrycode`, `region`, `regioncode`, `city`, `zip`, `tzone`, `isp`, `loc`) VALUES 
+                           (NULL, current_timestamp(), '7025551212', 'gianni b', NULL, 'threaldjgiannib@gmail.com', NULL, NULL, '', '', '', 'insertByHandJB', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'algoz', NULL, 'US', 'Nevada', NULL, 'Las Vegas', '89119', NULL, NULL, NULL);
+
+
+
+
+
   Sample RT Json payload from actual stripe purchase vai Apple 
 
   {
@@ -400,3 +490,6 @@ http_response_code(200);
 
 */
 
+
+
+?>

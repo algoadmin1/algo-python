@@ -258,7 +258,6 @@ require_once "database.php";
                 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);                         // Set PDO to throw exceptions for errors
                             // SELECT * FROM `users` WHERE `email` LIKE 'mitcrapsteam@gmail.com'
                     $query  = "SELECT * FROM ". $tblname. " WHERE email = :email";
-                                                                                                         // $query = "SELECT * FROM positions WHERE tradeHash = :tradeHash";
                     $stmt = $conn->prepare($query);
                     $stmt->bindParam(':email', $email);
                     $stmt->execute();
