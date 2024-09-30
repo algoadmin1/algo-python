@@ -176,7 +176,7 @@ function CaloricDemand($gender, $height_cm, $weight_kg, $age, $activityLevel) {
 document.getElementById('bmiForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const cms = parseInt(document.getElementById('cms').value);
+    const cms = parseFloat(document.getElementById('cm0').value);
     // const feet = parseInt(document.getElementById('feet').value);
     // const inches = 0; // parseInt(document.getElementById('inches').value);
 
