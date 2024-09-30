@@ -172,12 +172,14 @@ function CaloricDemand($gender, $height_cm, $weight_kg, $age, $activityLevel) {
 
 */
 
-
+// *** kgs version METRIC
 document.getElementById('bmiForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const feet = parseInt(document.getElementById('feet').value);
-    const inches = parseInt(document.getElementById('inches').value);
+    const cms = parseInt(document.getElementById('cms').value);
+    // const feet = parseInt(document.getElementById('feet').value);
+    // const inches = 0; // parseInt(document.getElementById('inches').value);
+
     const weight = parseFloat(document.getElementById('weight').value);   // lbs
 
     const age = parseFloat(document.getElementById('age').value);
@@ -191,9 +193,11 @@ document.getElementById('bmiForm').addEventListener('submit', function(event) {
 
 
 
-    const heightInInches = (feet * 12) + inches;
-    const heightInMeters = heightInInches * 0.0254;
-    const weightInKg = weight * 0.453592;
+    // const heightInInches = (feet * 12) + inches;
+    // const heightInMeters = heightInInches * 0.0254;
+    const heightInMeters = cms / 100.0; 
+    // const weightInKg = weight * 0.453592;   // lbs
+    const weightInKg = weight * 1.0;
 
 
     const bmi = weightInKg / (heightInMeters * heightInMeters);

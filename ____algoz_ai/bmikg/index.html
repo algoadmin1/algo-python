@@ -16,17 +16,22 @@
         <form id="bmiForm">
             <div class="input-group">
                 <!-- <label for="feet">Height (Feet):</label> -->
-                <input type="number" id="feet" placeholder="Height (feet):" name="feet" min="0" required>
+                <input type="number" id="cms" placeholder="Height (cm):" name="cms" min="0" required>
                 <!-- <input type="password" placeholder="Password:" name="password" class="form-control" id="password"> -->
             </div>
-            <div class="input-group">
-                <!-- <label for="inches">Height (Inches):</label> -->
-                <input type="number" id="inches" placeholder="Height (inches):" name="inches" min="0" max="11" required>
-            </div>
+            <!-- <div class="input-group">
+                 <label for="inches">Height (Inches):</label> -->
+               <!-- <input type="number" id="inches" placeholder="Height (inches):" name="inches" min="0" max="11" required>
+            </div> -->
+
             <div class="input-group">
                 <!-- <label for="weight">Weight (Pounds):</label> -->
-                <input type="number" id="weight" placeholder="Weight (lbs):" name="weight" min="0" required>
+                <!-- <input type="number" id="weight" placeholder="Weight (lbs):" name="weight" min="0" required> -->
+                <input type="number" id="weight" placeholder="Weight (kgs):" name="weight" min="0" required>
             </div>
+
+
+
             <div class="input-group">
                 <!-- <label for="inches">Age:</label> -->
                 <input type="number" id="age" placeholder="Age:" name="age" min="0" max="140" required>
@@ -128,7 +133,8 @@
             <button type="submit">Calculate BMI</button>
 
             <div style="text-align: center;">
-                <p id="swmetrics" style="font-size: 12px;"> <a href="../bmikg/index.html">Switch to Metric System</a></p>
+                
+                <p id="swmetrics" style="font-size: 12px;"> <a href="../bmi/index.html">Switch to Imperial System</a></p>
               </div>
         </form>
 
