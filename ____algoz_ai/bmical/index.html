@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calorie Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" type="image/png"  href="favicon.ico" />
+
+</head>
+<body>
+    <div class="container">
+        <!-- <h1>Fighting Fitness FasterClass</h1> -->
+        <!-- <h1>FasterClass</h1> -->
+        <h2>BMI Calorie Calculator</h2>
+        <form id="bmiForm">
+            <div class="input-group">
+                <!-- <label for="feet">Height (Feet):</label> -->
+                <input type="number" id="feet" placeholder="Height (Feet):" name="feet" min="0" required>
+                <!-- <input type="password" placeholder="Password:" name="password" class="form-control" id="password"> -->
+            </div>
+            <div class="input-group">
+                <!-- <label for="inches">Height (Inches):</label> -->
+                <input type="number" id="inches" placeholder="Height (inches):" name="inches" min="0" max="11" required>
+            </div>
+            <div class="input-group">
+                <!-- <label for="weight">Weight (Pounds):</label> -->
+                <input type="number" id="weight" placeholder="Weight (lbs):" name="weight" min="0" required>
+            </div>
+            <div class="input-group">
+                <!-- <label for="inches">Age:</label> -->
+                <input type="number" id="age" placeholder="Age:" name="age" min="0" max="140" required>
+            </div>
+
+
+            <div class="input-group">
+                <input type="number" id="pct" placeholder="% weight to lose:" name="pct" min="0" max="100" required>
+            </div>
+
+            <div class="input-group">
+                <input type="number" id="days" placeholder="Days to lose weight:" name="days" min="1" max="3650" required>
+            </div>
+            
+
+            <div class="input-group">
+                <!-- Dropdown Menu for Gender -->
+                <!-- <label for="gender">Gender:</label> -->
+                <select id="gender" name="gender" required>
+                    <option value="">--Select Gender--</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select><br><br>
+            </div>
+
+
+            <div class="input-group">
+                <select id="actlevel" name="actlevel" required>
+                    <option value="">--Select Activity Level--</option>
+                    <option value="0">Sedentary: No exercise</option>
+                    <option value="1">Lightly Active: exercise 1-2x per week</option>
+                    <option value="2">Moderately Active: exercise 3-5x per week</option>
+                    <option value="3">Very Active: exercise 6-7x per week</option>
+                    <option value="4">Extremely Active: hard exercise 8+x per week</option>
+                </select><br><br>
+         
+            </div>
+
+
+            <!-- <div class="input-group"> -->
+                <!-- <input type="number" id="email" placeholder="me@abc.com:" name="email" > -->
+            <!-- </div> -->
+
+            <div class="form-group" >
+            <!-- <div class="input-group"> -->
+                <input type="email" id="email" placeholder="me@abc.com:" name="email"  class="form-control">
+                <!-- class="form-control"> -->
+            </div>
+
+
+
+            <!-- <div class="input-group"> -->
+                    <!-- 
+            <div class="form-container">
+                <form method="POST" action=""> -->
+<!-- 
+                    <h2>Select an Option</h2>
+                    <label>
+                        <input type="radio" name="option" value="1"> Option1
+                    </label><br>
+        
+                    <label>
+                        <input type="radio" name="option" value="2"> Option2
+                    </label><br>
+        
+                    <label>
+                        <input type="radio" name="option" value="3"> Option3
+                    </label><br>
+        
+                    <label>
+                        <input type="radio" name="option" value="4"> Option4
+                    </label><br>
+        
+                    <label>
+                        <input type="radio" name="option" value="5"> Option5
+                    </label><br>
+         -->
+                    <!-- <button type="submit">Submit</button>
+                </form> -->
+        
+
+                <!-- <?php
+                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                    if (isset($_POST['option'])) {
+                        $radioButtonInt = (int) $_POST['option']; // Capture and cast to integer
+                        echo "<p>You selected Option $radioButtonInt</p>";
+                    } else {
+                        echo "<p>Please select an option.</p>";
+                    }
+                }
+                ?> -->
+            <!-- </div> -->
+
+
+
+
+            <button type="submit">Calculate BMI</button>
+        </form>
+
+
+
+
+        <div id="result"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

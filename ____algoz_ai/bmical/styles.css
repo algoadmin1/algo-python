@@ -1,0 +1,100 @@
+body {
+    font-family: Verdana, sans-serif;
+    background-color: #7474ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+/* .input-group {
+    margin-bottom: 15px;
+    text-align: left;
+} */
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%; /* Make the input group span the full width of its parent */
+    /* box-sizing: border-box;  */
+    /* Ensure padding and border are included in the element's width */
+}
+
+
+ /* Basic styling for the form and button */
+ .form-group {
+    position: relative; /* Position relative to contain the eye icon */
+   /* width: 260px;   Set a width for the form group */
+    width: 100%; /* Set a width for the form group */
+    margin-bottom: 15px; /* Spacing at the bottom of the input field */
+
+/*.input-group */
+/*    margin-bottom: 15px;*/
+    text-align: left;
+
+}
+
+.form-control {
+    width: 100%; /* Make the input full width within the form group */
+    /* padding-right: 40px;  */
+    /* Add padding on the right to avoid overlap with the eye icon */
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="number"] {
+    width: calc(100% - 10px);
+    padding: 8px;
+    border: 1px solid #9765b5;
+    border-radius: 4px;
+}
+
+
+h2 {
+    margin-bottom: 15px;
+}
+
+
+select, input[type="number"] {
+    padding: 5px;
+    width: 100%;
+    max-width: 300px;
+}
+
+
+
+button {
+    background-color: #8b8bf7; /* #007bff */
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#result {
+    margin-top: 20px;
+    font-size: 18px;
+}
