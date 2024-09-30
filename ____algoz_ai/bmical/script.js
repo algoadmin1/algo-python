@@ -218,8 +218,9 @@ document.getElementById('bmiForm').addEventListener('submit', function(event) {
     }
     // ☠️  
 
-
-    let cn = CalcCalories(gender, (heightInMeters*100), weightInKg, age, actlevel );
+    let cm0=(heightInMeters*100).toFixed(1);
+    // let cn = CalcCalories(gender, (heightInMeters*100), weightInKg, age, actlevel );
+    let cn = CalcCalories(gender, cm0,  weightInKg, age, actlevel );
     let cn1 = cn.toFixed(2);
     // let addstr = 'Calories needed:' + cn1 + '/day   gender:' + gender+ ' age:' + age +' actLvl:' + actlevel ;
     let addstr = 'Calories needed/day:' + cn1 ;  
@@ -244,15 +245,24 @@ let cals2consume  =result.dailyCaloriesToConsume;
 let cals2cut      =result.dailyCaloricDeficit;
 // cals2consume = cals2consume.toFixed(0);
 // cals2cut     = cals2cut.toFixed(0);
-let email1 = email0.split('@')[0] +','; // Get the part before the '@'
+let email1a = ""; //email0.split('@')[0]; //+','; // Get the part before the '@'
 
+if(email0!=""){
+    email1a = email0.split('@')[0];
+    email1a = email1a +',' ;
+}else email1a = "Ok,";
 // let addstr2 = `Daily Calories to Consume: ${result.dailyCaloriesToConsume}` ;
 // let addstr2 = email0 + ` To lose `+pct2lose +`% or `+ lbs2lose+`lbs, over `+ days2lose +` days, <strong>consume ${result.dailyCaloriesToConsume}` +`</strong> calories/day or <strong>cut out `+ cals2cut+`</strong> calories/day.<br>` ;
-let addstr2 = email1 + ` to lose `+pct2lose +`% or `+ lbs2lose+`lbs, over `+ days2lose +` days, <strong>consume `+cals2consume +`</strong> calories/day or <strong>cut out `+ cals2cut+`</strong> calories/day.<br>` ;
+// let addstr2 = email1a + ` to lose `+pct2lose +`% or `+ lbs2lose+`lbs, over `+ days2lose +` days, <strong>consume `+cals2consume +`</strong> calories/day or <strong>cut out `+ cals2cut+`</strong> calories/day.<br>` ;
+// let addstr2 = email1a + ` to lose `+pct2lose +`% or `+ lbs2lose+`lbs, over `+ days2lose +` days, <strong>consume `+cals2consume +`</strong> calories/day (-`+ cals2cut+` cals/day).<br>` ;
+let addstr2 = email1a + ` to lose `+pct2lose +`% or `+ lbs2lose+`lbs, over `+ days2lose +` days, <strong>consume `+cals2consume +`</strong> calories/day.<br>` ;
 // document.getElementById('result').innerHTML = `days, consume ${result.dailyCaloriesToConsume} <strong>calories/day</strong>.`;
 
+let kilos = weightInKg.toFixed(1);
+    
 
-    document.getElementById('result').innerHTML = `Your BMI is ${bmiRounded}. You are classified as ${category}. <br>${addstr}. <br>${addstr2}`;
+// document.getElementById('result').innerHTML = `Your BMI is ${bmiRounded}. You are classified as ${category}. <br>${addstr}. <br>${addstr2}`;
+document.getElementById('result').innerHTML = `At ${kilos}kg & ${cm0}cm: your BMI is ${bmiRounded}, classified as ${category}. <br>${addstr}. <br>${addstr2}`;
 
 
 
