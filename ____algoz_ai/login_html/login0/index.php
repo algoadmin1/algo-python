@@ -15,17 +15,6 @@ if (!isset($_SESSION["user"])) {
 require_once "./login/database.php";
 /*
 
-// js
-
-const player = cloudinary.videoPlayer('player', {
-  cloudName: 'www-avattireapp-com',
-  showLogo: false
-});
-
-player.source('samples/cld-sample-video');
-
-
-
 <!-- 
             <li class="items">
                 <i class="fa-solid fa-house"></i>
@@ -202,7 +191,7 @@ player.source('samples/cld-sample-video');
 
 
             <li class="items" id="ffcBtn">
-                <i class="fa-solid fa-boxing-glove"></i>
+                <i class="fa-solid fa-heart"></i>
                 <p class="para">Get Fit</p>
             </li>
             <script>

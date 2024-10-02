@@ -11,109 +11,317 @@ if (!isset($_SESSION["user"])) {
     $user_lastDateTime  = $_SESSION["user_lastDateTime"] ;
     $user_lastDay = $_SESSION["user_lastDay"]  ;
                  
+    // /Users/mac2021/Desktop/_dev/Projects/algo-python/____algoz_ai/login_html/login0/index.php
+
+    
+    $gChart= 0;
+    if($email1=="roguequant1@gmail.com"){
+        $gChart= 1;
+    }
+
  }
 require_once "./login/database.php";
-
 /*
 
- KNOWN BUGS:
-
-    1  UPON login, check PWD_hash as it is not matching
-    2  UPON login, an incorrect pwd spits out debug 'echo' strings
-    3  
-    4  WE NEED SaaS SERVICE LEVELS Included OR EXCLUDED from a USER'S MENU
-    5  
-    6  
-    7  THE style.css is wrong for input fields; check /BMI inputs
-    8  
-    9  
-
-
-    FILES:
-
-        _candlesticks.php
-        _dbase0.php
-        _recPortfolioTrade.php
-        algozDatabaseMySQL.png
-        algozUserTable.png
-        algozUserTableOld.png
-        database.php
-        encrypt.php
-        favicon.ico
-        forgotpwd.php
-        forgotpwdreset.php
-        gethttp.php
-        index.html
-        index.php
-        indexmenu.php
-        lastdateTest.php
-        login.php
-        loginfiles.txt
-        logo.jpg
-        logoalgoz.jpg
-        logoalgoz.png
-        logoalgozMaster.png
-        logout.php
-        passstr.php
-        passstring.html
-        pwdeye.html
-        registration.php
-        sampleinput.php
-        sendemail.php
-        sidebarai.php
-        style.css
-        testdiv.html
-        user_ip.txt
-        userstats.html
-        userstats.js
-
-
-
-
+<!-- 
+            <li class="items">
+                <i class="fa-solid fa-house"></i>
+                <p class="para">Home</p>
+            </li> -->
+<!-- 
+            <li class="items">
+                <i class="fa-solid fa-search"></i>
+                <p class="para">ai Prompt</p>
+            </li>  -->
+<!-- 
+            <li class="items">
+                <i class="fa-solid fa-search"></i>
+                <p class="para">Search</p>
+            </li>  -->
+            <!--  
+            
+             'https://algoinvestorr.com/pivots/'    'https://algoinvestorr.com/ccc/'  
+            
+            <li class="items">
+                <i class="fa-solid fa-user"></i>
+                <p class="para">Account</p>
+            </li> -->
 */
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <!-- <title><?php echo $webName; ?> Dashboard</title> -->
-    <title> <?php echo $webName; ?> </title>
+    <title>algoz.ai</title>
+    <link rel="stylesheet" href="style_navbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="shortcut icon" type="image/png"  href="favicon.ico" />
+    <!-- https://fontawesome.com/v4/icons/ -->
 </head>
 <body>
     <div class="container">
-        <div style="text-align: center;">
-            <div class="logo1">
-                <img src="logo.jpg" alt="Logo">
+        <div class="sidebar">
+            <div class="logo items">
+                <!-- <img src="img/a1.png" alt=""> -->
+                <img src="logo_navbar.png" alt="">
+                <span class="mainHead para">
+                    <!-- <h5>algo</h5> -->
+                    <!-- <h4>Investor<sup>TM</sup></h4> -->
+                    <h4>algoz.ai<sup style="font-size: 50%;">TM</sup></h4>
+                    <!-- <h4>Investor</h4> -->
+                </span>
             </div>
+
+
+            <li class="items" id="pricelevelsBtn">
+                <i class="fas fa-money-bill"></i>
+                <!-- <i class="fa-solid fa-list-alt"></i> -->
+                <p class="para">Price Levels</p>
+            </li> 
+            <script>
+                document.getElementById('pricelevelsBtn').addEventListener('click', function() {
+                    window.location.href = 'https://algoinvestorr.com/pivots/'; // Redirect to the logout page
+                });
+            </script>
+            
+            <li class="items" id="cccBtn">
+                <i class="fa-solid fa-calendar-days"></i>
+                <p class="para">Covered Call Calc</p>
+            </li>
+            <script>
+                document.getElementById('cccBtn').addEventListener('click', function() {
+                    window.location.href = 'https://algoinvestorr.com/ccc/'; // Redirect to the logout page
+                });
+            </script>
+
+
+
+            <li class="items" id="buysellBtn">
+                <!-- <a href="https://algoinvestorr.com/algoz0"> -->
+                <!-- <i class="fa-solid fa-line-chart"></i> -->
+                <i class="fa-solid fa-traffic-light"></i>
+                    
+                    <!-- <p class="para style=font-size: 90%;">Buy Signals</p> -->
+                    <!-- <p class="para style=font-size: 100%;">⬆️ ⬇️Signals</p> -->
+                    <!-- <p class="para style=font-size: 100%;">Buy⬆Sell⬇ Signals</p> -->
+                    <p class="para style=font-size: 100%;">BuySell Signals</p>
+                    <!-- <p class="para style=font-size: 100%;">Buy Signals</p> -->
+                <!-- </a> -->
+            </li> 
+            <script>
+                document.getElementById('buysellBtn').addEventListener('click', function() {
+                    window.location.href = 'https://algoinvestorr.com/algoz0/'; // Redirect to the logout page
+                });
+            </script>
+
+
+
+
+            <!-- <li class="items">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <p class="para">Notification</p>
+            </li> -->
+            
+
+            <!-- <li class="items">
+                <i class="fa-solid fa fa-film"></i>
+                <p class="para">Webinar</p>
+            </li> -->
+
+       
+            <!-- <li class="items">
+                <i class="fa-solid fa-calendar-days"></i>
+                <p class="para">Events</p>
+            </li> -->
+           
+            <!--    
+            <li class="items">
+                <i class="fa-solid fa-envelope"></i>
+                <p class="para">Messages</p>
+            </li> -->
+            
+          
+<?php if ($gChart != 0): ?>
+
+            <li class="items" id="chartBtn">
+            <i class="fa-solid fa-line-chart"></i>
+            <p class="para">Charting</p>
+            </li>
+            <script>
+                document.getElementById('chartBtn').addEventListener('click', function() {
+                    window.location.href = 'https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0';  
+                });
+            </script>
+
+<?php endif; ?>
+
+
+            <li class="items" id="aiBtn">
+            <i class="fa-solid fa-search"></i>
+            <!-- <i class="fa-solid fa-microchip-ai"></i> -->
+            <p class="para">ai Prompt</p>
+            </li> 
+            <script>
+                document.getElementById('aiBtn').addEventListener('click', function() {
+                    window.location.href = 'https://chatgpt.com/';  
+                });
+            </script>
+
+            <li class="items"  id="newsletterBtn">
+                <i class="fa fa-newspaper"></i>
+                <!-- <i class="fa fa-newspaper-o"></i> -->
+                <p class="para">Newsletter</p>
+            </li>
+            <script>
+                document.getElementById('newsletterBtn').addEventListener('click', function() {
+                    window.location.href = 'https://algoinvestorr.com/newsletter.pdf'; // Redirect to the logout page
+                });
+            </script>
+            
+            <li class="items" id="bookcallBtn">
+                <i class="fa-solid fa-phone"></i>
+                <p class="para">Book Call</p>
+            </li>  
+            <script>
+                document.getElementById('bookcallBtn').addEventListener('click', function() {
+                    window.location.href = 'https://buy.stripe.com/28o5ncbru14209yaEP'; // Redirect to the logout page
+                });
+            </script>
+
+
+            <li class="items" id="bmiBtn">
+                <i class="fa-solid fa-weight-scale"></i>
+                <p class="para">BMI Caloric Calc</p>
+            </li>
+            <script>
+                document.getElementById('bmiBtn').addEventListener('click', function() {
+                    window.location.href = 'https://algoz.ai/bmi';  
+                });
+            </script>
+
+
+            <li class="items" id="ffcBtn">
+                <i class="fa-solid fa-heart"></i>
+                <p class="para">Get Fit</p>
+            </li>
+            <script>
+                document.getElementById('ffcBtn').addEventListener('click', function() {
+                    window.location.href = 'https://algoz.ai/ffc';  
+                });
+            </script>
+
+
+
+            <!--   <i class="fa-solid fa-microchip-ai"></i> -->
+           
+    <script>
+        // document.addEventListener("DOMContentLoaded", function () {
+            // Handle click event for Settings
+
+            // document.querySelector("#settings-item .para").addEventListener("click", function () {
+            //     // Draw on the canvas when "Settings" is clicked
+            //     drawRectangles();
+            //     // Redirect to settings.php
+            //     //   window.location.href = "settings.php";
+            // });
+    
+            // Function to draw two vertical rectangles on the canvas
+            function drawRectangles() {
+                var canvas = document.getElementById("myCanvas");
+                if (canvas.getContext) {
+                    var ctx = canvas.getContext("2d");
+    
+                    // Clear the canvas
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+                    // Canvas dimensions
+                    var canvasWidth = canvas.width;
+                    var canvasHeight = canvas.height;
+    
+                    // Rectangle dimensions
+                    var rectWidth = 16;
+                    var rectHeight = 280;
+                    var offset = 8;
+    
+                    // Calculate the x-coordinates to center the rectangles and apply offset
+                    var centerX = (canvasWidth / 2);
+                    var redRectX = centerX - (rectWidth + offset / 2);  // Left of the center
+                    var greenRectX = centerX + (offset / 2);  // Right of the center
+    
+                    // Y-coordinate to center the rectangles vertically
+                    var centerY = (canvasHeight - rectHeight) / 2;
+    
+                    // Draw the red rectangle
+                    ctx.fillStyle = "red";
+                    ctx.fillRect(redRectX, centerY, rectWidth, rectHeight);
+    
+                    // Draw the green rectangle
+                    ctx.fillStyle = "green";
+                    ctx.fillRect(greenRectX, centerY, rectWidth, rectHeight);
+                }
+            }
+        // });
+    </script>
+
+
+
+            <li class="items" id="settings-item">
+                <i class="fa-solid fa-gear"></i>
+                <p class="para">Settings</p>
+            </li>  
+            <script>
+                document.getElementById('settings-item').addEventListener('click', function() {
+                    drawRectangles();
+                    // window.location.href = './login/logout.php'; // Redirect to the logout page
+                });
+            </script>
+
+    
+            <!-- <a href="./login/logout.php" class="btn btn-warning">Logout</a> -->
+            <li class="items logout-btn" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <p class="para">Logout</p>
+            </li>
+            <!-- <style>   didn't work
+                .pressed {
+                    background-color: #ffcc00; /* Yellow color when pressed */
+                    color: #fff; /* White text */
+                }
+            </style> -->
+
+            <!-- JavaScript to handle logout button click -->
+            <script>
+                document.getElementById('logoutBtn').addEventListener('click', function() {
+                    window.location.href = './login/logout.php'; // Redirect to the logout page
+                });
+            </script>
+
         </div>
 
-        <!-- <h1 style="color: green;">Welcome to the <?php echo $webName; ?> Dashboard</h1> -->
-        <h1 style="color: green;">Welcome to <?php echo $webName; ?>. </h1>
+        <div class="toggler">
+            <i class="fa-solid fa-bars" id="toggle-bars"></i>
+            <i class="fa-solid fa-xmark" id="toggle-cross"></i>
+        </div>
 
-        <h1 style="color: white;"> 😊 <?php echo $email1; ?> 😊 </h1>
-
-
-        <h3 style="color: blue;"> <?php echo "[#". $userId. "] #visits= ". $numvisits1 ."x, last: ". $user_lastDay." ". $user_lastDateTime; ?> </h3>
-
-        <h3 style="color: yellow;">  <?php echo "IP=". $userIP ; ?>  </h3>
-        <h3 style="color: orange;">  <?php echo " ". $user_loc ; ?>  </h3>
-
-        <div class="div">...</div>
-        <a href="https://algoinvestorr.com/algoz0/" class="neon_btn1">Buy Sell Signals</a>
-        <a href="https://algoinvestorr.com/pivots/" class="neon_btn1">Price Levels</a>
-        <a href="https://algoz.ai/ld/piv.php?sym=spy" class="neon_btn1">Week/Month/Yr Price Levels</a>
-        <a href="https://algoinvestorr.com/ccc/" class="neon_btn1">Covered Call Calculator</a>
-        <a href="https://algoinvestorr.com/newsletter.pdf" class="neon_btn1">Newsletter</a>
-        <a href="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0" class="neon_btn1">Charting</a>
-        <a href="https://algoz.ai/bmi/index.html" class="neon_btn1">BMI Calc</a>
-        <a href="https://buy.stripe.com/fZedTI1QU8wuaOc9AR" class="neon_btn1">Buy Coin Stripe Test</a>
-        <a href="https://algoz.ai/dj.pdf" class="neon_btn1">DJ Gianni B Albums</a>
-
-        <a href="./login/logout.php" class="btn btn-warning">Logout</a>
     </div>
+
+            
+        
+
+ <!--  ADDED...   -->
+
+    <div class="content">
+        <div class="canvas-container">
+            <!-- <canvas id="myCanvas"></canvas>   -->
+            <canvas id="myCanvas" width="500" height="400"></canvas> <!-- Canvas added here -->
+        </div>
+    </div>
+    
+
+
+
+
+    <script src="script_navbar.js"></script>
 </body>
 </html>
