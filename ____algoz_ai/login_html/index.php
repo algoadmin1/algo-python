@@ -13,9 +13,11 @@ if (!isset($_SESSION["user"])) {
                  
     // /Users/mac2021/Desktop/_dev/Projects/algo-python/____algoz_ai/login_html/login0/index.php
 
-    
+    // $products=$_SESSION["products"];  // =="coin|newsletter|charts|ccc|"
+
+    $email1a= strtolower($email1);
     $gChart= 0;
-    if($email1=="roguequant1@gmail.com"){
+    if($email1a=="roguequant1@gmail.com"){
         $gChart= 1;
     }
 
