@@ -14,11 +14,7 @@ if (!isset($_SESSION["user"])) {
     // /Users/mac2021/Desktop/_dev/Projects/algo-python/____algoz_ai/login_html/login0/index.php
 
     // $products=$_SESSION["products"];  // =="coin|newsletter|charts|ccc|"
-    $emailParts = explode('@', $email1); // Split the string at '@'
-    $emailname = $emailParts[0];
-    if($user_loc!=""){
-        $emailname.= " from ". $user_loc. "!";
-    }
+
     $email1a= strtolower($email1);
     $gChart= 0;
     if($email1a=="roguequant1@gmail.com"){
@@ -67,17 +63,6 @@ require_once "./login/database.php";
 </head>
 <body>
     <div class="container">
-
- <!-- Content to the right of the sidebar -->
-        <div class="main-content">
-        <p>Welcome <?php echo $emailname; ?></p>
-        </div>
-<!-- 
-        <div class="main-content">
-        <p> check out this new style</p>
-        </div> -->
-
-
         <div class="sidebar">
             <div class="logo items">
                 <!-- <img src="img/a1.png" alt=""> -->
@@ -281,7 +266,7 @@ require_once "./login/database.php";
         // });
     </script>
 
-<!-- 
+
 
             <li class="items" id="settings-item">
                 <i class="fa-solid fa-gear"></i>
@@ -292,7 +277,7 @@ require_once "./login/database.php";
                     drawRectangles();
                     // window.location.href = './login/logout.php'; // Redirect to the logout page
                 });
-            </script> -->
+            </script>
 
     
             <!-- <a href="./login/logout.php" class="btn btn-warning">Logout</a> -->
@@ -300,6 +285,12 @@ require_once "./login/database.php";
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <p class="para">Logout</p>
             </li>
+            <!-- <style>   didn't work
+                .pressed {
+                    background-color: #ffcc00; /* Yellow color when pressed */
+                    color: #fff; /* White text */
+                }
+            </style> -->
 
             <!-- JavaScript to handle logout button click -->
             <script>
@@ -308,20 +299,7 @@ require_once "./login/database.php";
                 });
             </script>
 
-
-      
-            <!-- Canvas to the right of the sidebar -->
-            <!-- <div class="canvas-container">
-                <canvas id="myCanvas"></canvas>
-                <button class="buy-btn">Buy</button>
-            </div> -->
-
-
         </div>
-                <!-- END  OF  SIDEBAR  -->
-
-
-
 
         <div class="toggler">
             <i class="fa-solid fa-bars" id="toggle-bars"></i>
@@ -334,14 +312,15 @@ require_once "./login/database.php";
         
 
  <!--  ADDED...   -->
-<!--
+
     <div class="content">
         <div class="canvas-container">
-            <canvas id="myCanvas" width="500" height="400"></canvas>  
+            <!-- <canvas id="myCanvas"></canvas>   -->
+            <canvas id="myCanvas" width="500" height="400"></canvas> <!-- Canvas added here -->
         </div>
     </div>
     
-    -->
+
 
 
 

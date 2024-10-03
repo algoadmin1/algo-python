@@ -1,0 +1,293 @@
+in the following html, css and javascript code for a simple navbar-based website, please add mobile-responsive
+code to create a button "Buy", and a canvas to the right of the navbar. Then draw a red box and a green box , side by side, on the canvas.
+
+
+
+
+// html code main navbar page:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>algoz.ai</title>
+    <link rel="stylesheet" href="style_navbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="shortcut icon" type="image/png"  href="favicon.ico" />
+    <!-- https://fontawesome.com/v4/icons/ -->
+</head>
+<body>
+    <div class="container">
+
+
+        <div class="sidebar">
+
+            <div class="logo items">
+                <img src="logo_navbar.png" alt="">
+                <span class="mainHead para">
+                    <h4>algoz.ai<sup style="font-size: 50%;">TM</sup></h4>
+                </span>
+            </div>
+
+            <li class="items" id="pricelevelsBtn">
+                <i class="fas fa-money-bill"></i>
+                <p class="para">Price Levels</p>
+            </li> 
+            <script>
+                document.getElementById('pricelevelsBtn').addEventListener('click', function() {
+                    window.location.href = 'https://algoinvestorr.com/pivots/'; // Redirect to the logout page
+                });
+            </script>
+
+            <li class="items" id="cccBtn">
+                <i class="fa-solid fa-calendar-days"></i>
+                <p class="para">Covered Call Calc</p>
+            </li>
+            <script>
+                document.getElementById('cccBtn').addEventListener('click', function() {
+                    window.location.href = 'https://algoinvestorr.com/ccc/'; // Redirect to the logout page
+                });
+            </script>
+
+            <li class="items" id="buysellBtn">
+                <i class="fa-solid fa-traffic-light"></i>
+                    <p class="para style=font-size: 100%;">BuySell Signals</p>
+            </li> 
+            <script>
+                document.getElementById('buysellBtn').addEventListener('click', function() {
+                    window.location.href = 'https://algoinvestorr.com/algoz0/'; // Redirect to the logout page
+                });
+            </script>
+
+<?php if ($gChart != 0): ?>
+            <li class="items" id="chartBtn">
+            <i class="fa-solid fa-line-chart"></i>
+            <p class="para">Charting</p>
+            </li>
+            <script>
+                document.getElementById('chartBtn').addEventListener('click', function() {
+                    window.location.href = 'https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0';  
+                });
+            </script>
+<?php endif; ?>
+
+            <li class="items" id="aiBtn">
+            <i class="fa-solid fa-search"></i>
+            <p class="para">ai Prompt</p>
+            </li> 
+            <script>
+                document.getElementById('aiBtn').addEventListener('click', function() {
+                    window.location.href = 'https://chatgpt.com/';  
+                });
+            </script>
+
+            <li class="items"  id="newsletterBtn">
+                <i class="fa fa-newspaper"></i>
+                <p class="para">Newsletter</p>
+            </li>
+            <script>
+                document.getElementById('newsletterBtn').addEventListener('click', function() {
+                    window.location.href = 'https://algoinvestorr.com/newsletter.pdf'; // Redirect to the logout page
+                });
+            </script>
+
+            <li class="items" id="bookcallBtn">
+                <i class="fa-solid fa-phone"></i>
+                <p class="para">Book Call</p>
+            </li>  
+            <script>
+                document.getElementById('bookcallBtn').addEventListener('click', function() {
+                    window.location.href = 'https://buy.stripe.com/28o5ncbru14209yaEP'; // Redirect to the logout page
+                });
+            </script>
+
+            <li class="items" id="bmiBtn">
+                <i class="fa-solid fa-weight-scale"></i>
+                <p class="para">BMI Caloric Calc</p>
+            </li>
+            <script>
+                document.getElementById('bmiBtn').addEventListener('click', function() {
+                    window.location.href = 'https://algoz.ai/bmi';  
+                });
+            </script>
+
+            <li class="items" id="ffcBtn">
+                <i class="fa-solid fa-heart"></i>
+                <p class="para">Get Fit</p>
+            </li>
+            <script>
+                document.getElementById('ffcBtn').addEventListener('click', function() {
+                    window.location.href = 'https://algoz.ai/ffc';  
+                });
+            </script>
+
+            <li class="items logout-btn" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <p class="para">Logout</p>
+            </li>
+
+            <!-- JavaScript to handle logout button click -->
+            <script>
+                document.getElementById('logoutBtn').addEventListener('click', function() {
+                    window.location.href = './login/logout.php'; // Redirect to the logout page
+                });
+            </script>
+
+        </div>
+                <!-- END  OF  SIDEBAR  -->
+
+
+        <div class="toggler">
+            <i class="fa-solid fa-bars" id="toggle-bars"></i>
+            <i class="fa-solid fa-xmark" id="toggle-cross"></i>
+        </div>
+
+    </div>
+
+    <script src="script_navbar.js"></script>
+</body>
+</html>
+
+
+/* script_navbar.css */
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body{
+    height: 100vh;
+    width: 100vw;
+    /* background: linear-gradient(30deg, #3061f1, #520a95); */
+    background: linear-gradient(30deg,  #520a95, #3061f1);
+}
+
+.container{
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.sidebar{
+    height: 100%;
+    width: 60px;
+    background: aliceblue;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    overflow: hidden;
+    transition: all 0.5s ease;
+}
+
+.mainHead{
+    margin-left: 15px;
+}
+
+img{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    margin-left: 10px;
+}
+
+.items{
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+    color: #000000CC;
+    margin-left: 0px;
+    padding: 10px 0px;
+}
+
+.sidebar li{
+    margin-left: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    
+}
+
+.items i{
+    margin: 0 10px;
+}
+
+.para{
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.sidebar li:not(.logout-btn):hover {
+    background: #000;
+    color: aliceblue;
+}
+
+.logout-btn{
+    margin-top: 50px;
+    color: #B70202;
+}
+
+.logout-btn:hover{
+    /* background-color: #B70202; */
+    background-color: #5f06a2;
+    color: aliceblue;
+}
+
+.toggler{
+    position: absolute;
+    top: 0;
+    left: 60px;
+    padding: 10px 15px;
+    font-size: 1.4rem;
+    transition: all 0.5s ease;
+}
+
+.toggler #toggle-cross {
+    display: none;
+}
+
+
+
+.active.toggler #toggle-cross {
+    display: block;
+}
+
+.active.toggler #toggle-bars {
+    display: none;
+}
+
+.active.toggler {
+    left: 170px;
+}
+
+.active.sidebar {
+    width: 220px;
+}
+
+.active.sidebar .para{
+    opacity: 1;
+}
+
+
+
+
+
+
+
+
+
+// script_navbar.js 
+
+const toggler = document.querySelector('.toggler')
+const sidebar = document.querySelector('.sidebar')
+
+const showFull = () => {
+    toggler.addEventListener('click', ()=> {
+        toggler.classList.toggle('active')
+        sidebar.classList.toggle('active')
+    })
+}
+
+showFull()
