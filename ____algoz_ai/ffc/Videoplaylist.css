@@ -65,6 +65,46 @@ body {
 	color: #444;
 }
 
+.buy-btn {
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #e5d70c;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.buy-btn:hover {
+    background-color: #ead748;
+}
+
+
+.nxt-btn {
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.nxt-btn:hover {
+    background-color: #4dba65;
+}
+
+.prv-btn {
+    margin: 20px;
+    padding: 10px 20px;
+    background-color: #dc881b;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.prv-btn:hover {
+    background-color: #f1bf5a;
+}
+
 @media (max-width:1200px) {
 	.container {
 		margin: 0;

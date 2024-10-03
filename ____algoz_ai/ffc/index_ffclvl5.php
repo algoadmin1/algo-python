@@ -1,17 +1,16 @@
 <?php
-session_start();       		   // vers 5.2
-$user_email="";                      
-$user_loc="";                      
+session_start();                                // vers 4.0
 if (!isset($_SESSION["user"])) {
    header("Location: ../login/login.php");
 }else{
 	$user_email=$_SESSION["user"];
 	$user_loc=$_SESSION["user_loc"];
 
-	$levelName= "Level 1: The Jab";
+	$levelName= "Level 5: The Slip";
 
 	$emailParts = explode('@', $user_email); // Split the string at '@'
-    $emailname = $emailParts[0];
+	$emailname = $emailParts[0];
+
 
     // $email1=$_SESSION["user"];
     // $numvisits1=$_SESSION["numvisits"];
@@ -34,9 +33,8 @@ if (!isset($_SESSION["user"])) {
     //     $gChart= 1;
     // }
 
- }
+}
 // require_once "./login/database.php";
-
 
 ?>
 <!DOCTYPE html>
@@ -60,44 +58,28 @@ if (!isset($_SESSION["user"])) {
 	<div class="container">
 		<div class="main-video-container">
 			<video src="https://res.cloudinary.com/www-avattireapp-com/video/upload/v1726453178/vid01-01a.mov" loop controls class="main-video"></video>
-			<!-- <h3 class="main-vid-title">Level 1: The Jab</h3> -->
-			<h3 class="main-vid-title"><?php echo $levelName. " - for ". $emailname; ?></h3>
-
+			<!-- <h3 class="main-vid-title">Level 2: Throw the Jab</h3> -->
+			<h3 class="main-vid-title"><?php echo $levelName; ?></h3>
 		</div>
 		<div class="video-list-container" id="videosList"></div>
 	</div>
 
  	<div style="text-align: center;">
-   	<button class="nxt-btn" id="nextBtn">   Next Level   </button>
-	</div>
-	<script>
-	    document.getElementById('nextBtn').addEventListener('click', function() {
-	        window.location.href = 'https://algoz.ai/ffc/index_ffclvl2.php';
-	    });
-	</script>
-
-
-
-
-<!-- 
-	<div style="text-align: center;">
    	    <button class="prv-btn" id="prevBtn">  Previous Level   </button>
    	    <button class="nxt-btn" id="nextBtn">   Next Level   </button>
 	</div>
 
 	<script>
 	    document.getElementById('prevBtn').addEventListener('click', function() {
-	        window.location.href = 'https://algoz.ai/ffc';
+	        window.location.href = 'https://algoz.ai/ffc/index_ffclvl4.php';
 	    });
 	    document.getElementById('nextBtn').addEventListener('click', function() {
-	        window.location.href = 'https://algoz.ai/ffc3';
+	        window.location.href = 'https://algoz.ai/ffc/index_ffclvl6.php';
 	    });
 	</script>
- -->
 
 
-
-	<script src="Videoplaylist.js"></script>
+	<script src="Videoplaylist_lvl5.js"></script>
 
 </body>
 </html>
