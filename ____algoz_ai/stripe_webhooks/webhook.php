@@ -6,6 +6,8 @@ require_once './secrets.php';
 require_once '../login/database.php';
 require_once '../login/sendemail.php';
 
+require_once '../login/productTable.php';
+
 
 function cleanJsonForMySQL($payload) {
   // Step 1: Remove any non-JSON prefix (e.g., "Stripe\Charge JSON:")
