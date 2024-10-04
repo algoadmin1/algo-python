@@ -1,0 +1,73 @@
+write a php function ReadRawCSV( $fnameIn, $fnameOut ) which takes two arguements $fnameIn, $fnameOut, where $fnameIn = a string of a comma separated value file i.e. 'myfile.csv', and $fnameOut, the file to be created. 
+it reads $fnameIn in this format:
+
+50,tp_50
+51,tp_51
+52,tp_52
+53,tp_53
+54,tp_54
+55,tp_55
+56,tp_56
+57,tp_57
+58,tp_58
+59,tp_59
+
+and outputs a file $fnameOut in the format below, with quotes and an extra comma, so it can be included as an array using require_once $fnameOut
+
+"50","tp_50",
+"51","tp_51",
+"52","tp_52",
+"53","tp_53",
+"54","tp_54",
+"55","tp_55",
+"56","tp_56",
+"57","tp_57",
+"58","tp_58",
+"59","tp_59",
+
+the file $fnameIn can be of arbitrary length.
+
+
+
+define a php array of strings $productsArray
+
+$productsArray = [
+    "tp_50",
+    "tp_51",
+    "tp_52",
+    "tp_53",
+    "tp_54",
+    "tp_55",
+    "tp_56",
+    "tp_57",
+    "tp_58",
+    "tp_59"
+];
+
+
+
+write a php function GetProductName( $productArray, $amt) where $productArray is in the format below $productTable, and $amt is a string i.e. "53". 
+if the $amt is in the left side of the array, then return the very next value in the array i.e. "tp_53". if the $amt string is not found in, then return 'nil'
+Here would be a sample call:  GetProductName( $productTable, "61" );
+
+$productTable = [
+"50","tp_50",
+"51","tp_51",
+"52","tp_52",
+"53","tp_53",
+"54","tp_54",
+"55","tp_55",
+"56","tp_56",
+"57","tp_57",
+"58","tp_58",
+"59","tp_59",
+"60","tp_60",
+"61","tp_61",
+"62","tp_62",
+"63","tp_63",
+"64","tp_64",
+"65","tp_65",
+"66","tp_66",
+"67","tp_67"
+];
+
