@@ -6,7 +6,7 @@ require_once './secrets.php';
 require_once '../login/database.php';
 require_once '../login/sendemail.php';
 
-require_once '../login/productTable.php';
+require_once '../login/productTableFunctions.php';
 
 
 function cleanJsonForMySQL($payload) {
