@@ -1,5 +1,4 @@
 <?php
-//                                                  vers 5.8
 // require_once '../vendor/autoload.php';
 require_once './stripe-php/init.php';
 require_once './secrets.php';
@@ -7,8 +6,8 @@ require_once './secrets.php';
 require_once '../login/database.php';
 require_once '../login/sendemail.php';
 
-// require_once '../login/productsTable.php';
 require_once '../login/productTableFunctions.php';
+
 
 function cleanJsonForMySQL($payload) {
   // Step 1: Remove any non-JSON prefix (e.g., "Stripe\Charge JSON:")
@@ -308,11 +307,6 @@ $levelCustomer = 10;
 $key0=RandomString( $levelCustomer );
 $argstr= $argstr. $key0. "|"  ;
 
-$amtstr = (string)$amt;
-$product0 = "nil";
-$product0 = GetProductName( $productTable, $amtstr );
-
-
 
 // $email00="roguequant1@gmail.com";  // uncomm for debug only, overrides user/stripe email
 $email00=$email0; 
@@ -324,12 +318,8 @@ $mysqlLogstrLite="nilLogLite";
 $insertQuery02 = "INSERT INTO ". $tblnameTrans ;  
 // $insertQuery4a = " ( transactionId, userInitTimestamp, phonenum, fullName, email   ,  stripeId,     payload,     project ,       countrycode,      region,    city  ,   zip )   VALUES ";      
 // $insertQuery4b = " ( NULL, CURRENT_TIMESTAMP,         '$phone0', '$name0',  '$email0' , '$id', '$paymentIntent',  '$projectName', '$country0',  '$state0' ,'$city0' , '$zip0') ";    
-// $insertQuery4a = " ( transactionId, userInitTimestamp, phonenum, fullName, email   ,  stripeId, payload,                stripeKey,   project ,       countrycode,      region,    city  ,   zip )   VALUES ";      
-// $insertQuery4b = " ( NULL, CURRENT_TIMESTAMP,         '$phone0', '$name0',  '$email0' , '$id', '$paymentIntentCleaned',  '$key0',   '$projectName', '$country0',  '$state0' ,'$city0' , '$zip0') ";    
-
-$insertQuery4a = " ( transactionId, userInitTimestamp, phonenum, fullName, email   ,  stripeId, payload,                stripeKey,   project ,       countrycode,      region,    city  ,   zip , product,    amt )   VALUES ";      
-$insertQuery4b = " ( NULL, CURRENT_TIMESTAMP,         '$phone0', '$name0',  '$email0' , '$id', '$paymentIntentCleaned',  '$key0',   '$projectName', '$country0',  '$state0' ,'$city0' , '$zip0', '$product0', '$amt' ) ";    
-
+$insertQuery4a = " ( transactionId, userInitTimestamp, phonenum, fullName, email   ,  stripeId, payload,                stripeKey,   project ,       countrycode,      region,    city  ,   zip )   VALUES ";      
+$insertQuery4b = " ( NULL, CURRENT_TIMESTAMP,         '$phone0', '$name0',  '$email0' , '$id', '$paymentIntentCleaned',  '$key0',   '$projectName', '$country0',  '$state0' ,'$city0' , '$zip0') ";    
 $insertQuery2 = $insertQuery02. $insertQuery4a. $insertQuery4b ;
 
 $argstr.=  "mysql:host=$servername;dbname=$dbname, $username, $happy1". "|". $insertQuery2. "|";
