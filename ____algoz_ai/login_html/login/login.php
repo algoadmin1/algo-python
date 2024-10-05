@@ -327,9 +327,6 @@ require_once "database.php";
                                         $stmt->bindParam(':email', $email08);
                                         $stmt->execute();
                                         $resultTransactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                
-
-                                        // Assign the number of items returned to $itemcount
                                         $itemcount = count($resultTransactions);
 
                                         // Iterate through each row and print key/value pairs
