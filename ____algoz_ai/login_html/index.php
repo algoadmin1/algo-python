@@ -10,6 +10,8 @@ if (!isset($_SESSION["user"])) {
     $user_loc=$_SESSION["user_loc"];
     $user_lastDateTime  = $_SESSION["user_lastDateTime"] ;
     $user_lastDay = $_SESSION["user_lastDay"]  ;
+
+    $user_productstr = $_SESSION["user_productstr"]  ;
                  
     // /Users/mac2021/Desktop/_dev/Projects/algo-python/____algoz_ai/login_html/login0/index.php
 
@@ -70,7 +72,8 @@ require_once "./login/database.php";
 
  <!-- Content to the right of the sidebar -->
         <div class="main-content">
-        <p>Welcome <?php echo $emailname; ?></p>
+         <!-- <p>Welcome <?php echo $emailname ; ?></p> -->
+        <p>Welcome <?php echo $emailname. " =". $user_productstr ; ?></p>
         </div>
 <!-- 
         <div class="main-content">

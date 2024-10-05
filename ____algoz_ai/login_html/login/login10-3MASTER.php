@@ -310,80 +310,7 @@ require_once "database.php";
                     // close sess & assign $_SESSION["user"] 
                     // if(   $projectMatch==1   &&  $passwordHashMatch==1   && $passwordMatch==1 ){
                         if(   $projectMatch==1     &&   $passwordMatch==1  /* &&  $passwordHashMatch==1 */ ){
-                                 
-                            
-                                        // get products
-                                        $msgprod =false;  // true = product msgs + debug
-
-                                        $tableTrans = "transactions";
-                                        $amt08 ="";
-                                        $product08="nil";
-                                        $email08=$email;            // frmo above
-                                        $productstr="";
-
-                                        $queryTransactions  = "SELECT * FROM ". $tableTrans. " WHERE email = :email";
-                                          
-                                        $stmt = $conn->prepare($queryTransactions);
-                                        $stmt->bindParam(':email', $email08);
-                                        $stmt->execute();
-                                        $resultTransactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                
-
-                                        // Assign the number of items returned to $itemcount
-                                        $itemcount = count($resultTransactions);
-
-                                        // Iterate through each row and print key/value pairs
-                                        // foreach ($resultTransactions as $row) {
-                                        //     foreach ($row as $key => $value) {
-                                        //         echo "Key: $key; Value: $value<br>";
-                                        //     }
-                                        // }
-
-                                        if($msgprod)   echo "<br />resultTransaction(CNT= $itemcount )==";
-                                        // print_r( $resultTransactions) ;
-                                       
-                                        // $productstr="nil|-1,";
-                                        $productstr="";
-                                        $k=0;
-                                        $id08 ="";
-                                        $product08="";
-                                        
-                                        foreach ($resultTransactions as $row) {
-                                            // print_r( $row ) ;
-                                            if($msgprod)  echo "<br /><br />";
-
-                                            // foreach ($resultTransactions as $key => $value) {
-                                            foreach ($row as $key => $value) {
-        
-
-
-                                                if(  $key!="payload" ) $value0=$value;
-                                                    else $value0="";  // exclude json pl
-
-                                                if($msgprod)  echo "row". $k. "[". $key. "]=". $value0. "|" ;
-                                                
-                                                if(  $key=="transactionId" )  $id08 = (string)$value;
-                                                if(  $key=="product" ){
-                                                     $product08= $value;
-                                                     $productstr.= $product08."|". $id08."|,";
-                                                     $id08 ="";
-                                                }
-
-                                              }//forea
-
-                                            $k++;
-                                        }//forea
-
-                                        if($msgprod)   echo "<br />productstr = ". $productstr ;
-
-// resultTransactions==0[transactionId]=11|1[userInitTimestamp]=2024-10-05 12:50:47|2[phonenum]=nil|3[fullName]=John Botti|4[password]=|5[email]=roguequant1@gmail.com|6[pwdhash]=|7[lastDateTime]=|8[lastDate]=|9[lastTime]=|10[lastDay]=|11[sysvars]=|12[stripeId]=py_3Q6XRXEJfZ5xbPiB1IOj3Mb1|13[payload]=|14[sysvarsinit]=|15[stripeKey]=6W2DskF4hQ|16[tradeRawId]=|17[numvisits]=|18[lat]=|19[lon]=|20[project]=algoz|21[country]=|22[countrycode]=US|23[region]=NV|24[regioncode]=|25[city]=Las Vegas|26[zip]=89119|27[tzone]=|28[isp]=|29[loc]=|30[amount]=0|31[product]=tp_FightingFFC_Champ|32[amt]=55|
-                                            // $productstr= $resultTransactions["productstr"];
-                                            
-
-
-
-                                        $conn = null;       // close DBase
-
+                                     $conn = null;
                                         session_start();
                                         $_SESSION["user"]  = $email ; 
                                         $_SESSION["userId"] = $userID0;    //   from indxmenu.php $userID0=$_SESSION["userId"];
@@ -393,11 +320,10 @@ require_once "database.php";
                                         
                                         $_SESSION["user_lastDateTime"] = $user_lastDateTime;
                                         $_SESSION["user_lastDay"] = $user_lastDay ;
+                 
 
-                                        $_SESSION["user_productstr"] = $productstr ;
-                           // note on these:  tp_AlgoInvestorNewsletter_3Month END DATE MUST BE STORED      
-
-                                        if($msgprod==false)   header("Location: ../index.php");
+                                        // header("Location: indexmenu.php");
+                                        header("Location: ../index.php");
                                         die();    
                    }
 
