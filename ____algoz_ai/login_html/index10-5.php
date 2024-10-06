@@ -1,7 +1,5 @@
 <?php
-require_once "./login/database.php";
-
-session_start();
+session_start();                                // vers 4.0
 if (!isset($_SESSION["user"])) {
    header("Location: ./login/login.php");
 }else{
@@ -13,21 +11,9 @@ if (!isset($_SESSION["user"])) {
     $user_lastDateTime  = $_SESSION["user_lastDateTime"] ;
     $user_lastDay = $_SESSION["user_lastDay"]  ;
 
-    // should really re-query the .transaction table
     $user_productstr = $_SESSION["user_productstr"]  ;
-                
+                 
     // /Users/mac2021/Desktop/_dev/Projects/algo-python/____algoz_ai/login_html/login0/index.php
-
-    $gChart= 0;
-    $gFFC= 0;
-
-    if(StringContains( "SaaSFintechTool_Level_3", $user_productstr ) >0){
-    // if($email1a=="roguequant1@gmail.com"){
-            $gChart= 1;
-    }
-    if(StringContains( "FightingFFC", $user_productstr ) >0){
-            $gFFC= 1;
-    }
 
     // $products=$_SESSION["products"];  // =="coin|newsletter|charts|ccc|"
     $emailParts = explode('@', $email1); // Split the string at '@'
@@ -36,10 +22,13 @@ if (!isset($_SESSION["user"])) {
         $emailname.= " from ". $user_loc. "!";
     }
     $email1a= strtolower($email1);
-    
+    $gChart= 0;
+    if($email1a=="roguequant1@gmail.com"){
+        $gChart= 1;
+    }
 
  }
-// require_once "./login/database.php";
+require_once "./login/database.php";
 /*
 
 <!-- 
@@ -173,7 +162,7 @@ if (!isset($_SESSION["user"])) {
             </li> -->
             
           
-<?php if ($gChart > 0): ?>
+<?php if ($gChart != 0): ?>
 
             <li class="items" id="chartBtn">
             <i class="fa-solid fa-line-chart"></i>
@@ -184,20 +173,7 @@ if (!isset($_SESSION["user"])) {
                     window.location.href = 'https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0';  
                 });
             </script>
-<?php endif; ?>
-      
 
-<?php if ($gChart == 0): ?>
-
-        <li class="items" id="chartBtn">
-        <i class="fa-solid fa-line-chart"></i>
-        <p class="para">Purchase Charts</p>
-        </li>
-        <script>
-            document.getElementById('chartBtn').addEventListener('click', function() {
-                window.location.href = 'https://buy.stripe.com/dR6aHwcvycMK09ydRh'; //  'https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0';  
-            });
-        </script>
 <?php endif; ?>
 
 
@@ -244,8 +220,7 @@ if (!isset($_SESSION["user"])) {
                 });
             </script>
 
-    
-<?php if ($gFFC > 0): ?>
+
             <li class="items" id="ffcBtn">
                 <i class="fa-solid fa-heart"></i>
                 <p class="para">Get Fit</p>
@@ -255,20 +230,6 @@ if (!isset($_SESSION["user"])) {
                     window.location.href = 'https://algoz.ai/ffc';  
                 });
             </script>
-<?php endif; ?>  
-
-<?php if ($gFFC == 0): ?>
-<!--  -->
-            <li class="items" id="ffcBtn">
-                <i class="fa-solid fa-heart"></i>
-                <p class="para">Purchase Fitness</p>
-            </li>
-            <script>
-                document.getElementById('ffcBtn').addEventListener('click', function() {
-                    window.location.href = 'https://buy.stripe.com/6oE16W2UY1422hGbJ2';  
-                });
-            </script>
-<?php endif; ?>
 
 
 
