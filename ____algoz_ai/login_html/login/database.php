@@ -1,5 +1,5 @@
 <?php
-//
+//                                  ver 6.5
 // Aug 28 2024
 //
 // Sep 8 2024 : to add another project:
@@ -64,6 +64,21 @@ function StringContains($instr, $masterstr) {
 }
 
 
+function AddDaysToDate($numdays, $udate) {
+    // Create a DateTime object from the provided date string in 'YYYY-MM-DD' format
+    $date = DateTime::createFromFormat('Y-m-d', $udate);
+
+    if (!$date) {
+        // If the date format is invalid, return false or handle the error as needed
+        return false;
+    }
+
+    // Add or subtract the number of days
+    $date->modify("$numdays days");
+
+    // Return the modified date in 'YYYY-MM-DD' format
+    return $date->format('Y-m-d');
+}
 
 
 

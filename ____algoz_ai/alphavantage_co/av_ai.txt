@@ -1,0 +1,922 @@
+// alphavantage.co premium
+//
+//Account Information
+Username: algoz
+
+Email: algoinvestorr@gmail.com
+
+Premium API Key: not provided
+
+Exchange agreement: not applicable
+
+Name: JOHN BOTTI
+
+Address: 6543 S LAS VEGAS BLVD
+
+City: LAS VEGAS
+
+State/Province: NEVADA
+
+Postal Code: 89119
+
+Country: USA
+
+
+
+Data Entitlements
+
+Email verified! Please proceed with the data entitlement process below.
+
+
+
+
+
+15-minute Delayed US Stock Market Data: Enabled
+
+To access 15-minute delayed US stock market data, please append entitlement=delayed to the data request. For example:
+https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&entitlement=delayed&apikey=91M7LB7MG3JHY129
+
+https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&entitlement=delayed&apikey=91M7LB7MG3JHY129
+
+https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&outputsize=full&entitlement=delayed&apikey=91M7LB7MG3JHY129
+
+💡Tip: you can also access 15-minute delayed technical indicators with similar URL configurations:
+https://www.alphavantage.co/query?function=SMA&symbol=IBM&interval=5min&time_period=10&series_type=close&entitlement=delayed&apikey=91M7LB7MG3JHY129
+
+
+Realtime US Stock Market Data: Enabled
+
+To access realtime US stock market data, please append entitlement=realtime to the data request. For example:
+https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=IBM&interval=5min&entitlement=realtime&apikey=91M7LB7MG3JHY129
+https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=AAPL&interval=1min&entitlement=realtime&apikey=91M7LB7MG3JHY129
+
+https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=IBM&entitlement=realtime&apikey=91M7LB7MG3JHY129
+
+https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&outputsize=full&entitlement=realtime&apikey=91M7LB7MG3JHY129
+
+💡Tip: you can also access realtime technical indicators with similar URL configurations:
+https://www.alphavantage.co/query?function=SMA&symbol=IBM&interval=5min&time_period=10&series_type=close&entitlement=realtime&apikey=91M7LB7MG3JHY129
+
+❗IMPORTANT: if your subscription plan is also eligible for realtime US options data, please set up your options data entitlements here.
+
+
+
+
+
+Alpha X Data Terms
+Realtime and 15-minute delayed US stock market data powered by NASDAQ Basic NLS Plus©
+
+"Alpha X Data" means the ability to view stock market data with the additional flexibility of Application Programming Interfaces (APIs). Your use of Alpha X Terminal and Alpha X Data shall be for personal display purposes only. Redistribution of data using Alpha X Data APIs is strictly prohibited. You may not distribute or display Alpha X data to any other person or entity. Misuse of Alpha X Data may cause you to be assessed fees and/or penalties from the NASDAQ Stock Exchange.
+
+You also certify that:
+
+❚ You are NOT using Alpha X Data as or on behalf of a corporation, firm, partnership, trust, investment advisor, regulatory body, securities exchange, or any other association.
+
+❚ You will NOT provide information accessed through Alpha X Data as part of any type of commercial activity that allows individuals or entities other than yourself to access information directly or indirectly even if the scope of such activity falls outside of the securities industry.
+
+Alpha Vantage implements strict protocols for maintaining individual-natured Alpha X Data access. Alpha Vantage reserves the right to suspend your Alpha X Data entitlements due to inaccurate/invalid user credentials, excess data usage, or other applicable patterns of non-compliance.
+
+If you need realtime or 15-minute delayed US stock market data beyond the personal usage terms above, please contact us for our business and enterprise data plans instead.
+
+
+
+
+// JB ai requests
+
+write a php function AddDaysToDate( $numdays, $udate ) which takes an integer $numdays, and a date string in unix format $udate (i.e. 'YYYY-MM-DD' ), and 
+returns a new date string in ''YYYY-MM-DD' format which is $udate plus $numdays. If $numdays is negative, then the returned date string should be a date before $udate
+
+
+// realtime quotes up to 140/min w/ new Key
+
+write php to echo " a string"; and then echo " b string"; but put a timer in between the two statements so 0.33 seconds delay occurs
+  usleep(330000);
+
+https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=AAPL&interval=1min&entitlement=realtime&apikey=91M7LB7MG3JHY129
+
+write php to enter a loop and get a json payload from a url $urlstring, and echo the returned json in pretty mode. 
+after getting the contents  should have a timer that 
+
+
+
+$stockslist = [
+"AAPL","AMZN","ADBE","AMD","NVDA","META","MSFT","NFLX","GS","VXX","SPY","QQQ","AAPL","p_10M"
+];  
+
+
+
+write php function GetJsonPayloadRT( $urlstring , $symbol, $mins ) to get a json payload from a url $urlstring in the format below, 
+and creates a string $ohlcv which contains the first record in the "Time Series (1min)": records in the following format:
+$ohlcv = <$symbol>,<$mins>,<date time from first record i.e. ="2024-10-07 09:23:00">,<open>,<high>,<low>,<close>,<volume>
+
+Using the sample json below, where $symbol='TSLA' and $mins='1min' , 
+the $ohlcv string would be set to "TSLA,2024-10-07 09:23:00,249.9760,250.0000,249.8267,249.9400,16937"
+
+the function would then write this string to a file $fname, where $fname = $symbol. '.txt';
+
+the function would then return  the $ohlcv string
+
+
+Sample Json from $urlstring:
+
+{
+  "Meta Data": {
+    "1. Information": "Intraday (1min) open, high, low, close prices and volume",
+    "2. Symbol": "TSLA",
+    "3. Last Refreshed": "2024-10-07 09:23:00",
+    "4. Interval": "1min",
+    "5. Output Size": "Compact",
+    "6. Time Zone": "US/Eastern"
+  },
+  "Time Series (1min)": {
+    "2024-10-07 09:23:00": {
+      "1. open": "249.9760",
+      "2. high": "250.0000",
+      "3. low": "249.8267",
+      "4. close": "249.9400",
+      "5. volume": "16937"
+    },
+    "2024-10-07 09:22:00": {
+      "1. open": "249.8975",
+      "2. high": "249.9794",
+      "3. low": "249.8600",
+      "4. close": "249.9400",
+      "5. volume": "2387"
+    },
+    "2024-10-07 09:21:00": {
+      "1. open": "249.8750",
+      "2. high": "249.9830",
+      "3. low": "249.8500",
+      "4. close": "249.8975",
+      "5. volume": "4465"
+    },
+    "2024-10-07 09:20:00": {
+      "1. open": "249.8400",
+      "2. high": "249.9800",
+      "3. low": "249.8000",
+      "4. close": "249.9000",
+      "5. volume": "1557"
+    },
+  }
+}
+
+// almost got it..
+AMZN,2024-10-07 10:19:00,181.2500,181.3197,181.2400,181.3015,35213
+{
+    "Meta Data": {
+        "1. Information": "Intraday (1min) open, high, low, close prices and volume",
+        "2. Symbol": "AMZN",
+        "3. Last Refreshed": "2024-10-07 10:20:00",
+        "4. Interval": "1min",
+        "5. Output Size": "Compact",
+        "6. Time Zone": "US/Eastern"
+    },
+    "Time Series (1min)": {
+        "2024-10-07 10:20:00": {
+            "1. open": "181.4950",
+            "2. high": "181.5050",
+            "3. low": "181.4228",
+            "4. close": "181.4800",
+            "5. volume": "16468"
+        },
+        "2024-10-07 10:19:00": {
+            "1. open": "181.2500",
+            "2. high": "181.5000",
+            "3. low": "181.2400",
+            "4. close": "181.4837",
+            "5. volume": "87488"
+        },
+        "2024-10-07 10:18:00": {
+            "1. open": "181.2940",
+            "2. high": "181.3500",
+            "3. low": "181.2300",
+            "4. close": "181.2500",
+            "5. volume": "96510"
+        },
+        "2024-10-07 10:17:00": {
+            "1. open": "181.2475",
+            "2. high": "181.3168",
+            "3. low": "181.1600",
+            "4. close": "181.3000",
+            "5. volume": "130474"
+        },
+
+
+
+
+
+
+
+
+//  json{
+    "Meta Data": {
+        "1. Information": "Intraday (1min) open, high, low, close prices and volume",
+        "2. Symbol": "AAPL",
+        "3. Last Refreshed": "2024-10-07 09:08:00",
+        "4. Interval": "1min",
+        "5. Output Size": "Compact",
+        "6. Time Zone": "US/Eastern"
+    },
+    "Time Series (1min)": {
+        "2024-10-07 09:08:00": {
+            "1. open": "224.8850",
+            "2. high": "224.9300",
+            "3. low": "224.8400",
+            "4. close": "224.9100",
+            "5. volume": "355"
+        },
+        "2024-10-07 09:07:00": {
+            "1. open": "224.8789",
+            "2. high": "224.9400",
+            "3. low": "224.8300",
+            "4. close": "224.8900",
+            "5. volume": "1335"
+        },
+        "2024-10-07 09:06:00": {
+            "1. open": "224.7100",
+            "2. high": "224.8800",
+            "3. low": "224.7100",
+            "4. close": "224.8800",
+            "5. volume": "1985"
+        },
+        "2024-10-07 09:05:00": {
+            "1. open": "224.6565",
+            "2. high": "224.7400",
+            "3. low": "224.6300",
+            "4. close": "224.7400",
+            "5. volume": "413"
+        },
+        "2024-10-07 09:04:00": {
+            "1. open": "224.5900",
+            "2. high": "224.6600",
+            "3. low": "224.5200",
+            "4. close": "224.6000",
+            "5. volume": "3203"
+        },
+        "2024-10-07 09:03:00": {
+            "1. open": "224.6200",
+            "2. high": "224.6600",
+            "3. low": "224.5000",
+            "4. close": "224.5200",
+            "5. volume": "112"
+        },
+        "2024-10-07 09:02:00": {
+            "1. open": "224.5500",
+            "2. high": "224.6500",
+            "3. low": "224.5100",
+            "4. close": "224.5100",
+            "5. volume": "1712"
+        },
+        "2024-10-07 09:01:00": {
+            "1. open": "224.6390",
+            "2. high": "224.6500",
+            "3. low": "224.5000",
+            "4. close": "224.6321",
+            "5. volume": "2346"
+        },
+        "2024-10-07 09:00:00": {
+            "1. open": "224.6950",
+            "2. high": "224.7600",
+            "3. low": "224.6100",
+            "4. close": "224.6300",
+            "5. volume": "1336"
+        },
+        "2024-10-07 08:59:00": {
+            "1. open": "224.7000",
+            "2. high": "224.7500",
+            "3. low": "224.6000",
+            "4. close": "224.6500",
+            "5. volume": "874"
+        },
+        "2024-10-07 08:58:00": {
+            "1. open": "224.6300",
+            "2. high": "224.7500",
+            "3. low": "224.6100",
+            "4. close": "224.6619",
+            "5. volume": "368"
+        },
+        "2024-10-07 08:57:00": {
+            "1. open": "224.6850",
+            "2. high": "224.7700",
+            "3. low": "224.6000",
+            "4. close": "224.6399",
+            "5. volume": "3754"
+        },
+        "2024-10-07 08:56:00": {
+            "1. open": "224.6500",
+            "2. high": "224.7700",
+            "3. low": "224.6400",
+            "4. close": "224.6400",
+            "5. volume": "219"
+        },
+        "2024-10-07 08:55:00": {
+            "1. open": "224.7850",
+            "2. high": "224.8200",
+            "3. low": "224.6900",
+            "4. close": "224.7400",
+            "5. volume": "1590"
+        },
+        "2024-10-07 08:54:00": {
+            "1. open": "224.7800",
+            "2. high": "224.8300",
+            "3. low": "224.7500",
+            "4. close": "224.7583",
+            "5. volume": "2679"
+        },
+        "2024-10-07 08:53:00": {
+            "1. open": "224.7900",
+            "2. high": "224.8300",
+            "3. low": "224.7700",
+            "4. close": "224.7900",
+            "5. volume": "751"
+        },
+        "2024-10-07 08:52:00": {
+            "1. open": "224.8300",
+            "2. high": "224.8300",
+            "3. low": "224.6400",
+            "4. close": "224.7900",
+            "5. volume": "1026"
+        },
+        "2024-10-07 08:51:00": {
+            "1. open": "224.9800",
+            "2. high": "224.9800",
+            "3. low": "224.8300",
+            "4. close": "224.8300",
+            "5. volume": "1157"
+        },
+        "2024-10-07 08:50:00": {
+            "1. open": "224.9300",
+            "2. high": "226.8000",
+            "3. low": "224.8900",
+            "4. close": "224.9200",
+            "5. volume": "176"
+        },
+        "2024-10-07 08:49:00": {
+            "1. open": "224.9900",
+            "2. high": "225.0000",
+            "3. low": "224.9200",
+            "4. close": "224.9500",
+            "5. volume": "1001"
+        },
+        "2024-10-07 08:48:00": {
+            "1. open": "224.9500",
+            "2. high": "225.0000",
+            "3. low": "224.9500",
+            "4. close": "224.9900",
+            "5. volume": "2078"
+        },
+        "2024-10-07 08:47:00": {
+            "1. open": "224.9500",
+            "2. high": "225.0000",
+            "3. low": "224.9500",
+            "4. close": "224.9500",
+            "5. volume": "2996"
+        },
+        "2024-10-07 08:46:00": {
+            "1. open": "224.9600",
+            "2. high": "224.9900",
+            "3. low": "224.9500",
+            "4. close": "224.9900",
+            "5. volume": "410"
+        },
+        "2024-10-07 08:45:00": {
+            "1. open": "224.8987",
+            "2. high": "224.9600",
+            "3. low": "224.8400",
+            "4. close": "224.9600",
+            "5. volume": "431"
+        },
+        "2024-10-07 08:44:00": {
+            "1. open": "224.9350",
+            "2. high": "224.9600",
+            "3. low": "224.8800",
+            "4. close": "224.9600",
+            "5. volume": "1472"
+        },
+        "2024-10-07 08:43:00": {
+            "1. open": "224.8500",
+            "2. high": "224.9700",
+            "3. low": "224.8500",
+            "4. close": "224.9490",
+            "5. volume": "1615"
+        },
+        "2024-10-07 08:42:00": {
+            "1. open": "224.7500",
+            "2. high": "224.8600",
+            "3. low": "224.7500",
+            "4. close": "224.8600",
+            "5. volume": "737"
+        },
+        "2024-10-07 08:41:00": {
+            "1. open": "224.7500",
+            "2. high": "224.7700",
+            "3. low": "224.7300",
+            "4. close": "224.7501",
+            "5. volume": "857"
+        },
+        "2024-10-07 08:40:00": {
+            "1. open": "224.7650",
+            "2. high": "224.7800",
+            "3. low": "224.7500",
+            "4. close": "224.7600",
+            "5. volume": "821"
+        },
+        "2024-10-07 08:39:00": {
+            "1. open": "224.7000",
+            "2. high": "224.7800",
+            "3. low": "224.6804",
+            "4. close": "224.7600",
+            "5. volume": "882"
+        },
+        "2024-10-07 08:38:00": {
+            "1. open": "224.6700",
+            "2. high": "224.7000",
+            "3. low": "224.5845",
+            "4. close": "224.7000",
+            "5. volume": "1017"
+        },
+        "2024-10-07 08:37:00": {
+            "1. open": "224.6900",
+            "2. high": "224.6900",
+            "3. low": "224.6250",
+            "4. close": "224.6250",
+            "5. volume": "253"
+        },
+        "2024-10-07 08:36:00": {
+            "1. open": "224.6150",
+            "2. high": "224.6900",
+            "3. low": "224.6000",
+            "4. close": "224.6800",
+            "5. volume": "416"
+        },
+        "2024-10-07 08:35:00": {
+            "1. open": "224.5501",
+            "2. high": "224.6900",
+            "3. low": "224.5501",
+            "4. close": "224.5600",
+            "5. volume": "349"
+        },
+        "2024-10-07 08:34:00": {
+            "1. open": "224.6700",
+            "2. high": "224.6900",
+            "3. low": "224.5514",
+            "4. close": "224.5514",
+            "5. volume": "2281"
+        },
+        "2024-10-07 08:33:00": {
+            "1. open": "224.4800",
+            "2. high": "224.6000",
+            "3. low": "224.4200",
+            "4. close": "224.5500",
+            "5. volume": "4007"
+        },
+        "2024-10-07 08:32:00": {
+            "1. open": "224.4300",
+            "2. high": "224.5400",
+            "3. low": "224.3300",
+            "4. close": "224.4150",
+            "5. volume": "126"
+        },
+        "2024-10-07 08:31:00": {
+            "1. open": "224.4500",
+            "2. high": "224.5400",
+            "3. low": "224.3000",
+            "4. close": "224.3300",
+            "5. volume": "287"
+        },
+        "2024-10-07 08:30:00": {
+            "1. open": "224.6400",
+            "2. high": "224.7200",
+            "3. low": "224.5000",
+            "4. close": "224.5200",
+            "5. volume": "6274"
+        },
+        "2024-10-07 08:29:00": {
+            "1. open": "224.7650",
+            "2. high": "224.7800",
+            "3. low": "224.6717",
+            "4. close": "224.7000",
+            "5. volume": "1172"
+        },
+        "2024-10-07 08:28:00": {
+            "1. open": "224.7800",
+            "2. high": "224.7900",
+            "3. low": "224.7000",
+            "4. close": "224.7425",
+            "5. volume": "901"
+        },
+        "2024-10-07 08:27:00": {
+            "1. open": "224.8400",
+            "2. high": "224.8400",
+            "3. low": "224.6800",
+            "4. close": "224.7073",
+            "5. volume": "2396"
+        },
+        "2024-10-07 08:26:00": {
+            "1. open": "224.8200",
+            "2. high": "224.8900",
+            "3. low": "224.6900",
+            "4. close": "224.7650",
+            "5. volume": "3018"
+        },
+        "2024-10-07 08:25:00": {
+            "1. open": "224.8900",
+            "2. high": "224.9000",
+            "3. low": "224.8000",
+            "4. close": "224.8500",
+            "5. volume": "1834"
+        },
+        "2024-10-07 08:24:00": {
+            "1. open": "224.8928",
+            "2. high": "224.9000",
+            "3. low": "224.8000",
+            "4. close": "224.8500",
+            "5. volume": "8115"
+        },
+        "2024-10-07 08:23:00": {
+            "1. open": "224.7200",
+            "2. high": "224.9000",
+            "3. low": "224.7200",
+            "4. close": "224.8500",
+            "5. volume": "4112"
+        },
+        "2024-10-07 08:22:00": {
+            "1. open": "224.6000",
+            "2. high": "224.7400",
+            "3. low": "224.5800",
+            "4. close": "224.7200",
+            "5. volume": "6087"
+        },
+        "2024-10-07 08:21:00": {
+            "1. open": "224.6800",
+            "2. high": "224.6900",
+            "3. low": "224.5985",
+            "4. close": "224.6300",
+            "5. volume": "4482"
+        },
+        "2024-10-07 08:20:00": {
+            "1. open": "224.5750",
+            "2. high": "224.7200",
+            "3. low": "224.5750",
+            "4. close": "224.6550",
+            "5. volume": "1815"
+        },
+        "2024-10-07 08:19:00": {
+            "1. open": "224.5700",
+            "2. high": "224.6499",
+            "3. low": "224.4800",
+            "4. close": "224.5750",
+            "5. volume": "642"
+        },
+        "2024-10-07 08:18:00": {
+            "1. open": "224.5700",
+            "2. high": "224.6400",
+            "3. low": "224.4900",
+            "4. close": "224.5700",
+            "5. volume": "782"
+        },
+        "2024-10-07 08:17:00": {
+            "1. open": "224.4650",
+            "2. high": "224.6000",
+            "3. low": "224.4650",
+            "4. close": "224.6000",
+            "5. volume": "2005"
+        },
+        "2024-10-07 08:16:00": {
+            "1. open": "224.3000",
+            "2. high": "224.4450",
+            "3. low": "224.3000",
+            "4. close": "224.4400",
+            "5. volume": "939"
+        },
+        "2024-10-07 08:15:00": {
+            "1. open": "224.3450",
+            "2. high": "224.3900",
+            "3. low": "224.3200",
+            "4. close": "224.3800",
+            "5. volume": "1213"
+        },
+        "2024-10-07 08:14:00": {
+            "1. open": "224.3107",
+            "2. high": "224.3900",
+            "3. low": "224.2600",
+            "4. close": "224.3450",
+            "5. volume": "694"
+        },
+        "2024-10-07 08:13:00": {
+            "1. open": "224.3500",
+            "2. high": "224.4800",
+            "3. low": "224.3000",
+            "4. close": "224.3000",
+            "5. volume": "3415"
+        },
+        "2024-10-07 08:12:00": {
+            "1. open": "224.4550",
+            "2. high": "224.4900",
+            "3. low": "224.3500",
+            "4. close": "224.4800",
+            "5. volume": "1731"
+        },
+        "2024-10-07 08:11:00": {
+            "1. open": "224.3500",
+            "2. high": "224.4900",
+            "3. low": "224.3500",
+            "4. close": "224.4860",
+            "5. volume": "1473"
+        },
+        "2024-10-07 08:10:00": {
+            "1. open": "224.3500",
+            "2. high": "224.3650",
+            "3. low": "224.3000",
+            "4. close": "224.3500",
+            "5. volume": "364"
+        },
+        "2024-10-07 08:09:00": {
+            "1. open": "224.3000",
+            "2. high": "224.3515",
+            "3. low": "224.3000",
+            "4. close": "224.3200",
+            "5. volume": "815"
+        },
+        "2024-10-07 08:08:00": {
+            "1. open": "224.3000",
+            "2. high": "224.3153",
+            "3. low": "224.2100",
+            "4. close": "224.3000",
+            "5. volume": "589"
+        },
+        "2024-10-07 08:07:00": {
+            "1. open": "224.2997",
+            "2. high": "224.3096",
+            "3. low": "224.2100",
+            "4. close": "224.3096",
+            "5. volume": "680"
+        },
+        "2024-10-07 08:06:00": {
+            "1. open": "224.2750",
+            "2. high": "226.2330",
+            "3. low": "224.1500",
+            "4. close": "224.2350",
+            "5. volume": "1993"
+        },
+        "2024-10-07 08:05:00": {
+            "1. open": "224.2000",
+            "2. high": "224.2400",
+            "3. low": "224.1850",
+            "4. close": "224.2300",
+            "5. volume": "911"
+        },
+        "2024-10-07 08:04:00": {
+            "1. open": "224.1200",
+            "2. high": "224.2000",
+            "3. low": "224.1000",
+            "4. close": "224.1800",
+            "5. volume": "114"
+        },
+        "2024-10-07 08:03:00": {
+            "1. open": "224.0000",
+            "2. high": "224.2100",
+            "3. low": "224.0000",
+            "4. close": "224.1200",
+            "5. volume": "289"
+        },
+        "2024-10-07 08:02:00": {
+            "1. open": "224.1600",
+            "2. high": "226.8000",
+            "3. low": "224.0000",
+            "4. close": "224.1150",
+            "5. volume": "980"
+        },
+        "2024-10-07 08:01:00": {
+            "1. open": "224.2400",
+            "2. high": "225.8900",
+            "3. low": "223.6750",
+            "4. close": "224.2000",
+            "5. volume": "1115"
+        },
+        "2024-10-07 08:00:00": {
+            "1. open": "224.1462",
+            "2. high": "226.8000",
+            "3. low": "223.2980",
+            "4. close": "224.2400",
+            "5. volume": "51093"
+        },
+        "2024-10-07 07:59:00": {
+            "1. open": "224.1900",
+            "2. high": "224.1900",
+            "3. low": "224.1700",
+            "4. close": "224.1700",
+            "5. volume": "150"
+        },
+        "2024-10-07 07:58:00": {
+            "1. open": "224.2000",
+            "2. high": "224.2000",
+            "3. low": "224.2000",
+            "4. close": "224.2000",
+            "5. volume": "1"
+        },
+        "2024-10-07 07:57:00": {
+            "1. open": "224.2000",
+            "2. high": "224.2000",
+            "3. low": "224.2000",
+            "4. close": "224.2000",
+            "5. volume": "20"
+        },
+        "2024-10-07 07:55:00": {
+            "1. open": "224.2600",
+            "2. high": "224.2600",
+            "3. low": "224.2600",
+            "4. close": "224.2600",
+            "5. volume": "3"
+        },
+        "2024-10-07 07:54:00": {
+            "1. open": "224.2000",
+            "2. high": "224.2600",
+            "3. low": "224.2000",
+            "4. close": "224.2600",
+            "5. volume": "1439"
+        },
+        "2024-10-07 07:53:00": {
+            "1. open": "224.2200",
+            "2. high": "224.2600",
+            "3. low": "224.2100",
+            "4. close": "224.2600",
+            "5. volume": "1100"
+        },
+        "2024-10-07 07:52:00": {
+            "1. open": "224.2500",
+            "2. high": "224.2600",
+            "3. low": "224.2500",
+            "4. close": "224.2600",
+            "5. volume": "34"
+        },
+        "2024-10-07 07:51:00": {
+            "1. open": "224.2800",
+            "2. high": "224.2800",
+            "3. low": "224.2800",
+            "4. close": "224.2800",
+            "5. volume": "100"
+        },
+        "2024-10-07 07:49:00": {
+            "1. open": "224.1900",
+            "2. high": "224.3400",
+            "3. low": "224.1900",
+            "4. close": "224.3100",
+            "5. volume": "806"
+        },
+        "2024-10-07 07:48:00": {
+            "1. open": "224.1900",
+            "2. high": "224.2000",
+            "3. low": "224.1500",
+            "4. close": "224.1500",
+            "5. volume": "442"
+        },
+        "2024-10-07 07:47:00": {
+            "1. open": "224.1300",
+            "2. high": "224.1300",
+            "3. low": "224.1300",
+            "4. close": "224.1300",
+            "5. volume": "10"
+        },
+        "2024-10-07 07:46:00": {
+            "1. open": "224.1300",
+            "2. high": "224.1300",
+            "3. low": "224.1300",
+            "4. close": "224.1300",
+            "5. volume": "40"
+        },
+        "2024-10-07 07:45:00": {
+            "1. open": "224.0500",
+            "2. high": "224.2000",
+            "3. low": "224.0500",
+            "4. close": "224.2000",
+            "5. volume": "12"
+        },
+        "2024-10-07 07:44:00": {
+            "1. open": "224.2000",
+            "2. high": "224.2400",
+            "3. low": "224.1600",
+            "4. close": "224.2100",
+            "5. volume": "316"
+        },
+        "2024-10-07 07:43:00": {
+            "1. open": "224.1500",
+            "2. high": "224.1700",
+            "3. low": "224.1500",
+            "4. close": "224.1700",
+            "5. volume": "249"
+        },
+        "2024-10-07 07:42:00": {
+            "1. open": "224.1400",
+            "2. high": "224.1500",
+            "3. low": "224.1400",
+            "4. close": "224.1500",
+            "5. volume": "14"
+        },
+        "2024-10-07 07:41:00": {
+            "1. open": "224.0900",
+            "2. high": "224.0900",
+            "3. low": "224.0400",
+            "4. close": "224.0400",
+            "5. volume": "36"
+        },
+        "2024-10-07 07:39:00": {
+            "1. open": "224.0600",
+            "2. high": "224.0600",
+            "3. low": "224.0000",
+            "4. close": "224.0000",
+            "5. volume": "101"
+        },
+        "2024-10-07 07:38:00": {
+            "1. open": "224.0700",
+            "2. high": "224.0700",
+            "3. low": "224.0700",
+            "4. close": "224.0700",
+            "5. volume": "10"
+        },
+        "2024-10-07 07:37:00": {
+            "1. open": "223.9900",
+            "2. high": "224.0600",
+            "3. low": "223.9900",
+            "4. close": "224.0600",
+            "5. volume": "8"
+        },
+        "2024-10-07 07:36:00": {
+            "1. open": "224.0700",
+            "2. high": "224.0800",
+            "3. low": "223.9400",
+            "4. close": "223.9400",
+            "5. volume": "364"
+        },
+        "2024-10-07 07:35:00": {
+            "1. open": "223.9300",
+            "2. high": "224.0100",
+            "3. low": "223.9300",
+            "4. close": "224.0100",
+            "5. volume": "694"
+        },
+        "2024-10-07 07:33:00": {
+            "1. open": "223.8900",
+            "2. high": "223.9500",
+            "3. low": "223.8500",
+            "4. close": "223.9500",
+            "5. volume": "530"
+        },
+        "2024-10-07 07:32:00": {
+            "1. open": "223.8900",
+            "2. high": "223.9000",
+            "3. low": "223.8900",
+            "4. close": "223.9000",
+            "5. volume": "146"
+        },
+        "2024-10-07 07:31:00": {
+            "1. open": "223.8600",
+            "2. high": "223.8600",
+            "3. low": "223.8600",
+            "4. close": "223.8600",
+            "5. volume": "20"
+        },
+        "2024-10-07 07:30:00": {
+            "1. open": "223.9300",
+            "2. high": "223.9300",
+            "3. low": "223.9000",
+            "4. close": "223.9100",
+            "5. volume": "119"
+        },
+        "2024-10-07 07:29:00": {
+            "1. open": "223.9500",
+            "2. high": "223.9500",
+            "3. low": "223.9000",
+            "4. close": "223.9300",
+            "5. volume": "289"
+        },
+        "2024-10-07 07:28:00": {
+            "1. open": "223.9900",
+            "2. high": "223.9900",
+            "3. low": "223.9500",
+            "4. close": "223.9500",
+            "5. volume": "109"
+        },
+        "2024-10-07 07:27:00": {
+            "1. open": "223.9500",
+            "2. high": "224.0000",
+            "3. low": "223.9400",
+            "4. close": "224.0000",
+            "5. volume": "597"
+        },
+        "2024-10-07 07:26:00": {
+            "1. open": "223.9500",
+            "2. high": "223.9500",
+            "3. low": "223.9500",
+            "4. close": "223.9500",
+            "5. volume": "100"
+        },
+        "2024-10-07 07:24:00": {
+            "1. open": "223.9200",
+            "2. high": "223.9300",
+            "3. low": "223.9200",
+            "4. close": "223.9300",
+            "5. volume": "42"
+        }
+    }
+}

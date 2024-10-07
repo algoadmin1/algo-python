@@ -14,6 +14,8 @@ if (!isset($_SESSION["user"])) {
     $user_lastDay = $_SESSION["user_lastDay"]  ;
 
     // should really re-query the .transaction table
+//  $user_productstrNew = CheckForNewProducts( );
+
     $user_productstr = $_SESSION["user_productstr"]  ;
                 
     // /Users/mac2021/Desktop/_dev/Projects/algo-python/____algoz_ai/login_html/login0/index.php
