@@ -7,6 +7,7 @@
     --grey: #eee;
     --dark-grey: #AAAAAA;
     --dark: #363949;
+    --dark2:rgb(38, 82, 170)9;
     --danger: #D32F2F;
 	--light-danger: #FECDD3;
     --warning: #FBC02D;
@@ -413,11 +414,11 @@ body{
 .content main .insights li .info h3{
     font-size: 24px;
     font-weight: 600;
-    color: var(--dark);
+    color: var(--dark2);
 }
 
 .content main .insights li .info p{
-    color: var(--dark);
+    color: var(--dark2);
 }
 
 .content main .bottom-data{
