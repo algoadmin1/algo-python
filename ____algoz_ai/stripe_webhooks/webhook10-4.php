@@ -1,5 +1,5 @@
 <?php
-//                                                  vers 6.8
+//                                                  vers 5.8
 // require_once '../vendor/autoload.php';
 require_once './stripe-php/init.php';
 require_once './secrets.php';
@@ -310,37 +310,9 @@ $argstr= $argstr. $key0. "|"  ;
 
 $amtstr = (string)$amt;
 $product0 = "nil";
-$product0 = GetProductName( $productTable, $amtstr );    // ie 'Fintech_Saas_090days'
+$product0 = GetProductName( $productTable, $amtstr );
 
 
-
-// new
-$daysTilExpiration = -1;
-$dateOfExpiration  = '9999-12-31';
-
-$rightmostChars = substr($product0, -4);
-
-if($rightmostChars=='days'){                      // ie Fintech_Saas_090days  ==> 'days'
-  $rightstr7      = substr($product0, -7);        // ie Fintech_Saas_090days  ==> '090days'
-  $leftmostChars  = substr($rightstr7, 0, 3);      // ie '090days'  ==> '090'
-  
-  $daysTilExpiration = (int)$leftmostChars + 1;       //  '090days'  ==> 90  ==> 91 give 'em an extra day
-  $todaysDate0 = date('Y-m-d');                     // YYYY-MM-DD format
-
-  $dateOfExpiration =  AddDaysToDate( $daysTilExpiration, $todaysDate0  );  // get expiry date
-
-}else{
-  $daysTilExpiration = -1;        // reset it 
-  $dateOfExpiration  = '9999-12-31';
-  // days til expiration = none == -1
-}
-
-// here code must have  $dateOfExpiration set...
-
-//  HERE WE MUST SEND email LINK TO CORRECT PRODUCT !!!
-
-
-// expiration
 
 // $email00="roguequant1@gmail.com";  // uncomm for debug only, overrides user/stripe email
 $email00=$email0; 
@@ -355,8 +327,8 @@ $insertQuery02 = "INSERT INTO ". $tblnameTrans ;
 // $insertQuery4a = " ( transactionId, userInitTimestamp, phonenum, fullName, email   ,  stripeId, payload,                stripeKey,   project ,       countrycode,      region,    city  ,   zip )   VALUES ";      
 // $insertQuery4b = " ( NULL, CURRENT_TIMESTAMP,         '$phone0', '$name0',  '$email0' , '$id', '$paymentIntentCleaned',  '$key0',   '$projectName', '$country0',  '$state0' ,'$city0' , '$zip0') ";    
 
-$insertQuery4a = " ( transactionId, userInitTimestamp, phonenum, fullName, email   ,  stripeId, payload,                stripeKey,   project ,       countrycode,      region,    city  ,   zip , product,    amt ,   expiration  )   VALUES ";      
-$insertQuery4b = " ( NULL, CURRENT_TIMESTAMP,         '$phone0', '$name0',  '$email0' , '$id', '$paymentIntentCleaned',  '$key0',   '$projectName', '$country0',  '$state0' ,'$city0' , '$zip0', '$product0', '$amt' , '$dateOfExpiration' ) ";    
+$insertQuery4a = " ( transactionId, userInitTimestamp, phonenum, fullName, email   ,  stripeId, payload,                stripeKey,   project ,       countrycode,      region,    city  ,   zip , product,    amt )   VALUES ";      
+$insertQuery4b = " ( NULL, CURRENT_TIMESTAMP,         '$phone0', '$name0',  '$email0' , '$id', '$paymentIntentCleaned',  '$key0',   '$projectName', '$country0',  '$state0' ,'$city0' , '$zip0', '$product0', '$amt' ) ";    
 
 $insertQuery2 = $insertQuery02. $insertQuery4a. $insertQuery4b ;
 

@@ -58,6 +58,7 @@ $password_len_min=5;
 
 
  // ###################################### Functions
+ 
 function StringContains($instr, $masterstr) {
     // Use substr_count to count occurrences of $instr in $masterstr
     return substr_count($masterstr, $instr);
