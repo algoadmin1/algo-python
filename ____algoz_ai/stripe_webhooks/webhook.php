@@ -1,5 +1,5 @@
 <?php
-//                                                  vers 6.8
+//                                                  vers 6.10
 // require_once '../vendor/autoload.php';
 require_once './stripe-php/init.php';
 require_once './secrets.php';
@@ -122,11 +122,20 @@ function SendAndHandleIntroEmail( $email1 , $key0, $recpt ){
   global $fromEmail, $webName ;
 
   $emailName =  RemoveAt($email1);
-  $linkIntro ="https://itraderpro.co/candlesticks.php?sym=nvda&uname=". $emailName. "&email=". $email1 ."&key=". $key0 ;  //8a2b18a0";
+  $linkIntro0 ="https://itraderpro.co/candlesticks.php?sym=nvda&uname=". $emailName. "&email=". $email1 ."&key=". $key0 ;  //8a2b18a0";
+  $linkIntro="https://algoz.ai";
+
+  $productStrUser="";
+  // $productStrUser="SaaS";
 
   $subject="WELCOME to ". $webName;  // "algoz.ai ";
   // $message="Please click the link to access your product: ".  $linkResetPwd."?em=".$email1 ;
-  $message="Please click the link to access your product: ".  $linkIntro."?em=". $email1 . "   \n\nHere is your receipt: ". $recpt;
+  $message0="Please click the link to access your product: ".  $linkIntro0."?em=". $email1 . "   Here is your receipt: ". $recpt;
+
+  $message="Login/Register here: ".  $linkIntro. " with your $email1 to accesss your product $productStrUser.   *** THANK YOU !!! ***  ". " Here is your receipt: ". $recpt;
+  
+  
+  
   $from= $fromEmail ;   // $from="algoinvestorr@gmail.com";
   $ccemail0 = "roguequant1@gmail.com";
   // $emailSuccess = SendEmailToUser($email1, $subject, $message, $from);
