@@ -1,5 +1,5 @@
 <?php
-//                                          ver 7.01
+// ver 3.3
 session_start();
 if (isset($_SESSION["user"])) {
    header("Location: index.php");
@@ -320,7 +320,6 @@ require_once "database.php";
                                         $product08="nil";
                                         $email08=$email;            // frmo above
                                         $productstr="";
-                                        $expiration08="";
 
                                         $queryTransactions  = "SELECT * FROM ". $tableTrans. " WHERE email = :email";
                                           
@@ -343,11 +342,11 @@ require_once "database.php";
                                         if($msgprod)   echo "<br />resultTransaction(CNT= $itemcount )==";
                                         // print_r( $resultTransactions) ;
                                        
+                                        // $productstr="nil|-1,";
                                         $productstr="";
                                         $k=0;
                                         $id08 ="";
                                         $product08="";
-                                        $expiration08="";
                                         
                                         foreach ($resultTransactions as $row) {
                                             // print_r( $row ) ;
@@ -363,44 +362,12 @@ require_once "database.php";
 
                                                 if($msgprod)  echo "row". $k. "[". $key. "]=". $value0. "|" ;
                                                 
-                                                // in the array returned from mysql, the order is transactionId, product, expiration
                                                 if(  $key=="transactionId" )  $id08 = (string)$value;
-
-                                        //NEW
-                                            if(  $key=="product" )        $product08= $value;
-                                            if(  $key=="amt" )            $amt08=     $value;
-                                            if(  $key=="expiration" ){
-                                                    $expiration08= $value;   // ie YYYY-MM-DD
-                                                    // if(strlen($expiration08!=10)) $expiration08="9999-12-31";     // if bad format expiry= never
-                                                    // $productstr.= $product08."|". $expiration08."|". $id08."|,";
-                                                    $productstr.= $product08."|". $expiration08."|". $amt08. "|". $id08."|,";
-                                                    // clear id & expiry vars
-                                                    $id08 ="";
-                                                    $amt08 ="";
-                                                    $expiration08 ="";
+                                                if(  $key=="product" ){
+                                                     $product08= $value;
+                                                     $productstr.= $product08."|". $id08."|,";
+                                                     $id08 ="";
                                                 }
-/*
-
-new format <productName><expiryDate><amt><transactions.id>
-=tp_FightingFFC_Amateur||53|12|,tp_SaaSFintechTool_Level_3||63|13|,tp_SaaSFintechTool_Pivots_090days|2025-01-07|61|14|,
-tp_SaaSFintechTool_Pivots_365days|2025-10-09|63|15|,tp_FightingFFC_Beginner|9999-12-31|53|16|,tp_AlgoInvestorNewsletter_090days|2025-01-07|58|17|,
-tp_Cashflow_Business|9999-12-31|57|18|,tp_SaaSFintechTool_Pivots_365days|2025-10-09|63|19|,
-
-
-
-Welcome avattire.inc from Las Vegas Nevada United States 89106! 
-=tp_SaaSFintechTool_Level_0||8|,tp_FightingFFC_Amateur||9|,tp_AlgoInvestorNewsletter_3Month||10|,tp_FightingFFC_Amateur||12|,tp_SaaSFintechTool_Level_3||13|,
-
-tp_SaaSFintechTool_Pivots_090days|2025-01-07|14|,tp_SaaSFintechTool_Pivots_365days|2025-10-09|15|,
-tp_FightingFFC_Beginner|9999-12-31|16|,tp_AlgoInvestorNewsletter_090days|2025-01-07|17|,
-tp_Cashflow_Business|9999-12-31|18|,tp_SaaSFintechTool_Pivots_365days|2025-10-09|19|,
-
-
-*/
-
-
-                                        //NEW
-
 
                                               }//forea
 
@@ -412,6 +379,8 @@ tp_Cashflow_Business|9999-12-31|18|,tp_SaaSFintechTool_Pivots_365days|2025-10-09
 // resultTransactions==0[transactionId]=11|1[userInitTimestamp]=2024-10-05 12:50:47|2[phonenum]=nil|3[fullName]=John Botti|4[password]=|5[email]=roguequant1@gmail.com|6[pwdhash]=|7[lastDateTime]=|8[lastDate]=|9[lastTime]=|10[lastDay]=|11[sysvars]=|12[stripeId]=py_3Q6XRXEJfZ5xbPiB1IOj3Mb1|13[payload]=|14[sysvarsinit]=|15[stripeKey]=6W2DskF4hQ|16[tradeRawId]=|17[numvisits]=|18[lat]=|19[lon]=|20[project]=algoz|21[country]=|22[countrycode]=US|23[region]=NV|24[regioncode]=|25[city]=Las Vegas|26[zip]=89119|27[tzone]=|28[isp]=|29[loc]=|30[amount]=0|31[product]=tp_FightingFFC_Champ|32[amt]=55|
                                             // $productstr= $resultTransactions["productstr"];
                                             
+
+
 
                                         $conn = null;       // close DBase
 
@@ -425,11 +394,6 @@ tp_Cashflow_Business|9999-12-31|18|,tp_SaaSFintechTool_Pivots_365days|2025-10-09
                                         $_SESSION["user_lastDateTime"] = $user_lastDateTime;
                                         $_SESSION["user_lastDay"] = $user_lastDay ;
 
-                            //NEW
-                            //
-                            //      THIS SHOULD BE  CONSTRUCTED  at login time so everything funnels through login.php,
-                            //              where this $_SESSION["user_productstr"] = BuildSessionProducts(), located in database.php
-                            //
                                         $_SESSION["user_productstr"] = $productstr ;
                            // note on these:  tp_AlgoInvestorNewsletter_3Month END DATE MUST BE STORED      
 

@@ -1,5 +1,5 @@
 <?php
-//                                  ver 6.5
+//                                  ver 6.92
 // Aug 28 2024
 //
 // Sep 8 2024 : to add another project:
@@ -63,7 +63,10 @@ function StringContains($instr, $masterstr) {
     // Use substr_count to count occurrences of $instr in $masterstr
     return substr_count($masterstr, $instr);
 }
-
+function RemoveChars($str, $char) {
+    // Use str_replace to remove all occurrences of $char from $str
+    return str_replace($char, '', $str);
+}
 
 function AddDaysToDate($numdays, $udate) {
     // Create a DateTime object from the provided date string in 'YYYY-MM-DD' format
@@ -81,6 +84,27 @@ function AddDaysToDate($numdays, $udate) {
     return $date->format('Y-m-d');
 }
 
+// returns -1 if A<B, 0 A==B, +1 if A>B
+function CompareDates( $udateA, $udateB ) : int {
+    $retcode=-99;
+    if( strlen($udateA)!=10 || strlen($udateB)!=10  ){  // check for udate format YYYY-MM-DD , len=10
+            return($retcode);  // error code -99
+    }
+    $udateA0 =  RemoveChars(  $udateA , '-' );       //  YYYY-MM-DD   ==> YYYYMMDD ie 20241009 an int
+    $udateB0 =  RemoveChars(  $udateB , '-' );
+    
+    $a= (int)$udateA0 ;
+    $b= (int)$udateB0 ;
+    
+    $retcode=0;
+    if($a==$b)  return($retcode);
+
+    $retcode=1;  // a!=b, assume b>a  ret +1
+    if($a < $b)  $retcode = -1;
+
+    return($retcode);
+
+}
 
 
 
