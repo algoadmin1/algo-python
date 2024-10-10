@@ -1,5 +1,5 @@
 <?php
-//                                                  ver  9.8
+//                                                  ver  10.3
 date_default_timezone_set('America/New_York');
 require_once '../login/events.php';
 require_once '../login/database.php';
@@ -26,6 +26,19 @@ $logout0= "https://algoz.ai/login/logout.php";
 $j=0;
 
 
+// Get the current date and time
+$now = new DateTime();
+$prettyDateTime = $now->format('D M jS g:ia');
+$prettyDateTime.= " EDT";
+// Example output: Thurs Oct 10th 1:49pm
+// echo $prettyDateTime;
+
+
+// Format the date and time as 'D M jS g:ia'
+$todays_udate  = date('Y-m-d');  // 'YYYY-MM-DD'
+
+
+
 
 
 // https://algoz.ai/products.pdf
@@ -50,7 +63,21 @@ function PrettyDate($udate) {
     return $date->format('M jS');
 }
 
+function prettyOrNot( $test_udate ){
+        global $todays_udate;
 
+        $green      = "completed";
+        $red        = "not-completed";
+        $assume     = $green;
+
+        // if(strlen($test_udate!=10))  return($assume); 
+
+        if( $todays_udate  == $test_udate )   $assume = $red;
+
+        return($assume);
+
+
+}
 
 
 
@@ -205,8 +232,8 @@ if (isset($eventsTable[0])) {
             </a>
              -->
              <div class="info">
-                <p>Hey, <b>Rogue</b></p>
-                <small class="text-muted">Creator</small>
+                <p><b>Rogue</b></p>
+                <small class="text-muted">[ Creator ]</small>
             </div>
             <a href="#" class="profile">
                 <img src="images/logo_d2.png">
@@ -218,7 +245,9 @@ if (isset($eventsTable[0])) {
         <main>
             <div class="header">
                 <div class="left">
-                    <h1>Your Dashboard</h1>
+                    <!-- <h1>Your Dashboard</h1> -->
+                    <h1><?php echo $prettyDateTime;  ?></h1>
+
 
 <!--                     
                     <ul class="breadcrumb">
@@ -342,7 +371,9 @@ if (isset($eventsTable[0])) {
                     <ul class="task-list">
 
                     <?php  $j=0;  if (isset($eventsTable[$j])):  ?>
-                        <li class="completed">
+                       
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
                    <!-- <li class="not-completed"> -->
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
@@ -354,7 +385,8 @@ if (isset($eventsTable[0])) {
 
 
                     <?php $j+=2; if (isset($eventsTable[$j])): ?>
-                            <li class="completed">
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                            <!-- <li class="completed"> -->
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
                                 <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
@@ -364,7 +396,8 @@ if (isset($eventsTable[0])) {
 
 
                     <?php $j+=2; if (isset($eventsTable[$j])): ?>
-                        <li class="completed">
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
                                 <p> <?php echo  PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
@@ -374,7 +407,8 @@ if (isset($eventsTable[0])) {
 
 
                     <?php $j+=2; if (isset($eventsTable[$j])): ?>
-                        <li class="completed">
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
                                 <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
@@ -384,7 +418,8 @@ if (isset($eventsTable[0])) {
 
 
                     <?php $j+=2; if (isset($eventsTable[$j])): ?>
-                        <li class="completed">
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
                                 <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
@@ -394,7 +429,8 @@ if (isset($eventsTable[0])) {
 
 
                     <?php $j+=2; if (isset($eventsTable[$j])): ?>
-                        <li class="completed">
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
                                 <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
@@ -404,7 +440,8 @@ if (isset($eventsTable[0])) {
 
 
                     <?php $j+=2; if (isset($eventsTable[$j])): ?>
-                        <li class="completed">
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
                                 <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
@@ -414,7 +451,8 @@ if (isset($eventsTable[0])) {
 
 
                     <?php $j+=2; if (isset($eventsTable[$j])): ?>
-                        <li class="completed">
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
                                 <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
@@ -424,7 +462,8 @@ if (isset($eventsTable[0])) {
 
 
                     <?php $j+=2; if (isset($eventsTable[$j])): ?>
-                        <li class="completed">
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
                                 <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
@@ -434,7 +473,8 @@ if (isset($eventsTable[0])) {
 
 
                     <?php $j+=2; if (isset($eventsTable[$j])): ?>
-                        <li class="completed">
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
                                 <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
@@ -444,7 +484,8 @@ if (isset($eventsTable[0])) {
 
 
                     <?php $j+=2; if (isset($eventsTable[$j])): ?>
-                        <li class="completed">
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
                                 <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
@@ -454,7 +495,8 @@ if (isset($eventsTable[0])) {
 
 
                     <?php $j+=2; if (isset($eventsTable[$j])): // #22 here or 11th?>
-                        <li class="completed">
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
                                 <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
@@ -465,7 +507,8 @@ if (isset($eventsTable[0])) {
 
 
                     <?php $j+=2; if (isset($eventsTable[$j])): // #24 here or 12th?>
-                        <li class="completed">
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
                                 <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
