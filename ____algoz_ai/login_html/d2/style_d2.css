@@ -241,7 +241,8 @@ body{
 }
 
 .content nav form .form-input button{
-    width: 80px;
+    /* width: 80px; */
+    width: 100px;
     height: 100%;
     display: flex;
     justify-content: center;

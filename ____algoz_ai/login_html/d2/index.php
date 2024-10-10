@@ -1,12 +1,14 @@
 <?php
-//                                                  ver  9.4
+//                                                  ver  9.8
 date_default_timezone_set('America/New_York');
 require_once '../login/events.php';
 require_once '../login/database.php';
 
 
 
-$BuyCall30min="https://buy.stripe.com/aEU3f42UYbIG4pO8wW";
+$BuyCall30minTest ="https://buy.stripe.com/aEU3f42UYbIG4pO8wW";
+$BuyCall30min ="https://buy.stripe.com/28o5ncbru14209yaEP";
+
 $buySellSignals="https://algoinvestorr.com/algoz0/";
 $ccc = "https://algoinvestorr.com/ccc/";
 $pivots = "https://algoinvestorr.com/pivots/";
@@ -72,6 +74,51 @@ if (isset($eventsTable[0])) {
             </script>
 <?php endif; ?>
       
+
+  <div class="div">...</div>
+        <!-- <a href="#" class="neon_btn1">BlackOps.com</a> -->
+        <a href="https://algoinvestorr.com/algoz0/" class="neon_btn1">Buy Sell Signals</a>
+        <a href="https://algoinvestorr.com/pivots/" class="neon_btn1">Price Levels</a>
+        <a href="https://algoz.ai/ld/piv.php?sym=spy" class="neon_btn1">Week/Month/Yr SPY Price Levels</a>
+        <a href="https://algoz.ai/ld/piv.php?sym=qqq" class="neon_btn1">Week/Month/Yr QQQ Price Levels</a>
+        <a href="https://algoinvestorr.com/ccc/" class="neon_btn1">Covered Call Calculator</a>
+        <a href="https://algoinvestorr.com/newsletter.pdf" class="neon_btn1">Newsletter</a>
+        <a href="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0" class="neon_btn1">Charting</a>
+        <a href="https://algoz.ai/bmi/index.html" class="neon_btn1">BMI Calc</a>
+        <a href="https://buy.stripe.com/fZedTI1QU8wuaOc9AR" class="neon_btn2">Buy Jacks Coin TEST</a>
+
+        <a href="logout.php" class="neon_btn1">LOGOUT</a>
+        <!-- <a href="https://algoz.ai/bmi/index.html" class="neon_btn1">Logout</a> -->
+
+<!-- 
+        <a href="https://buy.stripe.com/8wMbKN8V65asgzmeUV?sym=&sdate=" class="neon_btn2">Buy Premium Club 1 Month</a>
+        <a href="https://buy.stripe.com/bIYdTI1QUeUS5tSfZ5" class="neon_btn2">Buy Newsletter (1mo)</a>
+        <a href="https://buy.stripe.com/bIYdTI1QUeUS5tSfZ5" class="neon_btn2">Buy Newsletter (1yr)</a>
+        <a href="https://buy.stripe.com/28o5ncbru14209yaEP" class="neon_btn2">Buy Pro's Consultation (30mins)</a>
+        <a href="https://buy.stripe.com/dR6eXMgLO286aOc28i" class="neon_btn2">Buy Pro's Consultation (60mins)</a>
+        <a href= "https://buy.stripe.com/00g8zogLO286bSgaEM" class="neon_btn2">Buy Annual Gold Access 1-time Fee</a>
+        <a href= "https://buy.stripe.com/3cseXM0MQ9Ay6xWeV3" class="neon_btn2">Buy Annual Gold Access Subscription</a>
+       
+        <a href="https://buy.stripe.com/8wM4j8anq5kicWk5kA" class="neon_btn2">Buy Market Maxims MasterClass: 54 Playing Cards</a>
+      
+        <a href="https://buy.stripe.com/7sI9Ds0MQh303lK7sE" class="neon_btn2">Buy MasterClass 1: Stock/Crypto Algoz Basics</a>
+        <a href="https://buy.stripe.com/fZe9Ds2UY286bSg7sF" class="neon_btn2">Buy MasterClass 2: Bonds/Futures</a>
+        <a href="https://buy.stripe.com/00g4j8bru7sq9K84gu" class="neon_btn2">Buy MasterClass 3: Options</a>
+        <a href="https://buy.stripe.com/dR616WbrubIG5tS4gv" class="neon_btn2">Buy MasterClass 4: Advanced</a>
+        <a href="https://buy.stripe.com/dR616WbrubIG5tS4gv" class="neon_btn2">Buy MasterClass 5: Advanced Business Secrets</a>
+        
+        <a href="https://open.spotify.com/album/3lG9TKLuevE9pznP3Y1Jg1?si=-bahmqlQSFyKqjJYxbOHdw" class="neon_btn2">DJ Gianni B Wall Street</a>
+        <a href="https://open.spotify.com/album/0HT1P1xEkxRswDBqnAb6gJ?si=TWzzfy-gRbODmmj_uZ__lA" class="neon_btn2">DJ Gianni B Knockout</a>
+        <a href="https://open.spotify.com/album/3nm4jHVVpG4BBGnyX107LG?si=rPE8u1hwSaKxfzjrsf88-Q" class="neon_btn2">DJ Gianni B AGI Dreams</a>
+        <a href="https://open.spotify.com/album/0oKBEtBlzjKQtpd1BalotT?si=sx4DZy9aRMeJxmIQL1aqZQ" class="neon_btn2">DJ Gianni B The Midnight</a>
+        <a href="https://itraderpro.co/fire" class="neon_btn2">ai art prompts</a>
+ -->
+
+
+
+        <!-- <a href="https://blackops.com/timer130/" class="neon_btn2">boxing timer</a> -->
+
+        </div>
 */
 
 
@@ -97,10 +144,11 @@ if (isset($eventsTable[0])) {
             <div class="logo-name"><span>algoz</span>.ai</div>
         </a>
         <ul class="side-menu">
-            <li><a href="#"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
+            <li class="active"><a href="#"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
             <!-- <li><a href="#"><i class='bx bx-store-alt'></i>Price Levels</a></li> -->
             <li><a href="<?php echo $pivots; ?>"><i class='bx bx-vertical-bottom'></i>Price Levels</a></li>
-            <li class="active"><a href="<?php echo $ccc; ?>"><i class='bx bx-math'></i>Covered Call Calc</a></li>
+            <!-- <li class="active"><a href="<?php echo $ccc; ?>"><i class='bx bx-math'></i>Covered Call Calc</a></li> -->
+            <li><a href="<?php echo $ccc; ?>"><i class='bx bx-math'></i>Covered Call Calc</a></li>
             <!-- <li><a href="#"><i class='bx bx-analyse'></i>BuySell Signals</a></li> -->
             <li><a href="<?php echo $buySellSignals; ?>"><i class='bx bx-line-chart'></i>BuySell Signals</a></li>
 
@@ -118,7 +166,7 @@ if (isset($eventsTable[0])) {
             <li><a href="<?php echo $newsletter; ?>"><i class='bx bx-news'></i>Newsletter</a></li>
             <li><a href="<?php echo $fintechfc; ?>"><i class='bx bx-fast-forward-circle'></i>Fintech FasterClass</a></li>
 
-            <li><a href="<?php echo $chatai; ?>"><i class='bx bx-search'></i>ai Prompt</a></li>
+            <li><a href="<?php echo $chatai; ?>"><i class='bx bx-search'></i>ai Search...</a></li>
             <li><a href="<?php echo $BuyCall30min; ?>"><i class='bx bx-phone-outgoing'></i>Book Call</a></li>
 
             <!-- <li><a href="#"><i class='bx bx-group'></i>Users</a></li> -->
@@ -144,7 +192,7 @@ if (isset($eventsTable[0])) {
             <i class='bx bx-menu'></i>
             <form action="#">
                 <div class="form-input">
-                    <input type="search" placeholder="Search...">
+                    <input type="search" placeholder="ai prompt or symbol...">
                     <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
                 </div>
             </form>
