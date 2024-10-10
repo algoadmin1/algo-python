@@ -1,5 +1,5 @@
 <?php
-session_start();       		   // vers 5.6   fitness ffc index
+session_start();       		   // vers 5.2
 $user_email="";                      
 $user_loc="";                      
 if (!isset($_SESSION["user"])) {
@@ -57,26 +57,6 @@ if (!isset($_SESSION["user"])) {
                 <img src="logo256x144.jpg" alt="Logo">
                 </div>
     </div>
-
-
-   <div class="input-group">
-             <select id="lang" name="lang" required>
-                 <option value="">--Select Language--</option>
-                 <option value="0">English</option>
-                 <option value="1">Spanish</option>
-                 <option value="2">French</option>
-                 <option value="3">German</option>
-                 <option value="4">Portuguese</option>
-                 <option value="5">Italian</option>
-                 <option value="6">Japanese</option>
-                 <option value="7">Mandarin</option>
-                 <option value="8">Korean</option>
-                 <option value="9">Russian </option>
-                 <option value="9">Arabic </option>
-             </select>
-    </div>
-
-
 	<div class="container">
 		<div class="main-video-container">
 			<video src="https://res.cloudinary.com/www-avattireapp-com/video/upload/v1726453178/vid01-01a.mov" loop controls class="main-video"></video>
@@ -86,9 +66,6 @@ if (!isset($_SESSION["user"])) {
 		</div>
 		<div class="video-list-container" id="videosList"></div>
 	</div>
-
-
-          
 
  	<div style="text-align: center;">
    	<button class="nxt-btn" id="nextBtn">   Next Level   </button>
@@ -117,21 +94,8 @@ if (!isset($_SESSION["user"])) {
 	    });
 	</script>
  -->
-<!-- 
-<script>
-document.getElementById('bmiForm').addEventListener('submit', function(event) {
-    event.preventDefault();
 
-    const feet = parseInt(document.getElementById('feet').value);
-    const inches = parseInt(document.getElementById('inches').value);
-    const weight = parseFloat(document.getElementById('weight').value);   // lbs
 
-    const age = parseFloat(document.getElementById('age').value);
-    const gender = document.getElementById('gender').value ;
-    const actlevel = parseInt(document.getElementById('actlevel').value) ;
- }
-	</script>
- -->
 
 	<script src="Videoplaylist.js"></script>
 

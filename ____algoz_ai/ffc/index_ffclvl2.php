@@ -71,7 +71,7 @@ if (!isset($_SESSION["user"])) {
 
 	<script>
 	    document.getElementById('prevBtn').addEventListener('click', function() {
-	        window.location.href = 'https://algoz.ai/ffc/index.php';
+	        window.location.href = 'https://algoz.ai/ffc';
 	    });
 	    document.getElementById('nextBtn').addEventListener('click', function() {
 	        window.location.href = 'https://algoz.ai/ffc/index_ffclvl3.php';
