@@ -1,0 +1,466 @@
+<?php
+//                                                  ver  9.4
+date_default_timezone_set('America/New_York');
+require_once '../login/events.php';
+require_once '../login/database.php';
+
+
+
+$BuyCall30min="https://buy.stripe.com/aEU3f42UYbIG4pO8wW";
+$buySellSignals="https://algoinvestorr.com/algoz0/";
+$ccc = "https://algoinvestorr.com/ccc/";
+$pivots = "https://algoinvestorr.com/pivots/";
+
+$fintechfc = "https://algoz.ai/FFC.pdf";
+
+$newsletter="https://algoinvestorr.com/newsletter.pdf";
+
+$bmi       = "https://algoz.ai/bmi";
+$fitnessfc = "https://algoz.ai/ffc/";  // https://algoz.ai/ffc/
+
+$chatai="https://chatgpt.com/";
+
+$logout0= "https://algoz.ai/login/logout.php";
+$j=0;
+
+
+
+
+// https://algoz.ai/products.pdf
+
+
+//  $content = file_get_contents('https://algoz.ai/rtq/rtq.php?sym=meta');  echo content; 
+// 
+// if(isset( $_GET['sym'] )){
+//     $sym = $_GET['sym'] ;
+// }else{
+//     $sym = "SPY";
+// }
+// $sym = strtoupper($sym);
+// echo "] sym = ". $sym ;
+
+
+function PrettyDate($udate) {
+    // Create a DateTime object from the string
+    $date = new DateTime($udate);
+
+    // Format the date to "M jS" (Month abbreviation and day with ordinal suffix)
+    return $date->format('M jS');
+}
+
+
+
+
+
+/* 
+if (isset($eventsTable[0])) {
+}
+
+<?php if (isset($eventsTable[0])): ?>
+<?php endif; ?>
+
+<?php if ($gChart > 0): ?>
+
+            <li class="items" id="chartBtn">
+            <i class="fa-solid fa-line-chart"></i>
+            <p class="para">Charting</p>
+            </li>
+            <script>
+                document.getElementById('chartBtn').addEventListener('click', function() {
+                    window.location.href = 'https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0';  
+                });
+            </script>
+<?php endif; ?>
+      
+*/
+
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style_d2.css">
+    <title>algoz dashboard</title>
+</head>
+
+<body>
+
+    <!-- Sidebar     https://blade-ui-kit.com/blade-icons/gameicon-chess-knight                     ver 4.1 -->
+    <div class="sidebar">
+        <a href="#" class="logo">
+            <i class='bx bx-analyse'></i>
+            <div class="logo-name"><span>algoz</span>.ai</div>
+        </a>
+        <ul class="side-menu">
+            <li><a href="#"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
+            <!-- <li><a href="#"><i class='bx bx-store-alt'></i>Price Levels</a></li> -->
+            <li><a href="<?php echo $pivots; ?>"><i class='bx bx-vertical-bottom'></i>Price Levels</a></li>
+            <li class="active"><a href="<?php echo $ccc; ?>"><i class='bx bx-math'></i>Covered Call Calc</a></li>
+            <!-- <li><a href="#"><i class='bx bx-analyse'></i>BuySell Signals</a></li> -->
+            <li><a href="<?php echo $buySellSignals; ?>"><i class='bx bx-line-chart'></i>BuySell Signals</a></li>
+
+          
+
+            <!-- <li><a href="#"><i class='bx bx-candles' id="chartBtn"></i>Charting</a></li> -->
+            <li><a href="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0"><i class='bx bx-candles' id="chartBtn"></i>Charting</a></li>
+            <!-- <li><a href="#"><i class='bx bx-mail-send'></i>Newsletter</a></li> -->
+            <!-- <script>
+                document.getElementById('chartBtn').addEventListener('click', function() {
+                    window.location.href = 'https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0';  
+                });
+            </script> -->
+
+            <li><a href="<?php echo $newsletter; ?>"><i class='bx bx-news'></i>Newsletter</a></li>
+            <li><a href="<?php echo $fintechfc; ?>"><i class='bx bx-fast-forward-circle'></i>Fintech FasterClass</a></li>
+
+            <li><a href="<?php echo $chatai; ?>"><i class='bx bx-search'></i>ai Prompt</a></li>
+            <li><a href="<?php echo $BuyCall30min; ?>"><i class='bx bx-phone-outgoing'></i>Book Call</a></li>
+
+            <!-- <li><a href="#"><i class='bx bx-group'></i>Users</a></li> -->
+            <li><a href="<?php echo $bmi; ?>"><i class='bx bx-health'></i>BMI Calc</a></li>
+            <li><a href="<?php echo $fitnessfc; ?>"><i class='bx bx-heart'></i>Fitness Fasterclass</a></li>
+            <!-- <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li> -->
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="<?php echo $logout0; ?>" class="logout">
+                    <i class='bx bx-log-out-circle'></i>
+                    Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- End of Sidebar -->
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Navbar -->
+        <nav>
+            <i class='bx bx-menu'></i>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search...">
+                    <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+            <input type="checkbox" id="theme-toggle" hidden>
+            <label for="theme-toggle" class="theme-toggle"></label>
+<!-- 
+            <a href="#" class="notif">
+                <i class='bx bx-bell'></i>
+                <span class="count">12</span>
+            </a>
+             -->
+             <div class="info">
+                <p>Hey, <b>Rogue</b></p>
+                <small class="text-muted">Creator</small>
+            </div>
+            <a href="#" class="profile">
+                <img src="images/logo_d2.png">
+            </a>
+        </nav>
+
+        <!-- End of Navbar -->
+
+        <main>
+            <div class="header">
+                <div class="left">
+                    <h1>Your Dashboard</h1>
+
+<!--                     
+                    <ul class="breadcrumb">
+                        <li><a href="#">
+                                Analytics
+                            </a></li>
+                        /
+                        <li><a href="#" class="active">Shop</a></li>
+                    </ul> -->
+
+
+                </div>
+                <a href="#" class="report">
+                    <i class='bx bx-cloud-download'></i>
+                    <span>Download Guide</span>
+                </a>
+            </div>
+
+
+                <!-- Insights -->
+<!-- 
+                <ul class="insights">
+                    <li>
+                        <span class="info">
+                            <h3>
+                                $487.52
+                            </h3>
+                            <p>QQQ</p>
+                        </span>
+                    </li>
+                    
+                    <li><i class='bx bxl-apple'></i>
+                        <span class="info">
+                            <h3>
+                                $224.50
+                            </h3>
+                            <p>AAPL</p>
+                        </span>
+                    </li>
+                        <li><i class='bx bxl-meta'></i>
+                            <span class="info">
+                            <h3>
+                                $589.45
+                            </h3>
+                            <p>META</p>
+                        </span>
+                    </li>
+                    <li><i class='bx bx-line-chart'></i>
+                        <span class="info">
+                            <h3>
+                                $130.87
+                            </h3>
+                            <p>NVDA</p>
+                        </span>
+                    </li>
+                </ul>
+                 -->
+                <!-- End of Insights -->
+
+
+            <div class="bottom-data">
+                <div class="orders">
+                    <div class="header">
+                        <i class='bx bx-receipt'></i>
+                        <h3>Recent Quotes</h3>
+                        <!-- <i class='bx bx-filter'></i>
+                        <i class='bx bx-search'></i> -->
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Stock</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <img src="../img/aapl.png">
+                                    <p>AAPL</p>
+                                </td>
+                                <td>10-08-24</td>
+                                <td><span class="status completed">Trending UP</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="../img/nvda.png">
+                                    <p>NVDA</p>
+                                </td>
+                                <td>10-08-24</td>
+                                <td><span class="status pending">Consolidating</span></td>
+                            </tr> <tr>
+                                <td>
+                                    <img src="../img/meta.png">
+                                    <p>META</p>
+                                </td>
+                                <td>10-08-24</td>
+                                <td><span class="status process">Trending DOWN</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="../img/gs.png">
+                                    <p>GS</p>
+                                </td>
+                                <td>10-08-24</td>
+                                <td><span class="status completed">Trending UP</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Reminders -->
+                <div class="reminders">
+                    <div class="header">
+                        <i class='bx bx-note'></i>
+                        <h3>Upcoming Events</h3>
+                        <!-- <i class='bx bx-filter'></i> -->
+                        <!-- <i class='bx bx-plus'></i> -->
+                    </div>
+                    <ul class="task-list">
+
+                    <?php  $j=0;  if (isset($eventsTable[$j])):  ?>
+                        <li class="completed">
+                   <!-- <li class="not-completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                            <!-- <i class='bx bx-dots-vertical-rounded'></i> -->
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                            <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo  PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): // #22 here or 11th?>
+                        <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): // #24 here or 12th?>
+                        <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+
+
+<!-- 
+                        <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> Nov 7th FMOC Meeting</p>
+                            </div>
+                        </li>
+                        <li class="completed">
+                                <div class="task-title">
+                                    <i class='bx bx-check-circle'></i>
+                                    <p>Dec 18th FMOC Meeting</p>
+                            </div>
+                        </li> -->
+
+
+
+
+                    </ul>
+                </div>
+
+                <!-- End of Reminders-->
+
+
+                
+
+                
+            </div>
+
+        </main>
+
+    </div>
+
+    <script src="index_d2.js"></script>
+</body>
+
+</html>
