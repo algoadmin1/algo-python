@@ -1,5 +1,5 @@
 <?php
-//                                                  ver  10.8
+//                                                  ver  10.9
 date_default_timezone_set('America/New_York');
 require_once '../login/events.php';
 require_once '../login/database.php';
@@ -28,7 +28,6 @@ $j=0;
 
 // Get the current date and time
 $now = new DateTime();
-$prettyDateTime1= $now->format('D M jS');
 $prettyDateTime = $now->format('D M jS g:ia');
 $prettyDateTime.= " EDT";
 // Example output: Thurs Oct 10th 1:49pm
@@ -56,7 +55,7 @@ $todays_udate  = date('Y-m-d');  // 'YYYY-MM-DD'
 // echo "] sym = ". $sym ;
 
 
-function PrettyDate1($udate) {
+function PrettyDate0($udate) {
     // Create a DateTime object from the string
     $date = new DateTime($udate);
 
@@ -75,6 +74,8 @@ function PrettyDate($udate) {
     // Format the date as "D M j" (Day abbreviation, month abbreviation, and day with suffix)
     return $date->format('D M ') . $day . $daySuffix;
 }
+
+
 function prettyOrNot( $test_udate ){
         global $todays_udate;
 
@@ -171,7 +172,6 @@ if (isset($eventsTable[0])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style_d2.css">
-    <link rel="stylesheet" href="style_digital.css">
     <title>algoz dashboard</title>
 </head>
 
@@ -232,7 +232,7 @@ if (isset($eventsTable[0])) {
             <i class='bx bx-menu'></i>
             <form action="#">
                 <div class="form-input">
-                    <input type="search" placeholder="symbol...">
+                    <input type="search" placeholder="ai prompt or symbol...">
                     <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
                 </div>
             </form>
@@ -259,18 +259,9 @@ if (isset($eventsTable[0])) {
             <div class="header">
                 <div class="left">
                     <!-- <h1>Your Dashboard</h1> -->
-                    <h1><div class="textdig" id="time"></div></h1>
+                    <h1><?php echo $prettyDateTime;  ?></h1>
 
-                     <!-- <div class="wrapper"> 
-                        <div class="display">
-                            <div id="time"></div>
-                        </div>
-                        -->
-                       <!--  <span></span>
 
-                        <span></span>
-                    </div>
- -->
 <!--                     
                     <ul class="breadcrumb">
                         <li><a href="#">
@@ -573,7 +564,6 @@ if (isset($eventsTable[0])) {
 
     </div>
 
-    <script src="clock.js"></script>
     <script src="index_d2.js"></script>
 </body>
 
