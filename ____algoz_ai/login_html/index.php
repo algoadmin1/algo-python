@@ -1,180 +1,94 @@
 <?php
-require_once "./login/database.php";
-
-session_start();
-if (!isset($_SESSION["user"])) {
-   header("Location: ./login/login.php");
-}else{
-    $email1=$_SESSION["user"];
-    $numvisits1=$_SESSION["numvisits"];
-    $userIP=$_SESSION["userIP"];
-    $userId=$_SESSION["userId"];
-    $user_loc=$_SESSION["user_loc"];
-    $user_lastDateTime  = $_SESSION["user_lastDateTime"] ;
-    $user_lastDay = $_SESSION["user_lastDay"]  ;
-
-    // should really re-query the .transaction table
-//  $user_productstrNew = CheckForNewProducts( );
-
-    $user_productstr = $_SESSION["user_productstr"]  ;
-                
-    // /Users/mac2021/Desktop/_dev/Projects/algo-python/____algoz_ai/login_html/login0/index.php
-
-    $gChart= 0;
-    $gFFC= 0;
-
-    if(StringContains( "SaaSFintechTool_Level_3", $user_productstr ) >0){
-    // if($email1a=="roguequant1@gmail.com"){
-            $gChart= 1;
-    }
-    if(StringContains( "FightingFFC", $user_productstr ) >0){
-            $gFFC= 1;
-    }
-
-    // $products=$_SESSION["products"];  // =="coin|newsletter|charts|ccc|"
-    $emailParts = explode('@', $email1); // Split the string at '@'
-    $emailname = $emailParts[0];
-    if($user_loc!=""){
-        $emailname.= " from ". $user_loc. "!";
-    }
-    $email1a= strtolower($email1);
-    
-
- }
-// require_once "./login/database.php";
-/*
-
-<!-- 
-            <li class="items">
-                <i class="fa-solid fa-house"></i>
-                <p class="para">Home</p>
-            </li> -->
-<!-- 
-            <li class="items">
-                <i class="fa-solid fa-search"></i>
-                <p class="para">ai Prompt</p>
-            </li>  -->
-<!-- 
-            <li class="items">
-                <i class="fa-solid fa-search"></i>
-                <p class="para">Search</p>
-            </li>  -->
-            <!--  
-            
-             'https://algoinvestorr.com/pivots/'    'https://algoinvestorr.com/ccc/'  
-            
-            <li class="items">
-                <i class="fa-solid fa-user"></i>
-                <p class="para">Account</p>
-            </li> -->
-*/
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>algoz.ai</title>
-    <link rel="stylesheet" href="style_navbar.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="shortcut icon" type="image/png"  href="favicon.ico" />
-    <!-- https://fontawesome.com/v4/icons/ -->
-</head>
-<body>
-    <div class="container">
-
- <!-- Content to the right of the sidebar -->
-        <div class="main-content">
-         <!-- <p>Welcome <?php echo $emailname ; ?></p> -->
-        <p>Welcome <?php echo $emailname. " =". $user_productstr ; ?></p>
-        </div>
-<!-- 
-        <div class="main-content">
-        <p> check out this new style</p>
-        </div> -->
-
-
-        <div class="sidebar">
-            <div class="logo items">
-                <!-- <img src="img/a1.png" alt=""> -->
-                <img src="logo_navbar.png" alt="">
-                <span class="mainHead para">
-                    <!-- <h5>algo</h5> -->
-                    <!-- <h4>Investor<sup>TM</sup></h4> -->
-                    <h4>algoz.ai<sup style="font-size: 50%;">TM</sup></h4>
-                    <!-- <h4>Investor</h4> -->
-                </span>
-            </div>
-
-
-            <li class="items" id="pricelevelsBtn">
-                <i class="fas fa-money-bill"></i>
-                <!-- <i class="fa-solid fa-list-alt"></i> -->
-                <p class="para">Price Levels</p>
-            </li> 
-            <script>
-                document.getElementById('pricelevelsBtn').addEventListener('click', function() {
-                    window.location.href = 'https://algoinvestorr.com/pivots/'; // Redirect to the logout page
-                });
-            </script>
-            
-            <li class="items" id="cccBtn">
-                <i class="fa-solid fa-calendar-days"></i>
-                <p class="para">Covered Call Calc</p>
-            </li>
-            <script>
-                document.getElementById('cccBtn').addEventListener('click', function() {
-                    window.location.href = 'https://algoinvestorr.com/ccc/'; // Redirect to the logout page
-                });
-            </script>
+//                                                  ver  10.5
+date_default_timezone_set('America/New_York');
+require_once '../login/events.php';
+require_once '../login/database.php';
 
 
 
-            <li class="items" id="buysellBtn">
-                <!-- <a href="https://algoinvestorr.com/algoz0"> -->
-                <!-- <i class="fa-solid fa-line-chart"></i> -->
-                <i class="fa-solid fa-traffic-light"></i>
-                    
-                    <!-- <p class="para style=font-size: 90%;">Buy Signals</p> -->
-                    <!-- <p class="para style=font-size: 100%;">⬆️ ⬇️Signals</p> -->
-                    <!-- <p class="para style=font-size: 100%;">Buy⬆Sell⬇ Signals</p> -->
-                    <p class="para style=font-size: 100%;">BuySell Signals</p>
-                    <!-- <p class="para style=font-size: 100%;">Buy Signals</p> -->
-                <!-- </a> -->
-            </li> 
-            <script>
-                document.getElementById('buysellBtn').addEventListener('click', function() {
-                    window.location.href = 'https://algoinvestorr.com/algoz0/'; // Redirect to the logout page
-                });
-            </script>
+$BuyCall30minTest ="https://buy.stripe.com/aEU3f42UYbIG4pO8wW";
+$BuyCall30min ="https://buy.stripe.com/28o5ncbru14209yaEP";
+
+$buySellSignals="https://algoinvestorr.com/algoz0/";
+$ccc = "https://algoinvestorr.com/ccc/";
+$pivots = "https://algoinvestorr.com/pivots/";
+
+$fintechfc = "https://algoz.ai/FFC.pdf";
+
+$newsletter="https://algoinvestorr.com/newsletter.pdf";
+
+$bmi       = "https://algoz.ai/bmi";
+$fitnessfc = "https://algoz.ai/ffc/";  // https://algoz.ai/ffc/
+
+$chatai="https://chatgpt.com/";
+
+$logout0= "https://algoz.ai/login/logout.php";
+$j=0;
+
+
+// Get the current date and time
+$now = new DateTime();
+$prettyDateTime1= $now->format('D M jS');
+$prettyDateTime = $now->format('D M jS g:ia');
+$prettyDateTime.= " EDT";
+// Example output: Thurs Oct 10th 1:49pm
+// echo $prettyDateTime;
+
+
+// Format the date and time as 'D M jS g:ia'
+$todays_udate  = date('Y-m-d');  // 'YYYY-MM-DD'
 
 
 
 
-            <!-- <li class="items">
-                <i class="fa-solid fa-circle-exclamation"></i>
-                <p class="para">Notification</p>
-            </li> -->
-            
 
-            <!-- <li class="items">
-                <i class="fa-solid fa fa-film"></i>
-                <p class="para">Webinar</p>
-            </li> -->
+// https://algoz.ai/products.pdf
 
-       
-            <!-- <li class="items">
-                <i class="fa-solid fa-calendar-days"></i>
-                <p class="para">Events</p>
-            </li> -->
-           
-            <!--    
-            <li class="items">
-                <i class="fa-solid fa-envelope"></i>
-                <p class="para">Messages</p>
-            </li> -->
-            
-          
+
+//  $content = file_get_contents('https://algoz.ai/rtq/rtq.php?sym=meta');  echo content; 
+// 
+// if(isset( $_GET['sym'] )){
+//     $sym = $_GET['sym'] ;
+// }else{
+//     $sym = "SPY";
+// }
+// $sym = strtoupper($sym);
+// echo "] sym = ". $sym ;
+
+
+function PrettyDate($udate) {
+    // Create a DateTime object from the string
+    $date = new DateTime($udate);
+
+    // Format the date to "M jS" (Month abbreviation and day with ordinal suffix)
+    return $date->format('M jS');
+}
+
+function prettyOrNot( $test_udate ){
+        global $todays_udate;
+
+        $green      = "completed";
+        $red        = "not-completed";
+        $assume     = $green;
+
+        // if(strlen($test_udate!=10))  return($assume); 
+
+        if( $todays_udate  == $test_udate )   $assume = $red;
+
+        return($assume);
+
+
+}
+
+
+
+/* 
+if (isset($eventsTable[0])) {
+}
+
+<?php if (isset($eventsTable[0])): ?>
+<?php endif; ?>
+
 <?php if ($gChart > 0): ?>
 
             <li class="items" id="chartBtn">
@@ -189,206 +103,467 @@ if (!isset($_SESSION["user"])) {
 <?php endif; ?>
       
 
-<?php if ($gChart == 0): ?>
+  <div class="div">...</div>
+        <!-- <a href="#" class="neon_btn1">BlackOps.com</a> -->
+        <a href="https://algoinvestorr.com/algoz0/" class="neon_btn1">Buy Sell Signals</a>
+        <a href="https://algoinvestorr.com/pivots/" class="neon_btn1">Price Levels</a>
+        <a href="https://algoz.ai/ld/piv.php?sym=spy" class="neon_btn1">Week/Month/Yr SPY Price Levels</a>
+        <a href="https://algoz.ai/ld/piv.php?sym=qqq" class="neon_btn1">Week/Month/Yr QQQ Price Levels</a>
+        <a href="https://algoinvestorr.com/ccc/" class="neon_btn1">Covered Call Calculator</a>
+        <a href="https://algoinvestorr.com/newsletter.pdf" class="neon_btn1">Newsletter</a>
+        <a href="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0" class="neon_btn1">Charting</a>
+        <a href="https://algoz.ai/bmi/index.html" class="neon_btn1">BMI Calc</a>
+        <a href="https://buy.stripe.com/fZedTI1QU8wuaOc9AR" class="neon_btn2">Buy Jacks Coin TEST</a>
 
-        <li class="items" id="chartBtn">
-        <i class="fa-solid fa-line-chart"></i>
-        <p class="para">Purchase Charts</p>
-        </li>
-        <script>
-            document.getElementById('chartBtn').addEventListener('click', function() {
-                window.location.href = 'https://buy.stripe.com/dR6aHwcvycMK09ydRh'; //  'https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0';  
-            });
-        </script>
-<?php endif; ?>
-
-
-            <li class="items" id="aiBtn">
-            <i class="fa-solid fa-search"></i>
-            <!-- <i class="fa-solid fa-microchip-ai"></i> -->
-            <p class="para">ai Prompt</p>
-            </li> 
-            <script>
-                document.getElementById('aiBtn').addEventListener('click', function() {
-                    window.location.href = 'https://chatgpt.com/';  
-                });
-            </script>
-
-            <li class="items"  id="newsletterBtn">
-                <i class="fa fa-newspaper"></i>
-                <!-- <i class="fa fa-newspaper-o"></i> -->
-                <p class="para">Newsletter</p>
-            </li>
-            <script>
-                document.getElementById('newsletterBtn').addEventListener('click', function() {
-                    window.location.href = 'https://algoinvestorr.com/newsletter.pdf'; // Redirect to the logout page
-                });
-            </script>
-            
-            <li class="items" id="bookcallBtn">
-                <i class="fa-solid fa-phone"></i>
-                <p class="para">Book Call</p>
-            </li>  
-            <script>
-                document.getElementById('bookcallBtn').addEventListener('click', function() {
-                    window.location.href = 'https://buy.stripe.com/28o5ncbru14209yaEP'; // Redirect to the logout page
-                });
-            </script>
-
-
-            <li class="items" id="bmiBtn">
-                <i class="fa-solid fa-weight-scale"></i>
-                <p class="para">BMI Caloric Calc</p>
-            </li>
-            <script>
-                document.getElementById('bmiBtn').addEventListener('click', function() {
-                    window.location.href = 'https://algoz.ai/bmi';  
-                });
-            </script>
-
-    
-<?php if ($gFFC > 0): ?>
-            <li class="items" id="ffcBtn">
-                <i class="fa-solid fa-heart"></i>
-                <p class="para">Get Fit</p>
-            </li>
-            <script>
-                document.getElementById('ffcBtn').addEventListener('click', function() {
-                    window.location.href = 'https://algoz.ai/ffc';  
-                });
-            </script>
-<?php endif; ?>  
-
-<?php if ($gFFC == 0): ?>
-<!--  -->
-            <li class="items" id="ffcBtn">
-                <i class="fa-solid fa-heart"></i>
-                <p class="para">Purchase Fitness</p>
-            </li>
-            <script>
-                document.getElementById('ffcBtn').addEventListener('click', function() {
-                    window.location.href = 'https://buy.stripe.com/6oE16W2UY1422hGbJ2';  
-                });
-            </script>
-<?php endif; ?>
-
-
-
-            <!--   <i class="fa-solid fa-microchip-ai"></i> -->
-           
-    <script>
-        // document.addEventListener("DOMContentLoaded", function () {
-            // Handle click event for Settings
-
-            // document.querySelector("#settings-item .para").addEventListener("click", function () {
-            //     // Draw on the canvas when "Settings" is clicked
-            //     drawRectangles();
-            //     // Redirect to settings.php
-            //     //   window.location.href = "settings.php";
-            // });
-    
-            // Function to draw two vertical rectangles on the canvas
-            function drawRectangles() {
-                var canvas = document.getElementById("myCanvas");
-                if (canvas.getContext) {
-                    var ctx = canvas.getContext("2d");
-    
-                    // Clear the canvas
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-                    // Canvas dimensions
-                    var canvasWidth = canvas.width;
-                    var canvasHeight = canvas.height;
-    
-                    // Rectangle dimensions
-                    var rectWidth = 16;
-                    var rectHeight = 280;
-                    var offset = 8;
-    
-                    // Calculate the x-coordinates to center the rectangles and apply offset
-                    var centerX = (canvasWidth / 2);
-                    var redRectX = centerX - (rectWidth + offset / 2);  // Left of the center
-                    var greenRectX = centerX + (offset / 2);  // Right of the center
-    
-                    // Y-coordinate to center the rectangles vertically
-                    var centerY = (canvasHeight - rectHeight) / 2;
-    
-                    // Draw the red rectangle
-                    ctx.fillStyle = "red";
-                    ctx.fillRect(redRectX, centerY, rectWidth, rectHeight);
-    
-                    // Draw the green rectangle
-                    ctx.fillStyle = "green";
-                    ctx.fillRect(greenRectX, centerY, rectWidth, rectHeight);
-                }
-            }
-        // });
-    </script>
+        <a href="logout.php" class="neon_btn1">LOGOUT</a>
+        <!-- <a href="https://algoz.ai/bmi/index.html" class="neon_btn1">Logout</a> -->
 
 <!-- 
+        <a href="https://buy.stripe.com/8wMbKN8V65asgzmeUV?sym=&sdate=" class="neon_btn2">Buy Premium Club 1 Month</a>
+        <a href="https://buy.stripe.com/bIYdTI1QUeUS5tSfZ5" class="neon_btn2">Buy Newsletter (1mo)</a>
+        <a href="https://buy.stripe.com/bIYdTI1QUeUS5tSfZ5" class="neon_btn2">Buy Newsletter (1yr)</a>
+        <a href="https://buy.stripe.com/28o5ncbru14209yaEP" class="neon_btn2">Buy Pro's Consultation (30mins)</a>
+        <a href="https://buy.stripe.com/dR6eXMgLO286aOc28i" class="neon_btn2">Buy Pro's Consultation (60mins)</a>
+        <a href= "https://buy.stripe.com/00g8zogLO286bSgaEM" class="neon_btn2">Buy Annual Gold Access 1-time Fee</a>
+        <a href= "https://buy.stripe.com/3cseXM0MQ9Ay6xWeV3" class="neon_btn2">Buy Annual Gold Access Subscription</a>
+       
+        <a href="https://buy.stripe.com/8wM4j8anq5kicWk5kA" class="neon_btn2">Buy Market Maxims MasterClass: 54 Playing Cards</a>
+      
+        <a href="https://buy.stripe.com/7sI9Ds0MQh303lK7sE" class="neon_btn2">Buy MasterClass 1: Stock/Crypto Algoz Basics</a>
+        <a href="https://buy.stripe.com/fZe9Ds2UY286bSg7sF" class="neon_btn2">Buy MasterClass 2: Bonds/Futures</a>
+        <a href="https://buy.stripe.com/00g4j8bru7sq9K84gu" class="neon_btn2">Buy MasterClass 3: Options</a>
+        <a href="https://buy.stripe.com/dR616WbrubIG5tS4gv" class="neon_btn2">Buy MasterClass 4: Advanced</a>
+        <a href="https://buy.stripe.com/dR616WbrubIG5tS4gv" class="neon_btn2">Buy MasterClass 5: Advanced Business Secrets</a>
+        
+        <a href="https://open.spotify.com/album/3lG9TKLuevE9pznP3Y1Jg1?si=-bahmqlQSFyKqjJYxbOHdw" class="neon_btn2">DJ Gianni B Wall Street</a>
+        <a href="https://open.spotify.com/album/0HT1P1xEkxRswDBqnAb6gJ?si=TWzzfy-gRbODmmj_uZ__lA" class="neon_btn2">DJ Gianni B Knockout</a>
+        <a href="https://open.spotify.com/album/3nm4jHVVpG4BBGnyX107LG?si=rPE8u1hwSaKxfzjrsf88-Q" class="neon_btn2">DJ Gianni B AGI Dreams</a>
+        <a href="https://open.spotify.com/album/0oKBEtBlzjKQtpd1BalotT?si=sx4DZy9aRMeJxmIQL1aqZQ" class="neon_btn2">DJ Gianni B The Midnight</a>
+        <a href="https://itraderpro.co/fire" class="neon_btn2">ai art prompts</a>
+ -->
 
-            <li class="items" id="settings-item">
-                <i class="fa-solid fa-gear"></i>
-                <p class="para">Settings</p>
-            </li>  
-            <script>
-                document.getElementById('settings-item').addEventListener('click', function() {
-                    drawRectangles();
-                    // window.location.href = './login/logout.php'; // Redirect to the logout page
+
+
+        <!-- <a href="https://blackops.com/timer130/" class="neon_btn2">boxing timer</a> -->
+
+        </div>
+*/
+
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style_d2.css">
+    <link rel="stylesheet" href="style_digital.css">
+    <title>algoz dashboard</title>
+</head>
+
+<body>
+
+    <!-- Sidebar     https://blade-ui-kit.com/blade-icons/gameicon-chess-knight                     ver 4.1 -->
+    <div class="sidebar">
+        <a href="#" class="logo">
+            <i class='bx bx-analyse'></i>
+            <div class="logo-name"><span>algoz</span>.ai</div>
+        </a>
+        <ul class="side-menu">
+            <li class="active"><a href="#"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
+            <!-- <li><a href="#"><i class='bx bx-store-alt'></i>Price Levels</a></li> -->
+            <li><a href="<?php echo $pivots; ?>"><i class='bx bx-vertical-bottom'></i>Price Levels</a></li>
+            <!-- <li class="active"><a href="<?php echo $ccc; ?>"><i class='bx bx-math'></i>Covered Call Calc</a></li> -->
+            <li><a href="<?php echo $ccc; ?>"><i class='bx bx-math'></i>Covered Call Calc</a></li>
+            <!-- <li><a href="#"><i class='bx bx-analyse'></i>BuySell Signals</a></li> -->
+            <li><a href="<?php echo $buySellSignals; ?>"><i class='bx bx-line-chart'></i>BuySell Signals</a></li>
+
+          
+
+            <!-- <li><a href="#"><i class='bx bx-candles' id="chartBtn"></i>Charting</a></li> -->
+            <li><a href="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0"><i class='bx bx-candles' id="chartBtn"></i>Charting</a></li>
+            <!-- <li><a href="#"><i class='bx bx-mail-send'></i>Newsletter</a></li> -->
+            <!-- <script>
+                document.getElementById('chartBtn').addEventListener('click', function() {
+                    window.location.href = 'https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0';  
                 });
             </script> -->
 
-    
-            <!-- <a href="./login/logout.php" class="btn btn-warning">Logout</a> -->
-            <li class="items logout-btn" id="logoutBtn">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <p class="para">Logout</p>
+            <li><a href="<?php echo $newsletter; ?>"><i class='bx bx-news'></i>Newsletter</a></li>
+            <li><a href="<?php echo $fintechfc; ?>"><i class='bx bx-fast-forward-circle'></i>Fintech FasterClass</a></li>
+
+            <li><a href="<?php echo $chatai; ?>"><i class='bx bx-search'></i>ai Search...</a></li>
+            <li><a href="<?php echo $BuyCall30min; ?>"><i class='bx bx-phone-outgoing'></i>Book Call</a></li>
+
+            <!-- <li><a href="#"><i class='bx bx-group'></i>Users</a></li> -->
+            <li><a href="<?php echo $bmi; ?>"><i class='bx bx-health'></i>BMI Calc</a></li>
+            <li><a href="<?php echo $fitnessfc; ?>"><i class='bx bx-heart'></i>Fitness Fasterclass</a></li>
+            <!-- <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li> -->
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="<?php echo $logout0; ?>" class="logout">
+                    <i class='bx bx-log-out-circle'></i>
+                    Logout
+                </a>
             </li>
-
-            <!-- JavaScript to handle logout button click -->
-            <script>
-                document.getElementById('logoutBtn').addEventListener('click', function() {
-                    window.location.href = './login/logout.php'; // Redirect to the logout page
-                });
-            </script>
-
-
-      
-            <!-- Canvas to the right of the sidebar -->
-            <!-- <div class="canvas-container">
-                <canvas id="myCanvas"></canvas>
-                <button class="buy-btn">Buy</button>
-            </div> -->
-
-
-        </div>
-                <!-- END  OF  SIDEBAR  -->
-
-
-
-
-        <div class="toggler">
-            <i class="fa-solid fa-bars" id="toggle-bars"></i>
-            <i class="fa-solid fa-xmark" id="toggle-cross"></i>
-        </div>
-
+        </ul>
     </div>
+    <!-- End of Sidebar -->
 
-            
-        
-
- <!--  ADDED...   -->
-<!--
+    <!-- Main Content -->
     <div class="content">
-        <div class="canvas-container">
-            <canvas id="myCanvas" width="500" height="400"></canvas>  
-        </div>
+        <!-- Navbar -->
+        <nav>
+            <i class='bx bx-menu'></i>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="symbol...">
+                    <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+            <input type="checkbox" id="theme-toggle" hidden>
+            <label for="theme-toggle" class="theme-toggle"></label>
+<!-- 
+            <a href="#" class="notif">
+                <i class='bx bx-bell'></i>
+                <span class="count">12</span>
+            </a>
+             -->
+             <div class="info1">
+                <p><b>Rogue</b></p>
+                <small class="text-muted">[ Creator ]</small>
+            </div>
+            <a href="#" class="profile">
+                <img src="images/logo_d2.png">
+            </a>
+        </nav>
+
+        <!-- End of Navbar -->
+
+        <main>
+            <div class="header">
+                <div class="left">
+                    <!-- <h1>Your Dashboard</h1> -->
+                    <h1><div class="textdig" id="time"></div></h1>
+
+                     <!-- <div class="wrapper"> 
+                        <div class="display">
+                            <div id="time"></div>
+                        </div>
+                        -->
+                       <!--  <span></span>
+
+                        <span></span>
+                    </div>
+ -->
+<!--                     
+                    <ul class="breadcrumb">
+                        <li><a href="#">
+                                Analytics
+                            </a></li>
+                        /
+                        <li><a href="#" class="active">Shop</a></li>
+                    </ul> -->
+
+
+                </div>
+                <a href="#" class="report">
+                    <i class='bx bx-cloud-download'></i>
+                    <span>Download Guide</span>
+                </a>
+            </div>
+
+
+                <!-- Insights -->
+<!-- 
+                <ul class="insights">
+                    <li>
+                        <span class="info">
+                            <h3>
+                                $487.52
+                            </h3>
+                            <p>QQQ</p>
+                        </span>
+                    </li>
+                    
+                    <li><i class='bx bxl-apple'></i>
+                        <span class="info">
+                            <h3>
+                                $224.50
+                            </h3>
+                            <p>AAPL</p>
+                        </span>
+                    </li>
+                        <li><i class='bx bxl-meta'></i>
+                            <span class="info">
+                            <h3>
+                                $589.45
+                            </h3>
+                            <p>META</p>
+                        </span>
+                    </li>
+                    <li><i class='bx bx-line-chart'></i>
+                        <span class="info">
+                            <h3>
+                                $130.87
+                            </h3>
+                            <p>NVDA</p>
+                        </span>
+                    </li>
+                </ul>
+                 -->
+                <!-- End of Insights -->
+
+
+            <div class="bottom-data">
+                <div class="orders">
+                    <div class="header">
+                        <i class='bx bx-receipt'></i>
+                        <h3>Recent Quotes</h3>
+                        <!-- <i class='bx bx-filter'></i>
+                        <i class='bx bx-search'></i> -->
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Stock</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <img src="../img/aapl.png">
+                                    <p>AAPL</p>
+                                </td>
+                                <td>10-08-24</td>
+                                <td><span class="status completed">Trending UP</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="../img/nvda.png">
+                                    <p>NVDA</p>
+                                </td>
+                                <td>10-08-24</td>
+                                <td><span class="status pending">Consolidating</span></td>
+                            </tr> <tr>
+                                <td>
+                                    <img src="../img/meta.png">
+                                    <p>META</p>
+                                </td>
+                                <td>10-08-24</td>
+                                <td><span class="status process">Trending DOWN</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="../img/gs.png">
+                                    <p>GS</p>
+                                </td>
+                                <td>10-08-24</td>
+                                <td><span class="status completed">Trending UP</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Reminders -->
+                <div class="reminders">
+                    <div class="header">
+                        <i class='bx bx-note'></i>
+                        <h3>Upcoming Events</h3>
+                        <!-- <i class='bx bx-filter'></i> -->
+                        <!-- <i class='bx bx-plus'></i> -->
+                    </div>
+                    <ul class="task-list">
+
+                    <?php  $j=0;  if (isset($eventsTable[$j])):  ?>
+                       
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                   <!-- <li class="not-completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                            <!-- <i class='bx bx-dots-vertical-rounded'></i> -->
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                            <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo  PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): // #22 here or 11th?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+
+                    <?php $j+=2; if (isset($eventsTable[$j])): // #24 here or 12th?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+
+
+<!-- 
+                        <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> Nov 7th FMOC Meeting</p>
+                            </div>
+                        </li>
+                        <li class="completed">
+                                <div class="task-title">
+                                    <i class='bx bx-check-circle'></i>
+                                    <p>Dec 18th FMOC Meeting</p>
+                            </div>
+                        </li> -->
+
+
+
+
+                    </ul>
+                </div>
+
+                <!-- End of Reminders-->
+
+
+                
+
+                
+            </div>
+
+        </main>
+
     </div>
-    
-    -->
 
-
-
-    <script src="script_navbar.js"></script>
+    <script src="clock.js"></script>
+    <script src="index_d2.js"></script>
 </body>
+
 </html>

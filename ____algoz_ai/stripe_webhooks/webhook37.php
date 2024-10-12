@@ -1,5 +1,5 @@
 <?php
-//                                                  vers 6.9
+//                                                  vers 6.10
 // require_once '../vendor/autoload.php';
 require_once './stripe-php/init.php';
 require_once './secrets.php';

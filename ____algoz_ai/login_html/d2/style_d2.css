@@ -13,7 +13,8 @@
     --warning: #FBC02D;
     --light-warning: #FFF2C6;
     --success: #388E3C;
-    --success2: #16c689;
+    --success2: #1996F2; /*#16c689;*/
+    --green2: #16c689;
     --light-success: #BBF7D0;
 }
 
@@ -49,6 +50,9 @@ body.dark{
 body{
     background: var(--grey);
     overflow-x: hidden;
+}
+.info1{
+    color: var(--green2);
 }
 
 .sidebar{
