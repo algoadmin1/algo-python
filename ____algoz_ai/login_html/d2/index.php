@@ -296,7 +296,7 @@ if (isset($eventsTable[0])) {
              -->
              <div class="info1">
                 <p><b>Rogue</b></p>
-                <small class="text-muted">[ Creator ]</small>
+                <small class="text-muted">Creator</small>
             </div>
             <a href="#" class="profile">
                 <img src="images/logo_d2.png">
@@ -630,6 +630,23 @@ if (isset($eventsTable[0])) {
                 <!-- End of Reminders-->
 
 
+
+
+
+
+
+                <div class="orders">
+                    <h3>chart</h3>
+
+                    <div class="chartsjb">
+                        <canvas id="myCanvas"></canvas>
+                    </div>
+                     
+                </div>
+
+
+                <!-- end of canvas attempt -->
+
                 
 
                 
@@ -639,6 +656,7 @@ if (isset($eventsTable[0])) {
 
     </div>
 
+    <script src="charting.js"></script>
     <script src="clock.js"></script>
     <script src="index_d2.js"></script>
 </body>
