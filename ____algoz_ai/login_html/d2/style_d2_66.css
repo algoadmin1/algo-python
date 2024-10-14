@@ -12,7 +12,6 @@
 	--light-danger: #FECDD3;
     --warning: #FBC02D;
     --light-warning: #FFF2C6;
-    --green-warning: #6ed573;
     --success: #388E3C;
     --success2: #1996F2; /*#16c689;*/
     --green2: #16c689;
@@ -566,13 +565,6 @@ body{
 .content main .bottom-data .reminders .task-list li.not-completed{
     border-left: 10px solid var(--danger);
 }
-.content main .bottom-data .reminders .task-list li.soon-completed{
-    border-left: 10px solid var(--green-warning);
-}
-.content main .bottom-data .reminders .task-list li.soon1-completed{
-    border-left: 10px solid var(--warning);
-}
-
 
 .content main .bottom-data .reminders .task-list li:last-child{
    margin-bottom: 0;

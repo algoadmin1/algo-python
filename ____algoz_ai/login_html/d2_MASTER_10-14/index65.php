@@ -1,5 +1,5 @@
 <?php
-//                                                  ver  11.4
+//                                                  ver  10.9
 date_default_timezone_set('America/New_York');
 require_once '../login/events.php';
 require_once '../login/database.php';
@@ -28,7 +28,6 @@ $j=0;
 
 // Get the current date and time
 $now = new DateTime();
-$prettyDateTime1= $now->format('D M jS');
 $prettyDateTime = $now->format('D M jS g:ia');
 $prettyDateTime.= " EDT";
 // Example output: Thurs Oct 10th 1:49pm
@@ -56,7 +55,7 @@ $todays_udate  = date('Y-m-d');  // 'YYYY-MM-DD'
 // echo "] sym = ". $sym ;
 
 
-function PrettyDate1($udate) {
+function PrettyDate0($udate) {
     // Create a DateTime object from the string
     $date = new DateTime($udate);
 
@@ -76,47 +75,15 @@ function PrettyDate($udate) {
     return $date->format('D M ') . $day . $daySuffix;
 }
 
-function DaysAway($udate_today, $udate) {
-    // Create DateTime objects for both dates
-    $today = new DateTime($udate_today);
-    $date = new DateTime($udate);
-
-    // Calculate the difference between the two dates
-    $interval = $today->diff($date);
-
-    // Determine the number of days
-    $daysAway = $interval->days;
-
-    // If $udate is before $udate_today, make $daysAway negative
-    if ($date < $today) {
-        $daysAway = -$daysAway;
-    }
-
-    return $daysAway;
-}
 
 function prettyOrNot( $test_udate ){
         global $todays_udate;
 
-        $yellow_days = 8;  // less than 8 days
-        $orange_days = 4;  // 3 or less days
-
-        $green          = "completed";
-        $red            = "not-completed";          // red date == udate
-        $orange         = "soon1-completed";        // orange  date <=3
-        $yellow         = "soon-completed";         // yellow date <=7
+        $green      = "completed";
+        $red        = "not-completed";
         $assume     = $green;
 
         // if(strlen($test_udate!=10))  return($assume); 
- 
-        $daysaway0 = DaysAway( $todays_udate, $test_udate );   // ie 4 days away
-        if( $daysaway0 < $yellow_days ){
-            $assume     = $yellow;
-        }
-
-        if( $daysaway0 < $orange_days ){
-            $assume     = $orange;
-        }
 
         if( $todays_udate  == $test_udate )   $assume = $red;
 
@@ -125,22 +92,6 @@ function prettyOrNot( $test_udate ){
 
 }
 
-// checks to see if var udate is set then checks if date behind us...
-function IsAvailable( $udate ){
-    global $todays_udate;
-
-    $tf = false; 
-
-    // isset($eventsTable[$j])  &&  DaysAway( $todays_udate , $eventsTable[$j] ) >=
-    if(!( isset( $udate ) ) ) return ($tf);   
-
-    if( DaysAway( $todays_udate , $udate ) < 0 )  return ($tf); 
-
-
-    $tf=true;
-    return ($tf); 
-
-}
 
 
 /* 
@@ -221,7 +172,6 @@ if (isset($eventsTable[0])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style_d2.css">
-    <link rel="stylesheet" href="style_digital.css">
     <title>algoz dashboard</title>
 </head>
 
@@ -282,7 +232,7 @@ if (isset($eventsTable[0])) {
             <i class='bx bx-menu'></i>
             <form action="#">
                 <div class="form-input">
-                    <input type="search" placeholder="symbol...">
+                    <input type="search" placeholder="ai prompt or symbol...">
                     <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
                 </div>
             </form>
@@ -309,18 +259,9 @@ if (isset($eventsTable[0])) {
             <div class="header">
                 <div class="left">
                     <!-- <h1>Your Dashboard</h1> -->
-                    <h1><div class="textdig" id="time"></div></h1>
+                    <h1><?php echo $prettyDateTime;  ?></h1>
 
-                     <!-- <div class="wrapper"> 
-                        <div class="display">
-                            <div id="time"></div>
-                        </div>
-                        -->
-                       <!--  <span></span>
 
-                        <span></span>
-                    </div>
- -->
 <!--                     
                     <ul class="breadcrumb">
                         <li><a href="#">
@@ -442,26 +383,10 @@ if (isset($eventsTable[0])) {
                     </div>
                     <ul class="task-list">
 
-
-
-                    <?php  $j=0;  if( isset($eventsTable[$j])  &&  DaysAway( $todays_udate , $eventsTable[$j] ) >=0 ):  
-                           $color0=prettyOrNot( $eventsTable[$j] );  
-                           ?>
+                    <?php  $j=0;  if (isset($eventsTable[$j])):  ?>
                        
-                        <!-- <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>"> -->
-                        <?php  if($color0=="soon1-completed") : ?>
-                                 <li class="soon1-completed">
-                        <?php endif; ?> 
-                        <?php  if($color0=="soon-completed") : ?>
-                                 <li class="soon-completed">
-                        <?php endif; ?>
-                        <?php  if($color0=="completed") : ?>
-                                 <li class="completed">
-                        <?php endif; ?>
-                        <?php  if($color0=="not-completed") : ?>
-                                 <li class="not-completed">
-                        <?php endif; ?> 
-
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
                    <!-- <li class="not-completed"> -->
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
@@ -472,7 +397,7 @@ if (isset($eventsTable[0])) {
                     <?php endif; ?>
 
 
-                    <?php $j+=2; if ( IsAvailable($eventsTable[$j]) ): ?>
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
                         <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
                             <!-- <li class="completed"> -->
                             <div class="task-title">
@@ -483,7 +408,7 @@ if (isset($eventsTable[0])) {
                     <?php endif; ?>
 
 
-                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
                         <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
                         <!-- <li class="completed"> -->
                             <div class="task-title">
@@ -494,7 +419,7 @@ if (isset($eventsTable[0])) {
                     <?php endif; ?>
 
 
-                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
                         <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
                         <!-- <li class="completed"> -->
                             <div class="task-title">
@@ -505,7 +430,7 @@ if (isset($eventsTable[0])) {
                     <?php endif; ?>
 
 
-                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
                         <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
                         <!-- <li class="completed"> -->
                             <div class="task-title">
@@ -516,7 +441,7 @@ if (isset($eventsTable[0])) {
                     <?php endif; ?>
 
 
-                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
                         <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
                         <!-- <li class="completed"> -->
                             <div class="task-title">
@@ -527,7 +452,7 @@ if (isset($eventsTable[0])) {
                     <?php endif; ?>
 
 
-                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
                         <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
                         <!-- <li class="completed"> -->
                             <div class="task-title">
@@ -538,7 +463,7 @@ if (isset($eventsTable[0])) {
                     <?php endif; ?>
 
 
-                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
                         <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
                         <!-- <li class="completed"> -->
                             <div class="task-title">
@@ -549,7 +474,7 @@ if (isset($eventsTable[0])) {
                     <?php endif; ?>
 
 
-                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
                         <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
                         <!-- <li class="completed"> -->
                             <div class="task-title">
@@ -560,7 +485,7 @@ if (isset($eventsTable[0])) {
                     <?php endif; ?>
 
 
-                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
                         <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
                         <!-- <li class="completed"> -->
                             <div class="task-title">
@@ -571,7 +496,7 @@ if (isset($eventsTable[0])) {
                     <?php endif; ?>
 
 
-                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                    <?php $j+=2; if (isset($eventsTable[$j])): ?>
                         <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
                         <!-- <li class="completed"> -->
                             <div class="task-title">
@@ -582,7 +507,7 @@ if (isset($eventsTable[0])) {
                     <?php endif; ?>
 
 
-                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): // #22 here or 11th?>
+                    <?php $j+=2; if (isset($eventsTable[$j])): // #22 here or 11th?>
                         <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
                         <!-- <li class="completed"> -->
                             <div class="task-title">
@@ -594,7 +519,7 @@ if (isset($eventsTable[0])) {
 
 
 
-                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): // #24 here or 12th?>
+                    <?php $j+=2; if (isset($eventsTable[$j])): // #24 here or 12th?>
                         <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
                         <!-- <li class="completed"> -->
                             <div class="task-title">
@@ -639,7 +564,6 @@ if (isset($eventsTable[0])) {
 
     </div>
 
-    <script src="clock.js"></script>
     <script src="index_d2.js"></script>
 </body>
 
