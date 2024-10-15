@@ -1,5 +1,6 @@
 
-<?php
+<?php                       
+    //                                                  ver  2.0
 date_default_timezone_set('America/New_York');
 
 
@@ -156,8 +157,11 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['S2year'] = 0;
         $value['S3year'] = 0;
 
+        $value['date'] = $date;
+        $timestamp = strtotime($date);
+        $dow= strtolower(date('D', $timestamp));     // Format the timestamp to return the three-letter day abbreviation (e.g., Mon, Tue, Sat)
+        $value['dayOfWeek']  = $dow;  // 0 Sun - 6 Sat normal php
 
-        $value['dayOfWeek']  = 7;  // 0 Sun - 6 Sat normal php
         $value['endOfMonth'] = 0;
 
         $value['sym'] = $sym0;
@@ -185,6 +189,7 @@ function removeString($masterStr, $strRemove) {
     return $newStr;
 }
 
+
 function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
     // Loop through the array using foreach
     echo $sym." ". $timeper. "(". $maxcandles. " max): <br /><br />";
@@ -210,8 +215,14 @@ function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
              "S3: " . $value['S3'] . ", " .
 
              "R4: " . $value['R4'] . ", " .
-             "S4: " . $value['S4'] .  
+             "S4: " . $value['S4'] .  ", " .
 
+             "date: " .$value['date']. ", ".  
+             "dayOfWeek: " .$value['dayOfWeek']. ", ".  
+             "endOfMonth: " .$value['endOfMonth']. ", ".  
+             "sym: " .$value['sym']. ", ".  
+             "per: " .$value['per'].    
+              
              "<br />";
     }
 }
@@ -246,6 +257,6 @@ PrintJsonData($dataProcessed, $sym0, $strkey , $maxCandles );
 
 
 // Output the data
-print_r($dataProcessed);
+// print_r($dataProcessed);
 
 ?>
