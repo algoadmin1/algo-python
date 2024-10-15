@@ -10,7 +10,9 @@ let gGlobalChartRect1 = { x: 150 , y: 275 , w: 60 , h: 134 };
 let gGlobalChartRect2 = { x: 150 , y: 275 , w: 60 , h: 134 };
 
 let gGlobalChartRectCurrent = { x: 150 , y: 275 , w: 60 , h: 134 };
-let gColScheme = { bg:'blue', up: 'green', dn:'red' };
+let gColScheme =  { bg:'white', up: 'green', dn:'red', ou:'blue' };
+let gColScheme1 = { bg:'yellow', up: 'green', dn:'red' , ou:'blue' };
+let gColScheme2 = { bg:'black', up: 'green', dn:'red' , ou:'blue'};
 
 
 function RandomNumC( num ){
@@ -93,10 +95,161 @@ function DrawRectOutline(ctx, x, y, w, h, wt, col) {
     ctx.stroke();
 }
 
-function DrawChart(ctx,  vrect , colScheme ) {
+function DrawChart(ctx,  vrect , colScheme, typestr ) {
 
     DrawVRect(ctx, vrect, 2, colScheme.bg , "solid");
+    DrawVRect(ctx, vrect, 4, colScheme.ou , "outline");
 
+    if(typestr=="candles")   DrawCandlesChart(ctx,  vrect , colScheme, 2);
+      else if(typestr=="line")   DrawLineChart(ctx,  vrect , colScheme, 3, "close");  // or P P3 to plot
+
+}
+/*
+
+*/
+//globals
+let gCandleWidthMin = 2;
+let gCandleSpaceMin  = 1;
+
+// let gCandleXpos = 0;
+let gCandleXnext = 0;
+let gCandleWidth =2;
+let gCandleOffset =gCandleSpaceMin; 
+let gCandleWidthTotal = gCandleWidthMin + gCandleSpaceMin;
+let gNumCandlesToRender =4 ;
+
+let gCandlesMaxesInit = { num2render: 1, priceHigh: 0, priceLow: 1000000, priceRange: 0,  
+                          srHigh: 0, srLow: 1000000,  srRange: 0,  volHigh: 0, volLow: 1000000,  volRange: 0 };
+
+let gCandlesMaxes     = { num2render: 1, priceHigh: 0, priceLow: 1000000, priceRange: 0,  
+                          srHigh: 0, srLow: 1000000,  srRange: 0,  volHigh: 0, volLow: 1000000,  volRange: 0 };
+
+        
+function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
+    let cw= canvas.width;
+    let ch= canvas.height;
+    let cnt = processedData.length;   /// == NaN ???
+
+    gCandleXnext = vrect.x + gCandleSpaceMin;
+
+//  ##############################################################################
+//  ######  MAKE A FUNCTION ...     SetCandleGlobals         #####################
+//  ##############################################################################
+    // init the vector
+    gCandlesMaxes = gCandlesMaxesInit;
+
+    let i=0;
+    // Example: Accessing specific data from processedData
+    for (var date in processedData) {
+        if (processedData.hasOwnProperty(date)) {
+            // console.log( i+") " + date + ", Close: " + processedData[date]["close"] + " "+   processedData[date]["day"]);
+            console.log( i+") " + date + ", Close: " + processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
+            let hi = parseFloat( processedData[date]["high"] );
+            let lo = parseFloat(  processedData[date]["low"] );
+            if(hi>gCandlesMaxes.priceHigh ) gCandlesMaxes.priceHigh = hi;
+            if(lo<gCandlesMaxes.priceLow  ) gCandlesMaxes.priceLow  = lo;
+
+            let srhi = parseFloat(  processedData[date]["R3"] );
+            let srlo = parseFloat(  processedData[date]["S3"] );
+            if(srhi>gCandlesMaxes.srHigh ) gCandlesMaxes.srHigh = srhi;
+            if(srlo<gCandlesMaxes.srLow  ) gCandlesMaxes.srLow  = srlo;
+
+
+            let vol = parseFloat(  processedData[date]["volume"] );
+            if(vol>gCandlesMaxes.volHigh ) gCandlesMaxes.volHigh = vol;
+            if(vol<gCandlesMaxes.volLow  ) gCandlesMaxes.volLow  = vol;
+
+
+            i++;
+        }
+    }
+    gNumCandlesToRender = i;
+    gCandlesMaxes.num2render = gNumCandlesToRender ;
+    gCandlesMaxes.priceRange = gCandlesMaxes.priceHigh - gCandlesMaxes.priceLow;
+    gCandlesMaxes.srRange    = gCandlesMaxes.srHigh    - gCandlesMaxes.srLow;
+    gCandlesMaxes.volRange   = gCandlesMaxes.volHigh   - gCandlesMaxes.volLow;
+    console.log("] POST calcs, gCandlesMaxes   =", gCandlesMaxes );
+
+//  ##############################################################################
+
+
+
+
+    gCandleOffset =gCandleSpaceMin;
+    // here test if gCandleOffset can be 2 
+    gCandleWidthTotal = parseInt( cw / gNumCandlesToRender  );
+    gCandleWidth      = gCandleWidthTotal - gCandleOffset;
+    console.log("] Candles to render, gCandleWidth  =", gNumCandlesToRender, gCandleWidth );
+
+    // console.log(processedData); // This will log the PHP data to the console
+
+    
+
+// Draw the rectangle
+    let newcol=RandomColorC();
+    newcol = 'purple';
+    DrawRectOutline(ctx, gCandleXnext, vrect.y+20,  gCandleWidth, (vrect.h/3), 2, newcol );
+    // DrawVRect(ctx, vrect, 4, colScheme.ou , "outline");
+
+
+}
+
+
+
+
+
+
+
+
+function DrawLineChart(ctx,  vrect , colScheme, wt, datastr){
+    let cw= canvas.width;
+    let ch= canvas.height;
+    let cnt = processedData.length;   ///  ????? NaN
+
+    gCandleXnext = vrect.x + gCandleSpaceMin;
+
+    let i=0;
+    // Example: Accessing specific data from processedData
+    for (var date in processedData) {
+        if (processedData.hasOwnProperty(date)) {
+            console.log( i+") " + date + ", Close: " + processedData[date]["close"] + " "+   processedData[date]["day"]);
+            i++;
+        }
+    }
+
+    gNumCandlesToRender = i;
+
+
+    gCandleWidth = parseInt( cw / gNumCandlesToRender  );
+    console.log("] Candles to render  =", gNumCandlesToRender );
+    console.log("] gCandleWidth   =", gCandleWidth );
+
+}
+
+function DrawLine(c, x, y, x1, y1, weight, color, style) {
+    const ctx = c.getContext('2d');
+    
+    // Set line properties
+    ctx.lineWidth = weight;
+    ctx.strokeStyle = color;
+
+    // Set line dash style if any
+    if (style === 'dashed') {
+        ctx.setLineDash([10, 5]); // 10px dash, 5px space
+    } else if (style === 'dotted') {
+        ctx.setLineDash([2, 4]);  // 2px dot, 4px space
+    } else {
+        ctx.setLineDash([]); // Solid line
+    }
+
+    // Begin drawing the line
+    ctx.beginPath();
+    ctx.moveTo(x, y); // Starting point
+    ctx.lineTo(x1, y1); // Ending point
+    ctx.stroke(); // Draw the line
+
+    // Reset line dash to solid for future drawing
+    ctx.setLineDash([]);
 }
 
 
@@ -122,21 +275,27 @@ function resizeCanvas() {
             const rectWidth = canvas.width - 12; // 6px margin on both sides
             const rectHeight = canvas.height - 12; // 6px margin on both sides
 
-            // Draw the rectangle
             let rcol=RandomColorC();
-            DrawRectOutline(ctx, 6, 6,           rectWidth, rectHeight, 2, 'green');
+
+            // DEL depr
+            // // Draw rnd rectangle
+            // DrawRectOutline(ctx, 6, 6,           rectWidth, rectHeight, 2, 'green');
             
+
             let vr =       { x0: 6 , y0: 6 , w0: rectWidth, h0: rectHeight };
             // DrawVRect(ctx, vr, 2, rcol, "outline");
 
-            gGlobalChartRectCurrent.x = vr.x0 + 100;
-            gGlobalChartRectCurrent.y = vr.y0 + 70;
+            gGlobalChartRectCurrent.x = vr.x0 +  parseInt(vr.w0 * 0.05);
+            gGlobalChartRectCurrent.y = vr.y0 +  parseInt(vr.h0 * 0.05);
             gGlobalChartRectCurrent.w = parseInt(vr.w0 * 0.75);
             gGlobalChartRectCurrent.h = parseInt(vr.h0 * 0.75);
 
             console.log( "preDrawChart()", gGlobalChartRectCurrent , gColScheme );
-            DrawChart( ctx, gGlobalChartRectCurrent , gColScheme );
+
+            DrawChart( ctx, gGlobalChartRectCurrent , gColScheme , "candles" );  // or "line"
             // DrawRectOutline(ctx, 6, 6, rectWidth, rectHeight, 2, rcol );
+
+            // DrawLine(canvas, 6, 6, rectWidth, rectHeight, 5, 'red', 'dotted' );   //'dashed');
 
             // ctx.beginPath();
             // ctx.rect(6, 6, rectWidth, rectHeight);
@@ -146,16 +305,15 @@ function resizeCanvas() {
 
             let rcol1=RandomColorC();
 
-            DrawVRect(ctx, gGlobalChartRect, 2, 'blue', "solid");
-
-            DrawVRect(ctx, gGlobalChartRect1, 2, rcol1, "solid");
+            // DrawVRect(ctx, gGlobalChartRect, 2, 'blue', "solid");
+            // DrawVRect(ctx, gGlobalChartRect1, 2, rcol1, "solid");
 
             let wstr = canvas.width.toString();
             let hstr = canvas.height.toString();
 
             // Draw the canv size w,h
             // let dtstr = "w,h= ["+ canvas.width.toString() +","+ canvas.height.toString() +"]"  ;
-            let dtstr = "w,h= ["+ wstr +","+ hstr +"]"  ;
+            let dtstr = "w,h= ["+ wstr +","+ hstr +"] CANDLES # =" +gNumCandlesToRender.toString()+" , candleW=" +gCandleWidth.toString() ;
             // console.log(dtstr);
             // let dtstrWidth = ctx.measureText(dtstr).width+ 0;
             let fsz = 24;
@@ -164,18 +322,16 @@ function resizeCanvas() {
             ctx.fillText( dtstr , 40, 40  );
 
 
+
+
+
 /* 
 
-
-
-               drawCandlestick(  o0, h0, l0, c0, dateStr, v0, pivotStr, pivot3Str , idx);
+               draw Candlestick(  o0, h0, l0, c0, dateStr, v0, pivotStr, pivot3Str , idx);
             
-               drawCandlestickOnly(  o0, h0, l0, c0, nextdatestr, v0, pivotStr, pivot3Str , idx, 1);
+               draw CandlestickOnly(  o0, h0, l0, c0, nextdatestr, v0, pivotStr, pivot3Str , idx, 1);
 
-               
-
-
-function drawCandlestickOnly( open, hi, low, close, dateStr, vol, Pstr, P3str , rotFlag){ //}, volume ){
+function drawC andlestickOnly( open, hi, low, close, dateStr, vol, Pstr, P3str , rotFlag){ //}, volume ){
             
             var redOrGreen = 0, y0=0, y=0, x=0,  hCanvas=0, priceStr="", wHi=0, wLo=0;   //   redOrGreen  0== red, 1=green
             var closeYCanvas = 0, openYCanvas=0;   // open, close in Y canvas coords
@@ -201,7 +357,7 @@ function drawCandlestickOnly( open, hi, low, close, dateStr, vol, Pstr, P3str , 
             // priceStr = "$"+close.toString( );    // close str
             priceStr = gCurrencyStr+close.toString( );    // close str
 
-            drawCandlestickGeometryOnly( candleXnext, y, candleWidth, hCanvas, wHi, wLo, redOrGreen, priceStr, dateStr, Pstr, P3str , rotFlag, 24);
+            drawCan dlestickGeometryOnly( candleXnext, y, candleWidth, hCanvas, wHi, wLo, redOrGreen, priceStr, dateStr, Pstr, P3str , rotFlag, 24);
             
             CheckLocalCallouts(dateStr, candleXnext-candleWidth, y+mf(0.5*(wHi-wLo)) );
 }//fn
@@ -212,7 +368,7 @@ var gPredictGreen ="#115511";    // GREEN
         
 var binarycnt=0;
 
-function drawCandlestickGeometryOnly( x,y,w,h,wHi,wLo,rG,priceStr, dateStr, Pstr, P3str , rotFlag , fntsz){
+function drawC andlestickGeometryOnly( x,y,w,h,wHi,wLo,rG,priceStr, dateStr, Pstr, P3str , rotFlag , fntsz){
         
 
                 var wickX = x + (w/2);
@@ -241,8 +397,6 @@ function drawCandlestickGeometryOnly( x,y,w,h,wHi,wLo,rG,priceStr, dateStr, Pstr
     
 //    ctx.fillStyle = "#ff9966";
   //  ctx.fillRect(x,Ybottom-200, w,h);
-
-    
     
                 ctx.fillStyle = "#555566";
                 ctx.font = "12px Arial";
@@ -267,7 +421,6 @@ function drawCandlestickGeometryOnly( x,y,w,h,wHi,wLo,rG,priceStr, dateStr, Pstr
                         }
                 }
 
- 
 // update master X for next candlestick
                 candleXnext = candleXnext + candleWidth + candleOffset ;
                
@@ -277,11 +430,7 @@ function drawCandlestickGeometryOnly( x,y,w,h,wHi,wLo,rG,priceStr, dateStr, Pstr
 //                 gThisMonthX = thisMonthX;
 //                 gDiffM = diffM; 
 
-
   }//fn
-        
-
-
 
 
 function GetYCoordFromPrice( priceInput ){
@@ -295,7 +444,6 @@ function GetYCoordFromPrice( priceInput ){
  }//fn
 
 */
-
 
         }
 
