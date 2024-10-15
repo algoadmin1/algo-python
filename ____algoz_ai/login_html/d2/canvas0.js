@@ -245,6 +245,12 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
     let col1 = colScheme.up ;
     if(cl1<op1) col1 = colScheme.dn;
 
+    let yh= vrect.y+50 -10 ;
+    let yl= vrect.y+50 + parseInt( idx/2 ) +20;
+    let xwick = gCandleXnext + parseInt( gCandleWidthTotal/2 );
+    DrawVerticalLine( ctx, xwick, yh, yl);
+
+
     candleRect.x = gCandleXnext;
     candleRect.y = vrect.y+50;
     candleRect.w = gCandleWidth;
@@ -293,8 +299,16 @@ function DrawLineChart(ctx,  vrect , colScheme, wt, datastr){
 
 }
 
-function DrawLine(c, x, y, x1, y1, weight, color, style) {
-    const ctx = c.getContext('2d');
+
+function DrawHorizontalLine( ctx, x1, x2, y ){
+    DrawLine(ctx, x1, y, x2, y, 2, 'grey', "solid");
+}
+function DrawVerticalLine( ctx, x, y1, y2 ){
+    DrawLine(ctx, x, y1, x, y2, 2, 'grey', "solid");
+}
+
+function DrawLine(ctx, x, y, x1, y1, weight, color, style) {
+    // DEL:   //  const ctx = c.getContext('2d');
     
     // Set line properties
     ctx.lineWidth = weight;
@@ -362,7 +376,7 @@ function resizeCanvas() {
             DrawChart( ctx, gGlobalChartRectCurrent , gColScheme , "candles" );  // or "line"
             // DrawRectOutline(ctx, 6, 6, rectWidth, rectHeight, 2, rcol );
 
-            // DrawLine(canvas, 6, 6, rectWidth, rectHeight, 5, 'red', 'dotted' );   //'dashed');
+            // Dra wLine(ctx, 6, 6, rectWidth, rectHeight, 5, 'red', 'dotted' );   //'dashed');
 
             // ctx.beginPath();
             // ctx.rect(6, 6, rectWidth, rectHeight);
