@@ -1,9 +1,28 @@
 //
-//          canvas0.js  aka dr@wChart.js                   ver 5.4
+//          canvas0.js  aka dr@wChart.js                   ver 6.0
 //
-// Get the canvas and the 2D drawing context
-        const canvas = document.getElementById('myCanvas');
-        const ctx = canvas.getContext('2d');
+//              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
+//
+//
+//              TO DO:  axes, gridlines,
+//                      buy/Sell sig's, drawTriangle, 
+//                      Monthly Sup/Resistance
+//                      Weekly Sup/Resistance
+//                      Draw Volume
+//
+//                      Draw price at high and at low
+//
+//                       white/blackFlip &scheme=, Black/WhiteText: gChartTextCol =
+//
+//                  **  End of Month Tracking, 0/1 ==> 0 or Xcoord of gWidthXmiddle (?)
+//
+//                      DrawLineChart()  
+//
+
+
+
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
 
 
 
@@ -13,10 +32,13 @@ let gGlobalChartRect1 = { x: 150 , y: 275 , w: 60 , h: 134 };
 let gGlobalChartRect2 = { x: 150 , y: 275 , w: 60 , h: 134 };
 
 let gGlobalChartRectCurrent = { x: 150 , y: 275 , w: 60 , h: 134 };
-let gColScheme = { bg:'white', up: 'green', dn:'red', ou:'purple' };
-let gColScheme3 =  { bg:'white', up: 'yellow', dn:'purple', ou:'red' };
-let gColScheme1 = { bg:'yellow', up: 'green', dn:'red' , ou:'blue' };
-let gColScheme2 = { bg:'black', up: 'green', dn:'red' , ou:'blue'};
+let gColScheme = { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple' };
+
+let gColScheme2 = { bg:'black',  tx: 'white', up: '#11ef43', dn:'purple' , ou:'yellow'};
+
+let gColScheme4 = { bg:'black',  tx: 'white', up: 'green', dn:'red' , ou:'white'};
+let gColScheme3 =  { bg:'white',  tx: 'black', up: 'yellow', dn:'purple', ou:'red' };
+let gColScheme1 = { bg:'yellow',  tx: 'red', up: 'green', dn:'red' , ou:'blue' };
 
 
 function RandomNumC( num ){
@@ -161,8 +183,9 @@ function DrawRoundedRect(ctx, vrect, radius, col, wt, fill) {
 
 function DrawChart(ctx,  vrect , colScheme, typestr ) {
 
-    DrawVRect(ctx, vrect, 2, colScheme.bg , "solid");
-   // DrawVRect(ctx, vrect, 4, colScheme.ou , "outline");
+    // DrawVRect(ctx, vrect, 2, colScheme.bg , "solid");
+    DrawRoundedRect(ctx, vrect, 20, colScheme.bg, 3, 1);
+
     // DrawRoundedRect(ctx, vrect, radius, col, wt, fill);
     DrawRoundedRect(ctx, vrect, 20, colScheme.ou, 3, 0);
 
@@ -197,10 +220,13 @@ let gNumCandlesToRender =4 ;
 let gCandleWickX =0;
 
 let gCandlesMaxesInit = { num2render: 1, priceHigh: 0, priceLow: 1000000, priceRange: 0,  
-                          srHigh: 0, srLow: 1000000,  srRange: 0,  volHigh: 0, volLow: 1000000,  volRange: 0 };
+                          srHigh: 0, srLow: 1000000,  srRange: 0,  volHigh: 0, volLow: 1000000,  volRange: 0 ,
+                          priceHighX: 0, priceHighY: 0,  priceLowX: 0, priceLowY: 0   };
 
 let gCandlesMaxes     = { num2render: 1, priceHigh: 0, priceLow: 1000000, priceRange: 0,  
-                          srHigh: 0, srLow: 1000000,  srRange: 0,  volHigh: 0, volLow: 1000000,  volRange: 0 };
+                          srHigh: 0, srLow: 1000000,  srRange: 0,  volHigh: 0, volLow: 1000000,  volRange: 0 ,
+                          priceHighX: 0, priceHighY: 0,  priceLowX: 0, priceLowY: 0   };
+
 
         
 function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
@@ -212,7 +238,6 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
 //  ##############################################################################
 //  ######  MAKE A FUNCTION ...     SetCandleGlobals         #####################
 //  ##############################################################################
-                                                    // DEL: wrong: !!! // gCandlesMaxes = gCandlesMaxesInit;
     
                                                     // let vect2 = { ...vect };   // example
     gCandlesMaxes = { ...gCandlesMaxesInit };      // init the global vector
@@ -221,11 +246,10 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
     let i=0;
     for (var date in processedData) {
         if (processedData.hasOwnProperty(date)) {
-            // console.log( i+") " + date + ", Close: " +processedData[date]["close"] + " "+   processedData[date]["day"]);
-            console.log( i+") " + date + ", Close: " + processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
+            // console.log( i+") " + date + ", Close: " + processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
             let hi = parseFloat( processedData[date]["high"] );
             let lo = parseFloat(  processedData[date]["low"] );
-            if(hi>gCandlesMaxes.priceHigh ) gCandlesMaxes.priceHigh = hi;
+            if(hi>gCandlesMaxes.priceHigh ) gCandlesMaxes.priceHigh = hi;  
             if(lo<gCandlesMaxes.priceLow  ) gCandlesMaxes.priceLow  = lo;
 
             let srhi = parseFloat(  processedData[date]["R3"] );
@@ -302,13 +326,13 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
             let hi1 = parseFloat(  processedData[date]["high"] );
             let lo1 = parseFloat(  processedData[date]["low"] );
             let cl1 = parseFloat(  processedData[date]["close"] );
-            let vol1 = parseFloat(  processedData[date]["close"] );
+            let vol1 = parseFloat(  processedData[date]["volume"] );
 
             gLastDateStr    = date;
 
             DrawCandlePlus(ctx, vrect, colScheme,  j, datestr, op1, hi1, lo1, cl1, vol1 );    // uses gCandlesMaxes
 
-            console.log( j+") " + datestr + ":  nextX="+ gCandleXnext  + ";  H, L, Close= " + processedData[date]["high"] + ", " + processedData[date]["low"] + ", "+ processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
+            // console.log( j+") " + datestr + ":  nextX="+ gCandleXnext  + ";  H, L, Close= " + processedData[date]["high"] + ", " + processedData[date]["low"] + ", "+ processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
             
             gCandleXnext =   gCandleXnext +  gCandleWidth + gCandleOffset ;
             j++;
@@ -318,7 +342,7 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
     gCandleXnextLast =   gCandleXnext;
 
 
-    DrawTextInfo( ctx , vrect , 48 ,  24);
+    DrawTextInfo( ctx , vrect , 48 ,  24, colScheme);
 
 
 }// fn Dr@wCandlesChart
@@ -365,7 +389,8 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
 
     yh = GetYCoordFromPrice( hi1, vrect ) ;   // gCandleMaxes{} must be set by this fn-call
     yl = GetYCoordFromPrice( lo1, vrect ) ;
-    DrawVerticalLine( ctx, xwick, yh, yl);
+    DrawVerticalLine( ctx, xwick, yh, yl, 'grey');
+    // DrawVerticalLine( ctx, xwick, yh, yl, colScheme.wi);  // wick col scheme
 
 
     candleRect.x = gCandleXnext;
@@ -386,29 +411,29 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
     }
 
     DrawVRect(ctx, candleRect, 2, col1 , "solid");
-    DrawOtherStuff(ctx , vrect , idx);
+    DrawOtherStuff(ctx , vrect , idx, colScheme);
 
 }// fn Dr@wCandlePlus(...)
 
 
-function  DrawOtherStuff( ctx  , vrect, idx ){
-    // DrawTextInfo( ctx , vrect , 48 ,  24);    /// only draw this 'AAPL (Daily) Last: $230.92'  ONCE!
-    if(idx%4==0) DrawDate( ctx  , vrect );
+function  DrawOtherStuff( ctx  , vrect, idx , colScheme ){
+    if(idx%4==0) DrawDate( ctx  , vrect , colScheme);
     // DrawVolume( ctx  , vrect );
 }
 
 
 
-function  DrawTextInfo( ctx , vrect, offset , fsz){
-    DrawText( ctx, gChartTextStr,  vrect.x+offset, vrect.y+offset, fsz , gGlobalDrawCol , gGlobalFont);
+function  DrawTextInfo( ctx , vrect, offset , fsz, colScheme ){
+    // DrawText( ctx, gChartTextStr,  vrect.x+offset, vrect.y+offset, fsz , gGlobalDrawCol , gGlobalFont);
+    DrawText( ctx, gChartTextStr,  vrect.x+offset, vrect.y+offset, fsz , colScheme.tx , gGlobalFont);
 }
 function DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr){    
     ctx.fillStyle = colStr ; 
     ctx.font =  fsz.toString() + "px "+ fontStr ;        // ctx.font = "bolder "+"124px Arial";
     ctx.fillText( txtStr , x,  y  );   
 }
-function DrawDate( ctx , vrect){  // designed to be called during Rendering
-    DrawTextRotated( ctx, gLastDateStr, gCandleWickX, (vrect.y+vrect.h), gGlobalDrawCol, 12, gGlobalFont, -0.25);
+function DrawDate( ctx , vrect, colScheme){  // designed to be called during Rendering
+    DrawTextRotated( ctx, gLastDateStr, gCandleWickX, (vrect.y+vrect.h), colScheme.tx, 12, gGlobalFont, -0.275);
 }
 function DrawTextRotated( ctx, rstr, xx0, yy0, colstr, px, font0str, rotfloat) {
     ctx.fillStyle = colstr;  
@@ -452,11 +477,11 @@ function DrawLineChart(ctx,  vrect , colScheme, wt, datastr){
 }
 
 
-function DrawHorizontalLine( ctx, x1, x2, y ){
-    DrawLine(ctx, x1, y, x2, y, 2, 'grey', "solid");
+function DrawHorizontalLine( ctx, x1, x2, y ,col){
+    DrawLine(ctx, x1, y, x2, y, 2, col, "solid");
 }
-function DrawVerticalLine( ctx, x, y1, y2 ){
-    DrawLine(ctx, x, y1, x, y2, 2, 'grey', "solid");
+function DrawVerticalLine( ctx, x, y1, y2 , col){
+    DrawLine(ctx, x, y1, x, y2, 2, col , "solid");
 }
 
 function DrawLine(ctx, x, y, x1, y1, weight, color, style) {
@@ -525,7 +550,7 @@ function resizeCanvas() {
 
             console.log( "preDrawChart()", gGlobalChartRectCurrent , gColScheme );
 
-            DrawChart( ctx, gGlobalChartRectCurrent , gColScheme , "candles" );  // or "line"
+            DrawChart( ctx, gGlobalChartRectCurrent , gColScheme2 , "candles" );  // or "line"
             // DrawRectOutline(ctx, 6, 6, rectWidth, rectHeight, 2, rcol );
 
             // Dra wLine(ctx, 6, 6, rectWidth, rectHeight, 5, 'red', 'dotted' );   //'dashed');
