@@ -374,8 +374,8 @@ $processedDataJson = json_encode($dataProcessed);
     </script>
 
     <!-- Link to your external JavaScript file -->
-    <!-- <script src="canvas0.js"></script> -->
-    <script src="drawchart.js"></script>
+    <script src="canvas0.js"></script>
+    <!-- <script src="drawchart.js"></script> -->
 </body>
 </html>
 

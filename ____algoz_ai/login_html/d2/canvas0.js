@@ -93,9 +93,9 @@ function DrawRectOutline(ctx, x, y, w, h, wt, col) {
     ctx.stroke();
 }
 
-function DrawChart(ctx,  vrect, candles, colScheme ) {
+function DrawChart(ctx,  vrect , colScheme ) {
 
-    DrawVRect(ctx, gGlobalChartRect, 2, colScheme.bg , "solid");
+    DrawVRect(ctx, vrect, 2, colScheme.bg , "solid");
 
 }
 
@@ -135,7 +135,7 @@ function resizeCanvas() {
             gGlobalChartRectCurrent.h = parseInt(vr.h0 * 0.75);
 
             console.log( "preDrawChart()", gGlobalChartRectCurrent , gColScheme );
-            DrawChart( ctx, gGlobalChartRectCurrent, processedData , gColScheme );
+            DrawChart( ctx, gGlobalChartRectCurrent , gColScheme );
             // DrawRectOutline(ctx, 6, 6, rectWidth, rectHeight, 2, rcol );
 
             // ctx.beginPath();
