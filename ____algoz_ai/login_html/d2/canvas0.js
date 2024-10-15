@@ -1,4 +1,7 @@
-  // Get the canvas and the 2D drawing context
+//
+//          canvas0.js  aka drawChart.js                   ver 5.0
+//
+// Get the canvas and the 2D drawing context
         const canvas = document.getElementById('myCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -10,7 +13,8 @@ let gGlobalChartRect1 = { x: 150 , y: 275 , w: 60 , h: 134 };
 let gGlobalChartRect2 = { x: 150 , y: 275 , w: 60 , h: 134 };
 
 let gGlobalChartRectCurrent = { x: 150 , y: 275 , w: 60 , h: 134 };
-let gColScheme =  { bg:'white', up: 'green', dn:'red', ou:'blue' };
+let gColScheme0 = { bg:'white', up: 'green', dn:'red', ou:'blue' };
+let gColScheme =  { bg:'white', up: 'yellow', dn:'purple', ou:'red' };
 let gColScheme1 = { bg:'yellow', up: 'green', dn:'red' , ou:'blue' };
 let gColScheme2 = { bg:'black', up: 'green', dn:'red' , ou:'blue'};
 
@@ -252,7 +256,10 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
     gCandleXnextLast =   gCandleXnext;
 
 
-}
+    DrawTextInfo( ctx , vrect , 48 ,  24);
+
+
+}// fn Dr@wCandlesChart
 
 
 //
@@ -323,9 +330,8 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
 
 
 function  DrawOtherStuff( ctx  , vrect, idx ){
-    DrawTextInfo( ctx , vrect , 48 ,  24);
-    if(idx%5==0) DrawDate( ctx  , vrect );
-
+    // DrawTextInfo( ctx , vrect , 48 ,  24);    /// only draw this 'AAPL (Daily) Last: $230.92'  ONCE!
+    if(idx%4==0) DrawDate( ctx  , vrect );
     // DrawVolume( ctx  , vrect );
 }
 
@@ -339,7 +345,7 @@ function DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr){
     ctx.font =  fsz.toString() + "px "+ fontStr ;        // ctx.font = "bolder "+"124px Arial";
     ctx.fillText( txtStr , x,  y  );   
 }
-function DrawDate( ctx , vrect){
+function DrawDate( ctx , vrect){  // designed to be called during Rendering
     DrawTextRotated( ctx, gLastDateStr, gCandleWickX, (vrect.y+vrect.h), gGlobalDrawCol, 24, gGlobalFont);
 }
 function DrawTextRotated( ctx, rstr, xx0, yy0, colstr, px, font0str) {
