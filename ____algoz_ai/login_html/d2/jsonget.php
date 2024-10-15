@@ -191,6 +191,8 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['dayOfWeek']  = $dow;  // 0 Sun - 6 Sat normal php
 
         $value['endOfMonth'] = 0;
+        // if(MonthEnd($value['date']))  $value['endOfMonth'] = 1 ;
+
 
         $value['sym'] = $sym0;
         $value['per'] = $intervalStr;
@@ -217,6 +219,16 @@ function removeString($masterStr, $strRemove) {
     return $newStr;
 }
 
+function MonthEnd($udate) {
+    // Convert the given date string to a timestamp
+    $timestamp = strtotime($udate);
+    
+    // Get the last day of the month for the given date
+    $lastDayOfMonth = date('Y-m-t', $timestamp);
+    
+    // Check if the given date is the same as the last day of the month
+    return $udate === $lastDayOfMonth;
+}
 
 function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
     // Loop through the array using foreach
@@ -260,7 +272,7 @@ function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
 // $sym0="NVDA";
 $sym0= $sym;
 $maxCandles = 95;  // just over 1 qtr
-$sym0str = $sym0. " Chart";
+$sym0str = $sym0." ".$per." Chart";
 $printjson=0;
 
  // https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=AAPL&interval=15min&entitlement=realtime&apikey=91M7LB7MG3JHY129
@@ -362,7 +374,8 @@ $processedDataJson = json_encode($dataProcessed);
     </script>
 
     <!-- Link to your external JavaScript file -->
-    <script src="canvas0.js"></script>
+    <!-- <script src="canvas0.js"></script> -->
+    <script src="drawchart.js"></script>
 </body>
 </html>
 

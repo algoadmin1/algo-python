@@ -7,6 +7,10 @@
 let gGlobalViewportRect = { x: -100 , y: -100 , w: 13 , h: 13 };
 let gGlobalChartRect = { x: 50 , y: 75 , w: 160 , h: 34 };
 let gGlobalChartRect1 = { x: 150 , y: 275 , w: 60 , h: 134 };
+let gGlobalChartRect2 = { x: 150 , y: 275 , w: 60 , h: 134 };
+
+let gGlobalChartRectCurrent = { x: 150 , y: 275 , w: 60 , h: 134 };
+let gColScheme = { bg:'blue', up: 'green', dn:'red' };
 
 
 function RandomNumC( num ){
@@ -87,8 +91,24 @@ function DrawRectOutline(ctx, x, y, w, h, wt, col) {
     ctx.strokeStyle = col;
     ctx.lineWidth = wt;
     ctx.stroke();
+}
+
+function DrawChart(ctx,  vrect, candles, colScheme ) {
+
+    DrawVRect(ctx, gGlobalChartRect, 2, colScheme.bg , "solid");
 
 }
+
+
+
+
+
+
+
+
+
+
+
         // Function to resize canvas and redraw the rectangle
 function resizeCanvas() {
             // Set canvas width and height to match the div's size
@@ -104,11 +124,18 @@ function resizeCanvas() {
 
             // Draw the rectangle
             let rcol=RandomColorC();
-            DrawRectOutline(ctx, 6, 6, rectWidth, rectHeight, 2, 'green');
+            DrawRectOutline(ctx, 6, 6,           rectWidth, rectHeight, 2, 'green');
             
-            // let vr = { x0: 6 , y0: 6 , h0: rectWidth, w0: rectHeight };
+            let vr =       { x0: 6 , y0: 6 , w0: rectWidth, h0: rectHeight };
             // DrawVRect(ctx, vr, 2, rcol, "outline");
 
+            gGlobalChartRectCurrent.x = vr.x0 + 100;
+            gGlobalChartRectCurrent.y = vr.y0 + 70;
+            gGlobalChartRectCurrent.w = parseInt(vr.w0 * 0.75);
+            gGlobalChartRectCurrent.h = parseInt(vr.h0 * 0.75);
+
+            console.log( "preDrawChart()", gGlobalChartRectCurrent , gColScheme );
+            DrawChart( ctx, gGlobalChartRectCurrent, processedData , gColScheme );
             // DrawRectOutline(ctx, 6, 6, rectWidth, rectHeight, 2, rcol );
 
             // ctx.beginPath();
