@@ -1,8 +1,15 @@
 
 <?php                       
-    //                                                  ver  2.0
+    //                                                  ver  2.2
 date_default_timezone_set('America/New_York');
+$intradaystrs = [ "notIntraday", "intraday"];
+$periods = [ "daily", "weekly", "monthly", "1min" , "5min", "15min" , "30min", "60min" ];
+$msg=1  ;
 
+function CheckStringArray($arr, $str) {
+    // Use in_array to check if the string exists in the array
+    return in_array($str, $arr);
+}
 
 if(isset( $_GET['sym'] )){
     $sym = $_GET['sym'] ;
@@ -11,6 +18,20 @@ if(isset( $_GET['sym'] )){
 }
 $sym = strtoupper($sym);
 
+
+if(isset( $_GET['per'] )){
+    $per0 = $_GET['per'] ;
+    $per="daily";
+    if(CheckStringArray($periods, $per0)) $per=$per0;
+}else{
+    $per = "daily";
+}
+$intraday=0; 
+if($per!="daily" && $per!="weekly" && $per!="monthly" ) $intraday=1;
+if($msg==1){
+    echo " ** PER =". $per;
+    echo "  ** intraday =". $intradaystrs[$intraday];
+}
 
 function GetJsonData($url, $maxCandles, $strkey) {
     try {
@@ -233,6 +254,8 @@ function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
 // $sym0="NVDA";
 $sym0= $sym;
 $maxCandles = 95;  // just over 1 qtr
+$sym0str = $sym0. " Chart";
+$printjson=0;
 
  // https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=AAPL&interval=15min&entitlement=realtime&apikey=91M7LB7MG3JHY129
 
@@ -252,7 +275,7 @@ $intervalStr = removeString($strkey, $strRemove);
 $data = GetJsonData($url, $maxCandles, $strkey);
 
 $dataProcessed = ProcessCandles($data, $sym0, $intervalStr);
-PrintJsonData($dataProcessed, $sym0, $strkey , $maxCandles );
+if($printjson==1) PrintJsonData($dataProcessed, $sym0, $strkey , $maxCandles );
 
 // Convert $processedData to JSON
 $processedDataJson = json_encode($dataProcessed);
@@ -269,9 +292,36 @@ $processedDataJson = json_encode($dataProcessed);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>js Proc'd Datat</title>
+    <title><?php echo $sym0str ; ?></title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        .chartjb {
+            width: 100%;
+            height: 100vh; /* Full viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
+
+    <div class="chartjb">
+        <canvas id="myCanvas"></canvas>
+    </div>
+
     <!-- Embed the PHP-generated JSON into the page using a script tag -->
     <script>
         // Store the PHP data in a JavaScript variable
@@ -280,7 +330,7 @@ $processedDataJson = json_encode($dataProcessed);
     </script>
 
     <!-- Link to your external JavaScript file -->
-    <!-- <script src="drawdata.js"></script> -->
+    <script src="canvas0.js"></script>
 </body>
 </html>
 
