@@ -157,7 +157,9 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['S2year'] = 0;
         $value['S3year'] = 0;
 
-        $value['date'] = $date;
+        $value['datefull'] = $date;
+        $value['date'] = substr($date, 0, 10);
+
         $timestamp = strtotime($date);
         $dow= strtolower(date('D', $timestamp));     // Format the timestamp to return the three-letter day abbreviation (e.g., Mon, Tue, Sat)
         $value['dayOfWeek']  = $dow;  // 0 Sun - 6 Sat normal php
