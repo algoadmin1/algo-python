@@ -194,7 +194,8 @@ function removeString($masterStr, $strRemove) {
 
 function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
     // Loop through the array using foreach
-    echo $sym." ". $timeper. "(". $maxcandles. " max): <br /><br />";
+    $cnt=count($arr);
+    echo $sym." ". $timeper. "( ". $maxcandles. " max, cnt=". $cnt. " ): <br /><br />";
 
     foreach ($arr as $date => $value) {
         // Echo the date and the corresponding values
@@ -220,8 +221,8 @@ function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
              "S4: " . $value['S4'] .  ", " .
 
              "date: " .$value['date']. ", ".  
-             "dayOfWeek: " .$value['dayOfWeek']. ", ".  
-             "endOfMonth: " .$value['endOfMonth']. ", ".  
+             "day: " .$value['dayOfWeek']. ", ".  
+             "eom: " .$value['endOfMonth']. ", ".  
              "sym: " .$value['sym']. ", ".  
              "per: " .$value['per'].    
               
@@ -231,7 +232,7 @@ function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
 
 // $sym0="NVDA";
 $sym0= $sym;
-$maxCandles = 30;
+$maxCandles = 95;  // just over 1 qtr
 
  // https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=AAPL&interval=15min&entitlement=realtime&apikey=91M7LB7MG3JHY129
 

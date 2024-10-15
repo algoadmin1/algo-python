@@ -1,3 +1,4 @@
+<!-- canvas0.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +13,7 @@
             width: 100%;
         }
 
-        .orders1 {
+        .chartjb {
             width: 100%;
             height: 100vh; /* Full viewport height */
             display: flex;
@@ -29,7 +30,7 @@
 </head>
 <body>
 
-    <div class="orders">
+    <div class="chartjb">
         <canvas id="myCanvas"></canvas>
     </div>
 
@@ -37,32 +38,6 @@
         // Get the canvas and the 2D drawing context
         const canvas = document.getElementById('myCanvas');
         const ctx = canvas.getContext('2d');
-
-        function DrawLine(c, x, y, x1, y1, weight, color, style) {
-                const ctx = c.getContext('2d');
-                
-                // Set line properties
-                ctx.lineWidth = weight;
-                ctx.strokeStyle = color;
-
-                // Set line dash style if any
-                if (style === 'dashed') {
-                    ctx.setLineDash([10, 5]); // 10px dash, 5px space
-                } else if (style === 'dotted') {
-                    ctx.setLineDash([2, 4]);  // 2px dot, 4px space
-                } else {
-                    ctx.setLineDash([]); // Solid line
-                }
-
-                // Begin drawing the line
-                ctx.beginPath();
-                ctx.moveTo(x, y); // Starting point
-                ctx.lineTo(x1, y1); // Ending point
-                ctx.stroke(); // Draw the line
-
-                // Reset line dash to solid for future drawing
-                ctx.setLineDash([]);
-            }
 
         // Function to resize canvas and redraw the rectangle
         function resizeCanvas() {
@@ -84,15 +59,18 @@
             ctx.lineWidth = 2;
             ctx.stroke();
 
+            let wstr = canvas.width.toString();
+            let hstr = canvas.height.toString();
 
-            let dtstr      = "w,h= ["+ canvas.width.toString()   +","+   canvas.height.toString() +"]"  ;
+            // Draw the canv size w,h
+            // let dtstr = "w,h= ["+ canvas.width.toString() +","+ canvas.height.toString() +"]"  ;
+            let dtstr = "w,h= ["+ wstr +","+ hstr +"]"  ;
+            // console.log(dtstr);
             // let dtstrWidth = ctx.measureText(dtstr).width+ 0;
             let fsz = 24;
             ctx.fillStyle = "#113edd";        
             ctx.font =  fsz.toString()+ "px Arial";   // ctx.font = "bolder "+"124px Arial";
             ctx.fillText( dtstr , 40, 40  );
-
-            DrawLine(canvas, 6, 6, rectWidth, rectHeight, 5, 'green', 'dashed');
 
         }
 
