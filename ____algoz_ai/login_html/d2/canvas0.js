@@ -113,6 +113,8 @@ let gCandleSpaceMin  = 1;
 
 // let gCandleXpos = 0;
 let gCandleXnext = 0;
+let gCandleXnextStart = 0;
+let gCandleXnextLast  = 0;
 let gCandleWidth =2;
 let gCandleOffset =gCandleSpaceMin; 
 let gCandleWidthTotal = gCandleWidthMin + gCandleSpaceMin;
@@ -130,14 +132,16 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
     let ch= canvas.height;
     let cnt = processedData.length;   /// == NaN ???
 
-    gCandleXnext = vrect.x + gCandleSpaceMin;
 
 //  ##############################################################################
 //  ######  MAKE A FUNCTION ...     SetCandleGlobals         #####################
 //  ##############################################################################
-    // init the vector
-    gCandlesMaxes = gCandlesMaxesInit;
+                                                    // DEL: wrong: !!! // gCandlesMaxes = gCandlesMaxesInit;
+    
+                                                    // let vect2 = { ...vect };   // example
+    gCandlesMaxes = { ...gCandlesMaxesInit };      // init the global vector
 
+    
     let i=0;
     // Example: Accessing specific data from processedData
     for (var date in processedData) {
@@ -154,6 +158,9 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
             if(srhi>gCandlesMaxes.srHigh ) gCandlesMaxes.srHigh = srhi;
             if(srlo<gCandlesMaxes.srLow  ) gCandlesMaxes.srLow  = srlo;
 
+            // let myNum = '62.3900';
+            // let myFloat = parseFloat(parseFloat(myNum).toFixed(2));
+            // console.log(myFloat);  // Outputs: 62.39 (as a number)
 
             let vol = parseFloat(  processedData[date]["volume"] );
             if(vol>gCandlesMaxes.volHigh ) gCandlesMaxes.volHigh = vol;
@@ -170,14 +177,22 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
     gCandlesMaxes.volRange   = gCandlesMaxes.volHigh   - gCandlesMaxes.volLow;
     console.log("] POST calcs, gCandlesMaxes   =", gCandlesMaxes );
 
-//  ##############################################################################
+//  ############################################################################## should be a fn
 
 
 
 
-    gCandleOffset =gCandleSpaceMin;
-    // here test if gCandleOffset can be 2 
+
+// DETERMINE gCandleOffset
+    gCandleOffset = gCandleSpaceMin;
     gCandleWidthTotal = parseInt( cw / gNumCandlesToRender  );
+    if(gCandleWidthTotal>4) gCandleOffset=gCandleSpaceMin+1;     // ie 2, set new offset iff candle wide enough
+   
+    gCandleXnext = vrect.x + gCandleOffset;
+    gCandleXnextStart = gCandleXnext;
+
+    
+// DETERMINE  gCandleWidth
     gCandleWidth      = gCandleWidthTotal - gCandleOffset;
     console.log("] Candles to render, gCandleWidth  =", gNumCandlesToRender, gCandleWidth );
 
@@ -185,20 +200,72 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
 
     
 
-// Draw the rectangle
+//
+//  DEL, depricate
+//
+// Draw the  SAMPLE rectangle
     let newcol=RandomColorC();
-    newcol = 'purple';
+    newcol = 'black';
     DrawRectOutline(ctx, gCandleXnext, vrect.y+20,  gCandleWidth, (vrect.h/3), 2, newcol );
     // DrawVRect(ctx, vrect, 4, colScheme.ou , "outline");
+
+
+
+
+    let j=0;
+    for (var date in processedData) {
+        if (processedData.hasOwnProperty(date)) {
+            let datestr= date;
+            let op1 = parseFloat(  processedData[date]["open"] );
+            let hi1 = parseFloat(  processedData[date]["high"] );
+            let lo1 = parseFloat(  processedData[date]["low"] );
+            let cl1 = parseFloat(  processedData[date]["close"] );
+            let vol1 = parseFloat(  processedData[date]["close"] );
+
+            DrawCandlePlus(ctx, vrect, colScheme,  j, datestr, op1, hi1, lo1, cl1, vol1 );    // uses gCandlesMaxes
+
+            console.log( j+") " + datestr + ":  nextX="+ gCandleXnext  + ";  H, L, Close= " + processedData[date]["high"] + ", " + processedData[date]["low"] + ", "+ processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
+            
+            gCandleXnext =   gCandleXnext +  gCandleWidth + gCandleOffset ;
+            j++;
+        }
+    }//for
+
+    gCandleXnextLast =   gCandleXnext;
 
 
 }
 
 
 
+function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl1, vol1  ){
+
+    let candleRect = {  x: 0 , y: 0 , w: 4 , h: 12  }; 
+
+    let col1 = colScheme.up ;
+    if(cl1<op1) col1 = colScheme.dn;
+
+    candleRect.x = gCandleXnext;
+    candleRect.y = vrect.y+50;
+    candleRect.w = gCandleWidth;
+    candleRect.h = parseInt( idx/2 );
+    DrawVRect(ctx, candleRect, 2, col1 , "solid");
+
+    // DrawOtherStuff(ctx);
+
+}
 
 
-
+function  DrawOtherStuff( ctx ){
+    DrawVolume( ctx );
+    DrawDate( ctx );
+}
+function  DrawVolume( ctx ){
+    let dumb=gCandleXnext;
+}
+function DrawDate( ctx ){
+    let dumb=gCandleXnext;
+}
 
 
 function DrawLineChart(ctx,  vrect , colScheme, wt, datastr){
