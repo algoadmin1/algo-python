@@ -55,6 +55,21 @@ $todays_udate  = date('Y-m-d');  // 'YYYY-MM-DD'
 // $sym = strtoupper($sym);
 // echo "] sym = ". $sym ;
 
+/// style
+//
+// .chartjb {
+//     width: 100%;
+//     height: 100vh; /* Full viewport height */
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     background-color: #f0f0f0;
+// }
+
+// canvas {
+//     width: 100%;
+//     height: 100%;
+// }
 
 function PrettyDate1($udate) {
     // Create a DateTime object from the string

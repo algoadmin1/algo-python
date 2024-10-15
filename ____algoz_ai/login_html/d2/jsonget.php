@@ -262,4 +262,42 @@ PrintJsonData($dataProcessed, $sym0, $strkey , $maxCandles );
 // Output the data
 // print_r($dataProcessed);
 
+
+
+/*
+
+
+
+
+
+<?php
+// Your PHP data processing
+$processedData = ProcessCandles($data);
+
+// Convert $processedData to JSON
+$processedDataJson = json_encode($processedData);
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Processed Data in JavaScript</title>
+</head>
+<body>
+    <!-- Embed the PHP-generated JSON into the page using a script tag -->
+    <script>
+        // Store the PHP data in a JavaScript variable
+        var processedData = <?php echo $processedDataJson; ?>;
+        console.log(processedData); // You can access the PHP data in JS now
+    </script>
+
+    <!-- Link to your external JavaScript file -->
+    <script src="drawdata.js"></script>
+</body>
+</html>
+
+
+*/
 ?>
