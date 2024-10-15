@@ -4,7 +4,7 @@
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
 $periods = [ "daily", "weekly", "monthly", "1min" , "5min", "15min" , "30min", "60min" ];
-$msg=0 ;
+$msg=1  ;
 
 function CheckStringArray($arr, $str) {
     // Use in_array to check if the string exists in the array
