@@ -185,7 +185,8 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
 
 // DETERMINE gCandleOffset
     gCandleOffset = gCandleSpaceMin;
-    gCandleWidthTotal = parseInt( cw / gNumCandlesToRender  );
+    // gCandleWidthTotal = parseInt( cw / gNumCandlesToRender  );
+    gCandleWidthTotal = parseInt(  vrect.w / gNumCandlesToRender  );
     if(gCandleWidthTotal>4) gCandleOffset=gCandleSpaceMin+1;     // ie 2, set new offset iff candle wide enough
    
     gCandleXnext = vrect.x + gCandleOffset;
