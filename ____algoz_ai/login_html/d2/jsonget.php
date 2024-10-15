@@ -254,36 +254,22 @@ $data = GetJsonData($url, $maxCandles, $strkey);
 $dataProcessed = ProcessCandles($data, $sym0, $intervalStr);
 PrintJsonData($dataProcessed, $sym0, $strkey , $maxCandles );
 
-// $dataProcessed1= CalculateP3data( $dataProcessed );
-// PrintJsonData($dataProcessed1, $sym0, $strkey , $maxCandles );
-
+// Convert $processedData to JSON
+$processedDataJson = json_encode($dataProcessed);
 
 
 // Output the data
 // print_r($dataProcessed);
 
-
-
-/*
-
-
-
-
-
-<?php
-// Your PHP data processing
-$processedData = ProcessCandles($data);
-
-// Convert $processedData to JSON
-$processedDataJson = json_encode($processedData);
 ?>
+ 
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Access Processed Data in JavaScript</title>
+    <title>js Proc'd Datat</title>
 </head>
 <body>
     <!-- Embed the PHP-generated JSON into the page using a script tag -->
@@ -294,10 +280,10 @@ $processedDataJson = json_encode($processedData);
     </script>
 
     <!-- Link to your external JavaScript file -->
-    <script src="drawdata.js"></script>
+    <!-- <script src="drawdata.js"></script> -->
 </body>
 </html>
 
 
-*/
-?>
+
+
