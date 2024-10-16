@@ -1,12 +1,21 @@
 
 <?php                       
-//                                                  ver  201.1
+//                                                  ver  206.2
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
 $periods = [ "daily", "weekly", "monthly", "1min" , "5min", "15min" , "30min", "60min" ];
 $months  = [ "zero", "jan", "feb", "mar" , "apr", "may" , "jun", "jul", "aug", "sep" , "oct", "nov", "dec" ];
 $msg=0 ;
+
+//globals for js    // global $ChartHigh , $ChartHighIdx , $ChartHighDate , $ChartLow , $ChartLowIdx , $ChartLowDate ;
+$ChartHigh  = 0;
+$ChartHighIdx = 0;
+$ChartHighDate = "nil";
+$ChartLow   = 1000000;
+$ChartLowIdx = 0;
+$ChartLowDate = "nil";
+
 
 function CheckStringArray($arr, $str) {
     // Use in_array to check if the string exists in the array
@@ -105,7 +114,6 @@ function GetJsonData($url, $maxCandles, $strkey) {
     }
 }
 
-
 /*
 R4day = High+ 3*(Pday-Low) ;
 R3day = (Pday-S1day) + R2day;
@@ -118,16 +126,159 @@ S3day = Pday – (R2day-S1day);
 s4day = Low- 3*(High-Pday) ;
 */
 function ProcessCandles($data,  $sym0, $intervalStr) {
-    // Loop through each element of the array
+
+    global $ChartHigh , $ChartHighIdx , $ChartHighDate , $ChartLow , $ChartLowIdx , $ChartLowDate ;
+
+
+    // init vars
+    $thisMonth = 'nil';    
+    $LastMonthDate = 'nil'; //'1900-12-31';
+    $LastMonth = 'nil';
+
+    $MonthHigh  = 0;
+    $MonthLow   = 1000000;
+    $MonthClose = 0;
+
+
+    $WeekHigh  = 0;
+    $WeekLow   = 1000000;
+    $WeekClose = 0;
+
+
+    $ChartHigh  = 0;
+    $ChartHighIdx = 0;
+    $ChartHighDate = "nil";
+
+    $ChartLow   = 1000000;
+    $ChartLowIdx = 0;
+    $ChartLowDate = "nil";
+ 
+
+
     $i=0;
+    $monthdays=0;
+
+    // Loop through each element of the array
     foreach ($data as $date => &$value) {
         // Calculate "P" as the average of "high", "low", and "close"
-        $high = floatval($value['high']);
-        $low = floatval($value['low']);
+        $high  = floatval($value['high']);
+        $low   = floatval($value['low']);
         $close = floatval($value['close']);
+        $pivot = FormatToNDecimals( (($high + $low + $close) / 3) , 2 );
+        $value['P'] = $pivot ; 
 
-        $value['P'] = FormatToNDecimals( (($high + $low + $close) / 3) , 2 );
-        $pivot = $value['P'];
+
+        //track chart allTimeHigh allTimeLow
+        if( $high > $ChartHigh ){
+            $ChartHigh = $high  ;
+            $ChartHighIdx = $i ;
+            $ChartHighDate = $date;
+        } 
+        if( $low < $ChartLow ){
+            $ChartLow = $low  ;
+            $ChartLowIdx = $i ;
+            $ChartLowDate = $date;
+        }
+        
+
+//
+//    NEW ######################  ck Month to store data
+//
+        $thisMonth = substr( $date, 0, 7 );   // '2024-10';   
+
+        if( $thisMonth != $LastMonth ){
+            // here we have NOT set $MonthHigh, Low or Close  or Last so 
+            //  we have a NEW MONTH HERE, LETS GET LAST MONTH'S #'S
+            
+            $value['monthHigh']     = $MonthHigh;
+            $value['monthLow']      = $MonthLow;
+            $value['monthClose']    = $MonthClose;
+            $value['monthLast']     = $LastMonth;               //  = '2024-10'; 
+            $value['monthLastDate'] = $LastMonthDate;          //  = '2024-10-23'; 
+            $value['monthDaysCnt']  = $monthdays ;
+
+            // COMPUTE MONTHLY PIVOTS SRs
+            $Pmonth = ( $MonthHigh+ $MonthLow + $MonthClose ) /3;
+
+            $R1month =  ($Pmonth *2 ) - $MonthLow;      //  R1day = (Pday *2)-Low;
+            $S1month =  ($Pmonth *2 ) - $MonthHigh;     //  S1day = (Pday *2)-High;
+
+            $S2month =  $Pmonth - $MonthHigh + $MonthLow ;  //  S2day = Pday – High + Low;
+            $R2month =  $Pmonth + $MonthHigh - $MonthLow ;   // R2day = Pday + High – Low;
+
+            $S3month =  $Pmonth -   ( $R2month - $S1month ) ;   // S3day = Pday – (R2day-S1day);
+            $R3month =( $Pmonth - $S1month ) +   $R2month ;     // R3day = (Pday-S1day) + R2day;
+
+            $S4month =  $MonthLow - 3*( $MonthHigh - $Pmonth); // s4day = Low- 3*(High-Pday) ; 
+            $R4month =  $MonthHigh+ 3*( $Pmonth - $MonthLow );  //  R4day = High+ 3*(Pday-Low) ;
+
+            // here we should CALC Based on these above
+            $value['R4month'] = $R4month;
+            $value['R3month'] = $R3month;
+            $value['R2month'] = $R2month;
+            $value['R1month'] = $R1month;
+            $value['Pmonth'] =  $Pmonth;     
+            $value['P3month'] = 0;
+            $value['S1month'] = $S1month;
+            $value['S2month'] = $S2month;
+            $value['S3month'] = $S3month;
+            $value['S4month'] = $S4month;
+
+            $value['X1month'] = 0;          // for drawing in js
+            $value['Y1month'] = 0;
+            $value['X2month'] = 0;
+            $value['Y2month'] = 0;
+
+        $value['endOfMonth'] = 1;
+
+            // reset monthly cnting vars
+            $LastMonth  = $thisMonth ;
+            $LastMonthDate= 'nil';
+            $monthdays  = 0;
+            $MonthHigh  = 0;
+            $MonthLow   = 1000000;
+            $MonthClose = 0;  //not needed
+
+        }else{   // we are looping in same month
+
+            // capture month H L C
+            if( $high > $MonthHigh ){
+                $MonthHigh = $high  ;
+            }
+            if( $low < $MonthLow ){
+                $MonthLow = $low  ;
+            }
+            $MonthClose    = $close;
+            $LastMonthDate = $date;
+
+            // Zero out everything
+            $value['monthHigh'] = 0;
+            $value['monthLow'] =  0; 
+            $value['monthClose'] =0;  
+            $value['monthLast'] = "nil";
+            $value['monthLastDate'] = "nil";
+            $value['monthDaysCnt']     = 0 ;
+
+            // here we should CALC Based on these above
+            $value['R4month'] = 0;
+            $value['R3month'] = 0;
+            $value['R2month'] = 0;
+            $value['R1month'] = 0;
+            $value['Pmonth']  = 0;
+            $value['P3month'] = 0;
+            $value['S1month'] = 0;
+            $value['S2month'] = 0;
+            $value['S3month'] = 0;
+            $value['S4month'] = 0;
+
+            $value['X1month'] = 0;
+            $value['Y1month'] = 0;
+            $value['X2month'] = 0;
+            $value['Y2month'] = 0;
+
+        $value['endOfMonth'] = 0;
+
+        }
 
 
         $s1 = FormatToNDecimals( (($pivot * 2) - $high ) , 2 );     // S1day = (Pday *2)-High;
@@ -157,7 +308,6 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 
 
 
-
         // P3 calc...
         if($i<3){
              $value['P3'] = 0;
@@ -171,7 +321,13 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         }
 
         // Add other fields and set them to 0 initially
+        $value['weekHigh'] = 0;
+        $value['weekLow'] = 0;
+        $value['weekClose'] = 0;
+        $value['weekLastDate'] = "nil";
+        $value['weekDaysCnt']     = 0 ;
 
+        $value['R4week'] = 0;
         $value['R3week'] = 0;
         $value['R2week'] = 0;
         $value['R1week'] = 0;
@@ -180,16 +336,24 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['S1week'] = 0;
         $value['S2week'] = 0;
         $value['S3week'] = 0;
+        $value['S4week'] = 0;
 
-        $value['R3month'] = 0;
-        $value['R2month'] = 0;
-        $value['R1month'] = 0;
-        $value['Pmonth'] = 0;
-        $value['P3month'] = 0;
-        $value['S1month'] = 0;
-        $value['S2month'] = 0;
-        $value['S3month'] = 0;
+        $value['X1week'] = 0;
+        $value['Y1week'] = 0;
+        $value['X2week'] = 0;
+        $value['Y2week'] = 0;
 
+
+     // month was here DEPR
+
+        $value['yearHigh']  = 0;
+        $value['yearLow']   = 0;
+        $value['yearClose'] = 0;
+        $value['yearLastDate'] = "nil";
+        $value['yearDaysCnt'] = 0 ;
+
+
+        $value['R4year'] = 0;
         $value['R3year'] = 0;
         $value['R2year'] = 0;
         $value['R1year'] = 0;
@@ -198,15 +362,31 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['S1year'] = 0;
         $value['S2year'] = 0;
         $value['S3year'] = 0;
+        $value['S4year'] = 0;
+
+        $value['X1year'] = 0;
+        $value['Y1year'] = 0;
+        $value['X2year'] = 0;
+        $value['Y2year'] = 0;
+
+// ################################ END OF NEW STUFF
+
+
 
         $value['datefull'] = $date;
         $value['date'] = substr($date, 0, 10);
+
+
+
+
 
         $mn = substr($date, 5, 2);      // 'YYYY-MM-DD' ==> 'MM'  ==> 09
 
         // 'DEL
  $mnInt = (int)$mn;              // ==> 9  XXX DEPR ???
         
+
+
         $value['monthNum'] =  $mn ;    //substr($date, 5, 2);
 
         $mm = $value['monthNum'];
@@ -220,7 +400,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 
         $value['endOfDay'] = 0;
         $value['endOfWeek'] = 0;
-        $value['endOfMonth'] = 0;
+        // $value['endOfMonth'] = 0;
         $value['endOfYear'] = 0;
 
         $value['gapstart'] = 0;
@@ -242,6 +422,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['per'] = $intervalStr;
 
         $i++;
+        $monthdays++;
     }
 
     // Return the modified array
@@ -414,6 +595,16 @@ $processedDataJson = json_encode($dataProcessed);
     <!-- Embed the PHP-generated JSON into the page using a script tag -->
     <script>
         // Store the PHP data/vars in a JavaScript variables
+                
+        var gChartHigh      = <?php echo $ChartHigh; ?>;
+        var gChartHighIdx   = <?php echo $ChartHighIdx; ?>;
+        var gChartHighDate  = <?php echo $ChartHighDate; ?>;
+
+        var gChartLow      = <?php echo $ChartLow; ?>;
+        var gChartLowIdx   = <?php echo $ChartLowIdx; ?>;
+        var gChartLowDate  = <?php echo $ChartLowDate; ?>;
+
+        console.log("] still inside php: Chart HI,idx,date / LOs = ",gChartHigh,gChartHighIdx, gChartHighDate, "  Lows=",gChartLow, gChartLowIdx, gChartLowDate ); 
         
         var gColSchemeNum = <?php echo $sch; ?>;
         var processedData = <?php echo $processedDataJson; ?>;
