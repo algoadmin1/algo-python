@@ -1,5 +1,5 @@
 //
-//          canvas0.js  aka dr@wChart.js                   ver 7.3
+//          canvas0.js  aka dr@wChart.js                   ver 202.4
 //
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -16,7 +16,7 @@
 //
 //                  **  End of Month Tracking, 0/1 ==> 0 or Xcoord of gWidthXmiddle (?)
 //
-//                      DrawLineChart()  
+                    //  ()  
 //
 
 
@@ -51,6 +51,10 @@ let gColScheme8 =  { bg:'blue',  tx: 'yellow', up: 'black', dn:'orange', ou:'gre
 let gColScheme9 =  { bg:'black', tx: 'white', up: 'lawngreen', dn:'crimson', ou:'indianred' };
 let gColScheme10 = { bg:'black', tx: 'mintcream', up: 'turquoise', dn:'peachpuff', ou:'magenta' };
 
+// rnd one against black
+let gColScheme99 = { bg:'black', tx: 'white', up: 'green', dn:'red', ou:'blue' };
+let gColScheme100 = { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple' };
+
 
 const colarr = [
     "aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black",
@@ -77,6 +81,12 @@ const colarr = [
     "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen"
 ];
 
+function RandomJSColor(arrStandardColors) {    // ie colarr
+    // Generate a random index between 0 and the length of the color array
+    const randomIndex = Math.floor(Math.random() * arrStandardColors.length);
+    // Return the color at the randomly generated index
+    return arrStandardColors[randomIndex];
+}
 
 function RandomNumC( num ){
     return(   Math.floor(Math.random()*num)   ) ; 
@@ -325,10 +335,11 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
     gCandleOffset = gCandleSpaceMin;
     // gCandleWidthTotal = parseInt( cw / gNumCandlesToRender  );
     gCandleWidthTotal = parseInt(  vrect.w / gNumCandlesToRender  );
-    if(gCandleWidthTotal>4) gCandleOffset=gCandleSpaceMin+1;     // ie 2, set new offset iff candle wide enough
+    // if(gCandleWidthTotal>4) gCandleOffset=gCandleSpaceMin+1;     // ie 2, set new offset iff candle wide enough
+    if(gCandleWidthTotal>5) gCandleOffset=gCandleSpaceMin+1;     // ie 2, set new offset iff candle wide enough
    
     gCandleXnext = vrect.x + gCandleOffset;
-    gCandleXnextStart = gCandleXnext;
+    gCandleXnextStart = gCandleXnext;           // SAVE START
 
     
 // DETERMINE  gCandleWidth
@@ -378,12 +389,107 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
 
     gCandleXnextLast =   gCandleXnext;
 
+// #################################  END OF CANDLESLOOP 
 
+
+    // DrawSegmentedLine(ctx, processedData, vrect, 3, 'green', "solid", gCandleXnextStart,   (  gCandleWidth + gCandleOffset ), "close") ;
+
+    DrawSegmentedLine(ctx, processedData, vrect, 2, 'cyan',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
+    DrawSegmentedLine(ctx, processedData, vrect, 2, 'yellow', "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P3") ;
+
+    // ie AAPL Last: $xxx
     DrawTextInfo( ctx , vrect , 48 ,  24, colScheme);
 
 
-}// fn Dr@wCandlesChart
+}// fn Dr@wCandlesChart   ################################################################################
 
+
+
+
+//
+//   DrawS3gmentedLine(ctx, processedData, vrect, 4, 'hotpink', "solid", gCandleXnextStart,   (  gCandleWidth + gCandleOffset ), "close") ;
+//
+function DrawSegmentedLine(ctx, processedData, vrect, wt, colLine, style, xstart, xoffset, fieldStr) {
+    let xContinuous = xstart + gCandleOffset + parseInt( gCandleWidth /2 );
+
+    ctx.save();
+
+    // Set the style of the line
+    if (style === "dashed") {
+        ctx.setLineDash([5, 15]); // dashed style
+    } else if (style === "dotted") {
+        ctx.setLineDash([1, 5]); // dotted style
+    } else {
+        ctx.setLineDash([]); // solid line
+    }
+
+    // Set the line width and color
+    ctx.lineWidth = wt;
+    ctx.strokeStyle = colLine;
+    
+    // Begin the path for the line
+    ctx.beginPath();
+
+    // Variable to track if the line should moveTo (for the first point) or lineTo (for subsequent points)
+    let isFirstPoint = true;
+    let i=0;
+    // Loop through the processedData
+    for (let date in processedData) {
+      if (processedData.hasOwnProperty(date) ) {
+            // Get the y-coordinate string for the given fieldStr (e.g. "close", "P", "P3")
+            let yCoordStr = processedData[date][fieldStr];
+            let yCoordFloat = parseFloat(yCoordStr);
+            let yCoordStrP = processedData[date]["P"];   // assume P3 check for triangles
+            let yCoordFloatP = parseFloat(yCoordStrP);
+
+            if (fieldStr=="P3" && i<3){
+                      // OVERWRITE
+                      yCoordFloat = yCoordFloatP ;
+                    }// if P3 test , i<3
+
+       
+
+            // Convert the price into the y-coordinate using the helper function
+            let yCoordFinal = GetYCoordFromPrice(yCoordFloat, vrect);
+
+            // Draw the line segment
+            if (isFirstPoint) {
+                // Move to the first point without drawing a line
+                ctx.moveTo(xContinuous, yCoordFinal);
+                isFirstPoint = false;
+            } else {
+                // Draw a line to the next point
+                ctx.lineTo(xContinuous, yCoordFinal);
+            }
+
+        // Increment the x-coordinate for the next point
+        xContinuous += xoffset   ;
+        i++;
+        
+      }// if exist
+    }
+
+    // Complete the path and draw the line
+    ctx.stroke();
+    ctx.restore();
+}
+
+// ai-written: Helper function to convert a price into a y-coordinate based on the vrect (viewport)
+// function GetYCoordFromPrice(price, vrect) {
+//     // Example conversion logic, this should map a price to a y-coordinate based on vrect.
+//     // You can customize this as needed based on your canvas and viewport configuration.
+//     let minPrice = 0;   // replace with your actual minimum price
+//     let maxPrice = 100; // replace with your actual maximum price
+//     let priceRange = maxPrice - minPrice;
+    
+//     let yRange = vrect.h;
+    
+//     // Calculate the percentage position of the price within the price range
+//     let pricePercent = (price - minPrice) / priceRange;
+
+//     // Map the percentage to the y-coordinate within the viewport, assuming y increases downward
+//     return vrect.y + vrect.h - (pricePercent * yRange);
+// }
 
 //
 // note:  gCandlesMaxes{} must be set
@@ -419,16 +525,17 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
          col1 = colScheme.dn;
          candleGreen = 0;
     }
-    let yh= vrect.y+50 -10 ;
-    let yl= vrect.y+50 + parseInt( idx/2 ) +20;
+
+    let yh= 0;  
+    let yl= 0;  
     let xwick = gCandleXnext + parseInt( gCandleWidthTotal/2 );
     gCandleWickX = xwick;
 
-    yh = GetYCoordFromPrice( hi1, vrect ) ;   // gCandleMaxes{} must be set by this fn-call
-    yl = GetYCoordFromPrice( lo1, vrect ) ;
+    // DRAW CANDLE WICK
+    yh = GetYCoordFromPrice( hi1, vrect ) ;   //  high  gCandleMaxes{} must be set by this fn-call
+    yl = GetYCoordFromPrice( lo1, vrect ) ;     // low
     DrawVerticalLine( ctx, xwick, yh, yl, 'grey');
     // DrawVerticalLine( ctx, xwick, yh, yl, colScheme.wi);  // wick col scheme
-
 
     candleRect.x = gCandleXnext;
     candleRect.y = vrect.y+50;
@@ -447,15 +554,29 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
         candleRect.h =   y2 - candleRect.y ;
     }
 
+    // draw candle body
     DrawVRect(ctx, candleRect, 2, col1 , "solid");
-    DrawOtherStuff(ctx , vrect , idx, colScheme);
+
+    // draw everything else assoc with that candle
+    DrawOtherStuff(ctx , vrect , idx, colScheme,  candleRect, candleGreen);
 
 }// fn Dr@wCandlePlus(...)
 
 
-function  DrawOtherStuff( ctx  , vrect, idx , colScheme ){
+function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGreen ){   // candleGreen==1 if UP
     if(idx%4==0) DrawDate( ctx  , vrect , colScheme);
-    // DrawVolume( ctx  , vrect );
+    DrawVolume( ctx  ,  vrect, idx , colScheme , candlerect, candleGreen  );   
+
+    
+    if(idx%12==0) DrawTriangle(ctx, 20, 3, 'green', gCandleWickX, candlerect.y+candlerect.h, 0, 1, 'limegreen' );
+    if(idx%9==0)  DrawTriangle(ctx, 20, 3, 'red', gCandleWickX, candlerect.y, 1, 1, 'hotpink' );
+    
+
+    // let cirOutline = RandomJSColor(colarr);
+    // let cirFill    = RandomJSColor(colarr);
+    // if(idx%7==0) DrawCircle(ctx, 40, 6, cirOutline, gCandleWickX, (candlerect.y+candlerect.h) , 0, 1, cirFill );
+
+
 }
 
 
@@ -483,35 +604,110 @@ function DrawTextRotated( ctx, rstr, xx0, yy0, colstr, px, font0str, rotfloat) {
     ctx.restore();
 }
 
+function  DrawVolume(  ctx ,  vrect, idx , colScheme , candlerect, candleGreen  ){
+    // let x0=gCandleWickX;
+    let x0 = gCandleXnext    ; //  gCandleWickX;
 
-function  DrawVolume( ctx ){
-    let dumb=gCandleXnext;
+    let volcol = colScheme.dn;
+    if(candleGreen==1){
+        volcol = colScheme.up;
+    }
+    let volht = parseInt(idx/3);  // HERE *** COMPUTE VOLUME based on   :    gCandlesMaxes {  .volrng }
+
+    let vrectVol = {   x: x0 , y: (( vrect.y+vrect.h ) - volht ),      w: candlerect.w,   h: volht };
+
+    DrawVRect(ctx, vrectVol, 1, volcol, "solid" );
+
 }
 
 function DrawLineChart(ctx,  vrect , colScheme, wt, datastr){
-    let cw= canvas.width;
-    let ch= canvas.height;
-    let cnt = processedData.length;   ///  ????? NaN
-
-    gCandleXnext = vrect.x + gCandleSpaceMin;
-
-    let i=0;
-    // Example: Accessing specific data from processedData
-    for (var date in processedData) {
-        if (processedData.hasOwnProperty(date)) {
-            console.log( i+") " + date + ", Close: " + processedData[date]["close"] + " "+   processedData[date]["day"]);
-            i++;
-        }
-    }
-
-    gNumCandlesToRender = i;
-
-
-    gCandleWidth = parseInt( cw / gNumCandlesToRender  );
-    console.log("] Candles to render  =", gNumCandlesToRender );
-    console.log("] gCandleWidth   =", gCandleWidth );
+    // let datastr = "close";
+    DrawSegmentedLine(ctx, processedData, vrect, wt, colScheme.up, "solid", gCandleXnextStart,   (  gCandleWidth + gCandleOffset ), "close") ;
 
 }
+// function DrawTriangle(ctx, size, wt, col, x, y, upDown, fill, fillcol ,     txtStr, xt, yt, fsz , colStr , fontStr) {  
+    // DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr)
+function DrawTriangle(ctx, size, wt, col, x, y, upDown, fill, fillcol ) {   
+     // Calculate the points of the triangle
+    const halfSize = size / 2;
+    ctx.beginPath();
+    
+    if (upDown === 0) {
+        // Triangle with point up
+        ctx.moveTo(x, y); // top point
+        ctx.lineTo(x - halfSize, y + size); // bottom left
+        ctx.lineTo(x + halfSize, y + size); // bottom right
+    } else {
+        // Triangle with point down
+        ctx.moveTo(x, y + size); // bottom point
+        ctx.lineTo(x - halfSize, y); // top left
+        ctx.lineTo(x + halfSize, y); // top right
+    }
+    ctx.closePath(); // Complete the triangle path
+
+    // Set stroke color and width
+    ctx.strokeStyle = col;
+    ctx.lineWidth = wt;
+
+    if (fill === 1) {
+        // Fill the triangle with the fill color
+        ctx.fillStyle = fillcol;
+        ctx.fill();
+    }
+
+    // Draw the triangle outline
+    ctx.stroke();
+}
+
+/*
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+
+// Draw an upward triangle with a blue border, no fill
+DrawTriangle(ctx, 100, 5, 'blue', 150, 50, 0, 0, '');
+
+// Draw a downward triangle with a red border and filled with yellow
+DrawTriangle(ctx, 100, 3, 'red', 300, 50, 1, 1, 'yellow');
+
+*/
+
+
+
+function DrawCircle(ctx, size, wt, col, x, y, xyOffset, fill, fillcol) {
+    // Adjust the x and y positions based on the offset
+    const adjustedX = x + xyOffset;
+    const adjustedY = y + xyOffset;
+    const radius = size / 2;
+
+    ctx.beginPath();
+    
+    // Draw the circle at the adjusted position
+    ctx.arc(adjustedX, adjustedY, radius, 0, 2 * Math.PI);
+
+    // Set stroke color and line width
+    ctx.strokeStyle = col;
+    ctx.lineWidth = wt;
+
+    if (fill === 1) {
+        // Fill the circle with the fill color
+        ctx.fillStyle = fillcol;
+        ctx.fill();
+    }
+
+    // Draw the circle outline
+    ctx.stroke();
+}
+
+/*
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+
+// Draw a circle with a green border and no fill, offset by 10 pixels
+DrawCircle(ctx, 100, 5, 'green', 150, 150, 10, 0, '');
+
+// Draw a filled red circle, offset by 20 pixels, with a black border
+DrawCircle(ctx, 100, 3, 'black', 300, 150, 20, 1, 'red');
+*/
 
 
 function DrawHorizontalLine( ctx, x1, x2, y ,col){
@@ -562,6 +758,19 @@ function GetColorScheme(){
     if(gColSchemeNum==9)  scheme0=gColScheme9;
     if(gColSchemeNum==10) scheme0=gColScheme10;
 
+    if(gColSchemeNum==99){
+        // 99 is changeable  but with BLACK bg
+        scheme0=gColScheme99;
+        scheme0.up = RandomJSColor(colarr);
+        scheme0.dn = RandomJSColor(colarr);
+}
+if(gColSchemeNum==100){
+        // 100 is changeable  but with BLACK bg
+        scheme0=gColScheme100;
+        scheme0.up = RandomJSColor(colarr);
+        scheme0.dn = RandomJSColor(colarr);
+}
+
     return scheme0; 
 }
 
@@ -602,11 +811,13 @@ function resizeCanvas() {
             gGlobalChartRectCurrent.w = parseInt(vr.w0 * 0.75);
             gGlobalChartRectCurrent.h = parseInt(vr.h0 * 0.75);
 
-            console.log( "preDrawChart()", gGlobalChartRectCurrent , gColScheme );
+            console.log( "preDr@wChart()", gGlobalChartRectCurrent , gColScheme );
 
             let colscheme = GetColorScheme();
-            DrawChart( ctx, gGlobalChartRectCurrent , colscheme , "candles" );  // or "line"
-            // DrawChart( ctx, gGlobalChartRectCurrent , gColScheme2 , "candles" );  // or "line"
+            DrawChart( ctx, gGlobalChartRectCurrent , colscheme , "candles" );   
+            // DrawChart( ctx, gGlobalChartRectCurrent , colscheme , "line" );  
+
+
             // DrawRectOutline(ctx, 6, 6, rectWidth, rectHeight, 2, rcol );
 
             // Dra wLine(ctx, 6, 6, rectWidth, rectHeight, 5, 'red', 'dotted' );   //'dashed');

@@ -1,6 +1,6 @@
 
 <?php                       
-//                                                  ver  7.2
+//                                                  ver  201.1
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -20,7 +20,7 @@ if(isset( $_GET['sym'] )){
 }
 $sym = strtoupper($sym);
 
-$gMaxColSchemes=16;
+$gMaxColSchemes=100;
 $sch=0;
 if(isset( $_GET['sch'] )){
     $sch0 = $_GET['sch'] ;
