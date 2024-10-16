@@ -1,5 +1,5 @@
 //
-//          canvas0.js  aka dr@wChart.js                   ver 6.0
+//          canvas0.js  aka dr@wChart.js                   ver 7.3
 //
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -32,13 +32,50 @@ let gGlobalChartRect1 = { x: 150 , y: 275 , w: 60 , h: 134 };
 let gGlobalChartRect2 = { x: 150 , y: 275 , w: 60 , h: 134 };
 
 let gGlobalChartRectCurrent = { x: 150 , y: 275 , w: 60 , h: 134 };
-let gColScheme = { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple' };
+let gColScheme =  { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple' };
+let gColScheme0 = { bg:'black', tx: 'white', up: 'limegreen', dn:'red', ou:'purple' };
 
-let gColScheme2 = { bg:'black',  tx: 'white', up: '#11ef43', dn:'purple' , ou:'yellow'};
+let gColScheme1 = { bg:'lightslategray',  tx: 'red', up: 'yellow', dn:'blue' , ou:'red' };
 
-let gColScheme4 = { bg:'black',  tx: 'white', up: 'green', dn:'red' , ou:'white'};
-let gColScheme3 =  { bg:'white',  tx: 'black', up: 'yellow', dn:'purple', ou:'red' };
-let gColScheme1 = { bg:'yellow',  tx: 'red', up: 'green', dn:'red' , ou:'blue' };
+let gColScheme2 = { bg:'black',  tx: 'white', up: '#11ef43', dn:'purple' , ou:'green'};
+
+let gColScheme3 =  { bg:'white',  tx: 'black', up: 'yellow', dn:'blue', ou:'red' };
+let gColScheme4 = { bg:'black',  tx: 'green', up: 'limegreen', dn:'deeppink' , ou:'grey'};
+
+let gColScheme5 =  { bg:'white',  tx: 'blue', up: 'green', dn:'red', ou:'red' };
+let gColScheme6 =  { bg:'antiquewhite',  tx: 'blue', up: 'black', dn:'orange', ou:'orange' };
+
+let gColScheme7 =  { bg:'white',  tx: 'blue', up: 'chocolate', dn:'hotpink', ou:'red' };
+let gColScheme8 =  { bg:'blue',  tx: 'yellow', up: 'black', dn:'orange', ou:'grey' };
+
+let gColScheme9 =  { bg:'black', tx: 'white', up: 'lawngreen', dn:'crimson', ou:'indianred' };
+let gColScheme10 = { bg:'black', tx: 'mintcream', up: 'turquoise', dn:'peachpuff', ou:'magenta' };
+
+
+const colarr = [
+    "aliceblue", "antiquewhite", "aqua", "aquamarine", "azure", "beige", "bisque", "black",
+    "blanchedalmond", "blue", "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse",
+    "chocolate", "coral", "cornflowerblue", "cornsilk", "crimson", "cyan", "darkblue",
+    "darkcyan", "darkgoldenrod", "darkgray", "darkgreen", "darkgrey", "darkkhaki", 
+    "darkmagenta", "darkolivegreen", "darkorange", "darkorchid", "darkred", "darksalmon", 
+    "darkseagreen", "darkslateblue", "darkslategray", "darkslategrey", "darkturquoise", 
+    "darkviolet", "deeppink", "deepskyblue", "dimgray", "dimgrey", "dodgerblue", 
+    "firebrick", "floralwhite", "forestgreen", "fuchsia", "gainsboro", "ghostwhite", "gold", 
+    "goldenrod", "gray", "green", "greenyellow", "grey", "honeydew", "hotpink", "indianred", 
+    "indigo", "ivory", "khaki", "lavender", "lavenderblush", "lawngreen", "lemonchiffon", 
+    "lightblue", "lightcoral", "lightcyan", "lightgoldenrodyellow", "lightgray", "lightgreen", 
+    "lightgrey", "lightpink", "lightsalmon", "lightseagreen", "lightskyblue", "lightslategray", 
+    "lightslategrey", "lightsteelblue", "lightyellow", "lime", "limegreen", "linen", 
+    "magenta", "maroon", "mediumaquamarine", "mediumblue", "mediumorchid", "mediumpurple", 
+    "mediumseagreen", "mediumslateblue", "mediumspringgreen", "mediumturquoise", 
+    "mediumvioletred", "midnightblue", "mintcream", "mistyrose", "moccasin", "navajowhite", 
+    "navy", "oldlace", "olive", "olivedrab", "orange", "orangered", "orchid", "palegoldenrod", 
+    "palegreen", "paleturquoise", "palevioletred", "papayawhip", "peachpuff", "peru", "pink", 
+    "plum", "powderblue", "purple", "red", "rosybrown", "royalblue", "saddlebrown", "salmon", 
+    "sandybrown", "seagreen", "seashell", "sienna", "silver", "skyblue", "slateblue", 
+    "slategray", "slategrey", "snow", "springgreen", "steelblue", "tan", "teal", "thistle", 
+    "tomato", "turquoise", "violet", "wheat", "white", "whitesmoke", "yellow", "yellowgreen"
+];
 
 
 function RandomNumC( num ){
@@ -509,7 +546,24 @@ function DrawLine(ctx, x, y, x1, y1, weight, color, style) {
     // Reset line dash to solid for future drawing
     ctx.setLineDash([]);
 }
+function GetColorScheme(){
+    let scheme0=gColScheme;     // assume wht bg, green/red
 
+    // gColSchemeNum = user input from php 
+    if(gColSchemeNum==0)  scheme0=gColScheme0;  // flip to black bg, green/red
+    if(gColSchemeNum==1)  scheme0=gColScheme1;
+    if(gColSchemeNum==2)  scheme0=gColScheme2;
+    if(gColSchemeNum==3)  scheme0=gColScheme3;
+    if(gColSchemeNum==4)  scheme0=gColScheme4;
+    if(gColSchemeNum==5)  scheme0=gColScheme5;
+    if(gColSchemeNum==6)  scheme0=gColScheme6;
+    if(gColSchemeNum==7)  scheme0=gColScheme7;
+    if(gColSchemeNum==8)  scheme0=gColScheme8;
+    if(gColSchemeNum==9)  scheme0=gColScheme9;
+    if(gColSchemeNum==10) scheme0=gColScheme10;
+
+    return scheme0; 
+}
 
 
 
@@ -550,7 +604,9 @@ function resizeCanvas() {
 
             console.log( "preDrawChart()", gGlobalChartRectCurrent , gColScheme );
 
-            DrawChart( ctx, gGlobalChartRectCurrent , gColScheme2 , "candles" );  // or "line"
+            let colscheme = GetColorScheme();
+            DrawChart( ctx, gGlobalChartRectCurrent , colscheme , "candles" );  // or "line"
+            // DrawChart( ctx, gGlobalChartRectCurrent , gColScheme2 , "candles" );  // or "line"
             // DrawRectOutline(ctx, 6, 6, rectWidth, rectHeight, 2, rcol );
 
             // Dra wLine(ctx, 6, 6, rectWidth, rectHeight, 5, 'red', 'dotted' );   //'dashed');

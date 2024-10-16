@@ -1,9 +1,11 @@
 
 <?php                       
-    //                                                  ver  2.2
+//                                                  ver  7.2
+
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
 $periods = [ "daily", "weekly", "monthly", "1min" , "5min", "15min" , "30min", "60min" ];
+$months  = [ "zero", "jan", "feb", "mar" , "apr", "may" , "jun", "jul", "aug", "sep" , "oct", "nov", "dec" ];
 $msg=0 ;
 
 function CheckStringArray($arr, $str) {
@@ -18,10 +20,24 @@ if(isset( $_GET['sym'] )){
 }
 $sym = strtoupper($sym);
 
+$gMaxColSchemes=16;
+$sch=0;
+if(isset( $_GET['sch'] )){
+    $sch0 = $_GET['sch'] ;
+    if( $sch0>0  &&  $sch0<($gMaxColSchemes+1)  ) $sch = $sch0;
+}else{
+    $sch = 0;
+}
+
 
 if(isset( $_GET['per'] )){
     $per0 = $_GET['per'] ;
     $per="daily";
+    if($per0=='1') $per0="1min";
+    if($per0=='5') $per0="5min";
+    if($per0=='15') $per0="15min";
+    if($per0=='30') $per0="30min";
+    if($per0=='60') $per0="60min";
     if(CheckStringArray($periods, $per0)) $per=$per0;
     if($per=="daily" || $per=="weekly" || $per=="monthly" ) $per=ucfirst($per);  // Daily <== daily
 }else{
@@ -186,12 +202,40 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['datefull'] = $date;
         $value['date'] = substr($date, 0, 10);
 
+        $mn = substr($date, 5, 2);      // 'YYYY-MM-DD' ==> 'MM'  ==> 09
+
+        // 'DEL
+ $mnInt = (int)$mn;              // ==> 9  XXX DEPR ???
+        
+        $value['monthNum'] =  $mn ;    //substr($date, 5, 2);
+
+        $mm = $value['monthNum'];
+        $mm1=intval($mm);
+        $value['monthName'] = $months[ $mm1 ];  
+
         $timestamp = strtotime($date);
         $dow= strtolower(date('D', $timestamp));     // Format the timestamp to return the three-letter day abbreviation (e.g., Mon, Tue, Sat)
         $value['dayOfWeek']  = $dow;  // 0 Sun - 6 Sat normal php
 
+
+        $value['endOfDay'] = 0;
+        $value['endOfWeek'] = 0;
         $value['endOfMonth'] = 0;
-        // if(MonthEnd($value['date']))  $value['endOfMonth'] = 1 ;
+        $value['endOfYear'] = 0;
+
+        $value['gapstart'] = 0;
+        $value['gapend'] = 0;
+
+        $value['buysigcnt'] = 0;
+        $value['sellsigcnt'] = 0;
+
+        $value['buySignal'] = 0;
+        $value['sellSignal'] = 0;
+
+        $value['candleX'] = 0;
+        $value['candleY'] = 0;
+
+
 
 
         $value['sym'] = $sym0;
@@ -219,6 +263,7 @@ function removeString($masterStr, $strRemove) {
     return $newStr;
 }
 
+//DEPR
 function MonthEnd($udate) {
     // Convert the given date string to a timestamp
     $timestamp = strtotime($udate);
@@ -368,9 +413,11 @@ $processedDataJson = json_encode($dataProcessed);
 
     <!-- Embed the PHP-generated JSON into the page using a script tag -->
     <script>
-        // Store the PHP data in a JavaScript variable
+        // Store the PHP data/vars in a JavaScript variables
+        
+        var gColSchemeNum = <?php echo $sch; ?>;
         var processedData = <?php echo $processedDataJson; ?>;
-        console.log(processedData); // You can access the PHP data in JS now
+        console.log("] still inside php:  processedData==", processedData); // You can access the PHP data in JS now
     </script>
 
     <!-- Link to your external JavaScript file -->

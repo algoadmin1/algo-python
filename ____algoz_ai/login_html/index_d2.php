@@ -1,20 +1,8 @@
 <?php
-//                                                  ver  12.1
-
+//                                                  ver  11.53
 date_default_timezone_set('America/New_York');
 require_once '../login/events.php';
 require_once '../login/database.php';
-
-
-// session_start();
-
-// // if (!isset($_SESSION["user"])) {
-// //    header("Location: ./login/login.php");
-// // }else{
-// //     $email1=$_SESSION["user"];
-// // }
-
-// $_SESSION["user_sym"]= "SPY";
 
 
 
@@ -234,7 +222,7 @@ if (isset($eventsTable[0])) {
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style_d2.css">
     <link rel="stylesheet" href="style_digital.css">
-    <title>algoz HQ</title>
+    <title>algoz dashboard</title>
 </head>
 
 <body>
@@ -310,31 +298,12 @@ if (isset($eventsTable[0])) {
                 <div class="form-input">
                     <input id="symbol-input" type="search" placeholder="symbol..." />
                     <a id="search-link" href="https://algoz.ai/d2/jsonget.php?sym=spy&sch=1" target="_blank">
-                    <!-- <button class="search-btn" type="button" onclick="updateLink()"> -->
-                        <button class="search-btn" type="submit">
-                           <i class='bx bx-search'></i>
-                        </button>
+                        <button class="search-btn" type="button" onclick="updateLink()"><i class='bx bx-search'></i></button>
                     </a>
                 </div>
             </form>
 
-
             <script>
-                // Attach event listener to the form
-                document.getElementById('search-form').addEventListener('submit', function(event) {
-                        event.preventDefault(); // Prevent the default form submission behavior
-
-                        // Get the value entered by the user
-                        const userInput = document.getElementById('symbol-input').value;
-                        
-                        // Construct the new URL
-                        const newUrl = `https://algoz.ai/d2/jsonget.php?sym=${encodeURIComponent(userInput)}&sch=0`;
-                        
-                        // Redirect to the new URL
-                        window.open(newUrl, '_blank');
-                    });
-
-
                 function updateLink() {
                     // Get the value entered by the user
                     const userInput = document.getElementById('symbol-input').value;
