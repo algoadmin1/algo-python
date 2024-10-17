@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "212.7";
+let                                                                         gVer = "215.3";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -17,7 +17,8 @@ let                                                                         gVer
 //
 //                *****>    End of Month Tracking, 0/1 ==> 0 or Xcoord of gWidthXmiddle (?)
 //                *****>    End of Month Tracking: DRAW Vertical Line at month w/ TEXT Date
-//                          Monthly Sup/Resistance
+//                          
+//                          BUG:  Monthly Sup/Resistance drawn above/below vrect  if ( checkPt(vrect,x,y)==true)
 //
 //                          FIX P3/P OFFSET DATA IN PHP
 //      
@@ -29,7 +30,7 @@ let                                                                         gVer
 // 
 //                          if BuySigPrice < S1month, or IF sellSigPrice > R1month etc...
 //                           
-///                  NOTE !!! draw candles is computing his and lows that DrawLines is NOT !!!
+///                  NOTE !!! draw candles is computing his and lows CIRCLES that DrawLines is NOT !!!
 //
 //                    CRONjob:  cronit.php : loops thru a list, writes file etc
 //                          
@@ -46,6 +47,8 @@ let gGlobalChartRect1 = { x: 150 , y: 275 , w: 60 , h: 134 };
 let gGlobalChartRect2 = { x: 150 , y: 275 , w: 60 , h: 134 };
 
 let gGlobalChartRectCurrent = { x: 150 , y: 275 , w: 60 , h: 134 };
+
+let gVolumePixelHigh_pct= 0.125;
 
 // col $chemes
 let gColScheme =  { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple', wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
@@ -158,7 +161,7 @@ function DrawVRect(ctx, vrect, wt, col, drawtype) {
     if(drawtype==dt){
         ctx.fillStyle = col;
         ctx.fillRect(x,y, w,h); // Draw the rectangle
-    }else{
+    }else{  // "outline"
         ctx.beginPath();
         ctx.rect(x, y, w, h);
         ctx.strokeStyle = col;
@@ -239,14 +242,9 @@ function DrawRoundedRect(ctx, vrect, radius, col, wt, fill) {
 
 
 function DrawChart(ctx,  vrect , colScheme, typestr ) {
-    // DrawVRect(ctx, vrect, 2, colScheme.bg , "solid");
     DrawRoundedRect(ctx, vrect, 20, colScheme.bg, 3, 1);
     // DrawRoundedRect(ctx, vrect, radius, col, wt, fill);
     DrawRoundedRect(ctx, vrect, 20, colScheme.ou, 3, 0);
-
-    //old
-    // if(typestr=="candles")   DrawCandlesChart(ctx,  vrect , colScheme, 2);  /// NOTE !!! draw candles is computing his and lows that DrawLines is NOT !!!
-    //   else if(typestr=="line")   DrawLineChart(ctx,  vrect , colScheme, 3, "close");  // or P P3 to plot
 
    // this will test for butt0n1==0
    DrawCandlesChart(ctx,  vrect , colScheme, 2);  /// NOTE !!! draw candles is computing his and lows that DrawLines is NOT !!!
@@ -254,19 +252,27 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
    if(typestr=="line")   DrawLineChart(ctx,  vrect , colScheme, 3, "close");  // or P P3 to plot
 
 
-    // DrawSegmentedLine(ctx, processedData, vrect, 3, 'green', "solid", gCandleXnextStart,   (  gCandleWidth + gCandleOffset ), "close") ;
-    if( button5==1 || button5==2  ) DrawSegmentedLine(ctx, processedData, vrect, 2, 'cyan',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
+   // pivot / p3 lines
+    if( button5==1 || button5==2  ) DrawSegmentedLine(ctx, processedData, vrect, 2, 'blue',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
     if( button5==2)                 DrawSegmentedLine(ctx, processedData, vrect, 2, 'yellow', "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P3") ;
     
     let fszDyn = parseInt( vrect.w * 0.025 );
-    DrawGlobalTextInfo( ctx , vrect , 48 ,  fszDyn, colScheme);
-    // DrawGlobalTextInfo( ctx , vrect , 48 ,  24, colScheme);
+    let xoff = 80;
+    let yoff = 48;
+    let fname ="../img/"+gSymbolStrLower+ ".png";
+
+    DrawGlobalTextInfo( ctx , vrect ,  xoff, yoff ,  fszDyn, colScheme);
+
+    InitAndDrawImage(ctx, vrect, fname, xoff, yoff+20, 0.425 ); 
 
 }
 // globals
 let gGlobalDrawCol = 'black';
 let gChartTextStr ="Welcome!";
+
 let gSymbolStr    ="SPY";
+let gSymbolStrLower='spy';
+
 let gPeriodStr = "(Daily)";
 let gCurrencyStr="$";
 let gLastPriceStr ="0.00";
@@ -356,7 +362,7 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
 //  ############################################################################## should be a fn
 
     gChartTextStr = gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0+"    v"+gVer+" php_v"+gVerPHP; 
-
+    gSymbolStrLower  = gSymbolStr.toLowerCase();
 
 // DETERMINE gCandleOffset
     gCandleOffset = gCandleSpaceMin;
@@ -620,22 +626,21 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
     }
 
 
-
-
     // draw candle body
     if(button1==0) DrawVRect(ctx, candleRect, 2, col1 , "solid");
 
     // draw everything else assoc with that candle
-    DrawOtherStuff(ctx , vrect , idx, colScheme,  candleRect, candleGreen, eom);
+    DrawOtherStuff(ctx , vrect , idx, colScheme,  candleRect, candleGreen, vol1 , eom);
 
 }// fn Dr@wCandlePlus(...)
 
 //
 // candlestick-based other stuff
 //
-function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGreen, eom ){   // candleGreen==1 if UP
+function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGreen, vol1 , eom ){   // candleGreen==1 if UP
 
-    DrawVolume( ctx  ,  vrect, idx , colScheme , candlerect, candleGreen  );   
+    // DrawVolume( ctx  ,  vrect, idx , colScheme , candlerect, candleGreen, vol1  ,'solid');   
+    DrawVolume( ctx  ,  vrect, idx , colScheme , candlerect, candleGreen, vol1  ,'outline');   
 
     if(eom==1){  // end of month
         DrawVerticalLine(ctx  , candlerect.x , vrect.y, (vrect.y+vrect.h) , "#454595", "dotted");
@@ -663,9 +668,34 @@ function DrawMonthlySupportResistance(ctx, vrect,  idx , colScheme , candlerect)
 }
 
 
-function  DrawGlobalTextInfo( ctx , vrect, offset , fsz, colScheme ){
+// Call: In1tAndDrawImage(ctx, '../img/pic.png', 50, 50, 0.5); // Example: img at (50, 50) with 50% scale
+//
+// Function to initialize and load an image, then call DrawImage once it's ready
+function InitAndDrawImage(ctx, vrect, imgPath, x, y, scale) {
+    let img = new Image(); // Create a new image object
+    img.src = imgPath; // Set the source to the image path
+
+    let x1 = vrect.x+x;
+    let y1 = vrect.y+y;
+    // When the image is fully loaded, draw it on the canvas
+    img.onload = function() {
+        DrawImage(ctx, img, x1, y1, scale);
+    };
+}
+
+// Function to draw an image on the canvas at (x, y) with scaling
+function DrawImage(ctx, img, x, y, scale) {
+    let imgWidth = img.width * scale;  // Scale the width
+    let imgHeight = img.height * scale; // Scale the height
+
+    // Draw the image at position (x, y) with the scaled width and height
+    ctx.drawImage(img, x, y, imgWidth, imgHeight);
+}
+
+
+function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     // DrawText( ctx, gChartTextStr,  vrect.x+offset, vrect.y+offset, fsz , gGlobalDrawCol , gGlobalFont);
-    DrawText( ctx, gChartTextStr,  vrect.x+offset, vrect.y+offset, fsz , colScheme.tx , gGlobalFont);
+    DrawText( ctx, gChartTextStr,  vrect.x+xoffset, vrect.y+yoffset, fsz , colScheme.tx , gGlobalFont);
 }
 function DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr){    
     ctx.fillStyle = colStr ; 
@@ -687,7 +717,8 @@ function DrawTextRotated( ctx, rstr, xx0, yy0, colstr, px, font0str, rotfloat) {
     ctx.restore();
 }
 
-function  DrawVolume(  ctx ,  vrect, idx , colScheme , candlerect, candleGreen  ){
+
+function  DrawVolume(  ctx ,  vrect, idx , colScheme , candlerect, candleGreen,  vol , style ){
     // let x0=gCandleWickX;
     let x0 = gCandleXnext    ; //  gCandleWickX;
 
@@ -695,11 +726,19 @@ function  DrawVolume(  ctx ,  vrect, idx , colScheme , candlerect, candleGreen  
     if(candleGreen==1){
         volcol = colScheme.up;
     }
-    let volht = parseInt(idx/3);  // HERE *** COMPUTE VOLUME based on   :    gCandlesMaxes {  .volrng }
+
+    // gCandlesMaxes.volRange   = gCandlesMaxes.volHigh   - gCandlesMaxes.volLow;
+    let volht =0; // parseInt(idx/3);  // HERE *** COMPUTE VOLUME based on   :    gCandlesMaxes {  .volrng }
+
+    let vol_pct = vol / gCandlesMaxes.volHigh;
+
+    let volht_MaxPixels  =  parseInt( vrect.h * gVolumePixelHigh_pct );  // gV0lumePixelHigh_pct= 0.125;
+
+    volht = parseInt( vol_pct * volht_MaxPixels );
 
     let vrectVol = {   x: x0 , y: (( vrect.y+vrect.h ) - volht ),      w: candlerect.w,   h: volht };
 
-    DrawVRect(ctx, vrectVol, 1, volcol, "solid" );
+    DrawVRect(ctx, vrectVol, 1, volcol, style );
 
 }
 
@@ -884,7 +923,7 @@ function resizeCanvas() {
             let rcol=RandomColorC();
 
             let vr =       { x0: 6 , y0: 6 , w0: rectWidth, h0: rectHeight };
-            // DrawVRect(ctx, vr, 2, rcol, "outline");
+            // DrawV Rect(ctx, vr, 2, rcol, "outline");
 
             gGlobalChartRectCurrent.x = vr.x0 +  parseInt(vr.w0 * 0.05);
             gGlobalChartRectCurrent.y = vr.y0 +  parseInt(vr.h0 * 0.05);
