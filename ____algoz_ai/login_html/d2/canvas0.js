@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "211.1";
+let                                                                         gVer = "212.6";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -70,6 +70,10 @@ let gColScheme10 = { bg:'black', tx: 'mintcream', up: 'turquoise', dn:'peachpuff
 // rnd one against black
 let gColScheme99 = { bg:'black', tx: 'white', up: 'green', dn:'red', ou:'blue' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
 let gColScheme100 = { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
+
+
+let gSupResColors = {  r4: 'darkred', r3: 'darkred', r2: '#9f2222'  , r1: '#ef2222' , s1: 'lawngreen' , s2: 'green', s3: 'darkgreen', s4: 'darkgreen'  };
+
 
 
 const colarr = [
@@ -371,23 +375,9 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
 
     // console.log(processedData); // This will log the PHP data to the console
 
-    
-
-//
-//  DEL, depricate
-//
-// Draw the  SAMPLE rectangle
-    // let newcol=RandomColorC();
-// newcol = 'black';
-    // DrawRectOutline(ctx, gCandleXnext, vrect.y+20,  gCandleWidth, (vrect.h/3), 2, newcol );
-    // // DrawVRect(ctx, vrect, 4, colScheme.ou , "outline");
-   
-    
-
-
     let newcol=RandomColorC();
 
-
+    let last_date_key="nil";  // DERP
 
     let j=0;
     for (var date in processedData) {
@@ -398,11 +388,61 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
             let lo1 = parseFloat(  processedData[date]["low"] );
             let cl1 = parseFloat(  processedData[date]["close"] );
             let vol1 = parseFloat(  processedData[date]["volume"] );
+            let eom = parseInt(  processedData[date]["endOfMonth"] );
 
             gLastDateStr    = date;
 
-            DrawCandlePlus(ctx, vrect, colScheme,  j, datestr, op1, hi1, lo1, cl1, vol1 );    // uses gCandlesMaxes
 
+            if(eom==1){   // found end of month
+                  processedData[date]["X1month"] = gCandleXnext;
+
+                //   // here we may have to pre-loop to set X1,X2month's
+                //  if(last_date_key!="nil"){
+                //     processedData[last_date_key]["X2month"] = gCandleXnext;  // get new X2 from last month
+                //     last_date_key =gLastDateStr;  //== date
+                //  }
+
+                  let x1m = gCandleXnext;
+                  let x2m = gCandleXnext + ( 10 * ( gCandleWidth + gCandleOffset ) ); 
+                //   if(x2m> vrect.x+vrect.h) x2m= vrect.x+vrect.h-1;
+
+                let  sr0price = 0.0;  
+                let  sr0Y  =0; 
+                let  sr0Ymax = vrect.y+vrect.h;
+
+                if(button3==1){
+                          sr0price = parseFloat( processedData[date]["R3month"] );
+                          sr0Y     = GetYCoordFromPrice( sr0price, vrect );
+                          // make sure Y coord is inside vrect 
+                           DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r3 ,  "dashed" );
+
+                          sr0price = parseFloat( processedData[date]["R2month"] );
+                          sr0Y     = GetYCoordFromPrice( sr0price, vrect );
+                           DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r2 ,  "dashed" );
+
+                          sr0price = parseFloat( processedData[date]["R1month"] );
+                          sr0Y     = GetYCoordFromPrice( sr0price, vrect );
+                           DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r1 ,  "dashed" );
+                        
+
+                          sr0price = parseFloat( processedData[date]["S1month"] );
+                          sr0Y     = GetYCoordFromPrice( sr0price, vrect );
+                           DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.s1 ,  "dashed" );
+
+                          sr0price = parseFloat( processedData[date]["S2month"] );
+                          sr0Y     = GetYCoordFromPrice( sr0price, vrect );
+                          DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.s2 ,  "dashed" );
+
+                          sr0price = parseFloat( processedData[date]["S3month"] );
+                          sr0Y     = GetYCoordFromPrice( sr0price, vrect );
+                          DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.s3 ,  "dashed" );
+                
+                    }//if butt0n
+
+            }
+
+
+            DrawCandlePlus(ctx, vrect, colScheme,  j, datestr, op1, hi1, lo1, cl1, vol1 , eom);    // uses gCandlesMaxes
             // console.log( j+") " + datestr + ":  nextX="+ gCandleXnext  + ";  H, L, Close= " + processedData[date]["high"] + ", " + processedData[date]["low"] + ", "+ processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
             
             gCandleXnext =   gCandleXnext +  gCandleWidth + gCandleOffset ;
@@ -413,15 +453,6 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
     gCandleXnextLast =   gCandleXnext;
 
 // #################################  END OF CANDLESLOOP 
-
-
-    // if(button5==1){
-    //     DrawSegmentedLine(ctx, processedData, vrect, 2, 'cyan',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
-    //     DrawSegmentedLine(ctx, processedData, vrect, 2, 'yellow', "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P3") ;
-    // }
-
-    // // ie AAPL Last: $xxx
-    // Dra wTextInfo( ctx , vrect , 48 ,  24, colScheme);
 
 
 }// fn Dr@wCandlesChart   ################################################################################
@@ -538,7 +569,7 @@ function GetYCoordFromPrice( priceInput, vrect ){
 
 }//fn
 
-function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl1, vol1  ){
+function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl1, vol1 , eom ){
 
     let candleRect = {  x: 0 , y: 0 , w: 4 , h: 12  }; 
 
@@ -558,8 +589,7 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
     yh = GetYCoordFromPrice( hi1, vrect ) ;   //  high  gCandleMaxes{} must be set by this fn-call
     yl = GetYCoordFromPrice( lo1, vrect ) ;     // low
 
-   if(button1==0) DrawVerticalLine( ctx, xwick, yh, yl, 'grey');
-    // DrawVerticalLine( ctx, xwick, yh, yl, colScheme.wi);  // wick col scheme
+    if(button1==0) DrawVerticalLine( ctx, xwick, yh, yl, colScheme.wi, "solid");
 
     candleRect.x = gCandleXnext;
     candleRect.y = vrect.y+50;
@@ -578,21 +608,32 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
         candleRect.h =   y2 - candleRect.y ;
     }
 
+
+
+
     // draw candle body
     if(button1==0) DrawVRect(ctx, candleRect, 2, col1 , "solid");
 
     // draw everything else assoc with that candle
-    DrawOtherStuff(ctx , vrect , idx, colScheme,  candleRect, candleGreen);
+    DrawOtherStuff(ctx , vrect , idx, colScheme,  candleRect, candleGreen, eom);
 
 }// fn Dr@wCandlePlus(...)
 
+//
+// candlestick-based other stuff
+//
+function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGreen, eom ){   // candleGreen==1 if UP
 
-function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGreen ){   // candleGreen==1 if UP
-    if(idx%4==0) DrawDate( ctx  , vrect , colScheme);
     DrawVolume( ctx  ,  vrect, idx , colScheme , candlerect, candleGreen  );   
 
+    if(eom==1){  // end of month
+        DrawVerticalLine(ctx  , candlerect.x , vrect.y, (vrect.y+vrect.h) , "#454595", "dotted");
+        DrawDateRotated( ctx  , vrect , colScheme, -0.50 );
+        DrawMonthlySupportResistance(ctx, vrect,  idx , colScheme , candlerect);
+    }
 
 
+// BUY SELL
    if(button2==0){ 
     // buy and sell signals
     if(idx%12==0) DrawTriangle(ctx, 20, 3, 'green', gCandleWickX, candlerect.y+candlerect.h, 0, 1, 'limegreen' );
@@ -606,6 +647,10 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
 
 }
 
+function DrawMonthlySupportResistance(ctx, vrect,  idx , colScheme , candlerect){
+    ;
+}
+
 
 function  DrawGlobalTextInfo( ctx , vrect, offset , fsz, colScheme ){
     // DrawText( ctx, gChartTextStr,  vrect.x+offset, vrect.y+offset, fsz , gGlobalDrawCol , gGlobalFont);
@@ -616,8 +661,9 @@ function DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr){
     ctx.font =  fsz.toString() + "px "+ fontStr ;        // ctx.font = "bolder "+"124px Arial";
     ctx.fillText( txtStr , x,  y  );   
 }
-function DrawDate( ctx , vrect, colScheme){  // designed to be called during Rendering
-    DrawTextRotated( ctx, gLastDateStr, gCandleWickX, (vrect.y+vrect.h), colScheme.tx, 12, gGlobalFont, -0.275);
+function DrawDateRotated( ctx , vrect, colScheme, rotfl){  // designed to be called during Rendering
+    // DrawTextRotated( ctx, gLastDateStr, gCandleWickX, (vrect.y+vrect.h), colScheme.tx, 12, gGlobalFont, -0.275);
+    DrawTextRotated( ctx, gLastDateStr, gCandleWickX + 4, (vrect.y+ parseInt(vrect.h *0.90) ), colScheme.tx, 12, gGlobalFont, rotfl );
 }
 function DrawTextRotated( ctx, rstr, xx0, yy0, colstr, px, font0str, rotfloat) {
     ctx.fillStyle = colstr;  
@@ -736,11 +782,11 @@ DrawCircle(ctx, 100, 3, 'black', 300, 150, 20, 1, 'red');
 */
 
 
-function DrawHorizontalLine( ctx, x1, x2, y ,col){
-    DrawLine(ctx, x1, y, x2, y, 2, col, "solid");
+function DrawHorizontalLine( ctx, x1, x2, y ,col,  style){
+    DrawLine(ctx, x1, y, x2, y, 2, col,  style);
 }
-function DrawVerticalLine( ctx, x, y1, y2 , col){
-    DrawLine(ctx, x, y1, x, y2, 2, col , "solid");
+function DrawVerticalLine( ctx, x, y1, y2 , col, style){
+    DrawLine(ctx, x, y1, x, y2, 2, col ,  style );
 }
 
 function DrawLine(ctx, x, y, x1, y1, weight, color, style) {
