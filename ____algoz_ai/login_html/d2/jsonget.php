@@ -1,6 +1,6 @@
 
 <?php                       
-//                                                  ver  206.2
+                                                              $ver=  "210.9";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -15,6 +15,28 @@ $ChartHighDate = "nil";
 $ChartLow   = 1000000;
 $ChartLowIdx = 0;
 $ChartLowDate = "nil";
+
+$button1 = 0;
+$button2 = 0;
+$button3 = 0;
+$button4 = 0;
+$button5 = 0;
+$button6 = 0;
+$button7 = 0;
+$button8 = 0;
+$button9 = 0;
+$button10 = 0;
+
+$button1name = "Line/Candle Chart";
+$button2name = "Buy & Sell Signals";
+$button3name = "Support Resistance";
+$button4name = "Gaps Detection";
+$button5name = "Pivot Lines";
+$button6name = "Fibonacci";
+$button7name = "Fundamentals";
+$button8name = "Aux Button 8";
+$button9name = "Aux Button 9";
+$button10name= "Aux Button 10";
 
 
 function CheckStringArray($arr, $str) {
@@ -573,29 +595,63 @@ $processedDataJson = json_encode($dataProcessed);
 
         .chartjb {
             width: 100%;
-            height: 100vh; /* Full viewport height */
+            height: 100vh; 
             display: flex;
+               flex-direction: column;  /*  *NEW*   */
             justify-content: center;
             align-items: center;
             background-color: #f0f0f0;
         }
 
         canvas {
-            width: 100%;
-            height: 100%;
+            width:  100%;
+            height: 100%;   /*  *NEW*     height: 100%; */
         }
+
+        .buttons-container {   /*  *NEW*   */
+            display: flex;
+            justify-content: space-evenly;
+            width: 100%;
+        }
+        .buttons-container button {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+        }
+
     </style>
 </head>
 <body>
+
+ <!--####################  Add buttons in a flex container  ###############################  *NEW_BUTTONS* -->
+ <div class="buttons-container">
+
+
+        <button id="button1" onclick="toggleButton(1)"><?php echo $button1name; ?></button>
+        <button id="button2" onclick="toggleButton(2)"><?php echo $button2name; ?></button>
+        <button id="button3" onclick="toggleButton(3)"><?php echo $button3name; ?></button>
+        <button id="button4" onclick="toggleButton(4)"><?php echo $button4name; ?></button>
+        <button id="button5" onclick="toggleButton(5)"><?php echo $button5name; ?></button>
+<!--
+        <button id="button6" onclick="toggleButton(6)"><?php echo $button6name; ?></button>
+        <button id="button7" onclick="toggleButton(7)"><?php echo $button7name; ?></button>
+        <button id="button8" onclick="toggleButton(8)"><?php echo $button8name; ?></button>
+        <button id="button9" onclick="toggleButton(9)"><?php echo $button9name; ?></button>
+      <button id="button10" onclick="toggleButton(10)"><?php echo $button10name; ?></button>
+    -->
+    </div>
 
     <div class="chartjb">
         <canvas id="myCanvas"></canvas>
     </div>
 
+
+
     <!-- Embed the PHP-generated JSON into the page using a script tag -->
     <script>
         // Store the PHP data/vars in a JavaScript variables
-                
+
+        var gVerPHP         = <?php echo $ver; ?>;
         var gChartHigh      = <?php echo $ChartHigh; ?>;
         var gChartHighIdx   = <?php echo $ChartHighIdx; ?>;
         var gChartHighDate  = <?php echo $ChartHighDate; ?>;
@@ -609,6 +665,22 @@ $processedDataJson = json_encode($dataProcessed);
         var gColSchemeNum = <?php echo $sch; ?>;
         var processedData = <?php echo $processedDataJson; ?>;
         console.log("] still inside php:  processedData==", processedData); // You can access the PHP data in JS now
+
+//  ##############################################################  *NEW_BUTTONS* 
+        //  Initialize button states from PHP   should be gButton1..10
+        var button1 = <?php echo $button1; ?>;
+        var button2 = <?php echo $button2; ?>;
+        var button3 = <?php echo $button3; ?>;
+        var button4 = <?php echo $button4; ?>;
+        var button5 = <?php echo $button5; ?>;
+        var button6 = <?php echo $button6; ?>;
+        var button7 = <?php echo $button7; ?>;
+        var button8 = <?php echo $button8; ?>;
+        var button9 = <?php echo $button9; ?>;
+        var button10 =<?php echo $button10; ?>;
+//  ##############################################################  *NEW_BUTTONS* 
+
+
     </script>
 
     <!-- Link to your external JavaScript file -->

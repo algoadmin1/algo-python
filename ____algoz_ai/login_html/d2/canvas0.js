@@ -1,25 +1,39 @@
+//          canvas0.js  aka dr@wChart.js                  
 //
-//          canvas0.js  aka dr@wChart.js                   ver 202.4
-//
+
+let                                                                         gVer = "211.1";
+
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
+//              TO DO:  
+//                      DRAW axes, 
+//                      DRAW gridlines,
 //
-//              TO DO:  axes, gridlines,
 //                      buy/Sell sig's, drawTriangle, 
-//                      Monthly Sup/Resistance
 //                      Weekly Sup/Resistance
 //                      Draw Volume
 //
-//                      Draw price at high and at low
+//                      Draw price at ChartHigh and at ChartLow
 //
-//                       white/blackFlip &scheme=, Black/WhiteText: gChartTextCol =
+//                *****>    End of Month Tracking, 0/1 ==> 0 or Xcoord of gWidthXmiddle (?)
+//                *****>    End of Month Tracking: DRAW Vertical Line at month w/ TEXT Date
+//                          Monthly Sup/Resistance
 //
-//                  **  End of Month Tracking, 0/1 ==> 0 or Xcoord of gWidthXmiddle (?)
+//                          FIX P3/P OFFSET DATA IN PHP
+//      
+//                          Draw Tri/Circle w/ Generic Text Callout fn
+//                          
+//                          Find EndOfWeek ['endOfWeek'] component for intraday
+//                          
+//                          fix volHt = (vol/volmax) etc   DRAW VOLUME
+// 
+//                          if BuySigPrice < S1month, or IF sellSigPrice > R1month etc...
+//                           
+///                  NOTE !!! draw candles is computing his and lows that DrawLines is NOT !!!
 //
-                    //  ()  
+//                    CRONjob:  cronit.php : loops thru a list, writes file etc
+//                          
 //
-
-
 
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
@@ -32,28 +46,30 @@ let gGlobalChartRect1 = { x: 150 , y: 275 , w: 60 , h: 134 };
 let gGlobalChartRect2 = { x: 150 , y: 275 , w: 60 , h: 134 };
 
 let gGlobalChartRectCurrent = { x: 150 , y: 275 , w: 60 , h: 134 };
-let gColScheme =  { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple' };
-let gColScheme0 = { bg:'black', tx: 'white', up: 'limegreen', dn:'red', ou:'purple' };
 
-let gColScheme1 = { bg:'lightslategray',  tx: 'red', up: 'yellow', dn:'blue' , ou:'red' };
+// col $chemes
+let gColScheme =  { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple', wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
+let gColScheme0 = { bg:'black', tx: 'white', up: 'limegreen', dn:'red', ou:'purple' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
 
-let gColScheme2 = { bg:'black',  tx: 'white', up: '#11ef43', dn:'purple' , ou:'green'};
+let gColScheme1 = { bg:'lightslategray',  tx: 'red', up: 'yellow', dn:'blue' , ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 
-let gColScheme3 =  { bg:'white',  tx: 'black', up: 'yellow', dn:'blue', ou:'red' };
-let gColScheme4 = { bg:'black',  tx: 'green', up: 'limegreen', dn:'deeppink' , ou:'grey'};
+let gColScheme2 = { bg:'black',  tx: 'white', up: '#11ef43', dn:'purple' , ou:'green', wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
 
-let gColScheme5 =  { bg:'white',  tx: 'blue', up: 'green', dn:'red', ou:'red' };
-let gColScheme6 =  { bg:'antiquewhite',  tx: 'blue', up: 'black', dn:'orange', ou:'orange' };
+let gColScheme3 =  { bg:'white',  tx: 'black', up: 'yellow', dn:'blue', ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
+let gColScheme4 = { bg:'black',  tx: 'green', up: 'limegreen', dn:'deeppink' , ou:'grey', wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 
-let gColScheme7 =  { bg:'white',  tx: 'blue', up: 'chocolate', dn:'hotpink', ou:'red' };
-let gColScheme8 =  { bg:'blue',  tx: 'yellow', up: 'black', dn:'orange', ou:'grey' };
+let gColScheme5 =  { bg:'white',  tx: 'blue', up: 'green', dn:'red', ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
+let gColScheme6 =  { bg:'antiquewhite',  tx: 'blue', up: 'black', dn:'orange', ou:'orange' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 
-let gColScheme9 =  { bg:'black', tx: 'white', up: 'lawngreen', dn:'crimson', ou:'indianred' };
-let gColScheme10 = { bg:'black', tx: 'mintcream', up: 'turquoise', dn:'peachpuff', ou:'magenta' };
+let gColScheme7 =  { bg:'white',  tx: 'blue', up: 'chocolate', dn:'hotpink', ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
+let gColScheme8 =  { bg:'blue',  tx: 'yellow', up: 'black', dn:'orange', ou:'grey' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
+
+let gColScheme9 =  { bg:'black', tx: 'white', up: 'lawngreen', dn:'crimson', ou:'indianred' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
+let gColScheme10 = { bg:'black', tx: 'mintcream', up: 'turquoise', dn:'peachpuff', ou:'magenta' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 
 // rnd one against black
-let gColScheme99 = { bg:'black', tx: 'white', up: 'green', dn:'red', ou:'blue' };
-let gColScheme100 = { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple' };
+let gColScheme99 = { bg:'black', tx: 'white', up: 'green', dn:'red', ou:'blue' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
+let gColScheme100 = { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 
 
 const colarr = [
@@ -218,32 +234,32 @@ function DrawRoundedRect(ctx, vrect, radius, col, wt, fill) {
 // DrawRoundedRect(ctx, { x: 250, y: 30, w: 200, h: 300 }, radius, color, borderWeight, fillRect);
 
 
-
-
-
-
-
-
-
-
-// '#ff4488'
-
 function DrawChart(ctx,  vrect , colScheme, typestr ) {
-
     // DrawVRect(ctx, vrect, 2, colScheme.bg , "solid");
     DrawRoundedRect(ctx, vrect, 20, colScheme.bg, 3, 1);
-
     // DrawRoundedRect(ctx, vrect, radius, col, wt, fill);
     DrawRoundedRect(ctx, vrect, 20, colScheme.ou, 3, 0);
 
-    if(typestr=="candles")   DrawCandlesChart(ctx,  vrect , colScheme, 2);
-      else if(typestr=="line")   DrawLineChart(ctx,  vrect , colScheme, 3, "close");  // or P P3 to plot
+    //old
+    // if(typestr=="candles")   DrawCandlesChart(ctx,  vrect , colScheme, 2);  /// NOTE !!! draw candles is computing his and lows that DrawLines is NOT !!!
+    //   else if(typestr=="line")   DrawLineChart(ctx,  vrect , colScheme, 3, "close");  // or P P3 to plot
+
+   // this will test for butt0n1==0
+   DrawCandlesChart(ctx,  vrect , colScheme, 2);  /// NOTE !!! draw candles is computing his and lows that DrawLines is NOT !!!
+   // this will test for butt0n1==1
+   if(typestr=="line")   DrawLineChart(ctx,  vrect , colScheme, 3, "close");  // or P P3 to plot
+
+
+    // DrawSegmentedLine(ctx, processedData, vrect, 3, 'green', "solid", gCandleXnextStart,   (  gCandleWidth + gCandleOffset ), "close") ;
+    if( button5==1 || button5==2  ) DrawSegmentedLine(ctx, processedData, vrect, 2, 'cyan',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
+    if( button5==2)                 DrawSegmentedLine(ctx, processedData, vrect, 2, 'yellow', "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P3") ;
+    
+    let fszDyn = parseInt( vrect.w * 0.025 );
+    DrawGlobalTextInfo( ctx , vrect , 48 ,  fszDyn, colScheme);
+    // DrawGlobalTextInfo( ctx , vrect , 48 ,  24, colScheme);
 
 }
-/*
-
-*/
-//globals
+// globals
 let gGlobalDrawCol = 'black';
 let gChartTextStr ="Welcome!";
 let gSymbolStr    ="SPY";
@@ -289,7 +305,7 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
                                                     // let vect2 = { ...vect };   // example
     gCandlesMaxes = { ...gCandlesMaxesInit };      // init the global vector
 
-    
+    let datestr0 = "0000-11-22";
     let i=0;
     for (var date in processedData) {
         if (processedData.hasOwnProperty(date)) {
@@ -314,11 +330,18 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
 
             gSymbolStr    = processedData[date]["sym"];
             gPeriodStr    = processedData[date]["per"];
-            gLastPriceStr  = processedData[date]["close"];
+
+            let lastPrice0= parseFloat(processedData[date]["close"]) ; 
+            // gLastPriceStr  =        processedData[date]["close"];   
+            gLastPriceStr  =   lastPrice0.toFixed(2).toString() ;
+            
             // let lastDay       = processedData[date]["dayOfWeek"];
             i++;
+
+            datestr0 = date.toString();
         }
-    }
+    }//loop
+
     gNumCandlesToRender = i;
     gCandlesMaxes.num2render = gNumCandlesToRender ;
     gCandlesMaxes.priceRange = gCandlesMaxes.priceHigh - gCandlesMaxes.priceLow;
@@ -328,7 +351,7 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
 
 //  ############################################################################## should be a fn
 
-    gChartTextStr = gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr ; 
+    gChartTextStr = gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0+"    v"+gVer+" php_v"+gVerPHP; 
 
 
 // DETERMINE gCandleOffset
@@ -392,13 +415,13 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
 // #################################  END OF CANDLESLOOP 
 
 
-    // DrawSegmentedLine(ctx, processedData, vrect, 3, 'green', "solid", gCandleXnextStart,   (  gCandleWidth + gCandleOffset ), "close") ;
+    // if(button5==1){
+    //     DrawSegmentedLine(ctx, processedData, vrect, 2, 'cyan',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
+    //     DrawSegmentedLine(ctx, processedData, vrect, 2, 'yellow', "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P3") ;
+    // }
 
-    DrawSegmentedLine(ctx, processedData, vrect, 2, 'cyan',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
-    DrawSegmentedLine(ctx, processedData, vrect, 2, 'yellow', "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P3") ;
-
-    // ie AAPL Last: $xxx
-    DrawTextInfo( ctx , vrect , 48 ,  24, colScheme);
+    // // ie AAPL Last: $xxx
+    // Dra wTextInfo( ctx , vrect , 48 ,  24, colScheme);
 
 
 }// fn Dr@wCandlesChart   ################################################################################
@@ -534,7 +557,8 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
     // DRAW CANDLE WICK
     yh = GetYCoordFromPrice( hi1, vrect ) ;   //  high  gCandleMaxes{} must be set by this fn-call
     yl = GetYCoordFromPrice( lo1, vrect ) ;     // low
-    DrawVerticalLine( ctx, xwick, yh, yl, 'grey');
+
+   if(button1==0) DrawVerticalLine( ctx, xwick, yh, yl, 'grey');
     // DrawVerticalLine( ctx, xwick, yh, yl, colScheme.wi);  // wick col scheme
 
     candleRect.x = gCandleXnext;
@@ -555,7 +579,7 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
     }
 
     // draw candle body
-    DrawVRect(ctx, candleRect, 2, col1 , "solid");
+    if(button1==0) DrawVRect(ctx, candleRect, 2, col1 , "solid");
 
     // draw everything else assoc with that candle
     DrawOtherStuff(ctx , vrect , idx, colScheme,  candleRect, candleGreen);
@@ -567,10 +591,13 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
     if(idx%4==0) DrawDate( ctx  , vrect , colScheme);
     DrawVolume( ctx  ,  vrect, idx , colScheme , candlerect, candleGreen  );   
 
-    
+
+
+   if(button2==0){ 
+    // buy and sell signals
     if(idx%12==0) DrawTriangle(ctx, 20, 3, 'green', gCandleWickX, candlerect.y+candlerect.h, 0, 1, 'limegreen' );
     if(idx%9==0)  DrawTriangle(ctx, 20, 3, 'red', gCandleWickX, candlerect.y, 1, 1, 'hotpink' );
-    
+   }
 
     // let cirOutline = RandomJSColor(colarr);
     // let cirFill    = RandomJSColor(colarr);
@@ -580,8 +607,7 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
 }
 
 
-
-function  DrawTextInfo( ctx , vrect, offset , fsz, colScheme ){
+function  DrawGlobalTextInfo( ctx , vrect, offset , fsz, colScheme ){
     // DrawText( ctx, gChartTextStr,  vrect.x+offset, vrect.y+offset, fsz , gGlobalDrawCol , gGlobalFont);
     DrawText( ctx, gChartTextStr,  vrect.x+offset, vrect.y+offset, fsz , colScheme.tx , gGlobalFont);
 }
@@ -775,16 +801,12 @@ if(gColSchemeNum==100){
 }
 
 
-
-
-
-
-
-
-
-
         // Function to resize canvas and redraw the rectangle
 function resizeCanvas() {
+
+    console.log("]  inside .js:  r3sizeCanvas():  button1...10 ==", button1, button2, button3, button4,
+         button5, button6, button7, button8, button9, button10 );  
+
             // Set canvas width and height to match the div's size
             canvas.width = canvas.parentElement.clientWidth;
             canvas.height = canvas.parentElement.clientHeight;
@@ -798,11 +820,6 @@ function resizeCanvas() {
 
             let rcol=RandomColorC();
 
-            // DEL depr
-            // // Draw rnd rectangle
-            // DrawRectOutline(ctx, 6, 6,           rectWidth, rectHeight, 2, 'green');
-            
-
             let vr =       { x0: 6 , y0: 6 , w0: rectWidth, h0: rectHeight };
             // DrawVRect(ctx, vr, 2, rcol, "outline");
 
@@ -814,24 +831,13 @@ function resizeCanvas() {
             console.log( "preDr@wChart()", gGlobalChartRectCurrent , gColScheme );
 
             let colscheme = GetColorScheme();
-            DrawChart( ctx, gGlobalChartRectCurrent , colscheme , "candles" );   
-            // DrawChart( ctx, gGlobalChartRectCurrent , colscheme , "line" );  
 
+            let typestr0 = 'candles';
+            if(button1==1) typestr0 = 'line';
+            DrawChart( ctx, gGlobalChartRectCurrent , colscheme , typestr0 );   
 
-            // DrawRectOutline(ctx, 6, 6, rectWidth, rectHeight, 2, rcol );
-
-            // Dra wLine(ctx, 6, 6, rectWidth, rectHeight, 5, 'red', 'dotted' );   //'dashed');
-
-            // ctx.beginPath();
-            // ctx.rect(6, 6, rectWidth, rectHeight);
-            // ctx.strokeStyle = 'black';
-            // ctx.lineWidth = 2;
-            // ctx.stroke();
 
             let rcol1=RandomColorC();
-
-            // DrawVRect(ctx, gGlobalChartRect, 2, 'blue', "solid");
-            // DrawVRect(ctx, gGlobalChartRect1, 2, rcol1, "solid");
 
             let wstr = canvas.width.toString();
             let hstr = canvas.height.toString();
@@ -846,269 +852,88 @@ function resizeCanvas() {
             // ctx.font =  fsz.toString()+ "px Arial";   // ctx.font = "bolder "+"124px Arial";
             // ctx.fillText( dtstr , 40, 40  );
 
+}//fn  r3sizeCanvas()
 
 
+        // Function to toggle button state and call resizeCanvas
+function toggleButton(buttonNumber) {
+            switch (buttonNumber) {
+                case 1:
+                    button1 = (button1 === 1) ? 0 : 1;
+                    window.dispatchEvent(new Event('button1'));  // Trigger event listener
+                    break;
+                case 2:
+                    button2 = (button2 === 1) ? 0 : 1;
+                    window.dispatchEvent(new Event('button2'));
+                    break;
+                case 3:
+                    button3 = (button3 === 1) ? 0 : 1;
+                    window.dispatchEvent(new Event('button3'));
+                    break;
+                case 4:
+                    button4 = (button4 === 1) ? 0 : 1;
+                    window.dispatchEvent(new Event('button4'));
+                    break;
+                case 5:
+                    // button5 = (button5 === 1) ? 0 : 1;
+                    if(button5==0) button5=1;
+                     else if(button5==1) button5=2;
+                      else  if(button5==2) button5=0;
+                    window.dispatchEvent(new Event('button5'));
+                    break;
+                case 6:
+                    button6 = (button6 === 1) ? 0 : 1;
+                    window.dispatchEvent(new Event('button6'));
+                    break;
+                case 7:
+                    button7 = (button7 === 1) ? 0 : 1;
+                    window.dispatchEvent(new Event('button7'));
+                    break;
+                case 8:
+                    button8 = (button8 === 1) ? 0 : 1;
+                    window.dispatchEvent(new Event('button8'));
+                    break;
+                case 9:
+                    button9 = (button9 === 1) ? 0 : 1;
+                    window.dispatchEvent(new Event('button9'));
+                    break;
+                case 10:
+                    button10 = (button10 === 1) ? 0 : 1;
+                    window.dispatchEvent(new Event('button10'));
+                    break;
 
-
-
-
-//   DrawTriangle( xx1, yy1, 28, arrowgreenColor, SellSignalOO , arrayitem.udate, arrayitem.p.toFixed(2).toString()+" "+ arrayitem.udate.substring(5,10), "" );
-/*
-
-// note direction of triangle is based on     if(grStr==arrowgreenColor  ||  grStr==arrowgreenColor1  ){
-//
-//
-function DrawTriangle( x0, y0, size0, grStr, numcandles0, dateStr0  , pricestr, dateStr ){
-  let specialstr="";
-  
-  // specialstr="silver";
-  // DrawTriangle1( x0, y0, size0*1.532, grStr, numcandles0, dateStr0  , pricestr, dateStr, specialstr );
-
-
-   specialstr="";   // normal
-  DrawTriangle1( x0, y0, size0, grStr, numcandles0, dateStr0  , pricestr, dateStr, specialstr );
-
-}
-
-function DrawTriangle1( x0, y0, size0, grStr, numcandles0, dateStr0  , pricestr, dateStr, specialstr ){
-   let dstr0 = dateStr0.substring(5,7) ;   // 2020-03-12
-   let dstr1 = dateStr0.substring(5,10) ;
-
- if(gDrawBuySell==0) return;
- if(numcandles0<4 && gAssetType=="crypto") return;
-
-  let monthNum0=Number(dstr0);
-
-    // NOT JAN OR FEB where BUY SIGNAL SHOULD BE SURPRESSED
-    if(  numcandles0 < 6)  size0*= 1.0;
-      else  if(  numcandles0 <9 )  size0*=1.6;
-        else   size0*=2.10;
-   
-    var size0half = size0 / 2;
-    var size0_75  = size0 * 0.75;
-    
-    var size0_753 = size0 * 0.75 * 1.10 ;
-    
-    var xx1 = x0 - size0half;
-    var xx2 = x0 + size0half;
-
-
-// the triangle
-    ctx.beginPath();
-    
-    let bearishBullish =-1;  /// -1 bearish, 1 = bullsh
-    if(grStr==arrowgreenColor  ||  grStr==arrowgreenColor1  ){
-      //  BUY SIGNAL
-        bearishBullish =1;
-
-            if(monthNum0 == 1 || monthNum0 == 2  ){
-              // IF   JAN OR FEB, SURPRESS BUY SIGNAL
-                grStr=jb_orange ;// size0_753 *= 0.5 ;  // surpress buy signals IN JAN/FEB
-              }
-
-        if(specialstr=="silver") y0 -=50;
-        y0 = y0+(size0_753* 2);
-        
-        ctx.moveTo(xx1, y0-(size0_753* 0) );
-        ctx.lineTo(xx2, y0-(size0_753* 0) );
-        
-        ctx.lineTo(x0,  y0-(size0_753* 1) );
-        
-        ctx.lineTo(xx1, y0); //+(size0_753* 2) );
-
-    }else{   // ie Red , ==  SELL SIGNAL
-
-       bearishBullish =-1;   //set it explicitly again -1 = bearish
-       
-       if(specialstr=="silver") y0 +=50;
-       y0 = y0-(size0_753* 2);
-
-        ctx.moveTo(xx1, y0+(size0_753* 0) );
-        ctx.lineTo(xx2, y0+(size0_753* 0) );
-        
-        ctx.lineTo(x0,  y0-(size0_753* -1) );
-        
-        ctx.lineTo(xx1, y0+(size0_753* 0) );
-
-    }
-    
-//    ctx.lineTo(xx1, y0 );
-    ctx.lineWidth = 10;
-    ctx.strokeStyle = grStr;
-   if(specialstr=="silver") ctx.strokeStyle = "#99ffee"; // = grStr;
-
-    ctx.stroke();
-
-
-// let jb_orange ="#f8ad25";
-// let jb_green  ="#05fa98";
-// let jb_red    ="#ff0024";
-// let jb_purple ="#a506f9";
-// let jb_blue   ="#040efb";
-// let jb_yellow ="#f5ff00";
-
- let dstr2 = numcandles0.toString();
-let fudge =0;
-
-// PRINT MONTH # ON TOP
-  if(gDrawBuySell==2){
-
-
-    ctx.fillStyle = jb_yellow; //grStr ; //jb_purple; //"#b1dd03"; //"#55ddff";
-   ctx.font = "28px Arial";
-   // let dstr0 = dateStr0.substring(5,7) ;
-   // ctx.fillText( dateStr0,  x0,  y0+(size0_753* 0) );
-//   ctx.fillText( dstr1,  xx1,  y0+(size0_75 * bearishBullish) );
-   ctx.fillText(  dstr2,  x0-8, 8+ y0 - (size0_753* (0.5  * bearishBullish) )  );  //+(size0_75 * bearishBullish) );
- // } 
-
-   ctx.fillStyle = jb_yellow; //jb_blue; //grStr ; //jb_purple; //"#b1dd03"; //"#55ddff";
-   ctx.font = "32px Arial";
-   if(bearishBullish!= -1){
-// bearish
-
-        ctx.fillText(  dateStr,       x0-28,  y0 - (size0_753* (2.55  * bearishBullish*-1) )  );  //+(size0_75 * bearishBullish) );
-        ctx.fillText(  "$"+pricestr,  x0-28,  y0 - (size0_753* (1.25  * bearishBullish*-1) )  );  //+(size0_75 * bearishBullish) );
-    }else{
-// bullish
-
-            ctx.fillText(       dateStr,  x0-28,  y0 - (size0_753* (1.5  * bearishBullish*-1) )  );   
-            ctx.fillText(  "$"+pricestr,  x0-28,  y0 - (size0_753* (0.5  * bearishBullish*-1) )  );   
          }
+}//fn t0ggle butt
 
 
 
-        }//if()
-}//fn
 
 
 
-*/
-/* 
+// #############################################################  MAIN CODE  *****
+// #############################################################  MAIN CODE  *****
+// #############################################################  MAIN CODE  *****
 
-               draw Candlestick(  o0, h0, l0, c0, dateStr, v0, pivotStr, pivot3Str , idx);
-            
-               draw CandlestickOnly(  o0, h0, l0, c0, nextdatestr, v0, pivotStr, pivot3Str , idx, 1);
-
-function drawC andlestickOnly( open, hi, low, close, dateStr, vol, Pstr, P3str , rotFlag){ //}, volume ){
-            
-            var redOrGreen = 0, y0=0, y=0, x=0,  hCanvas=0, priceStr="", wHi=0, wLo=0;   //   redOrGreen  0== red, 1=green
-            var closeYCanvas = 0, openYCanvas=0;   // open, close in Y canvas coords
-            
-            openYCanvas  =  GetYCoordFromPrice( open  ) ;
-            closeYCanvas =  GetYCoordFromPrice( close ) ;
-            
-            hCanvas = Math.abs( openYCanvas  -  closeYCanvas );
-            
-            if (close > open){             // GREEN
-                redOrGreen = 1;         // Close > open, green candle
-                y0 = close;             // y0 is in Price coords
-             }else{                      // RED
-                redOrGreen = 0;
-                y0 = open;              // Open > close  then y = open
-             }
-            
-            y = GetYCoordFromPrice( y0 );  // y in Canvas =  either open or close ,  y0 is in Price format
-            
-            wHi = GetYCoordFromPrice(  hi );
-            wLo = GetYCoordFromPrice( low );
-            
-            // priceStr = "$"+close.toString( );    // close str
-            priceStr = gCurre ncyStr+close.toString( );    // close str
-
-            drawCan dlestickGeometryOnly( candleXnext, y, candleWidth, hCanvas, wHi, wLo, redOrGreen, priceStr, dateStr, Pstr, P3str , rotFlag, 24);
-            
-            CheckLocalCallouts(dateStr, candleXnext-candleWidth, y+mf(0.5*(wHi-wLo)) );
-}//fn
-        
-        
-var gPredictRed = "#551111";     // RED
-var gPredictGreen ="#115511";    // GREEN     
-        
-var binarycnt=0;
-
-function drawC andlestickGeometryOnly( x,y,w,h,wHi,wLo,rG,priceStr, dateStr, Pstr, P3str , rotFlag , fntsz){
-        
-
-                var wickX = x + (w/2);
-                
-                ctx.beginPath();
-                ctx.strokeStyle="#555555";   // make wicks  grey vs black
-                ctx.lineWidth=1;
-// TOP WICK
-                ctx.moveTo(wickX,wHi);
-                ctx.lineTo(wickX,y);
-                ctx.stroke();
-// BOTTOM WICK
-                ctx.moveTo(wickX,(y+h));
-                ctx.lineTo(wickX,wLo);
-                ctx.stroke();
-                
-// this determines rG red =0 or Green=1
-                if (rG==0) ctx.fillStyle =gPredictRed;  //"#a82222";     // RED
-                else ctx.fillStyle =gPredictGreen;      //"#22a822";          // GREEN
-
-             if(dateStr==gFOMCDateStr) ctx.fillStyle = jb_purple; 
-             if(dateStr==gEarningsCorpDateStr ) ctx.fillStyle =jb_orange ;
-
-// then fill the   rectangle    -  candlestick drawn !
-                ctx.fillRect(x,y, w,h);
-    
-//    ctx.fillStyle = "#ff9966";
-  //  ctx.fillRect(x,Ybottom-200, w,h);
-    
-                ctx.fillStyle = "#555566";
-                ctx.font = "12px Arial";
-                
-                var priceY = (y+h+10 );
-                if( rG==1 ) priceY = ( y - 6 );
-       // ctx.fillText( priceStr,wickX+4, priceY );   // price at close
-                
-                //ctx.rotate(20*Math.PI/180);
-
-                binarycnt++;
-
-                var dateStr1 = dateStr.substring(5, 10);
-      // ctx.fillText( dateStr1, wickX+2, Ybottom*1.015 );  // date
-                if( GetDayOfWeek(dateStr).toLowerCase()=="mon"){
-                    if(rotFlag==0){     
-
-                            ctx.fillText( dateStr1, wickX+2, wHi-8 );  // date
-                        
-                        }else{
-                          if(binarycnt%1==0)  draw TextRotated(  dateStr1,    wickX+2, wHi-8 , "#8888aa", fntsz, "Arial");  //"Helvetica" ) ;
-                        }
-                }
-
-// update master X for next candlestick
-                candleXnext = candleXnext + candleWidth + candleOffset ;
-               
-                
-// // set globals on the way out for predictive 'next month's S1-R3'
-//                 gLastMonthNum = lastMonth;
-//                 gThisMonthX = thisMonthX;
-//                 gDiffM = diffM; 
-
-  }//fn
-
-
-function GetYCoordFromPrice( priceInput ){
-            // i.e. price range = $15 - $95 = 80,   ie $26-$15 = $11,  11/80 ~= 0.125 * Yrange (300) ~= $32.50
-            
-            var Ycanvas = YRange - (  ((priceInput - candlesPriceBoundsMin) / candlesPriceRange)  * YRange  ) ;
-            
-            Ycanvas += gGlobalViewportRect.y;
-            return( Ycanvas ); 
-
- }//fn
-
-*/
-
-        }
+        // Resize/redraw the canvas when a button1-6 is pressed 
+        window.addEventListener('button1', resizeCanvas);
+        window.addEventListener('button2', resizeCanvas);
+        window.addEventListener('button3', resizeCanvas);
+        window.addEventListener('button4', resizeCanvas);
+        window.addEventListener('button5', resizeCanvas);
+        window.addEventListener('button6', resizeCanvas);
+        window.addEventListener('button7', resizeCanvas);
+        window.addEventListener('button8', resizeCanvas);
+        window.addEventListener('button9', resizeCanvas);
+        window.addEventListener('button10', resizeCanvas);
 
         // Resize the canvas when the window is resized
         window.addEventListener('resize', resizeCanvas);
 
         // Initial resize to set up the canvas
         resizeCanvas();
+
+// #############################################################  MAIN CODE  *****
+// #############################################################  MAIN CODE  *****
+// #############################################################  MAIN CODE  *****
+
         
