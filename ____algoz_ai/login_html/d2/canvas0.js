@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "212.6";
+let                                                                         gVer = "212.7";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -410,30 +410,41 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
                 let  sr0Y  =0; 
                 let  sr0Ymax = vrect.y+vrect.h;
 
+                let fsz = 16;
+                let xyoff = 4;
+                let fontStr ="Helvetica";
+
                 if(button3==1){
-                          sr0price = parseFloat( processedData[date]["R3month"] );
+                          sr0price = parseFloat( processedData[date]["R3month"] ).toFixed(2);
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                          // make sure Y coord is inside vrect 
-                           DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r3 ,  "dashed" );
+                          DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r3 ,  "dashed" );
 
-                          sr0price = parseFloat( processedData[date]["R2month"] );
+                          sr0price = parseFloat( processedData[date]["R2month"] ).toFixed(2);
+                          txtStr    = gCurrencyStr+ sr0price.toString() + " (R2)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                           DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r2 ,  "dashed" );
+                        //    DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r2 ,  "dashed" );
+                           DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r2 , "dashed" , txtStr, fsz, xyoff, fontStr);
 
-                          sr0price = parseFloat( processedData[date]["R1month"] );
+                          sr0price = parseFloat( processedData[date]["R1month"] ).toFixed(2);
+                          txtStr    = gCurrencyStr+ sr0price.toString() + " (R1)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                           DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r1 ,  "dashed" );
+                        //   DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r1 ,  "dashed" );
+                        DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r1 , "dashed" , txtStr, fsz, xyoff, fontStr);
                         
 
-                          sr0price = parseFloat( processedData[date]["S1month"] );
+                          sr0price = parseFloat( processedData[date]["S1month"] ).toFixed(2);
+                          txtStr    = gCurrencyStr+ sr0price.toString() + " (S1)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                           DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.s1 ,  "dashed" );
+                          DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s1 ,  "dashed" , txtStr, fsz, xyoff, fontStr);
 
-                          sr0price = parseFloat( processedData[date]["S2month"] );
+                          sr0price = parseFloat( processedData[date]["S2month"] ).toFixed(2);
+                          txtStr    = gCurrencyStr+ sr0price.toString() + " (S2)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                          DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.s2 ,  "dashed" );
+                        //   DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.s2 ,  "dashed" );
+                          DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s2 ,  "dashed" , txtStr, fsz, xyoff, fontStr);
 
-                          sr0price = parseFloat( processedData[date]["S3month"] );
+
+                          sr0price = parseFloat( processedData[date]["S3month"] ).toFixed(2);
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
                           DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.s3 ,  "dashed" );
                 
@@ -782,8 +793,14 @@ DrawCircle(ctx, 100, 3, 'black', 300, 150, 20, 1, 'red');
 */
 
 
+function DrawHorizontalLine_callout( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr){
+    DrawLine( ctx, x1, y, x2, y, 2, col,  style);
+    DrawText( ctx, txtStr, x2+xyoff, y, fsz , col , fontStr);
+
+}
+
 function DrawHorizontalLine( ctx, x1, x2, y ,col,  style){
-    DrawLine(ctx, x1, y, x2, y, 2, col,  style);
+        DrawLine(ctx, x1, y, x2, y, 2, col,  style);
 }
 function DrawVerticalLine( ctx, x, y1, y2 , col, style){
     DrawLine(ctx, x, y1, x, y2, 2, col ,  style );
