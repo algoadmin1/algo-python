@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "230.1";
+                                                              $ver=  "212.4";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -491,7 +491,7 @@ $BuyThreshold  = 3;
 $BuyThreshold2 = 4;
 $SellThreshold = 3;
 $SellThreshold2= 4;
-$lastSellStr =  "nil";
+$lastSellStr = "nil";
 $currSellStr =  "nil";
 
 function ProcessData_BuySellSignals( ){
@@ -503,12 +503,7 @@ function ProcessData_BuySellSignals( ){
     $Pday        = 0;   // ['P']
     $PtrailingAvg= 0;   // ['P3']
 
-
-
-
-
-
-/******************************************************************************
+/*
 
 
 
@@ -618,8 +613,6 @@ if( $PtrailingAvg == $Pday ){
 //   SetPlotWidth(1, JBplotWsm);    //Plot1 = sell line, reset it
 }
  
-*****************************************************************************
-
 */
 
 
@@ -633,13 +626,7 @@ if( $PtrailingAvg == $Pday ){
 
 
 
-/******************************************************************************
- * *****************************************************************************
- * *****************************************************************************
- * 
- * 
- * 
- * 
+/*
 SetPlotColor(1, JBColorMvgAvg );  // yello
 SetPlotColor(2, JBColorPivot );  // cyan
 // sell signal?
@@ -769,15 +756,8 @@ Plot1(PtrailingAvg,"PtrailingAvg");    //SELL this is John Person's red-3 past d
 //BUY  Plot2 blue line
 //SetPlotColor(2, darkblue );
 Plot2(Pday,"Pday");         //BUY this is John Person's blue-the next day's Pivot based on today
-
-*****************************************************************************
-*****************************************************************************
-*****************************************************************************
-
+ 
 */
-
-
-
 
 
 function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
