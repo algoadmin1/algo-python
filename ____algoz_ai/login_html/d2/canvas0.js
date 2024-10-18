@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "234.8";
+let                                                                         gVer = "235.5";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -277,6 +277,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
 // globals
 let gGlobalDrawCol = 'black';
 let gChartTextStr ="Welcome!";
+let gChartTextStr1 ="Welcome!";
 
 let gSymbolStr    ="SPY";
 let gSymbolStrLower='spy';
@@ -309,6 +310,38 @@ let gCandlesMaxes     = { num2render: 1, priceHigh: 0, priceLow: 1000000, priceR
                           priceHighX: 0, priceHighY: 0,  priceLowX: 0, priceLowY: 0   };
 
 
+function DateAbbreviate(datestr, startMonthOnly) {
+    // Create a Date object from the input string
+    const date = new Date(datestr);
+
+    // Array of day and month names
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    // Get the day of the week, month, and day of the month
+    const dayOfWeek = days[date.getUTCDay()];
+    const month = months[date.getUTCMonth()];
+    const dayOfMonth = date.getUTCDate();
+
+    // Add appropriate suffix for day (st, nd, rd, th)
+    let suffix = 'th';
+    if (dayOfMonth === 1 || dayOfMonth === 21 || dayOfMonth === 31) {
+        suffix = 'st';
+    } else if (dayOfMonth === 2 || dayOfMonth === 22) {
+        suffix = 'nd';
+    } else if (dayOfMonth === 3 || dayOfMonth === 23) {
+        suffix = 'rd';
+    }
+
+    // Return the formatted date string
+    if(startMonthOnly==1)  return `${month} ${dayOfMonth}${suffix}`;
+    else  return `${dayOfWeek} ${month} ${dayOfMonth}${suffix}`;
+   
+}
+
+// Example usage
+// console.log(DateAbb reviate("2024-10-17")); // Output: "Thu Oct 17th"
+                
 function DrawChartAxes( ctx,  vrect , colScheme, wt ){
     let yy =0 ;
     let iyOff = 150;  // every 10 pixels
@@ -459,8 +492,11 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
 
 //  ############################################################################## should be a fn
 
-    gChartTextStr = gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0+"    v"+gVer+" php_v"+gVerPHP; 
-    gSymbolStrLower  = gSymbolStr.toLowerCase();
+gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
+// gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0;  //+"    v"+gVer+" php_v"+gVerPHP; 
+// gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0+"    v"+gVer+" php_v"+gVerPHP; 
+gChartTextStr1 = "v"+gVer+" php_v"+gVerPHP; 
+gSymbolStrLower  = gSymbolStr.toLowerCase();
 
 // DETERMINE gCandleOffset
     gCandleOffset = gCandleSpaceMin;
@@ -802,6 +838,8 @@ function DrawImage(ctx, img, x, y, scale) {
 function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     // DrawText( ctx, gChartTextStr,  vrect.x+offset, vrect.y+offset, fsz , gGlobalDrawCol , gGlobalFont);
     DrawText( ctx, gChartTextStr,  vrect.x+xoffset, vrect.y+yoffset, fsz , colScheme.tx , gGlobalFont);
+    // DrawText( ctx, gChartTextStr1,  vrect.x+xoffset, vrect.y+yoffset, 12 , colScheme.tx , gGlobalFont);
+    DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y+yoffset, 12 , colScheme.tx , gGlobalFont);
 }
 
 function DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr){ 
@@ -821,7 +859,8 @@ function DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr){
 }
 function DrawDateRotated( ctx , vrect, colScheme, rotfl){  // designed to be called during Rendering
     // DrawTextRotated( ctx, gLastDateStr, gCandleWickX, (vrect.y+vrect.h), colScheme.tx, 12, gGlobalFont, -0.275);
-    DrawTextRotated( ctx, gLastDateStr, gCandleWickX + 4, (vrect.y+ parseInt(vrect.h *0.90) ), colScheme.tx, 12, gGlobalFont, rotfl );
+    let datestrAbbrev = DateAbbreviate( gLastDateStr , 1 );
+    DrawTextRotated( ctx, datestrAbbrev, gCandleWickX + 4, (vrect.y+ parseInt(vrect.h *0.90) ), colScheme.tx, 14, gGlobalFont, rotfl );
 }
 function DrawTextRotated( ctx, rstr, xx0, yy0, colstr, px, font0str, rotfloat) {
     ctx.fillStyle = colstr;  
