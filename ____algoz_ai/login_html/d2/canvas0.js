@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "235.5";
+let                                                                         gVer = "236.1";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -42,6 +42,7 @@ let                                                                         gVer
 
 let gAxesCol0      = "#454595" ;
 let gAxesCol0_init = "#25255A" ;
+let gImgScale = 0.225;
 
 let gGlobalViewportRect = { x: -100 , y: -100 , w: 13 , h: 13 };
 let gGlobalChartRect = { x: 50 , y: 75 , w: 160 , h: 34 };
@@ -271,7 +272,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
 
     DrawGlobalTextInfo( ctx , vrect ,  xoff, yoff ,  fszDyn, colScheme);
 
-    InitAndDrawImage(ctx, vrect, fname, xoff, yoff+20, 0.425 ); 
+    InitAndDrawImage(ctx, vrect, fname, xoff, yoff+20, gImgScale );   // let gImgScale = 0.325;
 
 }
 // globals
@@ -303,11 +304,15 @@ let gCandleWickX =0;
 
 let gCandlesMaxesInit = { num2render: 1, priceHigh: 0, priceLow: 1000000, priceRange: 0,  
                           srHigh: 0, srLow: 1000000,  srRange: 0,  volHigh: 0, volLow: 1000000,  volRange: 0 ,
-                          priceHighX: 0, priceHighY: 0,  priceLowX: 0, priceLowY: 0   };
+                          priceHighX: 0, priceHighY: 0,  priceLowX: 0, priceLowY: 0 ,
+                          priceHigh_date: "nil", priceHigh_idx: 0, priceLow_date: "nil", priceLow_idx: 0 
+                         };
 
 let gCandlesMaxes     = { num2render: 1, priceHigh: 0, priceLow: 1000000, priceRange: 0,  
                           srHigh: 0, srLow: 1000000,  srRange: 0,  volHigh: 0, volLow: 1000000,  volRange: 0 ,
-                          priceHighX: 0, priceHighY: 0,  priceLowX: 0, priceLowY: 0   };
+                          priceHighX: 0, priceHighY: 0,  priceLowX: 0, priceLowY: 0 , 
+                          priceHigh_date: "nil", priceHigh_idx: 0, priceLow_date: "nil", priceLow_idx: 0 
+                         };
 
 
 function DateAbbreviate(datestr, startMonthOnly) {
@@ -440,7 +445,7 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
 
 
 //  ##############################################################################
-//  ######  MAKE A FUNCTION ...     SetCandleGlobals         #####################
+//  ######  MAKE A FUNCTION ...   PrepCandles or  SetCandleGlobals       #########
 //  ##############################################################################
     
                                                     // let vect2 = { ...vect };   // example
@@ -453,8 +458,17 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
             // console.log( i+") " + date + ", Close: " + processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
             let hi = parseFloat( processedData[date]["high"] );
             let lo = parseFloat(  processedData[date]["low"] );
-            if(hi>gCandlesMaxes.priceHigh ) gCandlesMaxes.priceHigh = hi;  
-            if(lo<gCandlesMaxes.priceLow  ) gCandlesMaxes.priceLow  = lo;
+            if(hi>gCandlesMaxes.priceHigh ){
+                gCandlesMaxes.priceHigh = hi;
+                gCandlesMaxes.priceHigh_date = date.toString();
+                gCandlesMaxes.priceHigh_idx =  i ; 
+
+            }  
+            if(lo<gCandlesMaxes.priceLow  ){
+                 gCandlesMaxes.priceLow  = lo;
+                 gCandlesMaxes.priceLow_date = date.toString();
+                 gCandlesMaxes.priceLow_idx =  i ; 
+            }
 
             let srhi = parseFloat(  processedData[date]["R3"] );
             let srlo = parseFloat(  processedData[date]["S3"] );
@@ -526,6 +540,12 @@ gSymbolStrLower  = gSymbolStr.toLowerCase();
 
 
 // ################################################# RENDER CANDLES
+let  xHigh=0;
+let  yHigh=0;
+
+let  xLow =0;
+let  yLow =0;
+
 
     let j=0;
     for (var date in processedData) {
@@ -541,6 +561,33 @@ gSymbolStrLower  = gSymbolStr.toLowerCase();
             gLastDateStr    = date;
 
 
+// // NEW            
+//         //  if( gCandlesMaxes.priceHigh_date  == date ){
+//             if( gCandlesMaxes.priceHigh_idx == j ){
+//                     yHigh = GetYCoordFromPrice( hi1 , vrect );
+//                     xHigh = gCandleXnext ;
+//                     gCandlesMaxes.priceHighX =xHigh ;   // save, not used for now
+//                     gCandlesMaxes.priceHighY =yHigh ;
+//                     let txtstr=gCurrencyStr+ ( hi1.toFixed(2).toString() );
+//                     // DrawCircle(ctx, 36, 6, colScheme.dn, xHigh, yHigh, 0, 1, colScheme.tx, txtstr , 'yellow', 20, "Helvetica", -20 ) ;
+//                     DrawCircle(ctx, 36, 6, 'red', xHigh, yHigh, 0, 1, colScheme.tx, txtstr , 'yellow', 20, "Helvetica", -20 ) ;
+//         //    function DrawCircle(ctx, size, wt, col, x, y, xyOffset, fill, fillcol, txtstr, txtcol, fsz, fontStr, txtoff) {
+
+//             }  
+//         //  if( gCandlesMaxes.priceLow_date  == date ){
+//             if( gCandlesMaxes.priceLow_idx == j ){
+//                     yLow = GetYCoordFromPrice( lo1 , vrect );
+//                     xLow = gCandleXnext ;
+//                     gCandlesMaxes.priceLowX =xLow ;      // save, not used for now
+//                     gCandlesMaxes.priceLowY =yLow ;
+//                     let txtstr1=gCurrencyStr+ ( lo1.toFixed(2).toString() );
+//                     // DrawCircle(ctx, 36, 6, colScheme.up, xLow, yLow, 0, 1, colScheme.tx, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
+//                     DrawCircle(ctx, 36, 6, 'green', xLow, yLow, 0, 1, colScheme.tx, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
+//             }
+
+
+
+// END OF MONTH...
             if(eom==1){   // found end of month
                   processedData[date]["X1month"] = gCandleXnext;
 
@@ -604,6 +651,39 @@ gSymbolStrLower  = gSymbolStr.toLowerCase();
             DrawCandlePlus(ctx, vrect, colScheme,  j, datestr, op1, hi1, lo1, cl1, vol1 , eom);    // uses gCandlesMaxes
             // console.log( j+") " + datestr + ":  nextX="+ gCandleXnext  + ";  H, L, Close= " + processedData[date]["high"] + ", " + processedData[date]["low"] + ", "+ processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
             
+            let cw2 = parseInt( gCandleWidth/2 );
+// NEW            
+        //  if( gCandlesMaxes.priceHigh_date  == date ){
+            if( gCandlesMaxes.priceHigh_idx == j ){
+                yHigh = GetYCoordFromPrice( hi1 , vrect );
+                xHigh = gCandleXnext +cw2;
+                gCandlesMaxes.priceHighX =xHigh ;   // save, not used for now
+                gCandlesMaxes.priceHighY =yHigh ;
+                let txtstr=gCurrencyStr+ ( hi1.toFixed(2).toString() );
+                // DrawCircle(ctx, 36, 6, colScheme.dn, xHigh, yHigh, 0, 1, colScheme.tx, txtstr , 'yellow', 20, "Helvetica", -20 ) ;
+                DrawCircle(ctx, 30, 4, 'red', xHigh, yHigh, 0, 1, colScheme.tx, txtstr , 'yellow', 20, "Helvetica", -20 ) ;
+    //    function DrawCircle(ctx, size, wt, col, x, y, xyOffset, fill, fillcol, txtstr, txtcol, fsz, fontStr, txtoff) {
+
+        }  
+    //  if( gCandlesMaxes.priceLow_date  == date ){
+        if( gCandlesMaxes.priceLow_idx == j ){
+                yLow = GetYCoordFromPrice( lo1 , vrect );
+                xLow = gCandleXnext  +cw2;
+                gCandlesMaxes.priceLowX =xLow ;      // save, not used for now
+                gCandlesMaxes.priceLowY =yLow ;
+                let txtstr1=gCurrencyStr+ ( lo1.toFixed(2).toString() );
+                // DrawCircle(ctx, 36, 6, colScheme.up, xLow, yLow, 0, 1, colScheme.tx, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
+                DrawCircle(ctx, 30, 4, 'green', xLow, yLow, 0, 1, colScheme.tx, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
+        }
+
+
+
+
+
+
+
+
+
             gCandleXnext =   gCandleXnext +  gCandleWidth + gCandleOffset ;
             j++;
         }
@@ -800,7 +880,7 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
 
     // let cirOutline = RandomJSColor(colarr);
     // let cirFill    = RandomJSColor(colarr);
-    // if(idx%7==0) DrawCircle(ctx, 40, 6, cirOutline, gCandleWickX, (candlerect.y+candlerect.h) , 0, 1, cirFill );
+    // if(idx%7==0) Dr awCircle(ctx, 40, 6, cirOutline, gCandleWickX, (candlerect.y+candlerect.h) , 0, 1, cirFill );
 
 
 }
@@ -951,20 +1031,31 @@ DrawTriangle(ctx, 100, 3, 'red', 300, 50, 1, 1, 'yellow');
 
 
 
-function DrawCircle(ctx, size, wt, col, x, y, xyOffset, fill, fillcol) {
+function DrawCircle(ctx, size, wt, col, x, y, xyOffset, fill, fillcol,   txtstr, txtcol, fsz, fontStr, txtoff) {
     // Adjust the x and y positions based on the offset
     var adjustedX = x + xyOffset;
     var adjustedY = y + xyOffset;
+    var adjustedXtxt = x + txtoff;
+    var adjustedYtxt = y + txtoff;
     const radius = size / 2;
 
 
-    let vrect = gGlobalChartVRectCurrent;        
+    let vrect = gGlobalChartVRectCurrent;  
+
     let vectXY  = { x: adjustedX,  y: adjustedY }; 
     let vectXY_clipped  = { x: 0,  y: 0  };
     vectXY_clipped   = ClipPoint(ctx, vrect, vectXY);  
     adjustedX = vectXY_clipped.x;
     adjustedY = vectXY_clipped.y;
 
+
+    // let  vectXYtxt  = { x: adjustedXtxt,  y: adjustedYtxt }; 
+    // let  vectXY_clippedtxt   = { x: 0,  y: 0  };
+    //  vectXY_clippedtxt   = ClipPoint(ctx, vrect, vectXYtxt );  
+    // adjustedXtxt = vectXY_clippedtxt.x;
+    // adjustedYtxt = vectXY_clippedtxt.y;
+
+    // DrawText( ctx, txtstr, adjustedXtxt, adjustedYtxt, fsz , txtcol , fontStr);
 
     ctx.beginPath();
     
@@ -983,6 +1074,9 @@ function DrawCircle(ctx, size, wt, col, x, y, xyOffset, fill, fillcol) {
 
     // Draw the circle outline
     ctx.stroke();
+
+    DrawText( ctx, txtstr, adjustedXtxt, adjustedYtxt, fsz , txtcol , fontStr);
+
 }
 
 /*
@@ -990,10 +1084,10 @@ const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
 // Draw a circle with a green border and no fill, offset by 10 pixels
-DrawCircle(ctx, 100, 5, 'green', 150, 150, 10, 0, '');
+Draw Circle(ctx, 100, 5, 'green', 150, 150, 10, 0, '');
 
 // Draw a filled red circle, offset by 20 pixels, with a black border
-DrawCircle(ctx, 100, 3, 'black', 300, 150, 20, 1, 'red');
+Draw ircle(ctx, 100, 3, 'black', 300, 150, 20, 1, 'red');
 */
 
 
