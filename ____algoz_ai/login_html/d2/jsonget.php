@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "230.1";
+                                                              $ver=  "234.7";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -30,7 +30,7 @@ $button10 = 0;
 $button1name = "Line/Candle Chart";
 $button2name = "Buy & Sell Signals";
 $button3name = "Support Resistance";
-$button4name = "Gaps Detection";
+$button4name = "Random Colors" ; //; "Gaps Detection";
 $button5name = "Pivot Lines";
 $button6name = "Fibonacci";
 $button7name = "Fundamentals";

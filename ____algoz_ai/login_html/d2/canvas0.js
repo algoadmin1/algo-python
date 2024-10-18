@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "233.54";
+let                                                                         gVer = "234.8";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -40,7 +40,8 @@ let                                                                         gVer
     const ctx = canvas.getContext('2d');
 
 
-let gAxesCol0= "#454595" ;
+let gAxesCol0      = "#454595" ;
+let gAxesCol0_init = "#25255A" ;
 
 let gGlobalViewportRect = { x: -100 , y: -100 , w: 13 , h: 13 };
 let gGlobalChartRect = { x: 50 , y: 75 , w: 160 , h: 34 };
@@ -310,12 +311,12 @@ let gCandlesMaxes     = { num2render: 1, priceHigh: 0, priceLow: 1000000, priceR
 
 function DrawChartAxes( ctx,  vrect , colScheme, wt ){
     let yy =0 ;
-    let iyOff = 50;  // every 10 pixels
+    let iyOff = 150;  // every 10 pixels
     let yyMax = vrect.h;
 
 
     for(iy=yyMax; iy>yy; iy=iy-iyOff){
-        let txtStr = "[ # "+iy.toString()+" ]";
+        let txtStr = " "; //"[ # "+iy.toString()+" ]";
 
         // sr0price = parseFloat( processedData[date]["S1month"] ).toFixed(2);
         // txtStr    = gCurrencyStr+ sr0price.toString() + " (S1)";
@@ -346,6 +347,38 @@ function ClipPoint(ctx, vrect, vectXY) {        //  let vectXY= { x: 100, y:109 
         vectXY.y = vrect.y; // Clip to the top edge
     } else if (vectXY.y > vrect.y + vrect.h) {
         vectXY.y = vrect.y + vrect.h; // Clip to the bottom edge
+    }
+
+    cp_vrect = { x: vectXY.x ,   y: vectXY.y } ;
+
+    // Now you can use the clipped point for further drawing or processing
+    // ctx.beginPath();
+    // ctx.arc(vectXY.x, vectXY.y, 5, 0, 2 * Math.PI); // Example: Draw a small circle at the clipped point
+    // ctx.fill();
+
+    return(cp_vrect);
+
+}//fn
+
+
+// if point is outside,  ret then -1
+function ClipPoint1(ctx, vrect, vectXY) {        //  let vectXY= { x: 100, y:109 };
+    // Check if the x-coordinate is outside the rectangle
+    if (vectXY.x < vrect.x) {
+        // vectXY.x = vrect.x; // Clip to the left edge
+        vectXY.x = -1;
+    } else if (vectXY.x > vrect.x + vrect.w) {
+        // vectXY.x = vrect.x + vrect.w; // Clip to the right edge
+        vectXY.x = -1;
+    }
+
+    // Check if the y-coordinate is outside the rectangle
+    if (vectXY.y < vrect.y) {
+        // vectXY.y = vrect.y; // Clip to the top edge
+        vectXY.y = -1;
+    } else if (vectXY.y > vrect.y + vrect.h) {
+        // vectXY.y = vrect.y + vrect.h; // Clip to the bottom edge
+        vectXY.y = -1;
     }
 
     cp_vrect = { x: vectXY.x ,   y: vectXY.y } ;
@@ -776,10 +809,11 @@ function DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr){
     let vrect = gGlobalChartVRectCurrent;        
     let vectXY  = { x: x,  y: y };
     let vectXY_clipped  = { x: 0,  y: 0  };
-    vectXY_clipped   = ClipPoint(ctx, vrect, vectXY);  
+    vectXY_clipped   = ClipPoint1(ctx, vrect, vectXY);  
     x = vectXY_clipped.x;
     y = vectXY_clipped.y;
 
+    if(x<0 || y<0) return;      // if either x or y is offscreen, return & DO NOT DRAW !
 
     ctx.fillStyle = colStr ; 
     ctx.font =  fsz.toString() + "px "+ fontStr ;        // ctx.font = "bolder "+"124px Arial";
@@ -978,7 +1012,7 @@ function DrawLine(ctx, x, y, x1, y1, weight, color, style) {
     // Reset line dash to solid for future drawing
     ctx.setLineDash([]);
 }
-function GetColorScheme(){
+function GetColorScheme(){ 
     let scheme0=gColScheme;     // assume wht bg, green/red
 
     // gColSchemeNum = user input from php 
@@ -1009,7 +1043,7 @@ if(gColSchemeNum==100){
  
 
 gAxesCol0=  scheme0.ax ;
-gAxesCol0= "#454595" ;  // override  DEL to get .ax
+gAxesCol0= gAxesCol0_init; // "#454595" ;  // override  DEL to get .ax
 
     return scheme0; 
 }
@@ -1265,7 +1299,9 @@ function toggleButton(buttonNumber) {
                     break;
                 case 4:
                     button4 = (button4 === 1) ? 0 : 1;
-                    window.dispatchEvent(new Event('button4'));
+                    window.dispatchEvent(new Event('button4'));  // rndcolor
+                    gColSchemeNum=99;
+                    GetColorScheme();
                     break;
                 case 5:
                     // button5 = (button5 === 1) ? 0 : 1;
