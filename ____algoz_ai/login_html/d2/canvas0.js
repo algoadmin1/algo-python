@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "230.6";
+let                                                                         gVer = "233.54";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -47,7 +47,13 @@ let gGlobalChartRect = { x: 50 , y: 75 , w: 160 , h: 34 };
 let gGlobalChartRect1 = { x: 150 , y: 275 , w: 60 , h: 134 };
 let gGlobalChartRect2 = { x: 150 , y: 275 , w: 60 , h: 134 };
 
-let gGlobalChartRectCurrent = { x: 150 , y: 275 , w: 60 , h: 134 };
+let gGlobalChartVRectCurrent = { x: 150 , y: 275 , w: 60 , h: 134 };   // init w/ dummy values
+
+let gGlobalChartVRect_Xoff_pct  = 0.05;
+let gGlobalChartVRect_Yoff_pct  = 0.05;
+let gGlobalChartVRect_w_pct  = 0.85;
+let gGlobalChartVRect_h_pct  = 0.75;
+
 
 let gVolumePixelHigh_pct= 0.125;
 
@@ -316,14 +322,18 @@ function DrawChartAxes( ctx,  vrect , colScheme, wt ){
         // sr0Y     = GetYCoordFromPrice( sr0price, vrect );
         // DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s1 ,  "dashed" , txtStr, fsz, xyoff, fontStr);
 
+
         DrawHorizontalLine_callout(ctx, vrect.x, vrect.x+vrect.w, iy , gAxesCol0 ,  "dotted" , txtStr, 12, -6, "Helvetica");
 
     }
 
 }//fn
 
-//  let vectXY= { x: 100, y:109 };
-function ClipPoint(ctx, vrect, vectXY) {
+
+
+let cp_vrect = { x: 0 , y: 0 };
+
+function ClipPoint(ctx, vrect, vectXY) {        //  let vectXY= { x: 100, y:109 };
     // Check if the x-coordinate is outside the rectangle
     if (vectXY.x < vrect.x) {
         vectXY.x = vrect.x; // Clip to the left edge
@@ -338,10 +348,15 @@ function ClipPoint(ctx, vrect, vectXY) {
         vectXY.y = vrect.y + vrect.h; // Clip to the bottom edge
     }
 
+    cp_vrect = { x: vectXY.x ,   y: vectXY.y } ;
+
     // Now you can use the clipped point for further drawing or processing
     // ctx.beginPath();
     // ctx.arc(vectXY.x, vectXY.y, 5, 0, 2 * Math.PI); // Example: Draw a small circle at the clipped point
     // ctx.fill();
+
+    return(cp_vrect);
+
 }//fn
 
 
@@ -755,7 +770,17 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     // DrawText( ctx, gChartTextStr,  vrect.x+offset, vrect.y+offset, fsz , gGlobalDrawCol , gGlobalFont);
     DrawText( ctx, gChartTextStr,  vrect.x+xoffset, vrect.y+yoffset, fsz , colScheme.tx , gGlobalFont);
 }
-function DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr){    
+
+function DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr){ 
+
+    let vrect = gGlobalChartVRectCurrent;        
+    let vectXY  = { x: x,  y: y };
+    let vectXY_clipped  = { x: 0,  y: 0  };
+    vectXY_clipped   = ClipPoint(ctx, vrect, vectXY);  
+    x = vectXY_clipped.x;
+    y = vectXY_clipped.y;
+
+
     ctx.fillStyle = colStr ; 
     ctx.font =  fsz.toString() + "px "+ fontStr ;        // ctx.font = "bolder "+"124px Arial";
     ctx.fillText( txtStr , x,  y  );   
@@ -855,9 +880,18 @@ DrawTriangle(ctx, 100, 3, 'red', 300, 50, 1, 1, 'yellow');
 
 function DrawCircle(ctx, size, wt, col, x, y, xyOffset, fill, fillcol) {
     // Adjust the x and y positions based on the offset
-    const adjustedX = x + xyOffset;
-    const adjustedY = y + xyOffset;
+    var adjustedX = x + xyOffset;
+    var adjustedY = y + xyOffset;
     const radius = size / 2;
+
+
+    let vrect = gGlobalChartVRectCurrent;        
+    let vectXY  = { x: adjustedX,  y: adjustedY }; 
+    let vectXY_clipped  = { x: 0,  y: 0  };
+    vectXY_clipped   = ClipPoint(ctx, vrect, vectXY);  
+    adjustedX = vectXY_clipped.x;
+    adjustedY = vectXY_clipped.y;
+
 
     ctx.beginPath();
     
@@ -892,20 +926,36 @@ DrawCircle(ctx, 100, 3, 'black', 300, 150, 20, 1, 'red');
 
 function DrawHorizontalLine_callout( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr){
     DrawLine( ctx, x1, y, x2, y, 2, col,  style);
+
     DrawText( ctx, txtStr, x2+xyoff, y, fsz , col , fontStr);
 
 }
+
 
 function DrawHorizontalLine( ctx, x1, x2, y ,col,  style){
         DrawLine(ctx, x1, y, x2, y, 2, col,  style);
 }
 function DrawVerticalLine( ctx, x, y1, y2 , col, style){
-    DrawLine(ctx, x, y1, x, y2, 2, col ,  style );
+        DrawLine(ctx, x, y1, x, y2, 2, col ,  style );
 }
 
+
 function DrawLine(ctx, x, y, x1, y1, weight, color, style) {
-    // DEL:   //  const ctx = c.getContext('2d');
-    
+    let vrect = gGlobalChartVRectCurrent;   //  = {... gGl0balChartVRectCurrent }
+    let vectXY  = { x: x,  y:y };
+    let vectXY1 = { x: x1, y:y1 };
+    let vectXY_clipped  = { x: 0,  y: 0  };
+    let vectXY1_clipped = { x: 10, y: 10 };
+    vectXY_clipped   = ClipPoint(ctx, vrect, vectXY);  
+    x = vectXY_clipped.x;
+    y = vectXY_clipped.y;
+    vectXY1_clipped  = ClipPoint(ctx, vrect, vectXY1);           
+    x1 = vectXY1_clipped.x;
+    y1 = vectXY1_clipped.y;
+
+
+
+
     // Set line properties
     ctx.lineWidth = weight;
     ctx.strokeStyle = color;
@@ -1152,18 +1202,32 @@ function resizeCanvas() {
             let vr =       { x0: 6 , y0: 6 , w0: rectWidth, h0: rectHeight };
             // DrawV Rect(ctx, vr, 2, rcol, "outline");
 
-            gGlobalChartRectCurrent.x = vr.x0 +  parseInt(vr.w0 * 0.05);
-            gGlobalChartRectCurrent.y = vr.y0 +  parseInt(vr.h0 * 0.05);
-            gGlobalChartRectCurrent.w = parseInt(vr.w0 * 0.75);
-            gGlobalChartRectCurrent.h = parseInt(vr.h0 * 0.75);
+            
+// let gGloba lCha rtVRectCurrent = { x: 150 , y: 275 , w: 60 , h: 134 };   // init w/ dummy values
+            // gGlo balChartVRectCurrent.x = vr.x0 +  parseInt(vr.w0 * 0.05);
+            // gGloba lChartVRectCurrent.y = vr.y0 +  parseInt(vr.h0 * 0.05);
+            // gGlobal ChartVRectCurrent.w = parseInt(vr.w0 * 0.75);
+            // gGlobalC hartVRectCurrent.h = parseInt(vr.h0 * 0.75);
 
-            console.log( "preDr@wChart()", gGlobalChartRectCurrent , gColScheme );
+            gGlobalChartVRectCurrent.x = vr.x0 +  parseInt(vr.w0 * gGlobalChartVRect_Xoff_pct );
+            gGlobalChartVRectCurrent.y = vr.y0 +  parseInt(vr.h0 * gGlobalChartVRect_Yoff_pct );
+            gGlobalChartVRectCurrent.w = parseInt(vr.w0 * gGlobalChartVRect_w_pct );
+            gGlobalChartVRectCurrent.h = parseInt(vr.h0 * gGlobalChartVRect_h_pct );
+
+
+
+    // HERE MASTER vr3ct is NOW SET: gGl0balChartVRectCurrent={}
+    // HERE MASTER vr3ct is NOW SET: gGl0balChartVRectCurrent={}
+    // HERE MASTER vr3ct is NOW SET: gGl0balChartVRectCurrent={}
+    // HERE MASTER vr3ct is NOW SET: gGl0balChartVRectCurrent={}
+
+            console.log( "preDr@wChart()", gGlobalChartVRectCurrent , gColScheme );
 
             let colscheme = GetColorScheme();
 
             let typestr0 = 'candles';
             if(button1==1) typestr0 = 'line';
-            DrawChart( ctx, gGlobalChartRectCurrent , colscheme , typestr0 );   
+            DrawChart( ctx, gGlobalChartVRectCurrent , colscheme , typestr0 );   
 
 
             let rcol1=RandomColorC();
