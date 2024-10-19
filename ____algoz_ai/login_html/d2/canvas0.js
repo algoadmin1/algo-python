@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "243.2";
+let                                                                         gVer = "243.5";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -39,6 +39,8 @@ let                                                                         gVer
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
 
+let gDrawFib=0;
+let gFib_fntsz=16;
 
 let gAxesCol0      = "#454595" ;
 let gAxesCol0_init = "#25255A" ;
@@ -1277,9 +1279,7 @@ let fibcol4a = 'rgba( 22, 242, 33,1.0)' ;   // green ish
 let gFibHi = {x1: 0 , x2: 0 ,  y1: 0, y2: 0  };
 let gFibLo = {x1: 0 , x2: 0 ,  y1: 0, y2: 0  };
 
-let gDrawFib=1;
 
-let gFib_fntsz=48;
 
 //                      #############################               DR@wFib
 //                      #############################               DR@wFib
