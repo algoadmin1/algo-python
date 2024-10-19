@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "236.1";
+let                                                                         gVer = "239.2";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -42,7 +42,14 @@ let                                                                         gVer
 
 let gAxesCol0      = "#454595" ;
 let gAxesCol0_init = "#25255A" ;
-let gImgScale = 0.225;
+let gImgScale = 0.15;
+
+let gColor_white_Alpha_50pct= 'rgba( 255,255,255,0.50 )' ;  
+let gColor_grey_Alpha_50pct=  'rgba( 128,128,128,0.50 )' ;  
+let gColor_red_Alpha_50pct =  'rgba( 248,36,36,  0.50 )' ;  
+let gColor_green_Alpha_50pct= 'rgba( 32,248,48,  0.50 )' ;  
+let gColor_blue_Alpha_50pct=  'rgba( 32,48,248,  0.50 )' ;  
+
 
 let gGlobalViewportRect = { x: -100 , y: -100 , w: 13 , h: 13 };
 let gGlobalChartRect = { x: 50 , y: 75 , w: 160 , h: 34 };
@@ -53,9 +60,12 @@ let gGlobalChartVRectCurrent = { x: 150 , y: 275 , w: 60 , h: 134 };   // init w
 
 let gGlobalChartVRect_Xoff_pct  = 0.05;
 let gGlobalChartVRect_Yoff_pct  = 0.05;
-let gGlobalChartVRect_w_pct  = 0.85;
+let gGlobalChartVRect_w_pct  = 0.75;
+
 let gGlobalChartVRect_h_pct  = 0.75;
 
+let gHypotenuse_scalar_init = .0 ;   // c = sqrt(  ( a*a ) + ( b*b )  ) ;   // hypotenuse_scalar
+let gHypotenuse_scalar = 0.0 ;
 
 let gVolumePixelHigh_pct= 0.125;
 
@@ -266,13 +276,15 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
     if( button5==2)                 DrawSegmentedLine(ctx, processedData, vrect, 2, 'yellow', "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P3") ;
     
     let fszDyn = parseInt( vrect.w * 0.025 );
-    let xoff = 80;
-    let yoff = 48;
+    let xoff = 60;
+    let yoff = 54;
+    let img_xoff =10;  
+    let img_yoff =10 + 20;  
     let fname ="../img/"+gSymbolStrLower+ ".png";
 
     DrawGlobalTextInfo( ctx , vrect ,  xoff, yoff ,  fszDyn, colScheme);
 
-    InitAndDrawImage(ctx, vrect, fname, xoff, yoff+20, gImgScale );   // let gImgScale = 0.325;
+    InitAndDrawImage(ctx, vrect, fname, img_xoff, img_yoff, gImgScale );   // let gIm gScale = 0.325;
 
 }
 // globals
@@ -288,6 +300,8 @@ let gCurrencyStr="$";
 let gLastPriceStr ="0.00";
 let gLastDateStr ="1900-01-01";
 let gGlobalFont= "Arial";
+let gAxesOffset_x = -64;   // go past RIGHT side of canvas
+let gAxesOffset_y =  0;    // unused
 
 let gCandleWidthMin = 2;
 let gCandleSpaceMin  = 1;
@@ -342,29 +356,42 @@ function DateAbbreviate(datestr, startMonthOnly) {
     if(startMonthOnly==1)  return `${month} ${dayOfMonth}${suffix}`;
     else  return `${dayOfWeek} ${month} ${dayOfMonth}${suffix}`;
    
-}
-
 // Example usage
 // console.log(DateAbb reviate("2024-10-17")); // Output: "Thu Oct 17th"
-                
+
+}
+
+
 function DrawChartAxes( ctx,  vrect , colScheme, wt ){
     let yy =0 ;
-    let iyOff = 150;  // every 10 pixels
-    let yyMax = vrect.h;
+    let iy =0 ;
+    let y2 = 0;
+    let y2a= 0;
+    let txtStr = " ";
 
+    let y2f =0.0;
+    let price_high =  parseInt( gCandlesMaxes.priceHigh );         // ie  $200.00   hi
+    let price_low  =  parseInt( gCandlesMaxes.priceLow  );        //  <    $50.00 > low
+    let price_diff  = parseInt( gCandlesMaxes.priceRange  );       //     $150.00   = diff price $                           
+    let price_sm_pct = 0.20;                                      //  == 10% * 150 every $15.00, draw horiz Axes w/ $235.16 etc
 
-    for(iy=yyMax; iy>yy; iy=iy-iyOff){
-        let txtStr = " "; //"[ # "+iy.toString()+" ]";
+    let every_dollar_lines = parseInt( price_sm_pct * price_diff) ;  //  == $15.00 
 
-        // sr0price = parseFloat( processedData[date]["S1month"] ).toFixed(2);
-        // txtStr    = gCurrencyStr+ sr0price.toString() + " (S1)";
-        // sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-        // DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s1 ,  "dashed" , txtStr, fsz, xyoff, fontStr);
+    // make low price  % 5
+    y2a = price_low %  5;
+    y2a = y2a *5;  // ie $500 = 5 * 100
+    price_low = y2a; 
 
+// run price from lowest to highest (integers)
+    for( y2=price_low;   y2<=price_high;    y2=y2+every_dollar_lines  ){  
 
-        DrawHorizontalLine_callout(ctx, vrect.x, vrect.x+vrect.w, iy , gAxesCol0 ,  "dotted" , txtStr, 12, -6, "Helvetica");
-
-    }
+            y2f = parseFloat(y2).toFixed(2); 
+            iy     = GetYCoordFromPrice( y2f, vrect );
+            txtStr = gCurrencyStr+" "+y2f.toString();      
+            // DrawHorizontalLine_callout_textcol(ctx, vrect.x, vrect.x+vrect.w+ gAxesOffset_x, iy , gA xesCol0 ,  "dotted" , txtStr, 16, 0 ,gGlobalFont , colScheme.tx );
+            DrawHorizontalLine_callout_textcol(ctx, vrect.x, vrect.x+vrect.w+ gAxesOffset_x, iy , gAxesCol0 ,  "dotted" , txtStr, 16, 0 ,gGlobalFont , gAxesCol0 );
+    
+    }//for
 
 }//fn
 
@@ -521,22 +548,28 @@ gSymbolStrLower  = gSymbolStr.toLowerCase();
    
     gCandleXnext = vrect.x + gCandleOffset;
     gCandleXnextStart = gCandleXnext;           // SAVE START
-
     
 // DETERMINE  gCandleWidth
     gCandleWidth      = gCandleWidthTotal - gCandleOffset;
     console.log("] Candles to render, gCandleWidth  =", gNumCandlesToRender, gCandleWidth );
 
+
+//  ##############################################################################  
+//  #######################                       ################################  
+//  #######################  all prep Calcs DONE  ################################  
+//  #######################                       ################################  
+//  ##############################################################################  
+//  ############################################################################## should be a fn 
+
+
     // console.log(processedData); // This will log the PHP data to the console
 
     let newcol=RandomColorC();
-
     let last_date_key="nil";  // DERP
 
 
 
-
-    DrawChartAxes( ctx,  vrect , colScheme, wt );
+     DrawChartAxes( ctx,  vrect , colScheme, wt );
 
 
 // ################################################# RENDER CANDLES
@@ -661,7 +694,8 @@ let  yLow =0;
                 gCandlesMaxes.priceHighY =yHigh ;
                 let txtstr=gCurrencyStr+ ( hi1.toFixed(2).toString() );
                 // DrawCircle(ctx, 36, 6, colScheme.dn, xHigh, yHigh, 0, 1, colScheme.tx, txtstr , 'yellow', 20, "Helvetica", -20 ) ;
-                DrawCircle(ctx, 30, 4, 'red', xHigh, yHigh, 0, 1, colScheme.tx, txtstr , 'yellow', 20, "Helvetica", -20 ) ;
+                
+                DrawCircle(ctx, 30, 4, 'red', xHigh, yHigh, 0, 1, gColor_red_Alpha_50pct,  txtstr , 'yellow', 20, "Helvetica", -20 ) ;
     //    function DrawCircle(ctx, size, wt, col, x, y, xyOffset, fill, fillcol, txtstr, txtcol, fsz, fontStr, txtoff) {
 
         }  
@@ -673,7 +707,7 @@ let  yLow =0;
                 gCandlesMaxes.priceLowY =yLow ;
                 let txtstr1=gCurrencyStr+ ( lo1.toFixed(2).toString() );
                 // DrawCircle(ctx, 36, 6, colScheme.up, xLow, yLow, 0, 1, colScheme.tx, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
-                DrawCircle(ctx, 30, 4, 'green', xLow, yLow, 0, 1, colScheme.tx, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
+                DrawCircle(ctx, 30, 4, 'darkgreen', xLow, yLow, 0, 1, gColor_green_Alpha_50pct, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
         }
 
 
@@ -719,10 +753,8 @@ function DrawSegmentedLine(ctx, processedData, vrect, wt, colLine, style, xstart
     // Set the line width and color
     ctx.lineWidth = wt;
     ctx.strokeStyle = colLine;
-    
     // Begin the path for the line
     ctx.beginPath();
-
     // Variable to track if the line should moveTo (for the first point) or lineTo (for subsequent points)
     let isFirstPoint = true;
     let i=0;
@@ -740,11 +772,8 @@ function DrawSegmentedLine(ctx, processedData, vrect, wt, colLine, style, xstart
                       yCoordFloat = yCoordFloatP ;
                     }// if P3 test , i<3
 
-       
-
             // Convert the price into the y-coordinate using the helper function
             let yCoordFinal = GetYCoordFromPrice(yCoordFloat, vrect);
-
             // Draw the line segment
             if (isFirstPoint) {
                 // Move to the first point without drawing a line
@@ -754,21 +783,18 @@ function DrawSegmentedLine(ctx, processedData, vrect, wt, colLine, style, xstart
                 // Draw a line to the next point
                 ctx.lineTo(xContinuous, yCoordFinal);
             }
-
         // Increment the x-coordinate for the next point
         xContinuous += xoffset   ;
         i++;
-        
       }// if exist
     }
-
     // Complete the path and draw the line
     ctx.stroke();
     ctx.restore();
-}
+}//fn 
 
 // ai-written: Helper function to convert a price into a y-coordinate based on the vrect (viewport)
-// function GetYCoordFromPrice(price, vrect) {
+// function GetY CoordFromPrice(price, vrect) {
 //     // Example conversion logic, this should map a price to a y-coordinate based on vrect.
 //     // You can customize this as needed based on your canvas and viewport configuration.
 //     let minPrice = 0;   // replace with your actual minimum price
@@ -907,8 +933,8 @@ function InitAndDrawImage(ctx, vrect, imgPath, x, y, scale) {
 
 // Function to draw an image on the canvas at (x, y) with scaling
 function DrawImage(ctx, img, x, y, scale) {
-    let imgWidth = img.width * scale;  // Scale the width
-    let imgHeight = img.height * scale; // Scale the height
+    let imgWidth = parseInt(  img.width * scale  );  // Scale the width
+    let imgHeight = parseInt( img.height * scale ); // Scale the height
 
     // Draw the image at position (x, y) with the scaled width and height
     ctx.drawImage(img, x, y, imgWidth, imgHeight);
@@ -1095,6 +1121,13 @@ function DrawHorizontalLine_callout( ctx, x1, x2, y ,col,  style, txtStr, fsz, x
     DrawLine( ctx, x1, y, x2, y, 2, col,  style);
 
     DrawText( ctx, txtStr, x2+xyoff, y, fsz , col , fontStr);
+
+}
+
+function DrawHorizontalLine_callout_textcol( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr, txtcol,){
+    DrawLine( ctx, x1, y, x2, y, 2, col,  style);
+
+    DrawText( ctx, txtStr, x2+xyoff, y, fsz , txtcol , fontStr);
 
 }
 
