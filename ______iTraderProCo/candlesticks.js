@@ -6718,7 +6718,8 @@ if(cmp_52 < epsilon){
   DrawHorizontalLine( candleXnext,  (candleXnext+g52WeekXlen) , g52WeekHIGHColor,  yy2  , 4 );  
 
     gFibHi = {x1: candleXnext , x2: candleXnext+g52WeekXlen ,  y1: yy2+6 , y2: yy2+6  };
-
+  //  gFibLo = {x1: candleXnext , x2: candleXnext+g52WeekXlen ,  y1: yy3+6 , y2: yy3+6  };
+//
     a52weekHighReached= i ;
     }
 
@@ -7232,6 +7233,64 @@ gGlobalViewport6.x = lastCandleX ;//gGlobalViewportRectRecomputed.x+ gGlobalView
             "Real Middle Band": "137.4430",
             "Real Lower Band": "125.5379"
         },
+
+
+
+
+            gGlobalChartVRectCurrent.x = vr.x0 +  parseInt(vr.w0 * gGlobalChartVRect_Xoff_pct );
+            gGlobalChartVRectCurrent.y = vr.y0 +  parseInt(vr.h0 * gGlobalChartVRect_Yoff_pct );
+            gGlobalChartVRectCurrent.w = parseInt(vr.w0 * gGlobalChartVRect_w_pct );
+            gGlobalChartVRectCurrent.h = parseInt(vr.h0 * gGlobalChartVRect_h_pct );
+
+
+// canvas0.js from...
+let vector_2strings = { key_str: "abc",  value_str: "xyz" };
+
+let gFinancials = {    
+
+    date:       "2024-10-17",    
+    sym:        "AMD",
+    name:       "Advanced Micro Devices", 
+    last:       100.50, 
+
+    open:       99.56, 
+    high:       103.41,
+    low:        98.50, 
+    close:      100.50, 
+    volume:     99040560, 
+
+    beta:       1.1,
+
+    mktcap:       1.47,
+    evToRevenue:  109.2,
+    pe:           67.97, 
+    pegRatio:     2.70, 
+    eps:          8.45, 
+    bookValue:    33.90, 
+
+    revenue:      98.750, 
+    grossprofit:  36.250, 
+    ebitda:       100.50, 
+
+    IV:        0.150, 
+    atr:       100.50, 
+    shortInt:  5.50, 
+
+    gexExpsure: 0.65, 
+
+    p:        0.0, 
+    p3:       0.0,  
+
+    r3:       0.0,  
+    r2:       0.0,  
+    r1:       0.0,  
+
+    s1:       0.0,  
+    s2:       0.0, 
+    s3:       0.0,  
+
+    eof:        'nil' };
+
 
 
 

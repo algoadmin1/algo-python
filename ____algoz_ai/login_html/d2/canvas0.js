@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "243.5";
+let                                                                         gVer = "244.5";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -30,7 +30,7 @@ let                                                                         gVer
 // 
 //                          if BuySigPrice < S1month, or IF sellSigPrice > R1month etc...
 //                           
-///                  NOTE !!! draw candles is computing his and lows CIRCLES that DrawLines is NOT !!!
+//                   NOTE !!! draw candles is computing his and lows CIRCLES that DrawLines is NOT !!!
 //
 //                    CRONjob:  cronit.php : loops thru a list, writes file etc
 //                          
@@ -39,7 +39,9 @@ let                                                                         gVer
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
 
-let gDrawFib=0;
+let gDrawFinancials =1; 
+let gDrawFib        =0; 
+
 let gFib_fntsz=12;
 
 let gAxesCol0      = "#454595" ;
@@ -99,6 +101,58 @@ let gColScheme100 = { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple
 let gSupResColors = {  r4: 'darkred', r3: 'darkred', r2: '#9f2222'  , r1: '#ef2222' , s1: 'lawngreen' , s2: 'green', s3: 'darkgreen', s4: 'darkgreen'  };
 
 let gColSchemeCurrent= { bg:'black', tx: 'white', up: 'limegreen', dn:'red', ou:'purple' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
+
+
+// Financial objs
+let vector_2strings = { key_str: "abc",  value_str: "xyz" };
+
+let gFinancials = {    
+
+    date:       "2024-10-17",    
+    sym:        "AMD",
+    name:       "Advanced Micro Devices", 
+    last:       100.50, 
+
+    open:       99.56, 
+    high:       103.41,
+    low:        98.50, 
+    close:      100.50, 
+    volume:     99040560, 
+
+    beta:       1.1,
+
+    mktcap:       1.47,
+    evToRevenue:  109.2,
+    pe:           67.97, 
+    pegRatio:     2.70, 
+    eps:          8.45, 
+    bookValue:    33.90, 
+
+    revenue:      98.750, 
+    grossprofit:  36.250, 
+    ebitda:       100.50, 
+
+    IV:        0.150, 
+    atr:       100.50, 
+    shortInt:  5.50, 
+
+    gexExpsure: 0.65, 
+
+    p:        0.0, 
+    p3:       0.0,  
+
+    r3:       0.0,  
+    r2:       0.0,  
+    r1:       0.0,  
+
+    s1:       0.0,  
+    s2:       0.0, 
+    s3:       0.0,  
+
+    eof:        'nil' };
+
+
+
 
 
 const colarr = [
@@ -264,14 +318,47 @@ function DrawRoundedRect(ctx, vrect, radius, col, wt, fill) {
 
 
 function DrawChart(ctx,  vrect , colScheme, typestr ) {
+
+
     DrawRoundedRect(ctx, vrect, 20, colScheme.bg, 3, 1);
     // DrawRoundedRect(ctx, vrect, radius, col, wt, fill);
-    DrawRoundedRect(ctx, vrect, 20, colScheme.ou, 3, 0);
+    DrawRoundedRect(ctx, vrect, 20, colScheme.ou, 5, 0);
+
+
+
+
+
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
 
    // this will test for butt0n1==0
    DrawCandlesChart(ctx,  vrect , colScheme, 2);  /// NOTE !!! draw candles is computing his and lows that DrawLines is NOT !!!
    // this will test for butt0n1==1
    if(typestr=="line")   DrawLineChart(ctx,  vrect , colScheme, 3, "close");  // or P P3 to plot
+
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
+
+   DrawChartAxes( ctx,  vrect , colScheme, 2 );
+   // drawFibonacci( ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
+   let fntsz0 = 14;
+   DrawFinancials(ctx, vrect,       gFinancials,      32,   40,   fntsz0+4,   fntsz0, gGlobalFont, 'blue' );
+  //  DrawFina ncials(ctx, vrect, financials_object, xoff,   yoff,     yspace, fntsz , fntname,  fntcol ) { }
+
+   drawFibonacci( ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
+
 
 
    // pivot / p3 lines
@@ -290,6 +377,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
     InitAndDrawImage(ctx, vrect, fname, img_xoff, img_yoff, gImgScale );   // let gIm gScale = 0.325;
 
 }
+
 // globals
 let gGlobalDrawCol = 'black';
 let gChartTextStr ="Welcome!";
@@ -565,17 +653,33 @@ gSymbolStrLower  = gSymbolStr.toLowerCase();
 //  ############################################################################## should be a fn 
 
 
-    // console.log(processedData); // This will log the PHP data to the console
 
+
+
+
+
+
+    // console.log(processedData); // This will log the PHP data to the console
     let newcol=RandomColorC();
     let last_date_key="nil";  // DERP
 
+    //  DrawChartAxes( ctx,  vrect , colScheme, wt );
+    //  drawFibonacci( ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
+    //  let fntsz0 = 14;
+    //  DrawFinancials(ctx, vrect,       gFinancials,      32,   40,   fntsz0+4,   fntsz0, gGlobalFont, 'blue' );
+    // //  DrawFina ncials(ctx, vrect, financials_object, xoff,   yoff,     yspace, fntsz , fntname,  fntcol ) { }
 
 
-     DrawChartAxes( ctx,  vrect , colScheme, wt );
 
+
+
+    
 
 // ################################################# RENDER CANDLES
+// ################################################# RENDER CANDLES
+// ################################################# RENDER CANDLES
+// ################################################# RENDER CANDLES
+
 let  xHigh=0;
 let  yHigh=0;
 
@@ -899,7 +1003,6 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
         DrawMonthlySupportResistance(ctx, vrect,  idx , colScheme , candlerect);
     }
 
-    drawFibonacci( ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
 // 
 // BUY SELL
    if(button2==1){ 
@@ -912,7 +1015,30 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
     // let cirFill    = RandomJSColor(colarr);
     // if(idx%7==0) Dr awCircle(ctx, 40, 6, cirOutline, gCandleWickX, (candlerect.y+candlerect.h) , 0, 1, cirFill );
 
+}//fn
 
+function DrawFinancials(ctx, vrect, financials_object, xoff, yoff, yspace, fntsz , fntname, fntcol ) {
+    if(gDrawFinancials==0) return;
+
+    let i = 0; 
+    let ioff = 2; 
+
+    DrawText_noclip(ctx,  "FINANCIALS",   vrect.x + vrect.w + xoff, vrect.y + yoff + ( (i+0) * yspace ), fntsz,  fntcol,       fntname );
+
+    // Loop through every key-value pair in the financials_object
+    for (const [key, value] of Object.entries(financials_object)) {
+        // Cast key and value to strings
+        let key_string   = String(key);
+        let value_string = String(value);
+        let compString   = key_string + ": " + value_string;
+
+        // Call the DrawText function to draw the composed string
+        DrawText_noclip(ctx,  compString,   vrect.x + vrect.w + xoff, vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
+        // DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y+yoffset,             12 , colScheme.tx , gGlobalFont);
+
+        // Increment the counter
+        i++;
+    }
 }
 
 function DrawMonthlySupportResistance(ctx, vrect,  idx , colScheme , candlerect){
@@ -949,7 +1075,8 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     // DrawText( ctx, gChartTextStr,  vrect.x+offset, vrect.y+offset, fsz , gGlobalDrawCol , gGlobalFont);
     DrawText( ctx, gChartTextStr,  vrect.x+xoffset, vrect.y+yoffset, fsz , colScheme.tx , gGlobalFont);
     // DrawText( ctx, gChartTextStr1,  vrect.x+xoffset, vrect.y+yoffset, 12 , colScheme.tx , gGlobalFont);
-    DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y+yoffset, 12 , colScheme.tx , gGlobalFont);
+    // DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y +vrect.h - yoffset, 12 , colScheme.tx , gGlobalFont);
+    DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y +vrect.h - yoffset, 12 , gAxesCol0, gGlobalFont);
 }
 
 // function drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol3a ){
@@ -958,6 +1085,22 @@ function    drawText( fontStr,  x, y,                                   ftsz,  c
     DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr);
     
 }
+function DrawText_noclip( ctx, txtStr, x, y, fsz , colStr , fontStr){ 
+
+    let vrect = gGlobalChartVRectCurrent;        
+    let vectXY  = { x: x,  y: y };
+    let vectXY_clipped  = { x: 0,  y: 0  };
+
+    // vectXY_clipped   = ClipPoint1(ctx, vrect, vectXY);  
+    // x = vectXY_clipped.x;
+    // y = vectXY_clipped.y;
+    // if(x<0 || y<0) return;      // if either x or y is offscreen, return & DO NOT DRAW !
+
+    ctx.fillStyle = colStr ; 
+    ctx.font =  fsz.toString() + "px "+ fontStr ;        // ctx.font = "bolder "+"124px Arial";
+    ctx.fillText( txtStr , x,  y  );   
+}
+
 function DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr){ 
 
     let vrect = gGlobalChartVRectCurrent;        
@@ -1242,13 +1385,18 @@ gAxesCol0= gAxesCol0_init; // "#454595" ;  // override  DEL to get .ax
 
 
 function  ToggleFib(){
-    
     if(gDrawFib==0){
         gDrawFib=1;
     }else  if(gDrawFib==1){
         gDrawFib=0;
     }
-
+}//fn
+function  ToggleFinancials(){
+    if(gDrawFinancials==0){
+        gDrawFinancials=1;
+    }else  if(gDrawFinancials==1){
+        gDrawFinancials=0;
+    }
 }//fn
 
 
@@ -1291,7 +1439,7 @@ let gFibLo = {x1: 0 , x2: 0 ,  y1: 0, y2: 0  };
 //    drawFibonacc1(     ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
 //
 function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =same
-    // function   dra wFibonacci(hi,lo){   //     call old way :  drawFibonacci(candles52WeekHigh, candles52WeekLow);
+    // function   dra wFibonacci(hi,lo){   //     call old way :  dr@awFibonacci(candles52WeekHigh, candles52WeekLow);
 
     if(gDrawFib==0) return;
 
@@ -1590,11 +1738,9 @@ function toggleButton(buttonNumber) {
                     window.dispatchEvent(new Event('button4'));  // rndcolor
                     gColSchemeNum=99;
                     GetColorScheme();
-
-                    // ToggleFib();  
                     break;
                 case 5:
-                    // button5 = (button5 === 1) ? 0 : 1;
+                    // button5 = (button5 === 1) ? 0 : 1;   // pivots blue, then both blue+yellow, then off
                     if(button5==0) button5=1;
                      else if(button5==1) button5=2;
                       else  if(button5==2) button5=0;
@@ -1604,11 +1750,11 @@ function toggleButton(buttonNumber) {
                     button6 = (button6 === 1) ? 0 : 1;
                     window.dispatchEvent(new Event('button6'));
                     ToggleFib();  
-
                     break;
                 case 7:
                     button7 = (button7 === 1) ? 0 : 1;
                     window.dispatchEvent(new Event('button7'));
+                    ToggleFinancials();
                     break;
                 case 8:
                     button8 = (button8 === 1) ? 0 : 1;
