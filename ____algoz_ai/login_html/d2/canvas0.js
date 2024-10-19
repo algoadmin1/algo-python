@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "239.2";
+let                                                                         gVer = "243.2";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -96,6 +96,7 @@ let gColScheme100 = { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple
 
 let gSupResColors = {  r4: 'darkred', r3: 'darkred', r2: '#9f2222'  , r1: '#ef2222' , s1: 'lawngreen' , s2: 'green', s3: 'darkgreen', s4: 'darkgreen'  };
 
+let gColSchemeCurrent= { bg:'black', tx: 'white', up: 'limegreen', dn:'red', ou:'purple' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
 
 
 const colarr = [
@@ -896,9 +897,10 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
         DrawMonthlySupportResistance(ctx, vrect,  idx , colScheme , candlerect);
     }
 
-
+    drawFibonacci( ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
+// 
 // BUY SELL
-   if(button2==0){ 
+   if(button2==1){ 
     // buy and sell signals
     if(idx%12==0) DrawTriangle(ctx, 20, 3, 'green', gCandleWickX, candlerect.y+candlerect.h, 0, 1, 'limegreen' );
     if(idx%9==0)  DrawTriangle(ctx, 20, 3, 'red', gCandleWickX, candlerect.y, 1, 1, 'hotpink' );
@@ -948,6 +950,12 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y+yoffset, 12 , colScheme.tx , gGlobalFont);
 }
 
+// function drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol3a ){
+function    drawText( fontStr,  x, y,                                   ftsz,  colStr ){
+
+    DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr);
+    
+}
 function DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr){ 
 
     let vrect = gGlobalChartVRectCurrent;        
@@ -964,7 +972,6 @@ function DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr){
     ctx.fillText( txtStr , x,  y  );   
 }
 function DrawDateRotated( ctx , vrect, colScheme, rotfl){  // designed to be called during Rendering
-    // DrawTextRotated( ctx, gLastDateStr, gCandleWickX, (vrect.y+vrect.h), colScheme.tx, 12, gGlobalFont, -0.275);
     let datestrAbbrev = DateAbbreviate( gLastDateStr , 1 );
     DrawTextRotated( ctx, datestrAbbrev, gCandleWickX + 4, (vrect.y+ parseInt(vrect.h *0.90) ), colScheme.tx, 14, gGlobalFont, rotfl );
 }
@@ -1211,22 +1218,49 @@ if(gColSchemeNum==100){
 gAxesCol0=  scheme0.ax ;
 gAxesCol0= gAxesCol0_init; // "#454595" ;  // override  DEL to get .ax
 
+    gColSchemeCurrent =  scheme0;
+
     return scheme0; 
 }
 
 
-// fibonacci  5 incl 50% retracement
-// var gFibSeq = [
-//       0.236,
-//       0.382,
-//       0.500,
-//       0.618,
-//       0.786
 
-//       ];
+
+
+
+
+
+
+
 //
-//      drawFibonacci(candles52WeekHigh, candles52WeekLow);
+// ########################################################################################    
+// ########################################################################################    FIBONACCI
+// ########################################################################################    
+//
 
+
+function  ToggleFib(){
+    
+    if(gDrawFib==0){
+        gDrawFib=1;
+    }else  if(gDrawFib==1){
+        gDrawFib=0;
+    }
+
+}//fn
+
+
+// fibonacci  5 incl 50% retracement
+// const gFi bSeq = [
+var gFibSeq = [
+      0.236,  // low
+      0.382,
+      0.500,
+      0.618,
+      0.786   // hi
+      ];
+//
+//      drawFib onacci(candles52WeekHigh, candles52WeekLow);  // old way from cnadlesticks.js to CALL fn
 let fibcol1 = 'rgba(150,150,180,0.65)' ;
 let fibcol2 = 'rgba( 10,210,230,0.65)' ;    // cyan ish
 let fibcol3 = 'rgba(232, 219, 93,0.65)' ;   // yellow ish
@@ -1236,148 +1270,236 @@ let fibcol1a = 'rgba(150,150,180,1.0)' ;
 let fibcol2a = 'rgba( 10,210,230,1.0)' ;    // cyan ish
 let fibcol3a = 'rgba(232, 219, 93,1.0)' ;   // yellow ish
 let fibcol4a = 'rgba( 22, 242, 33,1.0)' ;   // green ish
-
-
 // Fib
-// FIB written at Cliff Lodge, Alta, Utah, Moose '23 Trip
+// FIB written at Cliff Lodge, Alta, Utah, Moose '23 Trip      
 //
 
+let gFibHi = {x1: 0 , x2: 0 ,  y1: 0, y2: 0  };
+let gFibLo = {x1: 0 , x2: 0 ,  y1: 0, y2: 0  };
+
+let gDrawFib=1;
+
+let gFib_fntsz=48;
+
+//                      #############################               DR@wFib
+//                      #############################               DR@wFib
+//                      #############################               DR@wFib
+//
+    // drawFi bonacci( vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
+
+//
+//    drawFibonacc1(     ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
+//
+function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =same
+    // function   dra wFibonacci(hi,lo){   //     call old way :  drawFibonacci(candles52WeekHigh, candles52WeekLow);
+
+    if(gDrawFib==0) return;
+
+        var delta = hi-lo;
+
+        var fiblen = gFibSeq.length;
+
+        let xoff0 = 500;
+
+        var i;
+        var fiblvl = 0;
+        var fibpct = 0;
+        var fiby = 0;
+        let x1 = 0, x2=0, y1=0,y2=0;
+        let deltax1=0;
+        let hiFirst =1;
+        let fibstr1="";
+        let fibstr2="";
+
+        let fibcolline='grey';
+        let fibcoltxt='white';
+        let fibfntsz=72;  // use gFib_fntsz
+
+        let inset = parseInt(vrect.w * 0.10 );
+
+        // console.log("gDrawFib=", gDrawFib);
+        // console.log("hi,lo,delta=", hi, lo, delta);
+
+        // let yh = GetYCoordFromPrice(  gCandlesMaxes.priceHigh, vrect );
+        // let yl = GetYCoordFromPrice(  gCandlesMaxes.priceLow,  vrect );
+
+        let yh = GetYCoordFromPrice(  hi,  vrect );
+        let yl = GetYCoordFromPrice(  lo,  vrect );
+
+        // unused////
+        gFibHi = { x1: inset , x2:  vrect.x+vrect.w- inset ,  y1: yh , y2: yh  };
+        gFibLo = { x1: inset , x2:  vrect.x+vrect.w- inset ,  y1: yl , y2: yl  };
+
+        // x1=  gFibLo.x1;
+        // y1 = gFibLo.y1;
+
+        // x2= gFibHi.x1;
+        // y2= gFibHi.y1;
+
+        console.log("] inside Dr@wFibonacci");
+
+        // if(gFibLo.x1 < gFibHi.x1){
+        //         x1= gFibLo.x1;
+        //         y1 = gFibLo.y1;
+
+        //         x2= gFibHi.x1;
+        //         y2= gFibHi.y1;
+        //         hiFirst =0;
+
+        //     }else{
+        //         x1= gFibHi.x1;
+        //         y1 = gFibHi.y1;
+
+        //         x2= gFibLo.x1;
+        //         y2= gFibLo.y1;
+        //         hiFirst =1;
+
+        //     }
+
+
+        // ctx.beginPath();
+        //     ctx.setLineDash([ 20, 15]);
+
+        //         ctx.strokeStyle=fibcol1; // "#9999aa";   
+        //         ctx.lineWidth = 6;
+        //         ctx.moveTo( x1,y1  );
+        //         ctx.lineTo( x2,y2  ) ; 
+        //         ctx.stroke();
+
+        //     ctx.setLineDash([]);
+        // ctx.closePath();
+
+        // gColSchemeCurrent
+
+
+        for(i=0;i<fiblen;i++){
+            // console.log("Fib",i, gFibSeq[i] );
+
+            fiblvl = ( ( gFibSeq[i] * delta ) + lo ).toFixed(2) ;  //  get price
+            // console.log("Fiblvl_"+i.toString()+"=", fiblvl);
+            // fiby = mf( GetYCoordFromPrice( fiblvl ) );       // OLD
+
+            fiby = GetYCoordFromPrice( fiblvl, vrect );      
+
+            fibstr2 = "("+((gFibSeq[i]*100).toFixed(1)).toString() +"%)    "+gCurrencyStr+fiblvl.toString();
+            fibstr1 =  gCurrencyStr+fiblvl.toString() + "    ("+((gFibSeq[i]*100).toFixed(1)).toString() +"%)" ;
+
+            if(i==1 || i==3){      // == fibcol3 , fibcol3a etc
+                fibcolline = fibcol3 ;
+                fibcoltxt  = fibcol3a;
+            }else if(i==2){    
+                fibcolline = fibcol1 ;
+                fibcoltxt  = fibcol1a;
+            }else{
+                fibcolline = fibcol2 ;
+                fibcoltxt  = fibcol2a;
+            }
+
+            DrawHorizontalLine_callout_textcol(ctx, vrect.x+inset, vrect.x+vrect.w-inset,  fiby , fibcolline  ,  "dashed" , fibstr1 , gFib_fntsz, 0 , gGlobalFont , fibcoltxt );
+
+        }//for
+
+
+        // FIB COLS FOR 0% AND 100%
+        fibcolline = fibcol4 ;
+        fibcoltxt  = fibcol4a
+
+        // draw 100%
+        fiblvl = ( ( 1.0 * delta ) + lo ).toFixed(2) ;  //  get price
+        fiby = GetYCoordFromPrice( fiblvl, vrect );      
+        fibstr1 =  gCurrencyStr+fiblvl.toString() + "    (100%)" ;
+        DrawHorizontalLine_callout_textcol(ctx, vrect.x+inset, vrect.x+vrect.w-inset,  fiby , fibcolline  ,  "dashed" , fibstr1 , gFib_fntsz, 0 , gGlobalFont , fibcoltxt );
+
+
+        // draw 0%
+        fiblvl = ( ( 0.0 * delta ) + lo ).toFixed(2) ;  //  get price
+        fiby = GetYCoordFromPrice( fiblvl, vrect );      
+        fibstr1 =  gCurrencyStr+fiblvl.toString() + "    (0%)" ;
+        DrawHorizontalLine_callout_textcol(ctx, vrect.x+inset, vrect.x+vrect.w-inset,  fiby , fibcolline  ,  "dashed" , fibstr1 , gFib_fntsz, 0 , gGlobalFont , fibcoltxt );
 
 
 
-/*
-function   drawFibonacci(hi,lo){
-if(gDrawFib==0) return;
-
-let xoff0 = 500;
-
-var i;
-var delta = hi-lo;
-var fiblen = gFibSeq.length;
-var fiblvl = 0;
-var fibpct = 0;
-var fiby = 0;
-let x1 = 0, x2=0, y1=0,y2=0;
-let deltax1=0;
-let hiFirst =1;
-let fibstr1="";
-let fibstr2="";
-let fibfntsz=72;
-
-// let fibcol1 = 'rgba(150,150,180,0.65)' ;
-// let fibcol2 = 'rgba( 10,210,230,0.65)' ;    // cyan ish
-// let fibcol3 = 'rgba(232, 209, 93,0.65)' ;   // yellow ish
-
-// let fibcol1a = 'rgba(150,150,180,1.0)' ;
-// let fibcol2a = 'rgba( 10,210,230,1.0)' ;    // cyan ish
-// let fibcol3a = 'rgba(232, 209, 93,1.0)' ;   // yellow ish
-
-// console.log("gDrawFib=", gDrawFib);
-// console.log("hi,lo,delta=", hi, lo, delta);
-
-
-  if(gFibLo.x1 < gFibHi.x1){
-        x1= gFibLo.x1;
-        y1 = gFibLo.y1;
-
-        x2= gFibHi.x1;
-        y2= gFibHi.y1;
-        hiFirst =0;
-
-    }else{
-         x1= gFibHi.x1;
-         y1 = gFibHi.y1;
-
-         x2= gFibLo.x1;
-         y2= gFibLo.y1;
-         hiFirst =1;
-
-    }
-
-
-ctx.beginPath();
-    ctx.setLineDash([ 20, 15]);
-
-  ctx.strokeStyle=fibcol1; // "#9999aa";   
-  ctx.lineWidth = 6;
-  ctx.moveTo( x1,y1  );
-  ctx.lineTo( x2,y2  ) ; 
-  ctx.stroke();
-    ctx.setLineDash([]);
-ctx.closePath(); 
 
 
 
-for(i=0;i<fiblen;i++){
-    // console.log("Fib",i, gFibSeq[i] );
+//
+//          OLD
+//
+        // for(i=0;i<fiblen;i++){
+        //     // console.log("Fib",i, gFibSeq[i] );
 
-    fiblvl = ( ( gFibSeq[i] * delta ) + lo ).toFixed(2) ;
-    // console.log("Fiblvl_"+i.toString()+"=", fiblvl);
+        //     fiblvl = ( ( gFibSeq[i] * delta ) + lo ).toFixed(2) ;
+        //     // console.log("Fiblvl_"+i.toString()+"=", fiblvl);
 
-    fiby = mf( GetYCoordFromPrice( fiblvl ) );     //.toFixed(0);
-    // console.log("Fib Y"+i.toString()+"=", fiby);
-// candlesClamp  ???
+        //     fiby = mf( GetYCoordFromPrice( fiblvl ) );     //.toFixed(0);
+        //     // console.log("Fib Y"+i.toString()+"=", fiby);
+        // // candlesClamp  ???
 
-    deltax1=(x2-x1)/7;
-    if(hiFirst==1)  x1off= x1 + deltax1*(5-i+1) - xoff0;
-        else x1off= x1 + deltax1*(i+1) - xoff0 ;
-
-
-    fibstr2 = "("+((gFibSeq[i]*100).toFixed(1)).toString() +"%)    "+gCurrencyStr+fiblvl.toString();
-    fibstr1 =  gCurrencyStr+fiblvl.toString() + "    ("+((gFibSeq[i]*100).toFixed(1)).toString() +"%)" ;
+        //     deltax1=(x2-x1)/7;
+        //     if(hiFirst==1)  x1off= x1 + deltax1*(5-i+1) - xoff0;
+        //         else x1off= x1 + deltax1*(i+1) - xoff0 ;
 
 
- if(i==1 || i==3){  
-    DrawHorizontalLine( x1off, x1off+g52WeekXlen, fibcol3,  fiby  , 8  );
-    drawText( fibstr1, x1off+25, fiby-16 , fibfntsz,  fibcol3a );
-    drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol3a );
-   
+        //     fibstr2 = "("+((gFibSeq[i]*100).toFixed(1)).toString() +"%)    "+gCurrencyStr+fiblvl.toString();
+        //     fibstr1 =  gCurrencyStr+fiblvl.toString() + "    ("+((gFibSeq[i]*100).toFixed(1)).toString() +"%)" ;
 
-   }else if( i==2 ){  
-    DrawHorizontalLine( x1off, x1off+g52WeekXlen, fibcol1,  fiby  , 8  );
-    drawText( fibstr1, x1off+25, fiby-16 , fibfntsz,  fibcol1a );
-    drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol1a );
-   
 
-   }else{ 
-    DrawHorizontalLine( x1off, x1off+g52WeekXlen, fibcol2,  fiby  , 8  );
-    drawText( fibstr1, x1off+25, fiby-16 , fibfntsz, fibcol2a  );
-    drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol2a  );
-    }
 
-}//for
 
-let tmpvar=0;
+        //         if(i==1 || i==3){  
+        //             DrawHorizontalLine( x1off, x1off+g52WeekXlen, fibcol3,  fiby  , 8  );
+        //             drawText( fibstr1, x1off+25, fiby-16 , fibfntsz,  fibcol3a );
+        //             drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol3a );
+        //         // DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr)
 
-// lo
-    fiblvl= lo.toFixed(2);
-    fibstr2 = "(0%)    "+gCurrencyStr+fiblvl.toString();
-    fibstr1 =  gCurrencyStr+fiblvl.toString() + "    (0%)" ;
-    fiby = mf( GetYCoordFromPrice( lo ) );   
+        //         }else if( i==2 ){  
+        //             DrawHorizontalLine( x1off, x1off+g52WeekXlen, fibcol1,  fiby  , 8  );
+        //             drawText( fibstr1, x1off+25, fiby-16 , fibfntsz,  fibcol1a );
+        //             drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol1a );
+                
 
- // drawText( fibstr1, x1off+25, fiby-16 , fibfntsz,  fibcol1a );
- drawText( fibstr1, x1off-250, fiby-16 , fibfntsz,  fibcol4a );
- drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol1a );
+        //         }else{ 
+        //             DrawHorizontalLine( x1off, x1off+g52WeekXlen, fibcol2,  fiby  , 8  );
+        //             drawText( fibstr1, x1off+25, fiby-16 , fibfntsz, fibcol2a  );
+        //             drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol2a  );
+        //             }
 
-   tmpvar =gFibLo.x1;
-   // if(x1off<tmpvar) DrawHorizontalLine( x1off, tmpvar, fibcol4,  fiby  , 18  );
-     DrawHorizontalLine( x1off, tmpvar, fibcol4,  fiby  , 18  );
-// hi
-    fiblvl= hi.toFixed(2);
-    fibstr2 = "(100%)    "+gCurrencyStr+fiblvl.toString();
-    fibstr1 =  gCurrencyStr+fiblvl.toString() + "    (100%)" ;
+        // }//for
 
-    fiby = mf( GetYCoordFromPrice( hi ) );   
-    drawText( fibstr1, x1off+25, fiby+4+fibfntsz , fibfntsz,  fibcol1a );
-    drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby+4+fibfntsz , fibfntsz,  fibcol1a );
-   
+        // let tmpvar=0;
+
+        // // lo
+        //     fiblvl= lo.toFixed(2);
+        //     fibstr2 = "(0%)    "+gCurrencyStr+fiblvl.toString();
+        //     fibstr1 =  gCurrencyStr+fiblvl.toString() + "    (0%)" ;
+        //     fiby = mf( GetYCoordFromPrice( lo ) );   
+
+        // // drawText( fibstr1, x1off+25, fiby-16 , fibfntsz,  fibcol1a );
+        // drawText( fibstr1, x1off-250, fiby-16 , fibfntsz,  fibcol4a );
+        // drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol1a );
+
+        // tmpvar =gFibLo.x1;
+        // // if(x1off<tmpvar) DrawHorizontalLine( x1off, tmpvar, fibcol4,  fiby  , 18  );
+        //     DrawHorizontalLine( x1off, tmpvar, fibcol4,  fiby  , 18  );
+        // // hi
+        //     fiblvl= hi.toFixed(2);
+        //     fibstr2 = "(100%)    "+gCurrencyStr+fiblvl.toString();
+        //     fibstr1 =  gCurrencyStr+fiblvl.toString() + "    (100%)" ;
+
+        //     fiby = mf( GetYCoordFromPrice( hi ) );   
+        //     drawText( fibstr1, x1off+25, fiby+4+fibfntsz , fibfntsz,  fibcol1a );
+        //     drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby+4+fibfntsz , fibfntsz,  fibcol1a );
+        
 
 
 }//fn fib
 
 
 
-*/
+
+
+
+
 
 
         // Function to resize canvas and redraw the rectangle
@@ -1468,6 +1590,8 @@ function toggleButton(buttonNumber) {
                     window.dispatchEvent(new Event('button4'));  // rndcolor
                     gColSchemeNum=99;
                     GetColorScheme();
+
+                    // ToggleFib();  
                     break;
                 case 5:
                     // button5 = (button5 === 1) ? 0 : 1;
@@ -1479,6 +1603,8 @@ function toggleButton(buttonNumber) {
                 case 6:
                     button6 = (button6 === 1) ? 0 : 1;
                     window.dispatchEvent(new Event('button6'));
+                    ToggleFib();  
+
                     break;
                 case 7:
                     button7 = (button7 === 1) ? 0 : 1;
