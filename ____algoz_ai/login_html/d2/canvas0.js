@@ -40,7 +40,7 @@ let                                                                         gVer
     const ctx = canvas.getContext('2d');
 
 let gDrawFib=0;
-let gFib_fntsz=16;
+let gFib_fntsz=12;
 
 let gAxesCol0      = "#454595" ;
 let gAxesCol0_init = "#25255A" ;
