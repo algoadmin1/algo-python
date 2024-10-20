@@ -1,6 +1,117 @@
 
 
 
+// ######################################################################################################################################################  NEW BELOW
+// ######################################################################################################################################################  NEW BELOW
+// ######################################################################################################################################################  NEW BELOW
+// ######################################################################################################################################################  NEW BELOW
+// ######################################################################################################################################################  NEW BELOW
+
+
+
+    // ########################  SELL signal?
+    if($P3 > $P){
+    // if($PtrailingAvg > $Pday){
+            if( $BuySignal>=0 ){ 
+                $SellSignal=$SellSignal+1;
+                if($SellSignal==1){
+                   if($BuySignal > $BuyThreshold){     // strong sell
+                    
+                        $value['sellSignal'] = 1;
+                        $value['sellSignalCnt'] = $BuySignal;
+
+                      // ; record buy sig here in $value['a'];
+
+                                                    // currSellStr= JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+ priceMinusR1pctstr   + ",SELL,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",P3day,sellsigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusR1str+","+ gapstr +","+weeklyPivotsStr+","+monthlyPivotsStr+",EOL";
+                                                    // SELL 100 Shares SYMBOL at LIMIT $PtrailingAvg+.01 time = timstr , IFF SHORTing = ON;
+                                                    // If ( BuySignal>= BuyThreshold2   and  ( currSellStr <>  lastSellStr ) and processBar=1  ) then
+                                                                // Begin
+                                                                //   FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine +  currSellStr );  //NewLine +JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+  "intraday,sell,100,"+Symbol+",atLimit,"+NumtoStr( PtrailingAvg ,2) +",P3day,sellsigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusR1str+","+weeklyPivotsStr+"," );
+                                                                // // FileAppend("c:\_dev\DayTrades.txt", NewLine+"|::   SELL 100 Shares  of "+Symbol+" at LIMIT " +"$"+NumtoStr( PtrailingAvg ,2) +"   ::|    "+LeftStr(ELDateToString(Date), 10) +"  "+NumtoStr(Time,0) +"   = "+JBString0 );
+                                                                // lastSellStr = currSellStr ;
+                                                                // end;
+                                                
+
+                        $BuySignal=0;  //zero th counter
+                    } //end;
+                }// if($SellSignal==1){
+        }// if( $BuySignal>=0 ){ 
+    }// if($P3 > $P){
+
+
+
+
+
+
+// ##################################* BUY signal?
+
+// //  if($PtrailingAvg < $Pday){  
+//     if( $P3 < $P ){  
+//         if ($SellSignal>=0){  
+//             $BuySignal=$BuySignal+1;
+//             if ($BuySignal==1){  
+//                 if($SellSignal > $SellThreshold ){  
+                    
+
+//                                                                 // currBuyStr=   JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+ priceMinusS1pctstr +",BUY,100,"+Symbol+",atLimit,"+NumtoStr( Pday ,2) +",Pday,buysigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusS1str+ ","+ gapstr +","+weeklyPivotsStr+","+monthlyPivotsStr+",EOL";
+//                                                                 //If ( SellSignal>=SellThreshold2      and ( currBuyStr <>  lastBuyStr )    and processBar=1 ) then
+//                                                                 //begin
+//                                                                 //   FileAppend("c:\_dev\Projects\algo-python\intradaytrades.txt", NewLine + currBuyStr); // +NewLine + "1>"+currBuyStr +NewLine + "2>"+lastBuyStr +NewLine +"]"+str3 );  // NewLine + JBudate +","+NumtoStr(Time,0)+","+ DayOfWeekNumStr+","+NumtoStr(BarInterval,0)+"min,"+ "intraday,buy,100,"+Symbol+",atLimit,"+NumtoStr( Pday ,2) +",Pday,buysigcnt,"+JBString0+","+pivotsStrOutput+","+priceMinusS1str+","+weeklyPivotsStr+"," );
+//                                                                 // lastBuyStr =  currBuyStr ;
+//                                                                 // end;
+                           
+//                }else {   
+//                     ;  // DRAW BUY
+//                }// end;
+
+//                 $SellSignal=0;  
+//             } //end;
+//         }// if($BuySignal==1){
+//     }// if( $BuySignal>=0 ){ 
+// }// if($P3 < $P){
+
+
+
+
+
+
+
+
+// EQUAL CASE
+if( $P3 == $P ){
+    $BuySignal=0;
+    $SellSignal=0;
+
+    $value['buySignalCnt'] = 0;
+    $value['sellSignalCnt'] = 0;
+
+    $value['buySignal'] = 0;
+    $value['sellSignal'] = 0;
+
+    $value['buySignalPrice'] = 0;
+    $value['sellSignalPrice'] = 0;
+}
+   
+
+
+
+
+
+
+
+
+
+
+
+// ######################################################################################################################################################  NEW ABOVE
+// ######################################################################################################################################################  NEW ABOVE
+// ######################################################################################################################################################  NEW ABOVE
+// ######################################################################################################################################################  NEW ABOVE
+// ######################################################################################################################################################  NEW ABOVE
+// ######################################################################################################################################################  NEW ABOVE
+// ######################################################################################################################################################  NEW ABOVE
+// ######################################################################################################################################################  NEW ABOVE
+
 /**
          * 
          * 

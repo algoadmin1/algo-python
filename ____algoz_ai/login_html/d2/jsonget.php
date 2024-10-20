@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "266.6";
+                                                              $ver=  "266.7";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -150,7 +150,11 @@ s4day = Low- 3*(High-Pday) ;
 function ProcessCandles($data,  $sym0, $intervalStr) {
 
     global $ChartHigh , $ChartHighIdx , $ChartHighDate , $ChartLow , $ChartLowIdx , $ChartLowDate ;
+    global $BuyThreshold , $BuyThreshold2 ,  $SellThreshold , $SellThreshold2  ;
 
+    $BuySignal = 0;
+    $SellSignal = 0;
+    
 
     // init vars
     $thisMonth = 'nil';    
@@ -179,6 +183,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 // NEW_P3
     $BuySignal  = 0;
     $SellSignal = 0;
+
 
     $pivot = 0;
     $P=0; $P3= 0;
@@ -477,26 +482,86 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['candleX'] = 0;
         $value['candleY'] = 0;
 
-// ################################ END OF NEW STUFF
-
 
         $value['sym'] = $sym0;
         $value['per'] = $intervalStr;
 
-
-        // here do the buy/sell signal integrations
-
+// ################################ END OF values store
 
 
 
+
+
+        // ##############################  SELL signal?
+            if($P3 > $P){   // if($PtrailingAvg > $Pday){
+                if( $BuySignal>=0 ){ 
+                    $SellSignal=$SellSignal+1;
+
+                    if($SellSignal==1){   // first time crossover P3 > P
+                        if($BuySignal > $BuyThreshold){     // strong sell
+                                $value['sellSignal']        = 1;
+                                $value['sellSignalCnt']     = $BuySignal;
+                                $value['sellSignalPrice']   = $P3; 
+                        }
+                    }// if($SellSignal==1){
+                    $BuySignal=0;  //zero  counter
+
+                }// if( $BuySignal>=0 ){ 
+            }// if($P3 > $P){
+
+
+        // ##################################* BUY signal?
+            if( $P3 < $P ){     //  if($PtrailingAvg < $Pday){ 
+                if ($SellSignal>=0){  
+                    $BuySignal=$BuySignal+1;
+
+                    if ($BuySignal==1){     // first time crossover P > P3
+                        if($SellSignal > $SellThreshold ){     // strong buy
+                            $value['buySignal']         = 1;
+                            $value['buySignalCnt']      = $SellSignal;
+                            $value['buySignalPrice']    = $P3; 
+                        }
+                    }// if($BuySignal==1){
+                    $SellSignal=0;      //zero  counter
+
+                }// if( $SellSignal>=0 ){ 
+            }// if($P3 < $P){
+
+
+        // EQUAL CASE
+        if( $P3 == $P ){
+            $BuySignal=0;
+            $SellSignal=0;
+
+            $value['buySignalCnt'] = 0;
+            $value['sellSignalCnt'] = 0;
+
+            $value['buySignal'] = 0;
+            $value['sellSignal'] = 0;
+
+            $value['buySignalPrice'] = 0;
+            $value['sellSignalPrice'] = 0;
+        }
+        
+
+
+// ############################################   END OF LOOP
+// ############################################   END OF LOOP
+// ############################################   END OF LOOP
 
         $i++;
         $monthdays++;
-    }
+    }// foreach loop
 
-    // Return the modified array
-    return $data;
-}
+    return $data;    // Return the modified array
+
+}//fn
+ 
+
+
+
+
+
 
 function FormatToNDecimals($valfloat, $decplaces) {
     // Format the float to 3 decimal places

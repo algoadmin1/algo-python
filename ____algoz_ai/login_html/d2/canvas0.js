@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "247.9";
+let                                                                         gVer = "254.4";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -39,7 +39,11 @@ let                                                                         gVer
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
 
-let gDrawFinancials =1; 
+let gScalar_init   = -1;
+let gScalarFloat_dynamic = 0.0;   // ratio of initial screen hypontenuse to : new hypot 
+let gScalar_resize = 1;
+
+let gDrawFinancials =0; 
 let gDrawFib        =0; 
 let gFib_fntsz=12;
 
@@ -331,6 +335,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
     DrawRoundedRect(ctx, vrect, 20, colScheme.ou, 5, 0);
 
 
+    // DrawChartAxes( ctx,  vrect , colScheme, 2 );
 
 
 
@@ -360,7 +365,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
    DrawChartAxes( ctx,  vrect , colScheme, 2 );
    // drawFibonacci( ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
    let fntsz0 = 14;
-   DrawFinancials(ctx, vrect,       gFinancials,      32,   40,   fntsz0+4,   fntsz0, gGlobalFont, 'blue' );
+   DrawFinancials(ctx, vrect,       gFinancials,      114,   40,   fntsz0+4,   fntsz0, gGlobalFont, 'blue' );
   //  DrawFina ncials(ctx, vrect, financials_object, xoff,   yoff,     yspace, fntsz , fntname,  fntcol ) { }
 
    drawFibonacci( ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
@@ -426,7 +431,7 @@ let gCandlesMaxes     = { num2render: 1, priceHigh: 0, priceLow: 1000000, priceR
                          };
 
 
-function DateAbbreviate(datestr, startMonthOnly) {
+function DateAbbreviate(datestr, startMonthOnly) {  // 2== Oct 17 vs 17th
     // Create a Date object from the input string
     const date = new Date(datestr);
 
@@ -450,7 +455,8 @@ function DateAbbreviate(datestr, startMonthOnly) {
     }
 
     // Return the formatted date string
-    if(startMonthOnly==1)  return `${month} ${dayOfMonth}${suffix}`;
+    if(startMonthOnly==2)  return `${month} ${dayOfMonth}`;
+    else if(startMonthOnly==1)  return `${month} ${dayOfMonth}${suffix}`;
     else  return `${dayOfWeek} ${month} ${dayOfMonth}${suffix}`;
    
 // Example usage
@@ -668,17 +674,7 @@ gSymbolStrLower  = gSymbolStr.toLowerCase();
     // console.log(processedData); // This will log the PHP data to the console
     let newcol=RandomColorC();
     let last_date_key="nil";  // DERP
-
-    //  DrawChartAxes( ctx,  vrect , colScheme, wt );
-    //  drawFibonacci( ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
-    //  let fntsz0 = 14;
-    //  DrawFinancials(ctx, vrect,       gFinancials,      32,   40,   fntsz0+4,   fntsz0, gGlobalFont, 'blue' );
-    // //  DrawFina ncials(ctx, vrect, financials_object, xoff,   yoff,     yspace, fntsz , fntname,  fntcol ) { }
-
-
-
-
-
+ 
     
 
 // ################################################# RENDER CANDLES
@@ -806,10 +802,11 @@ let  yLow =0;
             gBuySignal_thisCandle        =  parseInt(  processedData[date]["buySignal"]  )   ;   //$value['buySignal'];
             gSellSignal_thisCandle       =  parseInt(  processedData[date]["sellSignal"]  )   ;   //$value['sellSignal'] = 0;
             gBuySignalCnt_thisCandle     =  parseInt(  processedData[date]["buySignalCnt"]  )    ;
-            gSellSignalCnt_thisCandle    =  parseInt(  processedData[date]["buySignalCnt"]  )   ;
+            gSellSignalCnt_thisCandle    =  parseInt(  processedData[date]["sellSignalCnt"]  )   ;
             let buyPrice                 =  parseInt(  processedData[date]["buySignalPrice"]  )    ;
-            let sellPrice                =  parseInt(  processedData[date]["buySignalPrice"]  )   ;
-            let date_thisCandle         = date.toString();
+            let sellPrice                =  parseInt(  processedData[date]["sellSignalPrice"]  )   ;
+           
+            let date_thisCandle         =  DateAbbreviate(date, 2 );  // ie Oct 17
 
             gBuySignalStr_thisCandle     =  gCurrencyStr+ buyPrice.toString() +" "+ date_thisCandle +" (" + parseInt(gBuySignalCnt_thisCandle).toString() +")";
             gSellSignalStr_thisCandle    =  gCurrencyStr+ sellPrice.toString()+" "+ date_thisCandle+ " (" + parseInt(gSellSignalCnt_thisCandle).toString()+")";
@@ -822,7 +819,6 @@ let  yLow =0;
             DrawCandlePlus(ctx, vrect, colScheme,  j, datestr, op1, hi1, lo1, cl1, vol1 , eom);    // uses gCandlesMaxes
             // console.log( j+") " + datestr + ":  nextX="+ gCandleXnext  + ";  H, L, Close= " + processedData[date]["high"] + ", " + processedData[date]["low"] + ", "+ processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
             
-
 
 
             let cw2 = parseInt( gCandleWidth/2 );
@@ -1066,35 +1062,43 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
 
 }//fn
 
+function Hypotenuse(w, h) {
+    // Calculate the hypotenuse using the Pythagorean theorem
+    let hypotenuse = Math.sqrt(w * w + h * h);
+
+    // Return the hypotenuse rounded to the nearest integer
+    return Math.round(hypotenuse);
+}
+
+// Example usage
+console.log(Hypotenuse(3, 4)); // Output: 5
 
 function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGreen ) {
-    let sz      = 25+ ((idx%4)*5);
+    let sz      = 35; 
+    let sz_init  = 2; 
+    let sz1      = 11;   // ie cnt 3 == 33 size
     let upcol   = 'green';
-    let dncol   = 'red';
+    let dncol   = 'darkred';
         upcol   = 'blue';
-        dncol   = 'magenta';
+        // dncol   = 'magenta';
+
+    let txt1   = "  ";
+    // let txtStr = "  "+ idx.toString();
+    let txtStr = "  ";
+
+    
 
     if( gBuySignal_thisCandle  > 0 ){
-        upcol   = 'blue';
-        sz = gBuySignalCnt_thisCandle * 10;
-        DrawTriangle(ctx, sz, 3, upcol, gCandleWickX, candlerect.y+candlerect.h, 0, 1, 'limegreen' );
+        sz1 = sz_init * gBuySignalCnt_thisCandle;
+        txt1=gBuySignalStr_thisCandle;
+        DrawTriangle_callout(ctx, sz1, 3, upcol, gCandleWickX, candlerect.y+candlerect.h+sz*2, 0, 1, 'limegreen' ,  txt1+ txtStr, 0, 0, 16 , colScheme.tx , gGlobalFont  ) ;
+
     }
     if( gSellSignal_thisCandle  > 0 ){
-        dncol   = 'magenta';
-        sz = gSellSignalCnt_thisCandle * 10;
-        DrawTriangle(ctx, sz, 3, dncol, gCandleWickX, candlerect.y, 1, 1, 'hotpink' );
+        sz1 = sz_init * gSellSignalCnt_thisCandle;
+        txt1=gSellSignalStr_thisCandle;
+        DrawTriangle_callout(ctx, sz1, 3, dncol, gCandleWickX, candlerect.y+candlerect.h-sz*2, 1, 1, 'red' ,   txt1+ txtStr, 0, 0, 16 , colScheme.tx , gGlobalFont  ) ;
     }
-
-    let txtStr = " $550 Oct 18 (5) ___";
-    if(idx%12==0)  DrawTriangle_callout(ctx, sz, 3, upcol, gCandleWickX, candlerect.y+candlerect.h, 0, 1, 'limegreen' ,   txtStr, 0, 0, 16 , colScheme.tx , gGlobalFont  ) ;
-    if(idx%7==0)   DrawTriangle_callout(ctx, sz, 3, dncol, gCandleWickX, candlerect.y+candlerect.h, 1, 1, 'hotpink' ,     txtStr, 0, 0, 16 , colScheme.tx , gGlobalFont  ) ;
-
-    // OLD DEPR
-    // if(idx%12==0) DrawTriangle(ctx, sz, 3, upcol, gCandleWickX, candlerect.y+candlerect.h, 0, 1, 'limegreen' );
-    // if(idx%9==0)  DrawTriangle(ctx, sz, 3, dncol, gCandleWickX, candlerect.y, 1, 1, 'hotpink' );
-
-    // if(idx%12==0) DrawTriangle(ctx, sz, 3, upcol, gCandleWickX, candlerect.y+candlerect.h, 0, 1, 'limegreen' );
-    // if(idx%9==0)  DrawTriangle(ctx, sz, 3, dncol, gCandleWickX, candlerect.y, 1, 1, 'hotpink' );
 
 
 
@@ -1120,17 +1124,29 @@ function DrawFinancials(ctx, vrect, financials_object, xoff, yoff, yspace, fntsz
     let i = 0; 
     let ioff = 2; 
 
-    DrawText_noclip(ctx,  "FINANCIALS",   vrect.x + vrect.w + xoff, vrect.y + yoff + ( (i+0) * yspace ), fntsz,  fntcol,       fntname );
+
+    DrawText_noclip(ctx,  "FINANCIALS",   vrect.x + vrect.w + parseInt(0.5*xoff), vrect.y + yoff + ( (i+0) * yspace ), fntsz*2,  fntcol,       fntname );
 
     // Loop through every key-value pair in the financials_object
     for (const [key, value] of Object.entries(financials_object)) {
         // Cast key and value to strings
-        let key_string   = String(key);
+        let key_string   = String(key) + ":  ";
         let value_string = String(value);
         let compString   = key_string + ": " + value_string;
 
+
+        let rwidth = 0;
+        ctx.fillStyle =fntcol;   
+        ctx.font = fntsz.toString()+" "+ fntname;
+        // ctx.font = "64px Arial";
+        // ctx.fillText( key_string , 200 , 200 );
+        rwidth = ctx.measureText(key_string).width;
+     
+
         // Call the DrawText function to draw the composed string
-        DrawText_noclip(ctx,  compString,   vrect.x + vrect.w + xoff, vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
+        DrawText_noclip(ctx,  key_string,     vrect.x + vrect.w + xoff - rwidth, vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
+        // DrawText_noclip(ctx,  compString,     vrect.x + vrect.w + xoff, vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
+        DrawText_noclip(ctx,  value_string,   vrect.x + vrect.w + xoff         , vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
         // DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y+yoffset,             12 , colScheme.tx , gGlobalFont);
 
         // Increment the counter
@@ -1169,11 +1185,14 @@ function DrawImage(ctx, img, x, y, scale) {
 
 
 function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
-    // DrawText( ctx, gChartTextStr,  vrect.x+offset, vrect.y+offset, fsz , gGlobalDrawCol , gGlobalFont);
-    DrawText( ctx, gChartTextStr,  vrect.x+xoffset, vrect.y+yoffset, fsz , colScheme.tx , gGlobalFont);
-    // DrawText( ctx, gChartTextStr1,  vrect.x+xoffset, vrect.y+yoffset, 12 , colScheme.tx , gGlobalFont);
-    // DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y +vrect.h - yoffset, 12 , colScheme.tx , gGlobalFont);
+
+    let str = "";
+    str =  gScalar_resize.toString()+ " / "+ gScalar_init.toString()+ " == " +  (gScalarFloat_dynamic).toString() +" ";
+     // DrawText( ctx, str,  vrect.x+xoffset, vrect.y+yoffset+50, fsz , colScheme.tx , gGlobalFont);
+
+    DrawText( ctx, gChartTextStr+" " +  gScalarFloat_dynamic.toString(),  vrect.x+xoffset, vrect.y+yoffset, fsz , colScheme.tx , gGlobalFont);
     DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y +vrect.h - yoffset, 12 , gAxesCol0, gGlobalFont);
+    
 }
 
 // function drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol3a ){
@@ -1795,6 +1814,15 @@ function resizeCanvas() {
             // Clear the canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+
+            let hy = Hypotenuse( canvas.width, canvas.height); 
+            if(gScalar_init==-1){
+                gScalar_init = hy;
+            }
+            gScalar_resize = hy;
+            gScalarFloat_dynamic =  ( gScalar_resize/gScalar_init ).toFixed(2) ;
+
+
             // Set the rectangle dimensions 6px inside the canvas borders
             const rectWidth = canvas.width - 12; // 6px margin on both sides
             const rectHeight = canvas.height - 12; // 6px margin on both sides
@@ -1841,7 +1869,7 @@ function resizeCanvas() {
             // let dtstr = "w,h= ["+ canvas.width.toString() +","+ canvas.height.toString() +"]"  ;
             let dtstr = "w,h= ["+ wstr +","+ hstr +"] CANDLES # =" +gNumCandlesToRender.toString()+" , candleW=" +gCandleWidth.toString() ;
             // console.log(dtstr);
-            // let dtstrWidth = ctx.measureText(dtstr).width+ 0;
+            // let dtstrWidth = ctx.mea sureText(dtstr).width+ 0;
             let fsz = 24;
             // ctx.fillStyle = rcol ; // "#113edd";        
             // ctx.font =  fsz.toString()+ "px Arial";   // ctx.font = "bolder "+"124px Arial";
@@ -1867,9 +1895,9 @@ function toggleButton(buttonNumber) {
                     break;
                 case 4:
                     button4 = (button4 === 1) ? 0 : 1;
-                    window.dispatchEvent(new Event('button4'));  // rndcolor
                     gColSchemeNum=99;
                     GetColorScheme();
+                    window.dispatchEvent(new Event('button4'));  // rndcolor
                     break;
                 case 5:
                     // button5 = (button5 === 1) ? 0 : 1;   // pivots blue, then both blue+yellow, then off
@@ -1880,14 +1908,17 @@ function toggleButton(buttonNumber) {
                     break;
                 case 6:
                     button6 = (button6 === 1) ? 0 : 1;
-                    window.dispatchEvent(new Event('button6'));
                     ToggleFib();  
+                    window.dispatchEvent(new Event('button6'));
                     break;
                 case 7:
                     button7 = (button7 === 1) ? 0 : 1;
-                    window.dispatchEvent(new Event('button7'));
                     ToggleFinancials();
+                    window.dispatchEvent(new Event('button7'));
                     break;
+
+
+// unused
                 case 8:
                     button8 = (button8 === 1) ? 0 : 1;
                     window.dispatchEvent(new Event('button8'));
