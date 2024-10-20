@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "254.4";
+let                                                                         gVer = "257.1";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -1944,6 +1944,17 @@ function toggleButton(buttonNumber) {
 // #############################################################  MAIN CODE  *****
 // #############################################################  MAIN CODE  *****
 
+// // Get the button and audio element
+// const playButton = document.getElementById('play-button');
+// const audio      = document.getElementById('audio');
+
+//         // Add click event listener to the button
+//         playButton.addEventListener('click', function() {
+//             // Play the audio when the button is clicked
+//             audio.play();
+//         });
+
+
         // Resize/redraw the canvas when a button1-6 is pressed 
         window.addEventListener('button1', resizeCanvas);
         window.addEventListener('button2', resizeCanvas);
@@ -1952,6 +1963,7 @@ function toggleButton(buttonNumber) {
         window.addEventListener('button5', resizeCanvas);
         window.addEventListener('button6', resizeCanvas);
         window.addEventListener('button7', resizeCanvas);
+
         window.addEventListener('button8', resizeCanvas);
         window.addEventListener('button9', resizeCanvas);
         window.addEventListener('button10', resizeCanvas);

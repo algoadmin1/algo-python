@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "266.7";
+                                                              $ver=  "271.2";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -28,10 +28,10 @@ $button9 = 0;
 $button10 = 0;
 
 $button1name = "Line/Candle Chart";
-$button2name = "Buy & Sell Signals";
-$button3name = "Support Resistance";
+$button2name = "Buy/Sell Signals";
+$button3name = "Support/Resistance";
 $button4name = "Gaps" ;              //; "Gaps Detection";
-$button5name = "Pivot Lines";
+$button5name = "Pivots Lines";
 $button6name = "Fibonacci";
 $button7name = "Financials";
 $button8name = "Aux Button 8";
@@ -1024,15 +1024,63 @@ $processedDataJson = json_encode($dataProcessed);
             flex-grow: 1;
             padding: 10px;
             font-size: 16px;
+
+            background-color: #4C50AF; /* BTN background */
+            color: white; /* White text */
+
+            border: none; /* Remove border */
+            border-radius: 10px; /* Rounded corners */
         }
+
+        #play-button {
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text */
+            padding: 15px 32px; /* Padding around text */
+            text-align: center; /* Centered text */
+            text-decoration: none; /* Remove underline */
+            display: inline-block; /* Set to inline-block */
+            font-size: 16px; /* Font size */
+            margin: 4px 2px; /* Margins */
+            cursor: pointer; /* Pointer cursor */
+            border: none; /* Remove border */
+            border-radius: 12px; /* Rounded corners */
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+
+        #play-button:hover {
+            background-color: #229022; /* Darker green on hover */
+        }
+/* 
+        #button1, #button2, #button3, #button4, #button5, #button6, #button7, #button8  {
+            flex-grow: 1;
+            background-color: #4C50AF; /* Green background */
+            color: white; /* White text */
+            padding: 15px 32px; /* Padding around text */
+            text-align: center; /* Centered text */
+            text-decoration: none; /* Remove underline */
+            display: inline-block; /* Set to inline-block */
+            font-size: 16px; /* Font size */
+            margin: 4px 2px; /* Margins */
+            cursor: pointer; /* Pointer cursor */
+            border: none; /* Remove border */
+            border-radius: 12px; /* Rounded corners */
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+
+        #button1:hover, #button2:hover, #button3:hover, #button4:hover, #button5:hover, #button6:hover, #button7:hover, #button8:hover {
+            background-color: #222290; /* Darker green on hover */
+        } */
+
 
     </style>
 </head>
 <body>
 
+<!-- <audio id="audio" src="tutorial.mp3"></audio> -->
+
  <!--####################  Add buttons in a flex container  ###############################  *NEW_BUTTONS* -->
  <div class="buttons-container">
-
+        <!-- <button id="play-button">Tutorial</button> -->
 
         <button id="button1" onclick="toggleButton(1)"><?php echo $button1name; ?></button>
         <button id="button2" onclick="toggleButton(2)"><?php echo $button2name; ?></button>
@@ -1042,16 +1090,19 @@ $processedDataJson = json_encode($dataProcessed);
         <button id="button6" onclick="toggleButton(6)"><?php echo $button6name; ?></button>
         <button id="button7" onclick="toggleButton(7)"><?php echo $button7name; ?></button>
 
-        <!--
+    <!--
         <button id="button8" onclick="toggleButton(8)"><?php echo $button8name; ?></button>
-        <button id="button9" onclick="toggleButton(9)"><?php echo $button9name; ?></button>
-      <button id="button10" onclick="toggleButton(10)"><?php echo $button10name; ?></button>
+         <button id="button9" onclick="toggleButton(9)"><?php echo $button9name; ?></button>
+         <button id="button10" onclick="toggleButton(10)"><?php echo $button10name; ?></button>
     -->
     </div>
 
     <div class="chartjb">
         <canvas id="myCanvas"></canvas>
     </div>
+
+    <p>algoz.ai Copyright (c) 2023-2025 by Algo Investor Inc.</p>
+
 
 
 
