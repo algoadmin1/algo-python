@@ -1,0 +1,71 @@
+<!-- canvas0.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Canvas</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        .orders {
+            width: 100%;
+            height: 100vh; /* Full viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="orders">
+        <canvas id="myCanvas"></canvas>
+    </div>
+
+    <script>
+        // Get the canvas and the 2D drawing context
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Function to resize canvas and redraw the rectangle
+        function resizeCanvas() {
+            // Set canvas width and height to match the div's size
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Set the rectangle dimensions 6px inside the canvas borders
+            const rectWidth = canvas.width - 12; // 6px margin on both sides
+            const rectHeight = canvas.height - 12; // 6px margin on both sides
+
+            // Draw the rectangle
+            ctx.beginPath();
+            ctx.rect(6, 6, rectWidth, rectHeight);
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        // Resize the canvas when the window is resized
+        window.addEventListener('resize', resizeCanvas);
+
+        // Initial resize to set up the canvas
+        resizeCanvas();
+    </script>
+
+</body>
+</html>

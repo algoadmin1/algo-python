@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "247.9";
+let                                                                         gVer = "244.5";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -41,14 +41,8 @@ let                                                                         gVer
 
 let gDrawFinancials =1; 
 let gDrawFib        =0; 
-let gFib_fntsz=12;
 
-let gBuySignal_thisCandle =0;
-let gSellSignal_thisCandle =0;
-let gBuySignalCnt_thisCandle =0;
-let gSellSignalCnt_thisCandle =0;
-let gBuySignalStr_thisCandle ="nil";
-let gSellSignalStr_thisCandle ="nil";
+let gFib_fntsz=12;
 
 let gAxesCol0      = "#454595" ;
 let gAxesCol0_init = "#25255A" ;
@@ -794,37 +788,9 @@ let  yLow =0;
             }
 
 
-            /* 
-                                                            $value['buySignalCnt'] = 0;
-                                                            $value['sellSignalCnt'] = 0;
-                                                            $value['buySignal'] = 0;
-                                                            $value['sellSignal'] = 0;
-                                                            $value['buySignalPrice'] = 0;
-                                                            $value['sellSignalPrice'] = 0;
-            */
-
-            gBuySignal_thisCandle        =  parseInt(  processedData[date]["buySignal"]  )   ;   //$value['buySignal'];
-            gSellSignal_thisCandle       =  parseInt(  processedData[date]["sellSignal"]  )   ;   //$value['sellSignal'] = 0;
-            gBuySignalCnt_thisCandle     =  parseInt(  processedData[date]["buySignalCnt"]  )    ;
-            gSellSignalCnt_thisCandle    =  parseInt(  processedData[date]["buySignalCnt"]  )   ;
-            let buyPrice                 =  parseInt(  processedData[date]["buySignalPrice"]  )    ;
-            let sellPrice                =  parseInt(  processedData[date]["buySignalPrice"]  )   ;
-            let date_thisCandle         = date.toString();
-
-            gBuySignalStr_thisCandle     =  gCurrencyStr+ buyPrice.toString() +" "+ date_thisCandle +" (" + parseInt(gBuySignalCnt_thisCandle).toString() +")";
-            gSellSignalStr_thisCandle    =  gCurrencyStr+ sellPrice.toString()+" "+ date_thisCandle+ " (" + parseInt(gSellSignalCnt_thisCandle).toString()+")";
-
-// from jsonget.php
-        // $value['candleX'] = 0;
-        // $value['candleY'] = 0;
-
-//  DRAW everything assoc. with that candle , ie volume, buy/sell etc
             DrawCandlePlus(ctx, vrect, colScheme,  j, datestr, op1, hi1, lo1, cl1, vol1 , eom);    // uses gCandlesMaxes
             // console.log( j+") " + datestr + ":  nextX="+ gCandleXnext  + ";  H, L, Close= " + processedData[date]["high"] + ", " + processedData[date]["low"] + ", "+ processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
             
-
-
-
             let cw2 = parseInt( gCandleWidth/2 );
 // NEW            
         //  if( gCandlesMaxes.priceHigh_date  == date ){
@@ -935,7 +901,7 @@ function DrawSegmentedLine(ctx, processedData, vrect, wt, colLine, style, xstart
 }//fn 
 
 // ai-written: Helper function to convert a price into a y-coordinate based on the vrect (viewport)
-// funct ion GetY CoordFromPrice(price, vrect) {
+// function GetY CoordFromPrice(price, vrect) {
 //     // Example conversion logic, this should map a price to a y-coordinate based on vrect.
 //     // You can customize this as needed based on your canvas and viewport configuration.
 //     let minPrice = 0;   // replace with your actual minimum price
@@ -954,11 +920,6 @@ function DrawSegmentedLine(ctx, processedData, vrect, wt, colLine, style, xstart
 //
 // note:  gCandlesMaxes{} must be set
 //
-let gGlobalChartMargin_hTop = 0.05;
-let gGlobalChartMargin_hBot = 0.05;
-
-let gGlobalChartMargin_w = 0.00;
-
 function GetYCoordFromPrice( priceInput, vrect ){
     // i.e. price range = $15 - $95 = 80,   ie $26-$15 = $11,  11/80 ~= 0.125 * Yrange (300) ~= $32.50
     let yrange = vrect.h;
@@ -967,20 +928,7 @@ function GetYCoordFromPrice( priceInput, vrect ){
 
     let yrangeFloat= parseFloat( yrange );
 
-    let prh = gCandlesMaxes.priceHigh;
-    let prl = gCandlesMaxes.priceLow;
-
-    // for now only make top 10% higher, for example..
-    prh = prh * (1 + gGlobalChartMargin_hTop );   // ie $100 prh = 100 * (1 + 10%) =  100 * 1.1 = $110
-    prl = prl * (1 - gGlobalChartMargin_hBot );   // ie $100 prh = 100 * (1 -  5%) =  100 * .95 = $95
-    let prrange = prh - prl ; 
-
-    // here we can add margins...
-    let pricePctFloat = ((priceInput -  prl ) / prrange );  // all floats
-    // let pricePctFloat = ((priceInput - gCandlesMaxes.priceLow) / gCandlesMaxes.priceRange);  // all floats
-
-
-    // let pricePctFloat = ((priceInput - gCandlesMaxes.srLow) / gCandlesMaxes.srRange);  // BUGGy cause [0].s1... == 0
+    let pricePctFloat = ((priceInput - gCandlesMaxes.srLow) / gCandlesMaxes.srRange);  // all floats
     let pricePctFloat1 = pricePctFloat * yrangeFloat;
     let pricePctInt1   = parseInt( pricePctFloat1  );
    
@@ -1055,64 +1003,19 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
         DrawMonthlySupportResistance(ctx, vrect,  idx , colScheme , candlerect);
     }
 
+// 
 // BUY SELL
-   if(button2==1){    
-        DrawBuySellSignal( ctx  , vrect, idx , colScheme, candlerect , candleGreen) ;
-    }
+   if(button2==1){ 
+    // buy and sell signals
+    if(idx%12==0) DrawTriangle(ctx, 20, 3, 'green', gCandleWickX, candlerect.y+candlerect.h, 0, 1, 'limegreen' );
+    if(idx%9==0)  DrawTriangle(ctx, 20, 3, 'red', gCandleWickX, candlerect.y, 1, 1, 'hotpink' );
+   }
 
     // let cirOutline = RandomJSColor(colarr);
     // let cirFill    = RandomJSColor(colarr);
     // if(idx%7==0) Dr awCircle(ctx, 40, 6, cirOutline, gCandleWickX, (candlerect.y+candlerect.h) , 0, 1, cirFill );
 
 }//fn
-
-
-function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGreen ) {
-    let sz      = 25+ ((idx%4)*5);
-    let upcol   = 'green';
-    let dncol   = 'red';
-        upcol   = 'blue';
-        dncol   = 'magenta';
-
-    if( gBuySignal_thisCandle  > 0 ){
-        upcol   = 'blue';
-        sz = gBuySignalCnt_thisCandle * 10;
-        DrawTriangle(ctx, sz, 3, upcol, gCandleWickX, candlerect.y+candlerect.h, 0, 1, 'limegreen' );
-    }
-    if( gSellSignal_thisCandle  > 0 ){
-        dncol   = 'magenta';
-        sz = gSellSignalCnt_thisCandle * 10;
-        DrawTriangle(ctx, sz, 3, dncol, gCandleWickX, candlerect.y, 1, 1, 'hotpink' );
-    }
-
-    let txtStr = " $550 Oct 18 (5) ___";
-    if(idx%12==0)  DrawTriangle_callout(ctx, sz, 3, upcol, gCandleWickX, candlerect.y+candlerect.h, 0, 1, 'limegreen' ,   txtStr, 0, 0, 16 , colScheme.tx , gGlobalFont  ) ;
-    if(idx%7==0)   DrawTriangle_callout(ctx, sz, 3, dncol, gCandleWickX, candlerect.y+candlerect.h, 1, 1, 'hotpink' ,     txtStr, 0, 0, 16 , colScheme.tx , gGlobalFont  ) ;
-
-    // OLD DEPR
-    // if(idx%12==0) DrawTriangle(ctx, sz, 3, upcol, gCandleWickX, candlerect.y+candlerect.h, 0, 1, 'limegreen' );
-    // if(idx%9==0)  DrawTriangle(ctx, sz, 3, dncol, gCandleWickX, candlerect.y, 1, 1, 'hotpink' );
-
-    // if(idx%12==0) DrawTriangle(ctx, sz, 3, upcol, gCandleWickX, candlerect.y+candlerect.h, 0, 1, 'limegreen' );
-    // if(idx%9==0)  DrawTriangle(ctx, sz, 3, dncol, gCandleWickX, candlerect.y, 1, 1, 'hotpink' );
-
-
-
-
-
-    /*
-        gBuySignal_thisCandle        =  parseInt(  processedData[date]["buySignal"]  )   ;   //$value['buySignal'];
-            gSellSignal_thisCandle       =  parseInt(  processedData[date]["sellSignal"]  )   ;   //$value['sellSignal'] = 0;
-            gBuySignalCnt_thisCandle     =  parseInt(  processedData[date]["buySignalCnt"]  )    ;
-            gSellSignalCnt_thisCandle    =  parseInt(  processedData[date]["buySignalCnt"]  )   ;
-            let buyPrice                 =  parseInt(  processedData[date]["buySignalPrice"]  )    ;
-            let sellPrice                =  parseInt(  processedData[date]["buySignalPrice"]  )   ;
-
-            gBuySignalStr_thisCandle     =  gCurrencyStr+ buyPrice.toString() + "  " + parseInt(gBuySignalCnt_thisCandle).toString();
-            gSellSignalStr_thisCandle    =  gCurrencyStr+ sellPrice.toString()+ "  " + parseInt(gSellSignalCnt_thisCandle).toString();
-
-    */
-}
 
 function DrawFinancials(ctx, vrect, financials_object, xoff, yoff, yspace, fntsz , fntname, fntcol ) {
     if(gDrawFinancials==0) return;
@@ -1258,48 +1161,10 @@ function DrawLineChart(ctx,  vrect , colScheme, wt, datastr){
     DrawSegmentedLine(ctx, processedData, vrect, wt, colScheme.up, "solid", gCandleXnextStart,   (  gCandleWidth + gCandleOffset ), "close") ;
 
 }
-function DrawTriangle_callout(ctx, size, wt, col, x, y, upDown, fill, fillcol ,   txtStr, xt, yt, fsz , colStr , fontStr) {  
-
-    // Calculate the points of the triangle
-    const halfSize = size / 2;
-    ctx.beginPath();
-    
-    if (upDown === 0) {
-        // Triangle with point up
-        ctx.moveTo(x, y); // top point
-        ctx.lineTo(x - halfSize, y + size); // bottom left
-        ctx.lineTo(x + halfSize, y + size); // bottom right
-    } else {
-        // Triangle with point down
-        ctx.moveTo(x, y + size); // bottom point
-        ctx.lineTo(x - halfSize, y); // top left
-        ctx.lineTo(x + halfSize, y); // top right
-    }
-    ctx.closePath(); // Complete the triangle path
-
-    // Set stroke color and width
-    ctx.strokeStyle = col;
-    ctx.lineWidth = wt;
-
-    if (fill === 1) {
-        // Fill the triangle with the fill color
-        ctx.fillStyle = fillcol;
-        ctx.fill();
-    }
-
-    // Draw the triangle outline
-    ctx.stroke();
-
-//  DrawTriangle_callout(ctx, size, wt, col, x, y, upDown, fill, fillcol ,   txtStr, xt, yt, fsz , colStr , fontStr)
-    DrawText(            ctx, txtStr,  x+xt, y+yt,  fsz , colStr , fontStr  );
-
-
-
-
-}
-
-function         DrawTriangle(ctx, size, wt, col, x, y, upDown, fill, fillcol ) {   
-    // Calculate the points of the triangle
+// function DrawTriangle(ctx, size, wt, col, x, y, upDown, fill, fillcol ,     txtStr, xt, yt, fsz , colStr , fontStr) {  
+    // DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr)
+function DrawTriangle(ctx, size, wt, col, x, y, upDown, fill, fillcol ) {   
+     // Calculate the points of the triangle
     const halfSize = size / 2;
     ctx.beginPath();
     
@@ -1568,6 +1433,10 @@ let gFibLo = {x1: 0 , x2: 0 ,  y1: 0, y2: 0  };
 //                      #############################               DR@wFib
 //                      #############################               DR@wFib
 //
+    // drawFi bonacci( vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
+
+//
+//    drawFibonacc1(     ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
 //
 function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =same
     // function   dra wFibonacci(hi,lo){   //     call old way :  dr@awFibonacci(candles52WeekHigh, candles52WeekLow);
@@ -1674,8 +1543,7 @@ function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =
                 fibcoltxt  = fibcol2a;
             }
 
-            // DrawHorizontalLine_callout_textcol(ctx, vrect.x+inset, vrect.x+vrect.w-inset,  fiby , fibcolline  ,  "dashed" , fibstr1 , gFib_fntsz, 0 , gGlobalFont , fibcoltxt );
-            DrawHorizontalLine_callout_textcol(ctx, vrect.x , vrect.x+vrect.w-inset,  fiby , fibcolline  ,  "dashed" , fibstr1 , gFib_fntsz, 0 , gGlobalFont , fibcoltxt );
+            DrawHorizontalLine_callout_textcol(ctx, vrect.x+inset, vrect.x+vrect.w-inset,  fiby , fibcolline  ,  "dashed" , fibstr1 , gFib_fntsz, 0 , gGlobalFont , fibcoltxt );
 
         }//for
 
@@ -1688,14 +1556,14 @@ function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =
         fiblvl = ( ( 1.0 * delta ) + lo ).toFixed(2) ;  //  get price
         fiby = GetYCoordFromPrice( fiblvl, vrect );      
         fibstr1 =  gCurrencyStr+fiblvl.toString() + "    (100%)" ;
-        DrawHorizontalLine_callout_textcol(ctx, vrect.x+0, vrect.x+vrect.w-inset,  fiby , fibcolline  ,  "dashed" , fibstr1 , gFib_fntsz, 0 , gGlobalFont , fibcoltxt );
+        DrawHorizontalLine_callout_textcol(ctx, vrect.x+inset, vrect.x+vrect.w-inset,  fiby , fibcolline  ,  "dashed" , fibstr1 , gFib_fntsz, 0 , gGlobalFont , fibcoltxt );
 
 
         // draw 0%
         fiblvl = ( ( 0.0 * delta ) + lo ).toFixed(2) ;  //  get price
         fiby = GetYCoordFromPrice( fiblvl, vrect );      
         fibstr1 =  gCurrencyStr+fiblvl.toString() + "    (0%)" ;
-        DrawHorizontalLine_callout_textcol(ctx, vrect.x+0, vrect.x+vrect.w-inset,  fiby , fibcolline  ,  "dashed" , fibstr1 , gFib_fntsz, 0 , gGlobalFont , fibcoltxt );
+        DrawHorizontalLine_callout_textcol(ctx, vrect.x+inset, vrect.x+vrect.w-inset,  fiby , fibcolline  ,  "dashed" , fibstr1 , gFib_fntsz, 0 , gGlobalFont , fibcoltxt );
 
 
 

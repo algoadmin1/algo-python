@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "266.6";
+                                                              $ver=  "212.4";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -30,10 +30,10 @@ $button10 = 0;
 $button1name = "Line/Candle Chart";
 $button2name = "Buy & Sell Signals";
 $button3name = "Support Resistance";
-$button4name = "Random Colors" ; //; "Gaps Detection";
+$button4name = "Gaps Detection";
 $button5name = "Pivot Lines";
 $button6name = "Fibonacci";
-$button7name = "Financials";
+$button7name = "Fundamentals";
 $button8name = "Aux Button 8";
 $button9name = "Aux Button 9";
 $button10name= "Aux Button 10";
@@ -174,92 +174,20 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
     $ChartLow   = 1000000;
     $ChartLowIdx = 0;
     $ChartLowDate = "nil";
+ 
 
-
-// NEW_P3
-    $BuySignal  = 0;
-    $SellSignal = 0;
-
-    $pivot = 0;
-    $P=0; $P3= 0;
-
-    $h0=0; $l0= 0; $c0= 0;
-    $s1 = 0;  $s2=0; $s3=0; $s4=0;
-    $r1 = 0;  $r2=0; $r3=0; $r4=0;
 
     $i=0;
     $monthdays=0;
 
-
     // Loop through each element of the array
     foreach ($data as $date => &$value) {
-
-        // this candle's h,l,c [0]
+        // Calculate "P" as the average of "high", "low", and "close"
         $high  = floatval($value['high']);
         $low   = floatval($value['low']);
         $close = floatval($value['close']);
-
-
-// start pivot get stuff
-        $h0=0; $l0= 0; $c0= 0;
-        $s1 = 0;  $s2=0; $s3=0; $s4=0;
-        $r1 = 0;  $r2=0; $r3=0; $r4=0;
-
-        if($i>0){  // for Pivots, proces [1] and up
-                // Calculate "P" as the average of yesterday's : "high", "low", and "close"
-                $h0= array_values($data)[$i-1]['high'];
-                $l0= array_values($data)[$i-1]['low'];
-                $c0= array_values($data)[$i-1]['close'];
-                $pivot = FormatToNDecimals( (( $h0 + $l0 + $c0 ) / 3) , 2 );
-                $P= $pivot;
-
-                $s1 = FormatToNDecimals( (($pivot * 2) - $h0 ) ,  2 );     // S1day = (Pday *2)-High;
-                $r1 = FormatToNDecimals( (($pivot * 2) - $l0  ) , 2 );     // R1day = (Pday *2)-Low;
-
-                $s2 = FormatToNDecimals( ( $pivot - $h0 + $l0 ) , 2 );    //  S2day = Pday – High + Low;
-                $r2 = FormatToNDecimals( ( $pivot + $h0 - $l0 ) , 2 );    //  R2day = Pday + High – Low;
-
-                $s3 = FormatToNDecimals( ( $pivot - ($r2  - $s1 ) ) , 2 );     // S3day = Pday – (R2day-S1day);
-                $r3 = FormatToNDecimals( (($pivot - $s1 ) + $r2   ) , 2 );     // R3day = (Pday-S1day) + R2day;
-
-                $s4 = FormatToNDecimals( ( $l0  -  3 * ($h0 - $pivot ) ) , 2 );     // s4day = Low- 3*(High-Pday) ;
-                $r4 = FormatToNDecimals( ( $h0 +  3 * ($pivot - $l0  ) ) , 2 );     // R4day = High+ 3*(Pday-Low) ;
-                
-                if($i<4){            
-                        $P3=$close;  // make it non-zero
-                    }else{
-                        $a0= array_values($data)[$i-4]['P'];
-                        $a1= array_values($data)[$i-3]['P'];
-                        $a2= array_values($data)[$i-2]['P'];
-
-                        $P3  = FormatToNDecimals( (($a0 + $a1 + $a2) / 3) , 2 );
-                        // echo "  [". $i. "] P3=".$value['P3']. " (". $a0. " + ". $a1. " + ". $a2. ")/3 ";
-                    }
-                
-            }else{  // if i==0 we're at start of data candles RESET vars
-
-                $h0=0; $l0= 0; $c0= 0;
-                $s1 = 0;  $s2=0; $s3=0; $s4=0;
-                $r1 = 0;  $r2=0; $r3=0; $r4=0;
-                // $P=0; $P3=0;
-                $P=$close; 
-                $P3=$close;   // get non-zero vals
-            }
-
-            // after local vars set, assign arr vals
-            $value['P']  = $P;
-            $value['P3'] = $P3;
-
-            $value['S1'] = $s1; 
-            $value['R1'] = $r1;
-            $value['S2'] = $s2; 
-            $value['R2'] = $r2;
-            $value['S3'] = $s3;   
-            $value['R3'] = $r3;
-            $value['S4'] = $s4;
-            $value['R4'] = $r4;
-
-
+        $pivot = FormatToNDecimals( (($high + $low + $close) / 3) , 2 );
+        $value['P'] = $pivot ; 
 
 
         //track chart allTimeHigh allTimeLow
@@ -273,7 +201,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
             $ChartLowIdx = $i ;
             $ChartLowDate = $date;
         }
-
+        
 
 //
 //    NEW ######################  ck Month to store data
@@ -374,8 +302,45 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 
         }
 
-        // ##########################################################  END OF monthly
 
+        $s1 = FormatToNDecimals( (($pivot * 2) - $high ) , 2 );     // S1day = (Pday *2)-High;
+        $r1 = FormatToNDecimals( (($pivot * 2) - $low  ) , 2 );     // R1day = (Pday *2)-Low;
+        $value['S1'] = $s1; 
+        $value['R1'] = $r1;
+
+
+        $s2 = FormatToNDecimals( ( $pivot - $high + $low ) , 2 );    //  S2day = Pday – High + Low;
+        $r2 = FormatToNDecimals( ( $pivot + $high - $low ) , 2 );    //  R2day = Pday + High – Low;
+        $value['S2'] = $s2; 
+        $value['R2'] = $r2;
+
+
+        $s3 = FormatToNDecimals( ( $pivot - ($r2  - $s1 ) ) , 2 );     // S3day = Pday – (R2day-S1day);
+        $r3 = FormatToNDecimals( (($pivot - $s1 ) + $r2   ) , 2 );     // R3day = (Pday-S1day) + R2day;
+
+        $value['S3'] = $s3;   
+        $value['R3'] = $r3; 
+
+
+        $s4 = FormatToNDecimals( ( $low  -  3 * ($high - $pivot ) ) , 2 );     // s4day = Low- 3*(High-Pday) ;
+        $r4 = FormatToNDecimals( ( $high +  3 * ($pivot - $low  ) ) , 2 );     // R4day = High+ 3*(Pday-Low) ;
+
+        $value['S4'] = $s4;
+        $value['R4'] = $r4;
+
+
+
+        // P3 calc...
+        if($i<3){
+             $value['P3'] = 0;
+        }else{
+
+            $a0= array_values($data)[$i-3]['P'];
+            $a1= array_values($data)[$i-2]['P'];
+            $a2= array_values($data)[$i-1]['P'];
+            $value['P3'] = FormatToNDecimals( (($a0 + $a1 + $a2) / 3) , 2 );
+            // echo "  [". $i. "] P3=".$value['P3']. " (". $a0. " + ". $a1. " + ". $a2. ")/3 ";
+        }
 
         // Add other fields and set them to 0 initially
         $value['weekHigh'] = 0;
@@ -400,9 +365,8 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['X2week'] = 0;
         $value['Y2week'] = 0;
 
-        // ##########################################################  END OF weekly
 
-
+     // month was here DEPR
 
         $value['yearHigh']  = 0;
         $value['yearLow']   = 0;
@@ -427,13 +391,13 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['X2year'] = 0;
         $value['Y2year'] = 0;
 
-        // ##########################################################  END OF weekly
-
+// ################################ END OF NEW STUFF
 
 
 
         $value['datefull'] = $date;
         $value['date'] = substr($date, 0, 10);
+
 
 
 
@@ -464,20 +428,16 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['gapstart'] = 0;
         $value['gapend'] = 0;
 
-
-        $value['buySignalCnt'] = 0;
-        $value['sellSignalCnt'] = 0;
+        $value['buysigcnt'] = 0;
+        $value['sellsigcnt'] = 0;
 
         $value['buySignal'] = 0;
         $value['sellSignal'] = 0;
 
-        $value['buySignalPrice'] = 0;
-        $value['sellSignalPrice'] = 0;
-
         $value['candleX'] = 0;
         $value['candleY'] = 0;
 
-// ################################ END OF NEW STUFF
+
 
 
         $value['sym'] = $sym0;
@@ -531,7 +491,7 @@ $BuyThreshold  = 3;
 $BuyThreshold2 = 4;
 $SellThreshold = 3;
 $SellThreshold2= 4;
-$lastSellStr =  "nil";
+$lastSellStr = "nil";
 $currSellStr =  "nil";
 
 function ProcessData_BuySellSignals( ){
@@ -543,12 +503,7 @@ function ProcessData_BuySellSignals( ){
     $Pday        = 0;   // ['P']
     $PtrailingAvg= 0;   // ['P3']
 
-
-
-
-
-
-/******************************************************************************
+/*
 
 
 
@@ -658,8 +613,6 @@ if( $PtrailingAvg == $Pday ){
 //   SetPlotWidth(1, JBplotWsm);    //Plot1 = sell line, reset it
 }
  
-*****************************************************************************
-
 */
 
 
@@ -673,13 +626,7 @@ if( $PtrailingAvg == $Pday ){
 
 
 
-/******************************************************************************
- * *****************************************************************************
- * *****************************************************************************
- * 
- * 
- * 
- * 
+/*
 SetPlotColor(1, JBColorMvgAvg );  // yello
 SetPlotColor(2, JBColorPivot );  // cyan
 // sell signal?
@@ -809,15 +756,8 @@ Plot1(PtrailingAvg,"PtrailingAvg");    //SELL this is John Person's red-3 past d
 //BUY  Plot2 blue line
 //SetPlotColor(2, darkblue );
 Plot2(Pday,"Pday");         //BUY this is John Person's blue-the next day's Pivot based on today
-
-*****************************************************************************
-*****************************************************************************
-*****************************************************************************
-
+ 
 */
-
-
-
 
 
 function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
@@ -974,10 +914,9 @@ $processedDataJson = json_encode($dataProcessed);
         <button id="button3" onclick="toggleButton(3)"><?php echo $button3name; ?></button>
         <button id="button4" onclick="toggleButton(4)"><?php echo $button4name; ?></button>
         <button id="button5" onclick="toggleButton(5)"><?php echo $button5name; ?></button>
+<!--
         <button id="button6" onclick="toggleButton(6)"><?php echo $button6name; ?></button>
         <button id="button7" onclick="toggleButton(7)"><?php echo $button7name; ?></button>
-
-        <!--
         <button id="button8" onclick="toggleButton(8)"><?php echo $button8name; ?></button>
         <button id="button9" onclick="toggleButton(9)"><?php echo $button9name; ?></button>
       <button id="button10" onclick="toggleButton(10)"><?php echo $button10name; ?></button>
