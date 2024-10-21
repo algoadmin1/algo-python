@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "273.1";
+                                                              $ver=  "275.3";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -27,13 +27,13 @@ $button8 = 0;
 $button9 = 0;
 $button10 = 0;
 
-$button1name = "Line Cndl";
+$button1name = "Type";
 $button2name = "Buy Sell";
 $button3name = "Sup Res";
 $button4name = "Gaps" ;              //; "Gaps Detection";
 $button5name = "PivP3";
 $button6name = "Fib";
-$button7name = "#s";
+$button7name = "Fin's";
 $button8name = "col";
 
 $button9name = "Aux Button 9";
@@ -1093,9 +1093,7 @@ $processedDataJson = json_encode($dataProcessed);
             border: none; 
             border-radius: 10px;  
 
-
         }
-
 
 
 

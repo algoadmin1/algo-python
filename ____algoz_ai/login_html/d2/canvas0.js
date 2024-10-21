@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "260.2";
+let                                                                         gVer = "261.5";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -69,6 +69,8 @@ let gGapLineCol = 'magenta';
 let gGapTextCol = gGapLineCol;
 let gGapVrectWidth_pct= 0.20;
 let gGaps_On = 0;
+
+let gGlobalFontTitle="Verdana";
 
 let gAxesCol0      = "#454595" ;
 let gAxesCol0_init = "#25255A" ;
@@ -1250,11 +1252,11 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     InitAndDrawImage(ctx, vrect, gAlgozLogo_fname, 10, -30, (gImgScale*1.2) );   // let gIm gScale = 0.325;
     let welstr = "algoz Charting";  
     let xposT = parseInt(  vrect.x + (vrect.w/5)*2 );  
-    DrawText( ctx, welstr, xposT, vrect.y +vrect.h -(2* yoffset), 10 , 'purple', gGlobalFontTitle);
+    DrawText_noclip( ctx, welstr, xposT, vrect.y +vrect.h -(2* yoffset), 10 , 'purple', gGlobalFontTitle);
 
     let copyRstr = "algoz.ai Copyright (c) 2023-2025 by Algo Investor Inc.";
     let xpos = parseInt(  vrect.x + (vrect.w/3) );  
-    DrawText( ctx, copyRstr, xpos, vrect.y +vrect.h +(3* yoffset), 10 , 'black', gGlobalFont);
+    DrawText_noclip( ctx, copyRstr, xpos,  ( vrect.y +vrect.h +(3* yoffset) ),    10 , 'black', gGlobalFont);
 
 }
 
@@ -1264,7 +1266,7 @@ function    drawText( fontStr,  x, y,                                   ftsz,  c
     DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr);
     
 }
-function DrawText_noclip( ctx, txtStr, x, y, fsz , colStr , fontStr){ 
+function DrawText_noclip( ctx, txtStr, x, y,       fsz , colStr , fontStr){ 
 
     let vrect = gGlobalChartVRectCurrent;        
     let vectXY  = { x: x,  y: y };
