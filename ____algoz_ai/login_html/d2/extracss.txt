@@ -1,0 +1,70 @@
+
+
+
+
+/* 
+
+
+
+        #play-button {
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text */
+            padding: 15px 32px; /* Padding around text */
+            text-align: center; /* Centered text */
+            text-decoration: none; /* Remove underline */
+            display: inline-block; /* Set to inline-block */
+            font-size: 16px; /* Font size */
+            margin: 4px 2px; /* Margins */
+            cursor: pointer; /* Pointer cursor */
+            border: none; /* Remove border */
+            border-radius: 12px; /* Rounded corners */
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+
+        #play-button:hover {
+            background-color: #229022; /* Darker green on hover */
+        }
+
+        .buttons-container button {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+
+            border: none;  
+            border-radius:  10px; Rounded corners
+        }
+.buttons-container button {
+            flex-grow: 1;
+            padding: 10px;
+            font-size: 16px;
+
+            background-color: #4C50AF;  
+            color: white; 
+
+            border: none; 
+            border-radius: 10px;  
+        }
+
+
+
+
+
+        #button1, #button2, #button3, #button4, #button5, #button6, #button7, #button8  {
+            flex-grow: 1;
+            background-color: #4C50AF; /* Green background */
+            color: white; /* White text */
+            padding: 15px 32px; /* Padding around text */
+            text-align: center; /* Centered text */
+            text-decoration: none; /* Remove underline */
+            display: inline-block; /* Set to inline-block */
+            font-size: 16px; /* Font size */
+            margin: 4px 2px; /* Margins */
+            cursor: pointer; /* Pointer cursor */
+            border: none; /* Remove border */
+            border-radius: 12px; /* Rounded corners */
+            transition: background-color 0.3s ease; /* Smooth transition */
+        }
+
+        #button1:hover, #button2:hover, #button3:hover, #button4:hover, #button5:hover, #button6:hover, #button7:hover, #button8:hover {
+            background-color: #222290; /* Darker green on hover */
+        } */

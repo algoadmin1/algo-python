@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "271.2";
+                                                              $ver=  "273.1";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -27,14 +27,15 @@ $button8 = 0;
 $button9 = 0;
 $button10 = 0;
 
-$button1name = "Line/Candle Chart";
-$button2name = "Buy/Sell Signals";
-$button3name = "Support/Resistance";
+$button1name = "Line Cndl";
+$button2name = "Buy Sell";
+$button3name = "Sup Res";
 $button4name = "Gaps" ;              //; "Gaps Detection";
-$button5name = "Pivots Lines";
-$button6name = "Fibonacci";
-$button7name = "Financials";
-$button8name = "Aux Button 8";
+$button5name = "PivP3";
+$button6name = "Fib";
+$button7name = "#s";
+$button8name = "col";
+
 $button9name = "Aux Button 9";
 $button10name= "Aux Button 10";
 
@@ -179,11 +180,19 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
     $ChartLowIdx = 0;
     $ChartLowDate = "nil";
 
+// NEW_P3  
+    $gapPctThreshold  = 0.05;
+    //loop vars
+    $gapStart_price  = 0;
+    $gapEnd_price    = 0;
+    $gapStart_date   = "nil" ;
+    $gapEnd_date     = "nil" ;
+    $gapDir = 0;  // -1= down, 1=up,  0==noGAP
 
-// NEW_P3
+
+
     $BuySignal  = 0;
     $SellSignal = 0;
-
 
     $pivot = 0;
     $P=0; $P3= 0;
@@ -195,18 +204,15 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
     $i=0;
     $monthdays=0;
 
-
-    // Loop through each element of the array
-    foreach ($data as $date => &$value) {
+    foreach ($data as $date => &$value) {    // Loop through each element of the array
 
         // this candle's h,l,c [0]
         $high  = floatval($value['high']);
         $low   = floatval($value['low']);
         $close = floatval($value['close']);
 
-
 // start pivot get stuff
-        $h0=0; $l0= 0; $c0= 0;
+        $h0=0;    $l0= 0; $c0= 0;
         $s1 = 0;  $s2=0; $s3=0; $s4=0;
         $r1 = 0;  $r2=0; $r3=0; $r4=0;
 
@@ -240,7 +246,64 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
                         $P3  = FormatToNDecimals( (($a0 + $a1 + $a2) / 3) , 2 );
                         // echo "  [". $i. "] P3=".$value['P3']. " (". $a0. " + ". $a1. " + ". $a2. ")/3 ";
                     }
-                
+      
+
+//
+// #######################################################   Test for  GAPS
+// #######################################################   Test for  GAPS
+// #######################################################   Test for  GAPS
+//
+
+                // INIT GAP   within-loop vars
+                        $gapStart_price  = 0;  
+                        $gapEnd_price    = 0;
+
+                        $gapStart_date   = "nil" ;
+                        $gapEnd_date     = "nil" ;
+
+                        $gapDir          = 0;                // -1= down, 1=up,  0==noGAP
+                        $gapDirStr       = "noGap" ;
+                        
+                        $gapPriceThresh =   $cl0  * $gapPctThreshold ;   //   yesterday's close  * 0.05
+
+                        $priceDiff_GapUpTest     =    ($low - $h0 );     //  today's low  -  yesterday's high     variant: ($close - $h0 ); 
+                        // $priceDiffabs         = abs($low - $h0 );
+                        $priceDiff_GapDnTest     =    ( $l0 -$high  );    //   yesterday's low  -today's high       variant: ($close - $l0 ); 
+
+
+
+                // TEST for GAPs  
+                        // test for 1st gap UP, then 2nd gap DOWN...
+                        if( $priceDiff_GapUpTest > $gapPriceThresh ){            // GAP UP  Detected
+                            $gapDir = 1;    
+                            $gapDirStr      = "up" ;
+                            $gapStart_date  = $date;
+                            $gapEnd_date    = "nil" ;
+                            
+                            $gapStart_price = $h0;
+                            $gapEnd_price   = $low;
+                        }
+                        if( $priceDiff_GapDnTest > $gapPriceThresh ){            // GAP DOWN  Detected
+                            $gapDir = -1;    
+                            $gapDirStr      = "down" ;
+                            $gapStart_date  = $date;
+                            $gapEnd_date     = "nil" ;
+                             
+                            $gapStart_price = $l0 ;
+                            $gapEnd_price   = $high ;
+                        }
+                        
+                        $value['gapstart_price'] = $gapStart_price ;
+                        $value['gapend_price']   = $gapEnd_price ;
+
+                        $value['gapstart_date']  = $gapStart_date ;
+                        $value['gapend_date']    = $gapEnd_date ;
+
+                        $value['gapdir']         = $gapDir ;
+                        $value['gapdir_str']     = $gapDirStr;
+
+                        
+
             }else{  // if i==0 we're at start of data candles RESET vars
 
                 $h0=0; $l0= 0; $c0= 0;
@@ -466,8 +529,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         // $value['endOfMonth'] = 0;
         $value['endOfYear'] = 0;
 
-        $value['gapstart'] = 0;
-        $value['gapend'] = 0;
+      
 
 
         $value['buySignalCnt'] = 0;
@@ -1028,48 +1090,13 @@ $processedDataJson = json_encode($dataProcessed);
             background-color: #4C50AF; /* BTN background */
             color: white; /* White text */
 
-            border: none; /* Remove border */
-            border-radius: 10px; /* Rounded corners */
+            border: none; 
+            border-radius: 10px;  
+
+
         }
 
-        #play-button {
-            background-color: #4CAF50; /* Green background */
-            color: white; /* White text */
-            padding: 15px 32px; /* Padding around text */
-            text-align: center; /* Centered text */
-            text-decoration: none; /* Remove underline */
-            display: inline-block; /* Set to inline-block */
-            font-size: 16px; /* Font size */
-            margin: 4px 2px; /* Margins */
-            cursor: pointer; /* Pointer cursor */
-            border: none; /* Remove border */
-            border-radius: 12px; /* Rounded corners */
-            transition: background-color 0.3s ease; /* Smooth transition */
-        }
 
-        #play-button:hover {
-            background-color: #229022; /* Darker green on hover */
-        }
-/* 
-        #button1, #button2, #button3, #button4, #button5, #button6, #button7, #button8  {
-            flex-grow: 1;
-            background-color: #4C50AF; /* Green background */
-            color: white; /* White text */
-            padding: 15px 32px; /* Padding around text */
-            text-align: center; /* Centered text */
-            text-decoration: none; /* Remove underline */
-            display: inline-block; /* Set to inline-block */
-            font-size: 16px; /* Font size */
-            margin: 4px 2px; /* Margins */
-            cursor: pointer; /* Pointer cursor */
-            border: none; /* Remove border */
-            border-radius: 12px; /* Rounded corners */
-            transition: background-color 0.3s ease; /* Smooth transition */
-        }
-
-        #button1:hover, #button2:hover, #button3:hover, #button4:hover, #button5:hover, #button6:hover, #button7:hover, #button8:hover {
-            background-color: #222290; /* Darker green on hover */
-        } */
 
 
     </style>
@@ -1089,9 +1116,8 @@ $processedDataJson = json_encode($dataProcessed);
         <button id="button5" onclick="toggleButton(5)"><?php echo $button5name; ?></button>
         <button id="button6" onclick="toggleButton(6)"><?php echo $button6name; ?></button>
         <button id="button7" onclick="toggleButton(7)"><?php echo $button7name; ?></button>
-
-    <!--
         <button id="button8" onclick="toggleButton(8)"><?php echo $button8name; ?></button>
+    <!--
          <button id="button9" onclick="toggleButton(9)"><?php echo $button9name; ?></button>
          <button id="button10" onclick="toggleButton(10)"><?php echo $button10name; ?></button>
     -->
@@ -1101,7 +1127,7 @@ $processedDataJson = json_encode($dataProcessed);
         <canvas id="myCanvas"></canvas>
     </div>
 
-    <p>algoz.ai Copyright (c) 2023-2025 by Algo Investor Inc.</p>
+    <!-- <p>algoz.ai Copyright (c) 2023-2025 by Algo Investor Inc.</p> -->
 
 
 
@@ -1139,7 +1165,13 @@ $processedDataJson = json_encode($dataProcessed);
         var button10 =<?php echo $button10; ?>;
 //  ##############################################################  *NEW_BUTTONS* 
 
-
+/**
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
     </script>
 
     <!-- Link to your external JavaScript file -->

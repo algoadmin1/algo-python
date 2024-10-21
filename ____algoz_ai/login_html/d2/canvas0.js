@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "257.1";
+let                                                                         gVer = "260.2";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -39,6 +39,9 @@ let                                                                         gVer
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
 
+let gLogoname="logo";
+let gAlgozLogo_fname ="../img/"+gLogoname+ ".png";     
+
 let gScalar_init   = -1;
 let gScalarFloat_dynamic = 0.0;   // ratio of initial screen hypontenuse to : new hypot 
 let gScalar_resize = 1;
@@ -54,6 +57,19 @@ let gSellSignalCnt_thisCandle =0;
 let gBuySignalStr_thisCandle ="nil";
 let gSellSignalStr_thisCandle ="nil";
 
+    
+let gGapDir_thisCandle      = 0   ;//  =  parseInt(  processedData[date]["gapdir"]  )   ;
+let gGapDirStr_thisCandle   = "noGap" ;//  =  parseInt(  processedData[date]["gapdir_str"]  )   ;
+let gGapStartPrice_thisCandle = 0.00;//  =  parseFloat(  processedData[date]["gapstart_price"]  ).toFixed(2)   ;
+let gGapEndPrice_thisCandle  =  0.00  ;//  =  parseFloat(  processedData[date]["gapend_price"]  ).toFixed(2)    ;
+let gDate_thisCandle         ="nil" ;//    = date_thisCandle; 
+let gGapOpened_str           = "" ;// = gDate_thisCandle+" Gap-"+gGapDirStr_thisCandle+ ": "+ gCurrencyStr+ gGapStartPrice_thisCandle+  " - "+ gCurrencyStr+gGapEndPrice_thisCandle;
+let gGap_fntsz=gFib_fntsz ; // 12;
+let gGapLineCol = 'magenta';
+let gGapTextCol = gGapLineCol;
+let gGapVrectWidth_pct= 0.20;
+let gGaps_On = 0;
+
 let gAxesCol0      = "#454595" ;
 let gAxesCol0_init = "#25255A" ;
 let gImgScale = 0.15;
@@ -61,7 +77,9 @@ let gImgScale = 0.15;
 let gColor_white_Alpha_50pct= 'rgba( 255,255,255,0.50 )' ;  
 let gColor_grey_Alpha_50pct=  'rgba( 128,128,128,0.50 )' ;  
 let gColor_red_Alpha_50pct =  'rgba( 248,36,36,  0.50 )' ;  
+let gColor_red_Alpha_20pct =  'rgba( 248,36,36,  0.20 )' ;  
 let gColor_green_Alpha_50pct= 'rgba( 32,248,48,  0.50 )' ;  
+let gColor_green_Alpha_20pct= 'rgba( 32,248,48,  0.20 )' ;  
 let gColor_blue_Alpha_50pct=  'rgba( 32,48,248,  0.50 )' ;  
 
 
@@ -807,6 +825,7 @@ let  yLow =0;
             let sellPrice                =  parseInt(  processedData[date]["sellSignalPrice"]  )   ;
            
             let date_thisCandle         =  DateAbbreviate(date, 2 );  // ie Oct 17
+            gDate_thisCandle            = date_thisCandle; 
 
             gBuySignalStr_thisCandle     =  gCurrencyStr+ buyPrice.toString() +" "+ date_thisCandle +" (" + parseInt(gBuySignalCnt_thisCandle).toString() +")";
             gSellSignalStr_thisCandle    =  gCurrencyStr+ sellPrice.toString()+" "+ date_thisCandle+ " (" + parseInt(gSellSignalCnt_thisCandle).toString()+")";
@@ -815,10 +834,34 @@ let  yLow =0;
         // $value['candleX'] = 0;
         // $value['candleY'] = 0;
 
+
+// from jsonget.php
+        // $value['gapstart_price'] = $gapStart_price ;
+        // $value['gapend_price']   = $gapEnd_price ;
+
+        // $value['gapstart_date']  = $gapStart_date ;
+        // $value['gapend_date']    = $gapEnd_date ;
+
+        // $value['gapdir']         = $gapDir ;
+        // $value['gapdir_str']     = $gapDirStr;
+
+        
+        gGapDir_thisCandle          =  parseInt(  processedData[date]["gapdir"]  )   ;
+        gGapDirStr_thisCandle       =   processedData[date]["gapdir_str"]     ;
+        gGapStartPrice_thisCandle   =  parseFloat(  processedData[date]["gapstart_price"]  ).toFixed(2)   ;
+        gGapEndPrice_thisCandle     =  parseFloat(  processedData[date]["gapend_price"]  ).toFixed(2)    ;
+        gGapOpened_str              =  gDate_thisCandle+" Gap-"+gGapDirStr_thisCandle+ ": "+ gCurrencyStr+ gGapStartPrice_thisCandle+  " - "+ gCurrencyStr+gGapEndPrice_thisCandle;
+
+
+
+
 //  DRAW everything assoc. with that candle , ie volume, buy/sell etc
-            DrawCandlePlus(ctx, vrect, colScheme,  j, datestr, op1, hi1, lo1, cl1, vol1 , eom);    // uses gCandlesMaxes
-            // console.log( j+") " + datestr + ":  nextX="+ gCandleXnext  + ";  H, L, Close= " + processedData[date]["high"] + ", " + processedData[date]["low"] + ", "+ processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
-            
+        DrawCandlePlus(ctx, vrect, colScheme,  j, datestr, op1, hi1, lo1, cl1, vol1 , eom);    // uses gCandlesMaxes
+        // console.log( j+") " + datestr + ":  nextX="+ gCandleXnext  + ";  H, L, Close= " + processedData[date]["high"] + ", " + processedData[date]["low"] + ", "+ processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
+        
+
+
+
 
 
             let cw2 = parseInt( gCandleWidth/2 );
@@ -832,7 +875,7 @@ let  yLow =0;
                 let txtstr=gCurrencyStr+ ( hi1.toFixed(2).toString() );
                 // DrawCircle(ctx, 36, 6, colScheme.dn, xHigh, yHigh, 0, 1, colScheme.tx, txtstr , 'yellow', 20, "Helvetica", -20 ) ;
                 
-                DrawCircle(ctx, 30, 4, 'red', xHigh, yHigh, 0, 1, gColor_red_Alpha_50pct,  txtstr , 'yellow', 20, "Helvetica", -20 ) ;
+                DrawCircle(ctx, 30, 4, 'red', xHigh, yHigh, 0, 1, gColor_red_Alpha_20pct ,  txtstr , 'yellow', 20, "Helvetica", -20 ) ;
     //    function DrawCircle(ctx, size, wt, col, x, y, xyOffset, fill, fillcol, txtstr, txtcol, fsz, fontStr, txtoff) {
 
         }  
@@ -844,7 +887,7 @@ let  yLow =0;
                 gCandlesMaxes.priceLowY =yLow ;
                 let txtstr1=gCurrencyStr+ ( lo1.toFixed(2).toString() );
                 // DrawCircle(ctx, 36, 6, colScheme.up, xLow, yLow, 0, 1, colScheme.tx, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
-                DrawCircle(ctx, 30, 4, 'darkgreen', xLow, yLow, 0, 1, gColor_green_Alpha_50pct, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
+                DrawCircle(ctx, 30, 4, 'darkgreen', xLow, yLow, 0, 1, gColor_green_Alpha_20pct, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
         }
 
 
@@ -1060,6 +1103,15 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
     // let cirFill    = RandomJSColor(colarr);
     // if(idx%7==0) Dr awCircle(ctx, 40, 6, cirOutline, gCandleWickX, (candlerect.y+candlerect.h) , 0, 1, cirFill );
 
+
+    if(gGapDir_thisCandle!=0  &&  gGaps_On==1 ){
+        let fromx = candlerect.x+parseInt(candlerect.w/2) ;
+        let tox = fromx + parseInt(vrect.h*gGapVrectWidth_pct);   // .20 * .w
+        let yprice0 = GetYCoordFromPrice( gGapEndPrice_thisCandle, vrect );
+        DrawHorizontalLine_callout_textcol(ctx, fromx , tox ,  yprice0 , gGapLineCol  ,  "dotted" , gGapOpened_str , gGap_fntsz, 0 , gGlobalFont , gGapTextCol );
+    // DrawHorizontalLine_callout_textcol( ctx, x1, x2,         y ,col,  style, txtStr, fsz, xyoff, fontStr, txtcol,){
+    }
+
 }//fn
 
 function Hypotenuse(w, h) {
@@ -1077,10 +1129,9 @@ function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGre
     let sz      = 35; 
     let sz_init  = 2; 
     let sz1      = 11;   // ie cnt 3 == 33 size
-    let upcol   = 'green';
-    let dncol   = 'darkred';
-        upcol   = 'blue';
-        // dncol   = 'magenta';
+    let upcol   = 'blue';   // 'green';
+    let dncol   =  'orange' ;   //'darkred';
+
 
     let txt1   = "  ";
     // let txtStr = "  "+ idx.toString();
@@ -1193,6 +1244,18 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     DrawText( ctx, gChartTextStr+" " +  gScalarFloat_dynamic.toString(),  vrect.x+xoffset, vrect.y+yoffset, fsz , colScheme.tx , gGlobalFont);
     DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y +vrect.h - yoffset, 12 , gAxesCol0, gGlobalFont);
     
+ 
+
+
+    InitAndDrawImage(ctx, vrect, gAlgozLogo_fname, 10, -30, (gImgScale*1.2) );   // let gIm gScale = 0.325;
+    let welstr = "algoz Charting";  
+    let xposT = parseInt(  vrect.x + (vrect.w/5)*2 );  
+    DrawText( ctx, welstr, xposT, vrect.y +vrect.h -(2* yoffset), 10 , 'purple', gGlobalFontTitle);
+
+    let copyRstr = "algoz.ai Copyright (c) 2023-2025 by Algo Investor Inc.";
+    let xpos = parseInt(  vrect.x + (vrect.w/3) );  
+    DrawText( ctx, copyRstr, xpos, vrect.y +vrect.h +(3* yoffset), 10 , 'black', gGlobalFont);
+
 }
 
 // function drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol3a ){
@@ -1309,7 +1372,7 @@ function DrawTriangle_callout(ctx, size, wt, col, x, y, upDown, fill, fillcol , 
     // Draw the triangle outline
     ctx.stroke();
 
-//  DrawTriangle_callout(ctx, size, wt, col, x, y, upDown, fill, fillcol ,   txtStr, xt, yt, fsz , colStr , fontStr)
+//  DrawTriangle_ callout(ctx, size, wt, col, x, y, upDown, fill, fillcol ,   txtStr, xt, yt, fsz , colStr , fontStr)
     DrawText(            ctx, txtStr,  x+xt, y+yt,  fsz , colStr , fontStr  );
 
 
@@ -1537,6 +1600,13 @@ gAxesCol0= gAxesCol0_init; // "#454595" ;  // override  DEL to get .ax
 // ########################################################################################    
 //
 
+function ToggleGaps(){
+    if(gGaps_On==0){
+        gGaps_On=1;
+    }else  if(gGaps_On==1){
+        gGaps_On=0;
+    }
+}
 
 function  ToggleFib(){
     if(gDrawFib==0){
@@ -1895,8 +1965,7 @@ function toggleButton(buttonNumber) {
                     break;
                 case 4:
                     button4 = (button4 === 1) ? 0 : 1;
-                    gColSchemeNum=99;
-                    GetColorScheme();
+                    ToggleGaps();  //gGaps_On
                     window.dispatchEvent(new Event('button4'));  // rndcolor
                     break;
                 case 5:
@@ -1917,12 +1986,14 @@ function toggleButton(buttonNumber) {
                     window.dispatchEvent(new Event('button7'));
                     break;
 
-
-// unused
                 case 8:
                     button8 = (button8 === 1) ? 0 : 1;
+                    gColSchemeNum=99;
+                    GetColorScheme();
                     window.dispatchEvent(new Event('button8'));
                     break;
+
+// unused
                 case 9:
                     button9 = (button9 === 1) ? 0 : 1;
                     window.dispatchEvent(new Event('button9'));
