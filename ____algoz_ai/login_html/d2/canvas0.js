@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "270.1";
+let                                                                         gVer = "270.2";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -57,6 +57,9 @@ let gSellSignalCnt_thisCandle =0;
 let gBuySignalStr_thisCandle ="nil";
 let gSellSignalStr_thisCandle ="nil";
 
+let gColorCycleCnt    = 0;
+let gColorCycleCntMax = 9;
+
     
 let gGapDir_thisCandle      = 0   ;//  =  parseInt(  processedData[date]["gapdir"]  )   ;
 let gGapDirStr_thisCandle   = "noGap" ;//  =  parseInt(  processedData[date]["gapdir_str"]  )   ;
@@ -104,19 +107,19 @@ let gVolumePixelHigh_pct= 0.125;
 
 // col $chemes
 let gColScheme =  { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple', wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
-let gColScheme0 = { bg:'black', tx: 'white', up: 'limegreen', dn:'red', ou:'purple' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
 
-let gColScheme1 = { bg:'lightslategray',  tx: 'red', up: 'yellow', dn:'blue' , ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
-
+let gColScheme0 = { bg:'black',  tx: 'white', up: 'limegreen', dn:'red', ou:'purple' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
+let gColScheme1 = { bg:'white',  tx: 'red',   up: 'darkred', dn:'darkgreen' , ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 let gColScheme2 = { bg:'black',  tx: 'white', up: '#11ef43', dn:'purple' , ou:'green', wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
+let gColScheme3 = { bg:'white',  tx: 'blue',  up: 'chocolate', dn:'hotpink', ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 
-let gColScheme3 =  { bg:'white',  tx: 'black', up: 'yellow', dn:'blue', ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 let gColScheme4 = { bg:'black',  tx: 'green', up: 'limegreen', dn:'deeppink' , ou:'grey', wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 
 let gColScheme5 =  { bg:'white',  tx: 'blue', up: 'green', dn:'red', ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 let gColScheme6 =  { bg:'antiquewhite',  tx: 'blue', up: 'black', dn:'orange', ou:'orange' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 
-let gColScheme7 =  { bg:'white',  tx: 'blue', up: 'chocolate', dn:'hotpink', ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
+let gColScheme7 =  { bg:'white',  tx: 'black', up: 'yellow', dn:'blue', ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
+// let gColScheme7 =  { bg:'white',  tx: 'blue', up: 'chocolate', dn:'hotpink', ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 let gColScheme8 =  { bg:'blue',  tx: 'yellow', up: 'black', dn:'orange', ou:'grey' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 
 let gColScheme9 =  { bg:'black', tx: 'white', up: 'lawngreen', dn:'crimson', ou:'indianred' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
@@ -126,10 +129,10 @@ let gColScheme10 = { bg:'black', tx: 'mintcream', up: 'turquoise', dn:'peachpuff
 let gColScheme99 = { bg:'black', tx: 'white', up: 'green', dn:'red', ou:'blue' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
 let gColScheme100 = { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 
-
-let gSupResColors = {  r4: 'darkred', r3: 'darkred', r2: '#9f2222'  , r1: '#ef2222' , s1: 'lawngreen' , s2: 'green', s3: 'darkgreen', s4: 'darkgreen'  };
+let gSupResColors = {  r4: 'darkred', r3: 'darkred', r2: '#9f2222'  , r1: '#ef2222' , p: 'deepskyblue', s1: 'lawngreen' , s2: 'green', s3: 'darkgreen', s4: 'darkgreen'  };
 
 let gColSchemeCurrent= { bg:'black', tx: 'white', up: 'limegreen', dn:'red', ou:'purple' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
+
 
 
 // Financial objs
@@ -488,7 +491,6 @@ function DrawChartAxes( ctx,  vrect , colScheme, wt ){
             y2f = parseFloat(y2).toFixed(2); 
             iy     = GetYCoordFromPrice( y2f, vrect );
             txtStr = gCurrencyStr+" "+y2f.toString();      
-            // DrawHorizontalLine_callout_textcol(ctx, vrect.x, vrect.x+vrect.w+ gAxesOffset_x, iy , gA xesCol0 ,  "dotted" , txtStr, 16, 0 ,gGlobalFont , colScheme.tx );
             DrawHorizontalLine_callout_textcol(ctx, vrect.x, vrect.x+vrect.w+ gAxesOffset_x, iy , gAxesCol0 ,  "dotted" , txtStr, 16, 0 ,gGlobalFont , gAxesCol0 );
     
     }//for
@@ -834,15 +836,21 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
                           sr0price = parseFloat( processedData[date]["R2month"] ).toFixed(2);
                           txtStr    = gCurrencyStr+ sr0price.toString() + " (R2)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                        //    DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r2 ,  "dashed" );
                            DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r2 , "dashed" , txtStr, fsz, xyoff, fontStr);
 
                           sr0price = parseFloat( processedData[date]["R1month"] ).toFixed(2);
                           txtStr    = gCurrencyStr+ sr0price.toString() + " (R1)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                        //   DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r1 ,  "dashed" );
-                        DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r1 , "dashed" , txtStr, fsz, xyoff, fontStr);
+                          DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r1 , "dashed" , txtStr, fsz, xyoff, fontStr);
                         
+
+
+                          sr0price = parseFloat( processedData[date]["P"] ).toFixed(2);
+                          txtStr    = gCurrencyStr+ sr0price.toString() + " (P)";
+                          sr0Y     = GetYCoordFromPrice( sr0price, vrect );
+                          DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.p , "dashed" , txtStr, fsz, xyoff, fontStr);
+                        
+
 
                           sr0price = parseFloat( processedData[date]["S1month"] ).toFixed(2);
                           txtStr    = gCurrencyStr+ sr0price.toString() + " (S1)";
@@ -852,7 +860,6 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
                           sr0price = parseFloat( processedData[date]["S2month"] ).toFixed(2);
                           txtStr    = gCurrencyStr+ sr0price.toString() + " (S2)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                        //   DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.s2 ,  "dashed" );
                           DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s2 ,  "dashed" , txtStr, fsz, xyoff, fontStr);
 
 
@@ -1155,7 +1162,6 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
         let tox = fromx + parseInt(vrect.h*gGapVrectWidth_pct);   // .20 * .w
         let yprice0 = GetYCoordFromPrice( gGapEndPrice_thisCandle, vrect );
         DrawHorizontalLine_callout_textcol(ctx, fromx , tox ,  yprice0 , gGapLineCol  ,  "dotted" , gGapOpened_str , gGap_fntsz, 0 , gGlobalFont , gGapTextCol );
-    // DrawHorizontalLine_callout_textcol( ctx, x1, x2,         y ,col,  style, txtStr, fsz, xyoff, fontStr, txtcol,){
     }
 
 }//fn
@@ -1169,7 +1175,7 @@ function Hypotenuse(w, h) {
 }
 
 // Example usage
-console.log(Hypotenuse(3, 4)); // Output: 5
+// console.log(Hypotenuse(3, 4)); // Output: 5
 
 function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGreen ) {
     let sz      = 35; 
@@ -1178,26 +1184,34 @@ function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGre
     let upcol   = 'blue';   // 'green';
     let dncol   =  'orange' ;   //'darkred';
 
+    let fsz= 24;
 
     let txt1   = "  ";
     // let txtStr = "  "+ idx.toString();
     let txtStr = "  ";
 
-    
+    let xoff=14;
+
+    let BuyTrianglePos_y  = candlerect.y+candlerect.h+sz*2;
+    let SellTrianglePos_y = candlerect.y+candlerect.h-sz*2;
 
     if( gBuySignal_thisCandle  > 0 ){
         sz1 = sz_init * gBuySignalCnt_thisCandle;
         txt1=gBuySignalStr_thisCandle;
-        DrawTriangle_callout(ctx, sz1, 3, upcol, gCandleWickX, candlerect.y+candlerect.h+sz*2, 0, 1, 'limegreen' ,  txt1+ txtStr, 0, 0, 16 , colScheme.tx , gGlobalFont  ) ;
+        DrawTriangle_callout(ctx, sz1, 3, upcol, gCandleWickX, BuyTrianglePos_y, 0, 1, 'limegreen' ,  txt1+ txtStr, (-1*xoff) , 0, 16 , colScheme.tx , gGlobalFont  ) ;
+        // DrawTriangle_callout(ctx, sz1, 3, upcol, gCandleWickX, candlerect.y+candlerect.h+sz*2, 0, 1, 'limegreen' ,  txt1+ txtStr, (-1*xoff) , 0, 16 , colScheme.tx , gGlobalFont  ) ;
 
+        DrawText(ctx , txt1, gCandleWickX, BuyTrianglePos_y+10, fsz , colScheme.tx , gGlobalFont  );
     }
+
     if( gSellSignal_thisCandle  > 0 ){
         sz1 = sz_init * gSellSignalCnt_thisCandle;
         txt1=gSellSignalStr_thisCandle;
-        DrawTriangle_callout(ctx, sz1, 3, dncol, gCandleWickX, candlerect.y+candlerect.h-sz*2, 1, 1, 'red' ,   txt1+ txtStr, 0, 0, 16 , colScheme.tx , gGlobalFont  ) ;
+        DrawTriangle_callout(ctx, sz1, 3, dncol, gCandleWickX, SellTrianglePos_y, 1, 1, 'red' ,   txt1+ txtStr, (-1*xoff), 0, 16 , colScheme.tx , gGlobalFont  ) ;
+        // DrawTriangle_callout(ctx, sz1, 3, dncol, gCandleWickX, candlerect.y+candlerect.h-sz*2, 1, 1, 'red' ,   txt1+ txtStr, (-1*xoff), 0, 16 , colScheme.tx , gGlobalFont  ) ;
+      
+        DrawText(ctx , txt1, gCandleWickX, SellTrianglePos_y-10, fsz , colScheme.tx , gGlobalFont  );
     }
-
-
 
 
 
@@ -1291,7 +1305,6 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     DrawText( ctx, gChartTextStr+" " +  gScalarFloat_dynamic.toString(),  vrect.x+xoffset, vrect.y+yoffset, fsz , colScheme.tx , gGlobalFont);
     DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y +vrect.h - yoffset, 12 , gAxesCol0, gGlobalFont);
     
- 
 
     let welstr = "algoz Charting";  
     // let xposT = parseInt(  vrect.x + (vrect.w/5)*2 );  
@@ -1535,27 +1548,49 @@ Draw Circle(ctx, 100, 5, 'green', 150, 150, 10, 0, '');
 Draw ircle(ctx, 100, 3, 'black', 300, 150, 20, 1, 'red');
 */
 
+function ifInside( x_or_y, pixel_margin, coordTypeStr ){  // coordTypeStr="x" or "y"
+    let vrect = gGlobalChartVRectCurrent;        
+    let tf = true;  // assume pt are inside vrect 
+
+    if(coordTypeStr=="x"){
+        if( (x_or_y < vrect.x + pixel_margin )  ||   ( x_or_y > vrect.x + vrect.w - pixel_margin ) ){
+            tf = false;
+            return(tf);
+        }
+        
+    }else  if(coordTypeStr=="y"){
+        if( (x_or_y < vrect.y + pixel_margin )  ||   ( x_or_y > vrect.y + vrect.h - pixel_margin ) ){
+            tf = false;
+            return(tf);
+        }
+    }
+
+    return(tf);
+}//fn
+
+let gPixelMargin_y = 10;
+let gPixelMargin_x = 10;
 
 function DrawHorizontalLine_callout( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr){
-    DrawLine( ctx, x1, y, x2, y, 2, col,  style);
-
-    DrawText( ctx, txtStr, x2+xyoff, y, fsz , col , fontStr);
-
+    if(  ifInside( y, gPixelMargin_y, "y" )==true  ){
+            DrawLine( ctx, x1, y, x2, y, 2, col,  style);
+            DrawText( ctx, txtStr, x2+xyoff, y, fsz , col , fontStr);
+    }
 }
-
 function DrawHorizontalLine_callout_textcol( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr, txtcol,){
-    DrawLine( ctx, x1, y, x2, y, 2, col,  style);
-
-    DrawText( ctx, txtStr, x2+xyoff, y, fsz , txtcol , fontStr);
-
+    if( ifInside( y, gPixelMargin_y, "y" )==true  ){
+          DrawLine( ctx, x1, y, x2, y, 2, col,  style);
+          DrawText( ctx, txtStr, x2+xyoff, y, fsz , txtcol , fontStr);
+    }
 }
-
-
 function DrawHorizontalLine( ctx, x1, x2, y ,col,  style){
-        DrawLine(ctx, x1, y, x2, y, 2, col,  style);
+    if( ifInside( y, gPixelMargin_y, "y" )==true  )  DrawLine(ctx, x1, y, x2, y, 2, col,  style);
 }
+
 function DrawVerticalLine( ctx, x, y1, y2 , col, style){
-        DrawLine(ctx, x, y1, x, y2, 2, col ,  style );
+    if( ifInside( x, gPixelMargin_x, "x" )==true  ){
+           DrawLine(ctx, x, y1, x, y2, 2, col ,  style );
+    }
 }
 
 
@@ -1571,9 +1606,6 @@ function DrawLine(ctx, x, y, x1, y1, weight, color, style) {
     vectXY1_clipped  = ClipPoint(ctx, vrect, vectXY1);           
     x1 = vectXY1_clipped.x;
     y1 = vectXY1_clipped.y;
-
-
-
 
     // Set line properties
     ctx.lineWidth = weight;
@@ -1597,6 +1629,66 @@ function DrawLine(ctx, x, y, x1, y1, weight, color, style) {
     // Reset line dash to solid for future drawing
     ctx.setLineDash([]);
 }
+function GetColorSchemeCycle(){ 
+    let scheme0=gColScheme;     // assume wht bg, green/red default
+
+    gColorCycleCnt++;
+    if(gColorCycleCnt>gColorCycleCntMax) gColorCycleCnt=0;
+    if(gColorCycleCnt< 0 )               gColorCycleCnt=0;
+
+
+    if(gColorCycleCnt==0)  scheme0=gColScheme0;   // black 1
+    if(gColorCycleCnt==1)  scheme0=gColScheme1;   // white 1
+    if(gColorCycleCnt==2)  scheme0=gColScheme2;   // black 2 
+    if(gColorCycleCnt==3)  scheme0=gColScheme3;   // white 2
+
+    if(gColorCycleCnt==4){
+        // scheme0=gColScheme4;   // black rnd
+         // 99 is changeable  but with BLACK bg
+         scheme0=gColScheme99;
+         scheme0.up = RandomJSColor(colarr);
+         scheme0.dn = RandomJSColor(colarr);
+     }
+     if(gColorCycleCnt==5){
+        // scheme0=gColScheme5;   // black rnd
+         // 99 is changeable  but with BLACK bg
+         scheme0=gColScheme99;
+         scheme0.up = RandomJSColor(colarr);
+         scheme0.dn = RandomJSColor(colarr);
+     }
+     if(gColorCycleCnt==6){
+        // scheme0=gColScheme6;   // black rnd
+         // 99 is changeable  but with BLACK bg
+         scheme0=gColScheme99;
+         scheme0.up = RandomJSColor(colarr);
+         scheme0.dn = RandomJSColor(colarr);
+     }
+     if(gColorCycleCnt==7){
+        // scheme0=gColScheme7;   // black rnd
+         // 99 is changeable  but with BLACK bg
+         scheme0=gColScheme99;
+         scheme0.up = RandomJSColor(colarr);
+         scheme0.dn = RandomJSColor(colarr);
+     }
+
+    if(gColorCycleCnt==8)  scheme0=gColScheme8;     // white 3
+
+
+    // gAxesCol0=  scheme0.ax ;
+    gAxesCol0= gAxesCol0_init;      // "#454595" ;  // override  DEL to get .ax
+
+    gColSchemeCurrent =  scheme0;
+
+    return scheme0; 
+}
+
+
+
+
+
+
+
+// DEPR
 function GetColorScheme(){ 
     let scheme0=gColScheme;     // assume wht bg, green/red
 
@@ -1627,8 +1719,8 @@ if(gColSchemeNum==100){
 }
  
 
-gAxesCol0=  scheme0.ax ;
-gAxesCol0= gAxesCol0_init; // "#454595" ;  // override  DEL to get .ax
+    // gAxesCol0=  scheme0.ax ;
+    gAxesCol0= gAxesCol0_init; // "#454595" ;  // override  DEL to get .ax
 
     gColSchemeCurrent =  scheme0;
 
@@ -1787,7 +1879,7 @@ function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =
         //     ctx.setLineDash([]);
         // ctx.closePath();
 
-        // gColSchemeCurrent
+        // gCol SchemeCurrent
 
 
         for(i=0;i<fiblen;i++){
@@ -1813,7 +1905,6 @@ function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =
                 fibcoltxt  = fibcol2a;
             }
 
-            // DrawHorizontalLine_callout_textcol(ctx, vrect.x+inset, vrect.x+vrect.w-inset,  fiby , fibcolline  ,  "dashed" , fibstr1 , gFib_fntsz, 0 , gGlobalFont , fibcoltxt );
             DrawHorizontalLine_callout_textcol(ctx, vrect.x , vrect.x+vrect.w-inset,  fiby , fibcolline  ,  "dashed" , fibstr1 , gFib_fntsz, 0 , gGlobalFont , fibcoltxt );
 
         }//for
@@ -1837,78 +1928,6 @@ function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =
         DrawHorizontalLine_callout_textcol(ctx, vrect.x+0, vrect.x+vrect.w-inset,  fiby , fibcolline  ,  "dashed" , fibstr1 , gFib_fntsz, 0 , gGlobalFont , fibcoltxt );
 
 
-
-
-
-
-//
-//          OLD
-//
-        // for(i=0;i<fiblen;i++){
-        //     // console.log("Fib",i, gFibSeq[i] );
-
-        //     fiblvl = ( ( gFibSeq[i] * delta ) + lo ).toFixed(2) ;
-        //     // console.log("Fiblvl_"+i.toString()+"=", fiblvl);
-
-        //     fiby = mf( GetYCoordFromPrice( fiblvl ) );     //.toFixed(0);
-        //     // console.log("Fib Y"+i.toString()+"=", fiby);
-        // // candlesClamp  ???
-
-        //     deltax1=(x2-x1)/7;
-        //     if(hiFirst==1)  x1off= x1 + deltax1*(5-i+1) - xoff0;
-        //         else x1off= x1 + deltax1*(i+1) - xoff0 ;
-
-
-        //     fibstr2 = "("+((gFibSeq[i]*100).toFixed(1)).toString() +"%)    "+gCurrencyStr+fiblvl.toString();
-        //     fibstr1 =  gCurrencyStr+fiblvl.toString() + "    ("+((gFibSeq[i]*100).toFixed(1)).toString() +"%)" ;
-
-
-
-
-        //         if(i==1 || i==3){  
-        //             DrawHorizontalLine( x1off, x1off+g52WeekXlen, fibcol3,  fiby  , 8  );
-        //             drawText( fibstr1, x1off+25, fiby-16 , fibfntsz,  fibcol3a );
-        //             drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol3a );
-        //         // DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr)
-
-        //         }else if( i==2 ){  
-        //             DrawHorizontalLine( x1off, x1off+g52WeekXlen, fibcol1,  fiby  , 8  );
-        //             drawText( fibstr1, x1off+25, fiby-16 , fibfntsz,  fibcol1a );
-        //             drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol1a );
-                
-
-        //         }else{ 
-        //             DrawHorizontalLine( x1off, x1off+g52WeekXlen, fibcol2,  fiby  , 8  );
-        //             drawText( fibstr1, x1off+25, fiby-16 , fibfntsz, fibcol2a  );
-        //             drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol2a  );
-        //             }
-
-        // }//for
-
-        // let tmpvar=0;
-
-        // // lo
-        //     fiblvl= lo.toFixed(2);
-        //     fibstr2 = "(0%)    "+gCurrencyStr+fiblvl.toString();
-        //     fibstr1 =  gCurrencyStr+fiblvl.toString() + "    (0%)" ;
-        //     fiby = mf( GetYCoordFromPrice( lo ) );   
-
-        // // drawText( fibstr1, x1off+25, fiby-16 , fibfntsz,  fibcol1a );
-        // drawText( fibstr1, x1off-250, fiby-16 , fibfntsz,  fibcol4a );
-        // drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol1a );
-
-        // tmpvar =gFibLo.x1;
-        // // if(x1off<tmpvar) DrawHorizontalLine( x1off, tmpvar, fibcol4,  fiby  , 18  );
-        //     DrawHorizontalLine( x1off, tmpvar, fibcol4,  fiby  , 18  );
-        // // hi
-        //     fiblvl= hi.toFixed(2);
-        //     fibstr2 = "(100%)    "+gCurrencyStr+fiblvl.toString();
-        //     fibstr1 =  gCurrencyStr+fiblvl.toString() + "    (100%)" ;
-
-        //     fiby = mf( GetYCoordFromPrice( hi ) );   
-        //     drawText( fibstr1, x1off+25, fiby+4+fibfntsz , fibfntsz,  fibcol1a );
-        //     drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby+4+fibfntsz , fibfntsz,  fibcol1a );
-        
 
 
 }//fn fib
@@ -1973,7 +1992,8 @@ function resizeCanvas() {
 
             console.log( "preDr@wChart()", gGlobalChartVRectCurrent , gColScheme );
 
-            let colscheme = GetColorScheme();
+            let colscheme    = gColSchemeCurrent ;   
+            // let colscheme = GetColo rScheme();   //gColSch emeCurrent
 
             let typestr0 = 'candles';
             if(button1==1) typestr0 = 'line';
@@ -2038,8 +2058,11 @@ function toggleButton(buttonNumber) {
 
                 case 8:
                     button8 = (button8 === 1) ? 0 : 1;
-                    gColSchemeNum=99;
-                    GetColorScheme();
+                   
+                    GetColorSchemeCycle();
+
+                    // gColSchemeNum=99;
+                    // GetCol orScheme();
                     window.dispatchEvent(new Event('button8'));
                     break;
 
