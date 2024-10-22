@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "263.7";
+let                                                                         gVer = "270.1";
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -94,9 +94,8 @@ let gGlobalChartVRectCurrent = { x: 150 , y: 275 , w: 60 , h: 134 };   // init w
 
 let gGlobalChartVRect_Xoff_pct  = 0.05;
 let gGlobalChartVRect_Yoff_pct  = 0.05;
-let gGlobalChartVRect_w_pct  = 0.75;
-
-let gGlobalChartVRect_h_pct  = 0.75;
+let gGlobalChartVRect_w_pct  = 0.85;
+let gGlobalChartVRect_h_pct  = 0.85;
 
 let gHypotenuse_scalar_init = .0 ;   // c = sqrt(  ( a*a ) + ( b*b )  ) ;   // hypotenuse_scalar
 let gHypotenuse_scalar = 0.0 ;
@@ -348,49 +347,27 @@ function DrawRoundedRect(ctx, vrect, radius, col, wt, fill) {
 
 
 function DrawChart(ctx,  vrect , colScheme, typestr ) {
-
+    let fntsz0 = 14;
+    let wt = 2;  // DrawCandlesChart( ctx,  vrect , colScheme, wt );
 
     DrawRoundedRect(ctx, vrect, 20, colScheme.bg, 3, 1);
-    // DrawRoundedRect(ctx, vrect, radius, col, wt, fill);
     DrawRoundedRect(ctx, vrect, 20, colScheme.ou, 5, 0);
 
+  PreCalcCandlesChart( ctx,  vrect , colScheme, wt );
+    
+    DrawChartAxes( ctx,  vrect , colScheme, wt );
 
-    // DrawChartAxes( ctx,  vrect , colScheme, 2 );
-
-
-
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-
-   // this will test for butt0n1==0
-   DrawCandlesChart(ctx,  vrect , colScheme, 2);  /// NOTE !!! draw candles is computing his and lows that DrawLines is NOT !!!
-   // this will test for butt0n1==1
-   if(typestr=="line")   DrawLineChart(ctx,  vrect , colScheme, 3, "close");  // or P P3 to plot
-
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-   // these Maxes. should be calc'd beforehand, not tied to CANDLES 
-
-   DrawChartAxes( ctx,  vrect , colScheme, 2 );
-   // drawFibonacci( ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
-   let fntsz0 = 14;
-   DrawFinancials(ctx, vrect,       gFinancials,      114,   40,   fntsz0+4,   fntsz0, gGlobalFont, 'blue' );
-  //  DrawFina ncials(ctx, vrect, financials_object, xoff,   yoff,     yspace, fntsz , fntname,  fntcol ) { }
+    if(gDrawFinancials==0){
+        // this will test for butt0n1==0
+        DrawCandlesChart(ctx,  vrect , colScheme, wt );  /// NOTE !!! draw candles is computing his and lows that DrawLines is NOT !!!
+        // this will test for butt0n1==1
+        if(typestr=="line")   DrawLineChart(ctx,  vrect , colScheme, wt+1, "close");  // or P P3 to plot
+                        //    DrawChartAxes( ctx,  vrect , colScheme, 2 );
+    }else if(gDrawFinancials>0){                
+        DrawFinancials(ctx, vrect,       gFinancials,      114,   40,   fntsz0+4,   fntsz0, gGlobalFont, 'blue' );
+    }
 
    drawFibonacci( ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
-
-
 
    // pivot / p3 lines
     if( button5==1 || button5==2  ) DrawSegmentedLine(ctx, processedData, vrect, 2, 'blue',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
@@ -583,6 +560,101 @@ function ClipPoint1(ctx, vrect, vectXY) {        //  let vectXY= { x: 100, y:109
 
 
 
+//sets globals etc.
+function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
+    let cw= canvas.width;
+    let ch= canvas.height;
+    let cnt = processedData.length;   /// == NaN ???
+
+//  ##############################################################################
+
+        // let vect2 = { ...vect };   // example
+        gCandlesMaxes = { ...gCandlesMaxesInit };      // init the global vector
+
+        let datestr0 = "0000-11-22";
+        let i=0;
+        for (var date in processedData) {
+            if (processedData.hasOwnProperty(date)) {
+                // console.log( i+") " + date + ", Close: " + processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
+                let hi = parseFloat( processedData[date]["high"] );
+                let lo = parseFloat(  processedData[date]["low"] );
+                if(hi>gCandlesMaxes.priceHigh ){
+                    gCandlesMaxes.priceHigh = hi;
+                    gCandlesMaxes.priceHigh_date = date.toString();
+                    gCandlesMaxes.priceHigh_idx =  i ; 
+    
+                }  
+                if(lo<gCandlesMaxes.priceLow  ){
+                        gCandlesMaxes.priceLow  = lo;
+                        gCandlesMaxes.priceLow_date = date.toString();
+                        gCandlesMaxes.priceLow_idx =  i ; 
+                }
+    
+                let srhi = parseFloat(  processedData[date]["R3"] );
+                let srlo = parseFloat(  processedData[date]["S3"] );
+                if(srhi>gCandlesMaxes.srHigh ) gCandlesMaxes.srHigh = srhi;
+                if(srlo<gCandlesMaxes.srLow  ) gCandlesMaxes.srLow  = srlo;
+    
+                // let myNum = '62.3900';
+                // let myFloat = parseFloat(parseFloat(myNum).toFixed(2));
+                // console.log(myFloat);  // Outputs: 62.39 (as a number)
+    
+                let vol = parseFloat(  processedData[date]["volume"] );
+                if(vol>gCandlesMaxes.volHigh ) gCandlesMaxes.volHigh = vol;
+                if(vol<gCandlesMaxes.volLow  ) gCandlesMaxes.volLow  = vol;
+    
+                gSymbolStr    = processedData[date]["sym"];
+                gPeriodStr    = processedData[date]["per"];
+    
+                let lastPrice0= parseFloat(processedData[date]["close"]) ; 
+                // gLastPriceStr  =        processedData[date]["close"];   
+                gLastPriceStr  =   lastPrice0.toFixed(2).toString() ;
+                
+                // let lastDay       = processedData[date]["dayOfWeek"];
+                i++;
+    
+                datestr0 = date.toString();
+            }
+        }//loop
+    
+        gNumCandlesToRender = i;
+        gCandlesMaxes.num2render = gNumCandlesToRender ;
+        gCandlesMaxes.priceRange = gCandlesMaxes.priceHigh - gCandlesMaxes.priceLow;
+        gCandlesMaxes.srRange    = gCandlesMaxes.srHigh    - gCandlesMaxes.srLow;
+        gCandlesMaxes.volRange   = gCandlesMaxes.volHigh   - gCandlesMaxes.volLow;
+        console.log("] POST calcs, gCandlesMaxes   =", gCandlesMaxes );
+    
+    //  ############################################################################## should be a fn
+    
+    gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
+    // gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0;  //+"    v"+gVer+" php_v"+gVerPHP; 
+    // gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0+"    v"+gVer+" php_v"+gVerPHP; 
+    gChartTextStr1 = "v"+gVer+" php_v"+gVerPHP; 
+    gSymbolStrLower  = gSymbolStr.toLowerCase();
+    
+    // DETERMINE gCandleOffset
+        gCandleOffset = gCandleSpaceMin;
+        // gCandleWidthTotal = parseInt( cw / gNumCandlesToRender  );
+        gCandleWidthTotal = parseInt(  vrect.w / gNumCandlesToRender  );
+        // if(gCandleWidthTotal>4) gCandleOffset=gCandleSpaceMin+1;     // ie 2, set new offset iff candle wide enough
+        if(gCandleWidthTotal>5) gCandleOffset=gCandleSpaceMin+1;     // ie 2, set new offset iff candle wide enough
+        
+        gCandleXnext = vrect.x + gCandleOffset;
+        gCandleXnextStart = gCandleXnext;           // SAVE START
+        
+    // DETERMINE  gCandleWidth
+        gCandleWidth      = gCandleWidthTotal - gCandleOffset;
+        console.log("] Candles to render, gCandleWidth  =", gNumCandlesToRender, gCandleWidth );
+    
+    
+    //  ##############################################################################  
+    //  #######################                       ################################  
+    //  #######################  all prep Calcs DONE  ################################  
+    //  #######################                       ################################  
+    //  ##############################################################################  
+
+
+}
 
 
 
@@ -593,96 +665,109 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
     let ch= canvas.height;
     let cnt = processedData.length;   /// == NaN ???
 
+    // this is called just before DrawC@ndlesChart()
+    // PreCalcCandlesChart( ctx,  vrect , colScheme, wt );
 
-//  ##############################################################################
-//  ######  MAKE A FUNCTION ...   PrepCandles or  SetCandleGlobals       #########
-//  ##############################################################################
+
+// //  ##############################################################################  DEL
+// //  ##############################################################################  DEL
+// //  ##############################################################################
+// //  ##############################################################################
+// //  ##############################################################################
+// //  ##############################################################################
+// //  ######  MAKE A FUNCTION ...   PrepCandles or  SetCandleGlobals       #########
+// //  ##############################################################################
     
-                                                    // let vect2 = { ...vect };   // example
-    gCandlesMaxes = { ...gCandlesMaxesInit };      // init the global vector
+//                                                     // let vect2 = { ...vect };   // example
+//     gCandlesMaxes = { ...gCandlesMaxesInit };      // init the global vector
 
-    let datestr0 = "0000-11-22";
-    let i=0;
-    for (var date in processedData) {
-        if (processedData.hasOwnProperty(date)) {
-            // console.log( i+") " + date + ", Close: " + processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
-            let hi = parseFloat( processedData[date]["high"] );
-            let lo = parseFloat(  processedData[date]["low"] );
-            if(hi>gCandlesMaxes.priceHigh ){
-                gCandlesMaxes.priceHigh = hi;
-                gCandlesMaxes.priceHigh_date = date.toString();
-                gCandlesMaxes.priceHigh_idx =  i ; 
+//     let datestr0 = "0000-11-22";
+//     let i=0;
+//     for (var date in processedData) {
+//         if (processedData.hasOwnProperty(date)) {
+//             // console.log( i+") " + date + ", Close: " + processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
+//             let hi = parseFloat( processedData[date]["high"] );
+//             let lo = parseFloat(  processedData[date]["low"] );
+//             if(hi>gCandlesMaxes.priceHigh ){
+//                 gCandlesMaxes.priceHigh = hi;
+//                 gCandlesMaxes.priceHigh_date = date.toString();
+//                 gCandlesMaxes.priceHigh_idx =  i ; 
 
-            }  
-            if(lo<gCandlesMaxes.priceLow  ){
-                 gCandlesMaxes.priceLow  = lo;
-                 gCandlesMaxes.priceLow_date = date.toString();
-                 gCandlesMaxes.priceLow_idx =  i ; 
-            }
+//             }  
+//             if(lo<gCandlesMaxes.priceLow  ){
+//                  gCandlesMaxes.priceLow  = lo;
+//                  gCandlesMaxes.priceLow_date = date.toString();
+//                  gCandlesMaxes.priceLow_idx =  i ; 
+//             }
 
-            let srhi = parseFloat(  processedData[date]["R3"] );
-            let srlo = parseFloat(  processedData[date]["S3"] );
-            if(srhi>gCandlesMaxes.srHigh ) gCandlesMaxes.srHigh = srhi;
-            if(srlo<gCandlesMaxes.srLow  ) gCandlesMaxes.srLow  = srlo;
+//             let srhi = parseFloat(  processedData[date]["R3"] );
+//             let srlo = parseFloat(  processedData[date]["S3"] );
+//             if(srhi>gCandlesMaxes.srHigh ) gCandlesMaxes.srHigh = srhi;
+//             if(srlo<gCandlesMaxes.srLow  ) gCandlesMaxes.srLow  = srlo;
 
-            // let myNum = '62.3900';
-            // let myFloat = parseFloat(parseFloat(myNum).toFixed(2));
-            // console.log(myFloat);  // Outputs: 62.39 (as a number)
+//             // let myNum = '62.3900';
+//             // let myFloat = parseFloat(parseFloat(myNum).toFixed(2));
+//             // console.log(myFloat);  // Outputs: 62.39 (as a number)
 
-            let vol = parseFloat(  processedData[date]["volume"] );
-            if(vol>gCandlesMaxes.volHigh ) gCandlesMaxes.volHigh = vol;
-            if(vol<gCandlesMaxes.volLow  ) gCandlesMaxes.volLow  = vol;
+//             let vol = parseFloat(  processedData[date]["volume"] );
+//             if(vol>gCandlesMaxes.volHigh ) gCandlesMaxes.volHigh = vol;
+//             if(vol<gCandlesMaxes.volLow  ) gCandlesMaxes.volLow  = vol;
 
-            gSymbolStr    = processedData[date]["sym"];
-            gPeriodStr    = processedData[date]["per"];
+//             gSymbolStr    = processedData[date]["sym"];
+//             gPeriodStr    = processedData[date]["per"];
 
-            let lastPrice0= parseFloat(processedData[date]["close"]) ; 
-            // gLastPriceStr  =        processedData[date]["close"];   
-            gLastPriceStr  =   lastPrice0.toFixed(2).toString() ;
+//             let lastPrice0= parseFloat(processedData[date]["close"]) ; 
+//             // gLastPriceStr  =        processedData[date]["close"];   
+//             gLastPriceStr  =   lastPrice0.toFixed(2).toString() ;
             
-            // let lastDay       = processedData[date]["dayOfWeek"];
-            i++;
+//             // let lastDay       = processedData[date]["dayOfWeek"];
+//             i++;
 
-            datestr0 = date.toString();
-        }
-    }//loop
+//             datestr0 = date.toString();
+//         }
+//     }//loop
 
-    gNumCandlesToRender = i;
-    gCandlesMaxes.num2render = gNumCandlesToRender ;
-    gCandlesMaxes.priceRange = gCandlesMaxes.priceHigh - gCandlesMaxes.priceLow;
-    gCandlesMaxes.srRange    = gCandlesMaxes.srHigh    - gCandlesMaxes.srLow;
-    gCandlesMaxes.volRange   = gCandlesMaxes.volHigh   - gCandlesMaxes.volLow;
-    console.log("] POST calcs, gCandlesMaxes   =", gCandlesMaxes );
+//     gNumCandlesToRender = i;
+//     gCandlesMaxes.num2render = gNumCandlesToRender ;
+//     gCandlesMaxes.priceRange = gCandlesMaxes.priceHigh - gCandlesMaxes.priceLow;
+//     gCandlesMaxes.srRange    = gCandlesMaxes.srHigh    - gCandlesMaxes.srLow;
+//     gCandlesMaxes.volRange   = gCandlesMaxes.volHigh   - gCandlesMaxes.volLow;
+//     console.log("] POST calcs, gCandlesMaxes   =", gCandlesMaxes );
 
-//  ############################################################################## should be a fn
+// //  ############################################################################## should be a fn
 
-gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
-// gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0;  //+"    v"+gVer+" php_v"+gVerPHP; 
-// gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0+"    v"+gVer+" php_v"+gVerPHP; 
-gChartTextStr1 = "v"+gVer+" php_v"+gVerPHP; 
-gSymbolStrLower  = gSymbolStr.toLowerCase();
+// gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
+// // gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0;  //+"    v"+gVer+" php_v"+gVerPHP; 
+// // gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0+"    v"+gVer+" php_v"+gVerPHP; 
+// gChartTextStr1 = "v"+gVer+" php_v"+gVerPHP; 
+// gSymbolStrLower  = gSymbolStr.toLowerCase();
 
-// DETERMINE gCandleOffset
-    gCandleOffset = gCandleSpaceMin;
-    // gCandleWidthTotal = parseInt( cw / gNumCandlesToRender  );
-    gCandleWidthTotal = parseInt(  vrect.w / gNumCandlesToRender  );
-    // if(gCandleWidthTotal>4) gCandleOffset=gCandleSpaceMin+1;     // ie 2, set new offset iff candle wide enough
-    if(gCandleWidthTotal>5) gCandleOffset=gCandleSpaceMin+1;     // ie 2, set new offset iff candle wide enough
+// // DETERMINE gCandleOffset
+//     gCandleOffset = gCandleSpaceMin;
+//     // gCandleWidthTotal = parseInt( cw / gNumCandlesToRender  );
+//     gCandleWidthTotal = parseInt(  vrect.w / gNumCandlesToRender  );
+//     // if(gCandleWidthTotal>4) gCandleOffset=gCandleSpaceMin+1;     // ie 2, set new offset iff candle wide enough
+//     if(gCandleWidthTotal>5) gCandleOffset=gCandleSpaceMin+1;     // ie 2, set new offset iff candle wide enough
    
-    gCandleXnext = vrect.x + gCandleOffset;
-    gCandleXnextStart = gCandleXnext;           // SAVE START
+//     gCandleXnext = vrect.x + gCandleOffset;
+//     gCandleXnextStart = gCandleXnext;           // SAVE START
     
-// DETERMINE  gCandleWidth
-    gCandleWidth      = gCandleWidthTotal - gCandleOffset;
-    console.log("] Candles to render, gCandleWidth  =", gNumCandlesToRender, gCandleWidth );
+// // DETERMINE  gCandleWidth
+//     gCandleWidth      = gCandleWidthTotal - gCandleOffset;
+//     console.log("] Candles to render, gCandleWidth  =", gNumCandlesToRender, gCandleWidth );
 
 
-//  ##############################################################################  
-//  #######################                       ################################  
-//  #######################  all prep Calcs DONE  ################################  
-//  #######################                       ################################  
-//  ##############################################################################  
-//  ############################################################################## should be a fn 
+// //  ##############################################################################  
+// //  #######################                       ################################  
+// //  #######################  all prep Calcs DONE  ################################  
+// //  #######################                       ################################  
+// //  ##############################################################################  
+// //  ##############################################################################  DEL
+// //  ##############################################################################  DEL
+// //  ##############################################################################  DEL
+// //  ##############################################################################  DEL
+
+
 
 
 
@@ -695,18 +780,14 @@ gSymbolStrLower  = gSymbolStr.toLowerCase();
     let newcol=RandomColorC();
     let last_date_key="nil";  // DERP
  
-    
-
-// ################################################# RENDER CANDLES
-// ################################################# RENDER CANDLES
 // ################################################# RENDER CANDLES
 // ################################################# RENDER CANDLES
 
-let  xHigh=0;
-let  yHigh=0;
+    let  xHigh=0;
+    let  yHigh=0;
 
-let  xLow =0;
-let  yLow =0;
+    let  xLow =0;
+    let  yLow =0;
 
 
     let j=0;
@@ -721,32 +802,6 @@ let  yLow =0;
             let eom = parseInt(  processedData[date]["endOfMonth"] );
 
             gLastDateStr    = date;
-
-
-// // NEW            
-//         //  if( gCandlesMaxes.priceHigh_date  == date ){
-//             if( gCandlesMaxes.priceHigh_idx == j ){
-//                     yHigh = GetYCoordFromPrice( hi1 , vrect );
-//                     xHigh = gCandleXnext ;
-//                     gCandlesMaxes.priceHighX =xHigh ;   // save, not used for now
-//                     gCandlesMaxes.priceHighY =yHigh ;
-//                     let txtstr=gCurrencyStr+ ( hi1.toFixed(2).toString() );
-//                     // DrawCircle(ctx, 36, 6, colScheme.dn, xHigh, yHigh, 0, 1, colScheme.tx, txtstr , 'yellow', 20, "Helvetica", -20 ) ;
-//                     DrawCircle(ctx, 36, 6, 'red', xHigh, yHigh, 0, 1, colScheme.tx, txtstr , 'yellow', 20, "Helvetica", -20 ) ;
-//         //    function DrawCircle(ctx, size, wt, col, x, y, xyOffset, fill, fillcol, txtstr, txtcol, fsz, fontStr, txtoff) {
-
-//             }  
-//         //  if( gCandlesMaxes.priceLow_date  == date ){
-//             if( gCandlesMaxes.priceLow_idx == j ){
-//                     yLow = GetYCoordFromPrice( lo1 , vrect );
-//                     xLow = gCandleXnext ;
-//                     gCandlesMaxes.priceLowX =xLow ;      // save, not used for now
-//                     gCandlesMaxes.priceLowY =yLow ;
-//                     let txtstr1=gCurrencyStr+ ( lo1.toFixed(2).toString() );
-//                     // DrawCircle(ctx, 36, 6, colScheme.up, xLow, yLow, 0, 1, colScheme.tx, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
-//                     DrawCircle(ctx, 36, 6, 'green', xLow, yLow, 0, 1, colScheme.tx, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
-//             }
-
 
 
 // END OF MONTH...
@@ -809,7 +864,6 @@ let  yLow =0;
 
             }
 
-
             /* 
                                                             $value['buySignalCnt'] = 0;
                                                             $value['sellSignalCnt'] = 0;
@@ -856,14 +910,10 @@ let  yLow =0;
 
 
 
-
 //  DRAW everything assoc. with that candle , ie volume, buy/sell etc
         DrawCandlePlus(ctx, vrect, colScheme,  j, datestr, op1, hi1, lo1, cl1, vol1 , eom);    // uses gCandlesMaxes
         // console.log( j+") " + datestr + ":  nextX="+ gCandleXnext  + ";  H, L, Close= " + processedData[date]["high"] + ", " + processedData[date]["low"] + ", "+ processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
         
-
-
-
 
 
             let cw2 = parseInt( gCandleWidth/2 );
@@ -891,12 +941,6 @@ let  yLow =0;
                 // DrawCircle(ctx, 36, 6, colScheme.up, xLow, yLow, 0, 1, colScheme.tx, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
                 DrawCircle(ctx, 30, 4, 'darkgreen', xLow, yLow, 0, 1, gColor_green_Alpha_20pct, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
         }
-
-
-
-
-
-
 
 
 
@@ -1178,33 +1222,34 @@ function DrawFinancials(ctx, vrect, financials_object, xoff, yoff, yspace, fntsz
     let ioff = 2; 
 
 
-    DrawText_noclip(ctx,  "FINANCIALS",   vrect.x + vrect.w + parseInt(0.5*xoff), vrect.y + yoff + ( (i+0) * yspace ), fntsz*2,  fntcol,       fntname );
+    // DrawText_noclip(ctx,  "FINANCIALS",   vrect.x + vrect.w + parseInt(0.5*xoff), vrect.y + yoff + ( (i+0) * yspace ), fntsz*2,  fntcol,       fntname );
+    DrawText_noclip(ctx,  "FINANCIALS",   vrect.x + parseInt(0.5*xoff), vrect.y + yoff + ( (i+0) * yspace ), fntsz*2,  fntcol,       fntname );
 
-    // Loop through every key-value pair in the financials_object
-    for (const [key, value] of Object.entries(financials_object)) {
-        // Cast key and value to strings
-        let key_string   = String(key) + ":  ";
-        let value_string = String(value);
-        let compString   = key_string + ": " + value_string;
+            // Loop through every key-value pair in the financials_object
+            for (const [key, value] of Object.entries(financials_object)) {
+                // Cast key and value to strings
+                let key_string   = String(key) + ":  ";
+                let value_string = String(value);
+                let compString   = key_string + ": " + value_string;
 
 
-        let rwidth = 0;
-        ctx.fillStyle =fntcol;   
-        ctx.font = fntsz.toString()+" "+ fntname;
-        // ctx.font = "64px Arial";
-        // ctx.fillText( key_string , 200 , 200 );
-        rwidth = ctx.measureText(key_string).width;
-     
+                let rwidth = 0;
+                ctx.fillStyle =fntcol;   
+                ctx.font = fntsz.toString()+" "+ fntname;
+                // ctx.font = "64px Arial";
+                // ctx.fillText( key_string , 200 , 200 );
+                rwidth = ctx.measureText(key_string).width;
+            
 
-        // Call the DrawText function to draw the composed string
-        DrawText_noclip(ctx,  key_string,     vrect.x + vrect.w + xoff - rwidth, vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
-        // DrawText_noclip(ctx,  compString,     vrect.x + vrect.w + xoff, vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
-        DrawText_noclip(ctx,  value_string,   vrect.x + vrect.w + xoff         , vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
-        // DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y+yoffset,             12 , colScheme.tx , gGlobalFont);
+                // Call the DrawText function to draw the composed string
+                // DrawText_noclip(ctx,  key_string,     vrect.x + vrect.w + xoff - rwidth, vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
+                // DrawText_noclip(ctx,  value_string,   vrect.x + vrect.w + xoff         , vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
+                DrawText_noclip(ctx,  key_string,     vrect.x   + xoff - rwidth, vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
+                DrawText_noclip(ctx,  value_string,   vrect.x   + xoff         , vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
 
-        // Increment the counter
-        i++;
-    }
+                // Increment the counter
+                i++;
+            }
 }
 
 function DrawMonthlySupportResistance(ctx, vrect,  idx , colScheme , candlerect){
