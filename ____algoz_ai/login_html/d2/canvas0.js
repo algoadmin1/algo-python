@@ -1,7 +1,8 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "270.2";
+let                                                                         gVer = "274.3";
+let             gDebugInfo = 1;
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -350,32 +351,27 @@ function DrawRoundedRect(ctx, vrect, radius, col, wt, fill) {
 
 
 function DrawChart(ctx,  vrect , colScheme, typestr ) {
-    let fntsz0 = 14;
-    let wt = 2;  // DrawCandlesChart( ctx,  vrect , colScheme, wt );
+    let fntsz0 = 14;  
+    let wt = 2;   
 
     DrawRoundedRect(ctx, vrect, 20, colScheme.bg, 3, 1);
     DrawRoundedRect(ctx, vrect, 20, colScheme.ou, 5, 0);
 
-  PreCalcCandlesChart( ctx,  vrect , colScheme, wt );
-    
-    DrawChartAxes( ctx,  vrect , colScheme, wt );
+    PreCalcCandlesChart( ctx,  vrect , colScheme, wt );
 
     if(gDrawFinancials==0){
-        // this will test for butt0n1==0
+        DrawChartAxes( ctx,  vrect , colScheme, wt );
         DrawCandlesChart(ctx,  vrect , colScheme, wt );  /// NOTE !!! draw candles is computing his and lows that DrawLines is NOT !!!
-        // this will test for butt0n1==1
         if(typestr=="line")   DrawLineChart(ctx,  vrect , colScheme, wt+1, "close");  // or P P3 to plot
-                        //    DrawChartAxes( ctx,  vrect , colScheme, 2 );
+        drawFibonacci( ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
+    
+        // pivot / p3 lines
+        if( button5==1 || button5==2  ) DrawSegmentedLine(ctx, processedData, vrect, 2, 'blue',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
+        if( button5==2)                 DrawSegmentedLine(ctx, processedData, vrect, 2, 'yellow', "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P3") ;
     }else if(gDrawFinancials>0){                
         DrawFinancials(ctx, vrect,       gFinancials,      114,   40,   fntsz0+4,   fntsz0, gGlobalFont, 'blue' );
     }
 
-   drawFibonacci( ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
-
-   // pivot / p3 lines
-    if( button5==1 || button5==2  ) DrawSegmentedLine(ctx, processedData, vrect, 2, 'blue',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
-    if( button5==2)                 DrawSegmentedLine(ctx, processedData, vrect, 2, 'yellow', "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P3") ;
-    
     let fszDyn = parseInt( vrect.w * 0.025 );
     let xoff = 60;
     let yoff = 54;
@@ -387,7 +383,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
 
     InitAndDrawImage(ctx, vrect, fname, img_xoff, img_yoff, gImgScale );   // let gIm gScale = 0.325;
 
-}
+}//fn 
 
 // globals
 let gGlobalDrawCol = 'black';
@@ -890,8 +886,11 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
             let date_thisCandle         =  DateAbbreviate(date, 2 );  // ie Oct 17
             gDate_thisCandle            = date_thisCandle; 
 
-            gBuySignalStr_thisCandle     =  gCurrencyStr+ buyPrice.toString() +" "+ date_thisCandle +" (" + parseInt(gBuySignalCnt_thisCandle).toString() +")";
-            gSellSignalStr_thisCandle    =  gCurrencyStr+ sellPrice.toString()+" "+ date_thisCandle+ " (" + parseInt(gSellSignalCnt_thisCandle).toString()+")";
+            // gBuySignalStr_thisCandle     =  gCurrencyStr+ buyPrice.toString() +" "+ date_thisCandle +" (" + parseInt(gBuySignalCnt_thisCandle).toString() +")";
+            // gSellSignalStr_thisCandle    =  gCurrencyStr+ sellPrice.toString()+" "+ date_thisCandle+ " (" + parseInt(gSellSignalCnt_thisCandle).toString()+")";
+
+            gBuySignalStr_thisCandle     =  gCurrencyStr+ buyPrice.toString() +" "+ date_thisCandle; // +" (" + parseInt(gBuySignalCnt_thisCandle).toString() +")";
+            gSellSignalStr_thisCandle    =  gCurrencyStr+ sellPrice.toString()+" "+ date_thisCandle; //+ " (" + parseInt(gSellSignalCnt_thisCandle).toString()+")";
 
 // from jsonget.php
         // $value['candleX'] = 0;
@@ -921,32 +920,27 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
         DrawCandlePlus(ctx, vrect, colScheme,  j, datestr, op1, hi1, lo1, cl1, vol1 , eom);    // uses gCandlesMaxes
         // console.log( j+") " + datestr + ":  nextX="+ gCandleXnext  + ";  H, L, Close= " + processedData[date]["high"] + ", " + processedData[date]["low"] + ", "+ processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
         
-
-
+            let hilo_col= 'yellow';
+            if(CheckBGcolWhite()==true) hilo_col = colScheme.tx;
             let cw2 = parseInt( gCandleWidth/2 );
 // NEW            
-        //  if( gCandlesMaxes.priceHigh_date  == date ){
             if( gCandlesMaxes.priceHigh_idx == j ){
                 yHigh = GetYCoordFromPrice( hi1 , vrect );
                 xHigh = gCandleXnext +cw2;
                 gCandlesMaxes.priceHighX =xHigh ;   // save, not used for now
                 gCandlesMaxes.priceHighY =yHigh ;
                 let txtstr=gCurrencyStr+ ( hi1.toFixed(2).toString() );
-                // DrawCircle(ctx, 36, 6, colScheme.dn, xHigh, yHigh, 0, 1, colScheme.tx, txtstr , 'yellow', 20, "Helvetica", -20 ) ;
                 
-                DrawCircle(ctx, 30, 4, 'red', xHigh, yHigh, 0, 1, gColor_red_Alpha_20pct ,  txtstr , 'yellow', 20, "Helvetica", -20 ) ;
-    //    function DrawCircle(ctx, size, wt, col, x, y, xyOffset, fill, fillcol, txtstr, txtcol, fsz, fontStr, txtoff) {
+                DrawCircle(ctx, 30, 4, 'red', xHigh, yHigh, 0, 1, gColor_red_Alpha_20pct ,  txtstr , hilo_col, 20, "Helvetica", -20 , -20) ;
 
         }  
-    //  if( gCandlesMaxes.priceLow_date  == date ){
         if( gCandlesMaxes.priceLow_idx == j ){
                 yLow = GetYCoordFromPrice( lo1 , vrect );
                 xLow = gCandleXnext  +cw2;
                 gCandlesMaxes.priceLowX =xLow ;      // save, not used for now
                 gCandlesMaxes.priceLowY =yLow ;
                 let txtstr1=gCurrencyStr+ ( lo1.toFixed(2).toString() );
-                // DrawCircle(ctx, 36, 6, colScheme.up, xLow, yLow, 0, 1, colScheme.tx, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
-                DrawCircle(ctx, 30, 4, 'darkgreen', xLow, yLow, 0, 1, gColor_green_Alpha_20pct, txtstr1 ,  'yellow', 20, "Helvetica", -25 ) ;
+                DrawCircle(ctx, 30, 4, 'darkgreen', xLow, yLow, 0, 1, gColor_green_Alpha_20pct, txtstr1 , hilo_col, 20, "Helvetica", -20, 20) ;
         }
 
 
@@ -963,7 +957,14 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
 
 }// fn Dr@wCandlesChart   ################################################################################
 
-
+function CheckBGcolWhite() {
+    if(gColorCycleCnt ==1  || gColorCycleCnt ==3    ||  gColorCycleCnt ==5 ){ 
+        return true;
+    }else{
+        return false;
+    }
+}  
+             
 
 
 //
@@ -1177,12 +1178,18 @@ function Hypotenuse(w, h) {
 // Example usage
 // console.log(Hypotenuse(3, 4)); // Output: 5
 
+let gBuySignal_col           =   'limegreen' ; //'blue';
+let gSellSignal_col          =   'red' ; //'blue';
+let gBuySignal_outline_col   =   'blue' ; //'blue';
+let gSellSignal_outline_col  =   'orange';
+
 function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGreen ) {
     let sz      = 35; 
     let sz_init  = 2; 
     let sz1      = 11;   // ie cnt 3 == 33 size
-    let upcol   = 'blue';   // 'green';
-    let dncol   =  'orange' ;   //'darkred';
+    let sz2      = 14;   // ie cnt 3 == 33 size
+    let outline_upcol   =  gBuySignal_outline_col ;  //'blue';   // 'green';
+    let outline_dncol   =  gSellSignal_outline_col ;  //'orange' ;   //'darkred';
 
     let fsz= 24;
 
@@ -1191,26 +1198,31 @@ function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGre
     let txtStr = "  ";
 
     let xoff=14;
+    let Yoff = 14  ;
+    let Yoffbuy = Yoff+8;
 
     let BuyTrianglePos_y  = candlerect.y+candlerect.h+sz*2;
     let SellTrianglePos_y = candlerect.y+candlerect.h-sz*2;
 
     if( gBuySignal_thisCandle  > 0 ){
         sz1 = sz_init * gBuySignalCnt_thisCandle;
+        sz2 = parseInt( sz1/2);
         txt1=gBuySignalStr_thisCandle;
-        DrawTriangle_callout(ctx, sz1, 3, upcol, gCandleWickX, BuyTrianglePos_y, 0, 1, 'limegreen' ,  txt1+ txtStr, (-1*xoff) , 0, 16 , colScheme.tx , gGlobalFont  ) ;
-        // DrawTriangle_callout(ctx, sz1, 3, upcol, gCandleWickX, candlerect.y+candlerect.h+sz*2, 0, 1, 'limegreen' ,  txt1+ txtStr, (-1*xoff) , 0, 16 , colScheme.tx , gGlobalFont  ) ;
-
-        DrawText(ctx , txt1, gCandleWickX, BuyTrianglePos_y+10, fsz , colScheme.tx , gGlobalFont  );
+        txt1_num=parseInt(gBuySignalCnt_thisCandle).toString();
+        if(gBuySignalCnt_thisCandle<6) fsz= 24 -8;
+        DrawTriangle_callout(ctx, sz1, 3, outline_upcol, gCandleWickX, BuyTrianglePos_y, 0, 1, gBuySignal_col ,  txt1+ txtStr, (-1*xoff) , 0, 16 , colScheme.tx , gGlobalFont  ) ;
+        // DrawText(ctx , txt1_num, gCandleWickX-sz2, BuyTrianglePos_y+Yoff, fsz , gBuySignal_outline_col , gGlobalFont  );
+        DrawText(ctx , txt1_num, gCandleWickX-sz2, BuyTrianglePos_y+Yoffbuy+ sz1, fsz , gBuySignal_col , gGlobalFont  );
     }
 
     if( gSellSignal_thisCandle  > 0 ){
         sz1 = sz_init * gSellSignalCnt_thisCandle;
+        sz2 = parseInt( sz1/2);
         txt1=gSellSignalStr_thisCandle;
-        DrawTriangle_callout(ctx, sz1, 3, dncol, gCandleWickX, SellTrianglePos_y, 1, 1, 'red' ,   txt1+ txtStr, (-1*xoff), 0, 16 , colScheme.tx , gGlobalFont  ) ;
-        // DrawTriangle_callout(ctx, sz1, 3, dncol, gCandleWickX, candlerect.y+candlerect.h-sz*2, 1, 1, 'red' ,   txt1+ txtStr, (-1*xoff), 0, 16 , colScheme.tx , gGlobalFont  ) ;
-      
-        DrawText(ctx , txt1, gCandleWickX, SellTrianglePos_y-10, fsz , colScheme.tx , gGlobalFont  );
+        txt1_num=parseInt(gSellSignalCnt_thisCandle).toString();
+        if(gSellSignalCnt_thisCandle<6) fsz= 24 -8;
+        DrawTriangle_callout(ctx, sz1, 3, outline_dncol, gCandleWickX, SellTrianglePos_y, 1, 1, gSellSignal_col ,   txt1+ txtStr, (-1*xoff), 0, 16 , colScheme.tx , gGlobalFont  ) ;
+        DrawText(ctx , txt1_num, gCandleWickX-sz2, SellTrianglePos_y-Yoff, fsz , gSellSignal_outline_col , gGlobalFont  );
     }
 
 
@@ -1223,8 +1235,8 @@ function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGre
             let buyPrice                 =  parseInt(  processedData[date]["buySignalPrice"]  )    ;
             let sellPrice                =  parseInt(  processedData[date]["buySignalPrice"]  )   ;
 
-            gBuySignalStr_thisCandle     =  gCurrencyStr+ buyPrice.toString() + "  " + parseInt(gBuySignalCnt_thisCandle).toString();
-            gSellSignalStr_thisCandle    =  gCurrencyStr+ sellPrice.toString()+ "  " + parseInt(gSellSignalCnt_thisCandle).toString();
+            gBuySignalSt r_thisCandle     =  gCurrencyStr+ buyPrice.toString() + "  " + parseInt(gBuySignalCnt_thisCandle).toString();
+            gSellSignalS tr_thisCandle    =  gCurrencyStr+ sellPrice.toString()+ "  " + parseInt(gSellSignalCnt_thisCandle).toString();
 
     */
 }
@@ -1302,14 +1314,20 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     str =  gScalar_resize.toString()+ " / "+ gScalar_init.toString()+ " == " +  (gScalarFloat_dynamic).toString() +" ";
      // DrawText( ctx, str,  vrect.x+xoffset, vrect.y+yoffset+50, fsz , colScheme.tx , gGlobalFont);
 
-    DrawText( ctx, gChartTextStr+" " +  gScalarFloat_dynamic.toString(),  vrect.x+xoffset, vrect.y+yoffset, fsz , colScheme.tx , gGlobalFont);
+     let addstr = " ";
+
+     if(gDebugInfo==1){
+        addstr  = "  sc=" +  gScalarFloat_dynamic.toString();
+     }
+
+    DrawText( ctx, gChartTextStr+ addstr,  vrect.x+xoffset, vrect.y+yoffset, fsz , colScheme.tx , gGlobalFont);
     DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y +vrect.h - yoffset, 12 , gAxesCol0, gGlobalFont);
     
 
-    let welstr = "algoz Charting";  
-    // let xposT = parseInt(  vrect.x + (vrect.w/5)*2 );  
-    let xposT = parseInt(  vrect.x + 120 );  
-    DrawText_noclip( ctx, welstr, xposT, vrect.y - ( yoffset), 10 , 'purple', gGlobalFontTitle);
+    // let welstr = "algoz Charting";  
+    // // let xposT = parseInt(  vrect.x + (vrect.w/5)*2 );  
+    // let xposT = parseInt(  vrect.x + 120 );  
+    // DrawText_noclip( ctx, welstr, xposT, vrect.y - ( yoffset), 10 , 'purple', gGlobalFontTitle);
 
 
     let copyRstr = "algoz.ai Copyright (c) 2023-2025 by Algo Investor Inc.";
@@ -1489,12 +1507,12 @@ DrawTriangle(ctx, 100, 3, 'red', 300, 50, 1, 1, 'yellow');
 
 
 
-function DrawCircle(ctx, size, wt, col, x, y, xyOffset, fill, fillcol,   txtstr, txtcol, fsz, fontStr, txtoff) {
+function DrawCircle(ctx, size, wt, col, x, y, xyOffset, fill, fillcol,   txtstr, txtcol, fsz, fontStr, txtoff_x,  txtoff_y ) {
     // Adjust the x and y positions based on the offset
     var adjustedX = x + xyOffset;
     var adjustedY = y + xyOffset;
-    var adjustedXtxt = x + txtoff;
-    var adjustedYtxt = y + txtoff;
+    var adjustedXtxt = x + txtoff_x;
+    var adjustedYtxt = y + txtoff_y;
     const radius = size / 2;
 
 
@@ -1681,58 +1699,6 @@ function GetColorSchemeCycle(){
 
     return scheme0; 
 }
-
-
-
-
-
-
-
-// DEPR
-function GetColorScheme(){ 
-    let scheme0=gColScheme;     // assume wht bg, green/red
-
-    // gColSchemeNum = user input from php 
-    if(gColSchemeNum==0)  scheme0=gColScheme0;  // flip to black bg, green/red
-    if(gColSchemeNum==1)  scheme0=gColScheme1;
-    if(gColSchemeNum==2)  scheme0=gColScheme2;
-    if(gColSchemeNum==3)  scheme0=gColScheme3;
-    if(gColSchemeNum==4)  scheme0=gColScheme4;
-    if(gColSchemeNum==5)  scheme0=gColScheme5;
-    if(gColSchemeNum==6)  scheme0=gColScheme6;
-    if(gColSchemeNum==7)  scheme0=gColScheme7;
-    if(gColSchemeNum==8)  scheme0=gColScheme8;
-    if(gColSchemeNum==9)  scheme0=gColScheme9;
-    if(gColSchemeNum==10) scheme0=gColScheme10;
-
-    if(gColSchemeNum==99){
-        // 99 is changeable  but with BLACK bg
-        scheme0=gColScheme99;
-        scheme0.up = RandomJSColor(colarr);
-        scheme0.dn = RandomJSColor(colarr);
-}
-if(gColSchemeNum==100){
-        // 100 is changeable  but with BLACK bg
-        scheme0=gColScheme100;
-        scheme0.up = RandomJSColor(colarr);
-        scheme0.dn = RandomJSColor(colarr);
-}
- 
-
-    // gAxesCol0=  scheme0.ax ;
-    gAxesCol0= gAxesCol0_init; // "#454595" ;  // override  DEL to get .ax
-
-    gColSchemeCurrent =  scheme0;
-
-    return scheme0; 
-}
-
-
-
-
-
-
-
 
 
 

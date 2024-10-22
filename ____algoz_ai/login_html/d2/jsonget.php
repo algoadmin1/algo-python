@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "275.3";
+                                                              $ver=  "275.5";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -34,7 +34,7 @@ $button4name = "Gaps" ;              //; "Gaps Detection";
 $button5name = "PivP3";
 $button6name = "Fib";
 $button7name = "Fin's";
-$button8name = "col";
+$button8name = "Color";
 
 $button9name = "Aux Button 9";
 $button10name= "Aux Button 10";
