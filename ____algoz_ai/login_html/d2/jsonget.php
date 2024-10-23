@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "275.5";
+                                                              $ver=  "277.7";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -204,23 +204,61 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
     $i=0;
     $monthdays=0;
 
+    // HA = Heikin Ashi
+    $HA_open = 0;
+    $HA_high = 0;
+    $HA_low  = 0;
+    $HA_close= 0;
+    
+
     foreach ($data as $date => &$value) {    // Loop through each element of the array
 
-        // this candle's h,l,c [0]
+        // this candle's h,l,c,o [0]
         $high  = floatval($value['high']);
         $low   = floatval($value['low']);
         $close = floatval($value['close']);
+        $open  = floatval($value['open']);
 
 // start pivot get stuff
         $h0=0;    $l0= 0; $c0= 0;
         $s1 = 0;  $s2=0; $s3=0; $s4=0;
         $r1 = 0;  $r2=0; $r3=0; $r4=0;
 
-        if($i>0){  // for Pivots, proces [1] and up
-                // Calculate "P" as the average of yesterday's : "high", "low", and "close"
+
+        if($i==0){ 
+            // Heikin Ashi 1st [0] data piece
+            $HA_close = ($open + $high + $low + $close )/4;
+            $HA_open  = ($open + $close )/2;
+            $HA_high = $high;
+            $HA_low  = $low;
+
+            $value['HA_close']  =   $HA_close;
+            $value['HA_open']   =   $HA_open;
+            $value['HA_high']   =   $HA_high;
+            $value['HA_low']    =   $HA_low;
+        }
+        if($i>0){  // for Pivots & HA, proces [1] and up
+                //  get the O,H,L,C prices from YESTERDAY 
                 $h0= array_values($data)[$i-1]['high'];
                 $l0= array_values($data)[$i-1]['low'];
                 $c0= array_values($data)[$i-1]['close'];
+                $o0= array_values($data)[$i-1]['open'];
+
+
+                // Heikin Ashi  data piece
+                $HA_close = ($open + $high + $low + $close )/4;
+                $HA_open  =   ($o0 + $c0 )/2;
+                $HA_high  =  max( $high, $HA_open , $HA_close );
+                $HA_low   =  min( $low,  $HA_open , $HA_close );
+
+                $value['HA_close']  =   $HA_close;
+                $value['HA_open']   =   $HA_open;
+                $value['HA_high']   =   $HA_high;
+                $value['HA_low']    =   $HA_low;    
+
+
+
+                // pivots  // Calculate "P" as the average of yesterday's : "high", "low", and "close"
                 $pivot = FormatToNDecimals( (( $h0 + $l0 + $c0 ) / 3) , 2 );
                 $P= $pivot;
 

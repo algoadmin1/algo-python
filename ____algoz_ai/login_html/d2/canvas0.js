@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "274.3";
+let                                                                         gVer = "279.8";
 let             gDebugInfo = 1;
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
@@ -40,8 +40,17 @@ let             gDebugInfo = 1;
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
 
+let gDrawType=0;
+
 let gLogoname="logo";
 let gAlgozLogo_fname ="../img/"+gLogoname+ ".png";     
+
+// Heikin-Ashi
+let gDrawHeikinAshi =0;
+let gHA_close =0;
+let gHA_open  =0;
+let gHA_high  =0;
+let gHA_low   =0;
 
 let gScalar_init   = -1;
 let gScalarFloat_dynamic = 0.0;   // ratio of initial screen hypontenuse to : new hypot 
@@ -76,6 +85,7 @@ let gGaps_On = 0;
 
 let gGlobalFontTitle="Verdana";
 
+let gAxesCol1      = "#7575C5" ;
 let gAxesCol0      = "#454595" ;
 let gAxesCol0_init = "#25255A" ;
 let gImgScale = 0.15;
@@ -487,7 +497,7 @@ function DrawChartAxes( ctx,  vrect , colScheme, wt ){
             y2f = parseFloat(y2).toFixed(2); 
             iy     = GetYCoordFromPrice( y2f, vrect );
             txtStr = gCurrencyStr+" "+y2f.toString();      
-            DrawHorizontalLine_callout_textcol(ctx, vrect.x, vrect.x+vrect.w+ gAxesOffset_x, iy , gAxesCol0 ,  "dotted" , txtStr, 16, 0 ,gGlobalFont , gAxesCol0 );
+            DrawHorizontalLine_callout_textcol(ctx, vrect.x, vrect.x+vrect.w+ gAxesOffset_x, iy , gAxesCol0 ,  "dotted" , txtStr, 16, 0 ,gGlobalFont , gAxesCol1 );
     
     }//for
 
@@ -627,7 +637,7 @@ function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
     gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
     // gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0;  //+"    v"+gVer+" php_v"+gVerPHP; 
     // gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0+"    v"+gVer+" php_v"+gVerPHP; 
-    gChartTextStr1 = "v"+gVer+" php_v"+gVerPHP; 
+    gChartTextStr1 = "v"+gVer+"  v"+gVerPHP+"php"; 
     gSymbolStrLower  = gSymbolStr.toLowerCase();
     
     // DETERMINE gCandleOffset
@@ -798,6 +808,12 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
             let cl1 = parseFloat(  processedData[date]["close"] );
             let vol1 = parseFloat(  processedData[date]["volume"] );
             let eom = parseInt(  processedData[date]["endOfMonth"] );
+
+            gHA_open = parseFloat(  processedData[date]["HA_open"] );
+            gHA_high= parseFloat(  processedData[date]["HA_high"] );
+            gHA_low  = parseFloat(  processedData[date]["HA_low"] );
+            gHA_close= parseFloat(  processedData[date]["HA_close"] );
+
 
             gLastDateStr    = date;
 
@@ -1087,9 +1103,18 @@ function GetYCoordFromPrice( priceInput, vrect ){
 }//fn
 
 function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl1, vol1 , eom ){
+    let    candleRect = {  x: 0 , y: 0 , w: 4 , h: 12  }; 
+    let ha_candleRect = {  x: 0 , y: 0 , w: 4 , h: 12  }; 
 
-    let candleRect = {  x: 0 , y: 0 , w: 4 , h: 12  }; 
+    // heikinashi candle compute, just in case
+    let ha_col1 =  colScheme.up ;
+    let ha_candleGreen = 1; 
+    if( gHA_close<gHA_open ){
+        ha_col1 = colScheme.dn;
+        ha_candleGreen = 0;
+    }
 
+    // normal candle compute
     let col1 = colScheme.up ;
     let candleGreen = 1;            // 1== candle up , 0 == candle down
     if(cl1<op1){
@@ -1097,22 +1122,45 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
          candleGreen = 0;
     }
 
-    let yh= 0;  
-    let yl= 0;  
+    let yh= 0;      let yl= 0;  
+    let ha_yh= 0;   let ha_yl= 0;  
+   
     let xwick = gCandleXnext + parseInt( gCandleWidthTotal/2 );
     gCandleWickX = xwick;
 
-    // DRAW CANDLE WICK
+
+    // DRAW Heikin-Ashi CANDLE WICK
+    ha_yh = GetYCoordFromPrice( gHA_high, vrect ) ;   // ha high   
+    ha_yl = GetYCoordFromPrice( gHA_low,  vrect ) ;     // ha low
+    // if(gDrawHeikinAshi==1) DrawVerticalLine( ctx, xwick, ha_yh, ha_yl, colScheme.wi, "solid");
+
+// init ha_
+    ha_candleRect.x = gCandleXnext;
+    ha_candleRect.y = vrect.y+50;
+    ha_candleRect.w = gCandleWidth;
+    ha_candleRect.h = parseInt( idx/2 );
+
+    let ha_y2=0;
+    if(ha_candleGreen==1){  // candle UP !
+        ha_candleRect.y    =  GetYCoordFromPrice( gHA_close, vrect ) ; 
+        ha_y2              =  GetYCoordFromPrice( gHA_open,  vrect ) ; 
+        ha_candleRect.h =  ha_y2 - ha_candleRect.y ;
+    }else{              //  candle DOWN !
+        ha_candleRect.y    =  GetYCoordFromPrice( gHA_open,  vrect ) ;   // down candle, y=open
+        ha_y2              =  GetYCoordFromPrice( gHA_close, vrect ) ; 
+        ha_candleRect.h =   ha_y2 - ha_candleRect.y ;
+    }
+
+
+    // DRAW normal CANDLE WICK
     yh = GetYCoordFromPrice( hi1, vrect ) ;   //  high  gCandleMaxes{} must be set by this fn-call
     yl = GetYCoordFromPrice( lo1, vrect ) ;     // low
-
-    if(button1==0) DrawVerticalLine( ctx, xwick, yh, yl, colScheme.wi, "solid");
+    // if(button1==0) DrawVerticalLine( ctx, xwick, yh, yl, colScheme.wi, "solid");
 
     candleRect.x = gCandleXnext;
     candleRect.y = vrect.y+50;
     candleRect.w = gCandleWidth;
     candleRect.h = parseInt( idx/2 );
-
 
     let y2=0;
     if(candleGreen==1){  // candle UP !
@@ -1126,8 +1174,16 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
     }
 
 
-    // draw candle body
-    if(button1==0) DrawVRect(ctx, candleRect, 2, col1 , "solid");
+    if(gDrawHeikinAshi==1) DrawVerticalLine( ctx, xwick, ha_yh, ha_yl, colScheme.wi, "solid");
+        else    if(button1==0) DrawVerticalLine( ctx, xwick, yh, yl, colScheme.wi, "solid");
+
+    if(gDrawHeikinAshi==1){
+        DrawVRect(ctx, ha_candleRect, 2, ha_col1 , "solid");
+    }else  if(button1==0){
+        DrawVRect(ctx, candleRect, 2, col1 , "solid"); // draw candle body
+    }
+
+
 
     // draw everything else assoc with that candle
     DrawOtherStuff(ctx , vrect , idx, colScheme,  candleRect, candleGreen, vol1 , eom);
@@ -1647,6 +1703,7 @@ function DrawLine(ctx, x, y, x1, y1, weight, color, style) {
     // Reset line dash to solid for future drawing
     ctx.setLineDash([]);
 }
+
 function GetColorSchemeCycle(){ 
     let scheme0=gColScheme;     // assume wht bg, green/red default
 
@@ -1730,6 +1787,14 @@ function  ToggleFinancials(){
         gDrawFinancials=0;
     }
 }//fn
+function  ToggleHeikinAshi(){
+    if(gDrawHeikinAshi==0){
+        gDrawHeikinAshi=1;
+    }else  if(gDrawHeikinAshi==1){
+        gDrawHeikinAshi=0;
+    }
+}//fn
+        
 
 
 // fibonacci  5 incl 50% retracement
@@ -1909,7 +1974,7 @@ function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =
         // Function to resize canvas and redraw the rectangle
 function resizeCanvas() {
 
-    console.log("]  inside .js:  r3sizeCanvas():  button1...10 ==", button1, button2, button3, button4,
+    console.log("]  inside .js:  r3sizeCanvas():  button ...10 ==", button1, button2, button3, button4,
          button5, button6, button7, button8, button9, button10 );  
 
             // Set canvas width and height to match the div's size
@@ -1935,31 +2000,15 @@ function resizeCanvas() {
             let rcol=RandomColorC();
 
             let vr =       { x0: 6 , y0: 6 , w0: rectWidth, h0: rectHeight };
-            // DrawV Rect(ctx, vr, 2, rcol, "outline");
-
-            
-// let gGloba lCha rtVRectCurrent = { x: 150 , y: 275 , w: 60 , h: 134 };   // init w/ dummy values
-            // gGlo balChartVRectCurrent.x = vr.x0 +  parseInt(vr.w0 * 0.05);
-            // gGloba lChartVRectCurrent.y = vr.y0 +  parseInt(vr.h0 * 0.05);
-            // gGlobal ChartVRectCurrent.w = parseInt(vr.w0 * 0.75);
-            // gGlobalC hartVRectCurrent.h = parseInt(vr.h0 * 0.75);
 
             gGlobalChartVRectCurrent.x = vr.x0 +  parseInt(vr.w0 * gGlobalChartVRect_Xoff_pct );
             gGlobalChartVRectCurrent.y = vr.y0 +  parseInt(vr.h0 * gGlobalChartVRect_Yoff_pct );
             gGlobalChartVRectCurrent.w = parseInt(vr.w0 * gGlobalChartVRect_w_pct );
             gGlobalChartVRectCurrent.h = parseInt(vr.h0 * gGlobalChartVRect_h_pct );
 
-
-
-    // HERE MASTER vr3ct is NOW SET: gGl0balChartVRectCurrent={}
-    // HERE MASTER vr3ct is NOW SET: gGl0balChartVRectCurrent={}
-    // HERE MASTER vr3ct is NOW SET: gGl0balChartVRectCurrent={}
-    // HERE MASTER vr3ct is NOW SET: gGl0balChartVRectCurrent={}
-
             console.log( "preDr@wChart()", gGlobalChartVRectCurrent , gColScheme );
 
             let colscheme    = gColSchemeCurrent ;   
-            // let colscheme = GetColo rScheme();   //gColSch emeCurrent
 
             let typestr0 = 'candles';
             if(button1==1) typestr0 = 'line';
@@ -1988,7 +2037,26 @@ function resizeCanvas() {
 function toggleButton(buttonNumber) {
             switch (buttonNumber) {
                 case 1:
-                    button1 = (button1 === 1) ? 0 : 1;
+                    // button1 = (button1 === 1) ? 0 : 1;
+                   // ToggleHeikinAshi();
+                    // ie 0 = candle, 1= line, 2= heikin ashi
+
+                    if(gDrawType==0){    // if ==0  and PRESSED, to to ==1
+                        gDrawType=1;    
+                        button1 =1;             //  button1==1 == 'line'
+                        gDrawHeikinAshi=0;
+
+                    }else if(gDrawType==1){    // if ==1  and PRESSED, to to ==2
+                        gDrawType=2;
+                        gDrawHeikinAshi=1;
+                        button1 =0;
+
+                    }else  if(gDrawType==2){    // if ==2  and PRESSED, to to ==0
+                        gDrawType=0;
+                        button1 =0;
+                        gDrawHeikinAshi=0;
+
+                        }
                     window.dispatchEvent(new Event('button1'));  // Trigger event listener
                     break;
                 case 2:
