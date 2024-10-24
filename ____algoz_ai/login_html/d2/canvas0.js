@@ -1296,7 +1296,65 @@ function TestOverviewData(){
             });
         });
 }
-
+/**
+ * 
+ {
+    "Symbol": "M",
+    "AssetType": "Common Stock",
+    "Name": "Macy’s Inc",
+    "Description": "Macy's, Inc., an omnichannel retail organization, operates stores, websites, and mobile apps under the Macy's, Bloomingdale's and bluemercury brands. The company is headquartered in New York, New York.",
+    "CIK": "794367",
+    "Exchange": "NYSE",
+    "Currency": "USD",
+    "Country": "USA",
+    "Sector": "TRADE & SERVICES",
+    "Industry": "RETAIL-DEPARTMENT STORES",
+    "Address": "7 WEST SEVENTH STREET, CINCINNATI, OH, US",
+    "OfficialSite": "https://www.macysinc.com",
+    "FiscalYearEnd": "January",
+    "LatestQuarter": "2024-07-31",
+    "MarketCapitalization": "4254902000",
+    "EBITDA": "1937000000",
+    "PERatio": "23.6",
+    "PEGRatio": "0.103",
+    "BookValue": "15.51",
+    "DividendPerShare": "0.678",
+    "DividendYield": "0.0443",
+    "EPS": "0.65",
+    "RevenuePerShareTTM": "85.21",
+    "ProfitMargin": "0.0078",
+    "OperatingMarginTTM": "0.0371",
+    "ReturnOnAssetsTTM": "0.0511",
+    "ReturnOnEquityTTM": "0.0432",
+    "RevenueTTM": "23509000000",
+    "GrossProfitTTM": "9999000000",
+    "DilutedEPSTTM": "0.65",
+    "QuarterlyEarningsGrowthYOY": "-0.607",
+    "QuarterlyRevenueGrowthYOY": "-0.035",
+    "AnalystTargetPrice": "17.18",
+    "AnalystRatingStrongBuy": "1",
+    "AnalystRatingBuy": "3",
+    "AnalystRatingHold": "10",
+    "AnalystRatingSell": "1",
+    "AnalystRatingStrongSell": "0",
+    "TrailingPE": "23.6",
+    "ForwardPE": "5.78",
+    "PriceToSalesRatioTTM": "0.181",
+    "PriceToBookRatio": "1.012",
+    "EVToRevenue": "0.413",
+    "EVToEBITDA": "7.76",
+    "Beta": "2.145",
+    "52WeekHigh": "21.64",
+    "52WeekLow": "10.2",
+    "50DayMovingAverage": "15.54",
+    "200DayMovingAverage": "17.96",
+    "SharesOutstanding": "277373000",
+    "DividendDate": "2024-10-01",
+    "ExDividendDate": "2024-09-13"
+}
+ * 
+ * 
+ */
 
 function Hypotenuse(w, h) {
     // Calculate the hypotenuse using the Pythagorean theorem
