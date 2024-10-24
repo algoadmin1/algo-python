@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "286.3";
+let                                                                         gVer = "286.7";
 let             gDebugInfo = 0;  // for   sc = 1.0
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
@@ -70,7 +70,7 @@ let gBuySignalStr_thisCandle ="nil";
 let gSellSignalStr_thisCandle ="nil";
 let gBuySignal_Last = "nil"; //0.0;
 let gSellSignal_Last ="nil"; // 0.0;
-
+let gLastBuySellSignal_symbol = "";
 
 let gColorCycleCnt    = 0;
 let gColorCycleCntMax = 9;
@@ -371,7 +371,7 @@ function DrawRoundedRect(ctx, vrect, radius, col, wt, fill) {
 
 
 function DrawChart(ctx,  vrect , colScheme, typestr ) {
-    let fntsz0 = 14;  
+    let fntsz0 = 12;  
     let wt = 2;   
 
 
@@ -437,7 +437,7 @@ let gCurrencyStr="$";
 let gLastPriceStr ="0.00";
 let gLastDateStr ="1900-01-01";
 let gGlobalFont= "Arial";
-let gGlobalFont1= "Courier New";
+let gGlobalFont1= "Arial" ;   //"Courier New";
 let gAxesOffset_x = -64;   // go past RIGHT side of canvas
 let gAxesOffset_y =  0;    // unused
 
@@ -1489,11 +1489,22 @@ function DrawOverviewData(ctx, vrect, colScheme, object_arr, xoff, yoff, yspace,
         i++;
     });
     
+
+
     if(fins == fins_bad){
         DrawText_noclip(ctx, fins ,   3+vrect.x +xoff , 3+ vrect.y -8 + yoff + ( (0+1) * yspace ), fntsz*2,  'red',       fntname );
     }
     DrawText_noclip(ctx, fins ,   vrect.x +xoff , vrect.y -8 + yoff + ( (0+1) * yspace ), fntsz*2,  fntcol,       fntname );
  
+
+    let str99 = ""; 
+    str99 = " last BuySignal:"+ gBuySignal_Last + ",    last SellSignal:"+gSellSignal_Last;
+
+    if(gLastBuySellSignal_symbol==gSymbolStr){
+        DrawText_noclip(ctx, str99 ,   vrect.x +xoff , vrect.y -4 + yoff + parseInt( (1.75) * yspace ), fntsz-2,  gAxesCol1,       fntname );
+        // DrawText_noclip(ctx, str99 ,   vrect.x +xoff , vrect.y -8 + yoff + parseInt( (1.75) * yspace ), fntsz-2,  fntcol,       fntname );
+    }
+
 
 }//fn
 
@@ -1763,6 +1774,8 @@ function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGre
         // DrawText(ctx , txt1_num, gCandleWickX-sz2, BuyTrianglePos_y+Yoff, fsz , gBuySignal_outline_col , gGlobalFont  );
         DrawText(ctx , txt1_num, gCandleWickX-sz2, BuyTrianglePos_y+Yoffbuy+ sz1, fsz , gBuySignal_col , gGlobalFont  );
         gBuySignal_Last = "BUY "+gSymbolStr+" at "+  gBuySignalStr_thisCandle +" strength="+gBuySignalCnt_thisCandle.toString() +  " ";
+        gLastBuySellSignal_symbol= gSymbolStr;
+
     }
 
     if( gSellSignal_thisCandle  > 0 ){
@@ -1774,10 +1787,10 @@ function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGre
         DrawTriangle_callout(ctx, sz1, 3, outline_dncol, gCandleWickX, SellTrianglePos_y, 1, 1, gSellSignal_col ,   txt1+ txtStr, (-1*xoff), 0, 16 , colScheme.tx , gGlobalFont  ) ;
         DrawText(ctx , txt1_num, gCandleWickX-sz2, SellTrianglePos_y-Yoff, fsz , gSellSignal_outline_col , gGlobalFont  );
         gSellSignal_Last = "SELL "+gSymbolStr+" at "+  gSellSignalStr_thisCandle +" strength="+gSellSignalCnt_thisCandle.toString() +  " ";
-   
+        gLastBuySellSignal_symbol= gSymbolStr;
     }
 
-
+console.log("] inside Dr@wBuySellSignal(): last BUYstr, last SELLstr== ", gBuySignal_Last    , gSellSignal_Last );
 
     /*
         gBuySignal_thisCandle        =  parseInt(  processedData[date]["buySignal"]  )   ;   //$value['buySignal'];
