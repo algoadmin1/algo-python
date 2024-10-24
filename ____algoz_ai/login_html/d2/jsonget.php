@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "280.4";
+                                                              $ver=  "280.5";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -312,7 +312,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 
                 // TEST for GAPs  
                         // test for 1st gap UP, then 2nd gap DOWN...
-                        if( $priceDiff_GapUpTest > $gapPriceThresh  &&   $low < $h0 ){   //  todayLOW < yestHIGH , GAP UP  Detected
+                        if( $priceDiff_GapUpTest > $gapPriceThresh  &&   $low > $h0 ){   //  todayLOW < yestHIGH , GAP UP  Detected
                             $gapDir = 1;    
                             $gapDirStr      = "up" ;
                             $gapStart_date  = $date;

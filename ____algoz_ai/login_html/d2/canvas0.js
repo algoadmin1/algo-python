@@ -1296,7 +1296,39 @@ function TestOverviewData(){
             });
         });
 }
+function ReturnStrMB(num) {
+    // If the number is greater than or equal to 1 trillion (1,000,000,000,000), format it as trillions
+    if (num >= 1000000000000) {
+        return (num / 1000000000000).toFixed(2) + 'T';
+    } 
+    // If the number is greater than or equal to 1 billion (1,000,000,000), format it as billions
+    else if (num >= 1000000000) {
+        return (num / 1000000000).toFixed(2) + 'B';
+    } 
+    // If the number is greater than or equal to 1 million (1,000,000), format it as millions
+    else if (num >= 1000000) {
+        return (num / 1000000).toFixed(2) + 'M';
+    } 
+    // If the number is greater than or equal to 1 thousand (1,000), format it as thousands
+    else if (num >= 1000) {
+        return (num / 1000).toFixed(2) + 'K';
+    } 
+    // Otherwise, return the number as is
+    else {
+        return num.toString();
+    }
+}
+
+// // Sample usage:
+// console.log(ReturnStrMB(39000000000000));  // Output: "39.00T"
+// console.log(ReturnStrMB(37587280000));     // Output: "37.59B"
+// console.log(ReturnStrMB(768000000));       // Output: "768.00M"
+// console.log(ReturnStrMB(500000));          // Output: "500.00K"
+// console.log(ReturnStrMB(75000));           // Output: "75.00K"
+// console.log(ReturnStrMB(500));             // Output: "500"
+
 /**
+ *    !!!!!!! ALSO REMEMBER TO GRAB LAST DAILY PIVOTS TO gDailyR1, gDailyS1 ,etc to display WITH FINANCIALS
  * 
  {
     "Symbol": "M",
