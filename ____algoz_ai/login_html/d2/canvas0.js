@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "285.7";
+let                                                                         gVer = "286.3";
 let             gDebugInfo = 0;  // for   sc = 1.0
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
@@ -126,7 +126,9 @@ let gColScheme =  { bg:'white', tx: 'black', up: 'green', dn:'red', ou:'purple',
 
 let gColScheme0 = { bg:'black',  tx: 'white', up: 'limegreen', dn:'red', ou:'purple' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
 let gColScheme1 = { bg:'white',  tx: 'red',   up: 'darkred', dn:'darkgreen' , ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
-let gColScheme2 = { bg:'black',  tx: 'white', up: '#11ef43', dn:'purple' , ou:'green', wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
+
+// let gColScheme2 = { bg:'black',  tx: 'white', up: '#11ef43', dn:'purple' , ou:'green', wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
+let gColScheme2 = { bg:'black',  tx: 'greenyellow', up: '#11ef43', dn:'purple' , ou:'green', wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
 let gColScheme3 = { bg:'white',  tx: 'blue',  up: 'chocolate', dn:'hotpink', ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 
 let gColScheme4 = { bg:'black',  tx: 'green', up: 'limegreen', dn:'deeppink' , ou:'grey', wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
@@ -380,7 +382,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
     let img_yoff =10 + 20;  
     let fname ="../img/"+gSymbolStrLower+ ".png";
 
-    let fins_list_fsz=20;
+    let fins_list_fsz=18;
 
     DrawRoundedRect(ctx, vrect, 20, colScheme.bg, 3, 1);
     DrawRoundedRect(ctx, vrect, 20, colScheme.ou, 5, 0);
@@ -400,7 +402,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
 
         fntsz0 = parseInt( fins_list_fsz *  gScalarFloat_dynamic );
         // Dra wOverviewData( ctx, vrect , colScheme, gObject_arr , parseInt(vrect.w*0.2750) ,   yoff*2,   fntsz0+4,   fntsz0, gGlobalFont, colScheme.tx  );
-        DrawOverviewData( ctx, vrect , colScheme, gObject_arr ,    xoff ,   yoff*2,   fntsz0+4,   fntsz0, gGlobalFont, colScheme.tx  );
+        DrawOverviewData( ctx, vrect , colScheme, gObject_arr ,    xoff ,   yoff*2,   fntsz0+4,   fntsz0, gGlobalFont1, colScheme.tx  );
 
     }
 
@@ -435,6 +437,7 @@ let gCurrencyStr="$";
 let gLastPriceStr ="0.00";
 let gLastDateStr ="1900-01-01";
 let gGlobalFont= "Arial";
+let gGlobalFont1= "Courier New";
 let gAxesOffset_x = -64;   // go past RIGHT side of canvas
 let gAxesOffset_y =  0;    // unused
 
@@ -595,6 +598,28 @@ function ClipPoint1(ctx, vrect, vectXY) {        //  let vectXY= { x: 100, y:109
 
 
 
+
+
+
+let gNextEarnings_date="nil";
+
+let gLastCandle_C  =0;   // close
+let gLastCandle_P  =0;
+let gLastCandle_P3=0;
+
+let gLastCandle_R1 =0;
+let gLastCandle_R2 =0;
+let gLastCandle_R3 =0;
+let gLastCandle_R4 =0;
+
+let gLastCandle_S1 =0;
+let gLastCandle_S2 =0;
+let gLastCandle_S3 =0;
+let gLastCandle_S4 =0;
+
+let gLastCandle_datestr ="nil";
+
+
 //sets globals etc.
 function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
     let cw= canvas.width;
@@ -646,12 +671,39 @@ function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
                 gLastPriceStr  =   lastPrice0.toFixed(2).toString() ;
                 
                 // let lastDay       = processedData[date]["dayOfWeek"];
+                datestr0 = date.toString();
+
+
+// *NEW* 10-24
+
+                gLastCandle_C  = parseFloat(  processedData[date]["close"] );
+
+                gLastCandle_P  = parseFloat(  processedData[date]["P"] );
+                gLastCandle_P3 = parseFloat(  processedData[date]["P3"] );
+
+                gLastCandle_R1 = parseFloat(  processedData[date]["R1"] );
+                gLastCandle_S1 = parseFloat(  processedData[date]["S1"] );
+
+                gLastCandle_R2 = parseFloat(  processedData[date]["R2"] );
+                gLastCandle_S2 = parseFloat(  processedData[date]["S2"] );
+
+                gLastCandle_R3 = parseFloat(  processedData[date]["R3"] );
+                gLastCandle_S3 = parseFloat(  processedData[date]["S3"] );
+
+                gLastCandle_R4 = parseFloat(  processedData[date]["R4"] );
+                gLastCandle_S4 = parseFloat(  processedData[date]["S4"] );
+
+
+                gLastCandle_datestr = datestr0; 
+
+
                 i++;
     
-                datestr0 = date.toString();
             }
         }//loop
     
+        gNextEarnings_date = "na";
+
         gNumCandlesToRender = i;
         gCandlesMaxes.num2render = gNumCandlesToRender ;
         gCandlesMaxes.priceRange = gCandlesMaxes.priceHigh - gCandlesMaxes.priceLow;
@@ -1299,6 +1351,7 @@ function GetOverviewData(url) {
 const urlOverview1 = 'https://www.alphavantage.co/query?function=OVERVIEW&symbol='
 const urlOverview2 = '&apikey='+gAPIkey1;  
 
+let gFins_Xoff= 40;  // 16 == no vertical space PEratio:XXXX
 // let gFinancialsKeyVal = { keystr: "nil", valstr: "nil"  };  //gKeyVal
 let gObject_arr =[];
 let gKeyVal     = { key: "nil", value: "nil" };
@@ -1350,7 +1403,17 @@ function DrawOverviewData(ctx, vrect, colScheme, object_arr, xoff, yoff, yspace,
             keystr=="BookValue"  ||    
             keystr=="52WeekHigh"  ||    
             keystr=="52WeekLow"  ||   
-            keystr=="Beta"  ){
+            keystr=="Beta" ||
+
+            keystr=="nextEarnings" ||
+            keystr=="lastCandleDate" ||
+            keystr=="R2" ||
+            keystr=="R1" ||
+            keystr=="P" ||
+            keystr=="S1" ||
+            keystr=="S2" 
+        
+        ){
 
 
                     console.log(i, ")   [[", keystr , "]]=====>" , valstr, "<======" );
@@ -1374,7 +1437,16 @@ function DrawOverviewData(ctx, vrect, colScheme, object_arr, xoff, yoff, yspace,
                     if( keystr=="EPS"  || 
                         keystr=="DividendPerShare"  ||
                         keystr=="52WeekLow"  ||
-                        keystr=="52WeekHigh"  ){
+                        keystr=="52WeekHigh"  ||
+
+                        keystr=="R2" ||
+                        keystr=="R1" ||
+                        keystr=="P" ||
+                        keystr=="S1" ||
+                        keystr=="S2" 
+                    
+                    
+                    ){
 
                             numf = parseFloat( valstr );
 
@@ -1384,7 +1456,7 @@ function DrawOverviewData(ctx, vrect, colScheme, object_arr, xoff, yoff, yspace,
                         valstr = gCurrencyStr+  valstr ;
                     }
 
-                    // if PE < 0 == bad  fins!!!
+                    // if PEratio < 0 == bad  fins!!!
                     if( keystr=="PERatio" ){
                             numf = parseFloat( valstr );
                             if(   numf <0 ){
@@ -1401,12 +1473,13 @@ function DrawOverviewData(ctx, vrect, colScheme, object_arr, xoff, yoff, yspace,
 
                     let keystr1 = keystr;
 
-                    if(keystr!="Name"){
+                    if(keystr!="Name" && keystr!="nextEarnings" ){
                         keystr1=keystr+":";
                     }else keystr1="  ";
+                    if(keystr=="nextEarnings" ) valstr = " ";
 
                     DrawText_noclip(ctx,  keystr1,   vrect.x   + xoff1 - rwidth, vrect.y + yoff + ( (i_yinc+ioff) * yspace ), fntsz,  fntcol,  fntname );
-                    DrawText_noclip(ctx,  valstr,   vrect.x   + xoff1 +16               , vrect.y + yoff + ( (i_yinc+ioff) * yspace ), fntsz,  fntcol,  fntname );
+                    DrawText_noclip(ctx,  valstr,   vrect.x   + xoff1 +gFins_Xoff              , vrect.y + yoff + ( (i_yinc+ioff) * yspace ), fntsz,  fntcol,  fntname );
 
                     i_yinc++;
                    
@@ -1417,9 +1490,9 @@ function DrawOverviewData(ctx, vrect, colScheme, object_arr, xoff, yoff, yspace,
     });
     
     if(fins == fins_bad){
-        DrawText_noclip(ctx, fins ,   3+vrect.x +xoff , 3+ vrect.y + yoff + ( (0+1) * yspace ), fntsz*2,  'red',       fntname );
+        DrawText_noclip(ctx, fins ,   3+vrect.x +xoff , 3+ vrect.y -8 + yoff + ( (0+1) * yspace ), fntsz*2,  'red',       fntname );
     }
-    DrawText_noclip(ctx, fins ,   vrect.x +xoff , vrect.y + yoff + ( (0+1) * yspace ), fntsz*2,  fntcol,       fntname );
+    DrawText_noclip(ctx, fins ,   vrect.x +xoff , vrect.y -8 + yoff + ( (0+1) * yspace ), fntsz*2,  fntcol,       fntname );
  
 
 }//fn
@@ -1429,8 +1502,93 @@ function DrawOverviewData(ctx, vrect, colScheme, object_arr, xoff, yoff, yspace,
 function async_GetOverviewData() {
     let url = urlOverview1 + gSymbolStr + urlOverview2;
     gObject_arr =[];
+    let keyVal = { key: 'nilKey'  , value: 'noValue'   }; 
 
-    GetOverviewData(url).then(jsonArray => {
+
+    // GetOverviewData(url).then(jsonArray => {
+    //     jsonArray.forEach(([key, value]) => {
+    //         let keystr = key;
+    //         let valstr = String(value);
+
+    //         // console.log(keystr + ": " + valstr);
+
+    //         // store key, value into gKeyVal, then push onto array gObject_arr;
+    //         // gKeyVal = { key: keystr, value: valstr };  // create key-value pair
+    //         gKeyVal = { key: key  , value: value   };  // create key-value pair
+    //         gObject_arr.push(gKeyVal);  // push the key-value pair object onto the array
+
+    //     });
+    // });
+
+// done w/ initial k,val arr construction, to a global=  gObj..._arr
+
+// *NEW*
+
+   //   gNextEarnings_date="nil";
+        keyVal = { key: 'nextEarnings'  , value: gNextEarnings_date   };  // create key-value pair
+        gObject_arr.push(keyVal);  // push the key-value pair object onto the array
+       
+//   gLastCandle_datestr ="nil";
+        keyVal = { key: 'lastCandleDate'  , value: gLastCandle_datestr   };  // create key-value pair
+        gObject_arr.push(keyVal);  // push the key-value pair object onto the array
+
+
+
+    //   gLastCandle_P  =0;
+      keyVal = { key: 'close'  , value: gLastCandle_C.toString()  };  // create key-value pair
+      gObject_arr.push(keyVal);  // push the key-value pair object onto the array
+
+
+      
+    //   gLastCandle_R4 =0;
+    keyVal = { key: 'R4'  , value: gLastCandle_R4.toString()   };  // create key-value pair
+    gObject_arr.push(keyVal);  // push the key-value pair object onto the array
+
+    //   gLastCandle_R3 =0;
+    keyVal = { key: 'R3'  , value: gLastCandle_R3.toString()   };  // create key-value pair
+    gObject_arr.push(keyVal);  // push the key-value pair object onto the array
+
+
+    //   gLastCandle_R2 =0;
+      keyVal = { key: 'R2'  , value: gLastCandle_R2.toString()   };  // create key-value pair
+      gObject_arr.push(keyVal);  // push the key-value pair object onto the array
+
+
+    //   gLastCandle_R1 =0;
+    keyVal = { key: 'R1'  , value: gLastCandle_R1.toString()   };  // create key-value pair
+    gObject_arr.push(keyVal);  // push the key-value pair object onto the array
+
+
+    //   gLastCandle_P  =0;
+    keyVal = { key: 'P'  , value: gLastCandle_P.toString()  };  // create key-value pair
+    gObject_arr.push(keyVal);  // push the key-value pair object onto the array
+
+  //   gLastCandle_P3=0;
+    keyVal = { key: 'P3'  , value: gLastCandle_P3.toString()   };  // create key-value pair
+    gObject_arr.push(keyVal);  // push the key-value pair object onto the array
+
+
+
+    //  gLastCandle_S1 =0;
+     keyVal = { key: 'S1'  , value: gLastCandle_S1.toString()   };  // create key-value pair
+     gObject_arr.push(keyVal);  // push the key-value pair object onto the array
+ 
+    //  gLastCandle_S2 =0;
+     keyVal = { key: 'S2'  , value: gLastCandle_S2.toString()   };  // create key-value pair
+     gObject_arr.push(keyVal);  // push the key-value pair object onto the array
+
+    //  gLastCandle_S3 =0;
+     keyVal = { key: 'S3'  , value: gLastCandle_S3.toString()   };  // create key-value pair
+     gObject_arr.push(keyVal);  // push the key-value pair object onto the array
+
+    //  gLastCandle_S4 =0;
+     keyVal = { key: 'S4'  , value: gLastCandle_S4.toString()   };  // create key-value pair
+     gObject_arr.push(keyVal);  // push the key-value pair object onto the array
+
+
+
+
+     GetOverviewData(url).then(jsonArray => {
         jsonArray.forEach(([key, value]) => {
             let keystr = key;
             let valstr = String(value);
@@ -1444,6 +1602,12 @@ function async_GetOverviewData() {
 
         });
     });
+
+
+
+    console.log("] AT END of async_GetOverv..() , return'ing(gObject_arr):   pre-AMMENDED gObject_arr[] == " , gObject_arr   );
+
+
     return(gObject_arr);
 }
 
@@ -1738,10 +1902,10 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
 
     let copyRstr = "algoz.ai Copyright (c) 2023-2025 by Algo Investor Inc.";
     // let xpos = parseInt(  vrect.x + (vrect.w/3) );  
-    let xpos = vrect.x +  120 ;  //parseInt(  vrect.w/2 );  
+    let xpos = vrect.x +  60 ;  //parseInt(  vrect.w/2 );  
     DrawText_noclip( ctx, copyRstr, xpos,  ( vrect.y +vrect.h + parseInt(0.5*yoffset)  ),    10 , 'black', gGlobalFont);
     
-    InitAndDrawImage(ctx, vrect, gAlgozLogo_fname, 10, -30, (gImgScale*1.2) );   // let gIm gScale = 0.325;
+    // InitAndDrawImage(ctx, vrect, gAlgozLogo_fname, 10, -30, (gImgScale*1.2) );   // let gIm gScale = 0.325;
 
 }
 
