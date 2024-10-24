@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "280.5";
+                                                              $ver=  "280.6";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -27,7 +27,7 @@ $button8 = 0;
 $button9 = 0;
 $button10 = 0;
 
-$button1name = "Type";
+$button1name = "Chart";
 $button2name = "Buy Sell";
 $button3name = "Sup Res";
 $button4name = "Gaps" ;              //; "Gaps Detection";

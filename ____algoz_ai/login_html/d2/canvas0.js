@@ -1,8 +1,8 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "281.1";
-let             gDebugInfo = 1;
+let                                                                         gVer = "285.7";
+let             gDebugInfo = 0;  // for   sc = 1.0
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -372,6 +372,16 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
     let fntsz0 = 14;  
     let wt = 2;   
 
+
+    let fszDyn = parseInt( vrect.w * 0.025 );
+    let xoff = 60;
+    let yoff = 54;
+    let img_xoff =10;  
+    let img_yoff =10 + 20;  
+    let fname ="../img/"+gSymbolStrLower+ ".png";
+
+    let fins_list_fsz=20;
+
     DrawRoundedRect(ctx, vrect, 20, colScheme.bg, 3, 1);
     DrawRoundedRect(ctx, vrect, 20, colScheme.ou, 5, 0);
 
@@ -387,15 +397,19 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
         if( button5==1 || button5==2  ) DrawSegmentedLine(ctx, processedData, vrect, 2, 'blue',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
         if( button5==2)                 DrawSegmentedLine(ctx, processedData, vrect, 2, 'yellow', "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P3") ;
     }else if(gDrawFinancials>0){                
-        DrawFinancials(ctx, vrect,       gFinancials,      114,   40,   fntsz0+4,   fntsz0, gGlobalFont, 'blue' );
+
+        fntsz0 = parseInt( fins_list_fsz *  gScalarFloat_dynamic );
+        // Dra wOverviewData( ctx, vrect , colScheme, gObject_arr , parseInt(vrect.w*0.2750) ,   yoff*2,   fntsz0+4,   fntsz0, gGlobalFont, colScheme.tx  );
+        DrawOverviewData( ctx, vrect , colScheme, gObject_arr ,    xoff ,   yoff*2,   fntsz0+4,   fntsz0, gGlobalFont, colScheme.tx  );
+
     }
 
-    let fszDyn = parseInt( vrect.w * 0.025 );
-    let xoff = 60;
-    let yoff = 54;
-    let img_xoff =10;  
-    let img_yoff =10 + 20;  
-    let fname ="../img/"+gSymbolStrLower+ ".png";
+    // let fszDyn = parseInt( vrect.w * 0.025 );
+    // let xoff = 60;
+    // let yoff = 54;
+    // let img_xoff =10;  
+    // let img_yoff =10 + 20;  
+    // let fname ="../img/"+gSymbolStrLower+ ".png";
 
     DrawGlobalTextInfo( ctx , vrect ,  xoff, yoff ,  fszDyn, colScheme);
 
@@ -1224,7 +1238,6 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
     if(eom==1){  // end of month    let gAxe sCol0= "#454595" ;
         DrawVerticalLine(ctx  , candlerect.x , vrect.y, (vrect.y+vrect.h) , gAxesCol0 , "dotted");
         DrawDateRotated( ctx  , vrect , colScheme, -0.50 );
-        DrawMonthlySupportResistance(ctx, vrect,  idx , colScheme , candlerect);
     }
 
 // BUY SELL
@@ -1286,16 +1299,168 @@ function GetOverviewData(url) {
 const urlOverview1 = 'https://www.alphavantage.co/query?function=OVERVIEW&symbol='
 const urlOverview2 = '&apikey='+gAPIkey1;  
 
-function TestOverviewData(){
-    let url = urlOverview1+gSymbolStr+urlOverview2;
-        GetOverviewData(url).then(jsonArray => {
-            jsonArray.forEach(([key, value]) => {
-                let keystr = key;
-                let valstr = String(value);
-                console.log(keystr + ": " + valstr);
-            });
+// let gFinancialsKeyVal = { keystr: "nil", valstr: "nil"  };  //gKeyVal
+let gObject_arr =[];
+let gKeyVal     = { key: "nil", value: "nil" };
+
+function DrawOverviewData(ctx, vrect, colScheme, object_arr, xoff, yoff, yspace, fntsz , fntname, fntcol ){
+    if(gDrawFinancials==0) return;
+    let i = 0; 
+    let i_yinc = 0;
+    let ioff = 2; 
+    let ev = 0;    // ent value
+    let rev = 0;  // rev TTM
+    let ev2rev = 0.001;
+    let fins_ok=  "FINANCIALS";
+    let fins_bad=  "FINANCIALS - WARNING: Check Financials!";
+    let fins = fins_ok;
+    let num = 900000000000 ;
+    let numf = 900000000000.0;
+
+    let xoff1= parseInt( vrect.w * 0.275 );
+    
+    object_arr.forEach(obj => {
+        let keystr = obj.key;
+        let valstr = String(obj.value);
+        // console.log(keystr + ": " + valstr);
+      
+        if( keystr=="RevenueTTM"  ){  // this comes before EVtoRev in arr from avant.
+            rev=parseInt(valstr);
+        }
+        if( keystr=="EVToRevenue"  ){
+            ev2rev=parseFloat(valstr);
+            ev =parseInt( ev2rev * rev  );  
+            let evstr = ReturnStrMB(ev);
+            valstr = valstr + ",  EV = " +gCurrencyStr+ evstr ;
+        }
+
+
+        if( keystr=="Name"  || 
+            keystr=="PERatio"  ||
+            keystr=="PEGRatio"  ||
+            keystr=="EPS"  ||
+            keystr=="EBITDA"  ||
+            keystr=="MarketCapitalization"  ||
+            keystr=="DividendYield"  ||
+            keystr=="DividendPerShare"  ||
+            keystr=="DividendDate"  ||
+            keystr=="ExDividendDate"  || 
+            keystr=="RevenueTTM"  || 
+            keystr=="EVToRevenue"  ||  
+            keystr=="BookValue"  ||    
+            keystr=="52WeekHigh"  ||    
+            keystr=="52WeekLow"  ||   
+            keystr=="Beta"  ){
+
+
+                    console.log(i, ")   [[", keystr , "]]=====>" , valstr, "<======" );
+
+
+
+                    // add $ AND "B" or "T" or "M" or "K"
+                    if( keystr=="MarketCapitalization"  || 
+                        keystr=="EBITDA"  ||
+                        keystr=="RevenueTTM"  ){
+
+                        num = parseInt( valstr );
+                        if( keystr=="EBITDA" && num <0 ){
+                            fins = fins_bad;
+                        }
+                        valstr = gCurrencyStr +ReturnStrMB( num );
+
+                    }
+
+                    // add $ only
+                    if( keystr=="EPS"  || 
+                        keystr=="DividendPerShare"  ||
+                        keystr=="52WeekLow"  ||
+                        keystr=="52WeekHigh"  ){
+
+                            numf = parseFloat( valstr );
+
+                            if( keystr=="EPS" && numf <0 ){
+                                fins = fins_bad;
+                            }
+                        valstr = gCurrencyStr+  valstr ;
+                    }
+
+                    // if PE < 0 == bad  fins!!!
+                    if( keystr=="PERatio" ){
+                            numf = parseFloat( valstr );
+                            if(   numf <0 ){
+                                fins = fins_bad;
+                            }
+                    }
+
+
+                    let rwidth = 0;
+                    ctx.fillStyle =fntcol;   
+                    ctx.font = fntsz.toString()+" "+ fntname;
+                    rwidth =   ctx.measureText(keystr).width -  6;
+                
+
+                    let keystr1 = keystr;
+
+                    if(keystr!="Name"){
+                        keystr1=keystr+":";
+                    }else keystr1="  ";
+
+                    DrawText_noclip(ctx,  keystr1,   vrect.x   + xoff1 - rwidth, vrect.y + yoff + ( (i_yinc+ioff) * yspace ), fntsz,  fntcol,  fntname );
+                    DrawText_noclip(ctx,  valstr,   vrect.x   + xoff1 +16               , vrect.y + yoff + ( (i_yinc+ioff) * yspace ), fntsz,  fntcol,  fntname );
+
+                    i_yinc++;
+                   
+                    
+            }// end of big if thru array
+
+        i++;
+    });
+    
+    if(fins == fins_bad){
+        DrawText_noclip(ctx, fins ,   3+vrect.x +xoff , 3+ vrect.y + yoff + ( (0+1) * yspace ), fntsz*2,  'red',       fntname );
+    }
+    DrawText_noclip(ctx, fins ,   vrect.x +xoff , vrect.y + yoff + ( (0+1) * yspace ), fntsz*2,  fntcol,       fntname );
+ 
+
+}//fn
+
+// Draw OverviewData(gObject_arr);  // Assuming gObject_arr is already populated
+
+function async_GetOverviewData() {
+    let url = urlOverview1 + gSymbolStr + urlOverview2;
+    gObject_arr =[];
+
+    GetOverviewData(url).then(jsonArray => {
+        jsonArray.forEach(([key, value]) => {
+            let keystr = key;
+            let valstr = String(value);
+
+            // console.log(keystr + ": " + valstr);
+
+            // store key, value into gKeyVal, then push onto array gObject_arr;
+            // gKeyVal = { key: keystr, value: valstr };  // create key-value pair
+            gKeyVal = { key: key  , value: value   };  // create key-value pair
+            gObject_arr.push(gKeyVal);  // push the key-value pair object onto the array
+
         });
+    });
+    return(gObject_arr);
 }
+
+// let gObject_arr =[];
+// let gKeyVal = { key: "nil", value: "nil"  };  
+
+// function Te stOverviewData(){
+//     let url = urlOverview1+gSymbolStr+urlOverview2;
+//         GetOverviewData(url).then(jsonArray => {
+//             jsonArray.forEach(([key, value]) => {
+//                 let keystr = key;
+//                 let valstr = String(value);
+//                 console.log(keystr + ": " + valstr);
+//                 // store key, value into gKeyVal, then push onto array gObject_arr;
+//             });
+//         });
+// }
 function ReturnStrMB(num) {
     // If the number is greater than or equal to 1 trillion (1,000,000,000,000), format it as trillions
     if (num >= 1000000000000) {
@@ -1319,13 +1484,6 @@ function ReturnStrMB(num) {
     }
 }
 
-// // Sample usage:
-// console.log(ReturnStrMB(39000000000000));  // Output: "39.00T"
-// console.log(ReturnStrMB(37587280000));     // Output: "37.59B"
-// console.log(ReturnStrMB(768000000));       // Output: "768.00M"
-// console.log(ReturnStrMB(500000));          // Output: "500.00K"
-// console.log(ReturnStrMB(75000));           // Output: "75.00K"
-// console.log(ReturnStrMB(500));             // Output: "500"
 
 /**
  *    !!!!!!! ALSO REMEMBER TO GRAB LAST DAILY PIVOTS TO gDailyR1, gDailyS1 ,etc to display WITH FINANCIALS
@@ -1345,8 +1503,10 @@ function ReturnStrMB(num) {
     "OfficialSite": "https://www.macysinc.com",
     "FiscalYearEnd": "January",
     "LatestQuarter": "2024-07-31",
+
     "MarketCapitalization": "4254902000",
     "EBITDA": "1937000000",
+
     "PERatio": "23.6",
     "PEGRatio": "0.103",
     "BookValue": "15.51",
@@ -1358,8 +1518,10 @@ function ReturnStrMB(num) {
     "OperatingMarginTTM": "0.0371",
     "ReturnOnAssetsTTM": "0.0511",
     "ReturnOnEquityTTM": "0.0432",
+
     "RevenueTTM": "23509000000",
     "GrossProfitTTM": "9999000000",
+
     "DilutedEPSTTM": "0.65",
     "QuarterlyEarningsGrowthYOY": "-0.607",
     "QuarterlyRevenueGrowthYOY": "-0.035",
@@ -1380,7 +1542,9 @@ function ReturnStrMB(num) {
     "52WeekLow": "10.2",
     "50DayMovingAverage": "15.54",
     "200DayMovingAverage": "17.96",
+
     "SharesOutstanding": "277373000",
+
     "DividendDate": "2024-10-01",
     "ExDividendDate": "2024-09-13"
 }
@@ -1465,46 +1629,43 @@ function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGre
     */
 }
 
-function DrawFinancials(ctx, vrect, financials_object, xoff, yoff, yspace, fntsz , fntname, fntcol ) {
-    if(gDrawFinancials==0) return;
+// function DrawFinancials(ctx, vrect, financials_object, xoff, yoff, yspace, fntsz , fntname, fntcol ) {
+//     if(gDrawFinancials==0) return;
 
-    let i = 0; 
-    let ioff = 2; 
-
-
-    // DrawText_noclip(ctx,  "FINANCIALS",   vrect.x + vrect.w + parseInt(0.5*xoff), vrect.y + yoff + ( (i+0) * yspace ), fntsz*2,  fntcol,       fntname );
-    DrawText_noclip(ctx,  "FINANCIALS",   vrect.x + parseInt(0.5*xoff), vrect.y + yoff + ( (i+0) * yspace ), fntsz*2,  fntcol,       fntname );
-
-            // Loop through every key-value pair in the financials_object
-            for (const [key, value] of Object.entries(financials_object)) {
-                // Cast key and value to strings
-                let key_string   = String(key) + ":  ";
-                let value_string = String(value);
-                let compString   = key_string + ": " + value_string;
+//     let i = 0; 
+//     let ioff = 2; 
 
 
-                let rwidth = 0;
-                ctx.fillStyle =fntcol;   
-                ctx.font = fntsz.toString()+" "+ fntname;
-                // ctx.font = "64px Arial";
-                // ctx.fillText( key_string , 200 , 200 );
-                rwidth = ctx.measureText(key_string).width;
+//     // DrawText_noclip(ctx,  "FINANCIALS",   vrect.x + vrect.w + parseInt(0.5*xoff), vrect.y + yoff + ( (i+0) * yspace ), fntsz*2,  fntcol,       fntname );
+//     DrawText_noclip(ctx,  "FINANCIALS",   vrect.x + parseInt(0.5*xoff), vrect.y + yoff + ( (i+0) * yspace ), fntsz*2,  fntcol,       fntname );
+
+//             // Loop through every key-value pair in the financials_object
+//             for (const [key, value] of Object.entries(financials_object)) {
+//                 // Cast key and value to strings
+//                 let key_string   = String(key) + ":  ";
+//                 let value_string = String(value);
+//                 let compString   = key_string + ": " + value_string;
+
+
+//                 let rwidth = 0;
+//                 ctx.fillStyle =fntcol;   
+//                 ctx.font = fntsz.toString()+" "+ fntname;
+//                 // ctx.font = "64px Arial";
+//                 // ctx.fillText( key_string , 200 , 200 );
+//                 rwidth = ctx.measureText(key_string).width;
             
 
-                // Call the DrawText function to draw the composed string
-                // DrawText_noclip(ctx,  key_string,     vrect.x + vrect.w + xoff - rwidth, vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
-                // DrawText_noclip(ctx,  value_string,   vrect.x + vrect.w + xoff         , vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
-                DrawText_noclip(ctx,  key_string,     vrect.x   + xoff - rwidth, vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
-                DrawText_noclip(ctx,  value_string,   vrect.x   + xoff         , vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
+//                 // Call the DrawText function to draw the composed string
+//                 // DrawText_noclip(ctx,  key_string,     vrect.x + vrect.w + xoff - rwidth, vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
+//                 // DrawText_noclip(ctx,  value_string,   vrect.x + vrect.w + xoff         , vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
+//                 DrawText_noclip(ctx,  key_string,     vrect.x   + xoff - rwidth, vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
+//                 DrawText_noclip(ctx,  value_string,   vrect.x   + xoff         , vrect.y + yoff + ( (i+ioff) * yspace ), fntsz,  fntcol,       fntname );
 
-                // Increment the counter
-                i++;
-            }
-}
+//                 // Increment the counter
+//                 i++;
+//             }
+// }
 
-function DrawMonthlySupportResistance(ctx, vrect,  idx , colScheme , candlerect){
-    ;
-}
 
 
 // Call: In1tAndDrawImage(ctx, '../img/pic.png', 50, 50, 0.5); // Example: img at (50, 50) with 50% scale
@@ -1554,7 +1715,7 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     //  DrawText( ctx, gChartTypeStr+ addstr,  vrect.x+xoffset, vrect.y+yoffset+(fsz*2), fsz2 , colScheme.tx , gGlobalFont);
     
     // (Heikin Ashi Candles)
-     DrawText( ctx, gChartTypeStr,  vrect.x+xoffset, vrect.y+yoffset+(fsz*2), fsz2 ,  gAxesCol1, gGlobalFont );
+     if(gDrawFinancials==0) DrawText( ctx, gChartTypeStr,  vrect.x+xoffset, vrect.y+yoffset+(fsz*1), fsz2 ,  gAxesCol1, gGlobalFont );
         
 
     let lbstr = "Last Buy Signal:  "+gBuySignal_Last;
@@ -1578,7 +1739,7 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     let copyRstr = "algoz.ai Copyright (c) 2023-2025 by Algo Investor Inc.";
     // let xpos = parseInt(  vrect.x + (vrect.w/3) );  
     let xpos = vrect.x +  120 ;  //parseInt(  vrect.w/2 );  
-    DrawText_noclip( ctx, copyRstr, xpos,  ( vrect.y +vrect.h + yoffset ),    10 , 'black', gGlobalFont);
+    DrawText_noclip( ctx, copyRstr, xpos,  ( vrect.y +vrect.h + parseInt(0.5*yoffset)  ),    10 , 'black', gGlobalFont);
     
     InitAndDrawImage(ctx, vrect, gAlgozLogo_fname, 10, -30, (gImgScale*1.2) );   // let gIm gScale = 0.325;
 
@@ -2236,37 +2397,50 @@ function toggleButton(buttonNumber) {
                         button1 =1;             //  button1==1 == 'line'
                         gDrawHeikinAshi=0;
                         gChartTypeStr = gChartTypeStr_lin;  // "Line Chart"
+                        gDrawFinancials=0;
 
                     }else if(gDrawType==1){    // if ==1  and PRESSED, to to ==2
                         gDrawType=2;
                         gDrawHeikinAshi=1;
                         button1 =0;
                         gChartTypeStr = gChartTypeStr_ha;
+                        gDrawFinancials=0;
+
 
                     }else  if(gDrawType==2){    // if ==2  and PRESSED, to to ==0
                         gDrawType=0;
                         button1 =0;
                         gDrawHeikinAshi=0;
                         gChartTypeStr = gChartTypeStr_can;
+                        gDrawFinancials=0;
+
 
                         }
                     window.dispatchEvent(new Event('button1'));  // Trigger event listener
                     break;
                 case 2:
                     button2 = (button2 === 1) ? 0 : 1;
+                    gDrawFinancials=0;
+
                     window.dispatchEvent(new Event('button2'));
                     break;
                 case 3:
                     button3 = (button3 === 1) ? 0 : 1;
+                    gDrawFinancials=0;
+
                     window.dispatchEvent(new Event('button3'));
                     break;
                 case 4:
                     button4 = (button4 === 1) ? 0 : 1;
+                    gDrawFinancials=0;
+
                     ToggleGaps();  //gGaps_On
                     window.dispatchEvent(new Event('button4'));  // rndcolor
                     break;
                 case 5:
                     // button5 = (button5 === 1) ? 0 : 1;   // pivots blue, then both blue+yellow, then off
+                    gDrawFinancials=0;
+
                     if(button5==0) button5=1;
                      else if(button5==1) button5=2;
                       else  if(button5==2) button5=0;
@@ -2274,12 +2448,16 @@ function toggleButton(buttonNumber) {
                     break;
                 case 6:
                     button6 = (button6 === 1) ? 0 : 1;
+                    gDrawFinancials=0;
+
                     ToggleFib();  
                     window.dispatchEvent(new Event('button6'));
                     break;
                 case 7:
                     button7 = (button7 === 1) ? 0 : 1;
-                    TestOverviewData();
+
+                    console.log('button7:  gObject_arr[]=', gObject_arr);
+
                     ToggleFinancials();
                     window.dispatchEvent(new Event('button7'));
                     break;
@@ -2345,6 +2523,10 @@ function toggleButton(buttonNumber) {
 
         // Initial resize to set up the canvas
         resizeCanvas();
+        
+        // now 
+        let arr1=[];
+        arr1= async_GetOverviewData();
 
 // #############################################################  MAIN CODE  *****
 // #############################################################  MAIN CODE  *****
@@ -2522,7 +2704,7 @@ drawFundamentals
 //
 //ctx.rotate(20*Math.PI/180);
 
-function DrawOverviewData( vrect ){
+function DrawO verviewData( vrect ){
 
 
     // deor
@@ -2532,7 +2714,7 @@ if(gDrawAlmanac==1)  DrawAlmanac( "2022-03-23", "2022-08-21", vrect333, "Annual 
 
 
 // for stocks at the moment
-if(  gDrawCrypto>0  || gDrawOverview==0  ) return;  // self returning to allow other overlays above, cleaner 1 pipe for lots o data, easier for tracking
+if(  gDrawCrypto>0  || gDrawO verview==0  ) return;  // self returning to allow other overlays above, cleaner 1 pipe for lots o data, easier for tracking
 
 
 
