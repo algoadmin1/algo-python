@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "280.8";
+let                                                                         gVer = "281.1";
 let             gDebugInfo = 1;
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
@@ -150,7 +150,10 @@ let gSupResColors = {  r4: 'darkred', r3: 'darkred', r2: '#9f2222'  , r1: '#ef22
 let gColSchemeCurrent= { bg:'black', tx: 'white', up: 'limegreen', dn:'red', ou:'purple' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
 
 
-
+var gTestString9 ="129"; 
+var gTestString ="1G6BCDH"; 
+let gAPIkey0   = '5B4L3BMV4' + gTestString;       //  
+let gAPIkey1 = "91M7LB7MG3JHY" + gTestString9;    // rt 
 // Financial objs
 let vector_2strings = { key_str: "abc",  value_str: "xyz" };
 
@@ -1262,6 +1265,39 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
 
 }//fn
 
+function GetOverviewData(url) {
+    return fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json(); // Parse JSON object
+        })
+        .then(data => {
+            // Return data as an array of key-value pairs
+            return Object.entries(data);
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+}
+
+// Sample function call and loop to display key-value pairs
+const urlOverview1 = 'https://www.alphavantage.co/query?function=OVERVIEW&symbol='
+const urlOverview2 = '&apikey='+gAPIkey1;  
+
+function TestOverviewData(){
+    let url = urlOverview1+gSymbolStr+urlOverview2;
+        GetOverviewData(url).then(jsonArray => {
+            jsonArray.forEach(([key, value]) => {
+                let keystr = key;
+                let valstr = String(value);
+                console.log(keystr + ": " + valstr);
+            });
+        });
+}
+
+
 function Hypotenuse(w, h) {
     // Calculate the hypotenuse using the Pythagorean theorem
     let hypotenuse = Math.sqrt(w * w + h * h);
@@ -2153,6 +2189,7 @@ function toggleButton(buttonNumber) {
                     break;
                 case 7:
                     button7 = (button7 === 1) ? 0 : 1;
+                    TestOverviewData();
                     ToggleFinancials();
                     window.dispatchEvent(new Event('button7'));
                     break;
