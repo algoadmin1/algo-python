@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "279.8";
+let                                                                         gVer = "280.8";
 let             gDebugInfo = 1;
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
@@ -38,7 +38,7 @@ let             gDebugInfo = 1;
 //
 
     const canvas = document.getElementById('myCanvas');
-    const ctx = canvas.getContext('2d');
+    const ctx    = canvas.getContext('2d');
 
 let gDrawType=0;
 
@@ -64,8 +64,13 @@ let gBuySignal_thisCandle =0;
 let gSellSignal_thisCandle =0;
 let gBuySignalCnt_thisCandle =0;
 let gSellSignalCnt_thisCandle =0;
+let gBuySignalPrice_thisCandle =0;
+let gSellSignalPrice_thisCandle =0;
 let gBuySignalStr_thisCandle ="nil";
 let gSellSignalStr_thisCandle ="nil";
+let gBuySignal_Last = "nil"; //0.0;
+let gSellSignal_Last ="nil"; // 0.0;
+
 
 let gColorCycleCnt    = 0;
 let gColorCycleCntMax = 9;
@@ -399,6 +404,11 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
 let gGlobalDrawCol = 'black';
 let gChartTextStr ="Welcome!";
 let gChartTextStr1 ="Welcome!";
+
+let gChartTypeStr_can = ""; //"Candles";    
+let gChartTypeStr_lin = ""; //"Line Chart";    
+let gChartTypeStr_ha  = "(Heikin Ashi Candles)";  
+let gChartTypeStr =  gChartTypeStr_can ;  // Line Chart, Heikin Ashi Candles
 
 let gSymbolStr    ="SPY";
 let gSymbolStrLower='spy';
@@ -898,15 +908,25 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
             gSellSignalCnt_thisCandle    =  parseInt(  processedData[date]["sellSignalCnt"]  )   ;
             let buyPrice                 =  parseInt(  processedData[date]["buySignalPrice"]  )    ;
             let sellPrice                =  parseInt(  processedData[date]["sellSignalPrice"]  )   ;
-           
+            
             let date_thisCandle         =  DateAbbreviate(date, 2 );  // ie Oct 17
             gDate_thisCandle            = date_thisCandle; 
 
-            // gBuySignalStr_thisCandle     =  gCurrencyStr+ buyPrice.toString() +" "+ date_thisCandle +" (" + parseInt(gBuySignalCnt_thisCandle).toString() +")";
-            // gSellSignalStr_thisCandle    =  gCurrencyStr+ sellPrice.toString()+" "+ date_thisCandle+ " (" + parseInt(gSellSignalCnt_thisCandle).toString()+")";
+            // for last buy/sell sig
 
-            gBuySignalStr_thisCandle     =  gCurrencyStr+ buyPrice.toString() +" "+ date_thisCandle; // +" (" + parseInt(gBuySignalCnt_thisCandle).toString() +")";
-            gSellSignalStr_thisCandle    =  gCurrencyStr+ sellPrice.toString()+" "+ date_thisCandle; //+ " (" + parseInt(gSellSignalCnt_thisCandle).toString()+")";
+            gBuySignalPrice_thisCandle   = parseFloat(  processedData[date]["buySignalPrice"]  ).toFixed(2) ;
+            gSellSignalPrice_thisCandle  = parseFloat(  processedData[date]["sellSignalPrice"]  ).toFixed(2) ;
+
+
+            // gBuySignalStr_thisCandle     =  gCurrencyStr+ buyPrice.toString() +" "+ date_thisCandle; // +" (" + parseInt(gBuySignalCnt_thisCandle).toString() +")";
+            // gSellSignalStr_thisCandle    =  gCurrencyStr+ sellPrice.toString()+" "+ date_thisCandle; //+ " (" + parseInt(gSellSignalCnt_thisCandle).toString()+")";
+            gBuySignalStr_thisCandle     =  gCurrencyStr+ gBuySignalPrice_thisCandle.toString() +" "+ date_thisCandle; // +" (" + parseInt(gBuySignalCnt_thisCandle).toString() +")";
+            gSellSignalStr_thisCandle    =  gCurrencyStr+ gSellSignalPrice_thisCandle.toString()+" "+ date_thisCandle; //+ " (" + parseInt(gSellSignalCnt_thisCandle).toString()+")";
+
+
+
+
+
 
 // from jsonget.php
         // $value['candleX'] = 0;
@@ -1196,7 +1216,7 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
 function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGreen, vol1 , eom ){   // candleGreen==1 if UP
 
     // DrawVolume( ctx  ,  vrect, idx , colScheme , candlerect, candleGreen, vol1  ,'solid');   
-    DrawVolume( ctx  ,  vrect, idx , colScheme , candlerect, candleGreen, vol1  ,'outline');   
+    if(idx!=0) DrawVolume( ctx  ,  vrect, idx , colScheme , candlerect, candleGreen, vol1  ,'outline');   
 
     if(eom==1){  // end of month    let gAxe sCol0= "#454595" ;
         DrawVerticalLine(ctx  , candlerect.x , vrect.y, (vrect.y+vrect.h) , gAxesCol0 , "dotted");
@@ -1218,8 +1238,27 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
         let fromx = candlerect.x+parseInt(candlerect.w/2) ;
         let tox = fromx + parseInt(vrect.h*gGapVrectWidth_pct);   // .20 * .w
         let yprice0 = GetYCoordFromPrice( gGapEndPrice_thisCandle, vrect );
-        DrawHorizontalLine_callout_textcol(ctx, fromx , tox ,  yprice0 , gGapLineCol  ,  "dotted" , gGapOpened_str , gGap_fntsz, 0 , gGlobalFont , gGapTextCol );
-    }
+        let yprice1 = GetYCoordFromPrice( gGapStartPrice_thisCandle, vrect );
+
+        if(gGapDir_thisCandle>0){   
+            // draw the candle-gap callout before where the Gap STARTED...
+            DrawHorizontalLine_callout_textcol(ctx, fromx-candlerect.w , tox -candlerect.w,  yprice1 , gGapLineCol  ,  "dotted" , gGapOpened_str , gGap_fntsz, 0 , gGlobalFont , gGapTextCol );
+            // draw the current candle gap callout
+            DrawHorizontalLine_callout_textcol(ctx, fromx               , tox ,              yprice0 , gGapLineCol  ,  "dotted" ,  " " ,           gGap_fntsz, 0 , gGlobalFont , gGapTextCol );
+        
+            DrawVerticalLine(ctx, tox-candlerect.w , yprice1, yprice0, gGapLineCol, "dotted" );
+        }else{
+             // draw the candle-gap callout before where the Gap STARTED...
+             DrawHorizontalLine_callout_textcol(ctx, fromx-candlerect.w , tox -candlerect.w,  yprice1 , gGapLineCol  ,  "dotted" , " " ,            gGap_fntsz, 0 , gGlobalFont , gGapTextCol );
+             // draw the current candle gap callout
+             DrawHorizontalLine_callout_textcol(ctx, fromx               , tox ,              yprice0 , gGapLineCol  ,  "dotted" , gGapOpened_str , gGap_fntsz, 0 , gGlobalFont , gGapTextCol );
+             DrawVerticalLine(ctx, tox-candlerect.w , yprice1, yprice0, gGapLineCol, "dotted" );
+       
+         }
+
+    }//gapdir
+
+
 
 }//fn
 
@@ -1269,6 +1308,7 @@ function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGre
         DrawTriangle_callout(ctx, sz1, 3, outline_upcol, gCandleWickX, BuyTrianglePos_y, 0, 1, gBuySignal_col ,  txt1+ txtStr, (-1*xoff) , 0, 16 , colScheme.tx , gGlobalFont  ) ;
         // DrawText(ctx , txt1_num, gCandleWickX-sz2, BuyTrianglePos_y+Yoff, fsz , gBuySignal_outline_col , gGlobalFont  );
         DrawText(ctx , txt1_num, gCandleWickX-sz2, BuyTrianglePos_y+Yoffbuy+ sz1, fsz , gBuySignal_col , gGlobalFont  );
+        gBuySignal_Last = "BUY "+gSymbolStr+" at "+  gBuySignalStr_thisCandle +" strength="+gBuySignalCnt_thisCandle.toString() +  " ";
     }
 
     if( gSellSignal_thisCandle  > 0 ){
@@ -1279,6 +1319,8 @@ function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGre
         if(gSellSignalCnt_thisCandle<6) fsz= 24 -8;
         DrawTriangle_callout(ctx, sz1, 3, outline_dncol, gCandleWickX, SellTrianglePos_y, 1, 1, gSellSignal_col ,   txt1+ txtStr, (-1*xoff), 0, 16 , colScheme.tx , gGlobalFont  ) ;
         DrawText(ctx , txt1_num, gCandleWickX-sz2, SellTrianglePos_y-Yoff, fsz , gSellSignal_outline_col , gGlobalFont  );
+        gSellSignal_Last = "SELL "+gSymbolStr+" at "+  gSellSignalStr_thisCandle +" strength="+gSellSignalCnt_thisCandle.toString() +  " ";
+   
     }
 
 
@@ -1365,10 +1407,15 @@ function DrawImage(ctx, img, x, y, scale) {
 
 
 function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
+    let fsz2 = parseInt( fsz * 0.40 ) ;
+    let fsz3 = 14;
+
+    let yoffset1=yoffset;
 
     let str = "";
+
+
     str =  gScalar_resize.toString()+ " / "+ gScalar_init.toString()+ " == " +  (gScalarFloat_dynamic).toString() +" ";
-     // DrawText( ctx, str,  vrect.x+xoffset, vrect.y+yoffset+50, fsz , colScheme.tx , gGlobalFont);
 
      let addstr = " ";
 
@@ -1376,8 +1423,24 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
         addstr  = "  sc=" +  gScalarFloat_dynamic.toString();
      }
 
-    DrawText( ctx, gChartTextStr+ addstr,  vrect.x+xoffset, vrect.y+yoffset, fsz , colScheme.tx , gGlobalFont);
-    DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y +vrect.h - yoffset, 12 , gAxesCol0, gGlobalFont);
+     // "AAPL (Daily) Last: $230.90 as of..."
+     DrawText( ctx, gChartTextStr+ addstr,  vrect.x+xoffset, vrect.y+yoffset, fsz , colScheme.tx , gGlobalFont);
+    //  DrawText( ctx, gChartTypeStr+ addstr,  vrect.x+xoffset, vrect.y+yoffset+(fsz*2), fsz2 , colScheme.tx , gGlobalFont);
+    
+    // (Heikin Ashi Candles)
+     DrawText( ctx, gChartTypeStr,  vrect.x+xoffset, vrect.y+yoffset+(fsz*2), fsz2 ,  gAxesCol1, gGlobalFont );
+        
+
+    let lbstr = "Last Buy Signal:  "+gBuySignal_Last;
+    let lsstr = "Last Sell Signal: "+gSellSignal_Last;
+    // DrawText( ctx,lbstr ,   vrect.x+xoffset, vrect.y-yoffset1-fsz,    fsz , 'black' , gGlobalFont);    // last Buy Str
+    // DrawText( ctx, lsstr,  vrect.x+xoffset, vrect.y-yoffset1-(2*fsz), fsz , 'black' , gGlobalFont);   // last Sell Str
+    DrawText_noclip( ctx,lbstr ,   vrect.x+xoffset, 0-4-fsz3,     fsz3 , 'black' , gGlobalFont);    // last Buy Str
+    DrawText_noclip( ctx, lsstr,  vrect.x+xoffset,  0-4-(2*fsz3), fsz3 , 'black' , gGlobalFont);   // last Sell Str
+    // DrawText_noclip( ctx, txtStr, x, y,       fsz , colStr , fontStr)
+
+     // v239.9 v54.0p
+     DrawText( ctx, gChartTextStr1,  (vrect.x+vrect.w)-200, vrect.y +vrect.h - yoffset, 12 , gAxesCol0, gGlobalFont);
     
 
     // let welstr = "algoz Charting";  
@@ -2041,20 +2104,24 @@ function toggleButton(buttonNumber) {
                    // ToggleHeikinAshi();
                     // ie 0 = candle, 1= line, 2= heikin ashi
 
+
                     if(gDrawType==0){    // if ==0  and PRESSED, to to ==1
                         gDrawType=1;    
                         button1 =1;             //  button1==1 == 'line'
                         gDrawHeikinAshi=0;
+                        gChartTypeStr = gChartTypeStr_lin;  // "Line Chart"
 
                     }else if(gDrawType==1){    // if ==1  and PRESSED, to to ==2
                         gDrawType=2;
                         gDrawHeikinAshi=1;
                         button1 =0;
+                        gChartTypeStr = gChartTypeStr_ha;
 
                     }else  if(gDrawType==2){    // if ==2  and PRESSED, to to ==0
                         gDrawType=0;
                         button1 =0;
                         gDrawHeikinAshi=0;
+                        gChartTypeStr = gChartTypeStr_can;
 
                         }
                     window.dispatchEvent(new Event('button1'));  // Trigger event listener

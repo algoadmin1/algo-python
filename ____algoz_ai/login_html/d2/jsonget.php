@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "277.7";
+                                                              $ver=  "280.4";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -197,7 +197,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
     $pivot = 0;
     $P=0; $P3= 0;
 
-    $h0=0; $l0= 0; $c0= 0;
+    $h0=0; $l0= 0; $c0= 0; $o0= 0;
     $s1 = 0;  $s2=0; $s3=0; $s4=0;
     $r1 = 0;  $r2=0; $r3=0; $r4=0;
 
@@ -220,7 +220,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $open  = floatval($value['open']);
 
 // start pivot get stuff
-        $h0=0;    $l0= 0; $c0= 0;
+        $h0=0;    $l0= 0; $c0= 0; $o0= 0;
         $s1 = 0;  $s2=0; $s3=0; $s4=0;
         $r1 = 0;  $r2=0; $r3=0; $r4=0;
 
@@ -302,17 +302,17 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
                         $gapDir          = 0;                // -1= down, 1=up,  0==noGAP
                         $gapDirStr       = "noGap" ;
                         
-                        $gapPriceThresh =   $cl0  * $gapPctThreshold ;   //   yesterday's close  * 0.05
+                        $gapPriceThresh =   floatval( $cl0  * $gapPctThreshold );   //   yesterday's close  * 0.05
 
-                        $priceDiff_GapUpTest     =    ($low - $h0 );     //  today's low  -  yesterday's high     variant: ($close - $h0 ); 
+                        $priceDiff_GapUpTest     =    floatval($low - $h0 );     //  today's low  -  yesterday's high     variant: ($close - $h0 ); 
                         // $priceDiffabs         = abs($low - $h0 );
-                        $priceDiff_GapDnTest     =    ( $l0 -$high  );    //   yesterday's low  -today's high       variant: ($close - $l0 ); 
+                        $priceDiff_GapDnTest     =    floatval( $l0 - $high  );    //   yesterday's low  -today's high       variant: ($close - $l0 ); 
 
 
 
                 // TEST for GAPs  
                         // test for 1st gap UP, then 2nd gap DOWN...
-                        if( $priceDiff_GapUpTest > $gapPriceThresh ){            // GAP UP  Detected
+                        if( $priceDiff_GapUpTest > $gapPriceThresh  &&   $low < $h0 ){   //  todayLOW < yestHIGH , GAP UP  Detected
                             $gapDir = 1;    
                             $gapDirStr      = "up" ;
                             $gapStart_date  = $date;
@@ -321,7 +321,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
                             $gapStart_price = $h0;
                             $gapEnd_price   = $low;
                         }
-                        if( $priceDiff_GapDnTest > $gapPriceThresh ){            // GAP DOWN  Detected
+                        if( $priceDiff_GapDnTest > $gapPriceThresh  &&  $l0 > $high){   // yestLOW > todayHIGH ,  GAP DOWN  Detected
                             $gapDir = -1;    
                             $gapDirStr      = "down" ;
                             $gapStart_date  = $date;
