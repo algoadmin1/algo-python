@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "286.8";
+let                                                                         gVer = "286.7";
 let             gDebugInfo = 0;  // for   sc = 1.0
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
@@ -111,10 +111,10 @@ let gGlobalChartRect2 = { x: 150 , y: 275 , w: 60 , h: 134 };
 
 let gGlobalChartVRectCurrent = { x: 150 , y: 275 , w: 60 , h: 134 };   // init w/ dummy values
 
-let gGlobalChartVRect_Xoff_pct  = 0.0725;  // 0.05
+let gGlobalChartVRect_Xoff_pct  = 0.05;
 let gGlobalChartVRect_Yoff_pct  = 0.05;
 let gGlobalChartVRect_w_pct  = 0.85;
-let gGlobalChartVRect_h_pct  = 0.80;   // 0.80
+let gGlobalChartVRect_h_pct  = 0.85;
 
 let gHypotenuse_scalar_init = .0 ;   // c = sqrt(  ( a*a ) + ( b*b )  ) ;   // hypotenuse_scalar
 let gHypotenuse_scalar = 0.0 ;
@@ -138,9 +138,7 @@ let gColScheme6 =  { bg:'antiquewhite',  tx: 'blue', up: 'black', dn:'orange', o
 
 let gColScheme7 =  { bg:'white',  tx: 'black', up: 'yellow', dn:'blue', ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 // let gColScheme7 =  { bg:'white',  tx: 'blue', up: 'chocolate', dn:'hotpink', ou:'red' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
-// let gColScheme8 =  { bg:'blue',  tx: 'yellow', up: 'black', dn:'orange', ou:'grey' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
-// let gColScheme8 =  { bg:'black',  tx: 'goldenrod', up: 'purple', dn:'lightgoldenrodyellow', ou:'grey' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
-let gColScheme8 =  { bg:'black',  tx: 'goldenrod', up: 'purple', dn:'yellow', ou:'grey' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
+let gColScheme8 =  { bg:'blue',  tx: 'yellow', up: 'black', dn:'orange', ou:'grey' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };
 
 let gColScheme9 =  { bg:'black', tx: 'white', up: 'lawngreen', dn:'crimson', ou:'indianred' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'brown', ax: 'lightskyblue' };
 let gColScheme10 = { bg:'black', tx: 'mintcream', up: 'turquoise', dn:'peachpuff', ou:'magenta' , wi:'#6a6a6a', p:'blue', p3: 'yellow', tx1: 'green', ax: 'lightskyblue' };

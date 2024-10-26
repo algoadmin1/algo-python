@@ -1,0 +1,19 @@
+/*style_digital.css*/
+
+
+@font-face {
+    font-family: 'Digital-7';
+    /* src: url('https://algoinvestorr.com/timer/digital-7.ttf') format('truetype'); */
+    /* src: url('digital_7/digital-7.ttf') format('truetype'); */
+    src: url('digital_7/digital-7mi.ttf') format('truetype');
+    /* Replace 'path-to-your-font/Digital-7.ttf' with the actual path to your font file */
+}
+
+.textdig{
+  	color: #3495de;   
+    /*color: var(--gBut1Col);*/
+    /* font-family: 'Trebuchet MS', sans-serif; */
+    font-family: 'Digital-7', sans-serif; 
+    font-size: 24px;
+}
+
