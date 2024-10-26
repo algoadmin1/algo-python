@@ -2503,8 +2503,8 @@ function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =
         // Function to resize canvas and redraw the rectangle
 function resizeCanvas() {
 
-    console.log("]  inside .js:  r3sizeCanvas():  button ...10 ==", button1, button2, button3, button4,
-         button5, button6, button7, button8, button9, button10 );  
+    // console.log("]  inside .js:  r3sizeCanvas():  button ...10 ==", button1, button2, button3, button4,
+        //  button5, button6, button7, button8, button9, button10 );  
 
             // Set canvas width and height to match the div's size
             canvas.width = canvas.parentElement.clientWidth;
