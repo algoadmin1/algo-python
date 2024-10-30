@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "286.8";
+let                                                                         gVer = "287.0";
 let             gDebugInfo = 0;  // for   sc = 1.0
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
@@ -21,15 +21,9 @@ let             gDebugInfo = 0;  // for   sc = 1.0
 //                          
 //                          BUG:  Monthly Sup/Resistance drawn above/below vrect  if ( checkPt(vrect,x,y)==true)
 //
-//                          FIX P3/P OFFSET DATA IN PHP
-//      
-//                          Draw Tri/Circle w/ Generic Text Callout fn
 //                          
 //                          Find EndOfWeek ['endOfWeek'] component for intraday
 //                          
-//                          fix volHt = (vol/volmax) etc   DRAW VOLUME
-// 
-//                          if BuySigPrice < S1month, or IF sellSigPrice > R1month etc...
 //                           
 //                   NOTE !!! draw candles is computing his and lows CIRCLES that DrawLines is NOT !!!
 //
@@ -1366,8 +1360,11 @@ function DrawOverviewData(ctx, vrect, colScheme, object_arr, xoff, yoff, yspace,
     let ev = 0;    // ent value
     let rev = 0;  // rev TTM
     let ev2rev = 0.001;
-    let fins_ok=  "FINANCIALS";
-    let fins_bad=  "FINANCIALS - WARNING: Check Financials!";
+
+    let fins_ok=  "OVERVIEW";
+    let fins_bad=  "OVERVIEW - WARNING: Check Financials !";
+    // let fins_ok=  "FINANCIALS";
+    // let fins_bad=  "FINANCIALS - WARNING: Check Financials!";
     let fins = fins_ok;
     let num = 900000000000 ;
     let numf = 900000000000.0;
@@ -2594,7 +2591,16 @@ function toggleButton(buttonNumber) {
                         gDrawFinancials=0;
 
 
-                        }
+                        }// else  if(gDrawType==3){    // if ==3  and PRESSED, go to Financials
+                            // gDrawType=0;
+                            // button1 =0;
+                            // gDrawHeikinAshi=0;
+                            // gChartTypeStr = gChartTypeStr_can;
+                            // gDrawFinancials=0;
+    
+    
+                            // }
+
                     window.dispatchEvent(new Event('button1'));  // Trigger event listener
                     break;
                 case 2:
@@ -2652,14 +2658,14 @@ function toggleButton(buttonNumber) {
                     break;
 
 // unused
-                case 9:
-                    button9 = (button9 === 1) ? 0 : 1;
-                    window.dispatchEvent(new Event('button9'));
-                    break;
-                case 10:
-                    button10 = (button10 === 1) ? 0 : 1;
-                    window.dispatchEvent(new Event('button10'));
-                    break;
+                // case 9:
+                //     button9 = (button9 === 1) ? 0 : 1;
+                //     window.dispatchEvent(new Event('button9'));
+                //     break;
+                // case 10:
+                //     button10 = (button10 === 1) ? 0 : 1;
+                //     window.dispatchEvent(new Event('button10'));
+                //     break;
 
          }
 }//fn t0ggle butt
@@ -2694,8 +2700,9 @@ function toggleButton(buttonNumber) {
         window.addEventListener('button7', resizeCanvas);
 
         window.addEventListener('button8', resizeCanvas);
-        window.addEventListener('button9', resizeCanvas);
-        window.addEventListener('button10', resizeCanvas);
+
+        // window.addEventListener('button9', resizeCanvas);
+        // window.addEventListener('button10', resizeCanvas);
 
         // Resize the canvas when the window is resized
         window.addEventListener('resize', resizeCanvas);
@@ -3545,7 +3552,7 @@ return;
 
 
 
-
+// ###############################################
 
 
 

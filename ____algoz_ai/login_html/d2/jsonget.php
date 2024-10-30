@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "280.6";
+                                                              $ver=  "287.1";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -190,6 +190,10 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
     $gapDir = 0;  // -1= down, 1=up,  0==noGAP
 
 
+    $gapClosed_date = "nil";
+    $gapOpenIdx  = 0;
+    $gapClosed_x = 0;
+
 
     $BuySignal  = 0;
     $SellSignal = 0;
@@ -211,7 +215,10 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
     $HA_close= 0;
     
 
+
     foreach ($data as $date => &$value) {    // Loop through each element of the array
+
+
 
         // this candle's h,l,c,o [0]
         $high  = floatval($value['high']);
@@ -340,6 +347,12 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
                         $value['gapdir']         = $gapDir ;
                         $value['gapdir_str']     = $gapDirStr;
 
+                        // *NEW*
+                        $value['gapclosed_date']   =  $gapClosed_date  ;
+                        $value['gapclosed_x']      =    $gapClosed_x ;
+                        $value['gapopen_idx']      =    $gapOpenIdx  ;
+                    
+                    
                         
 
             }else{  // if i==0 we're at start of data candles RESET vars
@@ -542,6 +555,17 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['date'] = substr($date, 0, 10);
 
 
+        // *NEW*
+        $value['split_detected']  = 0;
+        $value['split_date']      = "na";
+        $value['split_coeff']     = 1.0;
+
+        $adjClose = 0.0;
+        if(isset($value['adjusted close'])){
+            $adjClose = floatval($value['adjusted close']);
+        }
+        $value['adjusted_close']     =  $adjClose;
+// if (adjClose != close ) { // use adj close, ie a split occurred  }
 
 
         $mn = substr($date, 5, 2);      // 'YYYY-MM-DD' ==> 'MM'  ==> 09
@@ -977,6 +1001,121 @@ Plot2(Pday,"Pday");         //BUY this is John Person's blue-the next day's Pivo
 
 *****************************************************************************
 *****************************************************************************
+
+
+
+let lastday0 = -1;
+// MAIN AI FUNCTION
+function scanCandlesticksForAI( candleArray ){
+    
+    var i=0, j=0, idx=0, idx_1=0, idx_2=0, idx_3=0, price0=0, p1dayAgo=0, p2dayAgo=0, p3dayAgo=0   ;
+    var voltmp=0;
+
+            gCorpName = "{Corp Name Here}";
+
+            BuySignal = 0;
+            SellSignal = 0;
+            
+            BuySigCnt = 0;
+            SellSigCnt =0;
+
+            longShort = 0; // -1 for short, 1 for long, 0 n/a
+            longShortPrior = 0; // to keep track of previous state
+    
+   // nov 23rd 2018
+   // june 30th 2019  jmb clear globals like gHCD_candleNum =-1; ...
+            Clear_gIndicators();
+    
+    
+// HERE WE REDEFINE THE GLOBAL VAR candlesLen
+            candlesLen = candleArray.length / candlesOffset ;
+//JMB011023
+            //candlesLen = ClampCandlesLen(candleArray);
+
+          // console.log("] scnCandlesticksForAI() -  before split hndlr" ); 
+
+
+
+  // ************************************************************************************ SPLIT_HANDLER
+  // ************************************************************************************ SPLIT HANDLER
+  // ****
+  // ****     SPLIT HANDLER
+  // ****
+  // ************************************************************************************ SPLIT HANDLER
+  // ************************************************************************************ SPLIT HANDLER
+  //
+  // JMB 2020-10-09
+  // handle  if(gSpl itDetected==1);
+    	var spl=0;
+    	var tmpj=0;
+    	var splitDivideFactor=1.0 ;
+
+   // console.log("] scnCandlesticksForAI() -  start of split hndlr" ); 
+
+
+		if(gSplitDetected==1){
+
+   // console.log("] scnCandlesticksForAI() -  INSIDE of split hndlr gSpl1itDetected==1" ); 
+
+
+
+			for(i=(candlesLen-1); i>=0; i--){  // reverse
+		        	   idx= i * candlesOffset;  
+
+                    let splitstr = candleArray[ idx + SPLIT_COEF ]; 
+
+		             spl = Number( candleArray[ idx + SPLIT_COEF ] );
+		             if(spl!=1.0){
+
+            cl( "] SPLIT HANDLER [SPLIT_COEF]==  ==>"+ splitstr +"<==" );
+
+                      // console.log("] **   SPLIT FOUND,  Num( spl )==" , spl );   
+                      //  console.log( candleArray[ idx + SPLIT_COEF ] );
+
+
+                            splitDivideFactor *= spl;   // handled multiple splits in same array
+            console.log("]  splitDivideFactor == " ,splitDivideFactor );
+
+    		             	// console.log("i=="+i+") splitDivideFactor="+splitDivideFactor+" starting split on next candle...");
+		             }else{
+      		             		// ie if we encounter splitcoeff in Avantage data, then don't split that line.
+      	 		             tmpj =   Number(candleArray[ idx + O ]) / splitDivideFactor   ;
+      			             candleArray[ idx + O ] = ( tmpj.toFixed(4) ).toString() ;
+            						 
+            						 tmpj =   Number(candleArray[ idx + H ]) / splitDivideFactor   ;
+            			             candleArray[ idx + H ] = ( tmpj.toFixed(4) ).toString() ;
+            						 
+            						 tmpj =   Number(candleArray[ idx + L ]) / splitDivideFactor   ;
+            			             candleArray[ idx + L ] = ( tmpj.toFixed(4) ).toString() ;
+            						 
+            						 tmpj =   Number(candleArray[ idx + C ]) / splitDivideFactor   ;
+            			             candleArray[ idx + C ] = ( tmpj.toFixed(4) ).toString() ;
+            			         
+            			         // volume * split factor
+            						 tmpj =   Number(candleArray[ idx + V ]) * splitDivideFactor   ;
+            			             candleArray[ idx + V ] = ( tmpj.toFixed(4) ).toString() ;
+			         }//else
+		             	 
+
+		        }// for 
+
+                // clear       if(gSplitDetected==1){
+        
+
+        //reset it so we don't keep splitting upon redraw...
+        // gSplitDetected=2;  // ?
+        gSplitDetected=0;
+
+
+		}//if
+    // ************************************************************************************ SPLIT HANDLER
+    // ************************************************************************************ SPLIT HANDLER
+    // ************************************************************************************ SPLIT HANDLER
+    // ************************************************************************************ SPLIT HANDLER
+    // ************************************************************************************ SPLIT HANDLER
+
+
+
 *****************************************************************************
 
 */
@@ -1038,6 +1177,10 @@ $urlday = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="
 $urlweekly="https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=IBM&apikey=demo";
 $urlmonthly="https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=IBM&apikey=demo";
 
+// adjusted prep
+$url_adjusted_close_daily = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSTR&outputsize=full&apikey=91M7LB7MG3JHY129";
+$url_adjusted_close_weekly = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=MSTR&outputsize=full&apikey=91M7LB7MG3JHY129";
+$url_adjusted_close_monthly = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=MSTR&outputsize=full&apikey=91M7LB7MG3JHY129";
 
 $strkey_1min  ="Time Series (1min)";
 $strkey_15min = "Time Series (15min)";
@@ -1131,7 +1274,21 @@ $processedDataJson = json_encode($dataProcessed);
             border: none; 
             border-radius: 10px;  
 
+            /* Smooth transition for hover and active */
+            transition: background-color 0.2s ease; 
         }
+
+        .buttons-container button:hover {
+            background-color: #5A5FBF;  
+        }
+
+        .buttons-container button:active {
+            background-color: #3E4290;  
+        }
+
+
+
+
 
 
 
@@ -1202,6 +1359,7 @@ $processedDataJson = json_encode($dataProcessed);
 //  ##############################################################  *NEW_BUTTONS* 
 
 /**
+ * 
  * 
  * 
  * 
