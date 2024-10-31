@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "287.1";
+                                                              $ver=  "287.3";
 
 date_default_timezone_set('America/New_York');
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -86,7 +86,9 @@ if($msg==1){
     echo " tser = ". $timeseriesStr;
 }
 
-function GetJsonData($url, $maxCandles, $strkey) {
+function GetJsonData($url, $maxCandles, $strkey, $adjustedCloseFlag) {
+    global $gDataSeriesTypeStr;
+
     try {
         // Fetch the JSON data from the URL
         $json = file_get_contents($url);
@@ -109,15 +111,127 @@ function GetJsonData($url, $maxCandles, $strkey) {
         $result = [];
 
         // Loop through the time series data and collect the required information
-        foreach ($timeSeries as $date => $values) {
-            // Format the required fields
-            $result[$date] = [
-                "open" => $values["1. open"],
-                "high" => $values["2. high"],
-                "low" => $values["3. low"],
-                "close" => $values["4. close"],
-                "volume" => $values["5. volume"]
-            ];
+        foreach ($timeSeries as $date => $values) { // Format the required fields
+            
+            if($adjustedCloseFlag == 0){      // old but may need it for INTRADAY
+                    $result[$date] = [
+                        "open" => $values["1. open"],
+                        "high" => $values["2. high"],
+                        "low" => $values["3. low"],
+                        "close" => $values["4. close"],
+                        "volume" => $values["5. volume"],
+                        "timeper" => $gDataSeriesTypeStr
+                    ];
+
+            }else  if($adjustedCloseFlag == 1 && $gDataSeriesTypeStr=="daily"){    // *NEW*  iff daily adjusted, THIS HAS 8. split coefficient
+                    $result[$date] = [
+                        "open" => $values["1. open"],
+                        "high" => $values["2. high"],
+                        "low" => $values["3. low"],
+                        "close" => $values["4. close"],
+                        "adjustedclose" => $values["5. adjusted close"],
+                        "volume" => $values["6. volume"],
+                        "dividendamount" => $values["7. dividend amount"],
+                        "splitcoefficient" => $values["8. split coefficient"],
+                        "timeper" => $gDataSeriesTypeStr
+
+                    ];
+
+            }else  if(   ($adjustedCloseFlag == 1)    &&   ( $gDataSeriesTypeStr=="weekly" ||  $gDataSeriesTypeStr=="monthly")   ){    
+                    $result[$date] = [
+                        "open" => $values["1. open"],
+                        "high" => $values["2. high"],
+                        "low" => $values["3. low"],
+                        "close" => $values["4. close"],
+                        "adjustedclose" => $values["5. adjusted close"],
+                        "volume" => $values["6. volume"],
+                        "dividendamount" => $values["7. dividend amount"],
+                        // "splitcoefficient" => $values["8. split coefficient"]
+
+                        "timeper" => $gDataSeriesTypeStr
+
+                    ];
+            }
+
+
+/*
+
+//monthly adj data
+ "2024-07-31": {
+            "1. open": "1410.0000",
+            "2. high": "1837.0000",
+            "3. low": "1202.3200",
+            "4. close": "1614.4400",
+            "5. adjusted close": "161.4440",
+            "6. volume": "28002730",
+            "7. dividend amount": "0.0000"
+        },
+
+// weekly adj data
+ "2024-07-12": {
+            "1. open": "1314.5300",
+            "2. high": "1435.4044",
+            "3. low": "1258.7817",
+            "4. close": "1396.7600",
+            "5. adjusted close": "139.6760",
+            "6. volume": "4828195",
+            "7. dividend amount": "0.0000"
+
+
+// daily adj  data
+  "2024-08-09": {
+            "1. open": "135.89",
+            "2. high": "136.685",
+            "3. low": "129.55",
+            "4. close": "135.37",
+            "5. adjusted close": "135.37",
+            "6. volume": "7330433",
+            "7. dividend amount": "0.0000",
+            "8. split coefficient": "1.0"
+        },
+        "2024-08-08": {
+            "1. open": "130.23",
+            "2. high": "136.76",
+            "3. low": "128.06",
+            "4. close": "135.99",
+            "5. adjusted close": "135.99",
+            "6. volume": "10378305",
+            "7. dividend amount": "0.0000",
+            "8. split coefficient": "10.0"
+        },
+        "2024-08-07": {
+            "1. open": "1408.78",
+            "2. high": "1421.58",
+            "3. low": "1240.13",
+            "4. close": "1246.85",
+            "5. adjusted close": "124.685",
+            "6. volume": "1093385",
+            "7. dividend amount": "0.0000",
+            "8. split coefficient": "1.0"
+        },
+        "2024-08-06": {
+            "1. open": "1326.0",
+            "2. high": "1394.94",
+            "3. low": "1262.18",
+            "4. close": "1369.21",
+            "5. adjusted close": "136.921",
+            "6. volume": "1226023",
+            "7. dividend amount": "0.0000",
+            "8. split coefficient": "1.0"
+        },
+        "2024-08-05": {
+            "1. open": "1051.65",
+            "2. high": "1354.2699",
+            "3. low": "1024.02",
+            "4. close": "1309.0",
+            "5. adjusted close": "130.9",
+            "6. volume": "2267755",
+            "7. dividend amount": "0.0000",
+            "8. split coefficient": "1.0"
+        },
+*/
+
+
 
             // Stop adding if we've reached the maximum number of candles
             if (count($result) >= $maxCandles) {
@@ -138,6 +252,65 @@ function GetJsonData($url, $maxCandles, $strkey) {
 }
 
 /*
+
+
+
+
+//  https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=MSTR&outputsize=full&apikey=91M7LB7MG3JHY129
+
+// MONTHLY ADJ CLOSE DATA
+"Monthly Adjusted Time Series": {
+        "2024-10-30": {
+            "1. open": "168.5200",
+            "2. high": "267.8900",
+            "3. low": "157.0200",
+            "4. close": "247.3100",
+            "5. adjusted close": "247.3100",
+            "6. volume": "418047718",
+            "7. dividend amount": "0.0000"
+        },
+        "2024-09-30": {
+            "1. open": "132.0000",
+            "2. high": "179.6000",
+            "3. low": "113.6900",
+            "4. close": "168.6000",
+            "5. adjusted close": "168.6000",
+            "6. volume": "229358616",
+            "7. dividend amount": "0.0000"
+        },
+        "2024-08-30": {
+            "1. open": "1615.0000",
+            "2. high": "1634.3600",
+            "3. low": "126.5900",
+            "4. close": "132.4200",
+            "5. adjusted close": "132.4200",
+            "6. volume": "172566116",
+            "7. dividend amount": "0.0000"
+        },
+        "2024-07-31": {
+            "1. open": "1410.0000",
+            "2. high": "1837.0000",
+            "3. low": "1202.3200",
+            "4. close": "1614.4400",
+            "5. adjusted close": "161.4440",
+            "6. volume": "28002730",
+            "7. dividend amount": "0.0000"
+        },
+        "2024-06-28": {
+            "1. open": "1601.0000",
+            "2. high": "1734.6977",
+            "3. low": "1325.5414",
+            "4. close": "1377.4800",
+            "5. adjusted close": "137.7480",
+            "6. volume": "24914682",
+            "7. dividend amount": "0.0000"
+        },
+
+
+
+
+
+
 R4day = High+ 3*(Pday-Low) ;
 R3day = (Pday-S1day) + R2day;
 R2day = Pday + High – Low;
@@ -561,9 +734,9 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['split_coeff']     = 1.0;
 
         $adjClose = 0.0;
-        if(isset($value['adjusted close'])){
-            $adjClose = floatval($value['adjusted close']);
-        }
+        // if(isset($value['adjusted close'])){
+        //     $adjClose = floatval($value['adjusted close']);
+        // }
         $value['adjusted_close']     =  $adjClose;
 // if (adjClose != close ) { // use adj close, ie a split occurred  }
 
@@ -1161,7 +1334,8 @@ function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
               
              "<br />";
     }
-}
+}//fn
+
 
 // $sym0="NVDA";
 $sym0= $sym;
@@ -1193,20 +1367,27 @@ $url = $urlday ;
 $strkey = $timeseriesStr;  // ie. "Time Series (Daily)"  or  "Time Series (1min)" or "Weekly Time Series"
 $strkeyAux = $strkey;  // this is for string-stripping only to insert (Daily) into per in json
 
-if($per=="Daily"){
-    $url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=".$sym0."&outputsize=compact&apikey=91M7LB7MG3JHY129";
+$gDataSeriesTypeStr ="daily";
 
+
+if($per=="Daily"){
+    // $url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=".$sym0."&outputsize=compact&apikey=91M7LB7MG3JHY129";
+    $url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=".$sym0."&outputsize=compact&apikey=91M7LB7MG3JHY129";
+    $gDataSeriesTypeStr="daily";
 }else if($per=="Weekly"){
     $strkey =  "Weekly Time Series";
-    $url = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=".$sym0."&outputsize=compact&apikey=91M7LB7MG3JHY129";
+    $url = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=".$sym0."&outputsize=compact&apikey=91M7LB7MG3JHY129";
+    $gDataSeriesTypeStr="weekly";
 
 }else if($per=="Monthly"){
     $strkey =  "Monthly Time Series";
-    $url = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=".$sym0."&outputsize=compact&apikey=91M7LB7MG3JHY129";
+    $url = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=".$sym0."&outputsize=compact&apikey=91M7LB7MG3JHY129";
+    $gDataSeriesTypeStr="monthly";
 
 }else{
     if($intraday==1){
         $url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=".$sym0. "&interval=" .$per ."&entitlement=realtime&apikey=91M7LB7MG3JHY129";
+        $gDataSeriesTypeStr="intraday";
 
     }
 }
@@ -1214,7 +1395,9 @@ if($per=="Daily"){
 $strRemove="Time Series ";
 $intervalStr = removeString($strkeyAux, $strRemove);   // leave only "(Monthly)" or "(15min)"
 
-$data = GetJsonData($url, $maxCandles, $strkey);
+$gUseAdjustedClose =1;
+// $data = GetJsonData($url, $maxCandles, $strkey, 0);   // old 1,2,3,4,5=volume
+$data = GetJsonData($url, $maxCandles, $strkey, $gUseAdjustedClose);
 
 $dataProcessed = ProcessCandles($data, $sym0, $intervalStr);
 if($printjson==1) PrintJsonData($dataProcessed, $sym0, $strkey , $maxCandles );

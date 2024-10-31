@@ -1,6 +1,7 @@
 <?php 
 
-                                                                $ver=  "2.1";
+                                                                $ver=  "2.7";
+date_default_timezone_set('America/New_York');
 
 session_start();
 if(!isset($_SESSION['cnt'])){
@@ -11,18 +12,238 @@ if(!isset($_SESSION['cnt'])){
 $cnt=$_SESSION['cnt'];
 
 
-date_default_timezone_set('America/New_York');
-                                
-$symbols0  = [   "SPY", "QQQ", "VXX", "AAPL", "META", "NVDA", "AMZN" ];  
 
-$symbols  = [   "SPY", "QQQ", "VXX", "AAPL", "META", "NVDA", "AMZN", "NFLX", "GS", "MSTR", "MSFT" ];
-
-$symbols2 = [   "SPY", "QQQ", "VXX", "AAPL", "META", "NVDA", "AMZN", "NFLX", "GS", "MSTR", "MSFT", 
-                    "GME", "GD", "TSLA", "INTC", "WBA", "JNJ", "X", "GLD", "SLV",
-                    "F", "CRM", "ORCL", "ZM", "M", "F", "K", "KO", "MCD" 
-                    ];
+$symbols  = [   "SPY", "QQQ","SQQQ", "VXX", "AAPL", "META", "NVDA", "AMZN", "NFLX", "GS", "MSTR", "MSFT", "RDDT", "AMD" , "DJT", "JNJ", "X", "GLD", "SLV",
+                    "F", "CRM", "GS", "ZM", "M", "TSLA", "PLTR", "KO", "MCD"];
 
 $symbolsCnt = count($symbols);
+echo "<br />] symbolsCnt ==". $symbolsCnt;
+
+
+function GetBulkQuotes($arr, $urlPrefix, $urlSuffix, $maxSymbols) {
+    // Step 1: Truncate the array if it contains more symbols than $maxSymbols
+    if (count($arr) > $maxSymbols) {
+        $arr = array_slice($arr, 0, $maxSymbols);
+    }
+
+    // Step 2: Build the URL by joining the tickers with a comma
+    $symbols = implode(",", $arr);
+    $urlNew = $urlPrefix . $symbols . $urlSuffix;
+    echo "<br />] newURL ==". $urlNew;
+
+    $processedBulkSymbols = [];
+
+    try {
+        // Step 3: Fetch data from the constructed URL
+        $json = file_get_contents($urlNew);
+
+        // Step 4: Decode JSON payload
+        $data = json_decode($json, true);
+
+        // Step 5: Check for 'data' in JSON and process each stock quote
+        if (isset($data['data'])) {
+            foreach ($data['data'] as $quote) {
+                $symbol = $quote['symbol'];
+                $tstamp = $quote['timestamp'];    // "2024-10-30 19:59:57.644"
+                $date0   =  substr($tstamp, 0, 10);  // "2024-10-30"    ( 0, 10, $quote['timestamp']);
+
+                // Organize only required fields
+                $processedBulkSymbols[$symbol] = [
+                    'timestamp' => $quote['timestamp'],
+                    'date' =>    $date0 ,                
+                    'open' => $quote['open'],
+                    'high' => $quote['high'],
+                    'low' => $quote['low'],
+                    'close' => $quote['close'],
+                    'volume' => $quote['volume'],
+                    'previous_close' => $quote['previous_close'],
+                    'change' => $quote['change'],
+                    'change_percent' => $quote['change_percent'],
+                    'extended_hours_quote' => $quote['extended_hours_quote'],
+                    'extended_hours_change' => $quote['extended_hours_change'],
+                    'extended_hours_change_percent' => $quote['extended_hours_change_percent']
+                ];
+            }
+        }
+    } catch (Exception $e) {
+        // Log or handle error
+        echo "Error fetching data: " . $e->getMessage();
+    }
+
+    // Return the processed data
+    return $processedBulkSymbols;
+}
+
+
+
+// function GetBulkQuotes0($arr, $urlPrefix, $urlSuffix) {
+//     // Step 1: Build the URL by joining the tickers with a comma
+//     $symbols = implode(",", $arr);
+//     $urlNew = $urlPrefix . $symbols . $urlSuffix;
+    
+//     $processedBulkSymbols = [];
+
+//     try {
+//         // Step 2: Fetch data from the constructed URL
+//         $json = file_get_contents($urlNew);
+
+//         // Step 3: Decode JSON payload
+//         $data = json_decode($json, true);
+
+//         // Step 4: Check for 'data' in JSON and process each stock quote
+//         if (isset($data['data'])) {
+//             foreach ($data['data'] as $quote) {
+//                 $symbol = $quote['symbol'];
+//                 $tstamp = $quote['timestamp'];    // "2024-10-30 19:59:57.644"
+//                 $date0   =  substr($tstamp, 0, 10);  //( 0, 10, $quote['timestamp']);
+
+//                 // Organize only required fields
+//                 $processedBulkSymbols[$symbol] = [
+//                     'timestamp' => $quote['timestamp'],
+//                     'date' =>    $date0 , //$quote['timestamp'],
+//                     'open' => $quote['open'],
+//                     'high' => $quote['high'],
+//                     'low' => $quote['low'],
+//                     'close' => $quote['close'],
+//                     'volume' => $quote['volume'],
+//                     'previous_close' => $quote['previous_close'],
+//                     'change' => $quote['change'],
+//                     'change_percent' => $quote['change_percent'],
+//                     'extended_hours_quote' => $quote['extended_hours_quote'],
+//                     'extended_hours_change' => $quote['extended_hours_change'],
+//                     'extended_hours_change_percent' => $quote['extended_hours_change_percent']
+//                 ];
+//             }
+//         }
+//     } catch (Exception $e) {
+//         // Log or handle error
+//         echo "Error fetching data: " . $e->getMessage();
+//     }
+
+    
+//     // Return the processed data
+//     return $processedBulkSymbols;
+// }//fn
+
+/*
+
+{
+    "endpoint": "Realtime Bulk Quotes",
+    "message": "success",
+    "data": [
+        {
+            "symbol": "MSTR",
+            "timestamp": "2024-10-30 19:59:57.644",
+            "open": "246.21",
+            "high": "255.8",
+            "low": "239.0",
+            "close": "247.31",
+            "volume": "20592520",
+            "previous_close": "258.24",
+            "change": "-10.93",
+            "change_percent": "-4.2325",
+            "extended_hours_quote": "242.9",
+            "extended_hours_change": "-4.41",
+            "extended_hours_change_percent": "-1.78319"
+        },
+        {
+            "symbol": "AAPL",
+            "timestamp": "2024-10-30 19:59:53.814",
+            "open": "232.62",
+            "high": "233.47",
+            "low": "229.56",
+            "close": "230.1",
+            "volume": "47070807",
+            "previous_close": "233.67",
+            "change": "-3.57",
+            "change_percent": "-1.5278",
+            "extended_hours_quote": "230.8",
+            "extended_hours_change": "0.7",
+            "extended_hours_change_percent": "0.30422"
+        },
+        {
+            "symbol": "TSLA",
+            "timestamp": "2024-10-30 19:59:58.242",
+            "open": "258.0",
+            "high": "263.35",
+            "low": "255.8201",
+            "close": "257.55",
+            "volume": "53993576",
+            "previous_close": "259.52",
+            "change": "-1.97",
+            "change_percent": "-0.7591",
+            "extended_hours_quote": "256.13",
+            "extended_hours_change": "-1.42",
+            "extended_hours_change_percent": "-0.55135"
+        },
+        {
+            "symbol": "IBM",
+            "timestamp": "2024-10-30 19:59:57.895",
+            "open": "209.53",
+            "high": "211.12",
+            "low": "204.26",
+            "close": "205.04",
+            "volume": "6956624",
+            "previous_close": "210.43",
+            "change": "-5.39",
+            "change_percent": "-2.5614",
+            "extended_hours_quote": "204.9",
+            "extended_hours_change": "-0.14",
+            "extended_hours_change_percent": "-0.06828"
+        },
+        {
+            "symbol": "AMD",
+            "timestamp": "2024-10-30 19:59:59.981",
+            "open": "153.0",
+            "high": "153.0",
+            "low": "148.105",
+            "close": "148.6",
+            "volume": "87701673",
+            "previous_close": "166.25",
+            "change": "-17.65",
+            "change_percent": "-10.6165",
+            "extended_hours_quote": "147.15",
+            "extended_hours_change": "-1.45",
+            "extended_hours_change_percent": "-0.97577"
+        },
+        {
+            "symbol": "BA",
+            "timestamp": "2024-10-30 19:58:18.420",
+            "open": "152.5",
+            "high": "156.91",
+            "low": "152.5",
+            "close": "154.24",
+            "volume": "50738028",
+            "previous_close": "152.98",
+            "change": "1.26",
+            "change_percent": "0.8236",
+            "extended_hours_quote": "154.1499",
+            "extended_hours_change": "-0.0901",
+            "extended_hours_change_percent": "-0.05842"
+        }
+    ]
+}
+*/
+
+
+
+
+
+
+
+
+
+function PrintBulkQuotes($arr) {
+    foreach ($arr as $symbol => $quote) {
+        echo "Symbol: $symbol<br />";
+        foreach ($quote as $key => $value) {
+            echo " ______________    $key: $value<br />";
+        }
+        echo "\n"; // Add a blank line between symbols for readability
+    }
+}
+
+
 
 function WriteFileData($fname, $datastr, $appendFlag) {
     // Check if append flag is set to 1, then use 'a' mode for appending, otherwise 'w' mode for overwriting
@@ -56,21 +277,26 @@ if($cntUp1 > ($symbolsCnt-1)){
 }
 
 $cntUp=$cntUp1;
-
-
-
 $nextSym = $symbols[$cntUp];
+
 
 $sym0lower= strtolower($nextSym);
 $fname = $sym0lower. ".txt";
-
 $datastr= $sym0lower. ",[". $cnt. "],". $datetimestr.  ",50,55.1,45.00,52.50,900123,". $nextSym. ",[". $cntUp. "],EOL" ;
+echo "<br />] <OLDr> Session cnt==". $cnt. ", datastr====>" .  $datastr ."<====";
 
-echo "<br />] Session cnt==". $cnt. ", datastr====>" .  $datastr ."<====";
-// Example usage:
 
-WriteFileData( $fname, $datastr, 0);  // overwrite to the file
 
+
+// WriteFileData( $fname, $datastr, 0);  // overwrite to the file
 // WriteFileData('example.txt', "This will append\n", 1);  // Appends to the file
+$urlPrefix="https://www.alphavantage.co/query?function=REALTIME_BULK_QUOTES&symbol=";
+$urlSuffix="&apikey=91M7LB7MG3JHY129";
+
+$gBulkQuotes = [];
+$gBulkQuotes = GetBulkQuotes($symbols, $urlPrefix, $urlSuffix, 100 );
+PrintBulkQuotes($gBulkQuotes);
+
+
 
 ?>
