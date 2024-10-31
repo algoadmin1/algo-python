@@ -9965,8 +9965,22 @@ function GetFintechDataTESTER(){
 }//fn 
 
 
-
 /*
+
+let gObject_arr =[];
+let gKeyVal = { key: "nil", value: "nil"  };  
+
+function TestOverviewData(){
+    let url = urlOverview1+gSymbolStr+urlOverview2;
+        GetOverviewData(url).then(jsonArray => {
+            jsonArray.forEach(([key, value]) => {
+                let keystr = key;
+                let valstr = String(value);
+                console.log(keystr + ": " + valstr);
+                // store key, value into gKeyVal, then push onto array gObject_arr;
+            });
+        });
+}
 
 
  function G tAlphaAdvantageStockDataNew(seriesInterval, objTarget , insetFlagStr)
