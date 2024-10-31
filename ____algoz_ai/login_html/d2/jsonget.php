@@ -3,6 +3,10 @@
                                                               $ver=  "287.3";
 
 date_default_timezone_set('America/New_York');
+
+$gDataSeriesTypeStr ="daily";
+
+
 $intradaystrs = [ "notIntraday", "intraday"];
 $periods = [ "daily", "weekly", "monthly", "1min" , "5min", "15min" , "30min", "60min" ];
 $months  = [ "zero", "jan", "feb", "mar" , "apr", "may" , "jun", "jul", "aug", "sep" , "oct", "nov", "dec" ];
@@ -87,7 +91,7 @@ if($msg==1){
 }
 
 function GetJsonData($url, $maxCandles, $strkey, $adjustedCloseFlag) {
-    global $gDataSeriesTypeStr;
+    global $gDataSeriesTypeStr, $gPeriod;
 
     try {
         // Fetch the JSON data from the URL
@@ -106,6 +110,7 @@ function GetJsonData($url, $maxCandles, $strkey, $adjustedCloseFlag) {
         // Extract the daily time series data
         // $timeSeries = $data["Time Series (Daily)"];  
         $timeSeries = $data[ $strkey ]; 
+        $numstr = "";
         
         // Initialize an empty array to hold the result
         $result = [];
@@ -113,17 +118,19 @@ function GetJsonData($url, $maxCandles, $strkey, $adjustedCloseFlag) {
         // Loop through the time series data and collect the required information
         foreach ($timeSeries as $date => $values) { // Format the required fields
             
-            if($adjustedCloseFlag == 0){      // old but may need it for INTRADAY
+            if($adjustedCloseFlag == 0 ||  $gDataSeriesTypeStr=="intraday"){      // old but may need it for INTRADAY
+                    $numstr = $gDataSeriesTypeStr."_".$gPeriod ;
+
                     $result[$date] = [
                         "open" => $values["1. open"],
                         "high" => $values["2. high"],
-                        "low" => $values["3. low"],
+                        "low"   => $values["3. low"],
                         "close" => $values["4. close"],
                         "volume" => $values["5. volume"],
-                        "timeper" => $gDataSeriesTypeStr
+                        "timeper" => $numstr
                     ];
 
-            }else  if($adjustedCloseFlag == 1 && $gDataSeriesTypeStr=="daily"){    // *NEW*  iff daily adjusted, THIS HAS 8. split coefficient
+            }else  if($adjustedCloseFlag == 1  &&  $gDataSeriesTypeStr=="daily"){    // *NEW*  iff daily adjusted, THIS HAS 8. split coefficient
                     $result[$date] = [
                         "open" => $values["1. open"],
                         "high" => $values["2. high"],
@@ -132,7 +139,7 @@ function GetJsonData($url, $maxCandles, $strkey, $adjustedCloseFlag) {
                         "adjustedclose" => $values["5. adjusted close"],
                         "volume" => $values["6. volume"],
                         "dividendamount" => $values["7. dividend amount"],
-                        "splitcoefficient" => $values["8. split coefficient"],
+                        "splitcoefficient" => $values["8. split coefficient"],  // only on daily data
                         "timeper" => $gDataSeriesTypeStr
 
                     ];
@@ -155,6 +162,52 @@ function GetJsonData($url, $maxCandles, $strkey, $adjustedCloseFlag) {
 
 
 /*
+
+// INTRADAY
+{
+    "Meta Data": {
+        "1. Information": "Intraday (5min) open, high, low, close prices and volume",
+        "2. Symbol": "IBM",
+        "3. Last Refreshed": "2024-10-30 19:55:00",
+        "4. Interval": "5min",
+        "5. Output Size": "Compact",
+        "6. Time Zone": "US/Eastern"
+    },
+    "Time Series (5min)": {
+        "2024-10-30 19:55:00": {
+            "1. open": "204.9600",
+            "2. high": "205.0100",
+            "3. low": "204.9000",
+            "4. close": "204.9000",
+            "5. volume": "68"
+        },
+        "2024-10-30 19:50:00": {
+            "1. open": "204.6900",
+            "2. high": "205.1500",
+            "3. low": "204.6900",
+            "4. close": "204.9600",
+            "5. volume": "27"
+        },
+        "2024-10-30 19:45:00": {
+            "1. open": "204.7000",
+            "2. high": "204.7000",
+            "3. low": "204.5300",
+            "4. close": "204.5500",
+            "5. volume": "595"
+        },
+        "2024-10-30 19:40:00": {
+            "1. open": "204.7800",
+            "2. high": "204.7800",
+            "3. low": "204.7000",
+            "4. close": "204.7000",
+            "5. volume": "62"
+        }, 
+
+
+
+
+
+
 
 //monthly adj data
  "2024-07-31": {
@@ -1367,7 +1420,7 @@ $url = $urlday ;
 $strkey = $timeseriesStr;  // ie. "Time Series (Daily)"  or  "Time Series (1min)" or "Weekly Time Series"
 $strkeyAux = $strkey;  // this is for string-stripping only to insert (Daily) into per in json
 
-$gDataSeriesTypeStr ="daily";
+// $gDataSeriesTypeStr ="daily";
 
 
 if($per=="Daily"){
@@ -1395,7 +1448,15 @@ if($per=="Daily"){
 $strRemove="Time Series ";
 $intervalStr = removeString($strkeyAux, $strRemove);   // leave only "(Monthly)" or "(15min)"
 
-$gUseAdjustedClose =1;
+
+$gPeriod=0;
+
+$gUseAdjustedClose = 1;
+if(  $gDataSeriesTypeStr=="intraday"  ) {
+     $gUseAdjustedClose = 0;
+     $gPeriod = $per;
+
+    }
 // $data = GetJsonData($url, $maxCandles, $strkey, 0);   // old 1,2,3,4,5=volume
 $data = GetJsonData($url, $maxCandles, $strkey, $gUseAdjustedClose);
 
