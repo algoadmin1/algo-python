@@ -1,12 +1,16 @@
 
 <?php                       
-                                                              $ver=  "288.7";
+                                                              $ver=  "289.1";
 
 date_default_timezone_set('America/New_York');
+require_once 'cryptoslist.php';  // gen'd by formatcsv.php <-- takes digital_currency_list.csv
+
+
 $intradaystrs = [ "notIntraday", "intraday"];
 $periods = [ "daily", "weekly", "monthly", "1min" , "5min", "15min" , "30min", "60min" ];
 $months  = [ "zero", "jan", "feb", "mar" , "apr", "may" , "jun", "jul", "aug", "sep" , "oct", "nov", "dec" ];
-$msg=1 ;
+// $msg=1 ;
+$msg=0;
 
 //globals for js    // global $ChartHigh , $ChartHighIdx , $ChartHighDate , $ChartLow , $ChartLowIdx , $ChartLowDate ;
 $ChartHigh  = 0;
@@ -51,7 +55,7 @@ function CheckStringArray($arr, $str) {
 
 //https://www.alphavantage.co/query?function=CRYPTO_INTRADAY&symbol=BTC&market=USD&interval=15min&apikey=
 function TestAndGetWellFormedCryptoSymbol($sym) {
-    global $gCryptoSymbol, $gCryptoCurrency;
+    global $gCryptoSymbol, $gCryptoCurrency, $gCryptoName;
 
     // Check if the symbol contains a "-"
     if (strpos($sym, '-') === false) {
@@ -66,6 +70,15 @@ function TestAndGetWellFormedCryptoSymbol($sym) {
 
         $gCryptoSymbol  = $symcrypto;
         $gCryptoCurrency= $currency;
+
+        // $gCryptoName = ReturnCryptoName($cryptos_allowed, $gCryptoSymbol );   
+        $gCryptoName = ReturnCryptoName(  $gCryptoSymbol );   
+        // if($gCryptoName=="nil")  return "nil";
+        if($gCryptoName=="nil"){
+            $gCryptoSymbol  = "BTC"; //$symcrypto;
+            $gCryptoCurrency= "USD"; //  $currency;
+            $gCryptoName= "Bitcoin";
+        }
 
         // Create the new string
         $newstr = $astr . $symcrypto . $bstr . $currency;
@@ -85,10 +98,11 @@ $sym = strtoupper($sym);
 
 
 
-// test for crypto
+//   crypto
 $gDigitalCurrency= 0;
 $gCryptoCurrency="USD";
 $gCryptoSymbol="BTC";
+$gCryptoName="Bitcoin";
 
 $gSymCrypto = TestAndGetWellFormedCryptoSymbol($sym);  // test for "BTC-USD",  Output: &symbol=BTC&market=USD
 if($gSymCrypto != "nil"){
@@ -1726,6 +1740,13 @@ $processedDataJson = json_encode($dataProcessed);
 
         console.log("] still inside php: Chart HI,idx,date / LOs = ",gChartHigh,gChartHighIdx, gChartHighDate, "  Lows=",gChartLow, gChartLowIdx, gChartLowDate ); 
         
+        var gDigitalCurrency= <?php echo $gDigitalCurrency; ?>; 
+        var gCryptoSymbol   = <?php echo '"'. $gCryptoSymbol. '"'; ?>;
+        var gCryptoCurrency = <?php echo '"'. $gCryptoCurrency. '"'; ?>;
+        var gCryptoName     = <?php echo '"'. $gCryptoName. '"'; ?>;
+        // global $gCryptoSymbol, $gCryptoCurrency, $gCryptoName;
+
+
         var gColSchemeNum = <?php echo $sch; ?>;
         var processedData = <?php echo $processedDataJson; ?>;
         console.log("] still inside php:  processedData==", processedData); // You can access the PHP data in JS now

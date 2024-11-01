@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "287.0";
+let                                                                         gVer = "287.1";
 let             gDebugInfo = 0;  // for   sc = 1.0
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
@@ -708,10 +708,13 @@ function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
         console.log("] POST calcs, gCandlesMaxes   =", gCandlesMaxes );
     
     //  ############################################################################## should be a fn
-    
-    gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
-    // gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0;  //+"    v"+gVer+" php_v"+gVerPHP; 
-    // gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0+"    v"+gVer+" php_v"+gVerPHP; 
+    if(gDigitalCurrency==1){
+        gChartTextStr =  gSymbolStr +" " +  gCryptoName +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
+
+    }else{
+        gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
+        
+    }
     gChartTextStr1 = "v"+gVer+"  v"+gVerPHP+"php"; 
     gSymbolStrLower  = gSymbolStr.toLowerCase();
     
