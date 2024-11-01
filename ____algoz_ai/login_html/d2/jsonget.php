@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "289.1";
+                                                              $ver=  "290.6";
 
 date_default_timezone_set('America/New_York');
 require_once 'cryptoslist.php';  // gen'd by formatcsv.php <-- takes digital_currency_list.csv
@@ -130,19 +130,46 @@ if(isset( $_GET['sch'] )){
 if(isset( $_GET['per'] )){
     $per0 = $_GET['per'] ;
     $per="daily";
-    if($per0=='1') $per0="1min";
-    if($per0=='5') $per0="5min";
+    if($per0=='1')  $per0="1min";
+    if($per0=='5')  $per0="5min";
     if($per0=='15') $per0="15min";
     if($per0=='30') $per0="30min";
     if($per0=='60') $per0="60min";
+
+    if($per0=='d' || $per0=='D' || $per0=='DAILY' || $per0=='Daily' || $per0=='day' || $per0=='Day')   $per0="daily";
+    if($per0=='w' || $per0=='W' || $per0=='WEEKLY' || $per0=='Weekly')  $per0="weekly";
+    if($per0=='m' || $per0=='M' || $per0=='MONTHLY' || $per0=='Monthly') $per0="monthly";
+
     if(CheckStringArray($periods, $per0)) $per=$per0;
     if($per=="daily" || $per=="weekly" || $per=="monthly" ) $per=ucfirst($per);  // Daily <== daily
 }else{
     $per = "Daily";
 }
-$intraday=0;   // ie false
-if($per!="Daily" && $per!="Weekly" && $per!="Monthly" ) $intraday=1;
+
+
+
+$intraday=0;   // assume intraday false
+if($per!="Daily" && $per!="Weekly" && $per!="Monthly" ){
+    // if( $per=="1min" ||    ||  ){ }
+     $intraday=1;
+     $gDataSeriesTypeStr= $per;
+    }else{
+    $gDataSeriesTypeStr=strtolower($per);   // ie weekly
+}
 $timeseriesStr = "Time Series (". $per. ")";
+
+$gGlobalPER = $per;
+
+$barlen='daily';
+if($per=="1min") $barlen="1";
+if($per=="5min") $barlen="5";
+if($per=="15min") $barlen="15";
+if($per=="30min") $barlen="30";
+if($per=="60min") $barlen="60";
+
+if($per=="Daily")   $barlen=$gDataSeriesTypeStr;
+if($per=="Weekly")  $barlen=$gDataSeriesTypeStr;   // ie weekly
+if($per=="Monthly") $barlen=$gDataSeriesTypeStr;
 
 
 // if($ms g==1){
@@ -153,15 +180,13 @@ $timeseriesStr = "Time Series (". $per. ")";
 
 
 function GetJsonData($url, $maxCandles, $strkey) {
-    global $adjustedCloseFlag ,  $gDataSeriesTypeStr ;
+    global $adjustedCloseFlag ,  $gDataSeriesTypeStr, $gDigitalCurrency, $gGlobalPER , $barlen;
+    $flag0=0;
+    $flag1=1;
 
     try {
-        // Fetch the JSON data from the URL
-        $json = file_get_contents($url);
-
-        // Decode the JSON data into a PHP array
-        $data = json_decode($json, true);
-
+        $json = file_get_contents($url);    // Fetch the JSON data from the URL
+        $data = json_decode($json, true);     // Decode the JSON data into a PHP array
         
         // Check if the "Time Series (Daily)" key exists
         // if (!isset($data["Time Series (Daily)"])) {
@@ -172,38 +197,53 @@ function GetJsonData($url, $maxCandles, $strkey) {
         // Extract the daily time series data
         // $timeSeries = $data["Time Series (Daily)"];  
         //BUG!!!
+    // if(isset($data[ $strkey ])){;}   
         $timeSeries = $data[ $strkey ]; 
-        
-        // Initialize an empty array to hold the result
-        $result = [];
-
+        $result = [];           // Initialize an empty array to hold the result
         // Loop through the time series data and collect the required information
-        foreach ($timeSeries as $date => $values) {
-            // Format the required fields
-            $result[$date] = [
-                "open" => $values["1. open"],
-                "high" => $values["2. high"],
-                "low" => $values["3. low"],
-                "close" => $values["4. close"],
-                "volume" => $values["5. volume"]
-            ];
+    foreach ($timeSeries as $date => $values) {
 
-/*
+        if($adjustedCloseFlag == 0  ||  $gDigitalCurrency==1 ){      //  for stocks non-AdjClose, & ALL Crypto 
 
-    
-            if($adjustedCloseFlag == 0 ||  $gDataSeriesTypeStr=="intraday"){      // old but may need it for INTRADAY
-                    $numstr = $gDataSeriesTypeStr."_".$gPeriod ;
-
+            if( $intraday==0 ){     // old daily, weekly monthly stocks **** NO SPLIT DATAs
                     $result[$date] = [
                         "open" => $values["1. open"],
                         "high" => $values["2. high"],
-                        "low"   => $values["3. low"],
+                        "low" =>  $values["3. low"],
                         "close" => $values["4. close"],
                         "volume" => $values["5. volume"],
-                        "timeper" => $numstr
+
+                        "adjustedcloseflag" => $flag0,    // ie no adjusted close here...
+                        "seriestype" => $gDataSeriesTypeStr,
+                        "seriescrypto" => $gDigitalCurrency,
+                        "barlen"  => $barlen,
+                        "globalper" =>  $gGlobalPER
                     ];
 
-            }else  if($adjustedCloseFlag == 1  &&  $gDataSeriesTypeStr=="daily"){    // *NEW*  iff daily adjusted, THIS HAS 8. split coefficient
+            }else if( $intraday==1    &&   $gDigitalCurrency==0 ){    // ie. stocks intraday $adjstedCloseFlag == 0
+                    //  $numstr = $gDataSeriesTypeStr."_".$gPeriod ;
+                        $result[$date] = [
+                            "open" => $values["1. open"],
+                            "high" => $values["2. high"],
+                            "low"   => $values["3. low"],
+                            "close" => $values["4. close"],
+                            "volume" => $values["5. volume"],
+
+                            "adjustedcloseflag" => $flag0,    // ie no adjusted close on INTRADAY...
+                            "seriestype" => $gDataSeriesTypeStr,
+                            "seriescrypto" => $gDigitalCurrency,
+                            "barlen"  => $barlen,
+                            "globalper" =>  $gGlobalPER           
+                        ];
+
+                }//if
+
+        }else if($adjustedCloseFlag == 1 ){  // adj close for stocks only (splits/divs), DAILY != wk/mon , ie daily has splitcoefficient
+
+
+
+
+                if( $gDataSeriesTypeStr=="daily"){    // *NEW*  iff daily adjusted, THIS HAS 8. split coefficient
                     $result[$date] = [
                         "open" => $values["1. open"],
                         "high" => $values["2. high"],
@@ -212,12 +252,18 @@ function GetJsonData($url, $maxCandles, $strkey) {
                         "adjustedclose" => $values["5. adjusted close"],
                         "volume" => $values["6. volume"],
                         "dividendamount" => $values["7. dividend amount"],
-                        "splitcoefficient" => $values["8. split coefficient"],  // only on daily data
-                        "timeper" => $gDataSeriesTypeStr
+                        "splitcoefficient" => $values["8. split coefficient"],  //  *** only on daily data
 
+                        "adjustedcloseflag" => $flag1, 
+                        "seriestype" => $gDataSeriesTypeStr,
+                        "seriescrypto" => $gDigitalCurrency,
+                        "barlen"  => $barlen,
+
+                        "globalper" =>  $gGlobalPER
                     ];
 
-            }else  if(   ($adjustedCloseFlag == 1)    &&   ( $gDataSeriesTypeStr=="weekly" ||  $gDataSeriesTypeStr=="monthly")   ){    
+
+                }else  if(    $gDataSeriesTypeStr=="weekly"      ||    $gDataSeriesTypeStr=="monthly"    ){ 
                     $result[$date] = [
                         "open" => $values["1. open"],
                         "high" => $values["2. high"],
@@ -228,13 +274,17 @@ function GetJsonData($url, $maxCandles, $strkey) {
                         "dividendamount" => $values["7. dividend amount"],
                         // "splitcoefficient" => $values["8. split coefficient"]
 
-                        "timeper" => $gDataSeriesTypeStr
+                        "adjustedcloseflag" => $flag1, 
+                        "seriestype" => $gDataSeriesTypeStr,
+                        "seriescrypto" => $gDigitalCurrency,
+                        "barlen"  => $barlen,
 
-                    ];
+                        "globalper" =>  $gGlobalPER         
+                       ];       
+
+                } 
+
             }
-
-*/
-
 
 
             // Stop adding if we've reached the maximum number of candles
@@ -253,7 +303,7 @@ function GetJsonData($url, $maxCandles, $strkey) {
         error_log("Error fetching or processing data: " . $e->getMessage());
         return [];
     }
-}
+}//fn
 
 /*
 R4day = High+ 3*(Pday-Low) ;
@@ -343,6 +393,10 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $low   = floatval($value['low']);
         $close = floatval($value['close']);
         $open  = floatval($value['open']);
+
+
+// if $value['adjustedcloseflag'] ==1
+
 
 // start pivot get stuff
         $h0=0;    $l0= 0; $c0= 0; $o0= 0;
@@ -679,9 +733,6 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['split_coeff']     = 1.0;
 
         $adjClose = 0.0;
-        if(isset($value['adjusted close'])){
-            $adjClose = floatval($value['adjusted close']);
-        }
         $value['adjusted_close']     =  $adjClose;
 // if (adjClose != close ) { // use adj close, ie a split occurred  }
 
@@ -1320,7 +1371,7 @@ $strkey = $timeseriesStr;  // ie. "Time Series (Daily)"  or  "Time Series (1min)
 $strkeyAux = $strkey;  // this is for string-stripping only to insert (Daily) into per in json
 
 
-$gDataSeriesTypeStr="daily";
+// $gDataSeriesTypeStr="daily";
 $adjustedCloseFlag = 0 ;   //  =1; // for using adjusted close for daily, weekly or monthly
 // DEPR
 $APIkey ="91M7LB7MG3JHY129";
@@ -1414,7 +1465,12 @@ if($msg==1){
 }
 
 
+//
+// getting json data, setting globals pre...
 
+// $gDataSeriesTypeStr="daily";
+$adjustedCloseFlag = 0 ;   //  =1; // for using adjusted close for daily, weekly or monthly
+// USES  $gDig1talCurrency, $gGlobalP3R
 $data = GetJsonData($url, $maxCandles, $strkey);
 
 $dataProcessed = ProcessCandles($data, $sym0, $intervalStr);
