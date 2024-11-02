@@ -1,7 +1,8 @@
 <?php 
 
-                                                                $ver=  "2.7";
+                                                                $ver=  "2.9";
 date_default_timezone_set('America/New_York');
+$msg=0;
 
 session_start();
 if(!isset($_SESSION['cnt'])){
@@ -17,10 +18,11 @@ $symbols  = [   "SPY", "QQQ","SQQQ", "VXX", "AAPL", "META", "NVDA", "AMZN", "NFL
                     "F", "CRM", "GS", "ZM", "M", "TSLA", "PLTR", "KO", "MCD"];
 
 $symbolsCnt = count($symbols);
-echo "<br />] symbolsCnt ==". $symbolsCnt;
+if($msg==1) echo "<br />] symbolsCnt ==". $symbolsCnt;
 
 
 function GetBulkQuotes($arr, $urlPrefix, $urlSuffix, $maxSymbols) {
+    global $msg;
     // Step 1: Truncate the array if it contains more symbols than $maxSymbols
     if (count($arr) > $maxSymbols) {
         $arr = array_slice($arr, 0, $maxSymbols);
@@ -29,7 +31,7 @@ function GetBulkQuotes($arr, $urlPrefix, $urlSuffix, $maxSymbols) {
     // Step 2: Build the URL by joining the tickers with a comma
     $symbols = implode(",", $arr);
     $urlNew = $urlPrefix . $symbols . $urlSuffix;
-    echo "<br />] newURL ==". $urlNew;
+    if($msg==1) echo "<br />] newURL ==". $urlNew;
 
     $processedBulkSymbols = [];
 
@@ -228,18 +230,60 @@ function GetBulkQuotes($arr, $urlPrefix, $urlSuffix, $maxSymbols) {
 
 
 
+function ReturnNiceTime($timestamp) {
+    // Create a DateTime object from the timestamp
+    $dateTime = DateTime::createFromFormat('Y-m-d H:i:s.u', $timestamp);
+    
+    // Format the time as "g:ia" (non-military time with am/pm)
+    if ($dateTime) {
+        return $dateTime->format('g:ia');
+    }
+    
+    // Return nil if the timestamp format is invalid
+    return "nil";
+}
+
+// // Example usage
+// $timestamp = "2024-11-01 19:59:57.970";
+// echo ReturnNiceTime($timestamp); // Output: "7:59pm"
 
 
 
 
+function PrintBulkQuotes1($arr) {
+    global $msg;
+
+    foreach ($arr as $symbol => $quote) {
+        echo $symbol. " ";  
+        $time1 ="nil";
+        foreach ($quote as $key => $value) {
+            // if($msg==1)  echo " ______________    $key: $value<br />";
+            if($key=="timestamp"){
+                 $time1 = ReturnNiceTime($value); 
+            }
+
+            // if($key=="close") echo "$". $value. " ". $time1.",   "; 
+            if($key=="close"){
+                $floatval = round((float)$value, 2);
+                // echo "$". $value. "   "; 
+                echo "$". $floatval. "   "; 
+
+            }
+
+        }
+        
+    }
+}
 
 function PrintBulkQuotes($arr) {
+    global $msg;
+
     foreach ($arr as $symbol => $quote) {
-        echo "Symbol: $symbol<br />";
+        if($msg==1)  echo "Symbol: $symbol<br />";
         foreach ($quote as $key => $value) {
-            echo " ______________    $key: $value<br />";
+            if($msg==1)  echo " ______________    $key: $value<br />";
         }
-        echo "\n"; // Add a blank line between symbols for readability
+        // echo "\n"; // Add a blank line between symbols for readability
     }
 }
 
@@ -283,7 +327,7 @@ $nextSym = $symbols[$cntUp];
 $sym0lower= strtolower($nextSym);
 $fname = $sym0lower. ".txt";
 $datastr= $sym0lower. ",[". $cnt. "],". $datetimestr.  ",50,55.1,45.00,52.50,900123,". $nextSym. ",[". $cntUp. "],EOL" ;
-echo "<br />] <OLDr> Session cnt==". $cnt. ", datastr====>" .  $datastr ."<====";
+if($msg==1) echo "<br />] <OLDr> Session cnt==". $cnt. ", datastr====>" .  $datastr ."<====";
 
 
 
@@ -295,7 +339,8 @@ $urlSuffix="&apikey=91M7LB7MG3JHY129";
 
 $gBulkQuotes = [];
 $gBulkQuotes = GetBulkQuotes($symbols, $urlPrefix, $urlSuffix, 100 );
-PrintBulkQuotes($gBulkQuotes);
+PrintBulkQuotes1($gBulkQuotes);
+// PrintBulkQuotes($gBulkQuotes);
 
 
 

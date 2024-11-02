@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "287.9";
+let                                                                         gVer = "288.1";
 let             gDebugInfo = 0;  // for   sc = 1.0
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
@@ -1240,6 +1240,7 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
 
 }//fn
 
+
 function GetOverviewData(url) {
     return fetch(url)
         .then(response => {
@@ -1785,6 +1786,74 @@ function DrawImage(ctx, img, x, y, scale) {
 }
 
 
+
+
+
+
+let gCrawlSeconds100 = 30;
+let gCrawlFontSize = 14;
+
+let gCrawlXstep =2;
+let gCrawlX=0;
+let gCrawlY=14;
+
+let gZipper0="             ";
+let gZipper= "             ";
+let gZipperUrl="https://algoz.ai/cronit/cronit.php";   // https://algoz.ai/cronit/cronit.php
+// let gZipperUrl="https://algoz.ai/cronit/crawl.php";   // https://algoz.ai/cronit/cronit.php
+
+function printZipperString( data, ctx){
+    gZipper0 = data;
+    gZipper= data + " " + data;
+    console.log("ZipperString gZipper str==", gZipper);
+    // DrawText_noclip( ctx, gZipper, gCrawlX, gCrawlY,       12 , 'blue' , gGlobalFont );
+
+}
+function GetTickerZipper(url , ctx) {
+    return fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text(); // get the response as text
+        })
+        .then(data => data) // return the fetched string
+        .catch(error => {
+            console.error('Fetch error:', error);
+            return "Error fetching data";
+        });
+}
+
+// // Example usage:
+// Get TickerZipper("https://example.com/api/data")
+//     .then(data => console.log("Fetched data:", data));
+
+
+function DrawCrawl() {
+    // gCrawlX = gCrawlX- gCrawlXstep;
+    // let vrect0 = { x: 0, y:gCrawlY-2 , w: canvas.width, h: gCrawlFontSize+4 };
+
+    ctx.fillStyle = 'yellow';   
+    ctx.font =  gCrawlFontSize.toString()+"px " +gGlobalFont;   //fsz.toString()+ "px Arial";    
+    let rWidth = ctx.measureText(gZipper0).width ;
+
+    if( gCrawlX < (-1*rWidth) ) gCrawlX =0 ;  
+        else gCrawlX-=gCrawlXstep;
+
+    let vrect0 = { x: 0, y:gCrawlY-4 , w: canvas.width, h: gCrawlFontSize+8 };
+
+    DrawVRect(ctx, vrect0, 2, 'blue', "solid");
+    DrawText_noclip( ctx, gZipper, gCrawlX, gCrawlY + gCrawlFontSize-2,       gCrawlFontSize , 'yellow' , gGlobalFont );
+
+}
+function logDateTime() {
+        const now = new Date();
+    console.log(now.toLocaleString());
+}
+
+// Call logDateTime every 2.5 seconds (2500 milliseconds)
+// setInterval( DrawCr awl, 2500);
+
 function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     let fsz2 = parseInt( fsz * 0.40 ) ;
     let fsz3 = 14;
@@ -1834,6 +1903,13 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     DrawText_noclip( ctx, copyRstr, xpos,  ( vrect.y +vrect.h + parseInt(0.5*yoffset)  ),    10 , 'black', gGlobalFont);
     
     // InitAndDrawImage(ctx, vrect, gAlgozLogo_fname, 10, -30, (gImgScale*1.2) );   // let gIm gScale = 0.325;
+
+
+
+
+    GetTickerZipper( gZipperUrl , ctx )
+        .then(data => printZipperString(data , ctx));
+
 
 }
 
@@ -2627,6 +2703,8 @@ function toggleButton(buttonNumber) {
         // Initial resize to set up the canvas
         resizeCanvas();
         
+    setInterval( DrawCrawl, gCrawlSeconds100);
+
         // now 
         let arr1=[];
         arr1= async_GetOverviewData();
