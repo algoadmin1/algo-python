@@ -1,11 +1,11 @@
 
 <?php                       
-                                                              $ver=  "290.6";
+                                                              $ver=  "291.2";
 
 date_default_timezone_set('America/New_York');
 require_once 'cryptoslist.php';  // gen'd by formatcsv.php <-- takes digital_currency_list.csv
 
-
+$apikey ="M3LB7MG3JF83E3";
 $intradaystrs = [ "notIntraday", "intraday"];
 $periods = [ "daily", "weekly", "monthly", "1min" , "5min", "15min" , "30min", "60min" ];
 $months  = [ "zero", "jan", "feb", "mar" , "apr", "may" , "jun", "jul", "aug", "sep" , "oct", "nov", "dec" ];
@@ -178,39 +178,52 @@ if($per=="Monthly") $barlen=$gDataSeriesTypeStr;
 //     echo " tser = ". $timeseriesStr;
 // }
 
+$gAdjCloseThreshold=0.975;
 
 function GetJsonData($url, $maxCandles, $strkey) {
-    global $adjustedCloseFlag ,  $gDataSeriesTypeStr, $gDigitalCurrency, $gGlobalPER , $barlen;
+    global $adjustedCloseFlag ,  $gDataSeriesTypeStr, $gDigitalCurrency, $gGlobalPER , $barlen, $gAdjCloseThreshold;
     $flag0=0;
     $flag1=1;
+    $abs_cl=0.0;
+    $ohlc_adjusted =0;
+    $ohlc_adjusted_ratio=1.0;
+
 
     try {
         $json = file_get_contents($url);    // Fetch the JSON data from the URL
         $data = json_decode($json, true);     // Decode the JSON data into a PHP array
-        
-        // Check if the "Time Series (Daily)" key exists
-        // if (!isset($data["Time Series (Daily)"])) {
-        if (!isset($data[ $strkey ])) {
-                throw new Exception("Invalid JSON structure or missing Time Series data.");
-        }
+                    
+                    // Check if the "Time Series (Daily)" key exists
+                    // if (!isset($data["Time Series (Daily)"])) {
+                    if (!isset($data[ $strkey ])) {
+                            throw new Exception("Invalid JSON structure or missing Time Series data.");
+                    }
 
         // Extract the daily time series data
-        // $timeSeries = $data["Time Series (Daily)"];  
-        //BUG!!!
-    // if(isset($data[ $strkey ])){;}   
+    // if(isset($data[ $strkey ])){;}     //BUG!!! // $timeSeries = $data["Time Series (Daily)"];  
         $timeSeries = $data[ $strkey ]; 
         $result = [];           // Initialize an empty array to hold the result
-        // Loop through the time series data and collect the required information
+
+
+    // Loop through the time series data and collect the required information
     foreach ($timeSeries as $date => $values) {
 
         if($adjustedCloseFlag == 0  ||  $gDigitalCurrency==1 ){      //  for stocks non-AdjClose, & ALL Crypto 
 
             if( $intraday==0 ){     // old daily, weekly monthly stocks **** NO SPLIT DATAs
                     $result[$date] = [
+                        "openOrig" => $values["1. open"],
+                        "highOrig" => $values["2. high"],
+                        "lowOrig" =>  $values["3. low"],
+                        "closeOrig" => $values["4. close"],
+                        "ohlc_adjusted" => $ohlc_adjusted, 
+                        "ohlc_adjusted_ratio" => $ohlc_adjusted_ratio, 
+
                         "open" => $values["1. open"],
                         "high" => $values["2. high"],
                         "low" =>  $values["3. low"],
                         "close" => $values["4. close"],
+
                         "volume" => $values["5. volume"],
 
                         "adjustedcloseflag" => $flag0,    // ie no adjusted close here...
@@ -223,10 +236,18 @@ function GetJsonData($url, $maxCandles, $strkey) {
             }else if( $intraday==1    &&   $gDigitalCurrency==0 ){    // ie. stocks intraday $adjstedCloseFlag == 0
                     //  $numstr = $gDataSeriesTypeStr."_".$gPeriod ;
                         $result[$date] = [
+                            "openOrig" => $values["1. open"],
+                            "highOrig" => $values["2. high"],
+                            "lowOrig" =>  $values["3. low"],
+                            "closeOrig" => $values["4. close"],
+                            "ohlc_adjusted" => $ohlc_adjusted,
+                            "ohlc_adjusted_ratio" => $ohlc_adjusted_ratio, 
+
                             "open" => $values["1. open"],
                             "high" => $values["2. high"],
                             "low"   => $values["3. low"],
                             "close" => $values["4. close"],
+
                             "volume" => $values["5. volume"],
 
                             "adjustedcloseflag" => $flag0,    // ie no adjusted close on INTRADAY...
@@ -238,66 +259,133 @@ function GetJsonData($url, $maxCandles, $strkey) {
 
                 }//if
 
-        }else if($adjustedCloseFlag == 1 ){  // adj close for stocks only (splits/divs), DAILY != wk/mon , ie daily has splitcoefficient
 
 
 
 
-                if( $gDataSeriesTypeStr=="daily"){    // *NEW*  iff daily adjusted, THIS HAS 8. split coefficient
-                    $result[$date] = [
-                        "open" => $values["1. open"],
-                        "high" => $values["2. high"],
-                        "low" => $values["3. low"],
-                        "close" => $values["4. close"],
-                        "adjustedclose" => $values["5. adjusted close"],
-                        "volume" => $values["6. volume"],
-                        "dividendamount" => $values["7. dividend amount"],
-                        "splitcoefficient" => $values["8. split coefficient"],  //  *** only on daily data
-
-                        "adjustedcloseflag" => $flag1, 
-                        "seriestype" => $gDataSeriesTypeStr,
-                        "seriescrypto" => $gDigitalCurrency,
-                        "barlen"  => $barlen,
-
-                        "globalper" =>  $gGlobalPER
-                    ];
 
 
-                }else  if(    $gDataSeriesTypeStr=="weekly"      ||    $gDataSeriesTypeStr=="monthly"    ){ 
-                    $result[$date] = [
-                        "open" => $values["1. open"],
-                        "high" => $values["2. high"],
-                        "low" => $values["3. low"],
-                        "close" => $values["4. close"],
-                        "adjustedclose" => $values["5. adjusted close"],
-                        "volume" => $values["6. volume"],
-                        "dividendamount" => $values["7. dividend amount"],
-                        // "splitcoefficient" => $values["8. split coefficient"]
 
-                        "adjustedcloseflag" => $flag1, 
-                        "seriestype" => $gDataSeriesTypeStr,
-                        "seriescrypto" => $gDigitalCurrency,
-                        "barlen"  => $barlen,
+        }else if($adjustedCloseFlag == 1 ){  
+            // adj close for stocks only (splits/divs), DAILY != wk/mon , ie daily has splitcoefficient
 
-                        "globalper" =>  $gGlobalPER         
-                       ];       
 
-                } 
+                                        if( $gDataSeriesTypeStr=="daily" ){    // *NEW*  iff daily adjusted, THIS HAS 8. split coefficient
+                                        //  https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSTR&outputsize=compact&apikey=91M7LB7MG3JHY129
+                                        
+                                                        $op        = floatVal( $values["1. open"] );
+                                                        $hi        = floatVal( $values["2. high"] );
+                                                        $lo        = floatVal( $values["3. low"] );
+                                                        $cl        = floatVal( $values["4. close"] );
 
-            }
+                                                        $adjcl     = floatVal( $values["5. adjusted close"]);
+                                                                    
+                                                        $new_ratio = $adjcl / $cl;     // ie 10-1 split cl =1500, adjCl =150 150/1500 = .10 = n3wRatio
+                                                        $abs_cl = abs( $adjcl - $cl  );  // if > 0.95
 
+
+                                                        if(  $ohlc_adjusted==1  ){            
+                                                                            $op = $op * $ohlc_adjusted_ratio;
+                                                                            $hi = $hi * $ohlc_adjusted_ratio;
+                                                                            $lo = $lo * $ohlc_adjusted_ratio;
+                                                                            $cl = $cl * $ohlc_adjusted_ratio;   // ie.  $1500 * 0.10 == $150
+                                                            }else   if($abs_cl  > $gAdjCloseThreshold ){
+                                                                
+                                                                            $ohlc_adjusted_ratio = $new_ratio;     // reset the ratio
+                                                                            $op = $op * $ohlc_adjusted_ratio;
+                                                                            $hi = $hi * $ohlc_adjusted_ratio;
+                                                                            $lo = $lo * $ohlc_adjusted_ratio;
+                                                                            $cl = $cl * $ohlc_adjusted_ratio;   // ie.  $1500 * 0.10 == $150
+                                                                            $ohlc_adjusted=1;
+                                                         }
+
+
+
+                                                    $result[$date] = [
+                                                            "openOrig" =>  $values["1. open"],
+                                                            "highOrig" =>  $values["2. high"],
+                                                            "lowOrig" =>   $values["3. low"],
+                                                            "closeOrig" => $values["4. close"],
+                                                            "ohlc_adjusted" => $ohlc_adjusted,
+                                                            "ohlc_adjusted_ratio" => $ohlc_adjusted_ratio, 
+
+                                                            "open" => $op,
+                                                            "high" => $hi,
+                                                            "low" =>  $lo,
+                                                            "close" => $cl,
+                                                            // "open" => $values["1. open"],
+                                                            // "high" => $values["2. high"],
+                                                            // "low" =>  $values["3. low"],
+                                                            // "close" => $values["4. close"],
+
+
+                                                            "adjustedclose" => $values["5. adjusted close"],
+                                                            "volume" => $values["6. volume"],
+                                                            "dividendamount" => $values["7. dividend amount"],
+                                                            "splitcoefficient" => $values["8. split coefficient"],  //  *** only on daily data
+
+                                                            "adjustedcloseflag" => $flag1, 
+                                                            "seriestype" => $gDataSeriesTypeStr,
+                                                            "seriescrypto" => $gDigitalCurrency,
+                                                            "barlen"  => $barlen,
+
+                                                            "globalper" =>  $gGlobalPER
+                                                    ];
+
+
+
+
+
+                                                // SHOULD NEVER GET THERE
+                                        }else  if(    $gDataSeriesTypeStr=="weekly"     ||    $gDataSeriesTypeStr=="monthly"    ){ 
+                                                // SHOULD NEVER GET THERE
+
+                                                // https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=MSTR&outputsize=compact&apikey=91M7LB7MG3JHY129
+                                                // https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=MSTR&outputsize=compact&apikey=91M7LB7MG3JHY129
+                                                        $result[$date] = [
+                                                            "openOrig" => $values["1. open"],
+                                                            "highOrig" => $values["2. high"],
+                                                            "lowOrig" =>  $values["3. low"],
+                                                            "closeOrig" => $values["4. close"],
+                                                            "ohlc_adjusted" => $ohlc_adjusted,
+                                                            "ohlc_adjusted_ratio" => $ohlc_adjusted_ratio, 
+
+
+                                                            "open" => $values["1. open"],
+                                                            "high" => $values["2. high"],
+                                                            "low" =>  $values["3. low"],
+                                                            "close" => $values["4. close"],
+
+                                                            "adjustedclose" => $values["5. adjusted close"],
+                                                            "volume" => $values["6. volume"],
+                                                            "dividendamount" => $values["7. dividend amount"],
+                                                            // "splitcoefficient" => $values["8. split coefficient"]
+
+                                                            "adjustedcloseflag" => $flag1, 
+                                                            "seriestype" => $gDataSeriesTypeStr,
+                                                            "seriescrypto" => $gDigitalCurrency,
+                                                            "barlen"  => $barlen,
+
+                                                            "globalper" =>  $gGlobalPER         
+                                                        ];       
+
+                                            } //    $gDataSeriesTypeStr=="weekly"     ||    $gDataSeriesTypeStr=="monthly"    ){ 
+
+            }//  else if($adjustedCloseFlag == 1 ){  
 
             // Stop adding if we've reached the maximum number of candles
             if (count($result) >= $maxCandles) {
                 break;
             }
-        }
 
-        // Reverse the array so the data is in ascending order
-        $result = array_reverse($result);
 
-        // Return the final array
+        }// forea
+
+
+
+        $result = array_reverse($result);        // Reverse the array so the data is in ascending order
         return $result;
+
     } catch (Exception $e) {
         // Handle any exceptions by returning an empty array or logging an error
         error_log("Error fetching or processing data: " . $e->getMessage());
@@ -324,7 +412,6 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
     $BuySignal = 0;
     $SellSignal = 0;
     
-
     // init vars
     $thisMonth = 'nil';    
     $LastMonthDate = 'nil'; //'1900-12-31';
@@ -395,7 +482,6 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $open  = floatval($value['open']);
 
 
-// if $value['adjustedcloseflag'] ==1
 
 
 // start pivot get stuff
@@ -732,9 +818,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['split_date']      = "na";
         $value['split_coeff']     = 1.0;
 
-        $adjClose = 0.0;
-        $value['adjusted_close']     =  $adjClose;
-// if (adjClose != close ) { // use adj close, ie a split occurred  }
+        
 
 
         $mn = substr($date, 5, 2);      // 'YYYY-MM-DD' ==> 'MM'  ==> 09
@@ -900,8 +984,6 @@ function ProcessData_BuySellSignals( ){
     $BuySignal   = 0;
     $Pday        = 0;   // ['P']
     $PtrailingAvg= 0;   // ['P3']
-
-
 
 
 
@@ -1330,9 +1412,15 @@ function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
               
              "<br />";
     }
-}
+}//fn
 
-// $sym0="NVDA";
+
+//  ################################################## LIVE CODE
+//  ################################################## LIVE CODE
+//  ################################################## LIVE CODE
+
+
+
 $sym0= $sym;
 $maxCandles = 95;  // just over 1 qtr
 $sym0str = $sym0." ".$per." Chart";
@@ -1369,17 +1457,29 @@ $url = $urlday ;
 
 $strkey = $timeseriesStr;  // ie. "Time Series (Daily)"  or  "Time Series (1min)" or "Weekly Time Series"
 $strkeyAux = $strkey;  // this is for string-stripping only to insert (Daily) into per in json
-
-
-// $gDataSeriesTypeStr="daily";
-$adjustedCloseFlag = 0 ;   //  =1; // for using adjusted close for daily, weekly or monthly
-// DEPR
 $APIkey ="91M7LB7MG3JHY129";
+
+
+
+
+
+
+
+
+
+
+
+
+
+// THIS CODEBLOCK SETS adjcloseflag
 
     if( $gDigitalCurrency == 0 ){
 
             if($per=="Daily"){
                     $gDataSeriesTypeStr="daily";
+                    
+                    // FORCE IT on daily
+                    $adjustedCloseFlag  =  1;   
 
                 // NORMAL ==    "Time Series (Daily)": {   SAMED ***  // ADJUSTD  ==  "Time Series (Daily)": {
                     $strkey =  "Time Series (Daily)";  // this is the format for both daily and adjDaily
@@ -1393,6 +1493,7 @@ $APIkey ="91M7LB7MG3JHY129";
             }else if($per=="Weekly"){  // defaults to 20yrs
                 // NORMAL == "Weekly Time Series": {  // ADJ    ==  "Weekly Adjusted Time Series": {
                     $gDataSeriesTypeStr="weekly";
+                    $adjustedCloseFlag  =  0;   
 
                     $strkey =  "Weekly Time Series";  
                     $url = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=".$sym0."&outputsize=compact&apikey=". $APIkey ;
@@ -1405,6 +1506,7 @@ $APIkey ="91M7LB7MG3JHY129";
             }else if($per=="Monthly"){   // defaults to 20yrs
             //  NORMAL  == "Monthly Time Series": {  //  ADJ     == "Monthly Adjusted Time Series": {
                         $gDataSeriesTypeStr="monthly";
+                        $adjustedCloseFlag  =  0;   
 
                         $strkey =  "Monthly Time Series";   
                         $url = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=".$sym0."&outputsize=compact&apikey=". $APIkey ;
@@ -1421,8 +1523,10 @@ $APIkey ="91M7LB7MG3JHY129";
                 }
             }
 
+
     }else if( $gDigitalCurrency == 1 ){
-        
+        $adjustedCloseFlag  =  0;   
+
         if($per=="Daily"){
                 $gDataSeriesTypeStr="daily";
 
@@ -1447,30 +1551,17 @@ $APIkey ="91M7LB7MG3JHY129";
             // chk intraday here
             // check intraday    //"Time Series Crypto (5min)": {
             // check intraday    //"Time Series Crypto (15min)": {
-
         }
-
-
 
     }// if crpto
 
-
-
-
 $strRemove="Time Series ";
 $intervalStr = removeString($strkeyAux, $strRemove);   // leave only "(Monthly)" or "(15min)"
-
 if($msg==1){
     echo  "] AdjCloseFlag==". $adjustedCloseFlag .", per= $per,   gDataSeriesTypeStr==". $gDataSeriesTypeStr ;
 }
 
 
-//
-// getting json data, setting globals pre...
-
-// $gDataSeriesTypeStr="daily";
-$adjustedCloseFlag = 0 ;   //  =1; // for using adjusted close for daily, weekly or monthly
-// USES  $gDig1talCurrency, $gGlobalP3R
 $data = GetJsonData($url, $maxCandles, $strkey);
 
 $dataProcessed = ProcessCandles($data, $sym0, $intervalStr);
