@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "287.6";
+let                                                                         gVer = "287.9";
 let             gDebugInfo = 0;  // for   sc = 1.0
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
@@ -379,7 +379,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
     let img_yoff =10 + 20;  
     let fname ="../img/"+gSymbolStrLower+ ".png";
 
-    let fins_list_fsz=18;
+    let fins_list_fsz=14;
 
     DrawRoundedRect(ctx, vrect, 20, colScheme.bg, 3, 1);
     DrawRoundedRect(ctx, vrect, 20, colScheme.ou, 5, 0);
@@ -1276,15 +1276,16 @@ function DrawOverviewData(ctx, vrect, colScheme, object_arr, xoff, yoff, yspace,
     let ev2rev = 0.001;
 
     let fins_ok=  "OVERVIEW";
-    let fins_bad=  "OVERVIEW - WARNING: Check Financials !";
-    // let fins_ok=  "FINANCIALS";
-    // let fins_bad=  "FINANCIALS - WARNING: Check Financials!";
+    let fins_bad=  "WARNING: Check Financials !";
     let fins = fins_ok;
     let num = 900000000000 ;
     let numf = 900000000000.0;
 
     let xoff1= parseInt( vrect.w * 0.275 );
     
+let fntsz2 = parseInt( fntsz * 1.6 );
+
+
     object_arr.forEach(obj => {
         let keystr = obj.key;
         let valstr = String(obj.value);
@@ -1385,6 +1386,7 @@ function DrawOverviewData(ctx, vrect, colScheme, object_arr, xoff, yoff, yspace,
                 
 
                     let keystr1 = keystr;
+                    if( keystr=="MarketCapitalization" ) keystr1="MarketCap";
 
                     if(keystr!="Name" && keystr!="nextEarnings" ){
                         keystr1=keystr+":";
@@ -1405,9 +1407,9 @@ function DrawOverviewData(ctx, vrect, colScheme, object_arr, xoff, yoff, yspace,
 
 
     if(fins == fins_bad){
-        DrawText_noclip(ctx, fins ,   3+vrect.x +xoff , 3+ vrect.y -8 + yoff + ( (0+1) * yspace ), fntsz*2,  'red',       fntname );
+        DrawText_noclip(ctx, fins ,   3+vrect.x +xoff , 3+ vrect.y -8 + yoff + ( (0+1) * yspace ), fntsz2,  'red',       fntname );
     }
-    DrawText_noclip(ctx, fins ,   vrect.x +xoff , vrect.y -8 + yoff + ( (0+1) * yspace ), fntsz*2,  fntcol,       fntname );
+    DrawText_noclip(ctx, fins ,   vrect.x +xoff , vrect.y -8 + yoff + ( (0+1) * yspace ), fntsz2,  fntcol,       fntname );
  
 
     let str99 = ""; 
