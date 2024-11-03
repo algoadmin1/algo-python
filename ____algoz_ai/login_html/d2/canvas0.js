@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "288.1";
+let                                                                         gVer = "293.9";
 let             gDebugInfo = 0;  // for   sc = 1.0
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
@@ -33,6 +33,9 @@ let             gDebugInfo = 0;  // for   sc = 1.0
 
     const canvas = document.getElementById('myCanvas');
     const ctx    = canvas.getContext('2d');
+
+
+let  gPrefixLink = "https://algoz.ai/as100/jsonget.php?sym=" ;  // ie + "AAPL"
 
 let gDrawType=0;
 let gSeriesType ="daily";
@@ -2485,10 +2488,183 @@ function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =
 
 
 
+// ####################################################
+//  // DEPR
+// function DrwRoundedRectCanvas2(ctx, x, y, width, height, radius, fillFlag, fillCol) {
+//     ctx.beginPath();
+//     ctx.lineWidth = lineWeight;
+//     ctx.moveTo(x + radius, y);
+//     ctx.lineTo(x + width - radius, y);
+//     ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+//     ctx.lineTo(x + width, y + height - radius);
+//     ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+//     ctx.lineTo(x + radius, y + height);
+//     ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+//     ctx.lineTo(x, y + radius);
+//     ctx.quadraticCurveTo(x, y, x + radius, y);
+//     ctx.closePath();
+
+//     if (fillFlag === 1) {
+//         ctx.fillStyle = fillCol;
+//         ctx.fill();
+//     }
+
+//     ctx.stroke(); // Optionally stroke the rectangle
+// }
+
+
+// function Dra@wButtonArray1(ctx, buttons, fillFlag, fillCol, textCol, fontSize, fontName) {
+//     buttons.forEach((button) => {
+//         const { x, y, width, height, text } = button;
+
+//         // Draw the rounded rectangle for the button
+//         DrawRo undedRectCanvas(ctx, x, y, width, height, 10, fillFlag, fillCol);
+
+//         // Set the font for the button text
+//         ctx.font = `${fontSize}px ${fontName}`;
+//         ctx.fillStyle = textCol; // Set the text color
+//         ctx.textAlign = 'center'; // Center align text
+//         ctx.textBaseline = 'middle'; // Middle align text
+//         ctx.fillText(text, x + width / 2, y + height / 2); // Draw the button text
+//     });
+// }
+
+// // Example usage
+// const canvas = document.getElementById('myCanvas');
+// const ctx = canvas.getContext('2d');
+// const buttons = [
+//     { x: 50, y: 50, width: 100, height: 50, text: 'Button 1' },
+//     { x: 50, y: 120, width: 100, height: 50, text: 'Button 2' }
+// ];
+
+// // Draw the button array
+// DrawBu ttonArray(ctx, buttons, 1, 'lightblue', 'black', 16, 'Arial');
+
+
+// Global array to store button properties
+let gGlobalButtons = [];
+let gGlobalButtonNameStr = '';
+let gGlobalButtonNum = -1;
+let gGlobalButton_arr = ['spy', 'qqq', 'nvda', 'aapl', 'tsla', 'nflx', 'msft', 'amzn', 'mstr',  'slv',  'gd',  'djt',  'gs',  'vxx', 'sqqq' ];
+// Draw ButtonArray(ctx, arr, 10, 10, 100, 0, 10, 2);
+// Det ectButtonPress(ctx, gGlobalButtons, arr);
+
+// Function to draw a rounded rectangle
+function DrawRoundedRectCanvas(ctx, vrect, radius, lineWeight, outlineCol, fillFlag, fillCol) {
+
+    ctx.beginPath();
+    ctx.lineWidth = lineWeight;
+    ctx.moveTo(vrect.x + radius, vrect.y);
+    ctx.lineTo(vrect.x + vrect.w - radius, vrect.y);
+    ctx.quadraticCurveTo(vrect.x + vrect.w, vrect.y, vrect.x + vrect.w, vrect.y + radius);
+    ctx.lineTo(vrect.x + vrect.w, vrect.y + vrect.h - radius);
+    ctx.quadraticCurveTo(vrect.x + vrect.w, vrect.y + vrect.h, vrect.x + vrect.w - radius, vrect.y + vrect.h);
+    ctx.lineTo(vrect.x + radius, vrect.y + vrect.h);
+    ctx.quadraticCurveTo(vrect.x, vrect.y + vrect.h, vrect.x, vrect.y + vrect.h - radius);
+    ctx.lineTo(vrect.x, vrect.y + radius);
+    ctx.quadraticCurveTo(vrect.x, vrect.y, vrect.x + radius, vrect.y);
+    ctx.closePath();
+
+    if (fillFlag === 1) {
+        ctx.fillStyle = fillCol;
+        ctx.fill();
+    }
+    ctx.strokeStyle = outlineCol;
+    ctx.stroke();
+}
+
+// Function to draw the button array on canvas
+function DrawButtonArray(ctx, arr, x, y, width, buttonHeight, idx, spacerY, lineWeight, textCol  , fontSize, fontName , butCol) {
+    let canvasHeight = ctx.canvas.height;
+
+    let buttonHeightMax = (canvasHeight - y - (spacerY * (arr.length - 1))) / arr.length;
+    if(buttonHeight > buttonHeightMax) buttonHeight= buttonHeightMax;
+
+    gGlobalButtons = []; // Clear the global button array
+
+    arr.forEach((label, i) => {
+
+        let vrect = { x: x, y: y + (buttonHeight + spacerY) * i, w: width, h: buttonHeight };
+        // Draw the rounded rectangle   radius                  fiilFlg
+        // DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight, 'darkblue', 1, 'blue' );   // #4C50AF
+        DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight,  'darkblue' , 1, butCol);   
+        // Set the font for the button text
+        ctx.font = `${fontSize}px ${fontName}`;    // ctx.font = "16px Arial";
+        ctx.fillStyle = textCol; // Set the text color
+        // Draw centered text inside the button
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(label, vrect.x + vrect.w / 2, vrect.y + vrect.h / 2);
+
+        // Save the button properties in global array
+        gGlobalButtons.push({ x: vrect.x, y: vrect.y, w: vrect.w, h: vrect.h });
+    });
+}
+
+// Function to detect button press
+function DetectButtonPress(ctx, gGlobalButtons, arr) {
+
+    let httpstrGo = "";
+    let httpstr = gPrefixLink; // "https://algoz.ai/d2/jsonget.php?sym=" ;  // ie + "AAPL"
+    // window.open(httpstrGo, '_blank');   // new browser
+    // window.location.href = httpstrGo;   // same browser
+
+
+    ctx.canvas.addEventListener('click', (e) => {
+        let rect = ctx.canvas.getBoundingClientRect();
+        let mouseX = e.clientX - rect.left;
+        let mouseY = e.clientY - rect.top;
+
+        gGlobalButtons.forEach((button, i) => {
+            if (mouseX >= button.x && mouseX <= button.x + button.w &&
+                mouseY >= button.y && mouseY <= button.y + button.h) {
+                gGlobalButtonNameStr = arr[i];
+                gGlobalButtonNum = i;
+                // console.log("Button clicked:", gGlobalButtonNameStr, gGlobalButtonNum);
+
+                httpstrGo = httpstr + gGlobalButtonNameStr ;
+                console.log("Button clicked, GOING TO HTTPS:", httpstrGo , gGlobalButtonNameStr, gGlobalButtonNum);
+                window.location.href = httpstrGo;   // same browser
+
+            }
+        });
+    });
+
+    // Add touch support for mobile
+    ctx.canvas.addEventListener('touchstart', (e) => {
+        let rect = ctx.canvas.getBoundingClientRect();
+        let touch = e.touches[0];
+        let mouseX = touch.clientX - rect.left;
+        let mouseY = touch.clientY - rect.top;
+
+        gGlobalButtons.forEach((button, i) => {
+            if (mouseX >= button.x && mouseX <= button.x + button.w &&
+                mouseY >= button.y && mouseY <= button.y + button.h) {
+                gGlobalButtonNameStr = arr[i];
+                gGlobalButtonNum = i;
+                // console.log("Button touched:", gGlobalButtonNameStr, gGlobalButtonNum);
+
+                httpstrGo = httpstr + gGlobalButtonNameStr ;
+                console.log("Button touched, GOING TO HTTPS:", httpstrGo , gGlobalButtonNameStr, gGlobalButtonNum);
+                window.location.href = httpstrGo;   // same browser
+
+            }
+        });
+    });
+// // Example usage
+// let canvas = document.getElementById("myCanvas");
+// let ctx = canvas.getContext("2d");
+// let arr = ['spy', 'qqq', 'sqqq', 'aapl', 'tsla', 'mstr', 'msft', 'amzn' ];
+// DrawButto nArray(ctx, arr, 10, 10, 100, 0, 10, 2);
+// DetectB uttonPress(ctx, gGlobalButtons, arr);
+}//fn
 
 
 
 
+
+
+let gDrawCanvasButtons = 1;
 
         // Function to resize canvas and redraw the rectangle
 function resizeCanvas() {
@@ -2549,8 +2725,24 @@ function resizeCanvas() {
             // ctx.font =  fsz.toString()+ "px Arial";   // ctx.font = "bolder "+"124px Arial";
             // ctx.fillText( dtstr , 40, 40  );
 
-}//fn  r3sizeCanvas()
+        let but_x =10;
+        let but_w = 80;
+        but_w = gGlobalChartVRectCurrent.x - 5 - but_x ;
+        let wbut  = parseInt( gScalarFloat_dynamic * but_w );
 
+        let hbutSt = 40;
+        let hbut =  parseInt( gScalarFloat_dynamic * hbutSt ); 
+        let fsz0 = parseInt( 16* gScalarFloat_dynamic);
+
+        if(gDrawCanvasButtons==1){
+                    // Dra wButtonArray(ctx, arr,               x, y, width, h,  idx, spacerY, lineWeight,  textCol  , fontSize, fontName ) 
+             DrawButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2          , 'white',     fsz0,   "Arial",  "#4C50AF" );
+             DetectButtonPress(ctx, gGlobalButtons, gGlobalButton_arr);
+
+        }
+
+
+}//fn  r3sizeCanvas()
 
         // Function to toggle button state and call resizeCanvas
 function toggleButton(buttonNumber) {

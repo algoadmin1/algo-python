@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "291.2";
+                                                              $ver=  "292.5";
 
 date_default_timezone_set('America/New_York');
 require_once 'cryptoslist.php';  // gen'd by formatcsv.php <-- takes digital_currency_list.csv
@@ -205,13 +205,29 @@ function GetJsonData($url, $maxCandles, $strkey) {
         $result = [];           // Initialize an empty array to hold the result
 
 
+
+
+
+    $timestr = "";
+
     // Loop through the time series data and collect the required information
     foreach ($timeSeries as $date => $values) {
+
+
+
+        $timestr = "16:00:00";
+        if(strlen($date) > 10) {   // ie there is a time component  "2024-11-01 04:00:00.324"
+             $timestr = GetRestOfDateTimeStr($date);   // ret's "04:00:00.324"
+        }
+
 
         if($adjustedCloseFlag == 0  ||  $gDigitalCurrency==1 ){      //  for stocks non-AdjClose, & ALL Crypto 
 
             if( $intraday==0 ){     // old daily, weekly monthly stocks **** NO SPLIT DATAs
                     $result[$date] = [
+                        "dateOrig" => $date  ,
+                        "timeOrig" => $timestr  ,
+
                         "openOrig" => $values["1. open"],
                         "highOrig" => $values["2. high"],
                         "lowOrig" =>  $values["3. low"],
@@ -236,6 +252,9 @@ function GetJsonData($url, $maxCandles, $strkey) {
             }else if( $intraday==1    &&   $gDigitalCurrency==0 ){    // ie. stocks intraday $adjstedCloseFlag == 0
                     //  $numstr = $gDataSeriesTypeStr."_".$gPeriod ;
                         $result[$date] = [
+                            "dateOrig" => $date  ,
+                            "timeOrig" => $timestr  ,
+
                             "openOrig" => $values["1. open"],
                             "highOrig" => $values["2. high"],
                             "lowOrig" =>  $values["3. low"],
@@ -302,6 +321,9 @@ function GetJsonData($url, $maxCandles, $strkey) {
 
 
                                                     $result[$date] = [
+                                                            "dateOrig" => $date  ,
+                                                            "timeOrig" => $timestr  ,
+
                                                             "openOrig" =>  $values["1. open"],
                                                             "highOrig" =>  $values["2. high"],
                                                             "lowOrig" =>   $values["3. low"],
@@ -336,13 +358,15 @@ function GetJsonData($url, $maxCandles, $strkey) {
 
 
 
-                                                // SHOULD NEVER GET THERE
                                         }else  if(    $gDataSeriesTypeStr=="weekly"     ||    $gDataSeriesTypeStr=="monthly"    ){ 
-                                                // SHOULD NEVER GET THERE
+                                                // SHOULD TRY to  GET THERE, and detect cl vs adjClose diff, like daily 
 
                                                 // https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=MSTR&outputsize=compact&apikey=91M7LB7MG3JHY129
                                                 // https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=MSTR&outputsize=compact&apikey=91M7LB7MG3JHY129
                                                         $result[$date] = [
+                                                            "dateOrig" => $date  ,
+                                                            "timeOrig" => $timestr  ,
+
                                                             "openOrig" => $values["1. open"],
                                                             "highOrig" => $values["2. high"],
                                                             "lowOrig" =>  $values["3. low"],
@@ -417,6 +441,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
     $LastMonthDate = 'nil'; //'1900-12-31';
     $LastMonth = 'nil';
 
+    $MonthOpen  = 0;  // i=0 month0pen not accuracte...
     $MonthHigh  = 0;
     $MonthLow   = 1000000;
     $MonthClose = 0;
@@ -472,16 +497,11 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 
 
     foreach ($data as $date => &$value) {    // Loop through each element of the array
-
-
-
-        // this candle's h,l,c,o [0]
-        $high  = floatval($value['high']);
-        $low   = floatval($value['low']);
-        $close = floatval($value['close']);
-        $open  = floatval($value['open']);
-
-
+        
+            $high  = floatval($value['high']);     // this candle's h,l,c,o [0]
+            $low   = floatval($value['low']);
+            $close = floatval($value['close']);
+            $open  = floatval($value['open']);
 
 
 // start pivot get stuff
@@ -490,7 +510,9 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $r1 = 0;  $r2=0; $r3=0; $r4=0;
 
 
-        if($i==0){ 
+    if($i==0){ 
+            $MonthOpen = $open;
+
             // Heikin Ashi 1st [0] data piece
             $HA_close = ($open + $high + $low + $close )/4;
             $HA_open  = ($open + $close )/2;
@@ -502,7 +524,9 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
             $value['HA_high']   =   $HA_high;
             $value['HA_low']    =   $HA_low;
         }
-        if($i>0){  // for Pivots & HA, proces [1] and up
+
+// first do i>0 stuff like HA and 
+    if($i>0){  // for Pivots & HA, proces [1] and up
                 //  get the O,H,L,C prices from YESTERDAY 
                 $h0= array_values($data)[$i-1]['high'];
                 $l0= array_values($data)[$i-1]['low'];
@@ -613,7 +637,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
                     
                         
 
-            }else{  // if i==0 we're at start of data candles RESET vars
+    }else{  // if i<=0 we're at start of data candles RESET vars
 
                 $h0=0; $l0= 0; $c0= 0;
                 $s1 = 0;  $s2=0; $s3=0; $s4=0;
@@ -621,7 +645,8 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
                 // $P=0; $P3=0;
                 $P=$close; 
                 $P3=$close;   // get non-zero vals
-            }
+    }
+
 
             // after local vars set, assign arr vals
             $value['P']  = $P;
@@ -654,13 +679,24 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 
 //
 //    NEW ######################  ck Month to store data
-//
-        $thisMonth = substr( $date, 0, 7 );   // '2024-10';   
 
-        if( $thisMonth != $LastMonth ){
+        // on every loop, set eow to zero, regardless of  i
+        $value['endOfWeek'] = 0;
+        // intraday...
+        $value['endOfMorning'] = 0;
+        $value['endOfHour'] = 0;
+
+
+    $thisMonth       = substr( $date, 0, 7 );   // '2024-10'     from  '2024-10-23' ;   
+    $thisMonthMMstr  = substr( $thisMonth, 5, 2 );   // '10'     from  '2024-10' ;   
+    
+        if( $thisMonth != $LastMonth ){    // ie '2024-10' vs '2024-09'
             // here we have NOT set $MonthHigh, Low or Close  or Last so 
             //  we have a NEW MONTH HERE, LETS GET LAST MONTH'S #'S
             
+            $value['monthOpen']     = $MonthOpen;  //  really last monht's open; except first time it will be zero until new monht
+            $MonthOpen              =  $open ;     // since we are on a new month, set it for next != monts
+
             $value['monthHigh']     = $MonthHigh;
             $value['monthLow']      = $MonthLow;
             $value['monthClose']    = $MonthClose;
@@ -700,7 +736,23 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
             $value['X2month'] = 0;
             $value['Y2month'] = 0;
 
-        $value['endOfMonth'] = 1;
+
+            $value['endOfMonth'] = 1;       // *** KEY THIS IS A New month like Jul 01  or Apr 02(mon)
+
+
+
+            // check if  NEW mon = jan apr jul oct
+            if( $thisMonthMMstr=="01" || $thisMonthMMstr=="04" || $thisMonthMMstr=="07" || $thisMonthMMstr=="10" ){
+                $value['endOfQtr'] = 1;
+            }else $value['endOfQtr'] = 0;
+
+            // check if  NEW mon = jan     $value['endOf Year'] = 1;
+            if($thisMonthMMstr=="01" ){
+                $value['endOfYear'] = 1;
+            }else    $value['endOfYear'] = 0;
+
+
+
 
             // reset monthly cnting vars
             $LastMonth  = $thisMonth ;
@@ -723,6 +775,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
             $LastMonthDate = $date;
 
             // Zero out everything
+            $value['monthOpen'] = 0;
             $value['monthHigh'] = 0;
             $value['monthLow'] =  0; 
             $value['monthClose'] =0;  
@@ -747,14 +800,18 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
             $value['X2month'] = 0;
             $value['Y2month'] = 0;
 
-        $value['endOfMonth'] = 0;
 
-        }
+        $value['endOfMonth'] = 0;
+        $value['endOfQtr']   = 0;  // if not eom, then NOT eoq, eoy...
+        $value['endOfYear']  = 0;
+
+        }// if month == lastM0nth
 
         // ##########################################################  END OF monthly
 
 
         // Add other fields and set them to 0 initially
+        $value['weekOpen'] = 0;
         $value['weekHigh'] = 0;
         $value['weekLow'] = 0;
         $value['weekClose'] = 0;
@@ -780,7 +837,34 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         // ##########################################################  END OF weekly
 
 
+        $value['qtrOpen']  = 0;
+        $value['qtrHigh']  = 0;
+        $value['qtrLow']   = 0;
+        $value['qtrClose'] = 0;
+        $value['qtrLastDate'] = "nil";
+        $value['qtrDaysCnt'] = 0 ;
 
+
+        $value['R4qtr'] = 0;
+        $value['R3qtr'] = 0;
+        $value['R2qtr'] = 0;
+        $value['R1qtr'] = 0;
+        $value['Pqtr'] = 0;
+        $value['P3qtr'] = 0;
+        $value['S1qtr'] = 0;
+        $value['S2qtr'] = 0;
+        $value['S3qtr'] = 0;
+        $value['S4qtr'] = 0;
+
+        $value['X1qtr'] = 0;
+        $value['Y1qtr'] = 0;
+        $value['X2qtr'] = 0;
+        $value['Y2qtr'] = 0;
+
+        // ##########################################################  END OF quarterly
+
+
+        $value['yearOpen']  = 0;
         $value['yearHigh']  = 0;
         $value['yearLow']   = 0;
         $value['yearClose'] = 0;
@@ -804,7 +888,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['X2year'] = 0;
         $value['Y2year'] = 0;
 
-        // ##########################################################  END OF weekly
+        // ##########################################################  END OF yearly
 
 
 
@@ -823,28 +907,45 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 
         $mn = substr($date, 5, 2);      // 'YYYY-MM-DD' ==> 'MM'  ==> 09
 
-        // 'DEL
- $mnInt = (int)$mn;              // ==> 9  XXX DEPR ???
-        
+
+        //  ** NEW **
+        $udate00 = substr($date, 0, 10);      // 'YYYY-MM-DD HH:MM:SS.mmm' ==> 'YYYY-MM-DD'   ==> 09
+        $monthNameLong = ReturnMonthName( $udate00 , 0 );
+        $monthNameShort= ReturnMonthName( $udate00 , 1 );
+
+        // 'DEL'
+        //  $mnInt = (int)$mn;              // ==> 9  XXX DEPR ???
+
+        $value['monthNum'] =  $mn ;    //substr($date, 5, 2);   OK 
+
+        // $mm = $value['monthNum'];
+        // $mm1=intval($mm);
+        // $value['monthName'] = $months[ $mm1 ];  
+        $value['monthName'] =       $monthNameLong ;  
+        $value['monthNameShort'] =  $monthNameShort;    //  *NEW
+
+        // $timestamp = strtotime($date);  //  use only 10char udate
+        $timestamp = strtotime($udate00);   
+        $dow = strtolower(date('D', $timestamp));      // Format the timestamp to return the three-letter day abbreviation (e.g., Mon, Tue, Sat)
+        $value['dayOfWeek']  = $dow;                   // 0 Sun - 6 Sat normal php
+
+        $dayOfWeekNum1 =date('w', $timestamp);
+        $dayOfWeekNum = (int)$dayOfWeekNum1;
+        $value['dayOfWeekInt']  =  $dayOfWeekNum;   // 0...6==sat
+
+        $monthNumberInt = date("n", $timestamp);
+        $monthNumberInt1 = (int)$monthNumberInt;
+        $value['monthInt'] =  $monthNumberInt1 ;   
+
+        $doq = getDayOfQuarterFromDate( $udate00 );
+        $value['dayOfQtrInt']  =  $doq;
+        $doy = getDayOfYearFromDate( $udate00 );
+        $value['dayOfYearInt'] =  $doy;
 
 
-        $value['monthNum'] =  $mn ;    //substr($date, 5, 2);
-
-        $mm = $value['monthNum'];
-        $mm1=intval($mm);
-        $value['monthName'] = $months[ $mm1 ];  
-
-        $timestamp = strtotime($date);
-        $dow= strtolower(date('D', $timestamp));     // Format the timestamp to return the three-letter day abbreviation (e.g., Mon, Tue, Sat)
-        $value['dayOfWeek']  = $dow;  // 0 Sun - 6 Sat normal php
-
-
-        $value['endOfDay'] = 0;
+        $value['endOfDay'] = 0;   // for intraday
         $value['endOfWeek'] = 0;
-        // $value['endOfMonth'] = 0;
-        $value['endOfYear'] = 0;
 
-      
 
 
         $value['buySignalCnt'] = 0;
@@ -934,9 +1035,79 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 
 }//fn
  
+function GetRestOfDateTimeStr($udatetime) {
+    $nilstr="";
+    if (strlen($udatetime) > 10) {
+        // Return the substring from the 12th character to the end
+        $tstr = substr($udatetime, 11);
+        if(isset($tstr)) return  $tstr ; 
+        else return $nilstr;
+    } else {
+        // Return an empty string if the length is not greater than 10
+        return $nilstr;
+    }
+}
 
 
+function GetMonthNumber($udate) {
+    $timestamp== strtotime($udate);
+    // Get the month as a zero-indexed number (1-12)
+    $monthNumber = date("n", $timestamp) ;
+    return $monthNumber;
+}
 
+function GetDayOfYearFromDate($udate) {
+    // Convert the Unix date string to a timestamp
+    $timestamp = strtotime($udate);
+    
+    // Format the timestamp to get the day of the year
+    $dayOfYear = date("z", $timestamp) + 1; // "z" gives 0-365, so add 1 for 1-366
+    
+    return $dayOfYear;
+}
+
+
+function getDayOfQuarterFromDate($udate) {
+    // Convert the Unix date string to a timestamp
+    $timestamp = strtotime($udate);
+    
+    // Extract year and month from the timestamp
+    $year = date('Y', $timestamp);
+    $month = date('n', $timestamp);
+    
+    // Determine the start of the quarter
+    if ($month <= 3) {
+        $quarterStart = strtotime("$year-01-01"); // Q1
+    } elseif ($month <= 6) {
+        $quarterStart = strtotime("$year-04-01"); // Q2
+    } elseif ($month <= 9) {
+        $quarterStart = strtotime("$year-07-01"); // Q3
+    } else {
+        $quarterStart = strtotime("$year-10-01"); // Q4
+    }
+    
+    // Calculate the difference in days
+    $dayOfQuarter = floor(($timestamp - $quarterStart) / (60 * 60 * 24));
+    
+    return $dayOfQuarter;
+}
+// // Example usage
+// $udate = "2024-10-31";
+// echo getDayOfQuarterFromDate($udate); // Outputs the day of the quarter for the given date
+
+function ReturnMonthName($udate, $abbreviateFlag) {
+    // Convert the string date to a timestamp
+    $timestamp = strtotime($udate);
+    
+    // Choose format based on $abbreviateFlag
+    if ($abbreviateFlag == 1) {
+        // Lowercase, 3-letter abbreviation
+        return strtolower(date('M', $timestamp));
+    } else {
+        // Full month name
+        return date('F', $timestamp);
+    }
+}
 
 
 
