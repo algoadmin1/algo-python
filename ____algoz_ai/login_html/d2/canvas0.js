@@ -2577,7 +2577,8 @@ function DrawRoundedRectCanvas(ctx, vrect, radius, lineWeight, outlineCol, fillF
 function DrawButtonArray(ctx, arr, x, y, width, buttonHeight, idx, spacerY, lineWeight, textCol  , fontSize, fontName , butCol) {
     let canvasHeight = ctx.canvas.height;
 
-    let buttonHeightMax = (canvasHeight - y - (spacerY * (arr.length - 1))) / arr.length;
+    // let buttonHeightMax = (canvasHeight - y - (spacerY * (arr.length - 1))) / arr.length;
+    let buttonHeightMax = (canvasHeight - y - (spacerY * (arr.length - 2))) / ( arr.length-1 );
     if(buttonHeight > buttonHeightMax) buttonHeight= buttonHeightMax;
 
     gGlobalButtons = []; // Clear the global button array
