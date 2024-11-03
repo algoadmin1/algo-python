@@ -1,8 +1,9 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "293.9";
+let                                                                         gVer = "296.3";
 let             gDebugInfo = 0;  // for   sc = 1.0
+let                                                 gPrefixLink = "https://algoz.ai/as113/jsonget.php?sym=" ;   
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -34,8 +35,6 @@ let             gDebugInfo = 0;  // for   sc = 1.0
     const canvas = document.getElementById('myCanvas');
     const ctx    = canvas.getContext('2d');
 
-
-let  gPrefixLink = "https://algoz.ai/as100/jsonget.php?sym=" ;  // ie + "AAPL"
 
 let gDrawType=0;
 let gSeriesType ="daily";
@@ -396,7 +395,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
         drawFibonacci( ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
     
         // pivot / p3 lines
-        if( button5==1 || button5==2  ) DrawSegmentedLine(ctx, processedData, vrect, 2, 'blue',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
+        if( button5==1 || button5==2  ) DrawSegmentedLine(ctx, processedData, vrect, 2, 'cyan',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
         if( button5==2)                 DrawSegmentedLine(ctx, processedData, vrect, 2, 'yellow', "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P3") ;
     }else if(gDrawFinancials>0){                
 
@@ -750,7 +749,7 @@ function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
 }
 
 
-
+let gGlobalPerFromData = 'nil';
 
 
 function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
@@ -780,9 +779,12 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
             let cl1 = parseFloat(  processedData[date]["close"] );
             let vol1 = parseFloat(  processedData[date]["volume"] );
             let eom = parseInt(  processedData[date]["endOfMonth"] );
+            let eoq = parseInt(  processedData[date]["endOfQtr"] );
+            let eoy = parseInt(  processedData[date]["endOfYear"] );
+
 
             gHA_open = parseFloat(  processedData[date]["HA_open"] );
-            gHA_high= parseFloat(  processedData[date]["HA_high"] );
+            gHA_high = parseFloat(  processedData[date]["HA_high"] );
             gHA_low  = parseFloat(  processedData[date]["HA_low"] );
             gHA_close= parseFloat(  processedData[date]["HA_close"] );
 
@@ -790,37 +792,117 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
             gLastDateStr    = date;
 
 
+// for drawing pivots mon/yr
+            let x1m = gCandleXnext;
+            let x2m      = gCandleXnext + ( 19 * ( gCandleWidth + gCandleOffset ) );   // for daily
+            let x2mDailyWidth_half = parseInt( ( 17 * ( gCandleWidth + gCandleOffset ) )   );    
+
+            let x2mMonth = gCandleXnext + ( 12 * ( gCandleWidth + gCandleOffset ) ); 
+            let x2mMonthWidth_half = parseInt( ( 11 * ( gCandleWidth + gCandleOffset ) )   );   
+
+          //   if(x2m> vrect.x+vrect.h) x2m= vrect.x+vrect.h-1;
+
+          let  sr0price = 0.0;  
+          let  sr0Y  =0; 
+          let  sr0Ymax = vrect.y+vrect.h;
+
+          let fsz = 16;
+          let xyoff = 4;
+          let fontStr ="Helvetica";
+
+          let perStr1 =  processedData[date]["globalper"];
+          let perStr = perStr1.toLowerCase();
+          gGlobalPerFromData =perStr;
+
+
+
+
+
+// END OF YEAR
+            if(eoy==1){ 
+                processedData[date]["X1year"] = gCandleXnext;
+                processedData[date]["X2year"] =   x2mMonth; // ( 12 * ( gCandleWidth + gCandleOffset ) );
+
+                fsz = 14;
+                x2m =x2mMonth;
+                xyoff = ( -1 * x2mMonthWidth_half) ;
+                
+                if(button3==1   && ( perStr=="monthly"  || perStr=="weekly" )){
+                    sr0price = parseFloat( processedData[date]["R3year"] ).toFixed(2);
+                    txtStr    = gCurrencyStr+ sr0price.toString() + " (R3 yr)";
+                    sr0Y     = GetYCoordFromPrice( sr0price, vrect );
+                    // DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r3 ,  "dashed" );
+                    DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r3 , "dashed" , txtStr, fsz-4, xyoff, fontStr);
+
+
+                    sr0price = parseFloat( processedData[date]["R2year"] ).toFixed(2);
+                    txtStr    = gCurrencyStr+ sr0price.toString() + " (R2 yr)";
+                    sr0Y     = GetYCoordFromPrice( sr0price, vrect );
+                     DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r2 , "dashed" , txtStr, fsz-2, xyoff, fontStr);
+
+                    sr0price = parseFloat( processedData[date]["R1year"] ).toFixed(2);
+                    txtStr    = gCurrencyStr+ sr0price.toString() + " (R1 yr)";
+                    sr0Y     = GetYCoordFromPrice( sr0price, vrect );
+                    DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r1 , "dashed" , txtStr, fsz, xyoff, fontStr);
+                  
+
+
+                    sr0price = parseFloat( processedData[date]["Pyear"] ).toFixed(2);
+                    txtStr    = gCurrencyStr+ sr0price.toString() + " (P yr)";
+                    sr0Y     = GetYCoordFromPrice( sr0price, vrect );
+                    DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.p , "dashed" , txtStr, fsz, xyoff, fontStr);
+                  
+
+
+                    sr0price = parseFloat( processedData[date]["S1year"] ).toFixed(2);
+                    txtStr    = gCurrencyStr+ sr0price.toString() + " (S1 yr)";
+                    sr0Y     = GetYCoordFromPrice( sr0price, vrect );
+                    DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s1 ,  "dashed" , txtStr, fsz, xyoff, fontStr);
+
+                    sr0price = parseFloat( processedData[date]["S2year"] ).toFixed(2);
+                    txtStr    = gCurrencyStr+ sr0price.toString() + " (S2 yr)";
+                    sr0Y     = GetYCoordFromPrice( sr0price, vrect );
+                    DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s2 ,  "dashed" , txtStr, fsz-2, xyoff, fontStr);
+
+
+                    sr0price = parseFloat( processedData[date]["S3year"] ).toFixed(2);
+                    txtStr    = gCurrencyStr+ sr0price.toString() + " (S3 yr)";
+                    sr0Y     = GetYCoordFromPrice( sr0price, vrect );
+                    // DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.s3 ,  "dashed" );
+                    DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s3 , "dashed" , txtStr, fsz-4, xyoff, fontStr);
+          
+
+              }//if butt0n  perStr=="monthly"
+
+            }//if(e0y==1){ 
+
+
+
+
+
+
+
+
+
 // END OF MONTH...
             if(eom==1){   // found end of month
-                  processedData[date]["X1month"] = gCandleXnext;
+                processedData[date]["X1month"] = gCandleXnext;
+                processedData[date]["X2month"] = x2m;
 
-                //   // here we may have to pre-loop to set X1,X2month's
-                //  if(last_date_key!="nil"){
-                //     processedData[last_date_key]["X2month"] = gCandleXnext;  // get new X2 from last month
-                //     last_date_key =gLastDateStr;  //== date
-                //  }
+                xyoff = ( -1 * x2mDailyWidth_half) ;  // basicall 2 candles width
+ 
 
-                  let x1m = gCandleXnext;
-                  let x2m = gCandleXnext + ( 10 * ( gCandleWidth + gCandleOffset ) ); 
-                //   if(x2m> vrect.x+vrect.h) x2m= vrect.x+vrect.h-1;
-
-                let  sr0price = 0.0;  
-                let  sr0Y  =0; 
-                let  sr0Ymax = vrect.y+vrect.h;
-
-                let fsz = 16;
-                let xyoff = 4;
-                let fontStr ="Helvetica";
-
-                if(button3==1){
+                if(button3==1   && perStr=="daily"){
                           sr0price = parseFloat( processedData[date]["R3month"] ).toFixed(2);
+                          txtStr    = gCurrencyStr+ sr0price.toString() + " (R3)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                          DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r3 ,  "dashed" );
+                        //   DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r3 ,  "dashed" );
+                          DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r3 , "dashed" , txtStr, fsz-4, xyoff, fontStr);
 
                           sr0price = parseFloat( processedData[date]["R2month"] ).toFixed(2);
                           txtStr    = gCurrencyStr+ sr0price.toString() + " (R2)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                           DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r2 , "dashed" , txtStr, fsz, xyoff, fontStr);
+                           DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r2 , "dashed" , txtStr, fsz-2, xyoff, fontStr);
 
                           sr0price = parseFloat( processedData[date]["R1month"] ).toFixed(2);
                           txtStr    = gCurrencyStr+ sr0price.toString() + " (R1)";
@@ -844,12 +926,15 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
                           sr0price = parseFloat( processedData[date]["S2month"] ).toFixed(2);
                           txtStr    = gCurrencyStr+ sr0price.toString() + " (S2)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                          DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s2 ,  "dashed" , txtStr, fsz, xyoff, fontStr);
+                          DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s2 ,  "dashed" , txtStr, fsz-2, xyoff, fontStr);
 
 
                           sr0price = parseFloat( processedData[date]["S3month"] ).toFixed(2);
+                          txtStr    = gCurrencyStr+ sr0price.toString() + " (S3)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                          DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.s3 ,  "dashed" );
+                        //   DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.s3 ,  "dashed" );
+                          DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s3 ,  "dashed" , txtStr, fsz-4, xyoff, fontStr);
+
                 
                     }//if butt0n
 
@@ -1084,9 +1169,14 @@ function GetYCoordFromPrice( priceInput, vrect ){
 
 }//fn
 
+let gSeriesYearStr ="nil";
 function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl1, vol1 , eom ){
     let    candleRect = {  x: 0 , y: 0 , w: 4 , h: 12  }; 
     let ha_candleRect = {  x: 0 , y: 0 , w: 4 , h: 12  }; 
+
+    let dstr = datestr.substring(0, 4); 
+    // gSerie sYearStr  = "'"+ dstr;   // vs (0,4);  '24 vs 2024
+    gSeriesYearStr  =  dstr;   // vs (0,4);  '24 vs 2024
 
     // heikinashi candle compute, just in case
     let ha_col1 =  colScheme.up ;
@@ -1190,18 +1280,24 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
             drawVerticals=1;   // always draw ea month vert line
 
         } else   if( gSeriesType=="monthly"  ) {
-            if(mm==1 || mm==7)   drawVerticals=1;
+            // if(mm==1 || mm==7)   drawVerticals=1;
+            if(mm==1  )   drawVerticals=1;
 
         } else   if( gSeriesType=="weekly"  ) {
             if(mm==1 || mm==4|| mm==7|| mm==10)   drawVerticals=1;
 
         } 
 
-        if(  drawVerticals==1  ){
+        // if(  drawVerticals==1  && gGlob alPerFromData=="daily" ){  // gSeriesType
+            if(  drawVerticals==1  &&  ( gSeriesType=="daily" || gSeriesType=="weekly" ) ){  
                 // VERTICAL AXES
-                DrawVerticalLine(ctx  , candlerect.x , vrect.y, (vrect.y+vrect.h) , gAxesCol0 , "dotted");
-                DrawDateRotated( ctx  , vrect , colScheme, -0.50 );
-        }
+            DrawVerticalLine(ctx  , candlerect.x , vrect.y, (vrect.y+vrect.h) , gAxesCol0 , "dotted");
+            DrawDateRotated( ctx  , vrect , colScheme, -0.50 );
+        }else if(  drawVerticals==1  && gSeriesType=="monthly" ){
+            // VERTICAL monthly  AXES
+            DrawVerticalLine(ctx  , candlerect.x , vrect.y, (vrect.y+vrect.h) , gAxesCol0 , "dotted");
+            DrawDateRotatedWithYear( ctx  , vrect , colScheme, -0.50 ); 
+            }
 
     }//eom
 
@@ -1697,14 +1793,16 @@ function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGre
 
     }
 
+
+let yoffSell=24;
     if( gSellSignal_thisCandle  > 0 ){
         sz1 = sz_init * gSellSignalCnt_thisCandle;
         sz2 = parseInt( sz1/2);
         txt1=gSellSignalStr_thisCandle;
         txt1_num=parseInt(gSellSignalCnt_thisCandle).toString();
         if(gSellSignalCnt_thisCandle<6) fsz= 24 -8;
-        DrawTriangle_callout(ctx, sz1, 3, outline_dncol, gCandleWickX, SellTrianglePos_y, 1, 1, gSellSignal_col ,   txt1+ txtStr, (-1*xoff), 0, 16 , colScheme.tx , gGlobalFont  ) ;
-        DrawText(ctx , txt1_num, gCandleWickX-sz2, SellTrianglePos_y-Yoff, fsz , gSellSignal_outline_col , gGlobalFont  );
+        DrawTriangle_callout(ctx, sz1, 3, outline_dncol, gCandleWickX, SellTrianglePos_y -yoffSell, 1, 1, gSellSignal_col ,   txt1+ txtStr, (-1*xoff), 0, 16 , colScheme.tx , gGlobalFont  ) ;
+        DrawText(ctx , txt1_num, gCandleWickX-sz2, SellTrianglePos_y-Yoff -yoffSell, fsz , gSellSignal_outline_col , gGlobalFont  );
         gSellSignal_Last = "SELL "+gSymbolStr+" at "+  gSellSignalStr_thisCandle +" strength="+gSellSignalCnt_thisCandle.toString() +  " ";
         gLastBuySellSignal_symbol= gSymbolStr;
     }
@@ -1794,11 +1892,11 @@ function DrawImage(ctx, img, x, y, scale) {
 
 
 let gCrawlSeconds100 = 30;
-let gCrawlFontSize = 14;
+let gCrawlFontSize = 18;
 
 let gCrawlXstep =2;
 let gCrawlX=0;
-let gCrawlY=14;
+let gCrawlY=10;
 
 let gZipper0="             ";
 let gZipper= "             ";
@@ -1809,7 +1907,7 @@ function printZipperString( data, ctx){
     gZipper0 = data;
     gZipper= data + " " + data;
     console.log("ZipperString gZipper str==", gZipper);
-    // DrawText_noclip( ctx, gZipper, gCrawlX, gCrawlY,       12 , 'blue' , gGlobalFont );
+    // DrawText_noclip( ctx, gZipper, gCrawlX, gCra wlY,       12 , 'blue' , gGlobalFont );
 
 }
 function GetTickerZipper(url , ctx) {
@@ -1834,7 +1932,7 @@ function GetTickerZipper(url , ctx) {
 
 function DrawCrawl() {
     // gCrawlX = gCrawlX- gCrawlXstep;
-    // let vrect0 = { x: 0, y:gCrawlY-2 , w: canvas.width, h: gCrawlFontSize+4 };
+    // let vrect0 = { x: 0, y:gCraw lY-2 , w: canvas.width, h: gCrawlFontSize+4 };
 
     ctx.fillStyle = 'yellow';   
     ctx.font =  gCrawlFontSize.toString()+"px " +gGlobalFont;   //fsz.toString()+ "px Arial";    
@@ -1846,7 +1944,7 @@ function DrawCrawl() {
     let vrect0 = { x: 0, y:gCrawlY-4 , w: canvas.width, h: gCrawlFontSize+8 };
 
     DrawVRect(ctx, vrect0, 2, 'blue', "solid");
-    DrawText_noclip( ctx, gZipper, gCrawlX, gCrawlY + gCrawlFontSize-2,       gCrawlFontSize , 'yellow' , gGlobalFont );
+    DrawText_noclip( ctx, gZipper, gCrawlX, gCrawlY + gCrawlFontSize-7,       gCrawlFontSize , 'yellow' , gGlobalFont );
 
 }
 function logDateTime() {
@@ -1955,6 +2053,10 @@ function DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr){
 }
 function DrawDateRotated( ctx , vrect, colScheme, rotfl){  // designed to be called during Rendering
     let datestrAbbrev = DateAbbreviate( gLastDateStr , 1 );
+    DrawTextRotated( ctx, datestrAbbrev, gCandleWickX + 4, (vrect.y+ parseInt(vrect.h *0.90) ), colScheme.tx, 14, gGlobalFont, rotfl );
+}
+function DrawDateRotatedWithYear( ctx , vrect, colScheme, rotfl){  // designed to be called during Rendering
+    let datestrAbbrev = DateAbbreviate( gLastDateStr , 1 ) + " " +gSeriesYearStr;
     DrawTextRotated( ctx, datestrAbbrev, gCandleWickX + 4, (vrect.y+ parseInt(vrect.h *0.90) ), colScheme.tx, 14, gGlobalFont, rotfl );
 }
 function DrawTextRotated( ctx, rstr, xx0, yy0, colstr, px, font0str, rotfloat) {
@@ -2169,7 +2271,7 @@ let gPixelMargin_x = 10;
 function DrawHorizontalLine_callout( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr){
     if(  ifInside( y, gPixelMargin_y, "y" )==true  ){
             DrawLine( ctx, x1, y, x2, y, 2, col,  style);
-            DrawText( ctx, txtStr, x2+xyoff, y, fsz , col , fontStr);
+            DrawText( ctx, txtStr, x2+xyoff, y-2, fsz , col , fontStr);   // -2 to raise above line
     }
 }
 function DrawHorizontalLine_callout_textcol( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr, txtcol,){
@@ -2286,6 +2388,34 @@ function GetColorSchemeCycle(){
 // ########################################################################################    FIBONACCI
 // ########################################################################################    
 //
+let gDrawTimeframe    = "daily";
+let gDrawTimeframeNum = 0;
+
+function ToggleTimeframe(){
+
+
+    let gstr =     gGlobalPerFromData;
+
+    let httpstrGo = "";
+    let httpstr = gPrefixLink;
+
+    if(gstr=="daily") httpstrGo = httpstr +  gSymbolStr +"&per=m";  
+    else if(gstr=="monthly") httpstrGo = httpstr +  gSymbolStr +"&per=w";
+         else if(gstr=="weekly") httpstrGo = httpstr +  gSymbolStr +"&per=d";
+
+    // console.log("Button clicked, GOING TO HTTPS:", httpstrGo , gGlobalButtonNameStr, gGlobalButtonNum);
+    window.location.href = httpstrGo;   // same browser
+
+}
+
+ function ToggleTimeframe1(){
+    
+    if(gDrawTimeframeNum==0){
+        gDrawTimeframeNum=1;
+    }else  if(gDrawTimeframeNum==1){
+        gDrawTimeframeNum=0;
+    }
+}
 
 function ToggleGaps(){
     if(gGaps_On==0){
@@ -2545,7 +2675,7 @@ function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =
 let gGlobalButtons = [];
 let gGlobalButtonNameStr = '';
 let gGlobalButtonNum = -1;
-let gGlobalButton_arr = ['spy', 'qqq', 'nvda', 'aapl', 'tsla', 'nflx', 'msft', 'amzn', 'mstr',  'slv',  'gd',  'djt',  'gs',  'vxx', 'sqqq' ];
+let gGlobalButton_arr = ['spy', 'qqq', 'nvda', 'aapl', 'tsla', 'nflx', 'msft', 'amzn', 'mstr',  'slv',  'btc-usd',  'djt',  'gs',  'vxx', 'sol-usd' ];
 // Draw ButtonArray(ctx, arr, 10, 10, 100, 0, 10, 2);
 // Det ectButtonPress(ctx, gGlobalButtons, arr);
 
@@ -2726,9 +2856,9 @@ function resizeCanvas() {
             // ctx.font =  fsz.toString()+ "px Arial";   // ctx.font = "bolder "+"124px Arial";
             // ctx.fillText( dtstr , 40, 40  );
 
-        let but_x =10;
+        let but_x =6;
         let but_w = 80;
-        but_w = gGlobalChartVRectCurrent.x - 5 - but_x ;
+        but_w = gGlobalChartVRectCurrent.x - 6 - but_x ;
         let wbut  = parseInt( gScalarFloat_dynamic * but_w );
 
         let hbutSt = 40;
@@ -2792,6 +2922,12 @@ function toggleButton(buttonNumber) {
                 case 2:
                     button2 = (button2 === 1) ? 0 : 1;
                     gDrawFinancials=0;
+                        if(button2 == 0){
+                                // pivot lines cyan/ye.
+                                if(button5==0) button5=1;
+                                else if(button5==1) button5=2;
+                                else  if(button5==2) button5=0;
+                        }
 
                     window.dispatchEvent(new Event('button2'));
                     break;
@@ -2811,10 +2947,11 @@ function toggleButton(buttonNumber) {
                 case 5:
                     // button5 = (button5 === 1) ? 0 : 1;   // pivots blue, then both blue+yellow, then off
                     gDrawFinancials=0;
+                    ToggleTimeframe();  //  gDrawTimeframe= "daily";
 
-                    if(button5==0) button5=1;
-                     else if(button5==1) button5=2;
-                      else  if(button5==2) button5=0;
+                    // if(button5==0) button5=1;
+                    //  else if(button5==1) button5=2;
+                    //   else  if(button5==2) button5=0;
                     window.dispatchEvent(new Event('button5'));
                     break;
                 case 6:

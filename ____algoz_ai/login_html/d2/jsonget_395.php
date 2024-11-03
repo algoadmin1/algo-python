@@ -1,15 +1,9 @@
 
 <?php                       
-                                                              $ver=  "293.3";
+                                                              $ver=  "292.5";
 
 date_default_timezone_set('America/New_York');
 require_once 'cryptoslist.php';  // gen'd by formatcsv.php <-- takes digital_currency_list.csv
-
-
-// session_start();
-// $_SESSION['crawlTime']=  t ;
-// $_SESSION['crawlstr']=  str ;
-
 
 $apikey ="M3LB7MG3JF83E3";
 $intradaystrs = [ "notIntraday", "intraday"];
@@ -42,7 +36,7 @@ $button1name = "Chart";
 $button2name = "Buy Sell";
 $button3name = "Sup Res";
 $button4name = "Gaps" ;              //; "Gaps Detection";
-$button5name = "Time";
+$button5name = "PivP3";
 $button6name = "Fib";
 $button7name = "Fin's";
 $button8name = "Color";
@@ -538,7 +532,6 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
                 $l0= array_values($data)[$i-1]['low'];
                 $c0= array_values($data)[$i-1]['close'];
                 $o0= array_values($data)[$i-1]['open'];
-                
 
 
                 // Heikin Ashi  data piece
@@ -1037,114 +1030,6 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $i++;
         $monthdays++;
     }// foreach loop
-
-
-   
-    // 2ndLoop find year H L  C
-    // 2ndLoop find year H L  C
-    // 2ndLoop find year H L  C
-    // 2ndLoop find year H L  C
-    $ii=0;
-    foreach ($data as $date => &$value) {    // Loop through each element of the array
-        $eoy  =     intval($value['endOfYear']); 
-        $eoq  =     intval($value['endOfQtr']); 
-        $gPer = strtolower($value['globalper']);                 //  "Monthly"  ==> monthly
-
-
-        if( $gPer=="monthly" ){
-
-            if($eoy==1  && $ii>=12 ){   // only compute HLC pivots for  0..11 --> [12]
-
-                // if we get here it is JAN and we have a whole year behind us
-                    $yearClose = (float)(array_values($data)[$ii-1]['close']);   // dec close
-                    $yearOpen  = (float)(array_values($data)[$ii-12]['open']);   // jan open
-                    $value['yearClose'] =  $yearClose;
-                    $value['yearOpen']  =  $yearOpen;
-                 
-                    
-                    $hi12 = (float)(array_values($data)[$ii-1]['high']); // dec 
-                    $hi11 = (float)(array_values($data)[$ii-2]['high']); 
-                    $hi10 = (float)(array_values($data)[$ii-3]['high']); 
-                    $hi09 = (float)(array_values($data)[$ii-4]['high']); 
-                    $hi08 = (float)(array_values($data)[$ii-5]['high']); 
-                    $hi07 = (float)(array_values($data)[$ii-6]['high']); 
-
-                    $hi06 = (float)(array_values($data)[$ii-7]['high']); 
-                    $hi05 = (float)(array_values($data)[$ii-8]['high']); 
-                    $hi04 = (float)(array_values($data)[$ii-9]['high']); 
-                    $hi03 = (float)(array_values($data)[$ii-10]['high']); 
-                    $hi02 = (float)(array_values($data)[$ii-11]['high']); 
-                    $hi01 = (float)(array_values($data)[$ii-12]['high']); // jan
-
-                    $yearHigh = max( $hi12, $hi11, $hi10, $hi09 , $hi08 , $hi07 , $hi06 , $hi05 , $hi04 , $hi03 , $hi02 , $hi01 );
-                    $value['yearHigh'] =  $yearHigh;
-    
-
-                    $lo12 = (float)(array_values($data)[$ii-1]['low']); // dec 
-                    $lo11 = (float)(array_values($data)[$ii-2]['low']); 
-                    $lo10 = (float)(array_values($data)[$ii-3]['low']); 
-                    $lo09 = (float)(array_values($data)[$ii-4]['low']); 
-                    $lo08 = (float)(array_values($data)[$ii-5]['low']); 
-                    $lo07 = (float)(array_values($data)[$ii-6]['low']); 
-
-                    $lo06 = (float)(array_values($data)[$ii-7]['low']); 
-                    $lo05 = (float)(array_values($data)[$ii-8]['low']); 
-                    $lo04 = (float)(array_values($data)[$ii-9]['low']); 
-                    $lo03 = (float)(array_values($data)[$ii-10]['low']); 
-                    $lo02 = (float)(array_values($data)[$ii-11]['low']); 
-                    $lo01 = (float)(array_values($data)[$ii-12]['low']); // jan
-
-                    $yearLow  = min( $lo12, $lo11, $lo10, $lo09 , $lo08 , $lo07 , $lo06 , $lo05 , $lo04 , $lo03 , $lo02 , $lo01 );
-                    $value['yearLow'] =  $yearLow;
-
-// here compute YearlyPivots
- 
-                            // COMPUTE yearLY PIVOTS SRs, BASED on LAST YEAR's OHLC, computed / stored above  ie  $value['yearHigh'] =  $yearHigh;
-                            $Pyear = ( $yearHigh+ $yearLow + $yearClose ) / 3;
-
-                            $R1year =  ($Pyear *2 ) - $yearLow;      //  R1day = (Pday *2)-Low;
-                            $S1year =  ($Pyear *2 ) - $yearHigh;     //  S1day = (Pday *2)-High;
-
-                            $S2year =  $Pyear - $yearHigh + $yearLow ;  //  S2day = Pday – High + Low;
-                            $R2year =  $Pyear + $yearHigh - $yearLow ;   // R2day = Pday + High – Low;
-
-                            $S3year =  $Pyear -   ( $R2year - $S1year ) ;   // S3day = Pday – (R2day-S1day);
-                            $R3year =( $Pyear - $S1year ) +   $R2year ;     // R3day = (Pday-S1day) + R2day;
-
-                            $S4year =  $yearLow - 3*( $yearHigh - $Pyear); // s4day = Low- 3*(High-Pday) ; 
-                            $R4year =  $yearHigh+ 3*( $Pyear - $yearLow );  //  R4day = High+ 3*(Pday-Low) ;
-
-                            // here we should CALC Based on these above
-                            $value['R4year'] = $R4year;
-                            $value['R3year'] = $R3year;
-                            $value['R2year'] = $R2year;
-                            $value['R1year'] = $R1year;
-                            $value['Pyear'] =  $Pyear;     
-                            $value['P3year'] = 0.0;
-                            $value['S1year'] = $S1year;
-                            $value['S2year'] = $S2year;
-                            $value['S3year'] = $S3year;
-                            $value['S4year'] = $S4year;
-
-
-                }// if eoy VALID
-
-        }// if m0nthly
-
-
-            // if( $gPer=="weekly" ){
-            //     if($eoq==1  && $ii>=4 ){   // only compute HLC pivots for 
-            //         // $o0= array_values($data)[$i-1]['open'];
-            //         $dum=1;
-            //         }
-            // }
-         
-
-
-
-        $ii++;
-     }//for
-
 
     return $data;    // Return the modified array
 
@@ -1670,7 +1555,7 @@ function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
         // Echo the date and the corresponding values
         echo $date . " | " .
              "Open: " . $value['open'] . ", " .
-             "high: " . $value['high'] . ", " .
+             "High: " . $value['high'] . ", " .
              "Low: " . $value['low'] . ", " .
              "Close: " . $value['close'] . ", " .
              "Volume: " . $value['volume'] . ", " .
