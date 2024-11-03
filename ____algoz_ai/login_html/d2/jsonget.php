@@ -5,6 +5,12 @@
 date_default_timezone_set('America/New_York');
 require_once 'cryptoslist.php';  // gen'd by formatcsv.php <-- takes digital_currency_list.csv
 
+
+// session_start();
+// $_SESSION['crawlTime']=  t ;
+// $_SESSION['crawlstr']=  str ;
+
+
 $apikey ="M3LB7MG3JF83E3";
 $intradaystrs = [ "notIntraday", "intraday"];
 $periods = [ "daily", "weekly", "monthly", "1min" , "5min", "15min" , "30min", "60min" ];
