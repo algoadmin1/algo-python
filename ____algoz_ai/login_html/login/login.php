@@ -1,8 +1,8 @@
 <?php
-//                                          ver 7.01
+                                         $ver= "9.14";
 session_start();
 if (isset($_SESSION["user"])) {
-   header("Location: index.php");
+   header("Location: ../d2/index.php");
 }
 require_once "database.php";
 /*
@@ -433,7 +433,7 @@ tp_Cashflow_Business|9999-12-31|18|,tp_SaaSFintechTool_Pivots_365days|2025-10-09
                                         $_SESSION["user_productstr"] = $productstr ;
                            // note on these:  tp_AlgoInvestorNewsletter_3Month END DATE MUST BE STORED      
 
-                                        if($msgprod==false)   header("Location: ../index.php");
+                                        if($msgprod==false)   header("Location: ../d2/index.php");
                                         die();    
                    }
 
@@ -465,7 +465,7 @@ tp_Cashflow_Business|9999-12-31|18|,tp_SaaSFintechTool_Pivots_365days|2025-10-09
         //         $_SESSION["user"] =$email ; 
         //         $_SESSION["userId"] = $userID0;    //   from indxmenu.php $userID0=$_SESSION["userId"];
 
-        //         header("Location: indexmenu.php");
+        //         header("Loc ation: indexmenu.php");
         //         die();    
 
         // if(   $projectMatch==1   &&  $passwordHashMatch==1   && $passwordMatch==1 ){

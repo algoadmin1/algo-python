@@ -2,10 +2,10 @@
 // ver 4.3
 session_start();
 if (isset($_SESSION["user"])) {
-   header("Location: ../index.php");
+   header("Location: ../d2/index.php");
 }
 require_once "database.php";
-
+                                                                        $ver = "9.13";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -379,10 +379,10 @@ require_once "database.php";
                     $_SESSION["user_lastDateTime"] = $today0; //$user_lastDateTime;
                     $_SESSION["user_lastDay"] = " "; //$user_lastDay ;
 
-                    // header("Location: lastdateTest.php?sym=aapl");
-                    // header("Location: indexmenu.php");
-                    header("Location: ../index.php");
-                    // header("Location: lastdateTest.php");
+                    // header("Loc ation: lastdateTest.php?sym=aapl");
+                    // header("Lo cation: indexmenu.php");
+                    header("Location: ../d2/index.php");
+                    // header("Loc ation: lastdateTest.php");
                     die();
 
             }

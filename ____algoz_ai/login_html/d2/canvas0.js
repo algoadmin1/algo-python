@@ -2676,8 +2676,6 @@ let gGlobalButtons = [];
 let gGlobalButtonNameStr = '';
 let gGlobalButtonNum = -1;
 let gGlobalButton_arr = ['spy', 'qqq', 'nvda', 'aapl', 'tsla', 'nflx', 'msft', 'amzn', 'mstr',  'slv',  'btc-usd',  'djt',  'gs',  'vxx', 'sol-usd' ];
-// Draw ButtonArray(ctx, arr, 10, 10, 100, 0, 10, 2);
-// Det ectButtonPress(ctx, gGlobalButtons, arr);
 
 // Function to draw a rounded rectangle
 function DrawRoundedRectCanvas(ctx, vrect, radius, lineWeight, outlineCol, fillFlag, fillCol) {

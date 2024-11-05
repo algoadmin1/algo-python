@@ -1,9 +1,9 @@
 <?php
 session_start();
 if (isset($_SESSION["user"])) {
-   header("Location: ../index.php");
+   header("Location: ../d2/index.php");
 }
-  
+                                                                $ver = "9.11";
 require_once "database.php";
 
 ?>
@@ -138,7 +138,7 @@ require_once "database.php";
                             // to start a sess
                             // session_start();
                             // $_SESSION["user"] =$email ; 
-                            // header("Location: index.php");
+                            // header("Loc ation: index.php");
                             // die();    
 
                         } else {

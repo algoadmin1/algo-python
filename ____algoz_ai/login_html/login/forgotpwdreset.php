@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_SESSION["user"])) {
-   header("Location: ../index.php");
+   header("Location: ../d2/index.php");
 }
 //  .php?em=abc@yahoo.com
 if(isset( $_GET['em'] )){
@@ -13,6 +13,8 @@ if(! (isset(  $_SESSION["pwd2reset"] )) ){
     $_SESSION["pwd2reset"]=$emailPwdReset;
 }
     $emailPwdReset1=$_SESSION["pwd2reset"];
+
+                                                                $ver = "9.12";
 
 require_once "database.php";
 
@@ -33,7 +35,7 @@ require_once "database.php";
         /* Basic styling for the form and button */
         .form-group {
             position: relative; /* Position relative to contain the eye icon */
-            width: 260px; /* Set a width for the form group */
+            width: 100%;  /* 260px;  Set a width for the form group */
             margin-bottom: 15px; /* Spacing at the bottom of the input field */
         }
 

@@ -1,5 +1,6 @@
 <?php
-//                                                  ver  12.1
+                                                 $ver=  "13.2";
+// /d2/index.php
 
 date_default_timezone_set('America/New_York');
 require_once '../login/events.php';
@@ -9,7 +10,7 @@ require_once '../login/database.php';
 // session_start();
 
 // // if (!isset($_SESSION["user"])) {
-// //    header("Location: ./login/login.php");
+// //    header("Loc ation: ./login/login.php");
 // // }else{
 // //     $email1=$_SESSION["user"];
 // // }
@@ -257,7 +258,10 @@ if (isset($eventsTable[0])) {
           
 
             <!-- <li><a href="#"><i class='bx bx-candles' id="chartBtn"></i>Charting</a></li> -->
-            <li><a href="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0"><i class='bx bx-candles' id="chartBtn"></i>Charting</a></li>
+            <li><a href="https://algoz.ai/d2/jsonget.php?sym=spy"><i class='bx bx-candles' id="chartBtn"></i>Charting</a></li>
+<!-- 
+            <li><a href="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0"><i class='bx bx-candles' id="chartBtn"></i>Charting</a></li> -->
+
             <!-- <li><a href="#"><i class='bx bx-mail-send'></i>Newsletter</a></li> -->
             <!-- <script>
                 document.getElementById('chartBtn').addEventListener('click', function() {
@@ -699,7 +703,7 @@ if (isset($eventsTable[0])) {
 
 
 
-
+<!-- 
 
                 <div class="orders">
                     <h3>chart</h3>
@@ -709,7 +713,7 @@ if (isset($eventsTable[0])) {
                     </div>
                      
                 </div>
-
+ -->
 
                 <!-- end of canvas attempt -->
 
@@ -722,7 +726,7 @@ if (isset($eventsTable[0])) {
 
     </div>
 
-    <script src="charting.js"></script>
+    <!-- <script src="charting.js"></script> -->
     <script src="clock.js"></script>
     <script src="index_d2.js"></script>
 </body>

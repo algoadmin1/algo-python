@@ -2204,6 +2204,56 @@ $processedDataJson = json_encode($dataProcessed);
  * 
  * 
  * 
+ * /login
+
+//              /login/login.php
+//              /login/database.php
+//              /login/events.php
+//              /login/forgotpwd.php
+//              /login/registration.php
+//              /login/logout.php
+//              /login/registration.php
+//              /login/productsTable.php
+//              /login/productTableFunctions.php 
+//              /login/gethttp.php
+//              /login/userstats.js
+//              /login/encrypt.php
+                
+
+                events.php
+                productsTable.php
+
+                login.php
+                database.php
+                productTableFunctions.php 
+                [ use with google sheets ]
+
+                forgotpwd.php
+
+                registration.php
+
+                logout.php
+
+                sendemail.php
+                lastdateTest.php
+
+                logo.jpg   // 17:10  256x144
+                favicon.ico
+                /digital_7 
+
+                gethttp.php
+                userstats.js
+                encrypt.php
+
+                indexmenu.php
+
+                userstats.html
+                passstr.php
+                sidebarai.phlp
+
+
+
+ * 
  * 
  */
     </script>
