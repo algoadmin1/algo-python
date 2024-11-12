@@ -1,10 +1,61 @@
 <?php
-                                                                                        $ver = "1.2";
-// API URL
-$url = 'https://api.x.ai/v1/chat/completions';
+                                                                                        $ver = "2.0";
+
+date_default_timezone_set('America/New_York');
+
+//   SAMPLE USAGE:
+//
+//              algoz.ai/ai?prompt=what is the market cap and Enterprise value of Tesla?
+//
+//
 
 $prompt1 = "Testing. Just say hi and then tell us about Elon and his help in the recent US Election, and how it impacted TSLA stock and Bitcoin both fundamentally and technically.";
-$prompt = "Testing. Just say hi and then tell us about the recent rise in the stock market indicies, and how Elon Musk helped Trump win the  US Election, and how it impacted TSLA stock and Bitcoin both fundamentally and technically.";
+$prompt2 = "Testing. Just say hi and then tell us about the recent rise in the stock market indicies, and how Elon Musk helped Trump win the  US Election, and how it impacted TSLA stock and Bitcoin both fundamentally and technically.";
+
+$promptInit = "Say something nice to me and tell me how the NASDAQ and S&P did today, noting a few stocks that moved a lot, and tell me why they moved.";
+$prompt0 = $promptInit ; 
+
+$verbose = 0;
+
+
+if(isset( $_GET['prompt'] )){
+    $prompt0 = $_GET['prompt'] ;
+}else{
+    if(isset( $_GET['pr'] )){
+        $prompt0 = $_GET['pr'] ;
+    }else{
+        $prompt0 = $promptInit ;  
+    }
+}
+// $sym = strtoupper($sym);
+
+$prompt = $prompt0;
+
+echo "<br />] ";
+$welcomeStr =  "Thank you for choosing algoz.ai ! ";
+echo '<strong style="color: green;">'. $welcomeStr . '</strong>';
+
+//  echo "<br />] One moment, while ai responds to: <br />";
+echo "<br />";
+echo "<br />] One moment while we get retrieve your ai response to:";
+echo "<br />";
+echo "<br />";
+
+
+// Bold and blue text
+echo '<strong style="color: blue;">'. $prompt . '</strong>';
+
+// Bold and red text
+// echo '<strong style="color: red;">This text is bold and red.</strong>';
+
+
+ob_flush();
+flush();
+
+
+// Xai api stuff API URL
+$url = 'https://api.x.ai/v1/chat/completions';
+
 // API headers
 $headers = [
     'Content-Type: application/json',
@@ -31,9 +82,44 @@ $data = [
 ];
 
 
-
-
 function DecodeResponse($response, $verbose) {
+    // Decode the JSON response
+    $data = json_decode($response, true);
+
+    // Initialize content string
+    $contentString = '';
+
+    // Check if JSON decoding was successful
+    if (json_last_error() === JSON_ERROR_NONE) {
+        // Access the 'choices' array where the assistant's content is located
+        if (isset($data['choices'][0]['message']['content'])) {
+            // Retrieve the content
+            $contentString = $data['choices'][0]['message']['content'];
+            
+            // Replace each "\n" with two newlines for better readability
+            $contentString = str_replace("\n", "\n\n", $contentString);
+        }
+
+        // Output based on verbosity level
+        if ($verbose == 0) {
+            // Pretty print the "content" only
+            echo "<pre>" . htmlentities($contentString) . "</pre>";
+        } else {
+            // Pretty print the entire response payload with modified content
+            // Update the content in the full JSON data structure
+            $data['choices'][0]['message']['content'] = $contentString;
+            echo "<pre>" . htmlentities(json_encode($data, JSON_PRETTY_PRINT)) . "</pre>";
+        }
+    } else {
+        echo "Invalid JSON response";
+    }
+
+    // Return content string regardless of verbosity
+    return $contentString;
+}
+
+
+function DecodeResponse_singleNewLine($response, $verbose) {
     // Decode the JSON response
     $data = json_decode($response, true);
 
@@ -68,9 +154,8 @@ function DecodeResponse($response, $verbose) {
 //  ############################################ END OF FUNCTIONS
 
 echo "<br /> ";
-echo "<br />] One moment, connecting to the Xai Brain... ";
 
-
+// 
 // Initialize cURL
 $ch = curl_init($url);
 
@@ -88,12 +173,11 @@ if (curl_errno($ch)) {
     echo 'Error:' . curl_error($ch);
 } else {
     // Print the response from the API
-    echo "<br /> Xai Response: ". $response;
+    if($verbose==1) echo "<br /> Xai Response: ". $response;
     echo "<br /> ";
     echo "<br /> ";
-    $verbose = 1;
     $replyStr = DecodeResponse($response, $verbose);
-    echo "<br /> ] replyStr == ". $replyStr;
+    if($verbose==1) echo "<br /> ] replyStr == ". $replyStr;
 
 }
 
