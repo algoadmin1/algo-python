@@ -1,37 +1,137 @@
 
 
-1 Call out your audience in ALL CAPS i.e. “MAKE MIORE MONEY.”
-	1a include a subheadline that furthers the message
 
-2 Demand their attention with an attention=grabbing headline
+Please build a mobile-responsive landing page for my SaaS startup, in html, css and javascript that is simple, clean and
+contemporary. 
+
+This landing page must contain the 17 steps below, from Sabri Subri's teachings. Each step is numbered 1-17. The customer should want to keep reading down the 17 steps, as they learn how they can make more money. Feel free to refer to Sabri Subri's "Sell Like Crazy" book or Alex Hormozi's "100x" books.
+
+Underneath each step, indented, is detail about that part of the landing page. Instructions below each of the 17 steps that are in brackets, i.e. '< place an image here >', refer to a url link or an image. Instructions below each of the 17 steps that contain an asterisk at the start, i.e. "*Here be CONCISE and PERSUASIVE, and come up with..." , means that your ai should create this step.
+
+Use a two-tone color scheme against white, to keep the landing page simple and clean. Make sure to make the two tones of color used, defined as variables in the CSS file so they can easily be changed to a different two-tone color scheme. Use fonts sans-serif, and also highlight key selling features where appropriate with bold or italics to stress a key feature.
+
+
+
+
+1 Call out the audience in ALL CAPS: “MAKE MORE MONEY”
+	Demand their attention with an attention-grabbing headline
+	
+
+2 Include a subheadline that furthers the message
+	"Make income from your home in the morning before you start your day."
+
 
 3 Irresitible Intrigue, bullet copy (variations of headline)
+	Learn invest short and long term
+	Look at this extra income I have made since August of this year:
+		<insert embed link to this video here: https://algoz.ai/images/video.mp4  >
+	Some of our members have made 5 and 6-figures off a single investment!
+	Learn how to make income off your existing portfolio
+	Use our proprietary price-level and trend predicting tools
+	All videos are in short-length format, so you do not have to watch 30 hours of content to start making money.
+	Make more income from home
+
 
 4 Identify the Problem
+	Everything gets more expensive over time due to inflation.
+	People are getting laid off all the time.
+	ai is taking the jobs of many professionals.
+	Our salaries do not go up with the cost of living.
+	People are struggling and need to learn how to make more money.
+	Dropshipping, real estate and influencer-based online businesses are not realistic for the average person with a family and a job.
+
 
 5 Provide Solution
+	We provide a faster way of learning with FasterClass, and offer personal instruction for super-fast learning tailored to your situation.
+	Our only goal is to educate you quickly in the basics of professional investing and trading, without years of prepping, lots of math or tons of technical indicators to learn.
+	We show you step by step how to produce income on a monthly basis in the stock, options and crypto markets - with algos.
+	Get access to Wall Street Algos created by MIT Quants, Professional Traders and Finance Industry veterans' simple strategies.
+
 
 6 Show Credentials
+	Our Background is we are a network of live, 5, 6 and 7-figure algorithmic traders who rely on this for a living.
+	John has a degree in Computer Science from MIT, has founded several businesses, as well as years of live market, algo-based trading experiend.
+	Mike is a professional trader and fund manager with a long history of work on Wall Street.
+	Our team includes members who are Fund Managers, CTOs, MIT Quants, Algo Investors, and small to large-account traders.
+	John studied additionally under Wall Street pros and famous traders, and has group has created a clean, easy-to-follow set of tools.
 
-7 Detail the Benefits (Features Tell, Benefits Sell)
 
-8 Social Proof: Client Testimonials
+7 Detail the Benefits 
+	You get up to speed quickly on how to invest and trade your money.
+	You learn from 20+ year live-money traders
+	You get to mimic our winning investments
+	All key investment information, both technical and fundamental are all in one place.
+	Access to our exclusive industry traders and their winning trades; 
+	We only focus on a few stocks and crypto
+	We do not advocate day trading all day.
+	We teach the opening of the market and how to exit positions.
+	Access to our exclusive industry newsletter, which has called many great investments to date,
+	
 
-9  Make the Godfather Offer. CONCISE. PERSUASIVE.
-    Customer: “How can they deliver this value?”
+8 Social Proof include these Client Testimonials
+	<  include a cirular profile picture next to each line (use the image link https://algoz.ai/images/profile1.png to the left of 'Thomas T.', then https://algoz.ai/images/profile2.png to the left of 'Wendy Y.', etc )  >
+	Thomas T. "Their newsletter is invaluable and John's initial 2-session training helped me make several mid 5-figure trades." 
+	Wendy Y. "John spent time with me personally. No ai chat bots here. His guidance helped me hang on to a position that was losing money, until it eventually made over $160,000- off one PLTR investment."
+	Gene M. "I bought their newsletter subscription, and learned so many ways to make money, like the Iron Condor. So many of their own stock and bitcoin investments made money."
+	Mark P. "I really enjoy getting the newsletter and reading about what stocks they're investing in."
+	Guillermo F. "John trained me up in how to make money off my porfolio every month. Having two kids nowadays is expensive, and I cannot thank John and Mike's training for the extra income I am now making, plus I have gained a key financial skill."
+	Allen D. "Their newsletter is non-partisan, and members share their winning trades to benefit the group."
+
+
+9  Make the Godfather Offer. 
+	*Here be CONCISE and PERSUASIVE, and come up with an offer the customer cannot refuse, based on the context of this document.
+
 
 10 Added bonuses
+	With a small amount of training and even a small account, you can make extra income.
+	We are not VC or Private Equity Funded
+	We are funded by our own money-making algorithms.
+	No pop-up ads or control by Advertisers.
+	No real estate to flip.
+	No Digital Marketing Agency creation and hunting for clients year after year. 
+	No expensive courses that make us rich after we sell a few hundred units.
+	Clean, simple interface for quick-checking your stock or crypto.
+	Learn these skills once and for all and make scalable money forever!
 
-11 Stack the value, itemizing each one next to a $ amt
+
+11 Stack the value, itemizing each one next to a dollar amount
+	$600/year	Newsletter - Our Community where members show live/winning trades
+	$600/year 	Covered Call Calculator - Quickly find the right price and date for Covered Calls
+	$1200/year 	Price Level Predictor - Find the algo-predicted price levels for entering & exiting positions.
+	$3000/year  algo-generated Buy and Sell Signals
+	$6000/year 	Access to our exclusive community of real-money 6 and 7 figure traders and investors
+	$4000 value Learn Faster with our Finance FasterClass - we only teach the key steps in creating winning investments with our tools
+	======
+	$15,000 in value 
+
 
 12 Reveal the Price
+	Our Finance FasterClass and Investing Tools are normally $999.
+	Now, for a limited time only, we are dropping the price to a one-time payment of only $499. No hidden fees or sneaky subscriptions.
+
 
 13 Inject Scarcity
+	We can only accomodate a small group of people serious about making more money. 
+	Our community of traders are themselves High Net Worth Individuals, so their time is scarce.
+	This price is a limited-time offer and will go up after this promotion.
+
 
 14 Powerful Guarantee
+	*Create a guarantee here.
+
 
 15 Call to Action (TELL THEM to TAKE ACTION)
+	Click this button and Start now !
+	< insert a yellow 'Learn More' Button here >
+
 
 16 WARNING
+	We will likely close our membership soon. Join our community now.
+	*Create another warning about ai replacing human jobs and financial investing skills being of paramount importance for everyone.
 
-17 Close with a Reminder (< 1 paragraph)  3rd-most read part of l.pg.
+17 Close with a Reminder  
+	Remember, everyone with a job can be laid off and replaced by ai.
+	Now is the time to take control of your financial future.
+	
+
+
