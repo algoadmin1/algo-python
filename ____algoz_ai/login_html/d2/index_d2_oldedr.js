@@ -1,6 +1,3 @@
-let                                                 verstr = "14.4";
-
-
 const sideLinks = document.querySelectorAll('.sidebar .side-menu li a:not(.logout)');
 
 sideLinks.forEach(item => {
@@ -57,7 +54,3 @@ toggler.addEventListener('change', function () {
         document.body.classList.remove('dark');
     }
 });
-
-
-
-

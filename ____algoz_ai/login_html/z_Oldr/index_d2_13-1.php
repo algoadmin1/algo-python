@@ -1,13 +1,10 @@
 <?php
-                                                        $ver=  "15.9";
-// 
-//                                                                              /algoz.ai/d2/index.php
-//
+                                                 $ver=  "13.1";
 
 date_default_timezone_set('America/New_York');
-// require_once '../login/events.php';
-require      '../d2/eventcycle.php';
+require_once '../login/events.php';
 require_once '../login/database.php';
+
 
 // session_start();
 
@@ -54,38 +51,7 @@ $prettyDateTime.= " EDT";
 $todays_udate  = date('Y-m-d');  // 'YYYY-MM-DD'
 
 
-/*
 
-/algoz.ai/index.php                 [ this file - unconditional jump to /login/login.php  ]
-/algoz.ai/favicon.ico
-
-/algoz.ai/d2/index.php              [  main dashboard  ]
-/algoz.ai/d2/jsonget.php
-
-/algoz.ai/d2/favicon.ico
-/algoz.ai/d2/style_d2.css
-/algoz.ai/d2/style_digital.css
-/algoz.ai/d2/eventcycle.php
-/algoz.ai/d2/events.php
-
-/algoz.ai/d2/images/...
-/algoz.ai/d2/digital_7/...
-
-/algoz.ai/login/login.php
-/algoz.ai/login/registration.php
-/algoz.ai/login/logout.php
-/algoz.ai/login/forgotpwd.php
-/algoz.ai/login/forgotpwdreset.php
-/algoz.ai/login/database.php
-/algoz.ai/login/productsTable.php
-/algoz.ai/login/encrypt.php
-/algoz.ai/login/gethttp.php
-
-/algoz.ai/login/.php
-/algoz.ai/login/.php
-/algoz.ai/login/.php
-
- */
 
 
 // https://algoz.ai/products.pdf
@@ -268,53 +234,7 @@ if (isset($eventsTable[0])) {
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style_d2.css">
     <link rel="stylesheet" href="style_digital.css">
-    <title>algoz.ai</title>
-
-
-    <script src="eventstable.js"></script>
-    
-    <script>
-
-                    // Function to get panel data - sample data for illustration
-                    function GetPanelData() {
-                        return [
-                            { stock: 'AAPL', date: '10-08-24', status: 'Trending UP', comment: 'completed' },
-                            { stock: 'NVDA', date: '10-08-24', status: 'Consolidating', comment: 'pending' },
-                            { stock: 'MSTR', date: '10-08-24', status: 'Trending DOWN', comment: 'process' },
-                            { stock: 'QQQ', date: '10-08-24', status: 'Trending UP', comment: 'process' },
-                            { stock: 'KO', date: '10-08-24', status: 'Trending UP', comment: 'process' },
-                            { stock: 'MSFT', date: '12-09-24', status: 'Trending DOWN', comment: 'process' },
-                            { stock: 'META', date: '12-10-24', status: 'Trending DOWN', comment: 'process' },
-                            { stock: 'M', date: '12-10-24', status: 'Trending DOWN', comment: 'pending' },
-
-                            { stock: 'GS', date: '12-10-24', status: 'Trending UP', comment: 'completed' }
-                        ];
-                    }
-
-                    // Function to render the table rows based on data returned from GetPanelData
-                    function populateTable() {
-                        const data = GetPanelData();
-                        const tbody = document.querySelector('.orders table tbody');
-                        tbody.innerHTML = ''; // Clear existing rows
-
-                        data.forEach(item => {
-                            const row = document.createElement('tr');
-                            row.innerHTML = `
-                                <td>
-                                    <img src="../img/${item.stock.toLowerCase()}.png">
-                                    <p>${item.stock}</p>
-                                </td>
-                                <td>${item.date}</td>
-                                <td><span class="status ${item.comment}">${item.status}</span></td>
-                            `;
-                            tbody.appendChild(row);
-                        });
-                    }
-
-                    // Call the populateTable function when the page loads
-                    document.addEventListener('DOMContentLoaded', populateTable);
-
-        </script>
+    <title>algoz HQ</title>
 </head>
 
 <body>
@@ -389,35 +309,17 @@ if (isset($eventsTable[0])) {
             </form> -->
 
 
-            <!--
-             <form action="#" id="search-form">
+            <form action="#" id="search-form">
                 <div class="form-input">
                     <input id="symbol-input" type="search" placeholder="symbol..." />
                     <a id="search-link" href="https://algoz.ai/d2/jsonget.php?sym=spy&sch=1" target="_blank">
+                    <!-- <button class="search-btn" type="button" onclick="updateLink()"> -->
                         <button class="search-btn" type="submit">
                            <i class='bx bx-search'></i>
                         </button>
                     </a>
                 </div>
-            </form> 
-            -->
-
-            <!-- new -->
-            <form action="#" id="search-form">
-                <div class="form-input">
-                    <input id="symbol-input" type="search" placeholder="symbol..." />
-                    <a id="search-link" href="https://algoz.ai/d2/jsonget.php?sym=spy&sch=1" target="_blank">
-                        <button class="search-btn" type="submit">
-                        <i class='bx bx-search'></i>
-                        </button>
-                    </a>
-                </div>
             </form>
-
-
-
-
-
 
 
             <script>
@@ -461,22 +363,13 @@ if (isset($eventsTable[0])) {
                 <span class="count">12</span>
             </a>
              -->
-
-<!--              here icon to the right
-
-
-
              <div class="info1">
                 <p><b>Rogue</b></p>
                 <small class="text-muted">Creator</small>
             </div>
             <a href="#" class="profile">
                 <img src="images/logo_d2.png">
-            </a> -->
-
-
-
-
+            </a>
         </nav>
 
         <!-- End of Navbar -->
@@ -508,12 +401,11 @@ if (isset($eventsTable[0])) {
 
 
                 </div>
-                    <a href="#" class="report">
-                        <i class='bx bx-cloud-download'></i>
-                        <span>Quick Ref</span>
-                    </a>
-                 </div>
-
+                <a href="#" class="report">
+                    <i class='bx bx-cloud-download'></i>
+                    <span>Download Guide</span>
+                </a>
+            </div>
 
 
                 <!-- Insights -->
@@ -556,27 +448,15 @@ if (isset($eventsTable[0])) {
                  -->
                 <!-- End of Insights -->
 
-<!-- new -->
 
             <div class="bottom-data">
-
-
-                             <!-- <tr>
-                                <td>
-                                    <img src="images/profile-1.jpg">
-                                    <p>John Doe</p>
-                                </td>
-                                <td>14-08-2023</td>
-                                <td><span class="status pending">Pending</span></td>
-                            </tr> -->
-
-
                 <div class="orders">
                     <div class="header">
                         <i class='bx bx-receipt'></i>
-                        <h3>Recent Activity</h3>
+                        <h3>Recent Quotes</h3>
+                        <!-- <i class='bx bx-filter'></i>
+                        <i class='bx bx-search'></i> -->
                     </div>
-
                     <table>
                         <thead>
                             <tr>
@@ -586,17 +466,40 @@ if (isset($eventsTable[0])) {
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Rows will be populated dynamically by JavaScript -->
+                            <tr>
+                                <td>
+                                    <img src="../img/aapl.png">
+                                    <p>AAPL</p>
+                                </td>
+                                <td>10-08-24</td>
+                                <td><span class="status completed">Trending UP</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="../img/nvda.png">
+                                    <p>NVDA</p>
+                                </td>
+                                <td>10-08-24</td>
+                                <td><span class="status pending">Consolidating</span></td>
+                            </tr> <tr>
+                                <td>
+                                    <img src="../img/meta.png">
+                                    <p>META</p>
+                                </td>
+                                <td>10-08-24</td>
+                                <td><span class="status process">Trending DOWN</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="../img/gs.png">
+                                    <p>GS</p>
+                                </td>
+                                <td>10-08-24</td>
+                                <td><span class="status completed">Trending UP</span></td>
+                            </tr>
                         </tbody>
                     </table>
-
                 </div>
-                
-            <!-- </div> -->
-
-
-
-
 
                 <!-- Reminders -->
                 <div class="reminders">
@@ -609,6 +512,171 @@ if (isset($eventsTable[0])) {
                     <ul class="task-list">
 
 
+
+                    <?php  $j=0;  if( isset($eventsTable[$j])  &&  DaysAway( $todays_udate , $eventsTable[$j] ) >=0 ):  
+                           $color0=prettyOrNot( $eventsTable[$j] );  
+                           ?>
+                       
+                        <!-- <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>"> -->
+                        <?php  if($color0=="soon1-completed") : ?>
+                                 <li class="soon1-completed">
+                        <?php endif; ?> 
+                        <?php  if($color0=="soon-completed") : ?>
+                                 <li class="soon-completed">
+                        <?php endif; ?>
+                        <?php  if($color0=="completed") : ?>
+                                 <li class="completed">
+                        <?php endif; ?>
+                        <?php  if($color0=="not-completed") : ?>
+                                 <li class="not-completed">
+                        <?php endif; ?> 
+
+                   <!-- <li class="not-completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                            <!-- <i class='bx bx-dots-vertical-rounded'></i> -->
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if ( IsAvailable($eventsTable[$j]) ): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                            <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo  PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): ?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): // #22 here or 11th?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+
+                    <?php $j+=2; if (IsAvailable($eventsTable[$j])): // #24 here or 12th?>
+                        <li class="<?php echo prettyOrNot( $eventsTable[$j] ); ?>">
+                        <!-- <li class="completed"> -->
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p> <?php echo PrettyDate($eventsTable[$j]).":  ".$eventsTable[$j+1]  ;   ?></p>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+
+
+
+
+<!-- 
                         <li class="completed">
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
@@ -620,28 +688,10 @@ if (isset($eventsTable[0])) {
                                     <i class='bx bx-check-circle'></i>
                                     <p>Dec 18th FMOC Meeting</p>
                             </div>
-                        </li>
-                        <li class="completed">
-                            <div class="task-title">
-                                <i class='bx bx-check-circle'></i>
-                                <p>Start Our Meeting</p>
-                            </div>
-                            <i class='bx bx-dots-vertical-rounded'></i>
-                        </li>
-                        <li class="completed">
-                            <div class="task-title">
-                                <i class='bx bx-check-circle'></i>
-                                <p>Analyse Our Site</p>
-                            </div>
-                            <i class='bx bx-dots-vertical-rounded'></i>
-                        </li>
-                        <li class="not-completed">
-                            <div class="task-title">
-                                <i class='bx bx-x-circle'></i>
-                                <p>Play Footbal</p>
-                            </div>
-                            <i class='bx bx-dots-vertical-rounded'></i>
-                        </li>
+                        </li> -->
+
+
+
 
                     </ul>
                 </div>
@@ -652,53 +702,9 @@ if (isset($eventsTable[0])) {
 
 
 
-
-            <!-- Insights -->
-            <ul class="insights">
-                <li>
-                    <i class='bx bx-calendar-check'></i>
-                    <span class="info">
-                        <h3>
-                            1,074
-                        </h3>
-                        <p>Paid Order</p>
-                    </span>
-                </li>
-                <li><i class='bx bx-show-alt'></i>
-                    <span class="info">
-                        <h3>
-                            3,944
-                        </h3>
-                        <p>Site Visit</p>
-                    </span>
-                </li>
-                <li><i class='bx bx-line-chart'></i>
-                    <span class="info">
-                        <h3>
-                            14,721
-                        </h3>
-                        <p>Searches</p>
-                    </span>
-                </li>
-                <li><i class='bx bx-dollar-circle'></i>
-                    <span class="info">
-                        <h3>
-                            $6,742
-                        </h3>
-                        <p>Total Sales</p>
-                    </span>
-                </li>
-            </ul>
-            <!-- End of Insights -->
-
-
-
-
-
-
 <!-- 
 
-                <div class="chartjb">
+                <div class="orders">
                     <h3>chart</h3>
 
                     <div class="chartsjb">

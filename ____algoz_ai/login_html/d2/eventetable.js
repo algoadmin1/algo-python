@@ -1,16 +1,6 @@
-<?php
-
-                                                    $ver  = "9.17";
-// Define a JSON string
-$jsonString = '{
-    "name": "John",
-    "age": 30,
-    "city": "New York",
-    "skills": ["PHP", "JavaScript", "HTML"]
-}';
 
 // DATE ,  EVENT
-$eventsTable = [
+let gEventsTable = [
 
     "2024-10-12","Columbus-Indig. Day",
     
@@ -59,20 +49,3 @@ $eventsTable = [
 
 
 ];
-
-// $i=0;
-// for($i=0; $i<count($eventsTable) ; $i+=2){
-//     echo "<br /> $i )  ". $eventsTable[$i]. ": ". $eventsTable[$i+1];
-// }
-
-
-
-
-// // Decode the JSON string to a PHP array
-// $data = json_decode($jsonString, true); // true converts it to an associative array
-// // Now you can use $data
-// print_r($data);
-
-
-?>
-

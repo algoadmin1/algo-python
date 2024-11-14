@@ -1,9 +1,9 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "296.3";
+let                                                                         gVer = "296.4";
 let             gDebugInfo = 0;  // for   sc = 1.0
-let                                                 gPrefixLink = "https://algoz.ai/as113/jsonget.php?sym=" ;   
+let                                                 gPrefixLink = "https://algoz.ai/as114/jsonget.php?sym=" ;   
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -2676,6 +2676,8 @@ let gGlobalButtons = [];
 let gGlobalButtonNameStr = '';
 let gGlobalButtonNum = -1;
 let gGlobalButton_arr = ['spy', 'qqq', 'nvda', 'aapl', 'tsla', 'nflx', 'msft', 'amzn', 'mstr',  'slv',  'btc-usd',  'djt',  'gs',  'vxx', 'sol-usd' ];
+// Draw ButtonArray(ctx, arr, 10, 10, 100, 0, 10, 2);
+// Det ectButtonPress(ctx, gGlobalButtons, arr);
 
 // Function to draw a rounded rectangle
 function DrawRoundedRectCanvas(ctx, vrect, radius, lineWeight, outlineCol, fillFlag, fillCol) {
@@ -2702,7 +2704,7 @@ function DrawRoundedRectCanvas(ctx, vrect, radius, lineWeight, outlineCol, fillF
 }
 
 // Function to draw the button array on canvas
-function DrawButtonArray(ctx, arr, x, y, width, buttonHeight, idx, spacerY, lineWeight, textCol  , fontSize, fontName , butCol) {
+function DrawButtonArray(ctx, arr, x, y, width, buttonHeight, idx, spacerY, lineWeight, textCol  , fontSize, fontName , butCol, butOulineCol ) {
     let canvasHeight = ctx.canvas.height;
 
     // let buttonHeightMax = (canvasHeight - y - (spacerY * (arr.length - 1))) / arr.length;
@@ -2716,7 +2718,8 @@ function DrawButtonArray(ctx, arr, x, y, width, buttonHeight, idx, spacerY, line
         let vrect = { x: x, y: y + (buttonHeight + spacerY) * i, w: width, h: buttonHeight };
         // Draw the rounded rectangle   radius                  fiilFlg
         // DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight, 'darkblue', 1, 'blue' );   // #4C50AF
-        DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight,  'darkblue' , 1, butCol);   
+        // DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight,  'darkblue' , 1, butCol);    
+        DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight,  butOulineCol , 1, butCol);    // butOulineCol
         // Set the font for the button text
         ctx.font = `${fontSize}px ${fontName}`;    // ctx.font = "16px Arial";
         ctx.fillStyle = textCol; // Set the text color
@@ -2865,8 +2868,9 @@ function resizeCanvas() {
 
         if(gDrawCanvasButtons==1){
                     // Dra wButtonArray(ctx, arr,               x, y, width, h,  idx, spacerY, lineWeight,  textCol  , fontSize, fontName ) 
-             DrawButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2          , 'white',     fsz0,   "Arial",  "#4C50AF" );
-             DetectButtonPress(ctx, gGlobalButtons, gGlobalButton_arr);
+                    // DrawButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'white',     fsz0,   "Arial",  "#4C50AF", 'darkblue' );
+                    DrawButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'blue',     fsz0,   "Arial",  'white',  'white' );
+                    DetectButtonPress(ctx, gGlobalButtons, gGlobalButton_arr);
 
         }
 

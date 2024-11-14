@@ -10,8 +10,8 @@
 }
 
 .textdig{
-  	color: #3495de;   
-    /*color: var(--gBut1Col);*/
+  	color: #16c689 ; /*#3495de ; */     
+    /*color: var(--gBut1Col);  #19de29.  #4466bf; */
     /* font-family: 'Trebuchet MS', sans-serif; */
     font-family: 'Digital-7', sans-serif; 
     font-size: 24px;
