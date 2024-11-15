@@ -1,0 +1,77 @@
+/* Define color variables */
+:root {
+    --primary-color: #7aabf5;
+    --secondary-color: #35bd62;
+    --background-color: #ffffff;
+    --text-color: #333333;
+}
+
+/* General Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+h1, h2 {
+    color: var(--primary-color);
+}
+
+ul {
+    padding-left: 20px;
+}
+
+.testimonial {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.testimonial img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+/* Call-to-Action Button */
+.cta-button {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: var(--secondary-color);
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.cta-button:hover {
+    background-color: #2a8e4c;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    .cta-button {
+        font-size: 14px;
+        padding: 12px 25px;
+    }
+}

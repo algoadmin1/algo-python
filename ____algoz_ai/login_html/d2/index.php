@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "15.9";
+                                                        $ver=  "17.1";
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -31,6 +31,7 @@ $pivots = "https://algoinvestorr.com/pivots/";
 $fintechfc = "https://algoz.ai/FFC.pdf";
 
 $newsletter="https://algoinvestorr.com/newsletter.pdf";
+$blueprint="https://algoz.ai/blueprint.pdf";
 
 $bmi       = "https://algoz.ai/bmi";
 $fitnessfc = "https://algoz.ai/ffc/";  // https://algoz.ai/ffc/
@@ -280,12 +281,12 @@ if (isset($eventsTable[0])) {
                         return [
                             { stock: 'AAPL', date: '10-08-24', status: 'Trending UP', comment: 'completed' },
                             { stock: 'NVDA', date: '10-08-24', status: 'Consolidating', comment: 'pending' },
-                            { stock: 'MSTR', date: '10-08-24', status: 'Trending DOWN', comment: 'process' },
+                            { stock: 'NFLX', date: '10-08-24', status: 'Trending DOWN', comment: 'process' },
                             { stock: 'QQQ', date: '10-08-24', status: 'Trending UP', comment: 'process' },
                             { stock: 'KO', date: '10-08-24', status: 'Trending UP', comment: 'process' },
                             { stock: 'MSFT', date: '12-09-24', status: 'Trending DOWN', comment: 'process' },
                             { stock: 'META', date: '12-10-24', status: 'Trending DOWN', comment: 'process' },
-                            { stock: 'M', date: '12-10-24', status: 'Trending DOWN', comment: 'pending' },
+                            { stock: 'AMZN', date: '12-10-24', status: 'Trending DOWN', comment: 'pending' },
 
                             { stock: 'GS', date: '12-10-24', status: 'Trending UP', comment: 'completed' }
                         ];
@@ -349,14 +350,16 @@ if (isset($eventsTable[0])) {
             </script> -->
 
             <li><a href="<?php echo $newsletter; ?>"><i class='bx bx-news'></i>Newsletter</a></li>
-            <li><a href="<?php echo $fintechfc; ?>"><i class='bx bx-fast-forward-circle'></i>Fintech FasterClass</a></li>
+            <li><a href="<?php echo $fintechfc; ?>"><i class='bx bx-fast-forward-circle'></i>FasterClass.finance</a></li>
 
             <li><a href="<?php echo $chatai; ?>"><i class='bx bx-search'></i>ai Search...</a></li>
+            <li><a href="<?php echo $blueprint; ?>"><i class='bx bx-map-alt'></i>ai Roadmap</a></li>  
             <li><a href="<?php echo $BuyCall30min; ?>"><i class='bx bx-phone-outgoing'></i>Book Call</a></li>
 
-            <!-- <li><a href="#"><i class='bx bx-group'></i>Users</a></li> -->
             <li><a href="<?php echo $bmi; ?>"><i class='bx bx-health'></i>BMI Calc</a></li>
-            <li><a href="<?php echo $fitnessfc; ?>"><i class='bx bx-heart'></i>Fitness Fasterclass</a></li>
+            <li><a href="<?php echo $fitnessfc; ?>"><i class='bx bx-heart'></i>Fitness Fasterclass</a></li>  
+
+            <!-- <li><a href="#"><i class='bx bx-group'></i>Users</a></li> -->
             <!-- <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li> -->
         </ul>
         <ul class="side-menu">
@@ -402,8 +405,12 @@ if (isset($eventsTable[0])) {
             </form> 
             -->
 
-            <!-- new -->
-            <form action="#" id="search-form">
+
+
+
+
+
+            <!-- <form action="#" id="search-form">
                 <div class="form-input">
                     <input id="symbol-input" type="search" placeholder="symbol..." />
                     <a id="search-link" href="https://algoz.ai/d2/jsonget.php?sym=spy&sch=1" target="_blank">
@@ -411,6 +418,16 @@ if (isset($eventsTable[0])) {
                         <i class='bx bx-search'></i>
                         </button>
                     </a>
+                </div>
+            </form> -->
+
+
+            <form action="#" id="search-form" onsubmit="event.preventDefault(); handleSearch();">
+                <div class="form-input">
+                    <input id="symbol-input" type="search" placeholder="symbol..." />
+                    <button class="search-btn" type="submit">
+                        <i class='bx bx-search'></i>
+                    </button>
                 </div>
             </form>
 
@@ -420,7 +437,107 @@ if (isset($eventsTable[0])) {
 
 
 
+
+
+
             <script>
+
+
+
+                    function handleSearch() {
+                        let searchBarStr = document.getElementById("symbol-input").value.trim();
+                        const testCharsStr = "0123456789@/- ._abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                        
+                        // // Validate input contains only allowed characters
+                        // for (let char of searchBarStr) {
+                        //     if (!testCharsStr.includes(char)) {
+                        //         alert("Invalid input. Only letters, numbers, or specific symbols (@/- .) are allowed.");
+                        //         return;
+                        //     }
+                        // }
+
+                        let searchBarStrHttp = "";
+                        let ai=false;
+
+
+                        // Case 1: If starts with "/ai"
+                        if (searchBarStr.startsWith("/ai")) {
+                            const gRemainingChars = searchBarStr.slice(3); // After "/ai"
+                            searchBarStrHttp = "https://algoz.ai/ai/xai.php?prompt=" +  encodeURIComponent(gRemainingChars);
+                            ai=true;
+                        }
+
+
+                        if( ai== false){        
+                                // Validate input contains only allowed characters
+                                for (let char of searchBarStr) {
+                                    if (!testCharsStr.includes(char)) {
+                                        alert("Invalid input. Only letters, numbers, or specific symbols (@/- .) are allowed.");
+                                        return;
+                                    }
+                                }
+                            
+
+                                // Case 2: If ends with "-"
+                                if (searchBarStr.endsWith("-")) {
+                                    searchBarStr += "USD"; // Add "USD" to the string
+                                    searchBarStrHttp = "https://algoz.ai/d2/jsonget.php?sym=" + encodeURIComponent(searchBarStr);
+                                } else {    // Case 3: Default case
+                                    searchBarStrHttp = "https://algoz.ai/d2/jsonget.php?sym=" + encodeURIComponent(searchBarStr);
+                                }
+
+                        }
+
+
+                        // Open popup  SAME window ==    window.location.href = "https://example.com";
+
+                        openPopup(searchBarStrHttp);
+                    }
+
+
+
+                    
+                    function openPopup(url) {
+                        const popupWindow = window.open(
+                            url,
+                            "_blank",
+                            "width=400,height=600,scrollbars=yes,resizable=yes"
+                        );
+
+                        // Add a close button to the popup (this assumes the popup page supports JS customization)
+                            // <button class="close-btn" onclick="window.close()">X</button>
+
+                        popupWindow.document.write(`
+                            <style>
+                                body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
+                                .close-btn { 
+                                    position: fixed; 
+                                    top: 10px; 
+                                    left: 10px; 
+                                    background: red; 
+                                    color: white; 
+                                    border: none; 
+                                    border-radius: 50%; 
+                                    width: 30px; 
+                                    height: 30px; 
+                                    font-size: 18px; 
+                                    cursor: pointer; 
+                                    z-index: 1000; 
+                                }
+                            </style>
+                            <iframe src="${url}" style="width: 100%; height: 100%; border: none;"></iframe>
+                        `);
+                    }
+
+
+
+
+
+
+
+
+
+
                 // Attach event listener to the form
                 document.getElementById('search-form').addEventListener('submit', function(event) {
                         event.preventDefault(); // Prevent the default form submission behavior
@@ -455,7 +572,8 @@ if (isset($eventsTable[0])) {
 
             <input type="checkbox" id="theme-toggle" hidden>
             <label for="theme-toggle" class="theme-toggle"></label>
-<!-- 
+
+<!--
             <a href="#" class="notif">
                 <i class='bx bx-bell'></i>
                 <span class="count">12</span>
@@ -507,11 +625,13 @@ if (isset($eventsTable[0])) {
                     </ul> -->
 
 
+
                 </div>
                     <a href="#" class="report">
-                        <i class='bx bx-cloud-download'></i>
-                        <span>Quick Ref</span>
-                    </a>
+                    <i class='bx bx-user-voice'></i>
+                    <!-- <i class='bx bx-cloud-download'></i> -->
+                    <span>Jr Trader</span>
+                    </a> 
                  </div>
 
 
@@ -612,33 +732,33 @@ if (isset($eventsTable[0])) {
                         <li class="completed">
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
-                                <p> Nov 7th FMOC Meeting</p>
-                            </div>
-                        </li>
-                        <li class="completed">
-                                <div class="task-title">
-                                    <i class='bx bx-check-circle'></i>
-                                    <p>Dec 18th FMOC Meeting</p>
+                                <p>Nov 28th Thanksgiving</p>
                             </div>
                         </li>
                         <li class="completed">
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
-                                <p>Start Our Meeting</p>
+                                <p>Dec 18th FMOC Meeting</p>
+                            </div>
+                        </li>
+                        <li class="completed">
+                            <div class="task-title">
+                                <i class='bx bx-check-circle'></i>
+                                <p>Jan 20th MLK Jr Day</p>
                             </div>
                             <i class='bx bx-dots-vertical-rounded'></i>
                         </li>
                         <li class="completed">
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
-                                <p>Analyse Our Site</p>
+                                <p>Feb 17th Pres Day</p>
                             </div>
                             <i class='bx bx-dots-vertical-rounded'></i>
                         </li>
                         <li class="not-completed">
                             <div class="task-title">
                                 <i class='bx bx-x-circle'></i>
-                                <p>Play Footbal</p>
+                                <p>Mar 15th '25 Go Long</p>
                             </div>
                             <i class='bx bx-dots-vertical-rounded'></i>
                         </li>
@@ -659,33 +779,34 @@ if (isset($eventsTable[0])) {
                     <i class='bx bx-calendar-check'></i>
                     <span class="info">
                         <h3>
-                            1,074
+                            8,074
                         </h3>
-                        <p>Paid Order</p>
+                        <p>Trained</p>
                     </span>
                 </li>
                 <li><i class='bx bx-show-alt'></i>
                     <span class="info">
                         <h3>
-                            3,944
+                            43.9B
                         </h3>
-                        <p>Site Visit</p>
+                        <p>Data Points</p>
                     </span>
                 </li>
                 <li><i class='bx bx-line-chart'></i>
                     <span class="info">
                         <h3>
-                            14,721
+                            $17,954
                         </h3>
-                        <p>Searches</p>
+                        <p>ai PnL</p>
                     </span>
                 </li>
-                <li><i class='bx bx-dollar-circle'></i>
+                <li><i class='bx bx-line-chart'></i>
+                <!-- <li><i class='bx bx-dollar-circle'></i> -->
                     <span class="info">
                         <h3>
-                            $6,742
+                            $406.2k
                         </h3>
-                        <p>Total Sales</p>
+                        <p>Member PnL</p>
                     </span>
                 </li>
             </ul>

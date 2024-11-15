@@ -673,6 +673,81 @@ canvas {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* General form styling */
+.form-input {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between the input and button */
+    width: 100%; /* Ensure the form takes up the full width */
+    box-sizing: border-box; /* Include padding/borders in width calculations */
+}
+
+input[type="search"] {
+    flex: 1; /* Make the search bar grow to fill available space */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    min-width: 150px; /* Prevent the search bar from shrinking too small */
+}
+
+.search-btn {
+    background-color: #00d5ff; /* Replace with your primary color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    min-width: 50px; /* Ensure the button doesn't shrink too small */
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Ensure the form stays visible on small screens */
+@media (max-width: 600px) {
+    .form-input {
+        flex-direction: row; /* Ensure input and button stay side by side */
+        width: 100%; /* Maintain full width on small screens */
+    }
+
+    input[type="search"] {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .search-btn {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
+
+/* Prevent shrinking below a minimum width */
+body {
+    min-width: 320px; /* Typical iPhone screen width */
+}
+
+
+
+
+
+
 /* end new */
 
 

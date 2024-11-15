@@ -284,3 +284,7 @@
     </li>
 <?php endif; ?>
 
+
+
+
+            <!-- <li><a href="<?php echo $fitnessfc; ?>"><i class='bx bx-heart'></i>Fitness Fasterclass</a></li>   -->
