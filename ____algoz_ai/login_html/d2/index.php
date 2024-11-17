@@ -1,23 +1,23 @@
 <?php
-                                                        $ver=  "17.1";
+                                                        $ver=  "17.2";
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
-
 date_default_timezone_set('America/New_York');
+
+
+session_start();
+if(! (isset($_SESSION["user"])) ) {
+   header("Location: ../login/login.php");
+}else{
+        $email1=$_SESSION["user"];
+    }
+
 // require_once '../login/events.php';
 require      '../d2/eventcycle.php';
 require_once '../login/database.php';
 
-// session_start();
-
-// // if (!isset($_SESSION["user"])) {
-// //    header("Loc ation: ./login/login.php");
-// // }else{
-// //     $email1=$_SESSION["user"];
-// // }
-
-// $_SESSION["user_sym"]= "SPY";
+ 
 
 
 
@@ -430,6 +430,14 @@ if (isset($eventsTable[0])) {
                     </button>
                 </div>
             </form>
+                             
+<!--             
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <input type="text" id="search-bar" placeholder="Search..." style="padding: 5px; width: 300px;" />
+                <button id="info-button" style="background-color: #f0f0f0; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; font-size: 18px; font-weight: bold;">
+                    i
+                </button>
+            </div> -->
 
 
 

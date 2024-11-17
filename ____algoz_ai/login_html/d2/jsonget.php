@@ -3,12 +3,21 @@
                                                               $ver=  "293.4";
 
 date_default_timezone_set('America/New_York');
+
+session_start();
+if (!(isset($_SESSION["user"])) ) {
+   header("Location: ../login/login.php");
+}else{
+        $email1=$_SESSION["user"];
+
+        // $_SESSION['crawlTime']=  t ;
+        // $_SESSION['crawlstr']=  str ;
+
+    }
+
+
 require_once 'cryptoslist.php';  // gen'd by formatcsv.php <-- takes digital_currency_list.csv
 
-
-// session_start();
-// $_SESSION['crawlTime']=  t ;
-// $_SESSION['crawlstr']=  str ;
 
 
 $apikey ="M3LB7MG3JF83E3";
@@ -2209,7 +2218,8 @@ $processedDataJson = json_encode($dataProcessed);
     </script>
 
     <!-- Link to your external JavaScript file -->
-    <script src="canvas0.js"></script>
+    <!-- <script src="canvas0.js"></script> -->
+    <script src="canvas1.js"></script>
     <!-- <script src="drawchart.js"></script> -->
 </body>
 </html>

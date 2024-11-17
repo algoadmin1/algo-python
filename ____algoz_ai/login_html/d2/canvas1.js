@@ -1112,6 +1112,8 @@ s4day = Low- 3*(High-Pday) ;
        let nextR2 = nextP + hi1 - lo1; 
        let x1next = vrect.x+vrect.h ;
 
+       console.log('got to end of next month dynamic,s1, p , r1 ==' , nextS1, nextP, nextR1 );
+       
        sr0price = parseFloat( nextR1 ).toFixed(2);
        txtStr    = gCurrencyStr+ sr0price.toString() + " (R1 nxtDAY)";
        sr0Y     = GetYCoordFromPrice( sr0price, vrect );

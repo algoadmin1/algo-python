@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Info Button Example</title>
+  <style>
+    #info-button {
+      color: #555;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.2s;
+    }
+
+    #info-button:hover {
+      background-color: #e0e0e0;
+    }
+
+    input {
+      padding: 5px;
+      width: 300px;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <input type="text" id="search-bar" placeholder="Search..." />
+    <button id="info-button">i</button>
+  </div>
+  <script>
+    document.getElementById('info-button').addEventListener('click', () => {
+      alert(`Type a symbol i.e. AAPL, BAC, GS
+BTC- , SOL-USD , ETH-EUR for crypto
+/ai What is Apple’s market cap?`);
+    });
+  </script>
+</body>
+</html>
