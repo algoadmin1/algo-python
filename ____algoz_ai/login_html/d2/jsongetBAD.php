@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "293.9";
+                                                              $ver=  "293.7";
 
 date_default_timezone_set('America/New_York');
 
@@ -2218,8 +2218,8 @@ $processedDataJson = json_encode($dataProcessed);
     </script>
 
     <!-- Link to your external JavaScript file -->
-    <!-- <script src="canvas0.js"></script> -->
-    <script src="canvas1.js"></script>
+    <script src="canvas0.js"></script>
+    <!-- <script src="canvas1.js"></script> -->
     <!-- <script src="drawchart.js"></script> -->
 </body>
 </html>

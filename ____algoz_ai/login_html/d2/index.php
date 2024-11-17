@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "17.2";
+                                                        $ver=  "17.3";
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -498,8 +498,8 @@ if (isset($eventsTable[0])) {
 
 
                         // Open popup  SAME window ==    window.location.href = "https://example.com";
-
-                        openPopup(searchBarStrHttp);
+                        window.location.href = searchBarStrHttp;
+                        // openPopup(searchBarStrHttp);
                     }
 
 
