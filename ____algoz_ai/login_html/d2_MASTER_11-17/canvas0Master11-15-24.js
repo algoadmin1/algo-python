@@ -1,9 +1,9 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "299.1";
+let                                                                         gVer = "296.5";
 let             gDebugInfo = 0;  // for   sc = 1.0
-let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget.php?sym=" ;   
+let                                                 gPrefixLink = "https://algoz.ai/as114/jsonget.php?sym=" ;   
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -715,13 +715,13 @@ function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
     
     //  ############################################################################## should be a fn
     if(gDigitalCurrency==1){
-        gChartTextStr =  gSymbolStr +" " +  gCryptoName +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+g Ver+" php_v"+gV erPHP; 
+        gChartTextStr =  gSymbolStr +" " +  gCryptoName +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
 
     }else{
-        gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVe r+" php_v"+gV erPHP; 
+        gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
         
     }
-    gChartTextStr1 = "v"+gVer+"js   v"+gVerPHP+"p";   // +"php"; 
+    gChartTextStr1 = "v"+gVer+"  v"+gVerPHP+"p";   // +"php"; 
     gSymbolStrLower  = gSymbolStr.toLowerCase();
     
     // DETERMINE gCandleOffset
@@ -752,6 +752,25 @@ function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
 let gGlobalPerFromData = 'nil';
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 let  gMonthNumDynamic = 10;           // ie after october, on monthly chart draw next year's dynamic pivots
 let  gEndOfHalfMonthDayDynamic= 13;   // ie after  15th of month, on monthly chart draw next   dynamic pivots
 
@@ -774,32 +793,14 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
     let eohmDynamic = 0;   // end of Half-month Dynamic - to show dynamic
     let eoyDynamic = 0;   // end of year Dynamic  - to show dynamic
 
-          let  sr0price = 0.0;  
-          let  sr0Y  =0; 
-
-          let op1 = 0;
-          let hi1 = 0;
-          let lo1 = 0;
-          let cl1 = 0;
-
-          let fsz = 16;
-          let xyoff = 4;
-          let fontStr ="Helvetica";
-
-        //   let datestr= "noset";
-
-          let txtStr ="";
-
-
-
     let j=0;
     for (var date in processedData) {
         if (processedData.hasOwnProperty(date)) {
             let datestr= date;
-              op1 = parseFloat(  processedData[date]["open"] );
-              hi1 = parseFloat(  processedData[date]["high"] );
-              lo1 = parseFloat(  processedData[date]["low"] );
-              cl1 = parseFloat(  processedData[date]["close"] );
+            let op1 = parseFloat(  processedData[date]["open"] );
+            let hi1 = parseFloat(  processedData[date]["high"] );
+            let lo1 = parseFloat(  processedData[date]["low"] );
+            let cl1 = parseFloat(  processedData[date]["close"] );
             let vol1 = parseFloat(  processedData[date]["volume"] );
             let eom = parseInt(  processedData[date]["endOfMonth"] );
             let eoq = parseInt(  processedData[date]["endOfQtr"] );
@@ -846,13 +847,13 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
 
           //   if(x2m> vrect.x+vrect.h) x2m= vrect.x+vrect.h-1;
 
-        //   let  sr0price = 0.0;  
-        //   let  sr0Y  =0; 
+          let  sr0price = 0.0;  
+          let  sr0Y  =0; 
           let  sr0Ymax = vrect.y+vrect.h;
 
-        //   let fsz = 16;
-        //   let xyoff = 4;
-        //   let fontStr ="Helvetica";
+          let fsz = 16;
+          let xyoff = 4;
+          let fontStr ="Helvetica";
 
           let perStr1 =  processedData[date]["globalper"];
           let perStr = perStr1.toLowerCase();
@@ -1096,8 +1097,7 @@ s4day = Low- 3*(High-Pday) ;
 
 
 
-// if( gEndOfHalfMonthDayDynamic ==1  && gGlob alPerFromData=="daily" ){
-    if(    button3==1  &&  gGlobalPerFromData=="daily" ){
+    if( gEndOfHalfMonthDayDynamic ==1  && perStr=="daily" ){
 
         // /// last assigned...  from today iff  perStr=="daily"
         // hi1 = parseFloat(  processedData[date]["high"] );
@@ -1105,52 +1105,27 @@ s4day = Low- 3*(High-Pday) ;
         //  cl1 = parseFloat(  processedData[date]["close"] );
 
         // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-       let nextP = ( hi1 +lo1 + cl1 ) / 3 ;
+       let nextP =  ( hi1 +lo1 + cl1 ) / 3 ;
        let nextS1 = (nextP*2) - hi1 ;
        let nextR1 = (nextP*2) - lo1
        let nextS2 = nextP - hi1 + lo1; 
        let nextR2 = nextP + hi1 - lo1; 
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
+       let x1next = vrect.x+vrect.h ;
 
-       let x1next = vrect.x+vrect.w ;
-
-       console.log('got to end of next month dynamic,s1, p , r1 ==' , nextS1, nextP, nextR1 );
-       
-       sr0price = parseFloat( nextR2 ).toFixed(2);
-       txtStr    = gCurrencyStr+ sr0price.toString() + " (R2)";
+       sr0price = parseFloat( nextR1 ).toFixed(2);
+       txtStr    = gCurrencyStr+ sr0price.toString() + " (R1 nxtDAY)";
        sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-        DrawHorizontalLine_callout_noclip( ctx, x1next , x1next+ 80 , sr0Y , gSupResColors.r2 , "dashed" , txtStr, fsz-2, -75, fontStr );
+        DrawHorizontalLine_callout( ctx, x1next , x1next+ 80 , sr0Y , gSupResColors.r1 , "dashed" , txtStr, fsz-2, -75, fontStr );
        
-
-        sr0price = parseFloat( nextR1 ).toFixed(2);
-        txtStr    = gCurrencyStr+ sr0price.toString() + " (R1 nxtDay)";
-        sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-         DrawHorizontalLine_callout_noclip( ctx, x1next , x1next+ 80 , sr0Y , gSupResColors.r1 , "dashed" , txtStr, fsz-2, -75, fontStr );
-        
         sr0price = parseFloat( nextP ).toFixed(2);
-        txtStr    = gCurrencyStr+ sr0price.toString() + " (P)";
+        txtStr    = gCurrencyStr+ sr0price.toString() + " (P nxtDAY)";
         sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-        DrawHorizontalLine_callout_noclip( ctx, x1next , x1next+ 80 , sr0Y , 'blue'           , "dashed" , txtStr, fsz-2, -75, fontStr );
+        DrawHorizontalLine_callout( ctx, x1next , x1next+ 80 , sr0Y , 'blue'           , "dashed" , txtStr, fsz-2, -75, fontStr );
         
         sr0price = parseFloat( nextS1 ).toFixed(2);
-         txtStr    = gCurrencyStr+ sr0price.toString() + " (S1 nxtDay)";
+         txtStr    = gCurrencyStr+ sr0price.toString() + " (S1 nxtDAY)";
          sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-         DrawHorizontalLine_callout_noclip( ctx, x1next , x1next+ 80 , sr0Y , gSupResColors.s1 , "dashed" , txtStr, fsz-2, -75, fontStr );
- 
-
-         sr0price = parseFloat( nextS2 ).toFixed(2);
-         txtStr    = gCurrencyStr+ sr0price.toString() + " (S2)";
-         sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-         DrawHorizontalLine_callout_noclip( ctx, x1next , x1next+ 80 , sr0Y , gSupResColors.s2 , "dashed" , txtStr, fsz-2, -75, fontStr );
+         DrawHorizontalLine_callout( ctx, x1next , x1next+ 80 , sr0Y , gSupResColors.s1 , "dashed" , txtStr, fsz-2, -75, fontStr );
  
 
     }
@@ -2025,8 +2000,8 @@ let gZipperUrl="https://algoz.ai/cronit/cronit.php";   // https://algoz.ai/croni
 
 function printZipperString( data, ctx){
     gZipper0 = data;
-    gZipper= data + "  algoz.ai Copyright (c) 2023-2025 by Algo Investor Inc  " + data;
-    // console.log("ZipperString gZipper str==", gZipper);
+    gZipper= data + " " + data;
+    console.log("ZipperString gZipper str==", gZipper);
     // DrawText_noclip( ctx, gZipper, gCrawlX, gCra wlY,       12 , 'blue' , gGlobalFont );
 
 }
@@ -2134,7 +2109,7 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
 
 }
 
-// function draw Text( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol3a ){
+// function drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol3a ){
 function    drawText( fontStr,  x, y,                                   ftsz,  colStr ){
 
     DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr);
@@ -2388,28 +2363,13 @@ function ifInside( x_or_y, pixel_margin, coordTypeStr ){  // coordTypeStr="x" or
 let gPixelMargin_y = 10;
 let gPixelMargin_x = 10;
 
-function DrawHorizontalLine_callout_noclip( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr){
-    // if(  ifInside( y, gPixelMargin_y, "y" )==true  ){
-        DrawLine_noclip( ctx, x1, y, x2, y, 2, col,  style);
-            //     DrawText( ctx, txtStr, x2+xyoff, y-2, fsz , col , fontStr);   // -2 to raise above line
-            DrawText_noclip( ctx, txtStr, x2+xyoff, y-2, fsz , col , fontStr); 
-    // }
-}
-function DrawHorizontalLine_callout_textcol_noclip( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr, txtcol){
-    // if( ifInside( y, gPixelMargin_y, "y" )==true  ){
-          DrawLine_noclip( ctx, x1, y, x2, y, 2, col,  style);
-                //  DrawText( ctx, txtStr, x2+xyoff, y, fsz , txtcol , fontStr);
-          DrawText_noclip( ctx, txtStr, x2+xyoff, y-2, fsz , col , fontStr); 
-          // }
-}
-
 function DrawHorizontalLine_callout( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr){
     if(  ifInside( y, gPixelMargin_y, "y" )==true  ){
             DrawLine( ctx, x1, y, x2, y, 2, col,  style);
             DrawText( ctx, txtStr, x2+xyoff, y-2, fsz , col , fontStr);   // -2 to raise above line
     }
 }
-function DrawHorizontalLine_callout_textcol( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr, txtcol){
+function DrawHorizontalLine_callout_textcol( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr, txtcol,){
     if( ifInside( y, gPixelMargin_y, "y" )==true  ){
           DrawLine( ctx, x1, y, x2, y, 2, col,  style);
           DrawText( ctx, txtStr, x2+xyoff, y, fsz , txtcol , fontStr);
@@ -2438,45 +2398,6 @@ function DrawLine(ctx, x, y, x1, y1, weight, color, style) {
     vectXY1_clipped  = ClipPoint(ctx, vrect, vectXY1);           
     x1 = vectXY1_clipped.x;
     y1 = vectXY1_clipped.y;
-
-    // Set line properties
-    ctx.lineWidth = weight;
-    ctx.strokeStyle = color;
-
-    // Set line dash style if any
-    if (style === 'dashed') {
-        ctx.setLineDash([10, 5]); // 10px dash, 5px space
-    } else if (style === 'dotted') {
-        ctx.setLineDash([2, 4]);  // 2px dot, 4px space
-    } else {
-        ctx.setLineDash([]); // Solid line
-    }
-
-    // Begin drawing the line
-    ctx.beginPath();
-    ctx.moveTo(x, y); // Starting point
-    ctx.lineTo(x1, y1); // Ending point
-    ctx.stroke(); // Draw the line
-
-    // Reset line dash to solid for future drawing
-    ctx.setLineDash([]);
-}
-
-
-function DrawLine_noclip(ctx, x, y, x1, y1, weight, color, style) {
-    let vrect = gGlobalChartVRectCurrent;   //  = {... gGl0balChartVRectCurrent }
-    let vectXY  = { x: x,  y:y };
-    let vectXY1 = { x: x1, y:y1 };
-    let vectXY_clipped  = { x: 0,  y: 0  };
-    let vectXY1_clipped = { x: 10, y: 10 };
-
-
-    // vectXY_clipped   = ClipPoint(ctx, vrect, vectXY);  
-    // x = vectXY_clipped.x;
-    // y = vectXY_clipped.y;
-    // vectXY1_clipped  = ClipPoint(ctx, vrect, vectXY1);           
-    // x1 = vectXY1_clipped.x;
-    // y1 = vectXY1_clipped.y;
 
     // Set line properties
     ctx.lineWidth = weight;

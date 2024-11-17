@@ -1,9 +1,8 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "299.1";
+let                                                                         gVer = "287.0";
 let             gDebugInfo = 0;  // for   sc = 1.0
-let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget.php?sym=" ;   
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -35,9 +34,7 @@ let                                                 gPrefixLink = "https://algoz
     const canvas = document.getElementById('myCanvas');
     const ctx    = canvas.getContext('2d');
 
-
 let gDrawType=0;
-let gSeriesType ="daily";
 
 let gLogoname="logo";
 let gAlgozLogo_fname ="../img/"+gLogoname+ ".png";     
@@ -70,7 +67,7 @@ let gSellSignal_Last ="nil"; // 0.0;
 let gLastBuySellSignal_symbol = "";
 
 let gColorCycleCnt    = 0;
-let gColorCycleCntMax = 8;// 9;
+let gColorCycleCntMax = 9;
 
     
 let gGapDir_thisCandle      = 0   ;//  =  parseInt(  processedData[date]["gapdir"]  )   ;
@@ -381,7 +378,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
     let img_yoff =10 + 20;  
     let fname ="../img/"+gSymbolStrLower+ ".png";
 
-    let fins_list_fsz=14;
+    let fins_list_fsz=18;
 
     DrawRoundedRect(ctx, vrect, 20, colScheme.bg, 3, 1);
     DrawRoundedRect(ctx, vrect, 20, colScheme.ou, 5, 0);
@@ -395,7 +392,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
         drawFibonacci( ctx, vrect , gCandlesMaxes.priceHigh, gCandlesMaxes.priceLow );
     
         // pivot / p3 lines
-        if( button5==1 || button5==2  ) DrawSegmentedLine(ctx, processedData, vrect, 2, 'cyan',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
+        if( button5==1 || button5==2  ) DrawSegmentedLine(ctx, processedData, vrect, 2, 'blue',   "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P") ;
         if( button5==2)                 DrawSegmentedLine(ctx, processedData, vrect, 2, 'yellow', "solid", gCandleXnextStart, (  gCandleWidth + gCandleOffset ), "P3") ;
     }else if(gDrawFinancials>0){                
 
@@ -435,8 +432,6 @@ let gPeriodStr = "(Daily)";
 let gCurrencyStr="$";
 let gLastPriceStr ="0.00";
 let gLastDateStr ="1900-01-01";
-let gMonthNum ="01";
-
 let gGlobalFont= "Arial";
 let gGlobalFont1= "Arial" ;   //"Courier New";
 let gAxesOffset_x = -64;   // go past RIGHT side of canvas
@@ -666,8 +661,7 @@ function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
     
                 gSymbolStr    = processedData[date]["sym"];
                 gPeriodStr    = processedData[date]["per"];
-                gSeriesType   = processedData[date]["seriestype"];
-
+    
                 let lastPrice0= parseFloat(processedData[date]["close"]) ; 
                 // gLastPriceStr  =        processedData[date]["close"];   
                 gLastPriceStr  =   lastPrice0.toFixed(2).toString() ;
@@ -714,14 +708,11 @@ function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
         console.log("] POST calcs, gCandlesMaxes   =", gCandlesMaxes );
     
     //  ############################################################################## should be a fn
-    if(gDigitalCurrency==1){
-        gChartTextStr =  gSymbolStr +" " +  gCryptoName +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+g Ver+" php_v"+gV erPHP; 
-
-    }else{
-        gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVe r+" php_v"+gV erPHP; 
-        
-    }
-    gChartTextStr1 = "v"+gVer+"js   v"+gVerPHP+"p";   // +"php"; 
+    
+    gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
+    // gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0;  //+"    v"+gVer+" php_v"+gVerPHP; 
+    // gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0+"    v"+gVer+" php_v"+gVerPHP; 
+    gChartTextStr1 = "v"+gVer+"  v"+gVerPHP+"php"; 
     gSymbolStrLower  = gSymbolStr.toLowerCase();
     
     // DETERMINE gCandleOffset
@@ -749,20 +740,130 @@ function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
 }
 
 
-let gGlobalPerFromData = 'nil';
 
 
-let  gMonthNumDynamic = 10;           // ie after october, on monthly chart draw next year's dynamic pivots
-let  gEndOfHalfMonthDayDynamic= 13;   // ie after  15th of month, on monthly chart draw next   dynamic pivots
 
 function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
     let cw= canvas.width;
     let ch= canvas.height;
     let cnt = processedData.length;   /// == NaN ???
+
+    // this is called just before DrawC@ndlesChart()
+    // PreCalcCandlesChart( ctx,  vrect , colScheme, wt );
+
+
+// //  ##############################################################################  DEL
+// //  ##############################################################################  DEL
+// //  ##############################################################################
+// //  ##############################################################################
+// //  ##############################################################################
+// //  ##############################################################################
+// //  ######  MAKE A FUNCTION ...   PrepCandles or  SetCandleGlobals       #########
+// //  ##############################################################################
+    
+//                                                     // let vect2 = { ...vect };   // example
+//     gCandlesMaxes = { ...gCandlesMaxesInit };      // init the global vector
+
+//     let datestr0 = "0000-11-22";
+//     let i=0;
+//     for (var date in processedData) {
+//         if (processedData.hasOwnProperty(date)) {
+//             // console.log( i+") " + date + ", Close: " + processedData[date]["close"] + " "+   processedData[date]["dayOfWeek"]);
+//             let hi = parseFloat( processedData[date]["high"] );
+//             let lo = parseFloat(  processedData[date]["low"] );
+//             if(hi>gCandlesMaxes.priceHigh ){
+//                 gCandlesMaxes.priceHigh = hi;
+//                 gCandlesMaxes.priceHigh_date = date.toString();
+//                 gCandlesMaxes.priceHigh_idx =  i ; 
+
+//             }  
+//             if(lo<gCandlesMaxes.priceLow  ){
+//                  gCandlesMaxes.priceLow  = lo;
+//                  gCandlesMaxes.priceLow_date = date.toString();
+//                  gCandlesMaxes.priceLow_idx =  i ; 
+//             }
+
+//             let srhi = parseFloat(  processedData[date]["R3"] );
+//             let srlo = parseFloat(  processedData[date]["S3"] );
+//             if(srhi>gCandlesMaxes.srHigh ) gCandlesMaxes.srHigh = srhi;
+//             if(srlo<gCandlesMaxes.srLow  ) gCandlesMaxes.srLow  = srlo;
+
+//             // let myNum = '62.3900';
+//             // let myFloat = parseFloat(parseFloat(myNum).toFixed(2));
+//             // console.log(myFloat);  // Outputs: 62.39 (as a number)
+
+//             let vol = parseFloat(  processedData[date]["volume"] );
+//             if(vol>gCandlesMaxes.volHigh ) gCandlesMaxes.volHigh = vol;
+//             if(vol<gCandlesMaxes.volLow  ) gCandlesMaxes.volLow  = vol;
+
+//             gSymbolStr    = processedData[date]["sym"];
+//             gPeriodStr    = processedData[date]["per"];
+
+//             let lastPrice0= parseFloat(processedData[date]["close"]) ; 
+//             // gLastPriceStr  =        processedData[date]["close"];   
+//             gLastPriceStr  =   lastPrice0.toFixed(2).toString() ;
+            
+//             // let lastDay       = processedData[date]["dayOfWeek"];
+//             i++;
+
+//             datestr0 = date.toString();
+//         }
+//     }//loop
+
+//     gNumCandlesToRender = i;
+//     gCandlesMaxes.num2render = gNumCandlesToRender ;
+//     gCandlesMaxes.priceRange = gCandlesMaxes.priceHigh - gCandlesMaxes.priceLow;
+//     gCandlesMaxes.srRange    = gCandlesMaxes.srHigh    - gCandlesMaxes.srLow;
+//     gCandlesMaxes.volRange   = gCandlesMaxes.volHigh   - gCandlesMaxes.volLow;
+//     console.log("] POST calcs, gCandlesMaxes   =", gCandlesMaxes );
+
+// //  ############################################################################## should be a fn
+
+// gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
+// // gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0;  //+"    v"+gVer+" php_v"+gVerPHP; 
+// // gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ datestr0+"    v"+gVer+" php_v"+gVerPHP; 
+// gChartTextStr1 = "v"+gVer+" php_v"+gVerPHP; 
+// gSymbolStrLower  = gSymbolStr.toLowerCase();
+
+// // DETERMINE gCandleOffset
+//     gCandleOffset = gCandleSpaceMin;
+//     // gCandleWidthTotal = parseInt( cw / gNumCandlesToRender  );
+//     gCandleWidthTotal = parseInt(  vrect.w / gNumCandlesToRender  );
+//     // if(gCandleWidthTotal>4) gCandleOffset=gCandleSpaceMin+1;     // ie 2, set new offset iff candle wide enough
+//     if(gCandleWidthTotal>5) gCandleOffset=gCandleSpaceMin+1;     // ie 2, set new offset iff candle wide enough
+   
+//     gCandleXnext = vrect.x + gCandleOffset;
+//     gCandleXnextStart = gCandleXnext;           // SAVE START
+    
+// // DETERMINE  gCandleWidth
+//     gCandleWidth      = gCandleWidthTotal - gCandleOffset;
+//     console.log("] Candles to render, gCandleWidth  =", gNumCandlesToRender, gCandleWidth );
+
+
+// //  ##############################################################################  
+// //  #######################                       ################################  
+// //  #######################  all prep Calcs DONE  ################################  
+// //  #######################                       ################################  
+// //  ##############################################################################  
+// //  ##############################################################################  DEL
+// //  ##############################################################################  DEL
+// //  ##############################################################################  DEL
+// //  ##############################################################################  DEL
+
+
+
+
+
+
+
+
+
+
     // console.log(processedData); // This will log the PHP data to the console
     let newcol=RandomColorC();
     let last_date_key="nil";  // DERP
  
+// ################################################# RENDER CANDLES
 // ################################################# RENDER CANDLES
 
     let  xHigh=0;
@@ -771,182 +872,58 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
     let  xLow =0;
     let  yLow =0;
 
-    let eohmDynamic = 0;   // end of Half-month Dynamic - to show dynamic
-    let eoyDynamic = 0;   // end of year Dynamic  - to show dynamic
-
-          let  sr0price = 0.0;  
-          let  sr0Y  =0; 
-
-          let op1 = 0;
-          let hi1 = 0;
-          let lo1 = 0;
-          let cl1 = 0;
-
-          let fsz = 16;
-          let xyoff = 4;
-          let fontStr ="Helvetica";
-
-        //   let datestr= "noset";
-
-          let txtStr ="";
-
-
 
     let j=0;
     for (var date in processedData) {
         if (processedData.hasOwnProperty(date)) {
             let datestr= date;
-              op1 = parseFloat(  processedData[date]["open"] );
-              hi1 = parseFloat(  processedData[date]["high"] );
-              lo1 = parseFloat(  processedData[date]["low"] );
-              cl1 = parseFloat(  processedData[date]["close"] );
+            let op1 = parseFloat(  processedData[date]["open"] );
+            let hi1 = parseFloat(  processedData[date]["high"] );
+            let lo1 = parseFloat(  processedData[date]["low"] );
+            let cl1 = parseFloat(  processedData[date]["close"] );
             let vol1 = parseFloat(  processedData[date]["volume"] );
             let eom = parseInt(  processedData[date]["endOfMonth"] );
-            let eoq = parseInt(  processedData[date]["endOfQtr"] );
-            let eoy = parseInt(  processedData[date]["endOfYear"] );
-
 
             gHA_open = parseFloat(  processedData[date]["HA_open"] );
-            gHA_high = parseFloat(  processedData[date]["HA_high"] );
+            gHA_high= parseFloat(  processedData[date]["HA_high"] );
             gHA_low  = parseFloat(  processedData[date]["HA_low"] );
             gHA_close= parseFloat(  processedData[date]["HA_close"] );
 
-            gMonthNum       = processedData[date]["monthNum"] ;
+
             gLastDateStr    = date;
-
-
-            let dstring =gLastDateStr; // "2024-11-14";
-
-            let lastTwoCharacters = dstring.slice(-2);
-            let dayOfMonthNum = parseInt(lastTwoCharacters);   // "14"  ==> 14
-
-            eohmDynamic = 0;   // end of Half-month - to show dynamic
-            if (dayOfMonthNum>gEndOfHalfMonthDayDynamic){
-                eohmDynamic=1;  
-            }
-
-            eoyDynamic = 0;   // end of yr  - to show dynamic
-            let monthtest = dstring.slice(5, 7); // Characters at index 5 and 6  "11"
-            let MonthNumtest = parseInt(monthtest);   // "11"  ==> 11
-            if (MonthNumtest>gMonthNumDynamic){    
-                eoyDynamic=1;  
-            }
-
-
-
-
-
-// for drawing pivots mon/yr
-            let x1m = gCandleXnext;
-            let x2m      = gCandleXnext + ( 19 * ( gCandleWidth + gCandleOffset ) );   // for daily
-            let x2mDailyWidth_half = parseInt( ( 17 * ( gCandleWidth + gCandleOffset ) )   );    
-
-            let x2mMonth = gCandleXnext + ( 12 * ( gCandleWidth + gCandleOffset ) ); 
-            let x2mMonthWidth_half = parseInt( ( 11 * ( gCandleWidth + gCandleOffset ) )   );   
-
-          //   if(x2m> vrect.x+vrect.h) x2m= vrect.x+vrect.h-1;
-
-        //   let  sr0price = 0.0;  
-        //   let  sr0Y  =0; 
-          let  sr0Ymax = vrect.y+vrect.h;
-
-        //   let fsz = 16;
-        //   let xyoff = 4;
-        //   let fontStr ="Helvetica";
-
-          let perStr1 =  processedData[date]["globalper"];
-          let perStr = perStr1.toLowerCase();
-          gGlobalPerFromData =perStr;
-
-
-
-
-
-// END OF YEAR
-            if(eoy==1){ 
-                processedData[date]["X1year"] = gCandleXnext;
-                processedData[date]["X2year"] =   x2mMonth; // ( 12 * ( gCandleWidth + gCandleOffset ) );
-
-                fsz = 14;
-                x2m =x2mMonth;
-                xyoff = ( -1 * x2mMonthWidth_half) ;
-                
-                if(button3==1   && ( perStr=="monthly"  || perStr=="weekly" )){
-                    sr0price = parseFloat( processedData[date]["R3year"] ).toFixed(2);
-                    txtStr    = gCurrencyStr+ sr0price.toString() + " (R3 yr)";
-                    sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                    // DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r3 ,  "dashed" );
-                    DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r3 , "dashed" , txtStr, fsz-4, xyoff, fontStr);
-
-
-                    sr0price = parseFloat( processedData[date]["R2year"] ).toFixed(2);
-                    txtStr    = gCurrencyStr+ sr0price.toString() + " (R2 yr)";
-                    sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                     DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r2 , "dashed" , txtStr, fsz-2, xyoff, fontStr);
-
-                    sr0price = parseFloat( processedData[date]["R1year"] ).toFixed(2);
-                    txtStr    = gCurrencyStr+ sr0price.toString() + " (R1 yr)";
-                    sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                    DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r1 , "dashed" , txtStr, fsz, xyoff, fontStr);
-                  
-
-
-                    sr0price = parseFloat( processedData[date]["Pyear"] ).toFixed(2);
-                    txtStr    = gCurrencyStr+ sr0price.toString() + " (P yr)";
-                    sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                    DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.p , "dashed" , txtStr, fsz, xyoff, fontStr);
-                  
-
-
-                    sr0price = parseFloat( processedData[date]["S1year"] ).toFixed(2);
-                    txtStr    = gCurrencyStr+ sr0price.toString() + " (S1 yr)";
-                    sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                    DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s1 ,  "dashed" , txtStr, fsz, xyoff, fontStr);
-
-                    sr0price = parseFloat( processedData[date]["S2year"] ).toFixed(2);
-                    txtStr    = gCurrencyStr+ sr0price.toString() + " (S2 yr)";
-                    sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                    DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s2 ,  "dashed" , txtStr, fsz-2, xyoff, fontStr);
-
-
-                    sr0price = parseFloat( processedData[date]["S3year"] ).toFixed(2);
-                    txtStr    = gCurrencyStr+ sr0price.toString() + " (S3 yr)";
-                    sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                    // DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.s3 ,  "dashed" );
-                    DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s3 , "dashed" , txtStr, fsz-4, xyoff, fontStr);
-          
-
-              }//if butt0n  perStr=="monthly"
-
-            }//if(e0y==1){ 
-
-
-
-
-
-
-
 
 
 // END OF MONTH...
             if(eom==1){   // found end of month
-                processedData[date]["X1month"] = gCandleXnext;
-                processedData[date]["X2month"] = x2m;
+                  processedData[date]["X1month"] = gCandleXnext;
 
-                xyoff = ( -1 * x2mDailyWidth_half) ;  // basicall 2 candles width
- 
+                //   // here we may have to pre-loop to set X1,X2month's
+                //  if(last_date_key!="nil"){
+                //     processedData[last_date_key]["X2month"] = gCandleXnext;  // get new X2 from last month
+                //     last_date_key =gLastDateStr;  //== date
+                //  }
 
-                if(button3==1   && perStr=="daily"){
+                  let x1m = gCandleXnext;
+                  let x2m = gCandleXnext + ( 10 * ( gCandleWidth + gCandleOffset ) ); 
+                //   if(x2m> vrect.x+vrect.h) x2m= vrect.x+vrect.h-1;
+
+                let  sr0price = 0.0;  
+                let  sr0Y  =0; 
+                let  sr0Ymax = vrect.y+vrect.h;
+
+                let fsz = 16;
+                let xyoff = 4;
+                let fontStr ="Helvetica";
+
+                if(button3==1){
                           sr0price = parseFloat( processedData[date]["R3month"] ).toFixed(2);
-                          txtStr    = gCurrencyStr+ sr0price.toString() + " (R3)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                        //   DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r3 ,  "dashed" );
-                          DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r3 , "dashed" , txtStr, fsz-4, xyoff, fontStr);
+                          DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.r3 ,  "dashed" );
 
                           sr0price = parseFloat( processedData[date]["R2month"] ).toFixed(2);
                           txtStr    = gCurrencyStr+ sr0price.toString() + " (R2)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                           DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r2 , "dashed" , txtStr, fsz-2, xyoff, fontStr);
+                           DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.r2 , "dashed" , txtStr, fsz, xyoff, fontStr);
 
                           sr0price = parseFloat( processedData[date]["R1month"] ).toFixed(2);
                           txtStr    = gCurrencyStr+ sr0price.toString() + " (R1)";
@@ -970,15 +947,12 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
                           sr0price = parseFloat( processedData[date]["S2month"] ).toFixed(2);
                           txtStr    = gCurrencyStr+ sr0price.toString() + " (S2)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                          DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s2 ,  "dashed" , txtStr, fsz-2, xyoff, fontStr);
+                          DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s2 ,  "dashed" , txtStr, fsz, xyoff, fontStr);
 
 
                           sr0price = parseFloat( processedData[date]["S3month"] ).toFixed(2);
-                          txtStr    = gCurrencyStr+ sr0price.toString() + " (S3)";
                           sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-                        //   DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.s3 ,  "dashed" );
-                          DrawHorizontalLine_callout(ctx, x1m, x2m, sr0Y , gSupResColors.s3 ,  "dashed" , txtStr, fsz-4, xyoff, fontStr);
-
+                          DrawHorizontalLine(ctx, x1m, x2m, sr0Y , gSupResColors.s3 ,  "dashed" );
                 
                     }//if butt0n
 
@@ -1080,82 +1054,6 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
     gCandleXnextLast =   gCandleXnext;
 
 // #################################  END OF CANDLESLOOP 
-
-
-/*
-R4day = High+ 3*(Pday-Low) ;
-R3day = (Pday-S1day) + R2day;
-R2day = Pday + High – Low;
-R1day = (Pday *2)-Low;
-Pday  = (High + Low + Close )/3 ;
-S1day = (Pday *2)-High;
-S2day = Pday – High + Low;
-S3day = Pday – (R2day-S1day);
-s4day = Low- 3*(High-Pday) ;
-*/
-
-
-
-// if( gEndOfHalfMonthDayDynamic ==1  && gGlob alPerFromData=="daily" ){
-    if(    button3==1  &&  gGlobalPerFromData=="daily" ){
-
-        // /// last assigned...  from today iff  perStr=="daily"
-        // hi1 = parseFloat(  processedData[date]["high"] );
-        //  lo1 = parseFloat(  processedData[date]["low"] );
-        //  cl1 = parseFloat(  processedData[date]["close"] );
-
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-       let nextP = ( hi1 +lo1 + cl1 ) / 3 ;
-       let nextS1 = (nextP*2) - hi1 ;
-       let nextR1 = (nextP*2) - lo1
-       let nextS2 = nextP - hi1 + lo1; 
-       let nextR2 = nextP + hi1 - lo1; 
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
-
-       let x1next = vrect.x+vrect.w ;
-
-       console.log('got to end of next month dynamic,s1, p , r1 ==' , nextS1, nextP, nextR1 );
-       
-       sr0price = parseFloat( nextR2 ).toFixed(2);
-       txtStr    = gCurrencyStr+ sr0price.toString() + " (R2)";
-       sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-        DrawHorizontalLine_callout_noclip( ctx, x1next , x1next+ 80 , sr0Y , gSupResColors.r2 , "dashed" , txtStr, fsz-2, -75, fontStr );
-       
-
-        sr0price = parseFloat( nextR1 ).toFixed(2);
-        txtStr    = gCurrencyStr+ sr0price.toString() + " (R1 nxtDay)";
-        sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-         DrawHorizontalLine_callout_noclip( ctx, x1next , x1next+ 80 , sr0Y , gSupResColors.r1 , "dashed" , txtStr, fsz-2, -75, fontStr );
-        
-        sr0price = parseFloat( nextP ).toFixed(2);
-        txtStr    = gCurrencyStr+ sr0price.toString() + " (P)";
-        sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-        DrawHorizontalLine_callout_noclip( ctx, x1next , x1next+ 80 , sr0Y , 'blue'           , "dashed" , txtStr, fsz-2, -75, fontStr );
-        
-        sr0price = parseFloat( nextS1 ).toFixed(2);
-         txtStr    = gCurrencyStr+ sr0price.toString() + " (S1 nxtDay)";
-         sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-         DrawHorizontalLine_callout_noclip( ctx, x1next , x1next+ 80 , sr0Y , gSupResColors.s1 , "dashed" , txtStr, fsz-2, -75, fontStr );
- 
-
-         sr0price = parseFloat( nextS2 ).toFixed(2);
-         txtStr    = gCurrencyStr+ sr0price.toString() + " (S2)";
-         sr0Y     = GetYCoordFromPrice( sr0price, vrect );
-         DrawHorizontalLine_callout_noclip( ctx, x1next , x1next+ 80 , sr0Y , gSupResColors.s2 , "dashed" , txtStr, fsz-2, -75, fontStr );
- 
-
-    }
-
-
 
 
 }// fn Dr@wCandlesChart   ################################################################################
@@ -1289,14 +1187,9 @@ function GetYCoordFromPrice( priceInput, vrect ){
 
 }//fn
 
-let gSeriesYearStr ="nil";
 function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl1, vol1 , eom ){
     let    candleRect = {  x: 0 , y: 0 , w: 4 , h: 12  }; 
     let ha_candleRect = {  x: 0 , y: 0 , w: 4 , h: 12  }; 
-
-    let dstr = datestr.substring(0, 4); 
-    // gSerie sYearStr  = "'"+ dstr;   // vs (0,4);  '24 vs 2024
-    gSeriesYearStr  =  dstr;   // vs (0,4);  '24 vs 2024
 
     // heikinashi candle compute, just in case
     let ha_col1 =  colScheme.up ;
@@ -1324,7 +1217,7 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
     // DRAW Heikin-Ashi CANDLE WICK
     ha_yh = GetYCoordFromPrice( gHA_high, vrect ) ;   // ha high   
     ha_yl = GetYCoordFromPrice( gHA_low,  vrect ) ;     // ha low
-    // if(gDrawHeikinAshi==1) DrawVer ticalLine( ctx, xwick, ha_yh, ha_yl, colScheme.wi, "solid");
+    // if(gDrawHeikinAshi==1) DrawVerticalLine( ctx, xwick, ha_yh, ha_yl, colScheme.wi, "solid");
 
 // init ha_
     ha_candleRect.x = gCandleXnext;
@@ -1347,7 +1240,7 @@ function DrawCandlePlus( ctx, vrect,  colScheme, idx, datestr, op1, hi1, lo1, cl
     // DRAW normal CANDLE WICK
     yh = GetYCoordFromPrice( hi1, vrect ) ;   //  high  gCandleMaxes{} must be set by this fn-call
     yl = GetYCoordFromPrice( lo1, vrect ) ;     // low
-    // if(button1==0) DrawVer ticalLine( ctx, xwick, yh, yl, colScheme.wi, "solid");
+    // if(button1==0) DrawVerticalLine( ctx, xwick, yh, yl, colScheme.wi, "solid");
 
     candleRect.x = gCandleXnext;
     candleRect.y = vrect.y+50;
@@ -1390,36 +1283,10 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
     // DrawVolume( ctx  ,  vrect, idx , colScheme , candlerect, candleGreen, vol1  ,'solid');   
     if(idx!=0) DrawVolume( ctx  ,  vrect, idx , colScheme , candlerect, candleGreen, vol1  ,'outline');   
 
-
     if(eom==1){  // end of month    let gAxe sCol0= "#454595" ;
-        let mm  = parseInt(gMonthNum);
-        let drawVerticals = 0;
-
-        // test for wk or mon charts
-        if( gSeriesType=="daily"  ) {
-            drawVerticals=1;   // always draw ea month vert line
-
-        } else   if( gSeriesType=="monthly"  ) {
-            // if(mm==1 || mm==7)   drawVerticals=1;
-            if(mm==1  )   drawVerticals=1;
-
-        } else   if( gSeriesType=="weekly"  ) {
-            if(mm==1 || mm==4|| mm==7|| mm==10)   drawVerticals=1;
-
-        } 
-
-        // if(  drawVerticals==1  && gGlob alPerFromData=="daily" ){  // gSeriesType
-            if(  drawVerticals==1  &&  ( gSeriesType=="daily" || gSeriesType=="weekly" ) ){  
-                // VERTICAL AXES
-            DrawVerticalLine(ctx  , candlerect.x , vrect.y, (vrect.y+vrect.h) , gAxesCol0 , "dotted");
-            DrawDateRotated( ctx  , vrect , colScheme, -0.50 );
-        }else if(  drawVerticals==1  && gSeriesType=="monthly" ){
-            // VERTICAL monthly  AXES
-            DrawVerticalLine(ctx  , candlerect.x , vrect.y, (vrect.y+vrect.h) , gAxesCol0 , "dotted");
-            DrawDateRotatedWithYear( ctx  , vrect , colScheme, -0.50 ); 
-            }
-
-    }//eom
+        DrawVerticalLine(ctx  , candlerect.x , vrect.y, (vrect.y+vrect.h) , gAxesCol0 , "dotted");
+        DrawDateRotated( ctx  , vrect , colScheme, -0.50 );
+    }
 
 // BUY SELL
    if(button2==1){    
@@ -1459,7 +1326,6 @@ function  DrawOtherStuff( ctx  , vrect, idx , colScheme , candlerect, candleGree
 
 }//fn
 
-
 function GetOverviewData(url) {
     return fetch(url)
         .then(response => {
@@ -1496,16 +1362,15 @@ function DrawOverviewData(ctx, vrect, colScheme, object_arr, xoff, yoff, yspace,
     let ev2rev = 0.001;
 
     let fins_ok=  "OVERVIEW";
-    let fins_bad=  "WARNING: Check Financials !";
+    let fins_bad=  "OVERVIEW - WARNING: Check Financials !";
+    // let fins_ok=  "FINANCIALS";
+    // let fins_bad=  "FINANCIALS - WARNING: Check Financials!";
     let fins = fins_ok;
     let num = 900000000000 ;
     let numf = 900000000000.0;
 
     let xoff1= parseInt( vrect.w * 0.275 );
     
-let fntsz2 = parseInt( fntsz * 1.6 );
-
-
     object_arr.forEach(obj => {
         let keystr = obj.key;
         let valstr = String(obj.value);
@@ -1606,7 +1471,6 @@ let fntsz2 = parseInt( fntsz * 1.6 );
                 
 
                     let keystr1 = keystr;
-                    if( keystr=="MarketCapitalization" ) keystr1="MarketCap";
 
                     if(keystr!="Name" && keystr!="nextEarnings" ){
                         keystr1=keystr+":";
@@ -1627,9 +1491,9 @@ let fntsz2 = parseInt( fntsz * 1.6 );
 
 
     if(fins == fins_bad){
-        DrawText_noclip(ctx, fins ,   3+vrect.x +xoff , 3+ vrect.y -8 + yoff + ( (0+1) * yspace ), fntsz2,  'red',       fntname );
+        DrawText_noclip(ctx, fins ,   3+vrect.x +xoff , 3+ vrect.y -8 + yoff + ( (0+1) * yspace ), fntsz*2,  'red',       fntname );
     }
-    DrawText_noclip(ctx, fins ,   vrect.x +xoff , vrect.y -8 + yoff + ( (0+1) * yspace ), fntsz2,  fntcol,       fntname );
+    DrawText_noclip(ctx, fins ,   vrect.x +xoff , vrect.y -8 + yoff + ( (0+1) * yspace ), fntsz*2,  fntcol,       fntname );
  
 
     let str99 = ""; 
@@ -1913,16 +1777,14 @@ function DrawBuySellSignal(ctx  , vrect, idx , colScheme, candlerect , candleGre
 
     }
 
-
-let yoffSell=24;
     if( gSellSignal_thisCandle  > 0 ){
         sz1 = sz_init * gSellSignalCnt_thisCandle;
         sz2 = parseInt( sz1/2);
         txt1=gSellSignalStr_thisCandle;
         txt1_num=parseInt(gSellSignalCnt_thisCandle).toString();
         if(gSellSignalCnt_thisCandle<6) fsz= 24 -8;
-        DrawTriangle_callout(ctx, sz1, 3, outline_dncol, gCandleWickX, SellTrianglePos_y -yoffSell, 1, 1, gSellSignal_col ,   txt1+ txtStr, (-1*xoff), 0, 16 , colScheme.tx , gGlobalFont  ) ;
-        DrawText(ctx , txt1_num, gCandleWickX-sz2, SellTrianglePos_y-Yoff -yoffSell, fsz , gSellSignal_outline_col , gGlobalFont  );
+        DrawTriangle_callout(ctx, sz1, 3, outline_dncol, gCandleWickX, SellTrianglePos_y, 1, 1, gSellSignal_col ,   txt1+ txtStr, (-1*xoff), 0, 16 , colScheme.tx , gGlobalFont  ) ;
+        DrawText(ctx , txt1_num, gCandleWickX-sz2, SellTrianglePos_y-Yoff, fsz , gSellSignal_outline_col , gGlobalFont  );
         gSellSignal_Last = "SELL "+gSymbolStr+" at "+  gSellSignalStr_thisCandle +" strength="+gSellSignalCnt_thisCandle.toString() +  " ";
         gLastBuySellSignal_symbol= gSymbolStr;
     }
@@ -2007,74 +1869,6 @@ function DrawImage(ctx, img, x, y, scale) {
 }
 
 
-
-
-
-
-let gCrawlSeconds100 = 30;
-let gCrawlFontSize = 18;
-
-let gCrawlXstep =2;
-let gCrawlX=0;
-let gCrawlY=10;
-
-let gZipper0="             ";
-let gZipper= "             ";
-let gZipperUrl="https://algoz.ai/cronit/cronit.php";   // https://algoz.ai/cronit/cronit.php
-// let gZipperUrl="https://algoz.ai/cronit/crawl.php";   // https://algoz.ai/cronit/cronit.php
-
-function printZipperString( data, ctx){
-    gZipper0 = data;
-    gZipper= data + "  algoz.ai Copyright (c) 2023-2025 by Algo Investor Inc  " + data;
-    // console.log("ZipperString gZipper str==", gZipper);
-    // DrawText_noclip( ctx, gZipper, gCrawlX, gCra wlY,       12 , 'blue' , gGlobalFont );
-
-}
-function GetTickerZipper(url , ctx) {
-    return fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text(); // get the response as text
-        })
-        .then(data => data) // return the fetched string
-        .catch(error => {
-            console.error('Fetch error:', error);
-            return "Error fetching data";
-        });
-}
-
-// // Example usage:
-// Get TickerZipper("https://example.com/api/data")
-//     .then(data => console.log("Fetched data:", data));
-
-
-function DrawCrawl() {
-    // gCrawlX = gCrawlX- gCrawlXstep;
-    // let vrect0 = { x: 0, y:gCraw lY-2 , w: canvas.width, h: gCrawlFontSize+4 };
-
-    ctx.fillStyle = 'yellow';   
-    ctx.font =  gCrawlFontSize.toString()+"px " +gGlobalFont;   //fsz.toString()+ "px Arial";    
-    let rWidth = ctx.measureText(gZipper0).width ;
-
-    if( gCrawlX < (-1*rWidth) ) gCrawlX =0 ;  
-        else gCrawlX-=gCrawlXstep;
-
-    let vrect0 = { x: 0, y:gCrawlY-4 , w: canvas.width, h: gCrawlFontSize+8 };
-
-    DrawVRect(ctx, vrect0, 2, 'blue', "solid");
-    DrawText_noclip( ctx, gZipper, gCrawlX, gCrawlY + gCrawlFontSize-7,       gCrawlFontSize , 'yellow' , gGlobalFont );
-
-}
-function logDateTime() {
-        const now = new Date();
-    console.log(now.toLocaleString());
-}
-
-// Call logDateTime every 2.5 seconds (2500 milliseconds)
-// setInterval( DrawCr awl, 2500);
-
 function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     let fsz2 = parseInt( fsz * 0.40 ) ;
     let fsz3 = 14;
@@ -2125,16 +1919,9 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     
     // InitAndDrawImage(ctx, vrect, gAlgozLogo_fname, 10, -30, (gImgScale*1.2) );   // let gIm gScale = 0.325;
 
-
-
-
-    GetTickerZipper( gZipperUrl , ctx )
-        .then(data => printZipperString(data , ctx));
-
-
 }
 
-// function draw Text( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol3a ){
+// function drawText( fibstr2, x1off+mf(g52WeekXlen*0.725), fiby-16 , fibfntsz,  fibcol3a ){
 function    drawText( fontStr,  x, y,                                   ftsz,  colStr ){
 
     DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr);
@@ -2173,10 +1960,6 @@ function DrawText( ctx, txtStr, x, y, fsz , colStr , fontStr){
 }
 function DrawDateRotated( ctx , vrect, colScheme, rotfl){  // designed to be called during Rendering
     let datestrAbbrev = DateAbbreviate( gLastDateStr , 1 );
-    DrawTextRotated( ctx, datestrAbbrev, gCandleWickX + 4, (vrect.y+ parseInt(vrect.h *0.90) ), colScheme.tx, 14, gGlobalFont, rotfl );
-}
-function DrawDateRotatedWithYear( ctx , vrect, colScheme, rotfl){  // designed to be called during Rendering
-    let datestrAbbrev = DateAbbreviate( gLastDateStr , 1 ) + " " +gSeriesYearStr;
     DrawTextRotated( ctx, datestrAbbrev, gCandleWickX + 4, (vrect.y+ parseInt(vrect.h *0.90) ), colScheme.tx, 14, gGlobalFont, rotfl );
 }
 function DrawTextRotated( ctx, rstr, xx0, yy0, colstr, px, font0str, rotfloat) {
@@ -2388,28 +2171,13 @@ function ifInside( x_or_y, pixel_margin, coordTypeStr ){  // coordTypeStr="x" or
 let gPixelMargin_y = 10;
 let gPixelMargin_x = 10;
 
-function DrawHorizontalLine_callout_noclip( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr){
-    // if(  ifInside( y, gPixelMargin_y, "y" )==true  ){
-        DrawLine_noclip( ctx, x1, y, x2, y, 2, col,  style);
-            //     DrawText( ctx, txtStr, x2+xyoff, y-2, fsz , col , fontStr);   // -2 to raise above line
-            DrawText_noclip( ctx, txtStr, x2+xyoff, y-2, fsz , col , fontStr); 
-    // }
-}
-function DrawHorizontalLine_callout_textcol_noclip( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr, txtcol){
-    // if( ifInside( y, gPixelMargin_y, "y" )==true  ){
-          DrawLine_noclip( ctx, x1, y, x2, y, 2, col,  style);
-                //  DrawText( ctx, txtStr, x2+xyoff, y, fsz , txtcol , fontStr);
-          DrawText_noclip( ctx, txtStr, x2+xyoff, y-2, fsz , col , fontStr); 
-          // }
-}
-
 function DrawHorizontalLine_callout( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr){
     if(  ifInside( y, gPixelMargin_y, "y" )==true  ){
             DrawLine( ctx, x1, y, x2, y, 2, col,  style);
-            DrawText( ctx, txtStr, x2+xyoff, y-2, fsz , col , fontStr);   // -2 to raise above line
+            DrawText( ctx, txtStr, x2+xyoff, y, fsz , col , fontStr);
     }
 }
-function DrawHorizontalLine_callout_textcol( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr, txtcol){
+function DrawHorizontalLine_callout_textcol( ctx, x1, x2, y ,col,  style, txtStr, fsz, xyoff, fontStr, txtcol,){
     if( ifInside( y, gPixelMargin_y, "y" )==true  ){
           DrawLine( ctx, x1, y, x2, y, 2, col,  style);
           DrawText( ctx, txtStr, x2+xyoff, y, fsz , txtcol , fontStr);
@@ -2438,45 +2206,6 @@ function DrawLine(ctx, x, y, x1, y1, weight, color, style) {
     vectXY1_clipped  = ClipPoint(ctx, vrect, vectXY1);           
     x1 = vectXY1_clipped.x;
     y1 = vectXY1_clipped.y;
-
-    // Set line properties
-    ctx.lineWidth = weight;
-    ctx.strokeStyle = color;
-
-    // Set line dash style if any
-    if (style === 'dashed') {
-        ctx.setLineDash([10, 5]); // 10px dash, 5px space
-    } else if (style === 'dotted') {
-        ctx.setLineDash([2, 4]);  // 2px dot, 4px space
-    } else {
-        ctx.setLineDash([]); // Solid line
-    }
-
-    // Begin drawing the line
-    ctx.beginPath();
-    ctx.moveTo(x, y); // Starting point
-    ctx.lineTo(x1, y1); // Ending point
-    ctx.stroke(); // Draw the line
-
-    // Reset line dash to solid for future drawing
-    ctx.setLineDash([]);
-}
-
-
-function DrawLine_noclip(ctx, x, y, x1, y1, weight, color, style) {
-    let vrect = gGlobalChartVRectCurrent;   //  = {... gGl0balChartVRectCurrent }
-    let vectXY  = { x: x,  y:y };
-    let vectXY1 = { x: x1, y:y1 };
-    let vectXY_clipped  = { x: 0,  y: 0  };
-    let vectXY1_clipped = { x: 10, y: 10 };
-
-
-    // vectXY_clipped   = ClipPoint(ctx, vrect, vectXY);  
-    // x = vectXY_clipped.x;
-    // y = vectXY_clipped.y;
-    // vectXY1_clipped  = ClipPoint(ctx, vrect, vectXY1);           
-    // x1 = vectXY1_clipped.x;
-    // y1 = vectXY1_clipped.y;
 
     // Set line properties
     ctx.lineWidth = weight;
@@ -2543,8 +2272,7 @@ function GetColorSchemeCycle(){
          scheme0.dn = RandomJSColor(colarr);
      }
 
-    //  if(gColorCycleCnt==8)  scheme0=gColScheme8;     // white 3
-     if(gColorCycleCnt==8)  scheme0=gColScheme10;     // white 3
+    if(gColorCycleCnt==8)  scheme0=gColScheme8;     // white 3
 
 
     // gAxesCol0=  scheme0.ax ;
@@ -2562,34 +2290,6 @@ function GetColorSchemeCycle(){
 // ########################################################################################    FIBONACCI
 // ########################################################################################    
 //
-let gDrawTimeframe    = "daily";
-let gDrawTimeframeNum = 0;
-
-function ToggleTimeframe(){
-
-
-    let gstr =     gGlobalPerFromData;
-
-    let httpstrGo = "";
-    let httpstr = gPrefixLink;
-
-    if(gstr=="daily") httpstrGo = httpstr +  gSymbolStr +"&per=m";  
-    else if(gstr=="monthly") httpstrGo = httpstr +  gSymbolStr +"&per=w";
-         else if(gstr=="weekly") httpstrGo = httpstr +  gSymbolStr +"&per=d";
-
-    // console.log("Button clicked, GOING TO HTTPS:", httpstrGo , gGlobalButtonNameStr, gGlobalButtonNum);
-    window.location.href = httpstrGo;   // same browser
-
-}
-
- function ToggleTimeframe1(){
-    
-    if(gDrawTimeframeNum==0){
-        gDrawTimeframeNum=1;
-    }else  if(gDrawTimeframeNum==1){
-        gDrawTimeframeNum=0;
-    }
-}
 
 function ToggleGaps(){
     if(gGaps_On==0){
@@ -2792,185 +2492,10 @@ function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =
 
 
 
-// ####################################################
-//  // DEPR
-// function DrwRoundedRectCanvas2(ctx, x, y, width, height, radius, fillFlag, fillCol) {
-//     ctx.beginPath();
-//     ctx.lineWidth = lineWeight;
-//     ctx.moveTo(x + radius, y);
-//     ctx.lineTo(x + width - radius, y);
-//     ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-//     ctx.lineTo(x + width, y + height - radius);
-//     ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-//     ctx.lineTo(x + radius, y + height);
-//     ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-//     ctx.lineTo(x, y + radius);
-//     ctx.quadraticCurveTo(x, y, x + radius, y);
-//     ctx.closePath();
-
-//     if (fillFlag === 1) {
-//         ctx.fillStyle = fillCol;
-//         ctx.fill();
-//     }
-
-//     ctx.stroke(); // Optionally stroke the rectangle
-// }
-
-
-// function Dra@wButtonArray1(ctx, buttons, fillFlag, fillCol, textCol, fontSize, fontName) {
-//     buttons.forEach((button) => {
-//         const { x, y, width, height, text } = button;
-
-//         // Draw the rounded rectangle for the button
-//         DrawRo undedRectCanvas(ctx, x, y, width, height, 10, fillFlag, fillCol);
-
-//         // Set the font for the button text
-//         ctx.font = `${fontSize}px ${fontName}`;
-//         ctx.fillStyle = textCol; // Set the text color
-//         ctx.textAlign = 'center'; // Center align text
-//         ctx.textBaseline = 'middle'; // Middle align text
-//         ctx.fillText(text, x + width / 2, y + height / 2); // Draw the button text
-//     });
-// }
-
-// // Example usage
-// const canvas = document.getElementById('myCanvas');
-// const ctx = canvas.getContext('2d');
-// const buttons = [
-//     { x: 50, y: 50, width: 100, height: 50, text: 'Button 1' },
-//     { x: 50, y: 120, width: 100, height: 50, text: 'Button 2' }
-// ];
-
-// // Draw the button array
-// DrawBu ttonArray(ctx, buttons, 1, 'lightblue', 'black', 16, 'Arial');
-
-
-// Global array to store button properties
-let gGlobalButtons = [];
-let gGlobalButtonNameStr = '';
-let gGlobalButtonNum = -1;
-let gGlobalButton_arr = ['spy', 'qqq', 'nvda', 'aapl', 'tsla', 'nflx', 'msft', 'amzn', 'mstr',  'slv',  'btc-usd',  'djt',  'gs',  'vxx', 'sol-usd' ];
-// Draw ButtonArray(ctx, arr, 10, 10, 100, 0, 10, 2);
-// Det ectButtonPress(ctx, gGlobalButtons, arr);
-
-// Function to draw a rounded rectangle
-function DrawRoundedRectCanvas(ctx, vrect, radius, lineWeight, outlineCol, fillFlag, fillCol) {
-
-    ctx.beginPath();
-    ctx.lineWidth = lineWeight;
-    ctx.moveTo(vrect.x + radius, vrect.y);
-    ctx.lineTo(vrect.x + vrect.w - radius, vrect.y);
-    ctx.quadraticCurveTo(vrect.x + vrect.w, vrect.y, vrect.x + vrect.w, vrect.y + radius);
-    ctx.lineTo(vrect.x + vrect.w, vrect.y + vrect.h - radius);
-    ctx.quadraticCurveTo(vrect.x + vrect.w, vrect.y + vrect.h, vrect.x + vrect.w - radius, vrect.y + vrect.h);
-    ctx.lineTo(vrect.x + radius, vrect.y + vrect.h);
-    ctx.quadraticCurveTo(vrect.x, vrect.y + vrect.h, vrect.x, vrect.y + vrect.h - radius);
-    ctx.lineTo(vrect.x, vrect.y + radius);
-    ctx.quadraticCurveTo(vrect.x, vrect.y, vrect.x + radius, vrect.y);
-    ctx.closePath();
-
-    if (fillFlag === 1) {
-        ctx.fillStyle = fillCol;
-        ctx.fill();
-    }
-    ctx.strokeStyle = outlineCol;
-    ctx.stroke();
-}
-
-// Function to draw the button array on canvas
-function DrawButtonArray(ctx, arr, x, y, width, buttonHeight, idx, spacerY, lineWeight, textCol  , fontSize, fontName , butCol, butOulineCol ) {
-    let canvasHeight = ctx.canvas.height;
-
-    // let buttonHeightMax = (canvasHeight - y - (spacerY * (arr.length - 1))) / arr.length;
-    let buttonHeightMax = (canvasHeight - y - (spacerY * (arr.length - 2))) / ( arr.length-1 );
-    if(buttonHeight > buttonHeightMax) buttonHeight= buttonHeightMax;
-
-    gGlobalButtons = []; // Clear the global button array
-
-    arr.forEach((label, i) => {
-
-        let vrect = { x: x, y: y + (buttonHeight + spacerY) * i, w: width, h: buttonHeight };
-        // Draw the rounded rectangle   radius                  fiilFlg
-        // DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight, 'darkblue', 1, 'blue' );   // #4C50AF
-        // DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight,  'darkblue' , 1, butCol);    
-        DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight,  butOulineCol , 1, butCol);    // butOulineCol
-        // Set the font for the button text
-        ctx.font = `${fontSize}px ${fontName}`;    // ctx.font = "16px Arial";
-        ctx.fillStyle = textCol; // Set the text color
-        // Draw centered text inside the button
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(label, vrect.x + vrect.w / 2, vrect.y + vrect.h / 2);
-
-        // Save the button properties in global array
-        gGlobalButtons.push({ x: vrect.x, y: vrect.y, w: vrect.w, h: vrect.h });
-    });
-}
-
-// Function to detect button press
-function DetectButtonPress(ctx, gGlobalButtons, arr) {
-
-    let httpstrGo = "";
-    let httpstr = gPrefixLink; // "https://algoz.ai/d2/jsonget.php?sym=" ;  // ie + "AAPL"
-    // window.open(httpstrGo, '_blank');   // new browser
-    // window.location.href = httpstrGo;   // same browser
-
-
-    ctx.canvas.addEventListener('click', (e) => {
-        let rect = ctx.canvas.getBoundingClientRect();
-        let mouseX = e.clientX - rect.left;
-        let mouseY = e.clientY - rect.top;
-
-        gGlobalButtons.forEach((button, i) => {
-            if (mouseX >= button.x && mouseX <= button.x + button.w &&
-                mouseY >= button.y && mouseY <= button.y + button.h) {
-                gGlobalButtonNameStr = arr[i];
-                gGlobalButtonNum = i;
-                // console.log("Button clicked:", gGlobalButtonNameStr, gGlobalButtonNum);
-
-                httpstrGo = httpstr + gGlobalButtonNameStr ;
-                console.log("Button clicked, GOING TO HTTPS:", httpstrGo , gGlobalButtonNameStr, gGlobalButtonNum);
-                window.location.href = httpstrGo;   // same browser
-
-            }
-        });
-    });
-
-    // Add touch support for mobile
-    ctx.canvas.addEventListener('touchstart', (e) => {
-        let rect = ctx.canvas.getBoundingClientRect();
-        let touch = e.touches[0];
-        let mouseX = touch.clientX - rect.left;
-        let mouseY = touch.clientY - rect.top;
-
-        gGlobalButtons.forEach((button, i) => {
-            if (mouseX >= button.x && mouseX <= button.x + button.w &&
-                mouseY >= button.y && mouseY <= button.y + button.h) {
-                gGlobalButtonNameStr = arr[i];
-                gGlobalButtonNum = i;
-                // console.log("Button touched:", gGlobalButtonNameStr, gGlobalButtonNum);
-
-                httpstrGo = httpstr + gGlobalButtonNameStr ;
-                console.log("Button touched, GOING TO HTTPS:", httpstrGo , gGlobalButtonNameStr, gGlobalButtonNum);
-                window.location.href = httpstrGo;   // same browser
-
-            }
-        });
-    });
-// // Example usage
-// let canvas = document.getElementById("myCanvas");
-// let ctx = canvas.getContext("2d");
-// let arr = ['spy', 'qqq', 'sqqq', 'aapl', 'tsla', 'mstr', 'msft', 'amzn' ];
-// DrawButto nArray(ctx, arr, 10, 10, 100, 0, 10, 2);
-// DetectB uttonPress(ctx, gGlobalButtons, arr);
-}//fn
 
 
 
 
-
-
-let gDrawCanvasButtons = 1;
 
         // Function to resize canvas and redraw the rectangle
 function resizeCanvas() {
@@ -3031,25 +2556,8 @@ function resizeCanvas() {
             // ctx.font =  fsz.toString()+ "px Arial";   // ctx.font = "bolder "+"124px Arial";
             // ctx.fillText( dtstr , 40, 40  );
 
-        let but_x =6;
-        let but_w = 80;
-        but_w = gGlobalChartVRectCurrent.x - 6 - but_x ;
-        let wbut  = parseInt( gScalarFloat_dynamic * but_w );
-
-        let hbutSt = 40;
-        let hbut =  parseInt( gScalarFloat_dynamic * hbutSt ); 
-        let fsz0 = parseInt( 16* gScalarFloat_dynamic);
-
-        if(gDrawCanvasButtons==1){
-                    // Dra wButtonArray(ctx, arr,               x, y, width, h,  idx, spacerY, lineWeight,  textCol  , fontSize, fontName ) 
-                    // DrawButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'white',     fsz0,   "Arial",  "#4C50AF", 'darkblue' );
-                    DrawButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'blue',     fsz0,   "Arial",  'white',  'white' );
-                    DetectButtonPress(ctx, gGlobalButtons, gGlobalButton_arr);
-
-        }
-
-
 }//fn  r3sizeCanvas()
+
 
         // Function to toggle button state and call resizeCanvas
 function toggleButton(buttonNumber) {
@@ -3098,12 +2606,6 @@ function toggleButton(buttonNumber) {
                 case 2:
                     button2 = (button2 === 1) ? 0 : 1;
                     gDrawFinancials=0;
-                        if(button2 == 0){
-                                // pivot lines cyan/ye.
-                                if(button5==0) button5=1;
-                                else if(button5==1) button5=2;
-                                else  if(button5==2) button5=0;
-                        }
 
                     window.dispatchEvent(new Event('button2'));
                     break;
@@ -3123,11 +2625,10 @@ function toggleButton(buttonNumber) {
                 case 5:
                     // button5 = (button5 === 1) ? 0 : 1;   // pivots blue, then both blue+yellow, then off
                     gDrawFinancials=0;
-                    ToggleTimeframe();  //  gDrawTimeframe= "daily";
 
-                    // if(button5==0) button5=1;
-                    //  else if(button5==1) button5=2;
-                    //   else  if(button5==2) button5=0;
+                    if(button5==0) button5=1;
+                     else if(button5==1) button5=2;
+                      else  if(button5==2) button5=0;
                     window.dispatchEvent(new Event('button5'));
                     break;
                 case 6:
@@ -3209,8 +2710,6 @@ function toggleButton(buttonNumber) {
         // Initial resize to set up the canvas
         resizeCanvas();
         
-    setInterval( DrawCrawl, gCrawlSeconds100);
-
         // now 
         let arr1=[];
         arr1= async_GetOverviewData();

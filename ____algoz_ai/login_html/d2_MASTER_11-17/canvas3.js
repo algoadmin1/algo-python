@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "299.1";
+let                                                                         gVer = "js299.1";
 let             gDebugInfo = 0;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget.php?sym=" ;   
 
@@ -715,13 +715,13 @@ function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
     
     //  ############################################################################## should be a fn
     if(gDigitalCurrency==1){
-        gChartTextStr =  gSymbolStr +" " +  gCryptoName +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+g Ver+" php_v"+gV erPHP; 
+        gChartTextStr =  gSymbolStr +" " +  gCryptoName +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
 
     }else{
-        gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVe r+" php_v"+gV erPHP; 
+        gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
         
     }
-    gChartTextStr1 = "v"+gVer+"js   v"+gVerPHP+"p";   // +"php"; 
+    gChartTextStr1 = "v"+gVer+"  v"+gVerPHP+"p";   // +"php"; 
     gSymbolStrLower  = gSymbolStr.toLowerCase();
     
     // DETERMINE gCandleOffset
@@ -786,7 +786,7 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
           let xyoff = 4;
           let fontStr ="Helvetica";
 
-        //   let datestr= "noset";
+          let datestr= "noset";
 
           let txtStr ="";
 
@@ -795,7 +795,7 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
     let j=0;
     for (var date in processedData) {
         if (processedData.hasOwnProperty(date)) {
-            let datestr= date;
+              datestr= date;
               op1 = parseFloat(  processedData[date]["open"] );
               hi1 = parseFloat(  processedData[date]["high"] );
               lo1 = parseFloat(  processedData[date]["low"] );
@@ -1097,7 +1097,7 @@ s4day = Low- 3*(High-Pday) ;
 
 
 // if( gEndOfHalfMonthDayDynamic ==1  && gGlob alPerFromData=="daily" ){
-    if(    button3==1  &&  gGlobalPerFromData=="daily" ){
+    if(   gGlobalPerFromData=="daily" ){
 
         // /// last assigned...  from today iff  perStr=="daily"
         // hi1 = parseFloat(  processedData[date]["high"] );
@@ -1121,7 +1121,7 @@ s4day = Low- 3*(High-Pday) ;
         // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
         // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
 
-       let x1next = vrect.x+vrect.w ;
+       let x1next = vrect.x+vrect.h ;
 
        console.log('got to end of next month dynamic,s1, p , r1 ==' , nextS1, nextP, nextR1 );
        

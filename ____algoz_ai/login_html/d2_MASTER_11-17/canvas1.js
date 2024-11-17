@@ -1097,7 +1097,7 @@ s4day = Low- 3*(High-Pday) ;
 
 
 // if( gEndOfHalfMonthDayDynamic ==1  && gGlob alPerFromData=="daily" ){
-    if(    button3==1  &&  gGlobalPerFromData=="daily" ){
+    if(   gGlobalPerFromData=="daily" ){
 
         // /// last assigned...  from today iff  perStr=="daily"
         // hi1 = parseFloat(  processedData[date]["high"] );
@@ -1121,7 +1121,7 @@ s4day = Low- 3*(High-Pday) ;
         // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
         // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
 
-       let x1next = vrect.x+vrect.w ;
+       let x1next = vrect.x+vrect.h ;
 
        console.log('got to end of next month dynamic,s1, p , r1 ==' , nextS1, nextP, nextR1 );
        

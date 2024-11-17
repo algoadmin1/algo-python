@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "299.1";
+let                                                                         gVer = "298.4";
 let             gDebugInfo = 0;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget.php?sym=" ;   
 
@@ -715,13 +715,13 @@ function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
     
     //  ############################################################################## should be a fn
     if(gDigitalCurrency==1){
-        gChartTextStr =  gSymbolStr +" " +  gCryptoName +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+g Ver+" php_v"+gV erPHP; 
+        gChartTextStr =  gSymbolStr +" " +  gCryptoName +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
 
     }else{
-        gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVe r+" php_v"+gV erPHP; 
+        gChartTextStr =  gSymbolStr +" "+ gPeriodStr+" Last: "+gCurrencyStr +gLastPriceStr + " as of "+ DateAbbreviate( datestr0 ,0 );   //+"    v"+gVer+" php_v"+gVerPHP; 
         
     }
-    gChartTextStr1 = "v"+gVer+"js   v"+gVerPHP+"p";   // +"php"; 
+    gChartTextStr1 = "v"+gVer+"  v"+gVerPHP+"p";   // +"php"; 
     gSymbolStrLower  = gSymbolStr.toLowerCase();
     
     // DETERMINE gCandleOffset
@@ -774,32 +774,14 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
     let eohmDynamic = 0;   // end of Half-month Dynamic - to show dynamic
     let eoyDynamic = 0;   // end of year Dynamic  - to show dynamic
 
-          let  sr0price = 0.0;  
-          let  sr0Y  =0; 
-
-          let op1 = 0;
-          let hi1 = 0;
-          let lo1 = 0;
-          let cl1 = 0;
-
-          let fsz = 16;
-          let xyoff = 4;
-          let fontStr ="Helvetica";
-
-        //   let datestr= "noset";
-
-          let txtStr ="";
-
-
-
     let j=0;
     for (var date in processedData) {
         if (processedData.hasOwnProperty(date)) {
             let datestr= date;
-              op1 = parseFloat(  processedData[date]["open"] );
-              hi1 = parseFloat(  processedData[date]["high"] );
-              lo1 = parseFloat(  processedData[date]["low"] );
-              cl1 = parseFloat(  processedData[date]["close"] );
+            let op1 = parseFloat(  processedData[date]["open"] );
+            let hi1 = parseFloat(  processedData[date]["high"] );
+            let lo1 = parseFloat(  processedData[date]["low"] );
+            let cl1 = parseFloat(  processedData[date]["close"] );
             let vol1 = parseFloat(  processedData[date]["volume"] );
             let eom = parseInt(  processedData[date]["endOfMonth"] );
             let eoq = parseInt(  processedData[date]["endOfQtr"] );
@@ -846,13 +828,13 @@ function DrawCandlesChart( ctx,  vrect , colScheme, wt ){
 
           //   if(x2m> vrect.x+vrect.h) x2m= vrect.x+vrect.h-1;
 
-        //   let  sr0price = 0.0;  
-        //   let  sr0Y  =0; 
+          let  sr0price = 0.0;  
+          let  sr0Y  =0; 
           let  sr0Ymax = vrect.y+vrect.h;
 
-        //   let fsz = 16;
-        //   let xyoff = 4;
-        //   let fontStr ="Helvetica";
+          let fsz = 16;
+          let xyoff = 4;
+          let fontStr ="Helvetica";
 
           let perStr1 =  processedData[date]["globalper"];
           let perStr = perStr1.toLowerCase();
@@ -1097,13 +1079,20 @@ s4day = Low- 3*(High-Pday) ;
 
 
 // if( gEndOfHalfMonthDayDynamic ==1  && gGlob alPerFromData=="daily" ){
-    if(    button3==1  &&  gGlobalPerFromData=="daily" ){
+    if(   gGlobalPerFromData=="daily" ){
 
         // /// last assigned...  from today iff  perStr=="daily"
         // hi1 = parseFloat(  processedData[date]["high"] );
         //  lo1 = parseFloat(  processedData[date]["low"] );
         //  cl1 = parseFloat(  processedData[date]["close"] );
 
+        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
+        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
+        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
+        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
+        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
+        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
+        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
         // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
         // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
         // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
@@ -1120,8 +1109,11 @@ s4day = Low- 3*(High-Pday) ;
         // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
         // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
         // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
+        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
+        // NOTE, *** these must be changed to hi/lo/close of the month (so hiMonth loMonth need fixin )
 
-       let x1next = vrect.x+vrect.w ;
+       let x1next = vrect.x+vrect.h ;
+
 
        console.log('got to end of next month dynamic,s1, p , r1 ==' , nextS1, nextP, nextR1 );
        
@@ -2025,7 +2017,7 @@ let gZipperUrl="https://algoz.ai/cronit/cronit.php";   // https://algoz.ai/croni
 
 function printZipperString( data, ctx){
     gZipper0 = data;
-    gZipper= data + "  algoz.ai Copyright (c) 2023-2025 by Algo Investor Inc  " + data;
+    gZipper= data + " " + data;
     // console.log("ZipperString gZipper str==", gZipper);
     // DrawText_noclip( ctx, gZipper, gCrawlX, gCra wlY,       12 , 'blue' , gGlobalFont );
 
