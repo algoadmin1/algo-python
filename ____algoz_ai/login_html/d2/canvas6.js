@@ -2057,11 +2057,12 @@ let gCrawlY=10;
 let gZipper0="             ";
 let gZipper= "             ";
 let gZipperUrl="https://algoz.ai/cronit/cronit.php";   // https://algoz.ai/cronit/cronit.php
-// let gZipperUrl="https://algoz.ai/cronit/crawl.php";   // https://algoz.ai/cronit/cronit.php
+// let gZipp erUrl="https://algoz.ai/cronit/crawl.php";   // https://algoz.ai/cronit/cronit.php
+let gCopyrightCrawl =  "  algoz.ai Copyright (c) 2023-2025 by Algo Investor Inc  ";
 
 function printZipperString( data, ctx){
     gZipper0 = data;
-    gZipper= data + "  algoz.ai Copyright (c) 2023-2025 by Algo Investor Inc  " + data;
+    gZipper= data +gCopyrightCrawl  + data;
     // console.log("ZipperString gZipper str==", gZipper);
     // DrawText_noclip( ctx, gZipper, gCrawlX, gCra wlY,       12 , 'blue' , gGlobalFont );
 
@@ -2162,7 +2163,7 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     // InitAndDrawImage(ctx, vrect, gAlgozLogo_fname, 10, -30, (gImgScale*1.2) );   // let gIm gScale = 0.325;
 
 
-
+// CRAWL ZIPPER SHOULD BE GOTTEN ONCE AT START
 
     GetTickerZipper( gZipperUrl , ctx )
         .then(data => printZipperString(data , ctx));
