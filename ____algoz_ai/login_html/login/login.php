@@ -430,8 +430,11 @@ tp_Cashflow_Business|9999-12-31|18|,tp_SaaSFintechTool_Pivots_365days|2025-10-09
                             //      THIS SHOULD BE  CONSTRUCTED  at login time so everything funnels through login.php,
                             //              where this $_SESSION["user_productstr"] = BuildSessionProducts(), located in database.php
                             //
-                                        $_SESSION["user_productstr"] = $productstr ;
-                           // note on these:  tp_AlgoInvestorNewsletter_3Month END DATE MUST BE STORED      
+                                    $_SESSION["user_productstr"] = $productstr ;
+                                    $_SESSION["appsecret"] = $appSecret ;
+                                    // note on these:  tp_AlgoInvestorNewsletter_3Month END DATE MUST BE STORED      
+
+
 
                                         if($msgprod==false)   header("Location: ../d2/index.php");
                                         die();    

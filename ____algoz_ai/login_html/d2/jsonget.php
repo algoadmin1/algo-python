@@ -1,8 +1,9 @@
 
 <?php                       
-                                                              $ver=  "294.6";
+                                                              $ver=  "294.8";
 
 date_default_timezone_set('America/New_York');
+require_once "../login/database.php";
 
 session_start();
 if (!(isset($_SESSION["user"])) ) {
@@ -12,6 +13,19 @@ if (!(isset($_SESSION["user"])) ) {
 
         // $_SESSION['crawlTime']=  t ;
         // $_SESSION['crawlstr']=  str ;
+        // from login
+        // $_SESSION["user"]  = $email ; 
+        // $_SESSION["userId"] = $userID0;    //   from indxmenu.php $userID0=$_SESSION["userId"];
+        // $_SESSION["numvisits"] = $numvisits;
+        // $_SESSION["userIP"] = $user_ip;
+        // $_SESSION["user_loc"] = $user_loc;
+        
+        // $_SESSION["user_lastDateTime"] = $user_lastDateTime;
+        // $_SESSION["user_lastDay"] = $user_lastDay ;
+        
+        // $_SESSION["user_productstr"] = $productstr ;
+        // $_SESSION["appsecret"] = $appSecret ;
+
 
     }
 

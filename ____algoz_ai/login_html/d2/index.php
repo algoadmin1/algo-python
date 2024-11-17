@@ -1,16 +1,40 @@
 <?php
-                                                        $ver=  "17.3";
+                                                        $ver=  "17.5";
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
 date_default_timezone_set('America/New_York');
 
+$emailName="Guest";
 
 session_start();
 if(! (isset($_SESSION["user"])) ) {
    header("Location: ../login/login.php");
 }else{
         $email1=$_SESSION["user"];
+
+        $emailName0   =$email1; // "johnnie1385@gmail.com";
+        // Remove everything to the right of '@', including '@'
+        $emailName = strstr($emailName0 , '@', true);
+        
+        // echo $result; // Output: "johnnie1385"
+        
+
+        // $_SESSION['crawlTime']=  t ;
+        // $_SESSION['crawlstr']=  str ;
+        // from login
+        // $_SESSION["user"]  = $email ; 
+        // $_SESSION["userId"] = $userID0;    //   from indxmenu.php $userID0=$_SESSION["userId"];
+        // $_SESSION["numvisits"] = $numvisits;
+        // $_SESSION["userIP"] = $user_ip;
+        // $_SESSION["user_loc"] = $user_loc;
+        
+        // $_SESSION["user_lastDateTime"] = $user_lastDateTime;
+        // $_SESSION["user_lastDay"] = $user_lastDay ;
+        
+        // $_SESSION["user_productstr"] = $productstr ;
+        // $_SESSION["appsecret"] = $appSecret ;
+
     }
 
 // require_once '../login/events.php';
@@ -424,7 +448,7 @@ if (isset($eventsTable[0])) {
 
             <form action="#" id="search-form" onsubmit="event.preventDefault(); handleSearch();">
                 <div class="form-input">
-                    <input id="symbol-input" type="search" placeholder="symbol..." />
+                    <input id="symbol-input" type="search" placeholder="NVDA, BTC-, SOL-, /ai <prompt> ..." />
                     <button class="search-btn" type="submit">
                         <i class='bx bx-search'></i>
                     </button>
@@ -702,7 +726,8 @@ if (isset($eventsTable[0])) {
                 <div class="orders">
                     <div class="header">
                         <i class='bx bx-receipt'></i>
-                        <h3>Recent Activity</h3>
+                        <h3><?php echo $emailName ; ?>'s Activity</h3>
+                        <!-- <h3>Recent Activity</h3> -->
                     </div>
 
                     <table>

@@ -1,5 +1,5 @@
 <?php
-//                                  ver 6.92
+//                                  ver 6.93
 // Aug 28 2024
 //
 // Sep 8 2024 : to add another project:
@@ -27,7 +27,7 @@ $servername= "localhost" ;
 $hostName  = "localhost" ;  
 
 $prefix=    "u184668114"; 
-
+$appSecret ="lagboslaxlasjfk10023";
 $username="u184668114_algozai";      
 $dbUser  ="u184668114_algozai";
 
