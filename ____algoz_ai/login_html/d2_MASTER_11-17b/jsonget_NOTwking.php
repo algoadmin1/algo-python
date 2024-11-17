@@ -1,40 +1,25 @@
 
 <?php                       
-                                                              $ver=  "294.6";
+                                                              $ver=  "290.1";
 
 date_default_timezone_set('America/New_York');
 
-session_start();
-if (!(isset($_SESSION["user"])) ) {
-   header("Location: ../login/login.php");
-}else{
-        $email1=$_SESSION["user"];
-
-        // $_SESSION['crawlTime']=  t ;
-        // $_SESSION['crawlstr']=  str ;
-
-    }
+$gDataSeriesTypeStr ="daily";
 
 
-require_once 'cryptoslist.php';  // gen'd by formatcsv.php <-- takes digital_currency_list.csv
-
-
-
-$apikey ="M3LB7MG3JF83E3";
-$intradaystrs = [ "notIntraday", "intraday"];
+$intradaystrs = [ "notIntraday", "intraday"]; // 1,5,15,30,60, daily, weekly, monthly
 $periods = [ "daily", "weekly", "monthly", "1min" , "5min", "15min" , "30min", "60min" ];
+// $periods = [ "daily", "weekly", "monthly", "Daily", "Weekly", "Monthly", "1min" , "5min", "15min" , "30min", "60min" ];
 $months  = [ "zero", "jan", "feb", "mar" , "apr", "may" , "jun", "jul", "aug", "sep" , "oct", "nov", "dec" ];
-// $msg=1 ;
-$msg=0;
+$msg=1 ;
 
 //globals for js    // global $ChartHigh , $ChartHighIdx , $ChartHighDate , $ChartLow , $ChartLowIdx , $ChartLowDate ;
 $ChartHigh  = 0;
 $ChartHighIdx = 0;
-$ChartHighDate = 0; //"nil";   // =0;
-
+$ChartHighDate = "1999-01-01";
 $ChartLow   = 1000000;
 $ChartLowIdx = 0;
-$ChartLowDate = 0; //"nil";  // =0;
+$ChartLowDate = "1999-12-31";
 
 $button1 = 0;
 $button2 = 0;
@@ -51,7 +36,7 @@ $button1name = "Chart";
 $button2name = "Buy Sell";
 $button3name = "Sup Res";
 $button4name = "Gaps" ;              //; "Gaps Detection";
-$button5name = "Time";
+$button5name = "PivP3";
 $button6name = "Fib";
 $button7name = "Fin's";
 $button8name = "Color";
@@ -59,48 +44,13 @@ $button8name = "Color";
 $button9name = "Aux Button 9";
 $button10name= "Aux Button 10";
 
-$adjustedCloseFlag = 0 ;
-$gDataSeriesTypeStr="daily";
-
 
 function CheckStringArray($arr, $str) {
     // Use in_array to check if the string exists in the array
     return in_array($str, $arr);
 }
 
-//https://www.alphavantage.co/query?function=CRYPTO_INTRADAY&symbol=BTC&market=USD&interval=15min&apikey=
-function TestAndGetWellFormedCryptoSymbol($sym) {
-    global $gCryptoSymbol, $gCryptoCurrency, $gCryptoName;
 
-    // Check if the symbol contains a "-"
-    if (strpos($sym, '-') === false) {
-        return "nil";
-    } else {
-        // Split $sym at the "-" character
-        list($symcrypto, $currency) = explode('-', $sym, 2);
-
-        // Define $astr and $bstr as specified
-        $astr = "&symbol=";
-        $bstr = "&market=";
-
-        $gCryptoSymbol  = $symcrypto;
-        $gCryptoCurrency= $currency;
-
-        // $gCryptoName = ReturnCryptoName($cryptos_allowed, $gCryptoSymbol );   
-        $gCryptoName = ReturnCryptoName(  $gCryptoSymbol );   
-        // if($gCryptoName=="nil")  return "nil";
-        if($gCryptoName=="nil"){
-            $gCryptoSymbol  = "BTC"; //$symcrypto;
-            $gCryptoCurrency= "USD"; //  $currency;
-            $gCryptoName= "Bitcoin";
-        }
-
-        // Create the new string
-        $newstr = $astr . $symcrypto . $bstr . $currency;
-
-        return $newstr;
-    }
-}
 
 
 
@@ -112,23 +62,6 @@ if(isset( $_GET['sym'] )){
 $sym = strtoupper($sym);
 
 
-
-//   crypto
-$gDigitalCurrency= 0;
-$gCryptoCurrency="USD";
-$gCryptoSymbol="BTC";
-$gCryptoName="Bitcoin";
-
-$gSymCrypto = TestAndGetWellFormedCryptoSymbol($sym);  // test for "BTC-USD",  Output: &symbol=BTC&market=USD
-if($gSymCrypto != "nil"){
-    $gDigitalCurrency= 1;
-    $sym = $gCryptoSymbol;  // updated inside T3stAndGet...().
-}else{
-    $gDigitalCurrency= 0;
-}
-if($msg==1 &&  $gDigitalCurrency== 1){
-    echo "] CRYPTO FOUND!!!!   ;  gSymCrypto= $gSymCrypto , sym==". $sym. " currency==".$gCryptoCurrency ;
-}
 
 
 
@@ -142,297 +75,346 @@ if(isset( $_GET['sch'] )){
 }
 
 
+
+
+
+
 if(isset( $_GET['per'] )){
-    $per0 = $_GET['per'] ;
-    $per="daily";
-    if($per0=='1')  $per0="1min";
-    if($per0=='5')  $per0="5min";
-    if($per0=='15') $per0="15min";
-    if($per0=='30') $per0="30min";
-    if($per0=='60') $per0="60min";
+        $per0 = $_GET['per'] ;
+        if($msg==1)  echo "<br /> PERIOD $ _GET['per'],  $ per0 == ". $per0;
 
-    if($per0=='d' || $per0=='D' || $per0=='DAILY' || $per0=='Daily' || $per0=='day' || $per0=='Day')   $per0="daily";
-    if($per0=='w' || $per0=='W' || $per0=='WEEKLY' || $per0=='Weekly')  $per0="weekly";
-    if($per0=='m' || $per0=='M' || $per0=='MONTHLY' || $per0=='Monthly') $per0="monthly";
+        if($per0=='1') $per0="1min";
+        if($per0=='5') $per0="5min";
+        if($per0=='15') $per0="15min";
+        if($per0=='30') $per0="30min";
+        if($per0=='60') $per0="60min";
+        if($msg==1)  echo "<br /> PERIOD adj(1-->1min)    $ per0 == ". $per0;
 
-    if(CheckStringArray($periods, $per0)) $per=$per0;
-    if($per=="daily" || $per=="weekly" || $per=="monthly" ) $per=ucfirst($per);  // Daily <== daily
+        $per="daily";
+
+
+
+
+        if(CheckStringArray($periods, $per0)) $per=$per0;
+
+
+        if($per=="daily" || $per=="weekly" || $per=="monthly" ) $per=ucfirst($per);  // Daily <== daily
+
+        if($msg==1) echo "<br /> PERIOD **SET: ". $per;
+        
 }else{
-    $per = "Daily";
+        $per = "Daily";
+        if($msg==1) echo "<br /> PERIOD notSET - defaulting to:". $per;
+
 }
 
 
 
-$intraday=0;   // assume intraday false
-if($per!="Daily" && $per!="Weekly" && $per!="Monthly" ){
-    // if( $per=="1min" ||    ||  ){ }
-     $intraday=1;
-     $gDataSeriesTypeStr= $per;
-    }else{
-    $gDataSeriesTypeStr=strtolower($per);   // ie weekly
-}
+
+
+$intraday=0;   // ie false
+if($per!="Daily" && $per!="Weekly" && $per!="Monthly" ) $intraday=1;
 $timeseriesStr = "Time Series (". $per. ")";
 
-$gGlobalPER = $per;
 
-$barlen='daily';
-if($per=="1min") $barlen="1";
-if($per=="5min") $barlen="5";
-if($per=="15min") $barlen="15";
-if($per=="30min") $barlen="30";
-if($per=="60min") $barlen="60";
-
-if($per=="Daily")   $barlen=$gDataSeriesTypeStr;
-if($per=="Weekly")  $barlen=$gDataSeriesTypeStr;   // ie weekly
-if($per=="Monthly") $barlen=$gDataSeriesTypeStr;
+if($msg==1){
+    echo " ** PER =". $per;
+    echo "  ** intraday =". $intradaystrs[$intraday];
+    echo " tser = ". $timeseriesStr;
+}
 
 
-// if($ms g==1){
-//     echo " ** PER =". $per;
-//     echo "  ** intraday =". $intradaystrs[$intraday];
-//     echo " tser = ". $timeseriesStr;
-// }
 
-$gAdjCloseThreshold=0.975;
 
-function GetJsonData($url, $maxCandles, $strkey) {
-    global $adjustedCloseFlag ,  $gDataSeriesTypeStr, $gDigitalCurrency, $gGlobalPER , $barlen, $gAdjCloseThreshold;
-    $flag0=0;
-    $flag1=1;
-    $abs_cl=0.0;
-    $ohlc_adjusted =0;
-    $ohlc_adjusted_ratio=1.0;
 
+
+
+
+
+
+// ######################################################## FUNCTIONS ############################
+// ######################################################## FUNCTIONS ############################
+// ######################################################## FUNCTIONS ############################
+// ######################################################## FUNCTIONS ############################
+// ######################################################## FUNCTIONS ############################
+// ######################################################## FUNCTIONS ############################
+
+
+
+function GetJsonData($url, $maxCandles, $strkey, $adjustedCloseFlag) {
+    global $gDataSeriesTypeStr, $gPeriod;
 
     try {
-        $json = file_get_contents($url);    // Fetch the JSON data from the URL
-        $data = json_decode($json, true);     // Decode the JSON data into a PHP array
-                    
-                    // Check if the "Time Series (Daily)" key exists
-                    // if (!isset($data["Time Series (Daily)"])) {
-                    if (!isset($data[ $strkey ])) {
-                            throw new Exception("Invalid JSON structure or missing Time Series data.");
-                    }
+        // Fetch the JSON data from the URL
+        $json = file_get_contents($url);
 
-        // Extract the daily time series data
-    // if(isset($data[ $strkey ])){;}     //BUG!!! // $timeSeries = $data["Time Series (Daily)"];  
-        $timeSeries = $data[ $strkey ]; 
-        $result = [];           // Initialize an empty array to hold the result
+        // Decode the JSON data into a PHP array
+        $data = json_decode($json, true);
 
-
-
-
-
-    $timestr = "";
-
-    // Loop through the time series data and collect the required information
-    foreach ($timeSeries as $date => $values) {
-
-
-
-        $timestr = "16:00:00";
-        if(strlen($date) > 10) {   // ie there is a time component  "2024-11-01 04:00:00.324"
-             $timestr = GetRestOfDateTimeStr($date);   // ret's "04:00:00.324"
+        
+        // Check if the "Time Series (Daily)" key exists
+        // if (!isset($data["Time Series (Daily)"])) {
+        if (!isset($data[ $strkey ])) {
+                throw new Exception("Invalid JSON structure or missing Time Series data.");
         }
 
+        // Extract the daily time series data
+        // $timeSeries = $data["Time Series (Daily)"];  
+        $timeSeries = $data[ $strkey ]; 
+        $numstr = "";
+        
+        // Initialize an empty array to hold the result
+        $result = [];
 
-        if($adjustedCloseFlag == 0  ||  $gDigitalCurrency==1 ){      //  for stocks non-AdjClose, & ALL Crypto 
+        // Loop through the time series data and collect the required information
+        foreach ($timeSeries as $date => $values) { // Format the required fields
+            
+            if($adjustedCloseFlag == 0 ||  $gDataSeriesTypeStr=="intraday"){      // old but may need it for INTRADAY
+                    $numstr = $gDataSeriesTypeStr."_".$gPeriod ;
 
-            if( $intraday==0 ){     // old daily, weekly monthly stocks **** NO SPLIT DATAs
                     $result[$date] = [
-                        "dateOrig" => $date  ,
-                        "timeOrig" => $timestr  ,
-
-                        "openOrig" => $values["1. open"],
-                        "highOrig" => $values["2. high"],
-                        "lowOrig" =>  $values["3. low"],
-                        "closeOrig" => $values["4. close"],
-                        "ohlc_adjusted" => $ohlc_adjusted, 
-                        "ohlc_adjusted_ratio" => $ohlc_adjusted_ratio, 
-
                         "open" => $values["1. open"],
                         "high" => $values["2. high"],
-                        "low" =>  $values["3. low"],
+                        "low"   => $values["3. low"],
                         "close" => $values["4. close"],
-
                         "volume" => $values["5. volume"],
-
-                        "adjustedcloseflag" => $flag0,    // ie no adjusted close here...
-                        "seriestype" => $gDataSeriesTypeStr,
-                        "seriescrypto" => $gDigitalCurrency,
-                        "barlen"  => $barlen,
-                        "globalper" =>  $gGlobalPER
+                        "timeper" => $numstr
                     ];
 
-            }else if( $intraday==1    &&   $gDigitalCurrency==0 ){    // ie. stocks intraday $adjstedCloseFlag == 0
-                    //  $numstr = $gDataSeriesTypeStr."_".$gPeriod ;
-                        $result[$date] = [
-                            "dateOrig" => $date  ,
-                            "timeOrig" => $timestr  ,
+            }else  if($adjustedCloseFlag == 1  &&  $gDataSeriesTypeStr=="daily"){    // *NEW*  iff daily adjusted, THIS HAS 8. split coefficient
+                    $result[$date] = [
+                        "open" => $values["1. open"],
+                        "high" => $values["2. high"],
+                        "low" => $values["3. low"],
+                        "close" => $values["4. close"],
+                        "adjustedclose" => $values["5. adjusted close"],
+                        "volume" => $values["6. volume"],
+                        "dividendamount" => $values["7. dividend amount"],
+                        "splitcoefficient" => $values["8. split coefficient"],  // only on daily data
+                        "timeper" => $gDataSeriesTypeStr
 
-                            "openOrig" => $values["1. open"],
-                            "highOrig" => $values["2. high"],
-                            "lowOrig" =>  $values["3. low"],
-                            "closeOrig" => $values["4. close"],
-                            "ohlc_adjusted" => $ohlc_adjusted,
-                            "ohlc_adjusted_ratio" => $ohlc_adjusted_ratio, 
+                    ];
 
-                            "open" => $values["1. open"],
-                            "high" => $values["2. high"],
-                            "low"   => $values["3. low"],
-                            "close" => $values["4. close"],
+            }else  if(   ($adjustedCloseFlag == 1)    &&   ( $gDataSeriesTypeStr=="weekly" ||  $gDataSeriesTypeStr=="monthly")   ){    
+                    $result[$date] = [
+                        "open" => $values["1. open"],
+                        "high" => $values["2. high"],
+                        "low" => $values["3. low"],
+                        "close" => $values["4. close"],
+                        "adjustedclose" => $values["5. adjusted close"],
+                        "volume" => $values["6. volume"],
+                        "dividendamount" => $values["7. dividend amount"],
+                        // "splitcoefficient" => $values["8. split coefficient"]
 
-                            "volume" => $values["5. volume"],
+                        "timeper" => $gDataSeriesTypeStr
 
-                            "adjustedcloseflag" => $flag0,    // ie no adjusted close on INTRADAY...
-                            "seriestype" => $gDataSeriesTypeStr,
-                            "seriescrypto" => $gDigitalCurrency,
-                            "barlen"  => $barlen,
-                            "globalper" =>  $gGlobalPER           
-                        ];
-
-                }//if
-
-
-
+                    ];
+            }
 
 
+/*
 
-
-
-        }else if($adjustedCloseFlag == 1 ){  
-            // adj close for stocks only (splits/divs), DAILY != wk/mon , ie daily has splitcoefficient
-
-
-                                        if( $gDataSeriesTypeStr=="daily" ){    // *NEW*  iff daily adjusted, THIS HAS 8. split coefficient
-                                        //  https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSTR&outputsize=compact&apikey=91M7LB7MG3JHY129
-                                        
-                                                        $op        = floatVal( $values["1. open"] );
-                                                        $hi        = floatVal( $values["2. high"] );
-                                                        $lo        = floatVal( $values["3. low"] );
-                                                        $cl        = floatVal( $values["4. close"] );
-
-                                                        $adjcl     = floatVal( $values["5. adjusted close"]);
-                                                                    
-                                                        $new_ratio = $adjcl / $cl;     // ie 10-1 split cl =1500, adjCl =150 150/1500 = .10 = n3wRatio
-                                                        $abs_cl = abs( $adjcl - $cl  );  // if > 0.95
-
-
-                                                        if(  $ohlc_adjusted==1  ){            
-                                                                            $op = $op * $ohlc_adjusted_ratio;
-                                                                            $hi = $hi * $ohlc_adjusted_ratio;
-                                                                            $lo = $lo * $ohlc_adjusted_ratio;
-                                                                            $cl = $cl * $ohlc_adjusted_ratio;   // ie.  $1500 * 0.10 == $150
-                                                            }else   if($abs_cl  > $gAdjCloseThreshold ){
-                                                                
-                                                                            $ohlc_adjusted_ratio = $new_ratio;     // reset the ratio
-                                                                            $op = $op * $ohlc_adjusted_ratio;
-                                                                            $hi = $hi * $ohlc_adjusted_ratio;
-                                                                            $lo = $lo * $ohlc_adjusted_ratio;
-                                                                            $cl = $cl * $ohlc_adjusted_ratio;   // ie.  $1500 * 0.10 == $150
-                                                                            $ohlc_adjusted=1;
-                                                         }
-
-
-
-                                                    $result[$date] = [
-                                                            "dateOrig" => $date  ,
-                                                            "timeOrig" => $timestr  ,
-
-                                                            "openOrig" =>  $values["1. open"],
-                                                            "highOrig" =>  $values["2. high"],
-                                                            "lowOrig" =>   $values["3. low"],
-                                                            "closeOrig" => $values["4. close"],
-                                                            "ohlc_adjusted" => $ohlc_adjusted,
-                                                            "ohlc_adjusted_ratio" => $ohlc_adjusted_ratio, 
-
-                                                            "open" => $op,
-                                                            "high" => $hi,
-                                                            "low" =>  $lo,
-                                                            "close" => $cl,
-                                                            // "open" => $values["1. open"],
-                                                            // "high" => $values["2. high"],
-                                                            // "low" =>  $values["3. low"],
-                                                            // "close" => $values["4. close"],
-
-
-                                                            "adjustedclose" => $values["5. adjusted close"],
-                                                            "volume" => $values["6. volume"],
-                                                            "dividendamount" => $values["7. dividend amount"],
-                                                            "splitcoefficient" => $values["8. split coefficient"],  //  *** only on daily data
-
-                                                            "adjustedcloseflag" => $flag1, 
-                                                            "seriestype" => $gDataSeriesTypeStr,
-                                                            "seriescrypto" => $gDigitalCurrency,
-                                                            "barlen"  => $barlen,
-
-                                                            "globalper" =>  $gGlobalPER
-                                                    ];
+// INTRADAY
+{
+    "Meta Data": {
+        "1. Information": "Intraday (5min) open, high, low, close prices and volume",
+        "2. Symbol": "IBM",
+        "3. Last Refreshed": "2024-10-30 19:55:00",
+        "4. Interval": "5min",
+        "5. Output Size": "Compact",
+        "6. Time Zone": "US/Eastern"
+    },
+    "Time Series (5min)": {
+        "2024-10-30 19:55:00": {
+            "1. open": "204.9600",
+            "2. high": "205.0100",
+            "3. low": "204.9000",
+            "4. close": "204.9000",
+            "5. volume": "68"
+        },
+        "2024-10-30 19:50:00": {
+            "1. open": "204.6900",
+            "2. high": "205.1500",
+            "3. low": "204.6900",
+            "4. close": "204.9600",
+            "5. volume": "27"
+        },
+        "2024-10-30 19:45:00": {
+            "1. open": "204.7000",
+            "2. high": "204.7000",
+            "3. low": "204.5300",
+            "4. close": "204.5500",
+            "5. volume": "595"
+        },
+        "2024-10-30 19:40:00": {
+            "1. open": "204.7800",
+            "2. high": "204.7800",
+            "3. low": "204.7000",
+            "4. close": "204.7000",
+            "5. volume": "62"
+        }, 
 
 
 
 
 
-                                        }else  if(    $gDataSeriesTypeStr=="weekly"     ||    $gDataSeriesTypeStr=="monthly"    ){ 
-                                                // SHOULD TRY to  GET THERE, and detect cl vs adjClose diff, like daily 
-
-                                                // https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=MSTR&outputsize=compact&apikey=91M7LB7MG3JHY129
-                                                // https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=MSTR&outputsize=compact&apikey=91M7LB7MG3JHY129
-                                                        $result[$date] = [
-                                                            "dateOrig" => $date  ,
-                                                            "timeOrig" => $timestr  ,
-
-                                                            "openOrig" => $values["1. open"],
-                                                            "highOrig" => $values["2. high"],
-                                                            "lowOrig" =>  $values["3. low"],
-                                                            "closeOrig" => $values["4. close"],
-                                                            "ohlc_adjusted" => $ohlc_adjusted,
-                                                            "ohlc_adjusted_ratio" => $ohlc_adjusted_ratio, 
 
 
-                                                            "open" => $values["1. open"],
-                                                            "high" => $values["2. high"],
-                                                            "low" =>  $values["3. low"],
-                                                            "close" => $values["4. close"],
+//monthly adj data
+ "2024-07-31": {
+            "1. open": "1410.0000",
+            "2. high": "1837.0000",
+            "3. low": "1202.3200",
+            "4. close": "1614.4400",
+            "5. adjusted close": "161.4440",
+            "6. volume": "28002730",
+            "7. dividend amount": "0.0000"
+        },
 
-                                                            "adjustedclose" => $values["5. adjusted close"],
-                                                            "volume" => $values["6. volume"],
-                                                            "dividendamount" => $values["7. dividend amount"],
-                                                            // "splitcoefficient" => $values["8. split coefficient"]
+// weekly adj data
+ "2024-07-12": {
+            "1. open": "1314.5300",
+            "2. high": "1435.4044",
+            "3. low": "1258.7817",
+            "4. close": "1396.7600",
+            "5. adjusted close": "139.6760",
+            "6. volume": "4828195",
+            "7. dividend amount": "0.0000"
 
-                                                            "adjustedcloseflag" => $flag1, 
-                                                            "seriestype" => $gDataSeriesTypeStr,
-                                                            "seriescrypto" => $gDigitalCurrency,
-                                                            "barlen"  => $barlen,
 
-                                                            "globalper" =>  $gGlobalPER         
-                                                        ];       
+// daily adj  data
+  "2024-08-09": {
+            "1. open": "135.89",
+            "2. high": "136.685",
+            "3. low": "129.55",
+            "4. close": "135.37",
+            "5. adjusted close": "135.37",
+            "6. volume": "7330433",
+            "7. dividend amount": "0.0000",
+            "8. split coefficient": "1.0"
+        },
+        "2024-08-08": {
+            "1. open": "130.23",
+            "2. high": "136.76",
+            "3. low": "128.06",
+            "4. close": "135.99",
+            "5. adjusted close": "135.99",
+            "6. volume": "10378305",
+            "7. dividend amount": "0.0000",
+            "8. split coefficient": "10.0"
+        },
+        "2024-08-07": {
+            "1. open": "1408.78",
+            "2. high": "1421.58",
+            "3. low": "1240.13",
+            "4. close": "1246.85",
+            "5. adjusted close": "124.685",
+            "6. volume": "1093385",
+            "7. dividend amount": "0.0000",
+            "8. split coefficient": "1.0"
+        },
+        "2024-08-06": {
+            "1. open": "1326.0",
+            "2. high": "1394.94",
+            "3. low": "1262.18",
+            "4. close": "1369.21",
+            "5. adjusted close": "136.921",
+            "6. volume": "1226023",
+            "7. dividend amount": "0.0000",
+            "8. split coefficient": "1.0"
+        },
+        "2024-08-05": {
+            "1. open": "1051.65",
+            "2. high": "1354.2699",
+            "3. low": "1024.02",
+            "4. close": "1309.0",
+            "5. adjusted close": "130.9",
+            "6. volume": "2267755",
+            "7. dividend amount": "0.0000",
+            "8. split coefficient": "1.0"
+        },
+*/
 
-                                            } //    $gDataSeriesTypeStr=="weekly"     ||    $gDataSeriesTypeStr=="monthly"    ){ 
 
-            }//  else if($adjustedCloseFlag == 1 ){  
 
             // Stop adding if we've reached the maximum number of candles
             if (count($result) >= $maxCandles) {
                 break;
             }
+        }
 
+        // Reverse the array so the data is in ascending order
+        $result = array_reverse($result);
 
-        }// forea
-
-
-
-        $result = array_reverse($result);        // Reverse the array so the data is in ascending order
+        // Return the final array
         return $result;
-
     } catch (Exception $e) {
         // Handle any exceptions by returning an empty array or logging an error
         error_log("Error fetching or processing data: " . $e->getMessage());
         return [];
     }
-}//fn
+}
 
 /*
+
+
+
+
+//  https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=MSTR&outputsize=full&apikey=91M7LB7MG3JHY129
+
+// MONTHLY ADJ CLOSE DATA
+"Monthly Adjusted Time Series": {
+        "2024-10-30": {
+            "1. open": "168.5200",
+            "2. high": "267.8900",
+            "3. low": "157.0200",
+            "4. close": "247.3100",
+            "5. adjusted close": "247.3100",
+            "6. volume": "418047718",
+            "7. dividend amount": "0.0000"
+        },
+        "2024-09-30": {
+            "1. open": "132.0000",
+            "2. high": "179.6000",
+            "3. low": "113.6900",
+            "4. close": "168.6000",
+            "5. adjusted close": "168.6000",
+            "6. volume": "229358616",
+            "7. dividend amount": "0.0000"
+        },
+        "2024-08-30": {
+            "1. open": "1615.0000",
+            "2. high": "1634.3600",
+            "3. low": "126.5900",
+            "4. close": "132.4200",
+            "5. adjusted close": "132.4200",
+            "6. volume": "172566116",
+            "7. dividend amount": "0.0000"
+        },
+        "2024-07-31": {
+            "1. open": "1410.0000",
+            "2. high": "1837.0000",
+            "3. low": "1202.3200",
+            "4. close": "1614.4400",
+            "5. adjusted close": "161.4440",
+            "6. volume": "28002730",
+            "7. dividend amount": "0.0000"
+        },
+        "2024-06-28": {
+            "1. open": "1601.0000",
+            "2. high": "1734.6977",
+            "3. low": "1325.5414",
+            "4. close": "1377.4800",
+            "5. adjusted close": "137.7480",
+            "6. volume": "24914682",
+            "7. dividend amount": "0.0000"
+        },
+
+
+
+
+
+
 R4day = High+ 3*(Pday-Low) ;
 R3day = (Pday-S1day) + R2day;
 R2day = Pday + High – Low;
@@ -451,12 +433,12 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
     $BuySignal = 0;
     $SellSignal = 0;
     
+
     // init vars
     $thisMonth = 'nil';    
     $LastMonthDate = 'nil'; //'1900-12-31';
     $LastMonth = 'nil';
 
-    $MonthOpen  = 0;  // i=0 month0pen not accuracte...
     $MonthHigh  = 0;
     $MonthLow   = 1000000;
     $MonthClose = 0;
@@ -469,11 +451,11 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 
     $ChartHigh  = 0;
     $ChartHighIdx = 0;
-    $ChartHighDate = "nil";
+    $ChartHighDate = "1999-01-01";
 
     $ChartLow   = 1000000;
     $ChartLowIdx = 0;
-    $ChartLowDate = "nil";
+    $ChartLowDate = "1999-01-21";
 
 // NEW_P3  
     $gapPctThreshold  = 0.05;
@@ -512,12 +494,14 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 
 
     foreach ($data as $date => &$value) {    // Loop through each element of the array
-        
-            $high  = floatval($value['high']);     // this candle's h,l,c,o [0]
-            $low   = floatval($value['low']);
-            $close = floatval($value['close']);
-            $open  = floatval($value['open']);
 
+
+
+        // this candle's h,l,c,o [0]
+        $high  = floatval($value['high']);
+        $low   = floatval($value['low']);
+        $close = floatval($value['close']);
+        $open  = floatval($value['open']);
 
 // start pivot get stuff
         $h0=0;    $l0= 0; $c0= 0; $o0= 0;
@@ -525,9 +509,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $r1 = 0;  $r2=0; $r3=0; $r4=0;
 
 
-    if($i==0){ 
-            $MonthOpen = $open;
-
+        if($i==0){ 
             // Heikin Ashi 1st [0] data piece
             $HA_close = ($open + $high + $low + $close )/4;
             $HA_open  = ($open + $close )/2;
@@ -539,15 +521,12 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
             $value['HA_high']   =   $HA_high;
             $value['HA_low']    =   $HA_low;
         }
-
-// first do i>0 stuff like HA and 
-    if($i>0){  // for Pivots & HA, proces [1] and up
+        if($i>0){  // for Pivots & HA, proces [1] and up
                 //  get the O,H,L,C prices from YESTERDAY 
                 $h0= array_values($data)[$i-1]['high'];
                 $l0= array_values($data)[$i-1]['low'];
                 $c0= array_values($data)[$i-1]['close'];
                 $o0= array_values($data)[$i-1]['open'];
-                
 
 
                 // Heikin Ashi  data piece
@@ -653,7 +632,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
                     
                         
 
-    }else{  // if i<=0 we're at start of data candles RESET vars
+            }else{  // if i==0 we're at start of data candles RESET vars
 
                 $h0=0; $l0= 0; $c0= 0;
                 $s1 = 0;  $s2=0; $s3=0; $s4=0;
@@ -661,8 +640,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
                 // $P=0; $P3=0;
                 $P=$close; 
                 $P3=$close;   // get non-zero vals
-    }
-
+            }
 
             // after local vars set, assign arr vals
             $value['P']  = $P;
@@ -695,24 +673,13 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 
 //
 //    NEW ######################  ck Month to store data
+//
+        $thisMonth = substr( $date, 0, 7 );   // '2024-10';   
 
-        // on every loop, set eow to zero, regardless of  i
-        $value['endOfWeek'] = 0;
-        // intraday...
-        $value['endOfMorning'] = 0;
-        $value['endOfHour'] = 0;
-
-
-    $thisMonth       = substr( $date, 0, 7 );   // '2024-10'     from  '2024-10-23' ;   
-    $thisMonthMMstr  = substr( $thisMonth, 5, 2 );   // '10'     from  '2024-10' ;   
-    
-        if( $thisMonth != $LastMonth ){    // ie '2024-10' vs '2024-09'
+        if( $thisMonth != $LastMonth ){
             // here we have NOT set $MonthHigh, Low or Close  or Last so 
             //  we have a NEW MONTH HERE, LETS GET LAST MONTH'S #'S
             
-            $value['monthOpen']     = $MonthOpen;  //  really last monht's open; except first time it will be zero until new monht
-            $MonthOpen              =  $open ;     // since we are on a new month, set it for next != monts
-
             $value['monthHigh']     = $MonthHigh;
             $value['monthLow']      = $MonthLow;
             $value['monthClose']    = $MonthClose;
@@ -752,23 +719,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
             $value['X2month'] = 0;
             $value['Y2month'] = 0;
 
-
-            $value['endOfMonth'] = 1;       // *** KEY THIS IS A New month like Jul 01  or Apr 02(mon)
-
-
-
-            // check if  NEW mon = jan apr jul oct
-            if( $thisMonthMMstr=="01" || $thisMonthMMstr=="04" || $thisMonthMMstr=="07" || $thisMonthMMstr=="10" ){
-                $value['endOfQtr'] = 1;
-            }else $value['endOfQtr'] = 0;
-
-            // check if  NEW mon = jan     $value['endOf Year'] = 1;
-            if($thisMonthMMstr=="01" ){
-                $value['endOfYear'] = 1;
-            }else    $value['endOfYear'] = 0;
-
-
-
+        $value['endOfMonth'] = 1;
 
             // reset monthly cnting vars
             $LastMonth  = $thisMonth ;
@@ -791,7 +742,6 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
             $LastMonthDate = $date;
 
             // Zero out everything
-            $value['monthOpen'] = 0;
             $value['monthHigh'] = 0;
             $value['monthLow'] =  0; 
             $value['monthClose'] =0;  
@@ -816,18 +766,14 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
             $value['X2month'] = 0;
             $value['Y2month'] = 0;
 
-
         $value['endOfMonth'] = 0;
-        $value['endOfQtr']   = 0;  // if not eom, then NOT eoq, eoy...
-        $value['endOfYear']  = 0;
 
-        }// if month == lastM0nth
+        }
 
         // ##########################################################  END OF monthly
 
 
         // Add other fields and set them to 0 initially
-        $value['weekOpen'] = 0;
         $value['weekHigh'] = 0;
         $value['weekLow'] = 0;
         $value['weekClose'] = 0;
@@ -853,34 +799,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         // ##########################################################  END OF weekly
 
 
-        $value['qtrOpen']  = 0;
-        $value['qtrHigh']  = 0;
-        $value['qtrLow']   = 0;
-        $value['qtrClose'] = 0;
-        $value['qtrLastDate'] = "nil";
-        $value['qtrDaysCnt'] = 0 ;
 
-
-        $value['R4qtr'] = 0;
-        $value['R3qtr'] = 0;
-        $value['R2qtr'] = 0;
-        $value['R1qtr'] = 0;
-        $value['Pqtr'] = 0;
-        $value['P3qtr'] = 0;
-        $value['S1qtr'] = 0;
-        $value['S2qtr'] = 0;
-        $value['S3qtr'] = 0;
-        $value['S4qtr'] = 0;
-
-        $value['X1qtr'] = 0;
-        $value['Y1qtr'] = 0;
-        $value['X2qtr'] = 0;
-        $value['Y2qtr'] = 0;
-
-        // ##########################################################  END OF quarterly
-
-
-        $value['yearOpen']  = 0;
         $value['yearHigh']  = 0;
         $value['yearLow']   = 0;
         $value['yearClose'] = 0;
@@ -904,7 +823,7 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['X2year'] = 0;
         $value['Y2year'] = 0;
 
-        // ##########################################################  END OF yearly
+        // ##########################################################  END OF weekly
 
 
 
@@ -918,50 +837,38 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $value['split_date']      = "na";
         $value['split_coeff']     = 1.0;
 
-        
+        $adjClose = 0.0;
+        // if(isset($value['adjusted close'])){
+        //     $adjClose = floatval($value['adjusted close']);
+        // }
+        $value['adjusted_close']     =  $adjClose;
+// if (adjClose != close ) { // use adj close, ie a split occurred  }
 
 
         $mn = substr($date, 5, 2);      // 'YYYY-MM-DD' ==> 'MM'  ==> 09
 
-
-        //  ** NEW **
-        $udate00 = substr($date, 0, 10);      // 'YYYY-MM-DD HH:MM:SS.mmm' ==> 'YYYY-MM-DD'   ==> 09
-        $monthNameLong = ReturnMonthName( $udate00 , 0 );
-        $monthNameShort= ReturnMonthName( $udate00 , 1 );
-
-        // 'DEL'
-        //  $mnInt = (int)$mn;              // ==> 9  XXX DEPR ???
-
-        $value['monthNum'] =  $mn ;    //substr($date, 5, 2);   OK 
-
-        // $mm = $value['monthNum'];
-        // $mm1=intval($mm);
-        // $value['monthName'] = $months[ $mm1 ];  
-        $value['monthName'] =       $monthNameLong ;  
-        $value['monthNameShort'] =  $monthNameShort;    //  *NEW
-
-        // $timestamp = strtotime($date);  //  use only 10char udate
-        $timestamp = strtotime($udate00);   
-        $dow = strtolower(date('D', $timestamp));      // Format the timestamp to return the three-letter day abbreviation (e.g., Mon, Tue, Sat)
-        $value['dayOfWeek']  = $dow;                   // 0 Sun - 6 Sat normal php
-
-        $dayOfWeekNum1 =date('w', $timestamp);
-        $dayOfWeekNum = (int)$dayOfWeekNum1;
-        $value['dayOfWeekInt']  =  $dayOfWeekNum;   // 0...6==sat
-
-        $monthNumberInt = date("n", $timestamp);
-        $monthNumberInt1 = (int)$monthNumberInt;
-        $value['monthInt'] =  $monthNumberInt1 ;   
-
-        $doq = getDayOfQuarterFromDate( $udate00 );
-        $value['dayOfQtrInt']  =  $doq;
-        $doy = getDayOfYearFromDate( $udate00 );
-        $value['dayOfYearInt'] =  $doy;
+        // 'DEL
+ $mnInt = (int)$mn;              // ==> 9  XXX DEPR ???
+        
 
 
-        $value['endOfDay'] = 0;   // for intraday
+        $value['monthNum'] =  $mn ;    //substr($date, 5, 2);
+
+        $mm = $value['monthNum'];
+        $mm1=intval($mm);
+        $value['monthName'] = $months[ $mm1 ];  
+
+        $timestamp = strtotime($date);
+        $dow= strtolower(date('D', $timestamp));     // Format the timestamp to return the three-letter day abbreviation (e.g., Mon, Tue, Sat)
+        $value['dayOfWeek']  = $dow;  // 0 Sun - 6 Sat normal php
+
+
+        $value['endOfDay'] = 0;
         $value['endOfWeek'] = 0;
+        // $value['endOfMonth'] = 0;
+        $value['endOfYear'] = 0;
 
+      
 
 
         $value['buySignalCnt'] = 0;
@@ -1047,191 +954,13 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         $monthdays++;
     }// foreach loop
 
-
-   
-    // 2ndLoop find year H L  C
-    // 2ndLoop find year H L  C
-    // 2ndLoop find year H L  C
-    // 2ndLoop find year H L  C
-    $ii=0;
-    foreach ($data as $date => &$value) {    // Loop through each element of the array
-        $eoy  =     intval($value['endOfYear']); 
-        $eoq  =     intval($value['endOfQtr']); 
-        $gPer = strtolower($value['globalper']);                 //  "Monthly"  ==> monthly
-
-
-        if( $gPer=="monthly" ){
-
-            if($eoy==1  && $ii>=12 ){   // only compute HLC pivots for  0..11 --> [12]
-
-                // if we get here it is JAN and we have a whole year behind us
-                    $yearClose = (float)(array_values($data)[$ii-1]['close']);   // dec close
-                    $yearOpen  = (float)(array_values($data)[$ii-12]['open']);   // jan open
-                    $value['yearClose'] =  $yearClose;
-                    $value['yearOpen']  =  $yearOpen;
-                 
-                    
-                    $hi12 = (float)(array_values($data)[$ii-1]['high']); // dec 
-                    $hi11 = (float)(array_values($data)[$ii-2]['high']); 
-                    $hi10 = (float)(array_values($data)[$ii-3]['high']); 
-                    $hi09 = (float)(array_values($data)[$ii-4]['high']); 
-                    $hi08 = (float)(array_values($data)[$ii-5]['high']); 
-                    $hi07 = (float)(array_values($data)[$ii-6]['high']); 
-
-                    $hi06 = (float)(array_values($data)[$ii-7]['high']); 
-                    $hi05 = (float)(array_values($data)[$ii-8]['high']); 
-                    $hi04 = (float)(array_values($data)[$ii-9]['high']); 
-                    $hi03 = (float)(array_values($data)[$ii-10]['high']); 
-                    $hi02 = (float)(array_values($data)[$ii-11]['high']); 
-                    $hi01 = (float)(array_values($data)[$ii-12]['high']); // jan
-
-                    $yearHigh = max( $hi12, $hi11, $hi10, $hi09 , $hi08 , $hi07 , $hi06 , $hi05 , $hi04 , $hi03 , $hi02 , $hi01 );
-                    $value['yearHigh'] =  $yearHigh;
-    
-
-                    $lo12 = (float)(array_values($data)[$ii-1]['low']); // dec 
-                    $lo11 = (float)(array_values($data)[$ii-2]['low']); 
-                    $lo10 = (float)(array_values($data)[$ii-3]['low']); 
-                    $lo09 = (float)(array_values($data)[$ii-4]['low']); 
-                    $lo08 = (float)(array_values($data)[$ii-5]['low']); 
-                    $lo07 = (float)(array_values($data)[$ii-6]['low']); 
-
-                    $lo06 = (float)(array_values($data)[$ii-7]['low']); 
-                    $lo05 = (float)(array_values($data)[$ii-8]['low']); 
-                    $lo04 = (float)(array_values($data)[$ii-9]['low']); 
-                    $lo03 = (float)(array_values($data)[$ii-10]['low']); 
-                    $lo02 = (float)(array_values($data)[$ii-11]['low']); 
-                    $lo01 = (float)(array_values($data)[$ii-12]['low']); // jan
-
-                    $yearLow  = min( $lo12, $lo11, $lo10, $lo09 , $lo08 , $lo07 , $lo06 , $lo05 , $lo04 , $lo03 , $lo02 , $lo01 );
-                    $value['yearLow'] =  $yearLow;
-
-// here compute YearlyPivots
- 
-                            // COMPUTE yearLY PIVOTS SRs, BASED on LAST YEAR's OHLC, computed / stored above  ie  $value['yearHigh'] =  $yearHigh;
-                            $Pyear = ( $yearHigh+ $yearLow + $yearClose ) / 3;
-
-                            $R1year =  ($Pyear *2 ) - $yearLow;      //  R1day = (Pday *2)-Low;
-                            $S1year =  ($Pyear *2 ) - $yearHigh;     //  S1day = (Pday *2)-High;
-
-                            $S2year =  $Pyear - $yearHigh + $yearLow ;  //  S2day = Pday – High + Low;
-                            $R2year =  $Pyear + $yearHigh - $yearLow ;   // R2day = Pday + High – Low;
-
-                            $S3year =  $Pyear -   ( $R2year - $S1year ) ;   // S3day = Pday – (R2day-S1day);
-                            $R3year =( $Pyear - $S1year ) +   $R2year ;     // R3day = (Pday-S1day) + R2day;
-
-                            $S4year =  $yearLow - 3*( $yearHigh - $Pyear); // s4day = Low- 3*(High-Pday) ; 
-                            $R4year =  $yearHigh+ 3*( $Pyear - $yearLow );  //  R4day = High+ 3*(Pday-Low) ;
-
-                            // here we should CALC Based on these above
-                            $value['R4year'] = $R4year;
-                            $value['R3year'] = $R3year;
-                            $value['R2year'] = $R2year;
-                            $value['R1year'] = $R1year;
-                            $value['Pyear'] =  $Pyear;     
-                            $value['P3year'] = 0.0;
-                            $value['S1year'] = $S1year;
-                            $value['S2year'] = $S2year;
-                            $value['S3year'] = $S3year;
-                            $value['S4year'] = $S4year;
-
-
-                }// if eoy VALID
-
-        }// if m0nthly
-
-
-            // if( $gPer=="weekly" ){
-            //     if($eoq==1  && $ii>=4 ){   // only compute HLC pivots for 
-            //         // $o0= array_values($data)[$i-1]['open'];
-            //         $dum=1;
-            //         }
-            // }
-         
-
-
-
-        $ii++;
-     }//for
-
-
     return $data;    // Return the modified array
 
 }//fn
  
-function GetRestOfDateTimeStr($udatetime) {
-    $nilstr="";
-    if (strlen($udatetime) > 10) {
-        // Return the substring from the 12th character to the end
-        $tstr = substr($udatetime, 11);
-        if(isset($tstr)) return  $tstr ; 
-        else return $nilstr;
-    } else {
-        // Return an empty string if the length is not greater than 10
-        return $nilstr;
-    }
-}
 
 
-function GetMonthNumber($udate) {
-    $timestamp== strtotime($udate);
-    // Get the month as a zero-indexed number (1-12)
-    $monthNumber = date("n", $timestamp) ;
-    return $monthNumber;
-}
 
-function GetDayOfYearFromDate($udate) {
-    // Convert the Unix date string to a timestamp
-    $timestamp = strtotime($udate);
-    
-    // Format the timestamp to get the day of the year
-    $dayOfYear = date("z", $timestamp) + 1; // "z" gives 0-365, so add 1 for 1-366
-    
-    return $dayOfYear;
-}
-
-
-function getDayOfQuarterFromDate($udate) {
-    // Convert the Unix date string to a timestamp
-    $timestamp = strtotime($udate);
-    
-    // Extract year and month from the timestamp
-    $year = date('Y', $timestamp);
-    $month = date('n', $timestamp);
-    
-    // Determine the start of the quarter
-    if ($month <= 3) {
-        $quarterStart = strtotime("$year-01-01"); // Q1
-    } elseif ($month <= 6) {
-        $quarterStart = strtotime("$year-04-01"); // Q2
-    } elseif ($month <= 9) {
-        $quarterStart = strtotime("$year-07-01"); // Q3
-    } else {
-        $quarterStart = strtotime("$year-10-01"); // Q4
-    }
-    
-    // Calculate the difference in days
-    $dayOfQuarter = floor(($timestamp - $quarterStart) / (60 * 60 * 24));
-    
-    return $dayOfQuarter;
-}
-// // Example usage
-// $udate = "2024-10-31";
-// echo getDayOfQuarterFromDate($udate); // Outputs the day of the quarter for the given date
-
-function ReturnMonthName($udate, $abbreviateFlag) {
-    // Convert the string date to a timestamp
-    $timestamp = strtotime($udate);
-    
-    // Choose format based on $abbreviateFlag
-    if ($abbreviateFlag == 1) {
-        // Lowercase, 3-letter abbreviation
-        return strtolower(date('M', $timestamp));
-    } else {
-        // Full month name
-        return date('F', $timestamp);
-    }
-}
 
 
 
@@ -1279,6 +1008,8 @@ function ProcessData_BuySellSignals( ){
     $BuySignal   = 0;
     $Pday        = 0;   // ['P']
     $PtrailingAvg= 0;   // ['P3']
+
+
 
 
 
@@ -1679,7 +1410,7 @@ function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
         // Echo the date and the corresponding values
         echo $date . " | " .
              "Open: " . $value['open'] . ", " .
-             "high: " . $value['high'] . ", " .
+             "High: " . $value['high'] . ", " .
              "Low: " . $value['low'] . ", " .
              "Close: " . $value['close'] . ", " .
              "Volume: " . $value['volume'] . ", " .
@@ -1710,12 +1441,7 @@ function PrintJsonData($arr, $sym, $timeper, $maxcandles ) {
 }//fn
 
 
-//  ################################################## LIVE CODE
-//  ################################################## LIVE CODE
-//  ################################################## LIVE CODE
-
-
-
+// $sym0="NVDA";
 $sym0= $sym;
 $maxCandles = 95;  // just over 1 qtr
 $sym0str = $sym0." ".$per." Chart";
@@ -1729,18 +1455,10 @@ $urlday = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="
 $urlweekly="https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=IBM&apikey=demo";
 $urlmonthly="https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=IBM&apikey=demo";
 
-// adjusted prep SAMPLES ONLY
-$url_adjusted_close_daily = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSTR&outputsize=compact&apikey=91M7LB7MG3JHY129";
-$url_adjusted_close_weekly = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=MSTR&outputsize=compact&apikey=91M7LB7MG3JHY129";
-$url_adjusted_close_monthly = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=MSTR&outputsize=compact&apikey=91M7LB7MG3JHY129";
-
-
-$url_crypto_intraday ="https://www.alphavantage.co/query?function=CRYPTO_INTRADAY&symbol=BTC&market=USD&interval=15min&apikey=91M7LB7MG3JHY129";
-$url_crypto_daily    ="https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol=SOL&market=USD&apikey=91M7LB7MG3JHY129";
-$url_crypto_weekly   ="https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_WEEKLY&symbol=SOL&market=USD&apikey=91M7LB7MG3JHY129";
-$url_crypto_monthly  ="https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_MONTHLY&symbol=SOL&market=USD&apikey=91M7LB7MG3JHY129";
-
-$url_vwap ="https://www.alphavantage.co/query?function=VWAP&symbol=IBM&interval=15min&apikey=demo";
+// adjusted prep
+$url_adjusted_close_daily = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=MSTR&outputsize=full&apikey=91M7LB7MG3JHY129";
+$url_adjusted_close_weekly = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=MSTR&outputsize=full&apikey=91M7LB7MG3JHY129";
+$url_adjusted_close_monthly = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=MSTR&outputsize=full&apikey=91M7LB7MG3JHY129";
 
 $strkey_1min  ="Time Series (1min)";
 $strkey_15min = "Time Series (15min)";
@@ -1752,112 +1470,46 @@ $url = $urlday ;
 
 $strkey = $timeseriesStr;  // ie. "Time Series (Daily)"  or  "Time Series (1min)" or "Weekly Time Series"
 $strkeyAux = $strkey;  // this is for string-stripping only to insert (Daily) into per in json
-$APIkey ="91M7LB7MG3JHY129";
+
+// $gDataSeriesTypeStr ="daily";
 
 
+if($per=="Daily"){
+    // $url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=".$sym0."&outputsize=compact&apikey=91M7LB7MG3JHY129";
+    $url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=".$sym0."&outputsize=compact&apikey=91M7LB7MG3JHY129";
+    $gDataSeriesTypeStr="daily";
+}else if($per=="Weekly"){
+    $strkey =  "Weekly Time Series";
+    $url = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=".$sym0."&outputsize=compact&apikey=91M7LB7MG3JHY129";
+    $gDataSeriesTypeStr="weekly";
 
+}else if($per=="Monthly"){
+    $strkey =  "Monthly Time Series";
+    $url = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=".$sym0."&outputsize=compact&apikey=91M7LB7MG3JHY129";
+    $gDataSeriesTypeStr="monthly";
 
+}else{
+    if($intraday==1){
+        $url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=".$sym0. "&interval=" .$per ."&entitlement=realtime&apikey=91M7LB7MG3JHY129";
+        $gDataSeriesTypeStr="intraday";
 
-
-
-
-
-
-
-
-
-// THIS CODEBLOCK SETS adjcloseflag
-
-    if( $gDigitalCurrency == 0 ){
-
-            if($per=="Daily"){
-                    $gDataSeriesTypeStr="daily";
-                    
-                    // FORCE IT on daily
-                    $adjustedCloseFlag  =  1;   
-
-                // NORMAL ==    "Time Series (Daily)": {   SAMED ***  // ADJUSTD  ==  "Time Series (Daily)": {
-                    $strkey =  "Time Series (Daily)";  // this is the format for both daily and adjDaily
-                    $url =     "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=".$sym0."&outputsize=compact&apikey=". $APIkey ;
-                    if( $adjustedCloseFlag==1) {
-                        $strkey =  "Time Series (Daily)";  // same for adj
-                        $url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=".$sym0."&outputsize=compact&apikey=". $APIkey ;
-                    }
-
-
-            }else if($per=="Weekly"){  // defaults to 20yrs
-                // NORMAL == "Weekly Time Series": {  // ADJ    ==  "Weekly Adjusted Time Series": {
-                    $gDataSeriesTypeStr="weekly";
-                    $adjustedCloseFlag  =  0;   
-
-                    $strkey =  "Weekly Time Series";  
-                    $url = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol=".$sym0."&outputsize=compact&apikey=". $APIkey ;
-                    if( $adjustedCloseFlag==1) {
-                        $strkey =  "Weekly Adjusted Time Series";  
-                        $url = "https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=".$sym0."&outputsize=compact&apikey". $APIkey ;
-                    }
-
-
-            }else if($per=="Monthly"){   // defaults to 20yrs
-            //  NORMAL  == "Monthly Time Series": {  //  ADJ     == "Monthly Adjusted Time Series": {
-                        $gDataSeriesTypeStr="monthly";
-                        $adjustedCloseFlag  =  0;   
-
-                        $strkey =  "Monthly Time Series";   
-                        $url = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&symbol=".$sym0."&outputsize=compact&apikey=". $APIkey ;
-                        if( $adjustedCloseFlag==1) {
-                            $strkey =  "Monthly Adjusted Time Series";  
-                            $url = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED&symbol=".$sym0."&outputsize=compact&apikey". $APIkey ;
-                        }
-
-            }else{
-                if($intraday==1){
-                    $adjustedCloseFlag=0;
-                    $gDataSeriesTypeStr="intraday";
-                    $url = "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=".$sym0. "&interval=" .$per ."&entitlement=realtime&apikey=". $APIkey ;
-                }
-            }
-
-
-    }else if( $gDigitalCurrency == 1 ){
-        $adjustedCloseFlag  =  0;   
-
-        if($per=="Daily"){
-                $gDataSeriesTypeStr="daily";
-
-                $strkey =  "Time Series (Digital Currency Daily)";   
-                $url =    "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY". $gSymCrypto ."&apikey=". $APIkey ;
-                // $url =    "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY". '&symbol=BTC&market=USD' ."&apikey=". $APIkey ;
-
-        }else if($per=="Weekly"){ 
-                $gDataSeriesTypeStr="weekly";
-
-                $strkey =  "Time Series (Digital Currency Weekly)";   
-                $url =    "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_WEEKLY". $gSymCrypto ."&apikey=". $APIkey ;
-               
-        }else if($per=="Monthly"){ 
-                $gDataSeriesTypeStr="monthly";
-
-                $strkey =  "Time Series (Digital Currency Monthly)";   
-                $url =    "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_MONTHLY". $gSymCrypto ."&apikey=". $APIkey ;
-               
-        }else{
-            $dumdum=1; 
-            // chk intraday here
-            // check intraday    //"Time Series Crypto (5min)": {
-            // check intraday    //"Time Series Crypto (15min)": {
-        }
-
-    }// if crpto
+    }
+}
 
 $strRemove="Time Series ";
 $intervalStr = removeString($strkeyAux, $strRemove);   // leave only "(Monthly)" or "(15min)"
-if($msg==1){
-    echo  "] AdjCloseFlag==". $adjustedCloseFlag .", per= $per,   gDataSeriesTypeStr==". $gDataSeriesTypeStr ;
-}
 
 
-$data = GetJsonData($url, $maxCandles, $strkey);
+$gPeriod=0;
+
+$gUseAdjustedClose = 1;
+if(  $gDataSeriesTypeStr=="intraday"  ) {
+     $gUseAdjustedClose = 0;
+     $gPeriod = $per;
+
+    }
+// $data = GetJsonData($url, $maxCandles, $strkey, 0);   // old 1,2,3,4,5=volume
+$data = GetJsonData($url, $maxCandles, $strkey, $gUseAdjustedClose);
 
 $dataProcessed = ProcessCandles($data, $sym0, $intervalStr);
 if($printjson==1) PrintJsonData($dataProcessed, $sym0, $strkey , $maxCandles );
@@ -1868,205 +1520,6 @@ $processedDataJson = json_encode($dataProcessed);
 
 // Output the data
 // print_r($dataProcessed);
-
-/*
-
-{
-    "Meta Data": {
-        "1. Information": "Intraday (1min) open, high, low, close prices and volume",
-        "2. Symbol": "AAPL",
-        "3. Last Refreshed": "2024-10-30 19:59:00",
-        "4. Interval": "1min",
-        "5. Output Size": "Compact",
-        "6. Time Zone": "US/Eastern"
-    },
-    "Time Series (1min)": {
-        "2024-10-30 19:59:00": {
-            "1. open": "230.7000",
-            "2. high": "230.8000",
-            "3. low": "230.7000",
-            "4. close": "230.7000",
-            "5. volume": "1209"
-        },
-        "2024-10-30 19:58:00": {
-            "1. open": "230.7100",
-            "2. high": "230.8000",
-            "3. low": "230.7000",
-            "4. close": "230.7500",
-            "5. volume": "1106"
-        },
-
-
-{
-    "Meta Data": {
-        "1. Information": "Intraday (5min) open, high, low, close prices and volume",
-        "2. Symbol": "AAPL",
-        "3. Last Refreshed": "2024-10-30 19:55:00",
-        "4. Interval": "5min",
-        "5. Output Size": "Compact",
-        "6. Time Zone": "US/Eastern"
-    },
-    "Time Series (5min)": {
-        "2024-10-30 19:55:00": {
-            "1. open": "230.6650",
-            "2. high": "230.8000",
-            "3. low": "230.6000",
-            "4. close": "230.7000",
-            "5. volume": "6106"
-        },
-        "2024-10-30 19:50:00": {
-            "1. open": "230.6000",
-            "2. high": "230.7800",
-            "3. low": "230.6000",
-            "4. close": "230.6700",
-            "5. volume": "4430"
-        },
-
-
-        {
-    "Meta Data": {
-        "1. Information": "Intraday (15min) open, high, low, close prices and volume",
-        "2. Symbol": "AAPL",
-        "3. Last Refreshed": "2024-10-30 19:45:00",
-        "4. Interval": "15min",
-        "5. Output Size": "Compact",
-        "6. Time Zone": "US/Eastern"
-    },
-    "Time Series (15min)": {
-        "2024-10-30 19:45:00": {
-            "1. open": "230.7300",
-            "2. high": "230.8000",
-            "3. low": "230.6000",
-            "4. close": "230.7000",
-            "5. volume": "15707"
-        },
-        "2024-10-30 19:30:00": {
-            "1. open": "230.3300",
-            "2. high": "230.8800",
-            "3. low": "230.3300",
-            "4. close": "230.7100",
-            "5. volume": "18414"
-        },
-
-
-
-
-
-     // ################################## crypto
-
-
-        {
-    "Meta Data": {
-        "1. Information": "Crypto Intraday (15min) Time Series",
-        "2. Digital Currency Code": "BTC",
-        "3. Digital Currency Name": "Bitcoin",
-        "4. Market Code": "USD",
-        "5. Market Name": "United States Dollar",
-        "6. Last Refreshed": "2024-10-31 21:45:00",
-        "7. Interval": "15min",
-        "8. Output Size": "Compact",
-        "9. Time Zone": "UTC"
-    },
-    "Time Series Crypto (15min)": {
-        "2024-10-31 21:45:00": {
-            "1. open": "70224.66000",
-            "2. high": "70434.69000",
-            "3. low": "70220.27000",
-            "4. close": "70350.10000",
-            "5. volume": 89
-        },
-        "2024-10-31 21:30:00": {
-            "1. open": "70213.54000",
-            "2. high": "70299.99000",
-            "3. low": "70135.69000",
-            "4. close": "70224.74000",
-            "5. volume": 72
-        },
-
-
-        {
-    "Meta Data": {
-        "1. Information": "Daily Prices and Volumes for Digital Currency",
-        "2. Digital Currency Code": "SOL",
-        "3. Digital Currency Name": "Solana",
-        "4. Market Code": "USD",
-        "5. Market Name": "United States Dollar",
-        "6. Last Refreshed": "2024-10-31 00:00:00",
-        "7. Time Zone": "UTC"
-    },
-    "Time Series (Digital Currency Daily)": {
-        "2024-10-31": {
-            "1. open": "174.82000000",
-            "2. high": "175.43000000",
-            "3. low": "174.82000000",
-            "4. close": "175.22000000",
-            "5. volume": "7661.89401551"
-        },
-        "2024-10-30": {
-            "1. open": "179.35000000",
-            "2. high": "181.20000000",
-            "3. low": "173.11000000",
-            "4. close": "174.85000000",
-            "5. volume": "678648.76800693"
-        },
-
-
-        {
-    "Meta Data": {
-        "1. Information": "Weekly Prices and Volumes for Digital Currency",
-        "2. Digital Currency Code": "SOL",
-        "3. Digital Currency Name": "Solana",
-        "4. Market Code": "USD",
-        "5. Market Name": "United States Dollar",
-        "6. Last Refreshed": "2024-10-31 00:00:00",
-        "7. Time Zone": "UTC"
-    },
-    "Time Series (Digital Currency Weekly)": {
-        "2024-10-31": {
-            "1. open": "176.43000000",
-            "2. high": "183.30000000",
-            "3. low": "172.27000000",
-            "4. close": "175.22000000",
-            "5. volume": "2603796.43788426"
-        },
-        "2024-10-27": {
-            "1. open": "167.34000000",
-            "2. high": "179.12000000",
-            "3. low": "159.05000000",
-            "4. close": "176.44000000",
-            "5. volume": "5812226.50432464"
-        },
-
-{
-    "Meta Data": {
-        "1. Information": "Monthly Prices and Volumes for Digital Currency",
-        "2. Digital Currency Code": "SOL",
-        "3. Digital Currency Name": "Solana",
-        "4. Market Code": "USD",
-        "5. Market Name": "United States Dollar",
-        "6. Last Refreshed": "2024-10-31 00:00:00",
-        "7. Time Zone": "UTC"
-    },
-    "Time Series (Digital Currency Monthly)": {   
-        "2024-10-31": {
-            "1. open": "152.50000000",
-            "2. high": "183.30000000",
-            "3. low": "133.10000000",
-            "4. close": "175.22000000",
-            "5. volume": "21744629.69876191"
-        },
-        "2024-09-30": {
-            "1. open": "135.33000000",
-            "2. high": "161.80000000",
-            "3. low": "120.51000000",
-            "4. close": "152.50000000",
-            "5. volume": "20308859.38673487"
-        },
-
-
-
- */
-
 
 ?>
  
@@ -2167,28 +1620,21 @@ $processedDataJson = json_encode($dataProcessed);
 
 
 
-    <!-- Embed the PHP-generated JSON into the page using a script tag -->
+    <!-- Embed the PHP-generated JSON into the page using a script tag     '  "  '.    -->
     <script>
         // Store the PHP data/vars in a JavaScript variables
 
         var gVerPHP         = <?php echo $ver; ?>;
         var gChartHigh      = <?php echo $ChartHigh; ?>;
         var gChartHighIdx   = <?php echo $ChartHighIdx; ?>;
-        var gChartHighDate  = <?php echo '"'. $ChartHighDate. '"'; ?>;
+        var gChartHighDate  = <?php echo '"'. $ChartHighDate. '"' ; ?>;
 
         var gChartLow      = <?php echo $ChartLow; ?>;
         var gChartLowIdx   = <?php echo $ChartLowIdx; ?>;
-        var gChartLowDate  = <?php echo '"'. $ChartLowDate. '"'; ?>;
+        var gChartLowDate  = <?php echo '"'. $ChartLowDate.'"'; ?>;
 
         console.log("] still inside php: Chart HI,idx,date / LOs = ",gChartHigh,gChartHighIdx, gChartHighDate, "  Lows=",gChartLow, gChartLowIdx, gChartLowDate ); 
         
-        var gDigitalCurrency= <?php echo $gDigitalCurrency; ?>; 
-        var gCryptoSymbol   = <?php echo '"'. $gCryptoSymbol. '"'; ?>;
-        var gCryptoCurrency = <?php echo '"'. $gCryptoCurrency. '"'; ?>;
-        var gCryptoName     = <?php echo '"'. $gCryptoName. '"'; ?>;
-        // global $gCryptoSymbol, $gCryptoCurrency, $gCryptoName;
-
-
         var gColSchemeNum = <?php echo $sch; ?>;
         var processedData = <?php echo $processedDataJson; ?>;
         console.log("] still inside php:  processedData==", processedData); // You can access the PHP data in JS now
@@ -2210,12 +1656,15 @@ $processedDataJson = json_encode($dataProcessed);
 /**
  * 
  * 
+ * 
+ * 
+ * 
+ * 
  */
     </script>
 
     <!-- Link to your external JavaScript file -->
-    <!-- <script src="canvas0.js"></script> -->
-    <script src="canvas6.js"></script>
+    <script src="canvas0.js"></script>
     <!-- <script src="drawchart.js"></script> -->
 </body>
 </html>
