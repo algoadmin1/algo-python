@@ -1,8 +1,8 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "299.6";
-let             gDebugInfo = 0;  // for   sc = 1.0
+let                                                                         gVer = "299.8";
+let             gDebugInfo = 1;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget.php?sym=" ;   
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
@@ -422,6 +422,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
 let gGlobalDrawCol = 'black';
 let gChartTextStr ="Welcome!";
 let gChartTextStr1 ="Welcome!";
+let gChartTextStrDebug ="* ";
 
 let gChartTypeStr_can = ""; //"Candles";    
 let gChartTypeStr_lin = ""; //"Line Chart";    
@@ -2120,13 +2121,18 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
 
     let str = "";
 
-
+    // gChartTextStrDebug = " x " + gCandlesMaxes.toString();
+    
     str =  gScalar_resize.toString()+ " / "+ gScalar_init.toString()+ " == " +  (gScalarFloat_dynamic).toString() +" ";
 
      let addstr = " ";
 
      if(gDebugInfo==1){
         addstr  = "  sc=" +  gScalarFloat_dynamic.toString();
+
+        // DrawText( ctx, gChartTextStrDebug,  vrect.x+xoffset, vrect.y+yoffset+2+fsz, fsz , colScheme.tx , gGlobalFont);
+        DrawText( ctx, gChartTextStrDebug,  vrect.x+xoffset, vrect.y+yoffset+2+fsz, fsz , colScheme.up , gGlobalFont);
+
      }
 
      // "AAPL (Daily) Last: $230.90 as of..."
@@ -3061,6 +3067,8 @@ function resizeCanvas() {
             // Draw the canv size w,h
             // let dtstr = "w,h= ["+ canvas.width.toString() +","+ canvas.height.toString() +"]"  ;
             let dtstr = "w,h= ["+ wstr +","+ hstr +"] CANDLES # =" +gNumCandlesToRender.toString()+" , candleW=" +gCandleWidth.toString() ;
+            gChartTextStrDebug=  "w,h= ["+ wstr +","+ hstr +"] #candles=" +gNumCandlesToRender.toString()+" , candleW=" +gCandleWidth.toString() ;
+
             // console.log(dtstr);
             // let dtstrWidth = ctx.mea sureText(dtstr).width+ 0;
             let fsz = 24;

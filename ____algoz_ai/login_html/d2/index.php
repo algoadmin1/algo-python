@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "17.5";
+                                                        $ver=  "17.9";
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -17,6 +17,23 @@ if(! (isset($_SESSION["user"])) ) {
         // Remove everything to the right of '@', including '@'
         $emailName = strstr($emailName0 , '@', true);
         
+        // added 11-19
+        $emailName1      = strstr($email1 , '@', true) ;
+
+        $userID1        = $_SESSION["userId"] ;  
+        $numvisits1     = $_SESSION["numvisits"] ;
+        $user_ip1       = $_SESSION["userIP"] ;
+        $user_loc1      = $_SESSION["user_loc"] ;
+        
+        $user_lastDateTime1   = $_SESSION["user_lastDateTime"] ;
+        $user_lastDay1        = $_SESSION["user_lastDay"] ;
+
+        $productstr1  = $_SESSION["user_productstr"]  ;
+        $appSecret1  =  $_SESSION["appsecret"] ;
+
+
+
+
         // echo $result; // Output: "johnnie1385"
         
 
@@ -33,6 +50,8 @@ if(! (isset($_SESSION["user"])) ) {
         // $_SESSION["user_lastDay"] = $user_lastDay ;
         
         // $_SESSION["user_productstr"] = $productstr ;
+
+        
         // $_SESSION["appsecret"] = $appSecret ;
 
     }
@@ -807,6 +826,7 @@ if (isset($eventsTable[0])) {
 
 
             <!-- Insights -->
+<!-- 
             <ul class="insights">
                 <li>
                     <i class='bx bx-calendar-check'></i>
@@ -834,7 +854,6 @@ if (isset($eventsTable[0])) {
                     </span>
                 </li>
                 <li><i class='bx bx-line-chart'></i>
-                <!-- <li><i class='bx bx-dollar-circle'></i> -->
                     <span class="info">
                         <h3>
                             $406.2k
@@ -843,6 +862,7 @@ if (isset($eventsTable[0])) {
                     </span>
                 </li>
             </ul>
+             -->
             <!-- End of Insights -->
 
 

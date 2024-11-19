@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "294.8";
+                                                              $ver=  "295.2";
 
 date_default_timezone_set('America/New_York');
 require_once "../login/database.php";
@@ -9,10 +9,24 @@ session_start();
 if (!(isset($_SESSION["user"])) ) {
    header("Location: ../login/login.php");
 }else{
-        $email1=$_SESSION["user"];
+        $email1         = $_SESSION["user"] ;
+        $emailName1      = strstr($email1 , '@', true) ;
+
+        $userID1        = $_SESSION["userId"] ;  
+        $numvisits1     = $_SESSION["numvisits"] ;
+        $user_ip1       = $_SESSION["userIP"] ;
+        $user_loc1      = $_SESSION["user_loc"] ;
+        
+        $user_lastDateTime1   = $_SESSION["user_lastDateTime"] ;
+        $user_lastDay1        = $_SESSION["user_lastDay"] ;
+
+        $productstr1  = $_SESSION["user_productstr"]  ;
+        $appSecret1  =  $_SESSION["appsecret"] ;
+
 
         // $_SESSION['crawlTime']=  t ;
         // $_SESSION['crawlstr']=  str ;
+
         // from login
         // $_SESSION["user"]  = $email ; 
         // $_SESSION["userId"] = $userID0;    //   from indxmenu.php $userID0=$_SESSION["userId"];
@@ -22,7 +36,7 @@ if (!(isset($_SESSION["user"])) ) {
         
         // $_SESSION["user_lastDateTime"] = $user_lastDateTime;
         // $_SESSION["user_lastDay"] = $user_lastDay ;
-        
+
         // $_SESSION["user_productstr"] = $productstr ;
         // $_SESSION["appsecret"] = $appSecret ;
 
@@ -2202,9 +2216,39 @@ $processedDataJson = json_encode($dataProcessed);
         var gCryptoName     = <?php echo '"'. $gCryptoName. '"'; ?>;
         // global $gCryptoSymbol, $gCryptoCurrency, $gCryptoName;
 
+        
 
         var gColSchemeNum = <?php echo $sch; ?>;
         var processedData = <?php echo $processedDataJson; ?>;
+
+
+        // $email1         = $_SESSION["user"] ;
+        // $emailName1      = strstr($email1 , '@', true) ;
+
+        // $userID1        = $_SESSION["userId"] ;  
+        // $numvisits1     = $_SESSION["numvisits"] ;
+        // $user_ip1       = $_SESSION["userIP"] ;
+        // $user_loc1      = $_SESSION["user_loc"] ;
+        
+        // $user_lastDateTime1   = $_SESSION["user_lastDateTime"] ;
+        // $user_lastDay1        = $_SESSION["user_lastDay"] ;
+
+        // $productstr1  = $_SESSION["user_productstr"]  ;
+        // $appSecret1  =  $_SESSION["appsecret"] ;
+
+        var g_email1                 = <?php echo '"'. $email1. '"'; ?>;
+        var g_emailName1             = <?php echo '"'. $emailName1. '"'; ?>;
+        var g_userID1                = <?php echo '"'. $userID1. '"'; ?>;
+        var g_numvisits1             = <?php echo '"'. $numvisits1. '"'; ?>;
+        var g_user_ip1               = <?php echo '"'. $user_ip1. '"'; ?>;
+        var g_user_loc1              = <?php echo '"'. $user_loc1. '"'; ?>;
+        var g_user_lastDateTime1     = <?php echo '"'. $user_lastDateTime1. '"'; ?>;
+        var g_user_lastDay1          = <?php echo '"'. $user_lastDay1. '"'; ?>;
+        var g_productstr1            = <?php echo '"'. $productstr1. '"'; ?>;
+        var g_appSecret1             = <?php echo '"'. $appSecret1. '"'; ?>;
+
+
+
         console.log("] still inside php:  processedData==", processedData); // You can access the PHP data in JS now
 
 //  ##############################################################  *NEW_BUTTONS* 
@@ -2229,7 +2273,7 @@ $processedDataJson = json_encode($dataProcessed);
 
     <!-- Link to your external JavaScript file -->
     <!-- <script src="canvas0.js"></script> -->
-    <script src="canvas6.js"></script>
+    <script src="canvas0.js"></script>
     <!-- <script src="drawchart.js"></script> -->
 </body>
 </html>
