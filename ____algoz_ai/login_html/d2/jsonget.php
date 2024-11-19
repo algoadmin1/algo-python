@@ -2273,7 +2273,7 @@ $processedDataJson = json_encode($dataProcessed);
 
     <!-- Link to your external JavaScript file -->
     <!-- <script src="canvas0.js"></script> -->
-    <script src="canvas0.js"></script>
+    <script src="canvas1.js"></script>
     <!-- <script src="drawchart.js"></script> -->
 </body>
 </html>

@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "300.2";
+let                                                                         gVer = "300.3";
 let             gDebugInfo = 1;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget.php?sym=" ;   
 
@@ -2067,9 +2067,11 @@ let gZipperUrl="https://algoz.ai/cronit/cronit.php";   // https://algoz.ai/croni
 // let gZipp erUrl="https://algoz.ai/cronit/crawl.php";   // https://algoz.ai/cronit/cronit.php
 let gCopyrightCrawl =  "  algoz.ai Copyright (c) 2023-2025 by Algo Investor Inc  ";
 
-function printZipperString( data, ctx){
-    gZipper0 = data;
-    gZipper= data +gCopyrightCrawl  + data;
+
+// function printZipperString( data, ctx){   
+function Assign_gZipperString( data, ctx){   
+        gZipper0 = data + gCopyrightCrawl +"  ";
+        gZipper= data   + gCopyrightCrawl  + data;
     // console.log("ZipperString gZipper str==", gZipper);
     // DrawText_noclip( ctx, gZipper, gCrawlX, gCra wlY,       12 , 'blue' , gGlobalFont );
 
@@ -2175,11 +2177,7 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     
     // InitAndDrawImage(ctx, vrect, gAlgozLogo_fname, 10, -30, (gImgScale*1.2) );   // let gIm gScale = 0.325;
 
-
-// CRAWL ZIPPER SHOULD BE GOTTEN ONCE AT START
-
-    GetTickerZipper( gZipperUrl , ctx )
-        .then(data => printZipperString(data , ctx));
+ 
 
 
 }
@@ -3258,6 +3256,7 @@ function toggleButton(buttonNumber) {
         // Resize the canvas when the window is resized
         window.addEventListener('resize', resizeCanvas);
 
+
         // Initial resize to set up the canvas
         resizeCanvas();
         
@@ -3266,6 +3265,16 @@ function toggleButton(buttonNumber) {
         // now 
         let arr1=[];
         arr1= async_GetOverviewData();
+
+
+// CRAWL ZIPPER SHOULD BE GOTTEN ONCE AT START
+
+    GetTickerZipper( gZipperUrl , ctx )
+    .then(data => Assign_gZipperString(data , ctx));
+    // .then(data => printZipperString(data , ctx));
+
+
+
 
 // #############################################################  MAIN CODE  *****
 // #############################################################  MAIN CODE  *****
