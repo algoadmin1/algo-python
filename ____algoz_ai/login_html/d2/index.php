@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "17.9";
+                                                        $ver=  "18.5";
 // 
 //                                                                              /algoz.ai/d2/index.php
 //

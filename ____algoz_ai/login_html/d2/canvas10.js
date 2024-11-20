@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "300.5";
+let                                                                         gVer = "300.9";
 let             gDebugInfo = 1;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget.php?sym=" ;   
 
@@ -2139,8 +2139,8 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
         addstr  = "  sc=" +  gScalarFloat_dynamic.toString();
 
         // DrawText( ctx, gChartTextStrDebug,  vrect.x+xoffset, vrect.y+yoffset+2+fsz, fsz , colScheme.tx , gGlobalFont);
-        DrawText( ctx, gChartTextStrDebug,   vrect.x+xoffset, vrect.y+yoffset+2+fsz, fsz2 , colScheme.up , gGlobalFont);
-        DrawText( ctx, gChartTextStrDebug2,  vrect.x+xoffset, vrect.y+yoffset+2+fsz+fsz, fsz2 , colScheme.up , gGlobalFont);
+        DrawText( ctx, gChartTextStrDebug,   vrect.x+xoffset, vrect.y+yoffset+2+fsz, fsz , colScheme.tx , gGlobalFont);
+        DrawText( ctx, gChartTextStrDebug2,  vrect.x+xoffset, vrect.y+yoffset+6+fsz+fsz, fsz2 , 'lightblue' , gGlobalFont);
 
      }
 
@@ -3076,7 +3076,7 @@ function resizeCanvas() {
             // Draw the canv size w,h
             // let dtstr = "w,h= ["+ canvas.width.toString() +","+ canvas.height.toString() +"]"  ;
             let dtstr = "w,h= ["+ wstr +","+ hstr +"] CANDLES # =" +gNumCandlesToRender.toString()+" , candleW=" +gCandleWidth.toString() ;
-            gChartTextStrDebug=  "w,h= ["+ wstr +","+ hstr +"] #candles=" +gNumCandlesToRender.toString()+" , candleW=" +gCandleWidth.toString() ;
+            gChartTextStrDebug=  "["+ wstr +"x"+ hstr +"],#cndl=" +gNumCandlesToRender.toString()+" , cndlW=" +gCandleWidth.toString() ;
 
             // console.log(dtstr);
             // let dtstrWidth = ctx.mea sureText(dtstr).width+ 0;

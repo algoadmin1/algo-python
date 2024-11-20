@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "295.9";
+                                                              $ver=  "295.8x";
 
 date_default_timezone_set('America/New_York');
 require_once "../login/database.php";
@@ -158,7 +158,8 @@ function TestAndGetWellFormedCryptoSymbol($sym) {
 }
 
 
-$sym = "SPY";
+echo "] BEFORE sym ==   =====>".$sym. "<=====";
+
 if(isset( $_GET['sym'] )){
 
     $sym = $_GET['sym'] ;
@@ -169,11 +170,15 @@ if(isset( $_GET['sym'] )){
         $sym = "QQQ";
     }
 
+
 }else{
     $sym = "SPY";
 }
 $sym = strtoupper($sym);
 
+echo "] AFTER sym ==   =====>".$sym. "<=====";
+
+die();
 
 
 //   crypto
@@ -2308,7 +2313,7 @@ $processedDataJson = json_encode($dataProcessed);
 
     <!-- Link to your external JavaScript file -->
     <!-- <script src="canvas0.js"></script> -->
-    <script src="canvas10.js"></script>
+    <script src="canvas0.js"></script>
     <!-- <script src="drawchart.js"></script> -->
 </body>
 </html>
