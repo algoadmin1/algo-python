@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "295.9";
+                                                              $ver=  "296.5";
 
 date_default_timezone_set('America/New_York');
 require_once "../login/database.php";
@@ -88,8 +88,9 @@ $button9name = "Aux Button 9";
 $button10name= "Aux Button 10";
 
 $adjustedCloseFlag = 0 ;
+$gCryptoCurrency_default="usd";
 $gDataSeriesTypeStr="daily";
-$compareCharStringMASTER = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.@_";
+$compareCharStringMASTER = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.@_-";
 
 function CheckSymbolValidity( $symstr ){
     $tf = true;
@@ -156,6 +157,22 @@ function TestAndGetWellFormedCryptoSymbol($sym) {
         return $newstr;
     }
 }
+function TestEndOfString($str, $char) {
+    // Check if the last character of $str matches $char
+    return substr($str, -1) === $char;
+}
+// // Example usage
+// $str = "hello!";
+// $char = "!";
+// $result = TestEndOfString($str, $char);
+// echo $result ? "True" : "False"; // Outputs: True
+
+// $str = "hello";
+// $char = "!";
+// $result = TestEndOfString($str, $char);
+// echo $result ? "True" : "False"; // Outputs: False
+
+
 
 
 $sym = "SPY";
@@ -181,6 +198,11 @@ $gDigitalCurrency= 0;
 $gCryptoCurrency="USD";
 $gCryptoSymbol="BTC";
 $gCryptoName="Bitcoin";
+
+$symCryptoTest = TestEndOfString($sym, "-" );
+if( $symCryptoTest == true ){
+    $sym=$sym.$gCryptoCurrency;
+}
 
 $gSymCrypto = TestAndGetWellFormedCryptoSymbol($sym);  // test for "BTC-USD",  Output: &symbol=BTC&market=USD
 if($gSymCrypto != "nil"){
@@ -2308,7 +2330,7 @@ $processedDataJson = json_encode($dataProcessed);
 
     <!-- Link to your external JavaScript file -->
     <!-- <script src="canvas0.js"></script> -->
-    <script src="canvas10.js"></script>
+    <script src="canvas0.js"></script>
     <!-- <script src="drawchart.js"></script> -->
 </body>
 </html>
