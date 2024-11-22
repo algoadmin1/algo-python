@@ -3305,7 +3305,15 @@ function toggleButton(buttonNumber) {
     // .then(data => printZipperString(data , ctx));
 
 
+//    let  gWatchlistCountdownFlag=0
 
+//         if( gWatchlistCountdownFlag ==1 ){
+//             ;
+//     // window.location.href = httpstrGo;   // same browser, go to next symbol
+
+//         }
+
+//EOCODE
 
 // #############################################################  MAIN CODE  *****
 // #############################################################  MAIN CODE  *****

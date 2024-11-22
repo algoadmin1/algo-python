@@ -189,7 +189,7 @@ if (!(isset($_SESSION["user"])) ) {
         // $_SESSION["appsecret"] = $appSecret ;
 
 
-    }
+}
 
 
 require_once 'cryptoslist.php';  // gen'd by formatcsv.php <-- takes digital_currency_list.csv
@@ -319,6 +319,25 @@ function TestEndOfString($str, $char) {
 // $char = "!";
 // $result = TestEndOfString($str, $char);
 // echo $result ? "True" : "False"; // Outputs: False
+
+
+
+
+
+
+
+
+// if(isset( $_SESSION['watchlistcountdownFlag'] )){
+//     if( $_SESSION['watchlistcountdown']>0){
+//         $arridx = $_SESSION['watchlistcountdown'];
+//         $_SESSION['watchlistcountdown']--;
+//         // get symbol from watchlist
+//     }
+// }else{
+//     // exec $_GET['sym']  symbol code here
+// }
+
+
 
 
 
