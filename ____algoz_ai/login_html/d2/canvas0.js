@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "301.1";
+let                                                                         gVer = "301.4";
 let             gDebugInfo = 1;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget.php?sym=" ;   
 
@@ -267,6 +267,25 @@ function RandomColorC(){
     // sets gRGBdecColor for
     return( rstr );
 }
+
+
+function MakeStringFromArray(watchlistArr0, insertChar) {
+    // Ensure the input is a valid array
+    if (!Array.isArray(watchlistArr0)) {
+        console.error("Invalid input: w@tchlistArr must be an array.");
+        return "";
+    }
+
+    // Use join to concatenate array elements with the insertChar
+    return watchlistArr.join(insertChar);
+}
+
+// // Example usage
+// const watc hlistArr = ["AAPL", "SPY", "QQQ", "NFLX", "TSLA"];
+// const insertChar = ",";
+// const result = MakeSt ringFromArray(wat chlistArr, insertChar);
+// console.log(result); // Output: "AAPL,SPY,QQQ,NFLX,TSLA"
+
 
 
 // function RandomColorC1(rng00){
@@ -2137,7 +2156,8 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
     let hstr = canvas.height.toString();
     gChartTextStrDebug=  "["+ wstr +"x"+ hstr +"],#cndl=" +gNumCandlesToRender.toString()+" , cndlW=" +gCandleWidth.toString() ;
 
-
+    
+    let localWatchlistStr = watchlistArrStr;
 
      let addstr = " ";
 
@@ -2147,6 +2167,7 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
         // DrawText( ctx, gChartTextStrDebug,  vrect.x+xoffset, vrect.y+yoffset+2+fsz, fsz , colScheme.tx , gGlobalFont);
         DrawText( ctx, gChartTextStrDebug,   vrect.x+xoffset, vrect.y+yoffset+2+fsz, fsz , colScheme.tx , gGlobalFont);
         DrawText( ctx, gChartTextStrDebug2,  vrect.x+xoffset, vrect.y+yoffset+6+fsz+fsz, fsz2 , 'lightblue' , gGlobalFont);
+        // DrawText( ctx, localWatchlistStr,  vrect.x+xoffset, vrect.y+yoffset+8+fsz+fsz+fsz, fsz2 , colScheme.tx , gGlobalFont);
 
      }
 

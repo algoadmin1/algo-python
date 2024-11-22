@@ -1,9 +1,135 @@
 
 <?php                       
-                                                              $ver=  "296.5";
+                                                              $ver=  "297.8";
 
 date_default_timezone_set('America/New_York');
 require_once "../login/database.php";
+
+$gCmpChars = "0123456789@/- ._abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+function MakeStringFromArray($watchlistArr1, $insertChar) {
+    // Ensure the input is a valid array
+    if (!is_array($watchlistArr1)) {
+        echo "Invalid input: watchlistArr must be an array.";
+        return "";
+    }
+
+    // Use implode to join array elements with the insertChar
+    return implode($insertChar, $watchlistArr1);
+}
+// // Example usage
+// $watchlistArr = ["AAPL", "SPY", "QQQ", "NFLX", "TSLA"];
+// $insertChar = ",";
+// $result = Make StringFromArray($watchlistArr, $insertChar);
+// echo $result; // Output: "AAPL,SPY,QQQ,NFLX,TSLA"
+
+function GetSymbols($fname, $currencyStr) {
+    global $gCmpChars;
+    // Initialize variables
+    $symbolStrArr = [];
+    $aiFlag = false;
+    $cmpChars =  $gCmpChars;   //  = "0123456789@/- ._abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    $symbols1 = [
+                "QQQ",
+                "SPY",
+                "PFE",
+                "AAPL",
+                "BRK.B",
+                "GS",
+                "F",
+                "MSFT",
+                "VXX",
+                "SQQQ",
+                "TQQQ",
+                "AMZN",
+                "AMD",
+                "X",
+                "JNJ",
+                "KO",
+                "BTC-USD",
+                "HAL",
+                "MSFT",
+                "MSTR",
+                "SOL-USD",
+                "V"
+            ];
+
+    // Check if the file exists
+    if (!file_exists($fname)) {
+        return $symbols1;
+        // return []; // Return an empty array if the file doesn't exist
+    }
+
+    // Read the file into an array of lines
+    $lines = file($fname, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+    // Loop through each line in the file
+    foreach ($lines as $line) {
+        $line = trim($line); // Remove leading and trailing whitespace
+
+        // if (strlen($line) < 3) {
+        //     continue; // Skip invalid or too short lines
+        // }
+        if (strlen($line) >= 3) {
+            
+            if (substr($line, 0, 3) === '/ai') {
+                $symbolStrAI = $line;
+                $symbolStrArr[] = $symbolStrAI;
+                $aiFlag = true;
+            }
+
+        }
+
+        // Check if the line starts with '/ai'
+        if ($aiFlag == false){
+
+            // Process symbols that don't start with '/ai'
+            $symbolStr = strtoupper($line); // Convert to uppercase
+            $symbolStr = str_replace("\r", "", $symbolStr); // Remove carriage returns
+
+            // Ensure $symbolStr only contains valid characters
+            $validStr = "";
+            for ($i = 0; $i < strlen($symbolStr); $i++) {
+                if (strpos($cmpChars, $symbolStr[$i]) !== false) {
+                    $validStr .= $symbolStr[$i];
+                }
+            }
+            $symbolStr = rtrim($validStr); // Remove trailing spaces
+
+            // If $symbolStr ends with '-', append the currency string
+            if (substr($symbolStr, -1) === '-') {
+                $symbolStr .= $currencyStr;
+            }
+
+            // Add to the array
+            $symbolStrArr[] = $symbolStr;
+        }
+        $aiFlag = false;   // reset the flag each loop
+    }//for
+
+
+    $symbolStrArr = array_unique($symbolStrArr);
+    $symbolStrArr = array_reverse($symbolStrArr);
+
+    // Return the array
+    return $symbolStrArr;
+}
+// init it with a few stocks
+$watchlistArr = [
+    "QQQ",
+    "SPY",
+    "DIA",
+    "AAPL",
+    "BRK.B",
+    "GS",
+    "TSLA",
+    "MSFT",
+    "VXX",
+    "SQQQ",
+    "TQQQ"
+];
+
 
 session_start();
 if (!(isset($_SESSION["user"])) ) {
@@ -22,6 +148,28 @@ if (!(isset($_SESSION["user"])) ) {
 
         $productstr1  = $_SESSION["user_productstr"]  ;
         $appSecret1  =  $_SESSION["appsecret"] ;
+
+        if (!(isset($_SESSION["watchlistArray"])) ) {
+            
+                // Example usage
+                $fname = "symbols.txt";
+                $currencyStr = "USD";
+                $watchlistArr =  GetSymbols($fname, $currencyStr);
+                $_SESSION["watchlistArray"]= $watchlistArr ;
+                // print_r($watchli stArr);
+
+                // $watchlistArrJson = json_encode($watchlistArr);
+                $watchlistArrStr= MakeStringFromArray($watchlistArr, ",");
+
+        }else{
+             $watchlistArr  =  $_SESSION["watchlistArray"];
+
+            $watchlistArrStr= MakeStringFromArray($watchlistArr, ",");
+            // DAL,AAL,CPM,SNOW,NVDA,AMD,L,MGM,C,JPM,WFC,BAC,AXP,WYNN,PFE,NKE,BRK.B,GS,F,RTX,AVAV,GD,BA,SQQQ,TQQQ,AMZN,TSLA,X,JNJ,KO,COP,HAL,MSFT,MSTR,SOL-USD,V,BTC-USD,NFLX,VXX,QQQ,SPY,AAPL
+
+        }
+
+
 
 
         // $_SESSION['crawlTime']=  t ;
@@ -2274,9 +2422,14 @@ $processedDataJson = json_encode($dataProcessed);
         // global $gCryptoSymbol, $gCryptoCurrency, $gCryptoName;
 
         
+        var watchlistArrStr = <?php echo '"'. $watchlistArrStr. '"'; ?>;
+
+        console.log("] still inside php: INSIDE .js: watchlstArrStr=**=", watchlistArrStr);
 
         var gColSchemeNum = <?php echo $sch; ?>;
         var processedData = <?php echo $processedDataJson; ?>;
+
+        
 
 
         // $email1         = $_SESSION["user"] ;
