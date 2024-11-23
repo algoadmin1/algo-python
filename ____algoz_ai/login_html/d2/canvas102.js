@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "304.1";
+let                                                                         gVer = "303.102";
 let             gDebugInfo = 1;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget.php?sym=" ;   
 
@@ -3314,8 +3314,8 @@ function toggleButton(buttonNumber) {
                     console.log("] FINISHED SYMBOL: ", g_watchlistLoopThru_sym, " waited");
                     console.log(   millisecs, " milliseconds to pass! Calling next one in WATCHLIST...;  w.list cnt==", g_watchlistLoopThru_cnt );
                     // You can perform any actions here after the delay
-                    // window.location.href = "https://algoz.ai/d2/jsonget100.php?sym=spy&loop=2";   // loop=2 is not a valid input but still calls
-                    window.location.href = "https://algoz.ai/d2/jsonget.php?sym=spy&loop=2";   // loop=2 is not a valid input but still calls
+                    window.location.href = "https://algoz.ai/d2/jsonget100.php?sym=spy&loop=2";   // loop=2 is not a valid input but still calls
+                    // window.location.href = "https://algoz.ai/d2/jsonget.php?sym=spy&loop=2";   // loop=2 is not a valid input but still calls
 
                 }, millisecs);
 

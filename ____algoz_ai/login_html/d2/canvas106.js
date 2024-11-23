@@ -1,9 +1,9 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "304.1";
+let                                                                         gVer = "303.106";
 let             gDebugInfo = 1;  // for   sc = 1.0
-let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget.php?sym=" ;   
+let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget100.php?sym=" ;   
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -3307,15 +3307,19 @@ function toggleButton(buttonNumber) {
 
         }else if( g_watchlistRUNNING == 1 ){
 
-                let millisecs = 750;
+                let millisecs = 1500; //750;
 
                 // Wait for 0.25 seconds ( 250 milliseconds)
                 setTimeout(() => {
                     console.log("] FINISHED SYMBOL: ", g_watchlistLoopThru_sym, " waited");
                     console.log(   millisecs, " milliseconds to pass! Calling next one in WATCHLIST...;  w.list cnt==", g_watchlistLoopThru_cnt );
                     // You can perform any actions here after the delay
+
+                    let httpsStr = gPrefixLink +"spy&loop=2";
+                    window.location.href =httpsStr ; 
+                    // "https://algoz.ai/d2/jsonget100.php?sym=spy&loop=2";   // loop=2 is not a valid input but still calls
                     // window.location.href = "https://algoz.ai/d2/jsonget100.php?sym=spy&loop=2";   // loop=2 is not a valid input but still calls
-                    window.location.href = "https://algoz.ai/d2/jsonget.php?sym=spy&loop=2";   // loop=2 is not a valid input but still calls
+                    // window.location.href = "https://algoz.ai/d2/jsonget.php?sym=spy&loop=2";   // loop=2 is not a valid input but still calls
 
                 }, millisecs);
 

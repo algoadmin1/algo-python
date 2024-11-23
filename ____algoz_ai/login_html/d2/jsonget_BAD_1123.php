@@ -1,11 +1,42 @@
-
 <?php                       
-                                                              $ver=  "297.8";
+                                                              $ver=  "303.102.2";
 
 date_default_timezone_set('America/New_York');
 require_once "../login/database.php";
 
 $gCmpChars = "0123456789@/- ._abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+$CreatorEmailName="roguequant1";
+
+
+function AppendFile($filename, $str) {
+    // Open the file for appending; create it if it doesn't exist
+    $fileHandle = fopen($filename, 'a');
+    
+    // Check if the file handle was successfully created
+    if ($fileHandle === false) {
+        echo "Error: Could not open file $filename for appending.";
+        return false;
+    }
+    
+    // Write the string to the file
+    if (fwrite($fileHandle, $str) === false) {
+        echo "Error: Could not write to file $filename.";
+        fclose($fileHandle); // Close the file handle
+        return false;
+    }
+    
+    // Close the file handle
+    fclose($fileHandle);
+    
+    echo "Successfully appended to file: $filename";
+    return true;
+}
+
+// $filename = "example.txt";
+// $str = "This is the string to append.\n";
+// App3ndFile($filename, $str);
+
+
 
 function MakeStringFromArray($watchlistArr1, $insertChar) {
     // Ensure the input is a valid array
@@ -24,7 +55,7 @@ function MakeStringFromArray($watchlistArr1, $insertChar) {
 // echo $result; // Output: "AAPL,SPY,QQQ,NFLX,TSLA"
 
 function GetSymbols($fname, $currencyStr) {
-    global $gCmpChars;
+    global $gCmpChars,  $watchlistArrVALiD;
     // Initialize variables
     $symbolStrArr = [];
     $aiFlag = false;
@@ -33,23 +64,18 @@ function GetSymbols($fname, $currencyStr) {
     $symbols1 = [
                 "QQQ",
                 "SPY",
-                "PFE",
                 "AAPL",
                 "BRK.B",
                 "GS",
-                "F",
                 "MSFT",
                 "VXX",
                 "SQQQ",
                 "TQQQ",
                 "AMZN",
                 "AMD",
-                "X",
-                "JNJ",
                 "KO",
                 "BTC-USD",
                 "HAL",
-                "MSFT",
                 "MSTR",
                 "SOL-USD",
                 "V"
@@ -150,50 +176,29 @@ if (!(isset($_SESSION["user"])) ) {
         $appSecret1  =  $_SESSION["appsecret"] ;
 
         if (!(isset($_SESSION["watchlistArray"])) ) {
-            
-                // Example usage
-                $fname = "symbols.txt";
-                $currencyStr = "USD";
-                $watchlistArr =  GetSymbols($fname, $currencyStr);
-                $_SESSION["watchlistArray"]= $watchlistArr ;
-                // print_r($watchli stArr);
+                    
+                        // if the watchlist array is not set, then  get the  current watchlist
+                        $fname = "symbols.txt";
+                        $currencyStr = "USD";
+                        $watchlistArr =  GetSymbols($fname, $currencyStr);
 
-                // $watchlistArrJson = json_encode($watchlistArr);
-                $watchlistArrStr= MakeStringFromArray($watchlistArr, ",");
+                        $_SESSION["watchlistArray"]= $watchlistArr ;
+                        // print_r($watchli stArr);
 
-        }else{
-             $watchlistArr  =  $_SESSION["watchlistArray"];
+                        // $watchlistArrJson = json_encode($watchlistArr);
+                        $watchlistArrStr= MakeStringFromArray($watchlistArr, ",");
 
-            $watchlistArrStr= MakeStringFromArray($watchlistArr, ",");
-            // DAL,AAL,CPM,SNOW,NVDA,AMD,L,MGM,C,JPM,WFC,BAC,AXP,WYNN,PFE,NKE,BRK.B,GS,F,RTX,AVAV,GD,BA,SQQQ,TQQQ,AMZN,TSLA,X,JNJ,KO,COP,HAL,MSFT,MSTR,SOL-USD,V,BTC-USD,NFLX,VXX,QQQ,SPY,AAPL
+                }else{
+                    $watchlistArr  =  $_SESSION["watchlistArray"];
 
-        }
+                    $watchlistArrStr= MakeStringFromArray($watchlistArr, ",");
+                    // DAL,AAL,CPM,SNOW,NVDA,AMD,L,MGM,C,JPM,WFC,BAC,AXP,WYNN,PFE,NKE,BRK.B,GS,F,RTX,AVAV,GD,BA,SQQQ,TQQQ,AMZN,TSLA,X,JNJ,KO,COP,HAL,MSFT,MSTR,SOL-USD,V,BTC-USD,NFLX,VXX,QQQ,SPY,AAPL
 
-
-
-
-        // $_SESSION['crawlTime']=  t ;
-        // $_SESSION['crawlstr']=  str ;
-
-        // from login
-        // $_SESSION["user"]  = $email ; 
-        // $_SESSION["userId"] = $userID0;    //   from indxmenu.php $userID0=$_SESSION["userId"];
-        // $_SESSION["numvisits"] = $numvisits;
-        // $_SESSION["userIP"] = $user_ip;
-        // $_SESSION["user_loc"] = $user_loc;
-        
-        // $_SESSION["user_lastDateTime"] = $user_lastDateTime;
-        // $_SESSION["user_lastDay"] = $user_lastDay ;
-
-        // $_SESSION["user_productstr"] = $productstr ;
-        // $_SESSION["appsecret"] = $appSecret ;
-
+                }
 
 }
 
-
 require_once 'cryptoslist.php';  // gen'd by formatcsv.php <-- takes digital_currency_list.csv
-
 
 
 $apikey ="M3LB7MG3JF83E3";
@@ -305,58 +310,174 @@ function TestAndGetWellFormedCryptoSymbol($sym) {
         return $newstr;
     }
 }
+
+
 function TestEndOfString($str, $char) {
-    // Check if the last character of $str matches $char
+    // Check if the last character of $str matches $char  ie BTC- or SOL-
     return substr($str, -1) === $char;
 }
-// // Example usage
-// $str = "hello!";
-// $char = "!";
-// $result = TestEndOfString($str, $char);
-// echo $result ? "True" : "False"; // Outputs: True
 
-// $str = "hello";
-// $char = "!";
-// $result = TestEndOfString($str, $char);
-// echo $result ? "True" : "False"; // Outputs: False
-
-
-
+function ReturnArrayItem($arr, $idx) {
+    // Ensure the input is a valid array and index is within bounds
+    if (is_array($arr) && $idx >= 0 && $idx < count($arr)) {
+        return $arr[$idx]; // Return the item at the specified index
+    } else {
+        return null; // Return null if index is out of bounds or $arr is not an array
+    }
+}
+// $wwatchlistArr0 = ["AAPL", "SPY", "QQQ", "NFLX", "TSLA"; $idx = 2;
+// $result = ReturnArrayItem($watchlistArr, $idx); // Output: The item at index 2 is: QQQ
 
 
 
+// here we assume the SIX 6 SESS vars are SET !!!!!!
+// here we assume the SIX 6 SESS vars are SET !!!!!!
+// here we assume the SIX 6 SESS vars are SET !!!!!!
+function GetNextSymbolFromWatchlist(){
+    global $g_watchlistLoopThru_cnt, $watchlistRUNNING,  $gWatchListSymStr;    
+    $sym0="QQQ";  // default
+
+    $g_watchlistLoopThru_cnt     = $_SESSION["watchlistLoopThruCount"] ;
+    $gWatchListSymStr            = ReturnArrayItem( $_SESSION["watchlistArray"],  $g_watchlistLoopThru_cnt);
+// here should test  if ==""
+    $_SESSION["watchlistLoopThru_currentSymbol"]   = $gWatchListSymStr ;
+    $sym0 = $gWatchListSymStr ;
+
+    $_SESSION["watchlistLoopThruCount"]++;
+    if( $_SESSION["watchlistLoopThruCount"] >= $_SESSION["watchlistLoopThruMax"]  ){
+
+        $_SESSION["watchlistLoopThru_running"]  = 0;
+        $watchlistRUNNING   = 0;
+
+    }
+
+    return ( $sym0 );
+}
 
 
-// if(isset( $_SESSION['watchlistcountdownFlag'] )){
-//     if( $_SESSION['watchlistcountdown']>0){
-//         $arridx = $_SESSION['watchlistcountdown'];
-//         $_SESSION['watchlistcountdown']--;
-//         // get symbol from watchlist
-//     }
-// }else{
-//     // exec $_GET['sym']  symbol code here
-// }
+
+// ######################################## >>>>>>>>>>> NEW sym CODE START HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE START HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE START HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE START HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE START HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE START HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE START HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE START HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE START HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE START HERE
+
+
+// ASSUME  WE didn't START a watchlist loop=1 ,  AND  WE'RE NOT IN WATCHLIST LOOP
+$startWatchlistLoop  = 0;       // =1 from user == start loop
+
+$watchlistRUNNING    = 0;       // =1 , == watchlist loop running
+$gWatchListSymStr="nil";
+$g_watchlistLoopThru_cnt=0;
+
+
+// https://algoz.ai/d2/jsonget100.php?sym=aapl&loop=1
+
+if( (!isset( $_SESSION["watchlistLoopThru_running"] ) )){
+    $watchlistRUNNING  = 0;
+
+}else   if( $_SESSION["watchlistLoopThru_running"]  == 1 ){
+            $watchlistRUNNING  = 1;
+        }
 
 
 
+// TEST IF WE JUST STARTED WATCHLIST LOOP WITH loop=1
+if( $watchlistRUNNING  == 0 ){
+
+        // really &loop=1 outside initialization for watchlist countdown
+        if( isset( $_GET['loop'] )){
+                    $startWatchlistLoop     = $_GET['loop'] ;
+
+                    if( $startWatchlistLoop != 1){
+                        $startWatchlistLoop = 0;
+                    }else if( $startWatchlistLoop == 1){    // *** FIRST TIME THRU but must be logged in as creator
+                        if(   ( isset($_SESSION["watchlistArray"]) )     &&      $emailName1  == $CreatorEmailName    ) {
+                                    // here we know it is jb and we've gone in once & gotten the current watchlist from symbols.txt
+                                    $startWatchlistLoop                       = 1;  // re-assign, forced, unecessry
+                                    $_SESSION["watchlistLoopThruMax"]         = count( $_SESSION["watchlistArray"] ) ;
+                                    $_SESSION["watchlistLoopThruCount"]       = 0;                    // start cnt
+
+                                    // turn it on...
+                                    $watchlistRUNNING                           = 1;
+                                    $_SESSION["watchlistLoopThru_running"]      = $watchlistRUNNING;
+                                  
+
+                                // here, watchlistRUNNING==1 so below we should re-route the ?sym= code to grab from G3tNextSymbolFromWatchlist();
+                            }else{
+                                $startWatchlistLoop = 0;
+                            }
+
+                    }
+        }else{
+            $startWatchlistLoop = 0;
+        }
+
+
+}// if( $w@tchlistRUNNING  == 0 ){
+
+// here we drop out and  $w@tchlistRUNNING  = 0  or  =1, if loop=1 started...
 
 
 
 $sym = "SPY";
-if(isset( $_GET['sym'] )){
+if( $watchlistRUNNING  == 1 ){
 
-    $sym = $_GET['sym'] ;
+    $sym = GetNextSymbolFromWatchlist();
+    echo "auto-algoz Watchlist Symbol: ". $sym; 
 
-    if($sym=="&"  || $sym=="" ){   
-        $sym = "DIA";
-    }else  if(CheckValidString($sym, $compareCharStringMASTER)==false){
-        $sym = "QQQ";
-    }
+}else if( $watchlistRUNNING  == 0 ){
 
-}else{
-    $sym = "SPY";
+// get $sym from ?sym=AAPL                  // ###################### orig  ?sym=GS code...
+
+        if(isset( $_GET['sym'] )){
+
+            $sym = $_GET['sym'] ;
+
+            if($sym=="&"  || $sym=="" ){   
+                $sym = "DIA";
+            }else  if(CheckValidString($sym, $compareCharStringMASTER)==false){
+                $sym = "QQQ";
+            }
+
+        }else{
+            $sym = "SPY";
+        }
+        $sym = strtoupper($sym);
+
 }
-$sym = strtoupper($sym);
+
+
+// ######################################## >>>>>>>>>>> NEW sym CODE   **END** HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE   **END** HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE   **END** HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE   **END** HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE   **END** HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE   **END** HERE
+// ######################################## >>>>>>>>>>> NEW sym CODE   **END** HERE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2440,10 +2561,18 @@ $processedDataJson = json_encode($dataProcessed);
         var gCryptoName     = <?php echo '"'. $gCryptoName. '"'; ?>;
         // global $gCryptoSymbol, $gCryptoCurrency, $gCryptoName;
 
-        
-        var watchlistArrStr = <?php echo '"'. $watchlistArrStr. '"'; ?>;
+        var watchlistArrStr             =  <?php echo '"'. $watchlistArrStr. '"'; ?>;
 
-        console.log("] still inside php: INSIDE .js: watchlstArrStr=**=", watchlistArrStr);
+        var g_watchlistLoopThru_sym     =  <?php echo '"'. $gWatchListSymStr. '"'; ?>;
+        var g_watchlistRUNNING          =  <?php echo $watchlistRUNNING; ?>;
+        var g_watchlistLoopThru_cnt     =  <?php echo $g_watchlistLoopThru_cnt; ?>;
+
+        console.log("] still inside php: INSIDE .js: watchlstLoopThru_sym, running, cnt ==", g_watchlistLoopThru_sym, g_watchlistRUNNING, g_watchlistLoopThru_cnt );
+        console.log("] still inside php: INSIDE .js: watchlstArrStr=**=", watchlistArrStr );  
+
+
+
+
 
         var gColSchemeNum = <?php echo $sch; ?>;
         var processedData = <?php echo $processedDataJson; ?>;
@@ -2500,9 +2629,18 @@ $processedDataJson = json_encode($dataProcessed);
  */
     </script>
 
+    <?php 
+    // bug - it did not do AAPL, didn't append the last symbol checked - still going in reverse
+        if($watchlistRUNNING==1){
+            $linestr = $gWatchListSymStr. ",".  "YYYY-MM-DD,noEventYet,EOL".  "\n";
+             AppendFile( "./auto/signals.txt", $linestr );
+        }
+    
+    ?>
+
     <!-- Link to your external JavaScript file -->
     <!-- <script src="canvas0.js"></script> -->
-    <script src="canvas0.js"></script>
+    <script src="canvas111.js"></script>
     <!-- <script src="drawchart.js"></script> -->
 </body>
 </html>

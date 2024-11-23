@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "304.1";
+let                                                                         gVer = "302.1";
 let             gDebugInfo = 1;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget.php?sym=" ;   
 
@@ -3054,7 +3054,7 @@ let gDrawCanvasButtons = 1;
         // Function to resize canvas and redraw the rectangle
 function resizeCanvas() {
 
-    // console.log("]  inside .js:  r3sizeCanvas():  button ...10 ==", button1, but ton2, bu tton3, button4,
+    // console.log("]  inside .js:  r3sizeCanvas():  button ...10 ==", button1, button2, button3, button4,
         //  button5, button6, button7, button8, button9, button10 );  
 
             // Set canvas width and height to match the div's size
@@ -3181,7 +3181,7 @@ function toggleButton(buttonNumber) {
 
                     window.dispatchEvent(new Event('button1'));  // Trigger event listener
                     break;
-                case 2:   //buy sell
+                case 2:
                     button2 = (button2 === 1) ? 0 : 1;
                     gDrawFinancials=0;
                         if(button2 == 0){
@@ -3193,7 +3193,7 @@ function toggleButton(buttonNumber) {
 
                     window.dispatchEvent(new Event('button2'));
                     break;
-                case 3:  // sup res
+                case 3:
                     button3 = (button3 === 1) ? 0 : 1;
                     gDrawFinancials=0;
 
@@ -3257,6 +3257,9 @@ function toggleButton(buttonNumber) {
 
 
 
+
+
+
 // #############################################################  MAIN CODE  *****
 // #############################################################  MAIN CODE  *****
 // #############################################################  MAIN CODE  *****
@@ -3264,6 +3267,7 @@ function toggleButton(buttonNumber) {
 // // Get the button and audio element
 // const playButton = document.getElementById('play-button');
 // const audio      = document.getElementById('audio');
+
 //         // Add click event listener to the button
 //         playButton.addEventListener('click', function() {
 //             // Play the audio when the button is clicked
@@ -3284,19 +3288,17 @@ function toggleButton(buttonNumber) {
 
         // Resize the canvas when the window is resized
         window.addEventListener('resize', resizeCanvas);
-
-        if( g_watchlistRUNNING == 1 ) {
-            button2 =1;   // force buy/sell on 
-            button3 =1;     // force supres on
-        }
         // Initial resize to set up the canvas
         resizeCanvas();
+        
 
         if( g_watchlistRUNNING == 0 )  setInterval( DrawCrawl, gCrawlSeconds100);
 
 
+        // now financial overvi3w data
         let arr1=[];
-        arr1= async_GetOverviewData();  // now financial overvi3w data
+        arr1= async_GetOverviewData();
+
 
         
         if( g_watchlistRUNNING == 0 ){    // CRAWL ZIPPER SHOULD BE GOTTEN ONCE AT START if we're not running watchlist
@@ -3307,17 +3309,15 @@ function toggleButton(buttonNumber) {
 
         }else if( g_watchlistRUNNING == 1 ){
 
-                let millisecs = 750;
 
                 // Wait for 0.25 seconds ( 250 milliseconds)
                 setTimeout(() => {
                     console.log("] FINISHED SYMBOL: ", g_watchlistLoopThru_sym, " waited");
-                    console.log(   millisecs, " milliseconds to pass! Calling next one in WATCHLIST...;  w.list cnt==", g_watchlistLoopThru_cnt );
+                    console.log("0.25 seconds to pass! Calling next one in WATCHLIST... , w.list cnt==", g_watchlistLoopThru_cnt );
                     // You can perform any actions here after the delay
-                    // window.location.href = "https://algoz.ai/d2/jsonget100.php?sym=spy&loop=2";   // loop=2 is not a valid input but still calls
                     window.location.href = "https://algoz.ai/d2/jsonget.php?sym=spy&loop=2";   // loop=2 is not a valid input but still calls
 
-                }, millisecs);
+                }, 250);
 
 
         }

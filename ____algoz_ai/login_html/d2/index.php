@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "18.5";
+                                                        $ver=  "18.1";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -104,7 +104,8 @@ $todays_udate  = date('Y-m-d');  // 'YYYY-MM-DD'
 /algoz.ai/favicon.ico
 
 /algoz.ai/d2/index.php              [  main dashboard  ]
-/algoz.ai/d2/jsonget.php
+/algoz.ai/d2/jsonget.php []
+/algoz.ai/d2/jsonget100.php
 
 /algoz.ai/d2/favicon.ico
 /algoz.ai/d2/style_d2.css
@@ -381,7 +382,7 @@ if (isset($eventsTable[0])) {
           
 
             <!-- <li><a href="#"><i class='bx bx-candles' id="chartBtn"></i>Charting</a></li> -->
-            <li><a href="https://algoz.ai/d2/jsonget.php?sym=spy"><i class='bx bx-candles' id="chartBtn"></i>Charting</a></li>
+            <li><a href="https://algoz.ai/d2/jsonget100.php?sym=spy"><i class='bx bx-candles' id="chartBtn"></i>Charting</a></li>
 <!-- 
             <li><a href="https://itraderpro.co/candlesticks.php?sym=nvda&uname=Guest&email=algoinvestorr@gmail.com&key=8a2b18a0"><i class='bx bx-candles' id="chartBtn"></i>Charting</a></li> -->
 
@@ -428,7 +429,7 @@ if (isset($eventsTable[0])) {
             <form action="#">
                 <div class="form-input">
                     <input type="search" placeholder="symbol...">
-                    <a href="https://algoz.ai/d2/jsonget.php?sym=spy&sch=1" target="_blank">
+                    <a href="https://algoz.ai/d2/jsonget100.php?sym=spy&sch=1" target="_blank">
                         <button class="search-btn" type="button"><i class='bx bx-search'></i></button>
                     </a>
                 </div>
@@ -439,7 +440,7 @@ if (isset($eventsTable[0])) {
              <form action="#" id="search-form">
                 <div class="form-input">
                     <input id="symbol-input" type="search" placeholder="symbol..." />
-                    <a id="search-link" href="https://algoz.ai/d2/jsonget.php?sym=spy&sch=1" target="_blank">
+                    <a id="search-link" href="https://algoz.ai/d2/jsonget100.php?sym=spy&sch=1" target="_blank">
                         <button class="search-btn" type="submit">
                            <i class='bx bx-search'></i>
                         </button>
@@ -456,7 +457,7 @@ if (isset($eventsTable[0])) {
             <!-- <form action="#" id="search-form">
                 <div class="form-input">
                     <input id="symbol-input" type="search" placeholder="symbol..." />
-                    <a id="search-link" href="https://algoz.ai/d2/jsonget.php?sym=spy&sch=1" target="_blank">
+                    <a id="search-link" href="https://algoz.ai/d2/jsonget100.php?sym=spy&sch=1" target="_blank">
                         <button class="search-btn" type="submit">
                         <i class='bx bx-search'></i>
                         </button>
@@ -532,9 +533,9 @@ if (isset($eventsTable[0])) {
                                 // Case 2: If ends with "-"
                                 if (searchBarStr.endsWith("-")) {
                                     searchBarStr += "USD"; // Add "USD" to the string
-                                    searchBarStrHttp = "https://algoz.ai/d2/jsonget.php?sym=" + encodeURIComponent(searchBarStr);
+                                    searchBarStrHttp = "https://algoz.ai/d2/jsonget100.php?sym=" + encodeURIComponent(searchBarStr);
                                 } else {    // Case 3: Default case
-                                    searchBarStrHttp = "https://algoz.ai/d2/jsonget.php?sym=" + encodeURIComponent(searchBarStr);
+                                    searchBarStrHttp = "https://algoz.ai/d2/jsonget100.php?sym=" + encodeURIComponent(searchBarStr);
                                 }
 
                         }
@@ -597,7 +598,7 @@ if (isset($eventsTable[0])) {
                         const userInput = document.getElementById('symbol-input').value;
                         
                         // Construct the new URL
-                        const newUrl = `https://algoz.ai/d2/jsonget.php?sym=${encodeURIComponent(userInput)}&sch=0`;
+                        const newUrl = `https://algoz.ai/d2/jsonget100.php?sym=${encodeURIComponent(userInput)}&sch=0`;
                         
                         // Redirect to the new URL
                         window.open(newUrl, '_blank');
@@ -609,7 +610,7 @@ if (isset($eventsTable[0])) {
                     const userInput = document.getElementById('symbol-input').value;
                     
                     // Construct the new URL
-                    const newUrl = `https://algoz.ai/d2/jsonget.php?sym=${encodeURIComponent(userInput)}&sch=0`;
+                    const newUrl = `https://algoz.ai/d2/jsonget100.php?sym=${encodeURIComponent(userInput)}&sch=0`;
                     
                     // Update the href attribute of the link
                     document.getElementById('search-link').href = newUrl;
