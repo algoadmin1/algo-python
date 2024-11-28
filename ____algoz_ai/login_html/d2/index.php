@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "18.1";  // jsonget100.php
+                                                        $ver=  "18.7";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -69,6 +69,9 @@ $BuyCall30min ="https://buy.stripe.com/28o5ncbru14209yaEP";
 
 $buySellSignals="https://algoinvestorr.com/algoz0/";
 $ccc = "https://algoinvestorr.com/ccc/";
+$pcc1 = "https://algoinvestorr.com/pcc/";
+$pcc ="https://algoinvestorr.com/pcc/index1.php?sym=spy";
+
 $pivots = "https://algoinvestorr.com/pivots/";
 
 $fintechfc = "https://algoz.ai/FFC.pdf";
@@ -376,8 +379,9 @@ if (isset($eventsTable[0])) {
             <li><a href="<?php echo $pivots; ?>"><i class='bx bx-vertical-bottom'></i>Price Levels</a></li>
             <!-- <li class="active"><a href="<?php echo $ccc; ?>"><i class='bx bx-math'></i>Covered Call Calc</a></li> -->
             <li><a href="<?php echo $ccc; ?>"><i class='bx bx-math'></i>Covered Call Calc</a></li>
+            <li><a href="<?php echo $pcc; ?>"><i class='bx bx-math'></i>Short Put Calc</a></li>
             <!-- <li><a href="#"><i class='bx bx-analyse'></i>BuySell Signals</a></li> -->
-            <li><a href="<?php echo $buySellSignals; ?>"><i class='bx bx-line-chart'></i>BuySell Signals</a></li>
+            <!-- <li><a href=" < ? php echo $buySellSignals; ?>"><i class='bx bx-line-chart'></i>BuySell Signals</a></li> -->
 
           
 
@@ -514,6 +518,8 @@ if (isset($eventsTable[0])) {
 
                         // Case 1: If starts with "/ai"
                         if (searchBarStr.startsWith("/ai")) {
+                            ai=true;
+
                             const gRemainingChars = searchBarStr.slice(3); // After "/ai"
                             searchBarStrHttp = "https://algoz.ai/ai/xai.php?prompt=" +  encodeURIComponent(gRemainingChars);
                             ai=true;
@@ -590,19 +596,19 @@ if (isset($eventsTable[0])) {
 
 
 
-                // Attach event listener to the form
-                document.getElementById('search-form').addEventListener('submit', function(event) {
-                        event.preventDefault(); // Prevent the default form submission behavior
+                // // Attach event listener to the form
+                // document.getElementById('search-form').addEventListener('submit', function(event) {
+                //         event.preventDefault(); // Prevent the default form submission behavior
 
-                        // Get the value entered by the user
-                        const userInput = document.getElementById('symbol-input').value;
+                //         // Get the value entered by the user
+                //         const userInput = document.getElementById('symbol-input').value;
                         
-                        // Construct the new URL
-                        const newUrl = `https://algoz.ai/d2/jsonget100.php?sym=${encodeURIComponent(userInput)}&sch=0`;
+                //         // Construct the new URL
+                //         const newUrl = `https://algoz.ai/d2/jsonget100.php?sym=${encodeURIComponent(userInput)}&sch=0`;
                         
-                        // Redirect to the new URL
-                        window.open(newUrl, '_blank');
-                    });
+                //         // Redirect to the new URL
+                //         window.open(newUrl, '_blank');
+                //     });
 
 
                 function updateLink() {
@@ -746,7 +752,7 @@ if (isset($eventsTable[0])) {
                 <div class="orders">
                     <div class="header">
                         <i class='bx bx-receipt'></i>
-                        <h3><?php echo $emailName ; ?>'s Activity</h3>
+                        <h3><?php echo $emailName ; ?>'s Signals</h3>
                         <!-- <h3>Recent Activity</h3> -->
                     </div>
 
