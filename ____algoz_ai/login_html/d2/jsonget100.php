@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "303.103";
+                                                              $ver=  "304.6";
 
 date_default_timezone_set('America/New_York');
 require_once "../login/database.php";
@@ -29,7 +29,7 @@ function AppendFile($filename, $str) {
     // Close the file handle
     fclose($fileHandle);
     
-    echo "Successfully appended to file: $filename";
+    //echo "Successfully appended to file: $filename";
     return true;
 }
 
@@ -806,6 +806,16 @@ function GetJsonData($url, $maxCandles, $strkey) {
     }
 }//fn
 
+
+function FloatDigits($floatnum, $numdigs) {
+    // Use round() to round the float to the specified number of decimal places
+    return round($floatnum, $numdigs);
+}
+// $floatnum = 123.456789;
+// $numdigs = 3;
+// $result = FloatDigits($floatnum, $numdigs);
+// echo "The number $floatnum rounded to $numdigs decimal places is: $result";
+
 /*
 R4day = High+ 3*(Pday-Low) ;
 R3day = (Pday-S1day) + R2day;
@@ -817,10 +827,32 @@ S2day = Pday – High + Low;
 S3day = Pday – (R2day-S1day);
 s4day = Low- 3*(High-Pday) ;
 */
+
+$signalsString_BuySignal    ="nilsym,1990-01-01,noEventBuySig,process";
+$signalsString_SellSignal   ="nilsym,1990-01-01,noEventSellSig,process";
+$signalsString_ATH          ="nilsym,1990-01-01,noEventATH,process";
+$signalsString_ATL          ="nilsym,1990-01-01,noEventATL,process";
+
+$signalsString_SupRes1     ="nilsym,1990-01-01,noEventSR1,process";
+$signalsString_SupRes2     ="nilsym,1990-01-01,noEventSR2,process";
+$signalsString_SupRes3     ="nilsym,1990-01-01,noEventSR3,process";
+$signalsString_MASTER      ="nil";  // ="nilsym,1990-01-01,noEventMASTER,process";
+
+$g_DailyCandlesBackToTestForSignals=11;  // i.e 11 trading days back
+
 function ProcessCandles($data,  $sym0, $intervalStr) {
 
     global $ChartHigh , $ChartHighIdx , $ChartHighDate , $ChartLow , $ChartLowIdx , $ChartLowDate ;
     global $BuyThreshold , $BuyThreshold2 ,  $SellThreshold , $SellThreshold2  ;
+
+
+    global $signalsString_BuySignal ,  $signalsString_SellSignal, $signalsString_ATH, $signalsString_ATL, $signalsString_SupRes1, $signalsString_SupRes2 , $signalsString_SupRes3  ;
+    global $g_DailyCandlesBackToTestForSignals, $signalsString_MASTER;
+
+    $data_len = count($data);
+
+
+
 
     $BuySignal = 0;
     $SellSignal = 0;
@@ -883,14 +915,27 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
     $HA_low  = 0;
     $HA_close= 0;
     
+    $gPer="";
+
+    $closeNearPct= 0.025;
+    $i_distToEnd=$data_len;
 
 
     foreach ($data as $date => &$value) {    // Loop through each element of the array
         
+
+
             $high  = floatval($value['high']);     // this candle's h,l,c,o [0]
             $low   = floatval($value['low']);
             $close = floatval($value['close']);
             $open  = floatval($value['open']);
+
+
+            $gPer = strtolower($value['globalper']);                 //  "Daily"  ==> daily
+            $udate00 = substr($date, 0, 10);      // 'YYYY-MM-DD HH:MM:SS.mmm' ==> 'YYYY-MM-DD'   ==> 09
+            $i_distToEnd = $data_len - $i ;   // ie 95= 0 > 11,   but 95 - 90 = 5 < 11 ok , print signal
+
+
 
 
 // start pivot get stuff
@@ -1053,17 +1098,21 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 
 
 
-
         //track chart allTimeHigh allTimeLow
         if( $high > $ChartHigh ){
             $ChartHigh = $high  ;
             $ChartHighIdx = $i ;
             $ChartHighDate = $date;
+            
+            $signalsString_ATH = $sym0. ",". $udate00. ",All-time High: ". $high. ",completed";
+           
         } 
         if( $low < $ChartLow ){
             $ChartLow = $low  ;
             $ChartLowIdx = $i ;
             $ChartLowDate = $date;
+            
+            $signalsString_ATL = $sym0. ",". $udate00. ",All-time Low: ". $low. ",completed";
         }
 
 
@@ -1370,6 +1419,8 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
                                 $value['sellSignal']        = 1;
                                 $value['sellSignalCnt']     = $BuySignal;
                                 $value['sellSignalPrice']   = $P3; 
+                                $signalsString_SellSignal = $sym0. ",". $udate00. ",Sell Signal_". $BuySignal. ": ". $P3. ",pending";
+
                         }
                     }// if($SellSignal==1){
                     $BuySignal=0;  //zero  counter
@@ -1388,6 +1439,8 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
                             $value['buySignal']         = 1;
                             $value['buySignalCnt']      = $SellSignal;
                             $value['buySignalPrice']    = $P3; 
+                            $signalsString_BuySignal = $sym0. ",". $udate00. ",Buy Signal_". $SellSignal. ": ". $P3. ",pending";
+
                         }
                     }// if($BuySignal==1){
                     $SellSignal=0;      //zero  counter
@@ -1413,6 +1466,52 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         
 
 
+
+//  ###########  chk close close to S1, R1, S2 R2
+
+    if($i_distToEnd < $g_DailyCandlesBackToTestForSignals) {    // ie 95= 0 > 11,   but 95 - 90 = 5 < 11 ok , print signal
+
+        // test S1,R1
+            if( abs( $close - $S1month ) <  ($close * $closeNearPct) ){
+                $flnum = FloatDigits($S1month, 2);
+                $signalsString_SupRes1 = $sym0. ",". $udate00. ",Near S1month_". $flnum. ": ". $close. ",pending";
+            }
+            if( abs( $close - $R1month ) <  ($close * $closeNearPct) ){
+                $flnum = FloatDigits($R1month, 2);
+                $signalsString_SupRes1 = $sym0. ",". $udate00. ",Near R1month_". $flnum. ": ". $close. ",pending";
+            }
+
+        // test S2,R2
+        if( abs( $close - $S2month ) <  ($close * $closeNearPct) ){
+                $flnum = FloatDigits($S2month, 2);
+                $signalsString_SupRes2 = $sym0. ",". $udate00. ",Near S2month_". $flnum. ": ". $close. ",pending";
+            }
+            if( abs( $close - $R2month ) <  ($close * $closeNearPct) ){
+                $flnum = FloatDigits($R2month, 2);
+                $signalsString_SupRes2 = $sym0. ",". $udate00. ",Near R2month_". $flnum. ": ". $close. ",pending";
+            }
+
+        // test S3,R3
+        if($close < $S3month){
+            $flnum = FloatDigits($S3month, 2);
+            $signalsString_SupRes3 = $sym0. ",". $udate00. ",Below S3month_". $flnum. ": ". $close. ",pending";
+
+        }
+
+        if($close > $R3month){
+            $flnum = FloatDigits($R3month, 2);
+            $signalsString_SupRes3 = $sym0. ",". $udate00. ",Above R3month_". $flnum. ": ". $close. ",pending";
+        }
+
+
+            
+    }
+
+
+
+
+
+
 // ############################################   END OF LOOP
 // ############################################   END OF LOOP
 // ############################################   END OF LOOP
@@ -1422,7 +1521,15 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
     }// foreach loop
 
 
-   
+
+
+if( $gPer=="daily" ){
+    $signalsString_MASTER = $signalsString_ATH."\n". $signalsString_ATL."\n". $signalsString_BuySignal ."\n". $signalsString_SellSignal ."\n". $signalsString_SupRes1 ."\n". $signalsString_SupRes2 ."\n".  $signalsString_SupRes3 ."\n"  ;
+}
+
+
+
+
     // 2ndLoop find year H L  C
     // 2ndLoop find year H L  C
     // 2ndLoop find year H L  C
@@ -2605,8 +2712,9 @@ $processedDataJson = json_encode($dataProcessed);
         var g_user_lastDay1          = <?php echo '"'. $user_lastDay1. '"'; ?>;
         var g_productstr1            = <?php echo '"'. $productstr1. '"'; ?>;
         var g_appSecret1             = <?php echo '"'. $appSecret1. '"'; ?>;
+        // var g_signalsString_MASTER             = < ? php echo '"'. $signalsString_MASTER. '"'; ? >;
 
-
+         
 
         console.log("] still inside php:  processedData==", processedData); // You can access the PHP data in JS now
 
@@ -2631,8 +2739,21 @@ $processedDataJson = json_encode($dataProcessed);
     </script>
 
     <?php 
+    // { stock: 'AAPL', date: '10-08-24', status: 'Trending UP', comment: 'completed' },
         if($watchlistRUNNING==1){
-            $linestr = $gWatchListSymStr. ",".  "YYYY-MM-DD,noEventYet,EOL".  "\n";
+            $today1 = date("Y-m-d");   // YYYY-MM-DD
+            $today2 = date("m-d-y");    // MM-DD-YY
+
+            $sym007 = $gWatchListSymStr;
+            if($sym007 == ""){
+                $sym007="nilsym";
+            }
+            $linestr = $sym007. ",".  $today1. ",noEventYet,EOL".  "\n";
+            // $linestr = $gWatchListSymStr. ",".  $today1. ",noEventYet,EOL".  "\n";
+
+            if($signalsString_MASTER!="nil"){
+                $linestr=$signalsString_MASTER ;
+            }
              AppendFile( "./auto/signals.txt", $linestr );
         }
     

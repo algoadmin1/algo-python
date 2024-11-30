@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "18.7";  // jsonget100.php
+                                                        $ver=  "18.8";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -71,7 +71,8 @@ $buySellSignals="https://algoinvestorr.com/algoz0/";
 $ccc = "https://algoinvestorr.com/ccc/";
 $pcc1 = "https://algoinvestorr.com/pcc/";
 $pcc ="https://algoinvestorr.com/pcc/index1.php?sym=spy";
-
+$craps0 = "https://algoz.ai/craps";
+$craps = "https://itraderpro.co/craps";
 $pivots = "https://algoinvestorr.com/pivots/";
 
 $fintechfc = "https://algoz.ai/FFC.pdf";
@@ -406,7 +407,9 @@ if (isset($eventsTable[0])) {
 
             <li><a href="<?php echo $bmi; ?>"><i class='bx bx-health'></i>BMI Calc</a></li>
             <li><a href="<?php echo $fitnessfc; ?>"><i class='bx bx-heart'></i>Fitness Fasterclass</a></li>  
-
+          
+            <li><a href="<?php echo $craps; ?>"><i class='bx bx-dice-6'></i>Craps</a></li>  
+            <!-- <use href="#bx--dice-6" /> -->
             <!-- <li><a href="#"><i class='bx bx-group'></i>Users</a></li> -->
             <!-- <li><a href="#"><i class='bx bx-cog'></i>Settings</a></li> -->
         </ul>
