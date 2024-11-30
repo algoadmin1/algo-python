@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "19.1";  // jsonget100.php
+                                                        $ver=  "20.7";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -100,6 +100,15 @@ $prettyDateTime.= " EDT";
 
 // Format the date and time as 'D M jS g:ia'
 $todays_udate  = date('Y-m-d');  // 'YYYY-MM-DD'
+
+
+
+
+
+
+
+
+
 
 
 /*
@@ -206,7 +215,7 @@ function ReadSignalsFile($fname) {
 
 // // Example usage
 // try {
-//     $sortedArray = ReadSignalsFile("signals.txt");
+//     $sortedArray = ReadSignalsFile("./auto/signals.txt");
 //     print_r($sortedArray);
 // } catch (Exception $e) {
 //     echo "Error: " . $e->getMessage();
@@ -298,6 +307,45 @@ function IsAvailable( $udate ){
     return ($tf); 
 
 }
+ 
+
+function prettyPrintArray($sortedArray) {
+    foreach ($sortedArray as $index => $entry) {
+        echo "Entry " . ($index + 1) . ":\n";
+        foreach ($entry as $key => $value) {
+            echo "  $key: $value\n";
+        }
+        echo str_repeat("-", 30) . "\n"; // Separator between entries
+    }
+}
+
+// // Example usage with the sorted array
+// try {
+//     $sortedArray = ReadSignalsFile("signals.txt");
+//     prettyPrintArray($sortedArray);
+// } catch (Exception $e) {
+//     echo "Error: " . $e->getMessage();
+// }
+
+
+
+
+// ############################# END OF FUNCTIONS, CALL CODE HERE...
+
+
+// Example usage
+try {
+    $sortedSignalsArray       = ReadSignalsFile("./auto/signals.txt");
+    $processedSignalsDataJson = json_encode($sortedSignalsArray);    // prep for .js
+
+    // prettyPrintArray($sortedSignalsArray);
+    // echo "<br />";
+    // print_r($sortedSignalsArray);
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+}
+
+
 
 
 /* 
@@ -370,6 +418,20 @@ if (isset($eventsTable[0])) {
 
 ?>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -385,21 +447,113 @@ if (isset($eventsTable[0])) {
     <script src="eventstable.js"></script>
     
     <script>
+                //$prcessedSignalsDataJson = json_encode($sortedSignalsArray);    // prep for .js
+                 var processedSignalsDataOrig = <?php echo $processedSignalsDataJson; ?>;
+                 console.log("] ***>> INSIDE <script> index.php, processedSignalsDataOrig ==",processedSignalsDataOrig);
+
+
+
+                 function ConvertSignalsData( processedSignalsData, daysBack) {
+                        // Initialize an array to hold the filtered and transformed data
+                        const resultArray = [];
+                        
+                        // Get today's date and calculate the cutoff date
+                        const today = new Date();
+                        const cutoffDate = new Date();
+                        cutoffDate.setDate(today.getDate() - daysBack);
+                        
+                        // Loop through the processedSignalsData
+                        processedSignalsData.forEach(entry => {
+                            // Parse the 'udate' field into a Date object
+                            const entryDate = new Date(entry.udate);
+
+                            // Check if the entry date is within the 'daysBack' range
+                            if (entryDate >= cutoffDate) {
+                                // Transform the entry into the new format and push it to resultArray
+                                resultArray.push({
+                                    stock: entry.symbol,
+                                    date: entry.udate,
+                                    status: `${entry.sigstr}_${entry.signum1}: ${entry.symprice}`,
+                                    comment: entry.status
+                                });
+                            }
+                        });
+
+                        // Return the new abbreviated array
+                        return resultArray;
+
+
+                        /**
+                         * 
+
+                                [
+                                    {
+                                        stock: "BTC-USD",
+                                        date: "2024-11-30",
+                                        status: "Above_R3month_88386.06: 96765.44",
+                                        comment: "pending"
+                                    }
+                                ]
+                         */
+
+                    }
+                    // // Example usage
+                    // const daysBack = 10; // Example: Filter for the last 10 days
+                    // const abbreviatedArray = Co nvertSignalsData(processedSignalsData, daysBack);
+                    // console.log(abbreviatedArray);
+
+
+
 
                     // Function to get panel data - sample data for illustration
                     function GetPanelData() {
-                        return [
-                            { stock: 'AAPL', date: '10-08-24', status: 'Trending UP', comment: 'completed' },
-                            { stock: 'NVDA', date: '10-08-24', status: 'Consolidating', comment: 'pending' },
-                            { stock: 'NFLX', date: '10-08-24', status: 'Trending DOWN', comment: 'process' },
-                            { stock: 'QQQ', date: '10-08-24', status: 'Trending UP', comment: 'process' },
-                            { stock: 'KO', date: '10-08-24', status: 'Trending UP', comment: 'process' },
-                            { stock: 'MSFT', date: '12-09-24', status: 'Trending DOWN', comment: 'process' },
-                            { stock: 'META', date: '12-10-24', status: 'Trending DOWN', comment: 'process' },
-                            { stock: 'AMZN', date: '12-10-24', status: 'Trending DOWN', comment: 'pending' },
 
-                            { stock: 'GS', date: '12-10-24', status: 'Trending UP', comment: 'completed' }
-                        ];
+                            // Example usage
+                            const daysBack = 12; // Example: Filter for the last 10 days
+                            let abbreviatedArray = ConvertSignalsData( processedSignalsDataOrig, daysBack );
+                            console.log("] inside G3tPanelData():  abbreviatedArray[]==", abbreviatedArray);
+
+
+                            // let dummyArr = [
+                            //         { stock: 'AAPL', date: '10-08-24', status: 'Trending UP', comment: 'completed' },
+                            //         { stock: 'NVDA', date: '10-08-24', status: 'Consolidating', comment: 'pending' },
+                            //         { stock: 'NFLX', date: '10-08-24', status: 'Trending DOWN', comment: 'process' },
+                            //         { stock: 'QQQ', date: '10-08-24', status: 'Trending UP', comment: 'process' },
+                            //         { stock: 'KO', date: '10-08-24', status: 'Trending UP', comment: 'process' },
+                            //         { stock: 'MSFT', date: '12-09-24', status: 'Trending DOWN', comment: 'process' },
+                            //         { stock: 'META', date: '12-10-24', status: 'Consolidating', comment: 'process' },
+                            //         { stock: 'AMZN', date: '12-10-24', status: 'Trending DOWN', comment: 'pending' },
+                            //         { stock: 'WBA', date: '12-10-24', status: 'Trending DOWN', comment: 'process' },
+                            //         { stock: 'SPY', date: '12-11-24', status: 'Trending UP', comment: 'process' },
+                            //         { stock: 'MSTR', date: '12-15-24', status: 'Trending DOWN', comment: 'process' },
+                            //         { stock: 'PLTR', date: '12-15-24', status: 'Trending SIDEW', comment: 'process' },
+                            //         { stock: 'MGM', date: '12-15-24', status: 'Trending DOWN', comment: 'process' },
+                            //         { stock: 'AMD', date: '12-15-24', status: 'Trending DOWN', comment: 'process' },
+
+                            //         { stock: 'GS', date: '12-10-24', status: 'Trending UP', comment: 'completed' }
+
+                            //          ];
+
+                            // console.log("] inside G3tPanelData():  dummyArr[]==", dummyArr);
+                            // return dummyArr;  
+
+
+                            return abbreviatedArray;  
+
+                        // return [
+                        //     { stock: 'AAPL', date: '10-08-24', status: 'Trending UP', comment: 'completed' },
+                        //     { stock: 'NVDA', date: '10-08-24', status: 'Consolidating', comment: 'pending' },
+                        //     { stock: 'NFLX', date: '10-08-24', status: 'Trending DOWN', comment: 'process' },
+                        //     { stock: 'QQQ', date: '10-08-24', status: 'Trending UP', comment: 'process' },
+                        //     { stock: 'KO', date: '10-08-24', status: 'Trending UP', comment: 'process' },
+                        //     { stock: 'MSFT', date: '12-09-24', status: 'Trending DOWN', comment: 'process' },
+                        //     { stock: 'META', date: '12-10-24', status: 'Trending DOWN', comment: 'process' },
+                        //     { stock: 'AMZN', date: '12-10-24', status: 'Trending DOWN', comment: 'pending' },
+
+                        //     { stock: 'GS', date: '12-10-24', status: 'Trending UP', comment: 'completed' }
+                        // ];
+
+
                     }
 
                     // Function to render the table rows based on data returned from GetPanelData
@@ -856,13 +1010,13 @@ if (isset($eventsTable[0])) {
                         <li class="completed">
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
-                                <p>Nov 28th Thanksgiving</p>
+                                <p>Dec 18th FMOC Meeting</p>
                             </div>
                         </li>
                         <li class="completed">
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
-                                <p>Dec 18th FMOC Meeting</p>
+                                <p>Dec 25th Christmas</p>
                             </div>
                         </li>
                         <li class="completed">

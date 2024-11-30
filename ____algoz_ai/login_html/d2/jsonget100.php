@@ -2495,7 +2495,7 @@ $dataProcessed = ProcessCandles($data, $sym0, $intervalStr);
 if($printjson==1) PrintJsonData($dataProcessed, $sym0, $strkey , $maxCandles );
 
 // Convert $processedData to JSON
-$processedDataJson = json_encode($dataProcessed);
+$processedDataJson = json_encode($dataProcessed);    // $sortedSignalsArray
 
 
 // Output the data
