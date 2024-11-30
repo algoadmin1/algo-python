@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "18.8";  // jsonget100.php
+                                                        $ver=  "19.1";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -149,6 +149,68 @@ $todays_udate  = date('Y-m-d');  // 'YYYY-MM-DD'
 // }
 // $sym = strtoupper($sym);
 // echo "] sym = ". $sym ;
+
+
+
+
+
+
+
+
+function ReadSignalsFile($fname) {
+    // Define the list of keys
+    $keys = [
+        "symbol", "udate", "utime", "per", "sigstr", 
+        "signum1", "signum2", "symprice", "status", "aux1", "aux2"
+    ];
+    
+    $result = [];
+
+    // Open the file for reading
+    if (($handle = fopen($fname, "r")) !== false) {
+        // Read each line in the file
+        while (($line = fgets($handle)) !== false) {
+            // Remove any trailing whitespace
+            $line = trim($line);
+
+            // Skip empty lines
+            if (empty($line)) {
+                continue;
+            }
+
+            // Split the line by commas
+            $values = explode(",", $line);
+
+            // Create an associative array using the keys
+            $entry = array_combine($keys, $values);
+
+            // Add the entry to the result array
+            if ($entry) {
+                $result[] = $entry;
+            }
+        }
+
+        // Close the file
+        fclose($handle);
+
+        // Sort the array by 'udate' in descending order
+        usort($result, function ($a, $b) {
+            return strtotime($b['udate']) - strtotime($a['udate']);
+        });
+
+        return $result;
+    } else {
+        throw new Exception("Could not open file: $fname");
+    }
+}
+
+// // Example usage
+// try {
+//     $sortedArray = ReadSignalsFile("signals.txt");
+//     print_r($sortedArray);
+// } catch (Exception $e) {
+//     echo "Error: " . $e->getMessage();
+// }
 
 
 function PrettyDate1($udate) {

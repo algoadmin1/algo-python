@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "304.6";
+                                                              $ver=  "307.5";
 
 date_default_timezone_set('America/New_York');
 require_once "../login/database.php";
@@ -8,6 +8,23 @@ require_once "../login/database.php";
 $gCmpChars = "0123456789@/- ._abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 $CreatorEmailName="roguequant1";
 
+
+$signalsString_MASTER      ="nil";  // =" ,1990-01-01,noEventMASTER,process";
+$g_DailyCandlesBackToTestForSignals=11;  // i.e 11 trading days back
+$g_utimeDailyClose = "16:16:00";
+$gPer="daily";  //default
+
+function Check_nilsym($str00){
+    $retstr ="";
+
+    if (substr($str00, 0, 7) === "*nilsym"){
+        $retstr ="";
+    }else{
+        $retstr =$str00. "\n";
+    }
+
+    return($retstr);
+}
 
 function AppendFile($filename, $str) {
     // Open the file for appending; create it if it doesn't exist
@@ -303,6 +320,8 @@ function TestAndGetWellFormedCryptoSymbol($sym) {
             $gCryptoSymbol  = "BTC"; //$symcrypto;
             $gCryptoCurrency= "USD"; //  $currency;
             $gCryptoName= "Bitcoin";
+            $gCryptoNameWellFormed="BTC-USD";
+
         }
 
         // Create the new string
@@ -479,8 +498,8 @@ if( $watchlistRUNNING  == 1 ){
 
 
 
-
-
+//default
+$gAssetType = "stocks";  // =="crypto"  =="forex" etc future
 
 //   crypto
 $gDigitalCurrency= 0;
@@ -488,17 +507,33 @@ $gCryptoCurrency="USD";
 $gCryptoSymbol="BTC";
 $gCryptoName="Bitcoin";
 
-$symCryptoTest = TestEndOfString($sym, "-" );
+$gCryptoNameWellFormed ="undefCrypto-USD";
+
+
+//
+//
+$symCryptoTest = TestEndOfString($sym, "-" );                // test for BTC-  or SOL-
 if( $symCryptoTest == true ){
-    $sym=$sym.$gCryptoCurrency;
+    $sym=$sym.$gCryptoCurrency;                 //   BTC-    ===>    BTC-USD
+
+    $gCryptoNameWellFormed = $sym ;
+    $gAssetType = "crypto";
+
 }
 
-$gSymCrypto = TestAndGetWellFormedCryptoSymbol($sym);  // test for "BTC-USD",  Output: &symbol=BTC&market=USD
+
+$gSymCrypto = TestAndGetWellFormedCryptoSymbol($sym);       // test for "BTC-USD",  Output: &symbol=BTC&market=USD
 if($gSymCrypto != "nil"){
     $gDigitalCurrency= 1;
     $sym = $gCryptoSymbol;  // updated inside T3stAndGet...().
+
+    $gCryptoNameWellFormed = $sym ;
+    $gAssetType = "crypto";
+
 }else{
     $gDigitalCurrency= 0;
+    $gAssetType = "stocks";
+
 }
 if($msg==1 &&  $gDigitalCurrency== 1){
     echo "] CRYPTO FOUND!!!!   ;  gSymCrypto= $gSymCrypto , sym==". $sym. " currency==".$gCryptoCurrency ;
@@ -828,29 +863,116 @@ S3day = Pday – (R2day-S1day);
 s4day = Low- 3*(High-Pday) ;
 */
 
-$signalsString_BuySignal    ="nilsym,1990-01-01,noEventBuySig,process";
-$signalsString_SellSignal   ="nilsym,1990-01-01,noEventSellSig,process";
-$signalsString_ATH          ="nilsym,1990-01-01,noEventATH,process";
-$signalsString_ATL          ="nilsym,1990-01-01,noEventATL,process";
+// NOTE: When called, this DOES NOT APPEND "\n"
+//   $si =  FrmatSignalString( $sym0, $udate00, $g_utimeDailyClose, $gPer, "Near_R1month", $flnum, 0.0, $close, "pending", "aux1",  "aux2" );
+function FormatSignalString( $symbol, $udate, $utime, $per, $sigstr, $signum1, $signum2, $symprice, $status, $aux1,  $aux2 ){
+    $retStr = "";
+    $c = ",";
+    $retStr = $symbol. $c. $udate. $c. $utime. $c. $per. $c. $sigstr. $c. $signum1. $c. $signum2. $c. $symprice. $c. $status. $c. $aux1. $c.  $aux2 ;
+    return( $retStr );
+}
 
-$signalsString_SupRes1     ="nilsym,1990-01-01,noEventSR1,process";
-$signalsString_SupRes2     ="nilsym,1990-01-01,noEventSR2,process";
-$signalsString_SupRes3     ="nilsym,1990-01-01,noEventSR3,process";
-$signalsString_MASTER      ="nil";  // ="nilsym,1990-01-01,noEventMASTER,process";
 
-$g_DailyCandlesBackToTestForSignals=11;  // i.e 11 trading days back
+$signalsString_BuySignal  =  FormatSignalString( "*nilsym", "1900-01-01", $g_utimeDailyClose, $gPer, "No_Event_BuySig",  0.0, 0.0, 0.0, "process", "aux1",  "aux2" );
+$signalsString_SellSignal =  FormatSignalString( "*nilsym", "1900-01-01", $g_utimeDailyClose, $gPer, "No_Event_SellSig", 0.0, 0.0, 0.0, "process", "aux1",  "aux2" );
+$signalsString_ATH =  FormatSignalString( "*nilsym", "1900-01-01", $g_utimeDailyClose, $gPer, "No_Event_ATH", 0.0, 0.0, 0.0, "process", "aux1",  "aux2" );
+$signalsString_ATL =  FormatSignalString( "*nilsym", "1900-01-01", $g_utimeDailyClose, $gPer, "No_Event_ATL", 0.0, 0.0, 0.0, "process", "aux1",  "aux2" );
+
+$signalsString_SupRes1 =  FormatSignalString( "*nilsym", "1900-01-01", $g_utimeDailyClose, $gPer, "No_Event_SR1", 0.0, 0.0, 0.0, "process", "aux1",  "aux2" );
+$signalsString_SupRes2 =  FormatSignalString( "*nilsym", "1900-01-01", $g_utimeDailyClose, $gPer, "No_Event_SR2", 0.0, 0.0, 0.0, "process", "aux1",  "aux2" );
+$signalsString_SupRes3 =  FormatSignalString( "*nilsym", "1900-01-01", $g_utimeDailyClose, $gPer, "No_Event_SR3", 0.0, 0.0, 0.0, "process", "aux1",  "aux2" );
+
+$signalsString_GapUpDn =  FormatSignalString( "*nilsym", "1900-01-01", $g_utimeDailyClose, $gPer, "No_Event_Gaps", 0.0, 0.0, 0.0, "process", "aux1",  "aux2" );
+
+
+function ReadSignalsFile0($fname) {
+    // Define the list of keys
+    $keys = [
+        "symbol", "udate", "utime", "per", "sigstr", 
+        "signum1", "signum2", "symprice", "status", "aux1", "aux2"
+    ];
+    
+    $result = [];
+
+    // Open the file for reading
+    if (($handle = fopen($fname, "r")) !== false) {
+        // Read each line in the file
+        while (($line = fgets($handle)) !== false) {
+            // Remove any trailing whitespace
+            $line = trim($line);
+
+            // Skip empty lines
+            if (empty($line)) {
+                continue;
+            }
+
+            // Split the line by commas
+            $values = explode(",", $line);
+
+            // Create an associative array using the keys
+            $entry = array_combine($keys, $values);
+
+            // Add the entry to the result array
+            if ($entry) {
+                $result[] = $entry;
+            }
+        }
+
+        // Close the file
+        fclose($handle);
+
+        // Sort the array by 'udate' in descending order
+        usort($result, function ($a, $b) {
+            return strtotime($b['udate']) - strtotime($a['udate']);
+        });
+
+        return $result;
+    } else {
+        throw new Exception("Could not open file: $fname");
+    }
+}
+
+// // Example usage
+// try {
+//     $sortedArray = ReadSignalsFile0("signals.txt");
+//     print_r($sortedArray);
+// } catch (Exception $e) {
+//     echo "Error: " . $e->getMessage();
+// }
+
+
+
+
+
+
+
+// $signalsString_MASTER      ="nil";  // ="nil sym,1990-01-01,noEventMASTER,process";
+// $g_DailyCandlesBackToTestForSignals=11;  // i.e 11 trading days back
+// $g_utimeDailyClose = "16:16:00";
+
 
 function ProcessCandles($data,  $sym0, $intervalStr) {
-
     global $ChartHigh , $ChartHighIdx , $ChartHighDate , $ChartLow , $ChartLowIdx , $ChartLowDate ;
-    global $BuyThreshold , $BuyThreshold2 ,  $SellThreshold , $SellThreshold2  ;
+    global $BuyThreshold , $BuyThreshold2 ,  $SellThreshold , $SellThreshold2 , $gPer ;
 
-
-    global $signalsString_BuySignal ,  $signalsString_SellSignal, $signalsString_ATH, $signalsString_ATL, $signalsString_SupRes1, $signalsString_SupRes2 , $signalsString_SupRes3  ;
-    global $g_DailyCandlesBackToTestForSignals, $signalsString_MASTER;
+    global $signalsString_BuySignal ,  $signalsString_SellSignal, $signalsString_ATH, $signalsString_ATL, $signalsString_SupRes1, $signalsString_SupRes2 , $signalsString_SupRes3, $signalsString_GapUpDn  ;
+    global $g_DailyCandlesBackToTestForSignals, $signalsString_MASTER, $g_utimeDailyClose;
+    global $gSymCrypto, $gAssetType, $gCryptoNameWellFormed;
 
     $data_len = count($data);
 
+    $numYears_Stocks = $data_len / 252;
+    $numYears_Crypto = $data_len / 365;
+
+    // default to STOCKS For now,       BUT RESET BeLOW if data steam is BTC- or SOL-   ETC
+    $numYears_Gen0 =  $numYears_Stocks;
+    $sym0_resolved = $sym0;
+
+    if( $gAssetType == "crypto" ){
+        $numYears_Gen0 =  $numYears_Crypto;
+        $sym0_resolved = $gCryptoNameWellFormed;
+    }
+    $numYears_Gen = FormatToNDecimals( $numYears_Gen0, 2 );
 
 
 
@@ -924,7 +1046,6 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
     foreach ($data as $date => &$value) {    // Loop through each element of the array
         
 
-
             $high  = floatval($value['high']);     // this candle's h,l,c,o [0]
             $low   = floatval($value['low']);
             $close = floatval($value['close']);
@@ -934,7 +1055,13 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
             $gPer = strtolower($value['globalper']);                 //  "Daily"  ==> daily
             $udate00 = substr($date, 0, 10);      // 'YYYY-MM-DD HH:MM:SS.mmm' ==> 'YYYY-MM-DD'   ==> 09
             $i_distToEnd = $data_len - $i ;   // ie 95= 0 > 11,   but 95 - 90 = 5 < 11 ok , print signal
+            $value['candlesfromend']      = $i_distToEnd ;
 
+
+            $value['symbol']      = $sym0_resolved ;
+            $value['assettype']   = $gAssetType  ;
+
+            $value['chartyears']   = $numYears_Gen;
 
 
 
@@ -1097,14 +1224,14 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
             $value['R4'] = $r4;
 
 
-
-        //track chart allTimeHigh allTimeLow
+            //track chart allTimeHigh allTimeLow
         if( $high > $ChartHigh ){
             $ChartHigh = $high  ;
             $ChartHighIdx = $i ;
             $ChartHighDate = $date;
             
-            $signalsString_ATH = $sym0. ",". $udate00. ",All-time High: ". $high. ",completed";
+            // $signalsString_ATH = $sym0. ",". $udate00. ",All-time High: ". $high. ",completed";
+            $signalsString_ATH =  FormatSignalString( $sym0_resolved, $udate00, $g_utimeDailyClose, $gPer, "Chart_High", $numYears_Gen, 0.0, $high, "completed", "aux1",  "aux2" );
            
         } 
         if( $low < $ChartLow ){
@@ -1112,7 +1239,9 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
             $ChartLowIdx = $i ;
             $ChartLowDate = $date;
             
-            $signalsString_ATL = $sym0. ",". $udate00. ",All-time Low: ". $low. ",completed";
+            // $signalsString_ATL = $sym0. ",". $udate00. ",All-time Low: ". $low. ",completed";
+            $signalsString_ATL =  FormatSignalString( $sym0_resolved, $udate00, $g_utimeDailyClose, $gPer, "Chart_Low", $numYears_Gen, 0.0, $low, "completed", "aux1",  "aux2" );
+
         }
 
 
@@ -1419,7 +1548,8 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
                                 $value['sellSignal']        = 1;
                                 $value['sellSignalCnt']     = $BuySignal;
                                 $value['sellSignalPrice']   = $P3; 
-                                $signalsString_SellSignal = $sym0. ",". $udate00. ",Sell Signal_". $BuySignal. ": ". $P3. ",pending";
+                                // $signalsString_SellSignal = $sym0. ",". $udate00. ",Sell Signal_". $BuySignal. ": ". $P3. ",pending";
+                                $signalsString_SellSignal =  FormatSignalString( $sym0_resolved, $udate00, $g_utimeDailyClose, $gPer, "Sell_Signal", $BuySignal, 0.0, $P3, "pending", "aux1",  "aux2" );
 
                         }
                     }// if($SellSignal==1){
@@ -1439,7 +1569,9 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
                             $value['buySignal']         = 1;
                             $value['buySignalCnt']      = $SellSignal;
                             $value['buySignalPrice']    = $P3; 
-                            $signalsString_BuySignal = $sym0. ",". $udate00. ",Buy Signal_". $SellSignal. ": ". $P3. ",pending";
+                            // $signalsString_BuySignal = $sym0. ",". $udate00. ",Buy Signal_". $SellSignal. ": ". $P3. ",pending";
+                            $signalsString_BuySignal =  FormatSignalString( $sym0_resolved, $udate00, $g_utimeDailyClose, $gPer, "Buy_Signal", $SellSignal, 0.0, $P3, "pending", "aux1",  "aux2" );
+
 
                         }
                     }// if($BuySignal==1){
@@ -1474,33 +1606,51 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
         // test S1,R1
             if( abs( $close - $S1month ) <  ($close * $closeNearPct) ){
                 $flnum = FloatDigits($S1month, 2);
-                $signalsString_SupRes1 = $sym0. ",". $udate00. ",Near S1month_". $flnum. ": ". $close. ",pending";
+                // $signalsString_SupRes1 = $sym0. ",". $udate00. ",Near S1month_". $flnum. ": ". $close. ",pending";
+                $signalsString_SupRes1 =  FormatSignalString( $sym0_resolved, $udate00, $g_utimeDailyClose, $gPer, "Near_S1month", $flnum, 0.0, $close, "pending", "aux1",  "aux2" );
+
             }
             if( abs( $close - $R1month ) <  ($close * $closeNearPct) ){
                 $flnum = FloatDigits($R1month, 2);
-                $signalsString_SupRes1 = $sym0. ",". $udate00. ",Near R1month_". $flnum. ": ". $close. ",pending";
+                // $signalsString_SupRes1 = $sym0. ",". $udate00. ",Near R1month_". $flnum. ": ". $close. ",pending";
+                $signalsString_SupRes1 =  FormatSignalString( $sym0_resolved, $udate00, $g_utimeDailyClose, $gPer, "Near_R1month", $flnum, 0.0, $close, "pending", "aux1",  "aux2" );
+
             }
 
         // test S2,R2
         if( abs( $close - $S2month ) <  ($close * $closeNearPct) ){
                 $flnum = FloatDigits($S2month, 2);
-                $signalsString_SupRes2 = $sym0. ",". $udate00. ",Near S2month_". $flnum. ": ". $close. ",pending";
+                // $signalsString_SupRes2 = $sym0. ",". $udate00. ",Near S2month_". $flnum. ": ". $close. ",pending";
+                $signalsString_SupRes2 =  FormatSignalString( $sym0_resolved, $udate00, $g_utimeDailyClose, $gPer, "Near_S2month", $flnum, 0.0, $close, "pending", "aux1",  "aux2" );
+
             }
             if( abs( $close - $R2month ) <  ($close * $closeNearPct) ){
                 $flnum = FloatDigits($R2month, 2);
-                $signalsString_SupRes2 = $sym0. ",". $udate00. ",Near R2month_". $flnum. ": ". $close. ",pending";
+                // $signalsString_SupRes2 = $sym0. ",". $udate00. ",Near R2month_". $flnum. ": ". $close. ",pending";
+                $signalsString_SupRes2 =  FormatSignalString( $sym0_resolved, $udate00, $g_utimeDailyClose, $gPer, "Near_R2month", $flnum, 0.0, $close, "pending", "aux1",  "aux2" );
+
             }
+
+
+
+
+        // ADD TEST FIRST FOR > R3 , < S3 so it is DETECTED EXtremes IFF not NEAR S3, R3
+        //           THEN FOR NEAR
+
 
         // test S3,R3
         if($close < $S3month){
             $flnum = FloatDigits($S3month, 2);
-            $signalsString_SupRes3 = $sym0. ",". $udate00. ",Below S3month_". $flnum. ": ". $close. ",pending";
+            // $signalsString_SupRes3 = $sym0. ",". $udate00. ",Below S3month_". $flnum. ": ". $close. ",pending";
+            $signalsString_SupRes3 =  FormatSignalString( $sym0_resolved, $udate00, $g_utimeDailyClose, $gPer, "Below_S3month", $flnum, 0.0, $close, "pending", "aux1",  "aux2" );
 
         }
 
         if($close > $R3month){
             $flnum = FloatDigits($R3month, 2);
-            $signalsString_SupRes3 = $sym0. ",". $udate00. ",Above R3month_". $flnum. ": ". $close. ",pending";
+            // $signalsString_SupRes3 = $sym0. ",". $udate00. ",Above R3month_". $flnum. ": ". $close. ",pending";
+            $signalsString_SupRes3 =  FormatSignalString( $sym0_resolved, $udate00, $g_utimeDailyClose, $gPer, "Above_R3month", $flnum, 0.0, $close, "pending", "aux1",  "aux2" );
+
         }
 
 
@@ -1512,9 +1662,9 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 
 
 
-// ############################################   END OF LOOP
-// ############################################   END OF LOOP
-// ############################################   END OF LOOP
+// ############################################   END OF 1st LOOP
+// ############################################   END OF 1st LOOP
+// ############################################   END OF 1st LOOP
 
         $i++;
         $monthdays++;
@@ -1524,7 +1674,8 @@ function ProcessCandles($data,  $sym0, $intervalStr) {
 
 
 if( $gPer=="daily" ){
-    $signalsString_MASTER = $signalsString_ATH."\n". $signalsString_ATL."\n". $signalsString_BuySignal ."\n". $signalsString_SellSignal ."\n". $signalsString_SupRes1 ."\n". $signalsString_SupRes2 ."\n".  $signalsString_SupRes3 ."\n"  ;
+    // $signalsString_MASTER = $signalsString_ATH."\n". $signalsString_ATL."\n". $signalsString_BuySignal ."\n". $signalsString_SellSignal ."\n". $signalsString_SupRes1 ."\n". $signalsString_SupRes2 ."\n".  $signalsString_SupRes3 ."\n"  ;
+    $signalsString_MASTER = Check_nilsym($signalsString_ATH). Check_nilsym( $signalsString_ATL).  Check_nilsym($signalsString_BuySignal). Check_nilsym($signalsString_SellSignal). Check_nilsym($signalsString_SupRes1). Check_nilsym($signalsString_SupRes2).  Check_nilsym($signalsString_SupRes3) ;
 }
 
 
@@ -2325,7 +2476,7 @@ $APIkey ="91M7LB7MG3JHY129";
         }else{
             $dumdum=1; 
             // chk intraday here
-            // check intraday    //"Time Series Crypto (5min)": {
+            // check intraday    //"Time Series Crypto (5min)": {    
             // check intraday    //"Time Series Crypto (15min)": {
         }
 
@@ -2746,15 +2897,18 @@ $processedDataJson = json_encode($dataProcessed);
 
             $sym007 = $gWatchListSymStr;
             if($sym007 == ""){
-                $sym007="nilsym";
+                $sym007="*nilsym";
             }
             $linestr = $sym007. ",".  $today1. ",noEventYet,EOL".  "\n";
             // $linestr = $gWatchListSymStr. ",".  $today1. ",noEventYet,EOL".  "\n";
+            $linestr =  FormatSignalString( $sym007, $today1, $g_utimeDailyClose, $gPer, "No_Event", 0.0, 0.0, 0.0, "process", "aux1",  "aux2" );
 
             if($signalsString_MASTER!="nil"){
                 $linestr=$signalsString_MASTER ;
+                AppendFile( "./auto/signals.txt", $linestr );
+
             }
-             AppendFile( "./auto/signals.txt", $linestr );
+            // AppendFile( "./auto/signals.txt", $linestr );
         }
     
     ?>
