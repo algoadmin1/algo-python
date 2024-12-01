@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "20.7";  // jsonget100.php
+                                                        $ver=  "22.0";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -452,6 +452,156 @@ if (isset($eventsTable[0])) {
                  console.log("] ***>> INSIDE <script> index.php, processedSignalsDataOrig ==",processedSignalsDataOrig);
 
 
+// DEPR TEST...
+                // The gEventsTable
+                 let gEventsTable9 = [
+                    // "2024-11-20", "NVDA Earnings",
+                    // "2024-12-18", "FOMC Meeting",
+                    // "2024-12-24", "Christmas Eve",
+                    // "2024-12-25", "Christmas Day",
+                    // "2024-12-31", "New Year's Eve",
+                    // "2025-01-01", "New Year's Day",
+                    // "2025-01-06", "Inauguration Day",
+                    // "2025-01-20", "MLK Jr Day",
+                    // "2025-01-20", "Inauguration Day",
+                    // "2025-02-17", "President's Day"
+
+                    // "2024-11-20","NVDA Earnings",
+                                    
+
+                    "2024-11-30","END of DEV",
+                    "2024-12-01","LAST month 2024",
+                    "2024-12-02","dec 2nd TEST  ",
+
+                    "2024-12-07","6 days out...",
+                    "2024-12-08","7 days out...",
+                    "2024-12-09","8 days out...",
+                    "2024-12-18","FOMC Meeting",
+
+                    "2024-12-24","Christmas Eve",
+                    "2024-12-25","Christmas Day",
+
+                    "2024-12-31","New Year's Eve",
+
+                    "2025-01-01","New Year's Day",
+                    "2025-01-20","MLK Jr Day",
+                    "2025-01-20","Inauguration Day",
+
+                    "2025-02-17","President's Day"
+                ];
+
+
+
+
+
+
+
+
+
+
+
+// The DaysAway function (from earlier)
+// function DaysAway(dateString) {
+//     const today = new Date();
+//     today.setHours(0, 0, 0, 0);
+//     const inputDate = new Date(dateString);
+//     inputDate.setHours(0, 0, 0, 0);
+//     const differenceInMilliseconds = inputDate - today;
+//     return Math.round(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+// }
+
+                 function DaysAway(dateString) {
+                    // Get today's date and set time to 00:00:00 for accurate day calculation
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    // Convert the input dateString to a Date object and set time to 00:00:00
+                    const inputDate = new Date(dateString);
+                    inputDate.setHours(0, 0, 0, 0);
+
+                    // Calculate the difference in milliseconds
+                    const differenceInMilliseconds = inputDate - today;
+
+                    // Convert the difference to days
+                    const daysAway = Math.round(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+
+                    // Return the result
+                    return daysAway;
+                }
+
+                // // Example usage
+                // console.log(DaysAway("2024-12-02")); // Output: 2
+                // console.log(DaysAway("2024-12-01")); // Output: 1
+                // console.log(DaysAway("2024-11-25")); // Output: -5
+                // console.log(DaysAway("2024-11-30")); // Output: 0
+
+
+
+
+                // is let strNew = formatUnixDateOptions("2024-11-30", "suffix", "-");   //  Nov-30th
+                 function formatUnixDateOptions(str1, suffix0, spaceChar) {
+                        if(suffix0 == "suffix"  ||  suffix0 == "1"){
+                            return  formatUnixDateWithSuffix(str1,spaceChar);
+                        }else return  formatUnixDate(str1, spaceChar);
+                         
+                 }
+
+                 function formatUnixDate(str1, spaceChar) {
+                    // Create a Date object from the string
+                    const date = new Date(str1);
+
+                    // Array of month abbreviations
+                    const monthAbbreviations = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+                    // Format the date as 'MMMDD'
+                    const month = monthAbbreviations[date.getMonth()];
+                    const day = date.getDate();
+
+                    // Return the formatted string
+                    
+                    return `${month}${spaceChar}${day}`;
+                    // return `${month} ${day}`;
+                }
+
+                // Example usage
+                // const str1 = "2024-11-30";
+                // const str2 = fo rmatUnixDate(str1);
+                // console.log(str2); // Output: "Nov30"
+
+                function formatUnixDateWithSuffix(str1, spaceChar) {
+                    // Create a Date object from the string
+                    const date = new Date(str1);
+
+                    // Array of month abbreviations
+                    const monthAbbreviations = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+                    // Format the date as 'MMMDDth/st/nd/rd'
+                    const month = monthAbbreviations[date.getMonth()];
+                    const day = date.getDate();
+
+                    // Determine the suffix for the day
+                    let suffix = "th";
+                    if (day % 10 === 1 && day !== 11) {
+                        suffix = "st";
+                    } else if (day % 10 === 2 && day !== 12) {
+                        suffix = "nd";
+                    } else if (day % 10 === 3 && day !== 13) {
+                        suffix = "rd";
+                    }
+
+                    // Return the formatted string
+                    return `${month}${spaceChar}${day}${suffix}`;
+                }
+
+                // // Example usage
+                // const str1 = "2024-11-30";
+                // const str2 = for matUnixDateWithSuffix(str1);
+                // console.log(str2); // Output: "Nov30th"
+
+
+
+
+
 
                  function ConvertSignalsData( processedSignalsData, daysBack) {
                         // Initialize an array to hold the filtered and transformed data
@@ -470,9 +620,13 @@ if (isset($eventsTable[0])) {
                             // Check if the entry date is within the 'daysBack' range
                             if (entryDate >= cutoffDate) {
                                 // Transform the entry into the new format and push it to resultArray
+                                let dstr = entry.udate;
+                                // let dstr1 = formatUnixDate(dstr," ");
+                                let dstr1 = formatUnixDateOptions(dstr,"1"," ");
+                                 
                                 resultArray.push({
                                     stock: entry.symbol,
-                                    date: entry.udate,
+                                    date: `${dstr1}`,
                                     status: `${entry.sigstr}_${entry.signum1}: ${entry.symprice}`,
                                     comment: entry.status
                                 });
@@ -578,6 +732,13 @@ if (isset($eventsTable[0])) {
 
                     // Call the populateTable function when the page loads
                     document.addEventListener('DOMContentLoaded', populateTable);
+
+
+
+
+
+
+
 
         </script>
 </head>
@@ -970,7 +1131,7 @@ if (isset($eventsTable[0])) {
 
                 <div class="orders">
                     <div class="header">
-                        <i class='bx bx-receipt'></i>
+                        <i class='bx bx-line-chart'></i>
                         <h3><?php echo $emailName ; ?>'s Signals</h3>
                         <!-- <h3>Recent Activity</h3> -->
                     </div>
@@ -999,7 +1160,7 @@ if (isset($eventsTable[0])) {
                 <!-- Reminders -->
                 <div class="reminders">
                     <div class="header">
-                        <i class='bx bx-note'></i>
+                        <i class='bx bx-calendar'></i>
                         <h3>Upcoming Events</h3>
                         <!-- <i class='bx bx-filter'></i> -->
                         <!-- <i class='bx bx-plus'></i> -->
@@ -1024,21 +1185,21 @@ if (isset($eventsTable[0])) {
                                 <i class='bx bx-check-circle'></i>
                                 <p>Jan 20th MLK Jr Day</p>
                             </div>
-                            <i class='bx bx-dots-vertical-rounded'></i>
+                            <!-- <i class='bx bx-dots-vertical-rounded'></i> -->
                         </li>
                         <li class="completed">
                             <div class="task-title">
                                 <i class='bx bx-check-circle'></i>
                                 <p>Feb 17th Pres Day</p>
                             </div>
-                            <i class='bx bx-dots-vertical-rounded'></i>
+                            <!-- <i class='bx bx-dots-vertical-rounded'></i> -->
                         </li>
                         <li class="not-completed">
                             <div class="task-title">
                                 <i class='bx bx-x-circle'></i>
                                 <p>Mar 15th '25 Go Long</p>
                             </div>
-                            <i class='bx bx-dots-vertical-rounded'></i>
+                            <!-- <i class='bx bx-dots-vertical-rounded'></i> -->
                         </li>
 
                     </ul>
@@ -1118,6 +1279,72 @@ if (isset($eventsTable[0])) {
         </main>
 
     </div>
+
+
+
+<script>
+
+
+// ###############################################################################################  NEW li
+// ###############################################################################################  NEW li
+
+                    // Get the task list container
+                    const taskList = document.querySelector(".task-list");
+
+                    // Clear existing tasks (if any)
+                    taskList.innerHTML = "";
+
+                    // Loop through the gEventsTable9
+                    for (let i = 0; i < gEventsTable9.length; i += 2) {
+                        let dateString = gEventsTable9[i];
+                        let descriptionString = gEventsTable9[i + 1];
+                        let daysAway0 = DaysAway(dateString);
+
+                        // Skip if the event is in the past
+                        if (daysAway0 < 0) continue;
+
+                        // Initialize variables
+                        let li_string = "completed";  // assume green
+                        let bx_string = "bx bx-check-circle";
+
+                        // Determine the styles based on the date proximity
+                        if (daysAway0 === 0) {
+                            li_string = "not-completed";
+                            bx_string = "bx bx-x-circle";
+
+                        }else if (daysAway0 < 4) {
+                            li_string = "soon1-completed";
+
+                        }else if (daysAway0 < 8) {
+                                li_string = "soon-completed";
+
+                        }
+
+                        
+
+                        // Format the date string to "MMMDDth/st/nd/rd" format
+                        const formattedDate = formatUnixDateWithSuffix(dateString, " ");
+                        // Create the <li> element dynamically
+                        const liElement = document.createElement("li");
+                        liElement.className = li_string;
+                        liElement.innerHTML = `
+                            <div class="task-title">
+                                <i class='${bx_string}'></i>
+                                <p>${formattedDate} ${descriptionString}</p>
+                            </div>
+                        `;
+
+                        // Append the <li> to the task list
+                        taskList.appendChild(liElement);
+                    }
+
+
+// ###############################################################################################  NEW li
+// ###############################################################################################  NEW li
+
+
+    </script>
+
 
     <!-- <script src="charting.js"></script> -->
     <script src="clock.js"></script>

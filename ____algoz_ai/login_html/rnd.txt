@@ -1,0 +1,142 @@
+
+
+
+
+
+
+
+let gEventsTable = [
+
+    "2024-11-20","NVDA Earnings",
+
+    "2024-12-18","FOMC Meeting",
+
+    "2024-12-24","Christmas Eve",
+    "2024-12-25","Christmas Day",
+
+    "2024-12-31","New Year's Eve",
+
+    "2025-01-01","New Year's Day",
+    "2025-01-06","Inauguration Day",
+    "2025-01-20","MLK Jr Day",
+    "2025-01-20","Inauguration Day",
+
+    "2025-02-17","President's Day",
+
+
+];
+
+
+<!-- Reminders -->
+<div class="reminders">
+    <div class="header">
+        <i class='bx bx-note'></i>
+        <h3>Upcoming Events</h3>
+    </div>
+
+    <ul class="task-list">
+
+        <li class="completed">
+            <div class="task-title">
+                <i class='bx bx-check-circle'></i>
+                <p>Dec 18th FMOC Meeting</p>
+            </div>
+        </li>
+        <li class="completed">
+            <div class="task-title">
+                <i class='bx bx-check-circle'></i>
+                <p>Dec 25th Christmas</p>
+            </div>
+        </li>
+        <li class="completed">
+            <div class="task-title">
+                <i class='bx bx-check-circle'></i>
+                <p>Jan 20th MLK Jr Day</p>
+            </div>
+        </li>
+        <li class="completed">
+            <div class="task-title">
+                <i class='bx bx-check-circle'></i>
+                <p>Feb 17th Pres Day</p>
+            </div>
+        </li>
+        <li class="not-completed">
+            <div class="task-title">
+                <i class='bx bx-x-circle'></i>
+                <p>2024-11-30 Go Long</p>
+            </div>
+        </li>
+
+    </ul>
+</div>
+
+<!-- End of Reminders-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function FormatSignalString( $symbol, $udate, $utime, $per, $sigstr, $signum1, $signum2, $symprice, $status, $aux1,  $aux2 ){
+
+symbol
+udate
+utime
+per
+sigstr
+signum1
+signum2
+symprice
+status
+aux1
+aux2
+
+
+NFLX,2024-11-18,16:16:00,daily,Near_R2month,830.76,0,847.05,pending,aux1,aux2
+BTC-USD,2024-11-30,16:16:00,daily,Above_R3month,88386.06,0,96765.44,pending,aux1,aux2
+V,2024-11-27,16:16:00,daily,Chart_High,0.38,0,316.37,completed,aux1,aux2
+
+
+ $processedSignalsDataJson = json_encode($sortedArray);
+
+ var processedSignalsData = <?php echo $processedSignalsDataJson; ?>;
+
+
+
+
+{ stock: 'AAPL', date: '10-08-24', status: 'Trending UP', comment: 'completed' },
+{ stock: 'NVDA', date: '10-08-24', status: 'Consolidating', comment: 'pending' },
+{ stock: 'NFLX', date: '10-08-24', status: 'Trending DOWN', comment: 'process' },
+{ stock: 'QQQ', date: '10-08-24', status: 'Trending UP', comment: 'process' },
+
+
+[
+    {
+        stock: "BTC-USD",
+        date: "2024-11-30",
+        status: "Above_R3month_88386.06: 96765.44",
+        comment: "pending"
+    }
+]
+
+
