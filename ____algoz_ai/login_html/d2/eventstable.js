@@ -5,8 +5,12 @@ let gEventsTable = [
 
     "2024-11-20","NVDA Earnings",
     "2024-11-30","END of DEV",
-    "2024-12-01","LAST month 2024",
+    "2024-12-01","Pel: Jean G. Aria",
+    "2024-12-02","Pel: Carbone Aria",
+    "2024-12-04","Pel: Agricult Mtg",
 
+    "2024-12-09","December 9",
+    "2024-12-10","December 10",
     "2024-12-09","8 days out...",
     "2024-12-18","FOMC Meeting",
 

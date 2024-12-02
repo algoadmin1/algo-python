@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "22.1";  // jsonget100.php
+                                                        $ver=  "22.0";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -68,8 +68,6 @@ $BuyCall30minTest ="https://buy.stripe.com/aEU3f42UYbIG4pO8wW";
 $BuyCall30min ="https://buy.stripe.com/28o5ncbru14209yaEP";
 
 $buySellSignals="https://algoinvestorr.com/algoz0/";
-$scans="https://algoz.ai/scans/scans.pdf";
-
 $ccc = "https://algoinvestorr.com/ccc/";
 $pcc1 = "https://algoinvestorr.com/pcc/";
 $pcc ="https://algoinvestorr.com/pcc/index1.php?sym=spy";
@@ -780,7 +778,7 @@ if (isset($eventsTable[0])) {
             <li><a href="<?php echo $newsletter; ?>"><i class='bx bx-news'></i>Newsletter</a></li>
             <li><a href="<?php echo $fintechfc; ?>"><i class='bx bx-fast-forward-circle'></i>FasterClass.finance</a></li>
 
-            <li><a href="<?php echo $scans; ?>"><i class='bx bx-data'></i>Mkt Scans</a></li>
+            <li><a href="<?php echo $chatai; ?>"><i class='bx bx-search'></i>ai Search...</a></li>
             <li><a href="<?php echo $blueprint; ?>"><i class='bx bx-map-alt'></i>ai Roadmap</a></li>  
             <li><a href="<?php echo $BuyCall30min; ?>"><i class='bx bx-phone-outgoing'></i>Book Call</a></li>
 
