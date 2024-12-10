@@ -176,182 +176,206 @@ function CaloricDemand($gender, $height_cm, $weight_kg, $age, $activityLevel) {
 document.getElementById('bmiForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const feet = parseInt(document.getElementById('feet').value);
-    const inches = parseInt(document.getElementById('inches').value);
-    const weight = parseFloat(document.getElementById('weight').value);   // lbs
+    // option price PAID
+    let optionsPricePaid = parseFloat(document.getElementById('feet').value);
 
-    const age = parseFloat(document.getElementById('age').value);
-    const gender = document.getElementById('gender').value ;
-    const actlevel = parseInt(document.getElementById('actlevel').value) ;
+    // stock price at time of options purchase
+    let stockPriceAtOptionsPaid = parseFloat(document.getElementById('inches').value);
 
-    const days2lose = parseInt(document.getElementById('days').value) ;
-    const pct2lose  = parseInt(document.getElementById('pct').value) ;
+    // strike
+    let strikePrice = parseFloat(document.getElementById('weight').value); 
 
-    const email0 = document.getElementById('email').value ;
+    // tgt stock price
+    let targetprice = parseFloat(document.getElementById('targetprice').value);
 
-
-
-    const heightInInches = (feet * 12) + inches;
-    const heightInMeters = heightInInches * 0.0254;
-    const weightInKg = weight * 0.453592;
+    //put 0   / call 1
+    let putCall = parseFloat(document.getElementById('age').value);
 
 
-    const bmi = weightInKg / (heightInMeters * heightInMeters);
-    const bmiRounded = bmi.toFixed(1);
+// assume Call
+    let premiumFromTodayTilExpiry       = 0.0;
+    let premiumFromTodayTilExpiry0      = 0.0;
+    let optionsPriceIntrinsic           = 0;
+    let optionsPriceExtrinsic           = 0;
+    let premiumDaily                    = 0;
+    let daysTilExpiryAdjusted           = 0;
+    let optionsPriceCalculated          = 0.0;
+    let optionsPriceCalculated1         =0.0;
+    let optionsPriceCalculatedIntrinsicOnly = 0.0;
 
-    let category = '';
+    let callOrPutStr = "Call";
+    if(putCall==0) callOrPutStr = "Put";
 
-    if (bmi < 18.5) {
-        category = 'Underweight: BMI less than 18.5';
-    } else if (bmi >= 18.5 && bmi < 24.99) {
-        category = '😉Normal weight: BMI 18.5 to 24.9';
-    } else if (bmi >= 25 && bmi < 29.99) {
-        category = '⚠️Overweight: BMI 25 to 29.9';
-    } else if (bmi >= 30 && bmi < 34.99) {
-        category = '☠️  Obese Class 1: BMI 30 to 34.9';
-    } else if (bmi >= 35 && bmi < 39.99) {
-        category = '☠️☠️ Obese Class 2: BMI 35 to 39.9';
-    } else if (bmi >= 40 && bmi < 49.99) {
-        category = '☠️☠️☠️Obese Class 3: Severe/Morbid Obesity: BMI 40+';
-    } else {
-        category = '☠️☠️☠️☠️Obese Class 4: You are Morbidly Obese: BMI 50+  SEE A DR!';
+
+// assume Calls 
+if(putCall==1){
+
+      optionsPriceIntrinsic = (stockPriceAtOptionsPaid - strikePrice ).toFixed(2);
+      optionsPriceExtrinsic = (optionsPricePaid - optionsPriceIntrinsic).toFixed(2);
+
+      premiumDaily         = (optionsPriceExtrinsic /  (daysTilExpiry)).toFixed(4);  // note daysTilExpiry = days from Purchase to Expiry
+
+
+    // check if date of purchase is behind us, not today
+    // if(optionsPurchaseDate_daysFromToday < 0){
+        if(true){
+        // get new # of days from today to Expiry, but use the orig calc from Options Purchase to Expiry for daily Premium
+          daysTilExpiryAdjusted         = daysTilExpiry + optionsPurchaseDate_daysFromToday;
+          premiumFromTodayTilExpiry0    =  daysTilExpiryAdjusted * premiumDaily  ;
+          premiumFromTodayTilExpiry     = (daysTilExpiryAdjusted * premiumDaily ).toFixed(2);
     }
-    // ☠️  
-
-    let cm0=(heightInMeters*100).toFixed(1);
-    // let cn = CalcCalories(gender, (heightInMeters*100), weightInKg, age, actlevel );
-    let cn = CalcCalories(gender, cm0,  weightInKg, age, actlevel );
-    let cn1 = cn.toFixed(2);
-    // let addstr = 'Calories needed:' + cn1 + '/day   gender:' + gender+ ' age:' + age +' actLvl:' + actlevel ;
-    let addstr = 'Calories needed/day:' + cn1 ;  
+    optionsPriceCalculated  = parseFloat(targetprice - strikePrice);  
+    optionsPriceCalculatedIntrinsicOnly  = parseFloat(targetprice - strikePrice);  
+    optionsPriceCalculatedIntrinsicOnly = optionsPriceCalculatedIntrinsicOnly.toFixed(2);
     
-    // document.getElementById('result').textContent = `Your BMI is ${bmiRounded}. HERE You are classified as ${category}. ${addstr}`;
-
-// now write a javascript function CalcCaloricDeficit( tdee, kg, days, percentLoss ) and calculates the daily caloric deficit based on tdee= TDEE, kg=kilgrams, days = days to loose the weight, and percentLoss = % of kg to lose
-
-// let days2lose = 90;
-// let pct2lose  = 10;
-let lbs2lose =  weight * (pct2lose/100);
-lbs2lose=lbs2lose.toFixed(0);
-
-let lbsTarget = weight * (1- pct2lose/100);
-lbsTarget=lbsTarget.toFixed(1);
+    optionsPriceCalculated+=  premiumFromTodayTilExpiry0;
+    optionsPriceCalculated1 = optionsPriceCalculated.toFixed(2);
 
 
-let result = CalcCaloricDeficit(cn1 , weightInKg, days2lose, pct2lose ); // tdee = 2600, weight = 100kg, 180 days, 10% weight loss
-console.log(`Daily Caloric Deficit: ${result.dailyCaloricDeficit}`);
-console.log(`Daily Calories to Consume: ${result.dailyCaloriesToConsume}`);
-let cals2consume  =result.dailyCaloriesToConsume;
-let cals2cut      =result.dailyCaloricDeficit;
-// cals2consume = cals2consume.toFixed(0);
-// cals2cut     = cals2cut.toFixed(0);
-let email1a = ""; //email0.split('@')[0]; //+','; // Get the part before the '@'
 
-if(email0!=""){
-    email1a = email0.split('@')[0];
-    email1a = email1a +',' ;
-}else email1a = "Ok,";
-// let addstr2 = `Daily Calories to Consume: ${result.dailyCaloriesToConsume}` ;
-// let addstr2 = email0 + ` To lose `+pct2lose +`% or `+ lbs2lose+`lbs, over `+ days2lose +` days, <strong>consume ${result.dailyCaloriesToConsume}` +`</strong> calories/day or <strong>cut out `+ cals2cut+`</strong> calories/day.<br>` ;
-// let addstr2 = email1a + ` to lose `+pct2lose +`% or `+ lbs2lose+`lbs, over `+ days2lose +` days, <strong>consume `+cals2consume +`</strong> calories/day or <strong>cut out `+ cals2cut+`</strong> calories/day.<br>` ;
-// let addstr2 = email1a + ` to lose `+pct2lose +`% or `+ lbs2lose+`lbs, over `+ days2lose +` days, <strong>consume `+cals2consume +`</strong> calories/day (-`+ cals2cut+` cals/day).<br>` ;
-let addstr2 = email1a + ` to lose `+pct2lose +`% or `+ lbs2lose+`lbs, over `+ days2lose +` days, <strong>consume `+cals2consume +`</strong> calories/day.<br>` ;
-// document.getElementById('result').innerHTML = `days, consume ${result.dailyCaloriesToConsume} <strong>calories/day</strong>.`;
+}else{
+// assume Puts
 
-let kilos = weightInKg.toFixed(1);
+
+      optionsPriceIntrinsic = ( strikePrice - stockPriceAtOptionsPaid  ).toFixed(2);
+      optionsPriceExtrinsic = (optionsPricePaid - optionsPriceIntrinsic).toFixed(2);
+
+      premiumDaily         = (optionsPriceExtrinsic /  (daysTilExpiry)).toFixed(4);  // note daysTilExpiry = days from Purchase to Expiry
+
+
+    // check if date of purchase is behind us, not today
+    // if(optionsPurchaseDate_daysFromToday < 0){
+        if(true){
+        // get new # of days from today to Expiry, but use the orig calc from Options Purchase to Expiry for daily Premium
+          daysTilExpiryAdjusted         = daysTilExpiry + optionsPurchaseDate_daysFromToday;
+          premiumFromTodayTilExpiry0    =  daysTilExpiryAdjusted * premiumDaily  ;
+          premiumFromTodayTilExpiry     = (daysTilExpiryAdjusted * premiumDaily ).toFixed(2);
+    }
+    optionsPriceCalculated              = parseFloat( strikePrice - targetprice);  
+    optionsPriceCalculatedIntrinsicOnly = parseFloat( strikePrice - targetprice );  
+    optionsPriceCalculatedIntrinsicOnly = optionsPriceCalculatedIntrinsicOnly.toFixed(2);
+    
+    optionsPriceCalculated+=  premiumFromTodayTilExpiry0;
+    optionsPriceCalculated1 = optionsPriceCalculated.toFixed(2);
+
+}
+
+document.getElementById('result').innerHTML = `Target ${callOrPutStr} Options Price: $ ${optionsPriceCalculated1}. With ${daysTilExpiry} days from purchase to expiry the Daily Premium is: $ ${premiumDaily}. Intrinsic/Extrinsic value: ${optionsPriceIntrinsic} / ${optionsPriceExtrinsic}. Days from Purchase to Today: ${optionsPurchaseDate_daysFromToday} with a remaining Premium of: $ ${premiumFromTodayTilExpiry}, Target Price (intrinsic Only): $ ${optionsPriceCalculatedIntrinsicOnly}`;
+
+
+
+
+                // <script>
+                //     const purchaseDatePicker = document.getElementById('options-purchase-date');
+                //     const expiryDatePicker = document.getElementById('options-expiry');
+                    
+                //     let daysTilExpiry = 1;
+
+                //     let timeDifference;
+
+
+
+                //     expiryDatePicker.addEventListener('change', () => {
+                //         // Get the purchase date or default to today if blank
+                //         const purchaseDateValue = purchaseDatePicker.value || new Date().toISOString().split('T')[0];
+                //         const expiryDateValue = expiryDatePicker.value;
+
+                //         if (!expiryDateValue) {
+                //             console.log("Please select an expiry date.");
+                //             return;
+                //         }
+
+                //         const purchaseDate = new Date(purchaseDateValue);
+                //         const expiryDate = new Date(expiryDateValue);
+
+                //         // Calculate days between purchase and expiry
+                //           timeDifference = expiryDate - purchaseDate;
+                //         // const daysTilExpiryOnDateOfPurchase = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+                //           daysTilExpiry = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+                //         console.log(`Purchase date: ${purchaseDateValue}`);
+                //         console.log(`Expiry date: ${expiryDateValue}`);
+                //         // console.log(`Days until expiry on date of purchase: ${daysTilExpiryOnDateOfPurchase}`);
+                //     });
+                // </script>
+
+
+
+
+
+
+
+
+
+
+//     const gender = document.getElementById('gender').value ;
+//     const actlevel = parseInt(document.getElementById('actlevel').value) ;
+
+//     const days2lose = parseInt(document.getElementById('days').value) ;
+//     const pct2lose  = parseInt(document.getElementById('pct').value) ;
+//     const email0 = document.getElementById('email').value ;
+
+
+//     const heightInInches = (feet * 12) + inches;
+//     const heightInMeters = heightInInches * 0.0254;
+//     const weightInKg = weight * 0.453592;
+
+
+//     const bmi = weightInKg / (heightInMeters * heightInMeters);
+//     const bmiRounded = bmi.toFixed(1);
+
+//     let category = '';
+
+//     if (bmi < 18.5) {
+//         category = 'Underweight: BMI less than 18.5';
+//     } else if (bmi >= 18.5 && bmi < 24.99) {
+//         category = '😉Normal weight: BMI 18.5 to 24.9';
+//     } else if (bmi >= 25 && bmi < 29.99) {
+//         category = '⚠️Overweight: BMI 25 to 29.9';
+//     } else if (bmi >= 30 && bmi < 34.99) {
+//         category = '☠️  Obese Class 1: BMI 30 to 34.9';
+//     } else if (bmi >= 35 && bmi < 39.99) {
+//         category = '☠️☠️ Obese Class 2: BMI 35 to 39.9';
+//     } else if (bmi >= 40 && bmi < 49.99) {
+//         category = '☠️☠️☠️Obese Class 3: Severe/Morbid Obesity: BMI 40+';
+//     } else {
+//         category = '☠️☠️☠️☠️Obese Class 4: You are Morbidly Obese: BMI 50+  SEE A DR!';
+//     }
+
+//     let cm0=(heightInMeters*100).toFixed(1);
+//     let cn = CalcCalories(gender, cm0,  weightInKg, age, actlevel );
+//     let cn1 = cn.toFixed(2);
+//     // let addstr = 'Calories needed:' + cn1 + '/day   gender:' + gender+ ' age:' + age +' actLvl:' + actlevel ;
+//     let addstr = 'Calories needed/day:' + cn1 ;  
+    
+// let lbs2lose =  weight * (pct2lose/100);
+// lbs2lose=lbs2lose.toFixed(0);
+
+// let lbsTarget = weight * (1- pct2lose/100);
+// lbsTarget=lbsTarget.toFixed(1);
+
+
+// let result = CalcCaloricDeficit(cn1 , weightInKg, days2lose, pct2lose ); // tdee = 2600, weight = 100kg, 180 days, 10% weight loss
+// console.log(`Daily Caloric Deficit: ${result.dailyCaloricDeficit}`);
+// console.log(`Daily Calories to Consume: ${result.dailyCaloriesToConsume}`);
+// let cals2consume  =result.dailyCaloriesToConsume;
+// let cals2cut      =result.dailyCaloricDeficit;
+// let email1a = ""; //email0.split('@')[0]; //+','; // Get the part before the '@'
+
+// if(email0!=""){
+//     email1a = email0.split('@')[0];
+//     email1a = email1a +',' ;
+// }else email1a = "Ok,";
+// let addstr2 = email1a + ` to lose `+pct2lose +`% or `+ lbs2lose+`lbs, over `+ days2lose +` days, <strong>consume `+cals2consume +`</strong> calories/day.<br>` ;
+
+// let kilos = weightInKg.toFixed(1);
+// document.getElementById('result').innerHTML = `At ${kilos}kg & ${cm0}cm: your BMI is ${bmiRounded}, classified as ${category}. <br>${addstr}. <br>${addstr2}`;
     
 
-// document.getElementById('result').innerHTML = `Your BMI is ${bmiRounded}. You are classified as ${category}. <br>${addstr}. <br>${addstr2}`;
-document.getElementById('result').innerHTML = `At ${kilos}kg & ${cm0}cm: your BMI is ${bmiRounded}, classified as ${category}. <br>${addstr}. <br>${addstr2}`;
-
-
-
-    
-    /*
-To calculate how many calories below your Total Daily Energy Expenditure (TDEE) you should consume to lose 10% of your body weight, we can follow these steps:
-
-Steps:
-Current Weight (224 lbs): Your goal is to lose 10% of this weight.
-
-10% of 224 lbs = 224 * 0.10 = 22.4 lbs.
-Caloric Deficit Needed for Weight Loss:
-
-To lose 1 pound of body weight, you need to create a caloric deficit of about 3,500 calories.
-Therefore, to lose 22.4 lbs, you would need a total deficit of:
-22.4
- 
-lbs
-×
-3500
- 
-calories/lb
-=
-78400
- 
-calories
-22.4lbs×3500calories/lb=78400calories.
-Caloric Deficit per Day:
-
-If you want to lose this weight over a certain number of days, you can calculate how many calories below your TDEE you 
-should eat each day. For example, if you want to lose this weight over a span of 6 months (roughly 180 days):
-78400 calories
-180 days
-=
-435.56
- 
-calories/day
-180days
-78400calories
-​
- =435.56calories/day.
-Calories to Consume Daily:
-
-Your TDEE is 2600 calories, so if you want to lose weight at this rate, you should consume:
-2600 calories/day
-−
-435.56
- 
-calories/day
-=
-2164.44
- 
-calories/day
-2600calories/day−435.56calories/day=2164.44calories/day.
-Conclusion:
-To lose 10% of your body weight (about 22.4 lbs) over a span of 6 months, you should consume approximately 2165 calories per day (about 435 calories below your TDEE).
-
-You can adjust the duration of the weight loss period, which will change the daily caloric deficit. For a faster or slower pace, you would either increase or decrease the daily caloric deficit accordingly.
 
 
 
 
-
-
-You said:
-to lose 1 kilogram of body weight , what is the caloric deficit ?
-ChatGPT said:
-ChatGPT
-To lose 1 kilogram of body weight, you need a caloric deficit of approximately 7,700 calories.
-
-Explanation:
-1 pound of body weight equals approximately 3,500 calories.
-Since 1 kilogram equals approximately 2.2 pounds, the caloric deficit required to lose 1 kilogram is:
-3
-,
-500
- 
-calories
-×
-2.2
-=
-7
-,
-700
- 
-calories
-3,500calories×2.2=7,700calories
-This means that to lose 1 kilogram of weight, you'd need to burn 7,700 calories more than you consume.
-
-    */
+ 
 
 });

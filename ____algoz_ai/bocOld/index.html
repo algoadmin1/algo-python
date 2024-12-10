@@ -12,97 +12,58 @@
     <div class="container">
         <!-- <h1>Fighting Fitness FasterClass</h1> -->
         <!-- <h1>FasterClass</h1> -->
-        <h4>Options Price Calculator</h4>
+        <h4>Basic Options Calculator</h4>
         <form id="bmiForm">
             <div class="input-group">
-                <input type="number" id="feet" placeholder="Option Price Paid:" name="feet" min="0" step="0.01"  required>
-
+                <!-- <label for="feet">Height (Feet):</label> -->
+                <input type="number" id="feet" placeholder="Option Price Paid:" name="feet" min="0" required>
+                <!-- <input type="password" placeholder="Password:" name="password" class="form-control" id="password"> -->
             </div>
             <div class="input-group">
-                <input type="number" id="inches" placeholder="Stock Price at Options Trade:" name="inches" min="0" step="0.01" required>
+                <!-- <label for="inches">Height (Inches):</label> -->
+                <input type="number" id="inches" placeholder="Stock Price at Options Trade:" name="inches" min="0" required>
             </div>
             <div class="input-group">
-                <input type="number" id="weight" placeholder="Option Strike Price:" name="weight" min="0" step="0.01" required>
+                <!-- <label for="weight">Weight (Pounds):</label> -->
+                <input type="number" id="weight" placeholder="Option Strike Price:" name="weight" min="0" required>
             </div>
 
             <div class="input-group">
-                <input type="number" id="targetprice" placeholder="Target Stock Price:" name="targetprice" min="0" step="0.01" required>
+                <!-- <label for="inches">Height (Inches):</label> -->
+                <input type="number" id="inches" placeholder="Current Stock Price:" name="inches" min="0" required>
             </div>
 
+            <div class="input-group">
+                <!-- Label for date selection -->
+                <label for="date-picker">Option Expiration:</label>
+                <!-- Date input field -->
+                <input type="date" id="date-picker" name="date-picker" required>
+            </div>
+            
+            <script>
+                const datePicker = document.getElementById('date-picker');
+            
+                
 
+                 datePicker.addEventListener('change', () => {
+                    const selectedDate = datePicker.value; // Get the date in YYYY-MM-DD format
+                    const unixTimestamp = new Date(selectedDate).getTime() / 1000; // Convert to Unix timestamp
 
+                    const today = new Date();
+                    const selectedDateObj = new Date(selectedDate);
+                    const timeDifference = selectedDateObj - today;
+                    const daysTilExpiry = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); // Calculate days until expiry
+
+                    console.log(`Selected date: ${selectedDate}, Unix timestamp: ${unixTimestamp}`);
+                    console.log(`Days until expiry: ${daysTilExpiry}`);
+                    // You can use daysTilExpiry as needed here
+                });
+            </script>
+            
             <div class="input-group">
                 <!-- <label for="inches">Age:</label> -->
                 <input type="number" id="age" placeholder="Put(0) or Call(1):" name="age" min="0" max="1" required>
             </div>
-
-
-
-
- 
-
- 
-
-                <div class="input-group">
-                    <!-- Label for options purchase date selection -->
-                    <label for="options-purchase-date">Options Purchase Date:</label>
-                    <input type="date" id="options-purchase-date" name="options-purchase-date">
-                </div>
-
-                <div class="input-group">
-                    <!-- Label for options expiry date selection -->
-                    <label for="options-expiry">Options Expiry Date:</label>
-                    <input type="date" id="options-expiry" name="options-expiry" required>
-                </div>
-
-
-                <script>
-                    const purchaseDatePicker = document.getElementById('options-purchase-date');
-                    const expiryDatePicker = document.getElementById('options-expiry');
-
-                    let daysTilExpiry = 1;
-                    let optionsPurchaseDate_daysFromToday = 0;
-
-
-                    expiryDatePicker.addEventListener('change', () => {
-                        // Get the purchase date or default to today if blank
-                        const purchaseDateValue = purchaseDatePicker.value || new Date().toISOString().split('T')[0];
-                        const expiryDateValue = expiryDatePicker.value;
-
-                        if (!expiryDateValue) {
-                            console.log("Please select an expiry date.");
-                            return;
-                        }
-
-                        const purchaseDate = new Date(purchaseDateValue);
-                        const expiryDate = new Date(expiryDateValue);
-                        const today = new Date();
-
-                        // Calculate days between purchase and expiry
-                        const timeDifference = expiryDate - purchaseDate;
-                        // const daysTilExpiryOnDateOfPurchase = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-                         daysTilExpiry = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-
-                        // Calculate days from today to purchase date if different
-                        // let optionsPurchaseDate_daysFromToday = 0;
-                        if (purchaseDate.toDateString() !== today.toDateString()) {
-                            const timeDifferenceFromToday = purchaseDate - today;
-                            optionsPurchaseDate_daysFromToday = Math.ceil(timeDifferenceFromToday / (1000 * 60 * 60 * 24));
-                        }
-
-                        console.log(`Purchase date: ${purchaseDateValue}`);
-                        console.log(`Expiry date: ${expiryDateValue}`);
-                        console.log(`Days until expiry on date of purchase: ${daysTilExpiry}`);
-                        console.log(`Days from today to purchase date: ${optionsPurchaseDate_daysFromToday}`);
-                    });
-                </script>
-
-
-
-
-
-
-
 
 
 
