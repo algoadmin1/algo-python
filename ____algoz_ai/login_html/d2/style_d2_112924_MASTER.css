@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
-/*                                                 style_d2.css         ver 2.3      */
-
-
 :root {
     --light: #f6f6f9;
     --primary: #1976D2;
@@ -17,26 +14,9 @@
     --light-warning: #FFF2C6;
     --green-warning: #6ed573;
     --success: #388E3C;
-    --success2: #1996F2;  
+    --success2: #1996F2; /*#16c689;*/
     --green2: #16c689;
     --light-success: #BBF7D0;
-
-
-    --Chart_High: #ec8e1b;
-    --Chart_Low:  #09bf24;
-
-    --Above_R3month: #aa20a3;
-    --Near_R2month: #8b0404;
-    --Near_R1month: #d93f3f;
-    --Near_Pivot:   #1edde4;
-    --Near_S1month: #20d04f;
-    --Near_S2month: #087930;
-    --Below_S3month: #a2c649;
-
-    --Sell_Signal:  #d4d719;
-    --Buy_Signal:   #285dd8;
-
-
 }
 
 *{
@@ -562,57 +542,6 @@ canvas {
 .content main .bottom-data .orders table tr td .status.pending{
     background: var(--warning);
 }
-
-
-
-
-
-
-.content main .bottom-data .orders table tr td .status.Chart_High{
-    background: var(--Chart_High);
-}
-.content main .bottom-data .orders table tr td .status.Chart_Low{
-    background: var(--Chart_Low);
-}
-
-
-
-.content main .bottom-data .orders table tr td .status.Above_R3month{
-    background: var(--Above_R3month);
-}
-.content main .bottom-data .orders table tr td .status.Near_R2month{
-    background: var(--Near_R2month);
-}
-.content main .bottom-data .orders table tr td .status.Near_R1month{
-    background: var(--Near_R1month);
-}
-.content main .bottom-data .orders table tr td .status.Near_Pivot__{
-    background: var(--Near_Pivot__);
-}
-.content main .bottom-data .orders table tr td .status.Near_S1month{
-    background: var(--Near_S1month);
-}
-.content main .bottom-data .orders table tr td .status.Near_S2month{
-    background: var(--Near_S2month);
-}
-      
-.content main .bottom-data .orders table tr td .status.Below_S3month{
-    background: var(--Below_S3month);
-}
-
-
-.content main .bottom-data .orders table tr td .status.Sell_Signal{
-    background: var(--Sell_Signal);
-}
-.content main .bottom-data .orders table tr td .status.Buy_Signal{
-    background: var(--Buy_Signal);
-}
-        
-
-
-
-
-
 
 .content main .bottom-data .reminders{
     flex-grow: 1;

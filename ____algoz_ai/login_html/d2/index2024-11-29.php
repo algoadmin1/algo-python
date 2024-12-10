@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "22.4";  // jsonget100.php
+                                                        $ver=  "22.1";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -629,8 +629,7 @@ if (isset($eventsTable[0])) {
                                 resultArray.push({
                                     stock: entry.symbol,
                                     date: `${dstr1}`,
-                                    status: `${entry.sigstr}=${entry.signum1}: $ ${entry.symprice}`,
-                                    css_style: entry.sigstr,
+                                    status: `${entry.sigstr}_${entry.signum1}: ${entry.symprice}`,
                                     comment: entry.status
                                 });
                             }
@@ -727,8 +726,8 @@ if (isset($eventsTable[0])) {
                                     <p>${item.stock}</p>
                                 </td>
                                 <td>${item.date}</td>
-                                <td><span class="status ${item.css_style}">${item.status}</span></td>
-                            `;  
+                                <td><span class="status ${item.comment}">${item.status}</span></td>
+                            `;
                             tbody.appendChild(row);
                         });
                     }
@@ -781,7 +780,7 @@ if (isset($eventsTable[0])) {
             <li><a href="<?php echo $newsletter; ?>"><i class='bx bx-news'></i>Newsletter</a></li>
             <li><a href="<?php echo $fintechfc; ?>"><i class='bx bx-fast-forward-circle'></i>FasterClass.finance</a></li>
 
-            <li><a href="<?php echo $scans; ?>"><i class='bx bx-data'></i>Market Scans</a></li>
+            <li><a href="<?php echo $scans; ?>"><i class='bx bx-data'></i>Mkt Scans</a></li>
             <li><a href="<?php echo $blueprint; ?>"><i class='bx bx-map-alt'></i>ai Roadmap</a></li>  
             <li><a href="<?php echo $BuyCall30min; ?>"><i class='bx bx-phone-outgoing'></i>Book Call</a></li>
 
