@@ -26,14 +26,14 @@
     --Chart_Low:  #09bf24;
 
     --Above_R3month: #aa20a3;
-    --Near_R2month: #8b0404;
+    --Near_R2month: #b11010;
     --Near_R1month: #d93f3f;
     --Near_Pivot:   #1edde4;
     --Near_S1month: #20d04f;
-    --Near_S2month: #087930;
-    --Below_S3month: #a2c649;
+    --Near_S2month: #08a13e;
+    --Below_S3month: #9ec61b;
 
-    --Sell_Signal:  #d4d719;
+    --Sell_Signal:  #cfc125;
     --Buy_Signal:   #285dd8;
 
 
@@ -543,7 +543,7 @@ canvas {
 }
 
 .content main .bottom-data .orders table tr td .status{
-    font-size: 10px;
+    font-size: 12px;
     padding: 6px 16px;
     color: var(--light);
     border-radius: 20px;
