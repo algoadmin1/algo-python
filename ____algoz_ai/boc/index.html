@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Options Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" type="image/png"  href="favicon.ico" />
+
+</head>
+<body>
+    <div class="container">
+        <!-- <h1>Fighting Fitness FasterClass</h1> -->
+        <!-- <h1>FasterClass</h1> -->
+        <h4>Basic Options Calculator</h4>
+        <form id="bmiForm">
+            <div class="input-group">
+                <!-- <label for="feet">Height (Feet):</label> -->
+                <input type="number" id="feet" placeholder="Option Price Paid:" name="feet" min="0" required>
+                <!-- <input type="password" placeholder="Password:" name="password" class="form-control" id="password"> -->
+            </div>
+            <div class="input-group">
+                <!-- <label for="inches">Height (Inches):</label> -->
+                <input type="number" id="inches" placeholder="Stock Price at Options Trade:" name="inches" min="0" required>
+            </div>
+            <div class="input-group">
+                <!-- <label for="weight">Weight (Pounds):</label> -->
+                <input type="number" id="weight" placeholder="Option Strike Price:" name="weight" min="0" required>
+            </div>
+
+            <div class="input-group">
+                <!-- <label for="inches">Height (Inches):</label> -->
+                <input type="number" id="inches" placeholder="Current Stock Price:" name="inches" min="0" required>
+            </div>
+
+            <div class="input-group">
+                <!-- Label for date selection -->
+                <label for="date-picker">Option Expiration:</label>
+                <!-- Date input field -->
+                <input type="date" id="date-picker" name="date-picker" required>
+            </div>
+            
+            <script>
+                const datePicker = document.getElementById('date-picker');
+            
+                
+
+                 datePicker.addEventListener('change', () => {
+                    const selectedDate = datePicker.value; // Get the date in YYYY-MM-DD format
+                    const unixTimestamp = new Date(selectedDate).getTime() / 1000; // Convert to Unix timestamp
+
+                    const today = new Date();
+                    const selectedDateObj = new Date(selectedDate);
+                    const timeDifference = selectedDateObj - today;
+                    const daysTilExpiry = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); // Calculate days until expiry
+
+                    console.log(`Selected date: ${selectedDate}, Unix timestamp: ${unixTimestamp}`);
+                    console.log(`Days until expiry: ${daysTilExpiry}`);
+                    // You can use daysTilExpiry as needed here
+                });
+            </script>
+            
+            <div class="input-group">
+                <!-- <label for="inches">Age:</label> -->
+                <input type="number" id="age" placeholder="Put(0) or Call(1):" name="age" min="0" max="1" required>
+            </div>
+
+
+
+
+<!-- 
+            <div class="input-group">
+                <input type="number" id="pct" placeholder="% weight to lose:" name="pct" min="0" max="100" required>
+            </div>
+
+            <div class="input-group">
+                <input type="number" id="days" placeholder="Days to lose weight:" name="days" min="1" max="3650" required>
+            </div>
+            
+
+            <div class="input-group">
+                <select id="gender" name="gender" required>
+                    <option value="">--Select Gender--</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select><br><br>
+            </div>
+
+
+            <div class="input-group">
+                <select id="actlevel" name="actlevel" required>
+                    <option value="">--Select Activity Level--</option>
+                    <option value="0">Sedentary: No exercise</option>
+                    <option value="1">Lightly Active: exercise 1-2x per week</option>
+                    <option value="2">Moderately Active: exercise 3-5x per week</option>
+                    <option value="3">Very Active: exercise 6-7x per week</option>
+                    <option value="4">Extremely Active: hard exercise 8+x per week</option>
+                </select><br><br>
+         
+            </div> -->
+
+
+
+            <!-- <div class="input-group"> -->
+                <!-- <input type="number" id="email" placeholder="me@abc.com:" name="email" > -->
+            <!-- </div> -->
+
+
+
+<!-- 
+            <div class="form-group" >
+                <input type="email" id="email" placeholder="me@abc.com:" name="email"  class="form-control">
+            </div> -->
+
+
+
+            <!-- <div class="input-group"> -->
+                    <!-- 
+            <div class="form-container">
+                <form method="POST" action=""> -->
+<!-- 
+                    <h2>Select an Option</h2>
+                    <label>
+                        <input type="radio" name="option" value="1"> Option1
+                    </label><br>
+        
+                    <label>
+                        <input type="radio" name="option" value="2"> Option2
+                    </label><br>
+        
+                    <label>
+                        <input type="radio" name="option" value="3"> Option3
+                    </label><br>
+        
+                    <label>
+                        <input type="radio" name="option" value="4"> Option4
+                    </label><br>
+        
+                    <label>
+                        <input type="radio" name="option" value="5"> Option5
+                    </label><br>
+         -->
+                    <!-- <button type="submit">Submit</button>
+                </form> -->
+        
+
+                <!-- <?php
+                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                    if (isset($_POST['option'])) {
+                        $radioButtonInt = (int) $_POST['option']; // Capture and cast to integer
+                        echo "<p>You selected Option $radioButtonInt</p>";
+                    } else {
+                        echo "<p>Please select an option.</p>";
+                    }
+                }
+                ?> -->
+            <!-- </div> -->
+
+
+
+
+            <button type="submit">Calculate Option Price</button>
+
+
+
+
+<!-- 
+            <div style="text-align: center;">
+                <p id="swmetrics" style="font-size: 12px;"> <a href="../bmikg/index.html">Switch to Metric System</a></p>
+              </div> -->
+
+
+        </form>
+
+
+
+
+        <div id="result"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

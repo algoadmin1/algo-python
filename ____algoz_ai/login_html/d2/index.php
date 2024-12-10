@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "22.4";  // jsonget100.php
+                                                        $ver=  "22.7";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -81,6 +81,9 @@ $fintechfc = "https://algoz.ai/FFC.pdf";
 
 $newsletter="https://algoinvestorr.com/newsletter.pdf";
 $blueprint="https://algoz.ai/blueprint.pdf";
+
+$boc       = "https://algoz.ai/boc";
+
 
 $bmi       = "https://algoz.ai/bmi";
 $fitnessfc = "https://algoz.ai/ffc/";  // https://algoz.ai/ffc/
@@ -441,7 +444,7 @@ if (isset($eventsTable[0])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style_d2.css">
+    <link rel="stylesheet" href="style_d2a.css">
     <link rel="stylesheet" href="style_digital.css">
     <title>algoz.ai</title>
 
@@ -759,6 +762,8 @@ if (isset($eventsTable[0])) {
             <!-- <li><a href="#"><i class='bx bx-store-alt'></i>Price Levels</a></li> -->
             <li><a href="<?php echo $pivots; ?>"><i class='bx bx-vertical-bottom'></i>Price Levels</a></li>
             <!-- <li class="active"><a href="<?php echo $ccc; ?>"><i class='bx bx-math'></i>Covered Call Calc</a></li> -->
+            <li><a href="<?php echo $boc; ?>"><i class='bx bx-calculator'></i>Option Price Calc</a></li>
+
             <li><a href="<?php echo $ccc; ?>"><i class='bx bx-math'></i>Covered Call Calc</a></li>
             <li><a href="<?php echo $pcc; ?>"><i class='bx bx-math'></i>Short Put Calc</a></li>
             <!-- <li><a href="#"><i class='bx bx-analyse'></i>BuySell Signals</a></li> -->
