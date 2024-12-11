@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "22.7";  // jsonget100.php
+                                                        $ver=  "23.8";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -478,9 +478,11 @@ if (isset($eventsTable[0])) {
                     "2024-12-01","LAST month 2024",
                     "2024-12-02","dec 2nd TEST  ",
 
-                    "2024-12-07","6 days out...",
-                    "2024-12-08","7 days out...",
-                    "2024-12-09","8 days out...",
+                    // "2024-12-07","6 days out...",
+                    // "2024-12-08","7 days out...",
+                    // "2024-12-09","8 days out...",
+                    "2024-12-11","CPI 8:30am EDT",
+                    "2024-12-13","FRI 13th",
                     "2024-12-18","FOMC Meeting",
 
                     "2024-12-24","Christmas Eve",
@@ -489,10 +491,38 @@ if (isset($eventsTable[0])) {
                     "2024-12-31","New Year's Eve",
 
                     "2025-01-01","New Year's Day",
-                    "2025-01-20","MLK Jr Day",
+                    "2025-01-20","MLK Day: High IV",
                     "2025-01-20","Inauguration Day",
 
-                    "2025-02-17","President's Day"
+                    "2025-01-15","GS Earnings",
+                    "2025-01-15","JPM Earnings",
+                    "2025-01-16","BAC Earnings",
+                    "2025-01-22","JNJ Earnings",
+                    "2025-01-22","TSLA Earnings",
+                    "2025-01-24","AXP Earnings",
+                    "2025-01-25","NFLX Earnings",
+                    "2025-01-28","AMD Earnings",
+                    "2025-01-29","AAPL Earnings",
+                    "2025-01-29","AMZN Earnings",
+
+                    "2025-02-03","MSTR Earnings",
+                    "2025-02-03","PLTR Earnings",
+                    "2025-02-04","PFE Earnings",
+                    "2025-02-04","RDDT Earnings",
+                    "2025-02-04","GOOG Earnings",
+                    "2025-02-06","META Earnings",
+
+
+                    "2025-02-13","ROKU Earnings",
+                    "2025-02-17","President's Day",
+                    "2025-02-26","CRM Earnings",
+                    "2025-02-26","NVDA Earnings",
+                    "2025-03-01","S&P500 LONG SEASON",
+
+                    "2025-04-22","MSFT Earnings",
+
+
+                    "2025-12-31","NEW YEAR'S EVE"
                 ];
 
 
@@ -543,11 +573,27 @@ if (isset($eventsTable[0])) {
 
 
 
-                // is let strNew = formatUnixDateOptions("2024-11-30", "suffix", "-");   //  Nov-30th
+                // is let strNew = form atUnixDateOptions("2024-11-30", "suffix", "-");   //  Nov-30th
                  function formatUnixDateOptions(str1, suffix0, spaceChar) {
-                        if(suffix0 == "suffix"  ||  suffix0 == "1"){
+                    let monthAbbreviations2 = ["Nil", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    let suffixes2 = [ "0th", "st", "nd", "rd", "th", "th",    "th", "th", "th", "th", "th",     "th", "th", "th", "th", "th",    "th", "th", "th", "th", "th",     "st", "nd","rd", "th", "th",    "th", "th", "th", "th",  "th",    "st", "32nd"  ];
+                      
+                    if(suffix0 == "suffix"  ||  suffix0 == "1"){
                             return  formatUnixDateWithSuffix(str1,spaceChar);
-                        }else return  formatUnixDate(str1, spaceChar);
+                        }else if(suffix0 == "unix" ){
+                            return str1;
+                        }else if(suffix0 == "suffix2"   ||  suffix0 == "suffix3"  ){
+                            let str1a    = str1.substring(5);  // "11-30"
+                            let str1_mon = str1a.substring(0,2);  // "11"
+                            let str1_day = str1a.substring(3);  // "30"
+                            let   dayInt = parseInt(str1_day);
+                            let str1_dayStr = dayInt.toString();
+                            let monthInt = parseInt(str1_mon);
+                            let newStr = monthAbbreviations2[monthInt] +" "+ str1_dayStr  ;   // suffix2 == no  1st or 2nd just 1 or 2
+                            if(suffix0 == "suffix3" ) newStr  = monthAbbreviations2[monthInt] +" "+ str1_dayStr + suffixes2[ dayInt];
+                            return  newStr;
+
+                        } else return  formatUnixDate(str1, spaceChar);
                          
                  }
 
@@ -627,7 +673,7 @@ if (isset($eventsTable[0])) {
                                 // Transform the entry into the new format and push it to resultArray
                                 let dstr = entry.udate;
                                 // let dstr1 = formatUnixDate(dstr," ");
-                                let dstr1 = formatUnixDateOptions(dstr,"1"," ");
+                                let dstr1 = formatUnixDateOptions(dstr,"suffix2"," ");
                                  
                                 resultArray.push({
                                     stock: entry.symbol,
@@ -759,8 +805,8 @@ if (isset($eventsTable[0])) {
         </a>
         <ul class="side-menu">
             <li class="active"><a href="#"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
-            <!-- <li><a href="#"><i class='bx bx-store-alt'></i>Price Levels</a></li> -->
-            <li><a href="<?php echo $pivots; ?>"><i class='bx bx-vertical-bottom'></i>Price Levels</a></li>
+            <!-- <li><a href="#"><i class='bx bx-store-alt'></i>Price Levels</a></li>   bx-vertical-bottom -->
+            <li><a href="<?php echo $pivots; ?>"><i class='bx bx-line-chart'></i>Price Levels</a></li>
             <!-- <li class="active"><a href="<?php echo $ccc; ?>"><i class='bx bx-math'></i>Covered Call Calc</a></li> -->
             <li><a href="<?php echo $boc; ?>"><i class='bx bx-calculator'></i>Option Price Calc</a></li>
 
@@ -1076,7 +1122,7 @@ if (isset($eventsTable[0])) {
                     <a href="#" class="report">
                     <i class='bx bx-user-voice'></i>
                     <!-- <i class='bx bx-cloud-download'></i> -->
-                    <span>Jr Trader</span>
+                    <span>Quick Ref</span>
                     </a> 
                  </div>
 
@@ -1139,7 +1185,8 @@ if (isset($eventsTable[0])) {
 
                 <div class="orders">
                     <div class="header">
-                        <i class='bx bx-line-chart'></i>
+                        <!-- <i class='bx bx-line-chart'></i>. -->
+                        <i class='bx bxs-traffic'></i>
                         <h3><?php echo $emailName ; ?>'s Signals</h3>
                         <!-- <h3>Recent Activity</h3> -->
                     </div>
@@ -1295,8 +1342,10 @@ if (isset($eventsTable[0])) {
 
 // ###############################################################################################  NEW li
 // ###############################################################################################  NEW li
-
-                    // Get the task list container
+//
+// ############################ EVENTS
+//
+// Get the task list container
                     const taskList = document.querySelector(".task-list");
 
                     // Clear existing tasks (if any)
@@ -1309,14 +1358,15 @@ if (isset($eventsTable[0])) {
                         let daysAway0 = DaysAway(dateString);
 
                         // Skip if the event is in the past
-                        if (daysAway0 < 0) continue;
+                        if (daysAway0 < -1) continue;
+                        // if (daysAway0 < 0) continue;
 
                         // Initialize variables
                         let li_string = "completed";  // assume green
                         let bx_string = "bx bx-check-circle";
 
                         // Determine the styles based on the date proximity
-                        if (daysAway0 === 0) {
+                        if (daysAway0 === 0  || daysAway0 == -1) {
                             li_string = "not-completed";
                             bx_string = "bx bx-x-circle";
 
@@ -1331,7 +1381,8 @@ if (isset($eventsTable[0])) {
                         
 
                         // Format the date string to "MMMDDth/st/nd/rd" format
-                        const formattedDate = formatUnixDateWithSuffix(dateString, " ");
+                        let formattedDate = formatUnixDateOptions(dateString,"suffix3"," ");
+                        // const formattedDate = formatUnixDateWithSuffix(dateString, " ");
                         // Create the <li> element dynamically
                         const liElement = document.createElement("li");
                         liElement.className = li_string;
