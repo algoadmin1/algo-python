@@ -375,6 +375,20 @@ function GetNextSymbolFromWatchlist(){
 }
 
 
+function renameFile($fname1, $fname2) {
+    // Check if the original file exists
+    if (!file_exists($fname1)) {
+        return false; // Return false if the file doesn't exist
+    }
+
+    // Attempt to rename the file
+    if (rename($fname1, $fname2)) {
+        return true; // Return true if the rename was successful
+    } else {
+        return false; // Return false if the rename failed
+    }
+}
+
 
 // ######################################## >>>>>>>>>>> NEW sym CODE START HERE
 // ######################################## >>>>>>>>>>> NEW sym CODE START HERE

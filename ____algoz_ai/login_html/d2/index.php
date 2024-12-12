@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "23.8";  // jsonget100.php
+                                                        $ver=  "24.1";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -91,6 +91,24 @@ $fitnessfc = "https://algoz.ai/ffc/";  // https://algoz.ai/ffc/
 $chatai="https://chatgpt.com/";
 
 $logout0= "https://algoz.ai/login/logout.php";
+
+
+
+// productstr test
+
+if( $email1!="roguequant1@gmail.com" ){
+
+     $fintechfc = "https://fasterclass.finance/store/index.html";
+
+    $fitnessfc =  "https://fasterclass.pro/store/index.html";
+
+}
+
+
+
+
+
+
 $j=0;
 
 
@@ -1381,7 +1399,7 @@ if (isset($eventsTable[0])) {
                         
 
                         // Format the date string to "MMMDDth/st/nd/rd" format
-                        let formattedDate = formatUnixDateOptions(dateString,"suffix3"," ");
+                        let formattedDate = formatUnixDateOptions(dateString,"suffix2"," ");
                         // const formattedDate = formatUnixDateWithSuffix(dateString, " ");
                         // Create the <li> element dynamically
                         const liElement = document.createElement("li");
