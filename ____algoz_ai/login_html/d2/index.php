@@ -1,11 +1,12 @@
 <?php
-                                                        $ver=  "24.6";  // jsonget100.php
+                                                        $ver=  "24.7";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
 date_default_timezone_set('America/New_York');
 
 $emailName="Guest";
+$gProductString_Session="";
 
 session_start();
 if(! (isset($_SESSION["user"])) ) {
@@ -28,7 +29,9 @@ if(! (isset($_SESSION["user"])) ) {
         $user_lastDateTime1   = $_SESSION["user_lastDateTime"] ;
         $user_lastDay1        = $_SESSION["user_lastDay"] ;
 
-        $productstr1  = $_SESSION["user_productstr"]  ;
+        $productstr1            = $_SESSION["user_productstr"]  ;
+        $gProductString_Session = $productstr1;
+
         $appSecret1  =  $_SESSION["appsecret"] ;
 
 
@@ -110,7 +113,14 @@ if(     $email1=="roguequant1@gmail.com"     ||
 }
 
 
-// $g_ProductString_Live = GetLiveProductStr($email1);
+
+
+
+$g_ProductString_Live = ""; 
+
+$g_ProductString_Live = GetLiveProductString($email1);
+
+
 $newsletter_link      = "";
 $newsletter_link      = GetProductUrl(  $email1, $g_ProductString_Live, $superuser , "newsletter_sub"); 
 
@@ -483,9 +493,16 @@ if (isset($eventsTable[0])) {
     <script src="eventstable.js"></script>
     
     <script>
+
+                 var gProductString_Live = <?php echo '"'. $g_ProductString_Live. '"'; ?>;
+                 console.log("] ***>> INSIDE <script> index.php, gPr0ductString_Live ==",gProductString_Live);
+
+                 var gProductString_Session = <?php echo '"'. $gProductString_Session. '"'; ?>;
+                 console.log("] ***>> INSIDE <script> index.php, gPr0ductString_Session ==",gProductString_Session);
+
                 //$prcessedSignalsDataJson = json_encode($sortedSignalsArray);    // prep for .js
-                 var processedSignalsDataOrig = <?php echo $processedSignalsDataJson; ?>;
-                 console.log("] ***>> INSIDE <script> index.php, processedSignalsDataOrig ==",processedSignalsDataOrig);
+                var processedSignalsDataOrig = <?php echo $processedSignalsDataJson; ?>;
+                console.log("] ***>> INSIDE <script> index.php, processedSignalsDataOrig ==",processedSignalsDataOrig);
 
 
 // DEPR TEST...
@@ -861,14 +878,14 @@ if (isset($eventsTable[0])) {
             </script> -->
 
             <li><a href="<?php echo $newsletter_link; ?>"><i class='bx bx-news'></i>Newsletter</a></li>
-            <li><a href="<?php echo $fintechfc; ?>"><i class='bx bx-fast-forward-circle'></i>FasterClass.finance</a></li>
+            <li><a href="<?php echo $fintechfc; ?>"><i class='bx bx-fast-forward-circle'></i>FasterClass Finance</a></li>
 
             <li><a href="<?php echo $scans; ?>"><i class='bx bx-radar'></i>Market Scans</a></li>
             <li><a href="<?php echo $blueprint; ?>"><i class='bx bx-map-alt'></i>ai Roadmap</a></li>  
             <li><a href="<?php echo $BuyCall30min; ?>"><i class='bx bx-phone-outgoing'></i>Book Call</a></li>
 
             <li><a href="<?php echo $bmi; ?>"><i class='bx bx-health'></i>BMI Calc</a></li>
-            <li><a href="<?php echo $fitnessfc; ?>"><i class='bx bx-heart'></i>Fitness Fasterclass</a></li>  
+            <li><a href="<?php echo $fitnessfc; ?>"><i class='bx bx-heart'></i>FasterClass Fitness</a></li>  
           
             <li><a href="<?php echo $refresh_url; ?>"><i class='bx bx-analyse'></i>Refresh</a></li>  
             <li><a href="<?php echo $craps; ?>"><i class='bx bx-dice-6'></i>Craps</a></li>  

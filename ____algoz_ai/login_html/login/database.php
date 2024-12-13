@@ -1,5 +1,5 @@
 <?php
-                                                   $db_ver =  "7.3";
+                                                   $db_ver =  "8.1";
 
 //
 // Aug 28 2024
@@ -117,9 +117,14 @@ tp_SaaSFintechTool_Pivots_365days|2025-10-09|63|15|,tp_FightingFFC_Beginner|9999
 tp_Cashflow_Business|9999-12-31|57|18|,tp_SaaSFintechTool_Pivots_365days|2025-10-09|63|19|,
 */
 //
+
+//test
+//    $productstr="tp_newsletter_sub|2025-01-01|5000|9|,tp_charting_sub|2025-03-31|30000|12|,";
 // assumes valid session active 
 //
 function GetLiveProductString( $email0 ){
+    global $servername, $dbname, $username, $happy1;
+
     $email08    = $email0;             
     $msgprod    = false;   
     $br         = "<br />";
@@ -128,78 +133,85 @@ function GetLiveProductString( $email0 ){
     $product08  ="";
    $expiration08="";
 
-    $productstr="";
 
-    try{
-        $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);           // Connect to MySQL using PDO
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);                         // Set PDO to throw exceptions for errors
+   $dateFormat = date("Y-m-d");
+   $productstr="tp_header_str|".  $dateFormat ."|00|0|,";
 
-            $tableTrans = "transactions";
-            $queryTransactions  = "SELECT * FROM ". $tableTrans. " WHERE email = :email";
-            $stmt = $conn->prepare($queryTransactions);
-            $stmt->bindParam(':email', $email08);
-            $stmt->execute();
-            $resultTransactions = $stmt->fetchAll(PDO::FETCH_ASSOC);        // get products
-            $itemcount = count($resultTransactions);                        // Assign the number of items returned to $itemcount
-                                // Iterate through each row and print key/value pairs
-                                // foreach ($resultTransactions as $row) {
-                                //     foreach ($row as $key => $value) {
-                                //         echo "Key: $key; Value: $value<br>";
-                                //     }
-                                // }
-            if($msgprod)   echo "<br />resultTransaction(CNT= $itemcount )==";
-            if($msgprod)   print_r( $resultTransactions) ;
-            
-            // $amt08      ="";
-            // $productstr="";
-            // $id08 ="";
-            // $product08="";
-            // $expiration08="";
-            $k=0;
-            
-            foreach ($resultTransactions as $row) {
-                // print_r( $row ) ;
-                foreach ($row as $key => $value) {
-                        if(  $key!="payload" ) $value0=$value;
-                            else $value0="";  // exclude json pl
-                        if($msgprod)  echo "row". $k. "[". $key. "]=". $value0. "|" ;
 
-                        // in the array returned from mysql, the order is transactionId, product, expiration
-                        if(  $key=="transactionId" )  $id08 = (string)$value;
-                        if(  $key=="product" )        $product08= $value;
-                        if(  $key=="amt" )            $amt08=     $value;
-                        if(  $key=="expiration" ){
-                                $expiration08= $value;   // ie YYYY-MM-DD
-                                // if(strlen($expiration08!=10)) $expiration08="9999-12-31";     // if bad format expiry= never
-                                $productstr.= $product08."|". $expiration08."|". $amt08. "|". $id08."|,";
-                                
-                                // clear id & expiry vars
-                                $id08 ="";
-                                $amt08 ="";
-                                $expiration08 ="";
-                            }
-                    }//forea1
-                $k++;
-            }//forea0
+   // Convert the date to a Unix timestamp
+//    $udate = strtotime($dateFormat);
+//    echo "Formatted date: " . $dateFormat . "<br>";   // YYYY-MM-DD
+//    echo "Unix timestamp: " . $udate;   // timestamp
 
-            if($msgprod)   echo "<br />productstr = ". $productstr ;
-            $conn = null;       // close DBase
 
-                //  pre Dec 12  2024
-                //      THIS SHOULD BE  CONSTRUCTED  at login time so everything funnels through login.php,
-                //              where this $_SESSION["user_productstr"] = BuildSessionProducts(), located in database.php
-                //
-                // $_SESSION["user_productstr"] = $productstr ;
-                // note create subscription
-                // note on these:  tp_AlgoInvestorNewsletter_3Month END DATE MUST BE STORED      
-                //
-    
-    } catch (PDOException $e) {
-        if($msgprod) echo "<br />ERROR:  Connection failed: " . $e->getMessage();
-        $productstr="error_dbConnFailed|1900-12-31|0|-1|,";
-    }
-    $conn = null;        // Close the PDO connection
-    if($msgprod) echo $br. " * PDO conn Closed. *";
+            try{
+            $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);           // Connect to MySQL using PDO
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);                         // Set PDO to throw exceptions for errors
+
+                $tableTrans = "transactions";
+                $queryTransactions  = "SELECT * FROM ". $tableTrans. " WHERE email = :email";
+                $stmt = $conn->prepare($queryTransactions);
+                $stmt->bindParam(':email', $email08);
+                $stmt->execute();
+                $resultTransactions = $stmt->fetchAll(PDO::FETCH_ASSOC);        // get products
+                $itemcount = count($resultTransactions);                        // Assign the number of items returned to $itemcount
+                                    // Iterate through each row and print key/value pairs
+                                    // foreach ($resultTransactions as $row) {
+                                    //     foreach ($row as $key => $value) {
+                                    //         echo "Key: $key; Value: $value<br>";
+                                    //     }
+                                    // }
+                if($msgprod)   echo "<br />resultTransaction(CNT= $itemcount )==";
+                if($msgprod)   print_r( $resultTransactions) ;
+                
+                $k=0;
+                foreach ($resultTransactions as $row) {
+                    // print_r( $row ) ;
+                    foreach ($row as $key => $value) {
+                            if(  $key!="payload" ) $value0=$value;
+                                else $value0="";  // exclude json pl
+                            if($msgprod)  echo "row". $k. "[". $key. "]=". $value0. "|" ;
+
+                            // in the array returned from mysql, the order is transactionId, product, expiration
+                            if(  $key=="transactionId" )  $id08 = (string)$value;
+                            if(  $key=="product" )        $product08= $value;
+                            if(  $key=="amt" )            $amt08=     $value;
+                            if(  $key=="expiration" ){
+                                    $expiration08= $value;   // ie YYYY-MM-DD
+                                    // if(strlen($expiration08!=10)) $expiration08="9999-12-31";     // if bad format expiry= never
+                                    $productstr.= $product08."|". $expiration08."|". $amt08. "|". $id08."|,";
+                                    
+                                    // clear id & expiry vars
+                                    $id08 ="";
+                                    $amt08 ="";
+                                    $expiration08 ="";
+                                }
+                        }//forea1
+                    $k++;
+                }//forea0
+
+                if($msgprod)   echo "<br />productstr = ". $productstr ;
+                $conn = null;       // close DBase
+
+                    //  pre Dec 12  2024
+                    //      THIS SHOULD BE  CONSTRUCTED  at login time so everything funnels through login.php,
+                    //              where this $_SESSION["user_productstr"] = BuildSessionProducts(), located in database.php
+                    //
+                    // $_SESSION["user_productstr"] = $productstr ;
+                    // note create subscription
+                    // note on these:  tp_AlgoInvestorNewsletter_3Month END DATE MUST BE STORED      
+                    //
+        
+            } catch (PDOException $e) {
+                if($msgprod) echo "<br />ERROR:  Connection failed: " . $e->getMessage();
+                $productstr="error_dbConnFailed|1900-12-31|0|-1|,";
+            }
+            $conn = null;        // Close the PDO connection
+            if($msgprod) echo $br. " * PDO conn Closed. *";
+
+
+
+
 
     return $productstr;
 
@@ -207,21 +219,60 @@ function GetLiveProductString( $email0 ){
 }//fn
 
 //
+//
+function CheckExpiryDate( $udate ){
+    $tf_date = false;
+
+    if(isset($udate))  $tf_date = true;
+    
+    return $tf_date;
+
+}
+
 //      pr0ducttype0 = "newsletter_sub"
 //
 //
 function HasProduct(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 ){
     $tf=false;
 
+    //    $productstr="tp_newsletter_sub|2025-01-01|5000|9|,
+    //                 tp_charting_sub|2025-03-31|30000|12|, ";
+
+    if(isset($g_ProductString_Live0)  &&  $g_ProductString_Live0 !="" ){
+            
+
+            $charstr =",";
+            $arrayRows = explode($charstr, $g_ProductString_Live0);
+            foreach ($arrayRows as $elementStr) {                     //  el3mentStr =  //  "tp_newsletter_sub|2025-01-01|5000|9|,
+
+                $charstr ="|";
+                $arrayColumns = explode($charstr, $elementStr);     
+
+                if($arrayColumns[0]==$producttype0){            //   tp_newsletter_sub   | 
+                    // check date
+                    $date_to_test = $arrayColumns[1];           //   2025-01-01          |
+                    $tf=CheckExpiryDate( $date_to_test );  
+                    // $tf=true;
+
+                }
+                $dummy=0;
+                // echo $element . "<br>"; // Echo each element followed by a line break
+            }//for
+
+
+
+    }// if isset
+
 
     if( $superuser0 == true ) return $tf= true;
-
 
     return  $tf;
 }
 
+
 function GetProductUrl(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 ){
         $urllink="https://algoz.ai/";
+
 
     if($producttype0      == "newsletter_sub"){
         // $urllink="https://algoinvestorr.com/newsletter_v64.pdf";
@@ -233,18 +284,22 @@ function GetProductUrl(  $email0, $g_ProductString_Live0, $superuser0 , $product
 
     }
 
+
      if($producttype0=="optionscalc_sub"){
         ;
     }
+
 
      if($producttype0=="charting_sub"){
         ;
     }
     
+
     if($producttype0=="pricelevels_sub"){
         ;
     }
     
+
     if($producttype0=="scans_sub"){
         ;
     }
