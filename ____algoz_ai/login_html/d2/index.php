@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "24.7";  // jsonget100.php
+                                                        $ver=  "25.1";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -1167,13 +1167,53 @@ if (isset($eventsTable[0])) {
 
 
 
+
+                </div>
+                <a href="https://algoz.ai/d2/tutorial/index.html" class="report">
+                <i class='bx bx-user-voice'></i>
+                        <span>Quick Ref</span>
+                    </a> 
+                </div>
+
+                
+<!-- 
+                <div>
+                        <audio id="quickRefAudio" preload="auto">
+                            <source src="tutorial.mp3" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+
+                        <a href="#" class="report" id="quickRefButton">
+                            <i class='bx bx-user-voice'></i>
+                            <span>Quick Ref</span>
+                        </a>
+                </div> -->
+
+
+                <script>
+                        // Get the audio element
+                        // const audio = document.getElementById('quickRefAudio');
+
+                        // // Add an event listener to the button
+                        // document.getElementById('quickRefButton').addEventListener('click', (event) => {
+                        //     event.preventDefault(); // Prevent the default link action
+                        //     audio.play(); // Play the audio
+                        // });
+                </script>
+
+
+
+
+
+
+
+<!-- 
                 </div>
                     <a href="#" class="report">
                     <i class='bx bx-user-voice'></i>
-                    <!-- <i class='bx bx-cloud-download'></i> -->
                     <span>Quick Ref</span>
                     </a> 
-                 </div>
+                 </div> -->
 
 
 

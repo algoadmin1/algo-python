@@ -1,6 +1,7 @@
 
 <?php                       
-                                                              $ver=  "307.5";
+                                                              $ver=  "309.9";
+
 
 date_default_timezone_set('America/New_York');
 require_once "../login/database.php";
@@ -390,6 +391,60 @@ function renameFile($fname1, $fname2) {
 }
 
 
+//
+//  $style =0   2024-12-13 13:16:59.998
+//
+//  $style =1   2024-12-13
+//
+//  $style =2   2024-12-13 13:16:59
+//
+//  $style =3   2024-12-13T131659
+//
+//  $style =4   2024-12-13_131659
+//
+//  $style =5   2024_12_13
+//
+//  $style =6   2024-12-13_13:16:59
+//
+//
+// $fname.= "_". G3tUnixDateTime(5);   //  + "2024_12_13
+function GetUnixDateTime($style0) {
+    // Get the current time in microseconds
+    $microtime = microtime(true);
+
+    // Extract the milliseconds
+    $milliseconds = sprintf("%03d", ($microtime - floor($microtime)) * 1000);
+
+    // Format the date and time as "YYYY-MM-DD HH:MM:SS"
+    $dateTime = date("Y-m-d H:i:s", floor($microtime));
+    $dateTime1 = date("Y-m-d");
+    $dateTime5 = date("Y_m_d");
+
+    $dateTime2= date("Y-m-d H:i:s");
+    $dateTime6= date("Y-m-d_H:i:s");
+    $dateTime3= date("Y-m-dTHis");
+    $dateTime4= date("Y-m-d_His");
+
+    // Append the milliseconds to the formatted date and time
+    $full_unix_date_time =  $dateTime. ".". $milliseconds;
+    $full_unix_date      =  $dateTime1 ;
+
+    $ret_udatetime= $dateTime;
+
+
+    if($style0==0) $ret_udatetime= $dateTime;
+    if($style0==1) $ret_udatetime= $dateTime1;
+    if($style0==2) $ret_udatetime= $dateTime2;
+    if($style0==3) $ret_udatetime= $dateTime3;
+    if($style0==4) $ret_udatetime= $dateTime4;
+    if($style0==5) $ret_udatetime= $dateTime5;
+    if($style0==6) $ret_udatetime= $dateTime6;
+
+    return $ret_udatetime;
+}
+ 
+
+
 // ######################################## >>>>>>>>>>> NEW sym CODE START HERE
 // ######################################## >>>>>>>>>>> NEW sym CODE START HERE
 // ######################################## >>>>>>>>>>> NEW sym CODE START HERE
@@ -437,10 +492,21 @@ if( $watchlistRUNNING  == 0 ){
                                     $_SESSION["watchlistLoopThruMax"]         = count( $_SESSION["watchlistArray"] ) ;
                                     $_SESSION["watchlistLoopThruCount"]       = 0;                    // start cnt
 
+
+// rename old file    ( only this 1st time thru !!! )           signals.txt   ==>  signals_2024_12_13.txt
+
+                                    $udate_file = GetUnixDateTime(5) ;   // 2024_12_13
+                                    $fnameNew0  = "signals";
+                                    $fnameOrig  = $fnameNew0. ".txt";
+                                    $fnameNew   = $fnameNew0. "_". $udate_file . ".txt";   //  + "_2024_12_13.txt"
+                                    $tf_success = renameFile(  $fnameOrig , $fnameNew  );
+
+
                                     // turn it on...
                                     $watchlistRUNNING                           = 1;
                                     $_SESSION["watchlistLoopThru_running"]      = $watchlistRUNNING;
                                   
+
 
                                 // here, watchlistRUNNING==1 so below we should re-route the ?sym= code to grab from G3tNextSymbolFromWatchlist();
                             }else{
