@@ -1,5 +1,7 @@
 <?php
-//                                  ver 6.99
+                                                   $db_ver =  "7.3";
+
+//
 // Aug 28 2024
 //
 // Sep 8 2024 : to add another project:
@@ -121,6 +123,12 @@ function GetLiveProductString( $email0 ){
     $email08    = $email0;             
     $msgprod    = false;   
     $br         = "<br />";
+    $amt08      ="";
+    $id08       ="";
+    $product08  ="";
+   $expiration08="";
+
+    $productstr="";
 
     try{
         $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $happy1);           // Connect to MySQL using PDO
@@ -142,11 +150,11 @@ function GetLiveProductString( $email0 ){
             if($msgprod)   echo "<br />resultTransaction(CNT= $itemcount )==";
             if($msgprod)   print_r( $resultTransactions) ;
             
-            $amt08      ="";
-            $productstr="";
-            $id08 ="";
-            $product08="";
-            $expiration08="";
+            // $amt08      ="";
+            // $productstr="";
+            // $id08 ="";
+            // $product08="";
+            // $expiration08="";
             $k=0;
             
             foreach ($resultTransactions as $row) {
@@ -198,7 +206,52 @@ function GetLiveProductString( $email0 ){
 
 }//fn
 
+//
+//      pr0ducttype0 = "newsletter_sub"
+//
+//
+function HasProduct(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 ){
+    $tf=false;
 
+
+    if( $superuser0 == true ) return $tf= true;
+
+
+    return  $tf;
+}
+
+function GetProductUrl(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 ){
+        $urllink="https://algoz.ai/";
+
+    if($producttype0      == "newsletter_sub"){
+        // $urllink="https://algoinvestorr.com/newsletter_v64.pdf";
+        if (  HasProduct(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 )  ==  true ){ 
+            $urllink="https://algoinvestorr.com/newsletter.pdf";
+        }else{
+            $urllink="https://fasterclass.finance";
+        }
+
+    }
+
+     if($producttype0=="optionscalc_sub"){
+        ;
+    }
+
+     if($producttype0=="charting_sub"){
+        ;
+    }
+    
+    if($producttype0=="pricelevels_sub"){
+        ;
+    }
+    
+    if($producttype0=="scans_sub"){
+        ;
+    }
+
+    return  $urllink;
+
+}
 
 
 

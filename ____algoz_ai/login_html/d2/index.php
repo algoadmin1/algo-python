@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "24.1";  // jsonget100.php
+                                                        $ver=  "24.6";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -62,6 +62,7 @@ require_once '../login/database.php';
 
  
 
+$refresh_url =   "https://algoz.ai/index.php";
 
 
 $BuyCall30minTest ="https://buy.stripe.com/aEU3f42UYbIG4pO8wW";
@@ -93,21 +94,33 @@ $chatai="https://chatgpt.com/";
 $logout0= "https://algoz.ai/login/logout.php";
 
 
+$superuser = false ;
+$creator   = false ;
 
-// productstr test
+if(     $email1=="roguequant1@gmail.com"     ||
+        $email1=="johnbotti9000@gmail.com"   ||
+        $email1=="johnbotti2013@gmail.com"   ||
+        $email1=="geneoss@yahoo.com"         ||
+        $email1=="algoinvestorr@gmail.com"   ){
+         
+        $superuser = true ;
 
-if( $email1!="roguequant1@gmail.com" ){
-
-     $fintechfc = "https://fasterclass.finance/store/index.html";
-
-    $fitnessfc =  "https://fasterclass.pro/store/index.html";
+        if( $email1!="geneoss@yahoo.com"     )  $creator = true ;
 
 }
 
 
+// $g_ProductString_Live = GetLiveProductStr($email1);
+$newsletter_link      = "";
+$newsletter_link      = GetProductUrl(  $email1, $g_ProductString_Live, $superuser , "newsletter_sub"); 
 
 
+ 
 
+if( $superuser == false  ){
+        $fintechfc = "https://fasterclass.finance/store/index.html";
+        $fitnessfc =  "https://fasterclass.pro/store/index.html";
+}
 
 $j=0;
 
@@ -847,16 +860,17 @@ if (isset($eventsTable[0])) {
                 });
             </script> -->
 
-            <li><a href="<?php echo $newsletter; ?>"><i class='bx bx-news'></i>Newsletter</a></li>
+            <li><a href="<?php echo $newsletter_link; ?>"><i class='bx bx-news'></i>Newsletter</a></li>
             <li><a href="<?php echo $fintechfc; ?>"><i class='bx bx-fast-forward-circle'></i>FasterClass.finance</a></li>
 
-            <li><a href="<?php echo $scans; ?>"><i class='bx bx-data'></i>Market Scans</a></li>
+            <li><a href="<?php echo $scans; ?>"><i class='bx bx-radar'></i>Market Scans</a></li>
             <li><a href="<?php echo $blueprint; ?>"><i class='bx bx-map-alt'></i>ai Roadmap</a></li>  
             <li><a href="<?php echo $BuyCall30min; ?>"><i class='bx bx-phone-outgoing'></i>Book Call</a></li>
 
             <li><a href="<?php echo $bmi; ?>"><i class='bx bx-health'></i>BMI Calc</a></li>
             <li><a href="<?php echo $fitnessfc; ?>"><i class='bx bx-heart'></i>Fitness Fasterclass</a></li>  
           
+            <li><a href="<?php echo $refresh_url; ?>"><i class='bx bx-analyse'></i>Refresh</a></li>  
             <li><a href="<?php echo $craps; ?>"><i class='bx bx-dice-6'></i>Craps</a></li>  
             <!-- <use href="#bx--dice-6" /> -->
             <!-- <li><a href="#"><i class='bx bx-group'></i>Users</a></li> -->
@@ -1217,6 +1231,7 @@ if (isset($eventsTable[0])) {
                                 <th>Status</th>
                             </tr>
                         </thead>
+                        
                         <tbody>
                             <!-- Rows will be populated dynamically by JavaScript -->
                         </tbody>
