@@ -1,5 +1,5 @@
 <?php
-                                                   $db_ver =  "8.1";
+                                                   $db_ver =  "8.2";
 
 //
 // Aug 28 2024
@@ -218,7 +218,6 @@ function GetLiveProductString( $email0 ){
 
 }//fn
 
-//
 //
 function CheckExpiryDate( $udate ){
     $tf_date = false;
