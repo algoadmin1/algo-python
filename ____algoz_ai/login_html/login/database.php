@@ -277,14 +277,23 @@ function GetProductUrl(  $email0, $g_ProductString_Live0, $superuser0 , $product
 
 
     if($producttype0      == "newsletter_sub"){
-        // $urllink="https://algoinvestorr.com/newsletter_v64.pdf";
         if (  HasProduct(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 )  ==  true ){ 
             $urllink="https://algoinvestorr.com/newsletter.pdf";
         }else{
             $urllink="https://fasterclass.finance";
         }
+    }
+
+    if($producttype0      == "tp_FightingFFC_Champ"){
+        if (  HasProduct(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 )  ==  true ){ 
+            $urllink="https://algoz.ai/ffc/";
+        }else{
+            $urllink="https://fasterclass.pro/store/index.html";
+        }
 
     }
+
+
 
 
      if($producttype0=="optionscalc_sub"){
@@ -305,6 +314,9 @@ function GetProductUrl(  $email0, $g_ProductString_Live0, $superuser0 , $product
     if($producttype0=="scans_sub"){
         ;
     }
+
+
+    
 
     return  $urllink;
 

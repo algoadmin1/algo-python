@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "25.1";  // jsonget100.php
+                                                        $ver=  "25.3";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -100,11 +100,11 @@ $logout0= "https://algoz.ai/login/logout.php";
 $superuser = false ;
 $creator   = false ;
 
-if(     $email1=="roguequant1@gmail.com"     ||
-        $email1=="johnbotti9000@gmail.com"   ||
+if(     $email1=="algoinvestorr@gmail.com"   ||
+        //  $email1=="roguequant1@gmail.com"     ||
         $email1=="johnbotti2013@gmail.com"   ||
         $email1=="geneoss@yahoo.com"         ||
-        $email1=="algoinvestorr@gmail.com"   ){
+        $email1=="johnbotti9000@gmail.com"   ){
          
         $superuser = true ;
 
@@ -125,12 +125,17 @@ $newsletter_link      = "";
 $newsletter_link      = GetProductUrl(  $email1, $g_ProductString_Live, $superuser , "newsletter_sub"); 
 
 
+
+$ffc_fitness_link      = "https://fasterclass.pro/store/index.html";
+$ffc_fitness_link      = GetProductUrl(  $email1, $g_ProductString_Live, $superuser , "tp_FightingFFC_Champ"); 
+
+
  
 
-if( $superuser == false  ){
-        $fintechfc = "https://fasterclass.finance/store/index.html";
-        $fitnessfc =  "https://fasterclass.pro/store/index.html";
-}
+// if( $superuser == false  ){
+//         $fintechfc = "https://fasterclass.finance/store/index.html";
+//         $fitnessfc =  "https://fasterclass.pro/store/index.html";
+// }
 
 $j=0;
 
@@ -885,7 +890,7 @@ if (isset($eventsTable[0])) {
             <li><a href="<?php echo $BuyCall30min; ?>"><i class='bx bx-phone-outgoing'></i>Book Call</a></li>
 
             <li><a href="<?php echo $bmi; ?>"><i class='bx bx-health'></i>BMI Calc</a></li>
-            <li><a href="<?php echo $fitnessfc; ?>"><i class='bx bx-heart'></i>FasterClass Fitness</a></li>  
+            <li><a href="<?php echo $ffc_fitness_link; ?>"><i class='bx bx-heart'></i>FasterClass Fitness</a></li>  
           
             <li><a href="<?php echo $refresh_url; ?>"><i class='bx bx-analyse'></i>Refresh</a></li>  
             <li><a href="<?php echo $craps; ?>"><i class='bx bx-dice-6'></i>Craps</a></li>  
