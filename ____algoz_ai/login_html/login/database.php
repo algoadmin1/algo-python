@@ -1,5 +1,5 @@
 <?php
-                                                   $db_ver =  "8.2";
+                                                   $db_ver =  "8.3";
 
 //
 // Aug 28 2024
@@ -221,9 +221,12 @@ function GetLiveProductString( $email0 ){
 //
 function CheckExpiryDate( $udate ){
     $tf_date = false;
-
-    if(isset($udate))  $tf_date = true;
-    
+    $todaydate0=date("Y-m-d");
+    if(isset($udate)){
+//                         returns -1 if A<B, 0 A==B, +1 if A>B
+        $numcmp = CompareDates( $todaydate0, $udate );
+        if($numcmp <1)        $tf_date = true;      // if todaysDate <= expiryDate , then true
+    }
     return $tf_date;
 
 }
