@@ -1,5 +1,5 @@
 <?php
-                                                   $db_ver =  "8.3";
+                                                   $db_ver =  "8.6";
 
 //
 // Aug 28 2024
@@ -270,6 +270,59 @@ function HasProduct(  $email0, $g_ProductString_Live0, $superuser0 , $producttyp
 
     return  $tf;
 }
+
+
+// Sample JSON array with "expired" field added
+$product_jsonStr = '[
+    {
+        "name": "tr_fcc",
+        "active": "https://algoz.ai/d2/jsonget100.php",
+        "expired": "https://algoz.ai/expired/tr_fcc"
+    },
+    {
+        "name": "tr_newsletter",
+        "active": "https://algoz.ai/newletter.pdf",
+        "expired": "https://algoz.ai/expired/tr_newsletter"
+    },
+    {
+        "name": "tr_ffc",
+        "active": "https://algoz.ai/ffc/",
+        "expired": "https://algoz.ai/expired/tr_ffc"
+    }
+]';
+
+// Function to get the active URL or return the expired URL
+function GetUrl($productNameStr) {
+    global $product_jsonStr; // Access the global JSON string
+    
+    // Decode JSON into an associative array
+    $productArray = json_decode($jsonStr, true);
+
+    // Check if decoding was successful
+    if ($productArray === null) {
+        return "Error: Invalid JSON";
+    }
+
+    // Loop through the array to find the matching product name
+    foreach ($productArray as $product) {
+        if (isset($product['name']) && $product['name'] === $productNameStr) {
+            return $product['active']; // Return the active URL if found
+        }
+    }
+
+    // If no match is found, return the generic expired URL
+    return  "https://algoz.ai"; //"expired";
+}
+
+// Example usage
+// $productName = "tr_newsletter";
+// echo "URL for '{$productName}': " . GetUrl($productName) . "\n";
+
+// $productName = "unknown_product";
+// echo "URL for '{$productName}': " . GetUrl($productName) . "\n";
+
+
+
 
 
 function GetProductUrl(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 ){
