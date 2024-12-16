@@ -121,9 +121,8 @@ $g_ProductString_Live = "";
 $g_ProductString_Live = GetLiveProductString($email1);
 
 
-$newsletter_link      = "";
+$newsletter_link      = "https://algoinvestorr.com/newsletter.pdf";
 $newsletter_link      = GetProductUrl(  $email1, $g_ProductString_Live, $superuser , "newsletter_sub"); 
-
 
 
 $ffc_fitness_link      = "https://fasterclass.pro/store/index.html";

@@ -1,5 +1,5 @@
 <?php
-                                                   $db_ver =  "8.6";
+                                                   $db_ver =  "8.8";
 
 //
 // Aug 28 2024
@@ -57,6 +57,40 @@ $linkResetPwd="https://algoz.ai/login/forgotpwdreset.php";
           
 $password_len_min=5;
 
+
+// Sample JSON array with "expired" field added
+$product_jsonStr = '[
+    {
+        "name": "tr_fcc",
+        "active": "https://algoz.ai/d2/jsonget100.php",
+        "expired": "https://algoz.ai/expired/tr_fcc"
+    },
+    {
+        "name": "tr_newsletter",
+        "active": "https://algoz.ai/newletter.pdf",
+        "expired": "https://algoz.ai/expired/tr_newsletter"
+    }, 
+    {
+        "name": "tr_newsletter",
+        "active": "https://algoz.ai/newletter.pdf",
+        "expired": "https://algoz.ai/expired/tr_newsletter"
+    }, 
+    {
+        "name": "tr_newsletter",
+        "active": "https://algoz.ai/newletter.pdf",
+        "expired": "https://algoz.ai/expired/tr_newsletter"
+    },
+    {
+        "name": "tp_FightingFFC_Champ",
+        "active": "https://algoz.ai/ffc",
+        "expired": "https://fasterclass.pro"
+    },
+    {
+        "name": "tr_ffc",
+        "active": "https://algoz.ai/ffc/",
+        "expired": "https://algoz.ai/expired/tr_ffc"
+    }
+]';
 
 
  // ###################################### Functions
@@ -233,7 +267,7 @@ function CheckExpiryDate( $udate ){
 
 //      pr0ducttype0 = "newsletter_sub"
 //
-//
+// 
 function HasProduct(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 ){
     $tf=false;
 
@@ -272,29 +306,67 @@ function HasProduct(  $email0, $g_ProductString_Live0, $superuser0 , $producttyp
 }
 
 
-// Sample JSON array with "expired" field added
-$product_jsonStr = '[
-    {
-        "name": "tr_fcc",
-        "active": "https://algoz.ai/d2/jsonget100.php",
-        "expired": "https://algoz.ai/expired/tr_fcc"
-    },
-    {
-        "name": "tr_newsletter",
-        "active": "https://algoz.ai/newletter.pdf",
-        "expired": "https://algoz.ai/expired/tr_newsletter"
-    },
-    {
-        "name": "tr_ffc",
-        "active": "https://algoz.ai/ffc/",
-        "expired": "https://algoz.ai/expired/tr_ffc"
-    }
-]';
+//
+//  2nd version returns url str
+//
+function HasProduct2(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 ){
+    // $tf=false;
+    $urlstr = "https://algoz.ai";
+
+    //    $productstr="tp_newsletter_sub|2025-01-01|5000|9|,
+    //                 tp_charting_sub|2025-03-31|30000|12|, ";
+
+    if(isset($g_ProductString_Live0)  &&  $g_ProductString_Live0 !="" ){
+            
+
+            $charstr =",";
+            $arrayRows = explode($charstr, $g_ProductString_Live0);
+            foreach ($arrayRows as $elementStr) {                     //  el3mentStr =  //  "tp_newsletter_sub|2025-01-01|5000|9|,
+
+                $charstr ="|";
+                $arrayColumns = explode($charstr, $elementStr);     
+
+                // here we've found the products name
+                if($arrayColumns[0]==$producttype0){            //   tp_newsletter_sub   | 
+                    $date_to_test = $arrayColumns[1];           //   // check date  2025-01-01          |
+                    $tf     = CheckExpiryDate( $date_to_test );       // false = expired, true = active
+
+                    $urlstr = GetProductUrl_active_expired( $producttype0, $tf );
+                    return  $urlstr; // $tf;
+
+                }
+                // echo $element . "<br>"; // Echo each element followed by a line break
+            }//for
+
+
+
+    }// if isset
+
+
+    // if( $superuser0 == true ) return $tf= true;
+
+    return  $urlstr; // $tf;
+}
+
+
+// // Sample JSON array with "expired" field added
+// $pr0oduct_jsonStr = '[
+//     {
+//         "name": "tr_fcc",
+//         "active": "https://algoz.ai/d2/jsonget100.php",
+//         "expired": "https://algoz.ai/expired/tr_fcc"
+//     }, ...
+// ]';
 
 // Function to get the active URL or return the expired URL
-function GetUrl($productNameStr) {
+function GetProductUrl_active_expired($productNameStr, $productActive) {
     global $product_jsonStr; // Access the global JSON string
     
+    $tag ='expired';
+    if($productActive==true){
+        $tag ='active';
+    } 
+
     // Decode JSON into an associative array
     $productArray = json_decode($jsonStr, true);
 
@@ -306,7 +378,8 @@ function GetUrl($productNameStr) {
     // Loop through the array to find the matching product name
     foreach ($productArray as $product) {
         if (isset($product['name']) && $product['name'] === $productNameStr) {
-            return $product['active']; // Return the active URL if found
+            // return $product['active']; // Return the active URL if found
+            return $product[ $tag ]; // Return the active/expired URL if found
         }
     }
 
@@ -314,50 +387,27 @@ function GetUrl($productNameStr) {
     return  "https://algoz.ai"; //"expired";
 }
 
-// Example usage
-// $productName = "tr_newsletter";
-// echo "URL for '{$productName}': " . GetUrl($productName) . "\n";
 
-// $productName = "unknown_product";
-// echo "URL for '{$productName}': " . GetUrl($productName) . "\n";
-
-
-
-
-
+//
+//  $ffc_fitness_link      = GetProductUrl(  $email1, $g_ProductString_Live, $superuser , "tp_FightingFFC_Champ"); 
+// 
 function GetProductUrl(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 ){
         $urllink="https://algoz.ai/";
 
-
     if($producttype0      == "newsletter_sub"){
-        if (  HasProduct(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 )  ==  true ){ 
-            $urllink="https://algoinvestorr.com/newsletter.pdf";
-        }else{
-            $urllink="https://fasterclass.finance";
-        }
+        $urllink=   HasProduct2(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 );
     }
-
     if($producttype0      == "tp_FightingFFC_Champ"){
-        if (  HasProduct(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 )  ==  true ){ 
-            $urllink="https://algoz.ai/ffc/";
-        }else{
-            $urllink="https://fasterclass.pro/store/index.html";
-        }
-
+        $urllink=   HasProduct2(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 );
     }
 
-
-
-
-     if($producttype0=="optionscalc_sub"){
+    if($producttype0=="optionscalc_sub"){
         ;
     }
 
-
-     if($producttype0=="charting_sub"){
+    if($producttype0=="charting_sub"){
         ;
     }
-    
 
     if($producttype0=="pricelevels_sub"){
         ;
@@ -368,10 +418,59 @@ function GetProductUrl(  $email0, $g_ProductString_Live0, $superuser0 , $product
         ;
     }
 
-
-    
-
     return  $urllink;
+
+}
+
+
+
+function GetPr0ductUrlOld(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 ){
+    $urllink="https://algoz.ai/";
+
+
+if($producttype0      == "newsletter_sub"){
+    if (  HasProduct(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 )  ==  true ){ 
+        $urllink="https://algoinvestorr.com/newsletter.pdf";
+    }else{
+        $urllink="https://fasterclass.finance";
+    }
+}
+
+if($producttype0      == "tp_FightingFFC_Champ"){
+    if (  HasProduct(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 )  ==  true ){ 
+        $urllink="https://algoz.ai/ffc/";
+    }else{
+        $urllink="https://fasterclass.pro/store/index.html";
+    }
+
+}
+
+
+
+
+ if($producttype0=="optionscalc_sub"){
+    ;
+}
+
+
+ if($producttype0=="charting_sub"){
+    ;
+}
+
+
+if($producttype0=="pricelevels_sub"){
+    ;
+}
+
+
+if($producttype0=="scans_sub"){
+    ;
+}
+
+
+
+
+return  $urllink;
 
 }
 
