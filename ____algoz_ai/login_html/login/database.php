@@ -374,7 +374,7 @@ function GetProductUrl_active_expired($productNameStr, $productActive) {
     if ($productArray === null) {
         return "Error: Invalid JSON";
     }
-
+ 
     // Loop through the array to find the matching product name
     foreach ($productArray as $product) {
         if (isset($product['name']) && $product['name'] === $productNameStr) {
