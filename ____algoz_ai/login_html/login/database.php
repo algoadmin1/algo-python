@@ -368,7 +368,7 @@ function GetProductUrl_active_expired($productNameStr, $productActive) {
     } 
 
     // Decode JSON into an associative array
-    $productArray = json_decode($jsonStr, true);
+    $productArray = json_decode($product_jsonStr, true);
 
     // Check if decoding was successful
     if ($productArray === null) {
@@ -402,19 +402,23 @@ function GetProductUrl(  $email0, $g_ProductString_Live0, $superuser0 , $product
     }
 
     if($producttype0=="optionscalc_sub"){
+        $urllink=   HasProduct2(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 );
         ;
     }
 
     if($producttype0=="charting_sub"){
+        $urllink=   HasProduct2(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 );
         ;
     }
 
     if($producttype0=="pricelevels_sub"){
+        $urllink=   HasProduct2(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 );
         ;
     }
     
 
     if($producttype0=="scans_sub"){
+        $urllink=   HasProduct2(  $email0, $g_ProductString_Live0, $superuser0 , $producttype0 );
         ;
     }
 
