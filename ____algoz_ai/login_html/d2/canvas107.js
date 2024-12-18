@@ -2161,7 +2161,7 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
 
      let addstr = " ";
 
-     if(gDebugInfo==1  && g_email1=="roguequant1@gmail.com"){
+     if(gDebugInfo==1  && g_email1.toLowerCase()=="roguequant1@gmail.com"){
         addstr  = "  sc=" +  gScalarFloat_dynamic.toString();
 
         // DrawText( ctx, gChartTextStrDebug,  vrect.x+xoffset, vrect.y+yoffset+2+fsz, fsz , colScheme.tx , gGlobalFont);

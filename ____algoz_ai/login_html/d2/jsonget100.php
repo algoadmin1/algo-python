@@ -1,19 +1,50 @@
 
 <?php                       
-                                                              $ver=  "309.9";
-
+                                                              $ver=  "310.1";
 
 date_default_timezone_set('America/New_York');
 require_once "../login/database.php";
-
 $gCmpChars = "0123456789@/- ._abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 $CreatorEmailName="roguequant1";
-
-
 $signalsString_MASTER      ="nil";  // =" ,1990-01-01,noEventMASTER,process";
 $g_DailyCandlesBackToTestForSignals=11;  // i.e 11 trading days back
 $g_utimeDailyClose = "16:16:00";
 $gPer="daily";  //default
+
+
+// ############################################################################################################################################################################
+// ############################################################################################################################################################################
+$symbolsListNum      = 1;             // assume symbols.txt vs symbols2nd.txt , symbols3rd.txt 4th.txt ..5TH 
+$startWatchlistLoop  = 0;             // =1 from user == start loop
+
+if( isset( $_GET['loop'] )){
+    $startWatchlistLoop     = $_GET['loop'] ;
+
+    if($startWatchlistLoop ==1){
+        $startWatchlistLoop =1;
+        $symbolsListNum =1;
+    }else if($startWatchlistLoop ==12){
+        $startWatchlistLoop =1;
+        $symbolsListNum =2;
+    }else if($startWatchlistLoop ==13){
+        $startWatchlistLoop =1;
+        $symbolsListNum =3;
+    }else if($startWatchlistLoop ==14){
+        $startWatchlistLoop =1;
+        $symbolsListNum =4;
+    }else if($startWatchlistLoop ==15){
+        $startWatchlistLoop =1;
+        $symbolsListNum =5;
+    }
+}
+
+// ############################################################################################################################################################################
+// ############################################################################################################################################################################
+
+
+
+
+
 
 function Check_nilsym($str00){
     $retstr ="";
@@ -197,7 +228,15 @@ if (!(isset($_SESSION["user"])) ) {
         if (!(isset($_SESSION["watchlistArray"])) ) {
                     
                         // if the watchlist array is not set, then  get the  current watchlist
-                        $fname = "symbols.txt";
+                        $fname = "symbols.txt";    // assume ==1
+
+                        if($symbolsListNum==2)  $fname = "symbols2nd.txt";
+                        if($symbolsListNum==3)  $fname = "symbols3rd.txt";
+                        if($symbolsListNum==4)  $fname = "symbols4th.txt";
+                        if($symbolsListNum==5)  $fname = "symbols5th.txt";
+
+
+
                         $currencyStr = "USD";
                         $watchlistArr =  GetSymbols($fname, $currencyStr);
 
@@ -458,7 +497,6 @@ function GetUnixDateTime($style0) {
 
 
 // ASSUME  WE didn't START a watchlist loop=1 ,  AND  WE'RE NOT IN WATCHLIST LOOP
-$startWatchlistLoop  = 0;       // =1 from user == start loop
 
 $watchlistRUNNING    = 0;       // =1 , == watchlist loop running
 $gWatchListSymStr="nil";
@@ -475,13 +513,12 @@ if( (!isset( $_SESSION["watchlistLoopThru_running"] ) )){
         }
 
 
-
 // TEST IF WE JUST STARTED WATCHLIST LOOP WITH loop=1
 if( $watchlistRUNNING  == 0 ){
 
         // really &loop=1 outside initialization for watchlist countdown
         if( isset( $_GET['loop'] )){
-                    $startWatchlistLoop     = $_GET['loop'] ;
+                   // $startWatchlistLoop     = $_GET['loo p'] ;
 
                     if( $startWatchlistLoop != 1){
                         $startWatchlistLoop = 0;
@@ -492,7 +529,6 @@ if( $watchlistRUNNING  == 0 ){
                                     $_SESSION["watchlistLoopThruMax"]         = count( $_SESSION["watchlistArray"] ) ;
                                     $_SESSION["watchlistLoopThruCount"]       = 0;                    // start cnt
 
-
 // rename old file    ( only this 1st time thru !!! )           signals.txt   ==>  signals_2024_12_13.txt
 
                                     $udate_file = GetUnixDateTime(5) ;   // 2024_12_13
@@ -501,11 +537,9 @@ if( $watchlistRUNNING  == 0 ){
                                     $fnameNew   = $fnameNew0. "_". $udate_file . ".txt";   //  + "_2024_12_13.txt"
                                     $tf_success = renameFile(  $fnameOrig , $fnameNew  );
 
-
                                     // turn it on...
                                     $watchlistRUNNING                           = 1;
                                     $_SESSION["watchlistLoopThru_running"]      = $watchlistRUNNING;
-                                  
 
 
                                 // here, watchlistRUNNING==1 so below we should re-route the ?sym= code to grab from G3tNextSymbolFromWatchlist();
@@ -2995,7 +3029,7 @@ $processedDataJson = json_encode($dataProcessed);    // $sortedSignalsArray
 
     <!-- Link to your external JavaScript file -->
     <!-- <script src="canvas0.js"></script> -->
-    <script src="canvas106.js"></script>
+    <script src="canvas107.js"></script>
     <!-- <script src="drawchart.js"></script> -->
 </body>
 </html>

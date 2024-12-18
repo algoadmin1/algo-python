@@ -597,7 +597,7 @@ if (isset($eventsTable[0])) {
 //     return Math.round(differenceInMilliseconds / (1000 * 60 * 60 * 24));
 // }
 
-                 function DaysAway(dateString) {
+function DaysAway(dateString) {
                     // Get today's date and set time to 00:00:00 for accurate day calculation
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
