@@ -8,11 +8,13 @@
     --primary: #1976D2;
     --light-primary: #CFE8FF;
     --grey: #eee;
+    --greyclick: #637bc3;
     --dark-grey: #AAAAAA;
     --dark: #363949;
     --dark2:rgb(38, 82, 170)9;
     --danger: #D32F2F;
 	--light-danger: #FECDD3;
+    --filler: #2e417a;
     --warning: #FBC02D;
     --light-warning: #FFF2C6;
     --green-warning: #6ed573;
@@ -539,11 +541,11 @@ canvas {
 }
 
 .content main .bottom-data .orders table tbody tr:hover{
-    background: var(--grey);
+    background: var(--greyclick);
 }
 
 .content main .bottom-data .orders table tr td .status{
-    font-size: 12px;
+    font-size: 8px;
     padding: 6px 16px;
     color: var(--light);
     border-radius: 20px;
@@ -560,7 +562,7 @@ canvas {
 }
 
 .content main .bottom-data .orders table tr td .status.pending{
-    background: var(--warning);
+    background: var(--filler);
 }
 
 

@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "27.2";  // jsonget100.php
+                                                        $ver=  "27.7";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -489,7 +489,7 @@ if (isset($eventsTable[0])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style_d2a.css">
+    <link rel="stylesheet" href="style_d2c.css">
     <link rel="stylesheet" href="style_digital.css">
     <title>algoz.ai</title>
 
@@ -857,7 +857,7 @@ function DaysAway(dateString) {
                                         <p>${item.date}</p>
                                     </td>
                                     <td>${spstr2}</td>
-                                    <td><span class="status Near_Pivot">${spstr1}</span></td>
+                                    <td><span class="status pending">${spstr1}</span></td>
                                 `;  
                                 tbody.appendChild(row1);
 
