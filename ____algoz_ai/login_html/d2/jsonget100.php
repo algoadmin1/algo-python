@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "310.1";
+                                                              $ver=  "310.3";
 
 date_default_timezone_set('America/New_York');
 require_once "../login/database.php";
@@ -16,6 +16,7 @@ $gPer="daily";  //default
 // ############################################################################################################################################################################
 $symbolsListNum      = 1;             // assume symbols.txt vs symbols2nd.txt , symbols3rd.txt 4th.txt ..5TH 
 $startWatchlistLoop  = 0;             // =1 from user == start loop
+$fname = "symbols.txt";              // assume ==1
 
 if( isset( $_GET['loop'] )){
     $startWatchlistLoop     = $_GET['loop'] ;
@@ -36,6 +37,13 @@ if( isset( $_GET['loop'] )){
         $startWatchlistLoop =1;
         $symbolsListNum =5;
     }
+
+
+    if($symbolsListNum==2)  $fname = "symbols2nd.txt";
+    if($symbolsListNum==3)  $fname = "symbols3rd.txt";
+    if($symbolsListNum==4)  $fname = "symbols4th.txt";
+    if($symbolsListNum==5)  $fname = "symbols5th.txt";
+
 }
 
 // ############################################################################################################################################################################
@@ -228,12 +236,12 @@ if (!(isset($_SESSION["user"])) ) {
         if (!(isset($_SESSION["watchlistArray"])) ) {
                     
                         // if the watchlist array is not set, then  get the  current watchlist
-                        $fname = "symbols.txt";    // assume ==1
+                        // $fn ame = "symbols.txt";    // assume ==1
 
-                        if($symbolsListNum==2)  $fname = "symbols2nd.txt";
-                        if($symbolsListNum==3)  $fname = "symbols3rd.txt";
-                        if($symbolsListNum==4)  $fname = "symbols4th.txt";
-                        if($symbolsListNum==5)  $fname = "symbols5th.txt";
+                        // if($symbolsListNum==2)  $fn ame = "symbols2nd.txt";
+                        // if($symbolsListNum==3)  $fn ame = "symbols3rd.txt";
+                        // if($symbolsListNum==4)  $fn ame = "symbols4th.txt";
+                        // if($symbolsListNum==5)  $fn ame = "symbols5th.txt";
 
 
 
@@ -445,8 +453,9 @@ function renameFile($fname1, $fname2) {
 //
 //  $style =6   2024-12-13_13:16:59
 //
+// $fn ame.= "_". G3tUnixDateTime(5);   //  + "2024_12_13
 //
-// $fname.= "_". G3tUnixDateTime(5);   //  + "2024_12_13
+
 function GetUnixDateTime($style0) {
     // Get the current time in microseconds
     $microtime = microtime(true);
@@ -563,7 +572,7 @@ $sym = "SPY";
 if( $watchlistRUNNING  == 1 ){
 
     $sym = GetNextSymbolFromWatchlist();
-    echo "Watchlist++ sym= ". $sym; 
+    echo "Watchlist++ sym= ". $sym. ", fname=". $fname; 
 
 }else if( $watchlistRUNNING  == 0 ){
 
