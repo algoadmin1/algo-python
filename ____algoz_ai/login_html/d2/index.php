@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "27.7";  // jsonget100.php
+                                                        $ver=  "28.2";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -489,7 +489,7 @@ if (isset($eventsTable[0])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style_d2c.css">
+    <link rel="stylesheet" href="style_d2e.css">
     <link rel="stylesheet" href="style_digital.css">
     <title>algoz.ai</title>
 
@@ -726,10 +726,14 @@ function DaysAway(dateString) {
                                 let dstr = entry.udate;
                                 // let dstr1 = formatUnixDate(dstr," ");
                                 let dstr1 = formatUnixDateOptions(dstr,"suffix2"," ");
-                                // let signalstr = entry.sigstr;
+
+                                
+                                let symstr1 = entry.symbol;
+                              
 
                                 resultArray.push({
-                                    stock: entry.symbol,
+                                    // stock: entry.symbol,
+                                    stock: symstr1 ,
                                     date: `${dstr1}`,
                                     // status: `${entry.sigstr}: ${entry.signum1} ${dstr1}`,
                                     status: `${entry.sigstr}: ${entry.signum1}`,
@@ -790,44 +794,9 @@ function DaysAway(dateString) {
                             console.log("] inside G3tPanelData():  abbreviatedArray[]==", abbreviatedArray);
 
 
-                            // let dummyArr = [
-                            //         { stock: 'AAPL', date: '10-08-24', status: 'Trending UP', comment: 'completed' },
-                            //         { stock: 'NVDA', date: '10-08-24', status: 'Consolidating', comment: 'pending' },
-                            //         { stock: 'NFLX', date: '10-08-24', status: 'Trending DOWN', comment: 'process' },
-                            //         { stock: 'QQQ', date: '10-08-24', status: 'Trending UP', comment: 'process' },
-                            //         { stock: 'KO', date: '10-08-24', status: 'Trending UP', comment: 'process' },
-                            //         { stock: 'MSFT', date: '12-09-24', status: 'Trending DOWN', comment: 'process' },
-                            //         { stock: 'META', date: '12-10-24', status: 'Consolidating', comment: 'process' },
-                            //         { stock: 'AMZN', date: '12-10-24', status: 'Trending DOWN', comment: 'pending' },
-                            //         { stock: 'WBA', date: '12-10-24', status: 'Trending DOWN', comment: 'process' },
-                            //         { stock: 'SPY', date: '12-11-24', status: 'Trending UP', comment: 'process' },
-                            //         { stock: 'MSTR', date: '12-15-24', status: 'Trending DOWN', comment: 'process' },
-                            //         { stock: 'PLTR', date: '12-15-24', status: 'Trending SIDEW', comment: 'process' },
-                            //         { stock: 'MGM', date: '12-15-24', status: 'Trending DOWN', comment: 'process' },
-                            //         { stock: 'AMD', date: '12-15-24', status: 'Trending DOWN', comment: 'process' },
-
-                            //         { stock: 'GS', date: '12-10-24', status: 'Trending UP', comment: 'completed' }
-
-                            //          ];
-
-                            // console.log("] inside G3tPanelData():  dummyArr[]==", dummyArr);
-                            // return dummyArr;  
-
 
                             return abbreviatedArray;  
 
-                        // return [
-                        //     { stock: 'AAPL', date: '10-08-24', status: 'Trending UP', comment: 'completed' },
-                        //     { stock: 'NVDA', date: '10-08-24', status: 'Consolidating', comment: 'pending' },
-                        //     { stock: 'NFLX', date: '10-08-24', status: 'Trending DOWN', comment: 'process' },
-                        //     { stock: 'QQQ', date: '10-08-24', status: 'Trending UP', comment: 'process' },
-                        //     { stock: 'KO', date: '10-08-24', status: 'Trending UP', comment: 'process' },
-                        //     { stock: 'MSFT', date: '12-09-24', status: 'Trending DOWN', comment: 'process' },
-                        //     { stock: 'META', date: '12-10-24', status: 'Trending DOWN', comment: 'process' },
-                        //     { stock: 'AMZN', date: '12-10-24', status: 'Trending DOWN', comment: 'pending' },
-
-                        //     { stock: 'GS', date: '12-10-24', status: 'Trending UP', comment: 'completed' }
-                        // ];
 
 
                     }
@@ -866,8 +835,18 @@ function DaysAway(dateString) {
 
                             }
 
+
                             statusstr = RemoveString( item.status, "Near_" );
-                            const httpslink00 = httpslink + item.stock.toLowerCase(); 
+
+
+                            let symstr1 = item.stock;
+                            symstr1= symstr1.toLowerCase();
+                            if(symstr1 == 'btc'  ||  symstr1 == 'sol'  ||  symstr1 == 'xrp'  ||  symstr1 == 'eth'  ||  symstr1 == 'doge'   ){
+                                    symstr1= symstr1 + "-usd";
+                            }
+
+                                // const httpslink00 = httpslink + item.stock.toLowerCase(); 
+                            const httpslink00 = httpslink + symstr1.toLowerCase(); 
 
 
                             const row = document.createElement('tr');

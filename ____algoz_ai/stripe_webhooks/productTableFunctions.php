@@ -1,5 +1,5 @@
 <?php
-require_once "productsTable.php";
+require_once "productsTable.php";                   // ver5.6
 
 function GetProductName($productArray, $amt) {
     // Loop through the product array
@@ -36,18 +36,18 @@ $productTable1 = [
     "67","tp_67"
 ];
 
-// Sample call
-$amt = "66";
-$product = GetProductName( $productTable, $amt );
-echo " *for productTable, for $amt found: ". $product;  
+// // Sample call
+// $amt = "66";
+// $product = GetProductName( $productTable, $amt );
+// echo " *for productTable, for $amt found: ". $product;  
 
 
-$amt = "54";
-$product = GetProductName( $productTable, $amt );
-echo " *for productTable, for $amt found: ". $product;  
+// $amt = "50000";
+// $product = GetProductName( $productTable, $amt );
+// echo " *for productTable, for $amt found: ". $product;  
 
 
-$amt = "53";
-$product = GetProductName( $productTable, $amt );
-echo " *for productTable, for $amt found: ". $product;  
+// $amt = "4999";
+// $product = GetProductName( $productTable, $amt );
+// echo " *for productTable, for $amt found: ". $product;  
 ?>
