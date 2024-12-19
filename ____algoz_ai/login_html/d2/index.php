@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "25.3";  // jsonget100.php
+                                                        $ver=  "26.5";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -726,13 +726,16 @@ function DaysAway(dateString) {
                                 let dstr = entry.udate;
                                 // let dstr1 = formatUnixDate(dstr," ");
                                 let dstr1 = formatUnixDateOptions(dstr,"suffix2"," ");
-                                 
+                                // let signalstr = entry.sigstr;
+
                                 resultArray.push({
                                     stock: entry.symbol,
                                     date: `${dstr1}`,
-                                    status: `${entry.sigstr}=${entry.signum1}: $ ${entry.symprice}`,
+                                    // status: `${entry.sigstr}: ${entry.signum1} ${dstr1}`,
+                                    status: `${entry.sigstr}: ${entry.signum1}`,
                                     css_style: entry.sigstr,
-                                    comment: entry.status
+                                    comment: entry.status,
+                                    price: entry.symprice
                                 });
                             }
                         });
@@ -760,6 +763,21 @@ function DaysAway(dateString) {
                     // const abbreviatedArray = Co nvertSignalsData(processedSignalsData, daysBack);
                     // console.log(abbreviatedArray);
 
+
+                     // Function to remove a substring from a target string
+                    function RemoveString(targetStr, removeStr) {
+                        // Check if the string to remove exists in the target string
+                        if (targetStr.includes(removeStr)) {
+                            // Remove the substring and return the result
+                            return targetStr.replace(removeStr, "");
+                        }
+                        // If removeStr does not exist in targetStr, return targetStr unchanged
+                        return targetStr;
+                    }
+                    // let targetStr = "Near_S1month: 92.50";
+                    // let removeStr = "Near_";
+                    // let result = Remo veString(targetStr, removeStr);
+                    // console.log(result); // Output: "S1month: 92.50"
 
 
 
@@ -819,18 +837,47 @@ function DaysAway(dateString) {
                         const data = GetPanelData();
                         const tbody = document.querySelector('.orders table tbody');
                         tbody.innerHTML = ''; // Clear existing rows
+                        let spstr1 = " ";
+                        let spstr2 = "NEW DAY";
+                        let dstr1_last = "nil"  ;   //  ie start != "Dec 10"
+                        let checkered_flag = "flag_ck";
+                        let statusstr = "";
 
                         data.forEach(item => {
+                            let dstr1 = item.date;
+
+                            if(dstr1 != dstr1_last){
+                                const row1 = document.createElement('tr');
+                                row1.innerHTML = `
+                                    <td>
+                                        <img src="../img/${checkered_flag}.png">
+                                        <p>${item.date}</p>
+                                    </td>
+                                    <td>${spstr2}</td>
+                                    <td><span class="status Near_Pivot">${spstr1}</span></td>
+                                `;  
+                                tbody.appendChild(row1);
+
+
+                                dstr1_last = dstr1 ;
+
+                            }
+
+
+                            statusstr = RemoveString( item.status, "Near_" );
+
                             const row = document.createElement('tr');
                             row.innerHTML = `
                                 <td>
                                     <img src="../img/${item.stock.toLowerCase()}.png">
                                     <p>${item.stock}</p>
                                 </td>
-                                <td>${item.date}</td>
-                                <td><span class="status ${item.css_style}">${item.status}</span></td>
+                                <td>$ ${item.price}</td>
+                                <td><span class="status ${item.css_style}">${statusstr}</span></td>
                             `;  
                             tbody.appendChild(row);
+
+
                         });
                     }
 
@@ -1287,9 +1334,9 @@ function DaysAway(dateString) {
                     <table>
                         <thead>
                             <tr>
-                                <th>Stock</th>
-                                <th>Date</th>
-                                <th>Status</th>
+                                <th>Symbol</th>
+                                <th>Price</th>
+                                <th>Signal</th>
                             </tr>
                         </thead>
                         

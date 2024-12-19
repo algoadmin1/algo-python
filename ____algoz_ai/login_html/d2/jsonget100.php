@@ -38,6 +38,7 @@ if( isset( $_GET['loop'] )){
         $symbolsListNum =5;
     }
 
+    // $fname = "symbols.txt";              // assume ==1
 
     if($symbolsListNum==2)  $fname = "symbols2nd.txt";
     if($symbolsListNum==3)  $fname = "symbols3rd.txt";
