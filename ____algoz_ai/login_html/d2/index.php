@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "26.5";  // jsonget100.php
+                                                        $ver=  "27.2";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -837,14 +837,17 @@ function DaysAway(dateString) {
                         const data = GetPanelData();
                         const tbody = document.querySelector('.orders table tbody');
                         tbody.innerHTML = ''; // Clear existing rows
-                        let spstr1 = " ";
+                        let spstr1 = "none";
                         let spstr2 = "NEW DAY";
                         let dstr1_last = "nil"  ;   //  ie start != "Dec 10"
                         let checkered_flag = "flag_ck";
                         let statusstr = "";
+                        const httpslink  = "https://algoz.ai/d2/jsonget100.php?sym=";
+                        let httpslink0 = "";
 
                         data.forEach(item => {
                             let dstr1 = item.date;
+
 
                             if(dstr1 != dstr1_last){
                                 const row1 = document.createElement('tr');
@@ -863,10 +866,16 @@ function DaysAway(dateString) {
 
                             }
 
-
                             statusstr = RemoveString( item.status, "Near_" );
+                            const httpslink00 = httpslink + item.stock.toLowerCase(); 
+
 
                             const row = document.createElement('tr');
+
+                                row.addEventListener('click', () => {       // Add an event listener for click or touch
+                                    window.location.href = httpslink00;       // Navigate to the URL in the same window
+                                });
+
                             row.innerHTML = `
                                 <td>
                                     <img src="../img/${item.stock.toLowerCase()}.png">
@@ -876,6 +885,36 @@ function DaysAway(dateString) {
                                 <td><span class="status ${item.css_style}">${statusstr}</span></td>
                             `;  
                             tbody.appendChild(row);
+
+
+/**
+ * 
+ const httpslink = "https://algoz.ai/d2/jsonget100.php?sym=AAPL";
+
+const row = document.createElement('tr');
+
+// Add an event listener for click or touch
+row.addEventListener('click', () => {
+    window.location.href = httpslink; // Navigate to the URL in the same window
+});
+
+row.innerHTML = `
+    <td>
+        <img src="../img/${item.stock.toLowerCase()}.png">
+        <p>${item.stock}</p>
+    </td>
+    <td>$ ${item.price}</td>
+    <td><span class="status ${item.css_style}">${statusstr}</span></td>
+`;
+
+tbody.appendChild(row);
+
+ * 
+ */
+
+
+
+
 
 
                         });
