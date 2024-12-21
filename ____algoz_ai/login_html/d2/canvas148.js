@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "303.147";
+let                                                                         gVer = "303.148";
 let             gDebugInfo = 1;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget100.php?sym=" ;   
 let  g_TruncateCandles = 0;
@@ -3554,8 +3554,8 @@ function HandleCrossHair(canvasMouse_x, canvasMouse_y, vrect, col) {
   }
   let canvasMouse_x1 =   parseInt(canvasMouse_x) ;
   let canvasMouse_y1 =   parseInt(canvasMouse_y) ;
-  let xoff =  21;
-  let yoff = -25;
+  let xoff =  16;
+  let yoff = -22;
 
   resizeCanvas();
 
@@ -3572,6 +3572,24 @@ function HandleCrossHair(canvasMouse_x, canvasMouse_y, vrect, col) {
   ctx.moveTo(vrect.x, canvasMouse_y);
   ctx.lineTo(vrect.x + vrect.w, canvasMouse_y);
   ctx.stroke();
+
+  // draw tiny white .tx  + in the center
+  let centoff= 3;
+  ctx.strokeStyle = gColSchemeCurrent.tx ; //"yellow";
+  ctx.beginPath();
+  ctx.moveTo(canvasMouse_x, canvasMouse_y - centoff);
+  ctx.lineTo(canvasMouse_x, canvasMouse_y + centoff);
+  ctx.stroke();
+
+  // Draw horizontal line
+  ctx.beginPath();
+  ctx.moveTo( canvasMouse_x - centoff, canvasMouse_y);
+  ctx.lineTo( canvasMouse_x + centoff, canvasMouse_y);
+  ctx.stroke();
+
+
+
+
 
   let priceFl = GetPriceFromYCoord(canvasMouse_y, vrect);
   let priceStr = gCurrencyStr +   formatFloatToString( priceFl ,2);  
