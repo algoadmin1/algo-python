@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "28.2";  // jsonget100.php
+                                                        $ver=  "28.3";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -10,7 +10,7 @@ $gProductString_Session="";
 
 session_start();
 if(! (isset($_SESSION["user"])) ) {
-   header("Location: ../login/login.php");
+    header("Location: ../login/login.php");
 }else{
         $email1=$_SESSION["user"];
 
@@ -33,6 +33,11 @@ if(! (isset($_SESSION["user"])) ) {
         $gProductString_Session = $productstr1;
 
         $appSecret1  =  $_SESSION["appsecret"] ;
+
+        if(! (isset($_SESSION["toggledark"])) ) {
+            $_SESSION["toggledark"] = 0;
+        }
+        $toggledark= $_SESSION["toggledark"];
 
 
 
@@ -508,7 +513,10 @@ if (isset($eventsTable[0])) {
 
                 //$prcessedSignalsDataJson = json_encode($sortedSignalsArray);    // prep for .js
                 var processedSignalsDataOrig = <?php echo $processedSignalsDataJson; ?>;
-                console.log("] ***>> INSIDE <script> index.php, processedSignalsDataOrig ==",processedSignalsDataOrig);
+                // console.log("] ***>> INSIDE <script> index.php, processedSignalsDataOrig ==",processedSignalsDataOrig);
+
+                var g_toggledark  = <?php echo $toggledark; ?>;
+                console.log("] ***>> INSIDE <script> index.php, g_toggledark, processedSignalsDataOrig ==",g_toggledark,processedSignalsDataOrig);
 
 
 // DEPR TEST...
