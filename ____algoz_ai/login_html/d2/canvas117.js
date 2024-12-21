@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "303.110";
+let                                                                         gVer = "303.117";
 let             gDebugInfo = 1;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget100.php?sym=" ;   
 
@@ -3131,22 +3131,22 @@ function resizeCanvas() {
             // ctx.font =  fsz.toString()+ "px Arial";   // ctx.font = "bolder "+"124px Arial";
             // ctx.fillText( dtstr , 40, 40  );
 
-        let but_x =6;
-        let but_w = 80;
-        but_w = gGlobalChartVRectCurrent.x - 6 - but_x ;
-        let wbut  = parseInt( gScalarFloat_dynamic * but_w );
+            let but_x =6;
+            let but_w = 80;
+            but_w = gGlobalChartVRectCurrent.x - 6 - but_x ;
+            let wbut  = parseInt( gScalarFloat_dynamic * but_w );
 
-        let hbutSt = 40;
-        let hbut =  parseInt( gScalarFloat_dynamic * hbutSt ); 
-        let fsz0 = parseInt( 16* gScalarFloat_dynamic);
+            let hbutSt = 40;
+            let hbut =  parseInt( gScalarFloat_dynamic * hbutSt ); 
+            let fsz0 = parseInt( 16* gScalarFloat_dynamic);
 
-        if(gDrawCanvasButtons==1){
-                    // Dra wButtonArray(ctx, arr,               x, y, width, h,  idx, spacerY, lineWeight,  textCol  , fontSize, fontName ) 
-                    // Dr awButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'white',     fsz0,   "Arial",  "#4C50AF", 'darkblue' );
-                    DrawButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'blue',     fsz0,   "Arial",  'white',  'white' );
-                    DetectButtonPress(ctx, gGlobalButtons, gGlobalButton_arr);
+            if(gDrawCanvasButtons==1){
+                        // Dra wButtonArray(ctx, arr,               x, y, width, h,  idx, spacerY, lineWeight,  textCol  , fontSize, fontName ) 
+                        // Dr awButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'white',     fsz0,   "Arial",  "#4C50AF", 'darkblue' );
+                        DrawButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'blue',     fsz0,   "Arial",  'white',  'white' );
+                        DetectButtonPress(ctx, gGlobalButtons, gGlobalButton_arr);
 
-        }
+            }
 
 
 }//fn  r3sizeCanvas()
@@ -3155,64 +3155,22 @@ function resizeCanvas() {
 let inputString = "";
 
 // Function to draw the current string on the canvas
-function renderText() {
+function renderText( x_text, y_text , fsz, col) {
     // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let cw0= canvas.width;
+    let h0 = fsz+0;
+    ctx.clearRect(0, y_text , cw0, h0 );
 
     // Set text properties (customize as needed)
-    ctx.font = '20px Arial';
-    ctx.fillStyle = 'black';
+    let fszstr =  fsz.toString()+'px Arial';
+
+    ctx.font = fszstr;
+    ctx.fillStyle = col;
 
     // Render the string
     ctx.fillText(inputString, x_text, y_text);
 }
-
-/*
-// Get the canvas element and its context
-const canvas = document.getElementById('myCanvas');
-const ctx = canvas.getContext('2d');
-
-// Coordinates to render the text
-const x_text = 50;
-const y_text = 100;
-
-// Variable to hold the entered string
-let inputString = "";
-
-// Function to draw the current string on the canvas
-function renderText() {
-    // Clear the canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Set text properties (customize as needed)
-    ctx.font = '20px Arial';
-    ctx.fillStyle = 'black';
-
-    // Render the string
-    ctx.fillText(inputString, x_text, y_text);
-}
-
-// Add event listener for keyboard input
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'Backspace') {
-        // Handle backspace by removing the last character
-        inputString = inputString.slice(0, -1);
-    } else if (event.key === 'Enter') {
-        // Open a new window with the specified HTTPS string
-        window.location.href = g_httpsStr;
-    } else if (event.key.length === 1) {
-        // Append valid characters to the string
-        inputString += event.key;
-    }
-
-    // Re-render the text on the canvas
-    renderText();
-});
-
-// Initial rendering
-renderText();
-
-*/
+ 
 
 
 
@@ -3224,12 +3182,7 @@ renderText();
 
 
 
-
-
-
-
-
-        // Function to toggle button state and call resizeCanvas
+        // Function to toggle button state and call r3sizeCanvas
 function toggleButton(buttonNumber) {
             switch (buttonNumber) {
                 
@@ -3364,6 +3317,10 @@ function toggleButton(buttonNumber) {
 // #############################################################  MAIN CODE  *****
 // #############################################################  MAIN CODE  *****
 
+
+let gZipperDisplay=0;
+
+
 // // Get the button and audio element
 // const playButton = document.getElementById('play-button');
 // const audio      = document.getElementById('audio');
@@ -3388,6 +3345,29 @@ function toggleButton(buttonNumber) {
         // Resize the canvas when the window is resized
         window.addEventListener('resize', resizeCanvas);
 
+
+        // Add event listener for keyboard input
+        // document.addEventListener('keydown', (event) => {
+        window.addEventListener('keydown', (event) => {
+                if (event.key === 'Backspace') {
+                // Handle backspace by removing the last character
+                inputString = inputString.slice(0, -1);
+            } else if (event.key === 'Enter') {
+                // Open a new window with the specified HTTPS string
+                window.location.href = g_httpsStr;
+            } else if (event.key.length === 1) {
+                // Append valid characters to the string
+                inputString += event.key;
+            }
+
+            let inputFontSize =36;
+            let inputFontY   = 20
+            // Re-render the text on the canvas
+            renderText( 200, inputFontY, inputFontSize, 'red');
+        });
+
+
+
         if( g_watchlistRUNNING == 1 ) {
             button2 =1;   // force buy/sell on 
             button3 =1;     // force supres on
@@ -3395,18 +3375,22 @@ function toggleButton(buttonNumber) {
         // Initial resize to set up the canvas
         resizeCanvas();
 
-        if( g_watchlistRUNNING == 0 )  setInterval( DrawCrawl, gCrawlSeconds100);
+        if( g_watchlistRUNNING == 0 ){
+            if(gZipperDisplay==1)  setInterval( DrawCrawl, gCrawlSeconds100);
 
+        }
 
         let arr1=[];
         arr1= async_GetOverviewData();  // now financial overvi3w data
 
         
         if( g_watchlistRUNNING == 0 ){    // CRAWL ZIPPER SHOULD BE GOTTEN ONCE AT START if we're not running watchlist
+          if(gZipperDisplay==1){
+
             GetTickerZipper( gZipperUrl , ctx )
             .then(data => Assign_gZipperString(data , ctx));
             // .then(data => printZipperString(data , ctx));
-
+          }
 
         }else if( g_watchlistRUNNING == 1 ){
 

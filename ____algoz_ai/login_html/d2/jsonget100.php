@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "310.5";
+                                                              $ver=  "310.113";
 
 date_default_timezone_set('America/New_York');
 require_once "../login/database.php";
@@ -3039,7 +3039,7 @@ $processedDataJson = json_encode($dataProcessed);    // $sortedSignalsArray
 
     <!-- Link to your external JavaScript file -->
     <!-- <script src="canvas0.js"></script> -->
-    <script src="canvas110.js"></script>
+    <script src="canvas117.js"></script>
     <!-- <script src="drawchart.js"></script> -->
 </body>
 </html>
