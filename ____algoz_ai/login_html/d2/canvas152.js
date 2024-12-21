@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "303.148";
+let                                                                         gVer = "303.152";
 let             gDebugInfo = 1;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget100.php?sym=" ;   
 let  g_TruncateCandles = 0;
@@ -3211,7 +3211,8 @@ function clearCanvasToColor(ctx, canvas, col0) {
   
 
 let gDrawCanvasButtons = 1;
-
+// let gBGvrectColor= "#25252B";    // 'white';
+let gBGvrectColor=   'white';
         // Function to resize canvas and redraw the rectangle
 function resizeCanvas() {
 
@@ -3223,11 +3224,15 @@ function resizeCanvas() {
             canvas.height = canvas.parentElement.clientHeight;
 
             // Clear the canvas
-            // ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            let col0 = "#25252B";
-            ctx.fillStyle = col0;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // if gBGvrectColor=   'white'; leav COMMENTED OUT
+            // let col0 = gBGvrectColor ; 
+            // ctx.fillStyle = col0;
+            // ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+
+
 
             let hy = Hypotenuse( canvas.width, canvas.height); 
             if(gScalar_init==-1){
@@ -3289,6 +3294,7 @@ function resizeCanvas() {
                         // Dra wButtonArray(ctx, arr,               x, y, width, h,  idx, spacerY, lineWeight,  textCol  , fontSize, fontName ) 
                         // Dr awButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'white',     fsz0,   "Arial",  "#4C50AF", 'darkblue' );
                         DrawButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'blue',     fsz0,   "Arial",  'white',  'white' );
+                        // DrawButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'blue',     fsz0,   "Arial",  gBGvrectColor,  'grey' );
                         DetectButtonPress(ctx, gGlobalButtons, gGlobalButton_arr);
 
             }
