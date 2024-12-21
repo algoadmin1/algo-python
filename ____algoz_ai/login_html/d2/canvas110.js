@@ -3151,6 +3151,84 @@ function resizeCanvas() {
 
 }//fn  r3sizeCanvas()
 
+
+let inputString = "";
+
+// Function to draw the current string on the canvas
+function renderText() {
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Set text properties (customize as needed)
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'black';
+
+    // Render the string
+    ctx.fillText(inputString, x_text, y_text);
+}
+
+/*
+// Get the canvas element and its context
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+
+// Coordinates to render the text
+const x_text = 50;
+const y_text = 100;
+
+// Variable to hold the entered string
+let inputString = "";
+
+// Function to draw the current string on the canvas
+function renderText() {
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Set text properties (customize as needed)
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'black';
+
+    // Render the string
+    ctx.fillText(inputString, x_text, y_text);
+}
+
+// Add event listener for keyboard input
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Backspace') {
+        // Handle backspace by removing the last character
+        inputString = inputString.slice(0, -1);
+    } else if (event.key === 'Enter') {
+        // Open a new window with the specified HTTPS string
+        window.location.href = g_httpsStr;
+    } else if (event.key.length === 1) {
+        // Append valid characters to the string
+        inputString += event.key;
+    }
+
+    // Re-render the text on the canvas
+    renderText();
+});
+
+// Initial rendering
+renderText();
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // Function to toggle button state and call resizeCanvas
 function toggleButton(buttonNumber) {
             switch (buttonNumber) {
