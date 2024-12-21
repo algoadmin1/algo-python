@@ -3380,6 +3380,87 @@ function toggleButton(buttonNumber) {
 
 
 
+
+
+
+// // Canvas setup  DELME
+// const canvas = document.getElementById("myCanvas");
+// const ctx = canvas.getContext("2d");
+// // View rectangle
+// const vrect = { x: 100, y: 150, w: 900, h: 700 };
+
+// Function to handle the crosshair drawing
+function HandleCrossHair(canvasMouse_x, canvasMouse_y, vrect) {
+  ctx.save(); // Save the current state of the canvas
+  
+  // Check if the mouse coordinates are outside the view rectangle
+  if (  canvasMouse_x < vrect.x || canvasMouse_x > vrect.x + vrect.w ||
+        canvasMouse_y < vrect.y || canvasMouse_y > vrect.y + vrect.h    ) {
+            resizeCanvas();
+            ctx.restore(); // Restore the canvas state before returning
+            return;
+  }
+  
+  // Coordinates are inside the view rectangle
+  // Draw vertical line
+  ctx.strokeStyle = "yellow";
+  ctx.beginPath();
+  ctx.moveTo(canvasMouse_x, vrect.y);
+  ctx.lineTo(canvasMouse_x, vrect.y + vrect.h);
+  ctx.stroke();
+
+  // Draw horizontal line
+  ctx.beginPath();
+  ctx.moveTo(vrect.x, canvasMouse_y);
+  ctx.lineTo(vrect.x + vrect.w, canvasMouse_y);
+  ctx.stroke();
+
+  // Draw the coordinate text
+  ctx.fillStyle = "yellow";
+  ctx.font = "14px Arial";
+  ctx.fillText(`${canvasMouse_x},${canvasMouse_y}`, canvasMouse_x - 10, canvasMouse_y - 10);
+  
+  ctx.restore(); // Restore the canvas state
+}
+
+// // Function to resize the canvas (you can customize this logic)
+// function res izeCanvas() {
+//   console.log("Canvas resizing triggered!");
+//   canvas.width = window.innerWidth; // Example logic
+//   canvas.height = window.innerHeight; // Example logic
+// }
+
+// Helper function to get mouse or touch coordinates relative to the canvas
+function getCanvasCoordinates(event) {
+  const rect = canvas.getBoundingClientRect();
+  if (event.touches) {
+    // For touch events
+    return {
+      x: event.touches[0].clientX - rect.left,
+      y: event.touches[0].clientY - rect.top
+    };
+  } else {
+    // For mouse events
+    return {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top
+    };
+  }
+}//fn
+
+// // Add event listeners for touch and mouse interactions
+// canvas.addEventListener("mousedown", (event) => {
+//   const { x, y } = getCanvasCoordinates(event);
+//   HandleCr ossHair(x, y, vrect);
+// });
+
+// canvas.addEventListener("touchstart", (event) => {
+//   event.preventDefault(); // Prevent scrolling on touch
+//   const { x, y } = getCanvasCoordinates(event);
+//   HandleCros sHair(x, y, vrect);
+// });
+
+
 // #############################################################  MAIN CODE  *****
 // #############################################################  MAIN CODE  *****
 // #############################################################  MAIN CODE  *****
@@ -3443,6 +3524,33 @@ const g_httpsStr="";
             // Re-render the text on the canvas
             renderText( inputFontX, inputFontY, inputFontSize, 'blue');
         });
+
+
+
+        // Add event listeners for touch and mouse interactions
+        canvas.addEventListener("mousedown", (event) => {
+            const { x, y } = getCanvasCoordinates(event);
+            HandleCrossHair(x, y, gGlobalChartVRectCurrent );
+        });
+        
+        canvas.addEventListener("touchstart", (event) => {
+            event.preventDefault(); // Prevent scrolling on touch
+            const { x, y } = getCanvasCoordinates(event);
+            HandleCrossHair(x, y, gGlobalChartVRectCurrent);
+        });
+  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
