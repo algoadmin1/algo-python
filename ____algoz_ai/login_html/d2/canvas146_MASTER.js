@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "303.140";
+let                                                                         gVer = "303.145";
 let             gDebugInfo = 1;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget100.php?sym=" ;   
 let  g_TruncateCandles = 0;
@@ -811,12 +811,13 @@ function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
         
         gCandleXnext = vrect.x + gCandleOffset;
         gCandleXnextStart = gCandleXnext;           // SAVE START
-        
-    // DETERMINE  gCandleWidth
+
+        // DETERMINE  gCandleWidth
         gCandleWidth      = gCandleWidthTotal - gCandleOffset;
         console.log("] Candles to render, gCandleWidth  =", gNumCandlesToRender, gCandleWidth );
     
-    
+        SetCandleXDateArray();
+
     //  ##############################################################################  
     //  #######################                       ################################  
     //  #######################  all prep Calcs DONE  ################################  
@@ -826,9 +827,41 @@ function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
 
 }
 
+// gCandleXnext =   gCandleXnext +  gCandleWidth + gCandleOffset ;
+// let candleXdateArr0 = { date: "2024-12-13", x1: 0, x2: 10 };
+let g_candleXdateArray =[];
+
+// must be called at the end of prep
+function SetCandleXDateArray( ){
+    g_candleXdateArray =[];
+    let xstart = gCandleXnextStart;
+    let x=xstart;
+    let x0 = x;
+
+    for (var date03 in processedData) {
+        if (processedData.hasOwnProperty(date03)) {
+            let datestr= date03;
+
+            x0 = x;
+            x = x0 + gCandleWidth + gCandleOffset  ;  // -1 to keep it from overstepping next x next candle
+
+            let recordToPush = { date: datestr,  x1: x0,  x2: ( x-1 )  };
+            // / Push the record onto the array
+            g_candleXdateArray.push(recordToPush);
+
+        }
+    }//for
+
+            // Example output to verify
+     console.log("] ** *done *>>> g_cndleXdateArray[]==",g_candleXdateArray);
+
+}//fn
+
+
+
+
 
 let gGlobalPerFromData = 'nil';
-
 
 let  gMonthNumDynamic = 10;           // ie after october, on monthly chart draw next year's dynamic pivots
 let  gEndOfHalfMonthDayDynamic= 13;   // ie after  15th of month, on monthly chart draw next   dynamic pivots
@@ -3411,9 +3444,9 @@ function toggleButton(buttonNumber) {
 
 
  
-// Function to draw a sniper sight
+// Function to draw a sn1iper sight
 function DrawSniperSight(canvasMouse_x, canvasMouse_y, radius, weight , col, onOff) {
-  const increment = radius / 8;
+  const increment = radius / 6;
 
   ctx.save(); // Save canvas state
 
@@ -3427,7 +3460,7 @@ function DrawSniperSight(canvasMouse_x, canvasMouse_y, radius, weight , col, onO
   ctx.stroke();
 
 
-    if(onOff==1){
+    if(onOff>=1){
         // Draw vertical lines on the horizontal axis
         for (let i = 1; i <= 4; i++) {
             const xOffset = increment * i;
@@ -3457,11 +3490,13 @@ function DrawSniperSight(canvasMouse_x, canvasMouse_y, radius, weight , col, onO
             ctx.lineTo(canvasMouse_x + lineLength / 2, canvasMouse_y + yOffset);
             ctx.stroke();
 
+            if(onOff!=2){
             // Top side
-            ctx.beginPath();
-            ctx.moveTo(canvasMouse_x - lineLength / 2, canvasMouse_y - yOffset);
-            ctx.lineTo(canvasMouse_x + lineLength / 2, canvasMouse_y - yOffset);
-            ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(canvasMouse_x - lineLength / 2, canvasMouse_y - yOffset);
+                ctx.lineTo(canvasMouse_x + lineLength / 2, canvasMouse_y - yOffset);
+                ctx.stroke();
+            }
         }
     }//onOff
 
@@ -3476,8 +3511,36 @@ function formatFloatToString(value, decplaces) {
     return value.toFixed(decplaces);
 }
 
-let gCrossHairColor  = 'blue';
+function FindCandleXDate(arr, x) {
+    // Loop through each item in the array
+    for (let i = 0; i < arr.length; i++) {
+      const record = arr[i];
+      // Check if x falls between x1 and x2
+      if (x >= record.x1 && x <= record.x2) {
+        return record.date; // Return the date if condition is met
+      }
+    }
+    // If no match is found, return "nil"
+    return "nil";
+  }
+  
+//   // SAMPLE ARRAY
+//   const sampleArray = [
+//     { date: '2024-08-08', x1: 135, x2: 149 },
+//     { date: '2024-08-09', x1: 150, x2: 164 },
+//     { date: '2024-08-12', x1: 165, x2: 179 },
+//     { date: '2024-08-13', x1: 180, x2: 194 },
+//     { date: '2024-08-14', x1: 195, x2: 209 },
+//     { date: '2024-08-15', x1: 210, x2: 224 },
+//   ];
+  
+//   // Example usage
+//   const xValue = 160;
+//   const result = FindC andleXDate(sampleArray, xValue);
+  
+//   console.log(result); // Output: "2024-08-12"
 
+  
 // Function to handle the crosshair drawing
 function HandleCrossHair(canvasMouse_x, canvasMouse_y, vrect, col) {
   ctx.save(); // Save the current state of the canvas
@@ -3491,8 +3554,8 @@ function HandleCrossHair(canvasMouse_x, canvasMouse_y, vrect, col) {
   }
   let canvasMouse_x1 =   parseInt(canvasMouse_x) ;
   let canvasMouse_y1 =   parseInt(canvasMouse_y) ;
-  let xoff = 30;
-  let yoff = -20;
+  let xoff =  32;
+  let yoff = -25;
 
   resizeCanvas();
 
@@ -3513,23 +3576,27 @@ function HandleCrossHair(canvasMouse_x, canvasMouse_y, vrect, col) {
   let priceFl = GetPriceFromYCoord(canvasMouse_y, vrect);
   let priceStr = gCurrencyStr +   formatFloatToString( priceFl ,2);  
   // Draw the coordinate text
-  ctx.fillStyle =col ; // "yellow";
-  ctx.font = "12px Helvetica";
+//   ctx.fillStyle =col ; // "yellow";
+  ctx.fillStyle =gColSchemeCurrent.tx ; 
+  
+  ctx.font = "16px Helvetica";
 //   ctx.fillText(`${canvasMouse_x1},${canvasMouse_y1}`, canvasMouse_x +  xoff, canvasMouse_y + yoff);
 // ctx.fillText(`${canvasMouse_x1},${canvasMouse_y1} =$ ${priceFl}`, canvasMouse_x +  xoff, canvasMouse_y + yoff);
-ctx.fillText( priceStr, canvasMouse_x +  xoff, canvasMouse_y + yoff);
-  
-  DrawSniperSight(canvasMouse_x, canvasMouse_y, 50, 2, col , 0);     // Example radius=50, weight=2
+// ctx.fillText( priceStr, canvasMouse_x +  xoff, canvasMouse_y + yoff);
+// let priceStr1 = priceStr +"  ("+ `${canvasMouse_x1},${canvasMouse_y1}` +")";
+let priceStr1 = priceStr  ;//+"  ("+ `${canvasMouse_x1},${canvasMouse_y1}` +")";
+ctx.textAlign = 'left'; 
+    ctx.fillText( priceStr1, canvasMouse_x +  xoff, canvasMouse_y + yoff);
+    
+    DrawSniperSight(canvasMouse_x, canvasMouse_y, 90, 2, col , 2);     // Example radius=50, weight=2
+
+    const candledatestr = FindCandleXDate( g_candleXdateArray, canvasMouse_x );
+    if(candledatestr!="nil"){
+      DrawTextRotated( ctx, candledatestr, canvasMouse_x-4, canvasMouse_y-21,  col, 11, gGlobalFont, -0.50) ;
+    }
 
   ctx.restore(); // Restore the canvas state
 }
-
-// // Function to resize the canvas (you can customize this logic)
-// function res izeCanvas() {
-//   console.log("Canvas resizing triggered!");
-//   canvas.width = window.innerWidth; // Example logic
-//   canvas.height = window.innerHeight; // Example logic
-// }
 
 // Helper function to get mouse or touch coordinates relative to the canvas
 function getCanvasCoordinates(event) {
@@ -3549,17 +3616,11 @@ function getCanvasCoordinates(event) {
   }
 }//fn
 
-// // Add event listeners for touch and mouse interactions
-// canvas.addEventListener("mousedown", (event) => {
-//   const { x, y } = getCanvasCoordinates(event);
-//   HandleCr ossHair(x, y, vrect);
-// });
 
-// canvas.addEventListener("touchstart", (event) => {
-//   event.preventDefault(); // Prevent scrolling on touch
-//   const { x, y } = getCanvasCoordinates(event);
-//   HandleCros sHair(x, y, vrect);
-// });
+
+
+
+
 
 
 // #############################################################  MAIN CODE  *****
@@ -3631,13 +3692,14 @@ const g_httpsStr="";
         // Add event listeners for touch and mouse interactions
         canvas.addEventListener("mousedown", (event) => {
             const { x, y } = getCanvasCoordinates(event);
-            HandleCrossHair(x, y, gGlobalChartVRectCurrent , gColSchemeCurrent.tx );
+            // HandleCrossHair(x, y, gGlobalChartVRectCurrent , gColSchemeCurrent.tx );
+            HandleCrossHair(x, y, gGlobalChartVRectCurrent , gColSchemeCurrent.up );
         });
         
         canvas.addEventListener("touchstart", (event) => {
             event.preventDefault(); // Prevent scrolling on touch
             const { x, y } = getCanvasCoordinates(event);
-            HandleCrossHair(x, y, gGlobalChartVRectCurrent , gColSchemeCurrent.tx );
+            HandleCrossHair(x, y, gGlobalChartVRectCurrent , gColSchemeCurrent.up );
         });
   
 
