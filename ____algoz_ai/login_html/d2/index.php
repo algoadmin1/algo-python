@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "28.3";  // jsonget100.php
+                                                        $ver=  "29.134";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -1576,7 +1576,8 @@ tbody.appendChild(row);
 
     <!-- <script src="charting.js"></script> -->
     <script src="clock.js"></script>
-    <script src="index_d2.js"></script>
+    <!-- <script src="index_d2.js"></script> -->
+    <script src="index_d2a.js"></script>
 </body>
 
 </html>

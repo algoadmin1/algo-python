@@ -1,4 +1,4 @@
-let                                                 verstr = "14.4";
+let                                                 verstr = "15.134";
 
 
 const sideLinks = document.querySelectorAll('.sidebar .side-menu li a:not(.logout)');
@@ -57,7 +57,6 @@ toggler.addEventListener('change', function () {
         document.body.classList.remove('dark');
     } else {
         document.body.classList.add('dark');
-
     }
 });
 
