@@ -3184,6 +3184,32 @@ function DetectButtonPress(ctx, gGlobalButtons, arr) {
 
 
 
+// The color of the PNG is a dark shade of gray with the RGB values (37, 37, 43). 
+// Its approximate HEX representation is 
+// write javascript to clear the canvas, but to a color of let col0 = #25252B;
+// ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+// Function to clear the canvas to a specific color
+function clearCanvasToColor(ctx, canvas, col0) {
+    // Clear the entire canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+    // Set the fill style to the specified color
+    ctx.fillStyle = col0;
+  
+    // Fill the canvas with the color
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+  
+//   // Example usage
+//   let canvas = document.getElementById("myCanvas");
+//   let ctx = canvas.getContext("2d");
+//   let col0 = "#25252B";
+  
+//   // Clear the canvas to color col0
+//   clearCanvasToColor(ctx, canvas, col0);
+  
+
 let gDrawCanvasButtons = 1;
 
         // Function to resize canvas and redraw the rectangle
@@ -3197,8 +3223,11 @@ function resizeCanvas() {
             canvas.height = canvas.parentElement.clientHeight;
 
             // Clear the canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+            // ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            let col0 = "#25252B";
+            ctx.fillStyle = col0;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             let hy = Hypotenuse( canvas.width, canvas.height); 
             if(gScalar_init==-1){
