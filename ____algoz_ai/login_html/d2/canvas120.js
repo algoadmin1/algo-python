@@ -3153,22 +3153,27 @@ function resizeCanvas() {
 
 
 let inputString = "";
+// Allowed characters string
+const charStr = "abcdefghijklmnopqrstuvwxyz0123456789./@";
 
 // Function to draw the current string on the canvas
 function renderText( x_text, y_text , fsz, col) {
     // Clear the canvas
     let cw0= canvas.width;
-    let h0 = fsz+0;
-    ctx.clearRect(0, y_text , cw0, h0 );
+    let h0 =  gGlobalChartVRectCurrent.y ; // - fsz+0;
+    ctx.clearRect(0, 0 , cw0, h0 );
 
+   
     // Set text properties (customize as needed)
     let fszstr =  fsz.toString()+'px Arial';
 
     ctx.font = fszstr;
     ctx.fillStyle = col;
 
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
     // Render the string
-    ctx.fillText(inputString, x_text, y_text);
+    ctx.fillText(inputString, x_text, y_text );
 }
  
 
@@ -3355,15 +3360,16 @@ let gZipperDisplay=0;
             } else if (event.key === 'Enter') {
                 // Open a new window with the specified HTTPS string
                 window.location.href = g_httpsStr;
-            } else if (event.key.length === 1) {
+            } else if (event.key.length === 1 && charStr.includes(event.key.toLowerCase())) {
                 // Append valid characters to the string
                 inputString += event.key;
             }
 
             let inputFontSize =36;
-            let inputFontY   = 20
+            let inputFontY   = 20;
+            
             // Re-render the text on the canvas
-            renderText( 200, inputFontY, inputFontSize, 'red');
+            renderText( 200, inputFontY, inputFontSize, 'blue');
         });
 
 
@@ -3375,6 +3381,11 @@ let gZipperDisplay=0;
         // Initial resize to set up the canvas
         resizeCanvas();
 
+
+        if(inputString=="") gZipperDisplay=1;
+            else gZipperDisplay=0;
+
+            
         if( g_watchlistRUNNING == 0 ){
             if(gZipperDisplay==1)  setInterval( DrawCrawl, gCrawlSeconds100);
 
