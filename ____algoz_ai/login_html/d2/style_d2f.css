@@ -545,7 +545,7 @@ canvas {
 }
 
 .content main .bottom-data .orders table tr td .status{
-    font-size: 8px;
+    font-size: 10px;
     padding: 6px 16px;
     color: var(--light);
     border-radius: 20px;

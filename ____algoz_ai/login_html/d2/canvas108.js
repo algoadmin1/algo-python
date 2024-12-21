@@ -1,9 +1,9 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "304.1";
+let                                                                         gVer = "303.109";
 let             gDebugInfo = 1;  // for   sc = 1.0
-let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget.php?sym=" ;   
+let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget100.php?sym=" ;   
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -438,7 +438,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
 
     DrawGlobalTextInfo( ctx , vrect ,  xoff, yoff ,  fszDyn, colScheme);
 
-    InitAndDrawImage(ctx, vrect, fname, img_xoff, img_yoff, gImgScale );   // let gIm gScale = 0.325;
+  //  InitAndDrawImage(ctx, vrect, fname, img_xoff, img_yoff, gImgScale );   // let gIm gScale = 0.325;
 
 }//fn 
 
@@ -2161,7 +2161,7 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
 
      let addstr = " ";
 
-     if(gDebugInfo==1){
+     if(gDebugInfo==1  && g_email1.toLowerCase()=="roguequant1@gmail.com"){
         addstr  = "  sc=" +  gScalarFloat_dynamic.toString();
 
         // DrawText( ctx, gChartTextStrDebug,  vrect.x+xoffset, vrect.y+yoffset+2+fsz, fsz , colScheme.tx , gGlobalFont);
@@ -2928,7 +2928,7 @@ function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =
 let gGlobalButtons = [];
 let gGlobalButtonNameStr = '';
 let gGlobalButtonNum = -1;
-let gGlobalButton_arr = ['spy', 'qqq', 'nvda', 'aapl', 'tsla', 'nflx', 'msft', 'amzn', 'mstr',  'slv',  'btc-usd',  'djt',  'gs',  'vxx', 'sol-usd' ];
+let gGlobalButton_arr = [ 'time', 'spy', 'qqq', 'nvda', 'aapl', 'tsla', 'nflx', 'msft', 'amzn', 'mstr',  'slv',  'btc-usd',   'gs',  'vxx', 'sol-usd' ];
 // Draw ButtonArray(ctx, arr, 10, 10, 100, 0, 10, 2);
 // Det ectButtonPress(ctx, gGlobalButtons, arr);
 
@@ -2969,20 +2969,36 @@ function DrawButtonArray(ctx, arr, x, y, width, buttonHeight, idx, spacerY, line
     arr.forEach((label, i) => {
 
         let vrect = { x: x, y: y + (buttonHeight + spacerY) * i, w: width, h: buttonHeight };
-        // Draw the rounded rectangle   radius                  fiilFlg
-        // DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight, 'darkblue', 1, 'blue' );   // #4C50AF
-        // DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight,  'darkblue' , 1, butCol);    
-        DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight,  butOulineCol , 1, butCol);    // butOulineCol
-        // Set the font for the button text
-        ctx.font = `${fontSize}px ${fontName}`;    // ctx.font = "16px Arial";
-        ctx.fillStyle = textCol; // Set the text color
-        // Draw centered text inside the button
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(label, vrect.x + vrect.w / 2, vrect.y + vrect.h / 2);
+        let label0= "7-year";
+        if(i==0){   // zero case  7yr
 
-        // Save the button properties in global array
-        gGlobalButtons.push({ x: vrect.x, y: vrect.y, w: vrect.w, h: vrect.h });
+                DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight+1,  butOulineCol , 1, butCol);    // butOulineCol
+                // Set the font for the button text
+                ctx.font = `${fontSize}px ${fontName}`;    // ctx.font = "16px Arial";
+                ctx.fillStyle = textCol; // Set the text color
+                // Draw centered text inside the button
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(label0, vrect.x + vrect.w / 2, vrect.y + vrect.h / 2);
+                // Save the button properties in global array
+                gGlobalButtons.push({ x: vrect.x, y: vrect.y, w: vrect.w, h: vrect.h });
+        }else{
+
+                vrect = { x: x, y: y + (buttonHeight + spacerY) * i, w: width, h: buttonHeight };
+
+                // Draw the rounded rectangle   radius                  fiilFlg
+                DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight,  butOulineCol , 1, butCol);    // butOulineCol
+                ctx.font = `${fontSize}px ${fontName}`;    // ctx.font = "16px Arial";
+                ctx.fillStyle = textCol; // Set the text color
+                // Draw centered text inside the button
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(label, vrect.x + vrect.w / 2, vrect.y + vrect.h / 2);
+
+                // Save the button properties in global array
+                gGlobalButtons.push({ x: vrect.x, y: vrect.y, w: vrect.w, h: vrect.h });
+
+        }
     });
 }
 
@@ -3006,8 +3022,11 @@ function DetectButtonPress(ctx, gGlobalButtons, arr) {
                 gGlobalButtonNameStr = arr[i];
                 gGlobalButtonNum = i;
                 // console.log("Button clicked:", gGlobalButtonNameStr, gGlobalButtonNum);
+ 
+                if(i==0){   // use 0th button for time 7yr
+                    httpstrGo = httpstr + gSymbolStr  +"&per=m";
+                }else httpstrGo = httpstr + gGlobalButtonNameStr ;
 
-                httpstrGo = httpstr + gGlobalButtonNameStr ;
                 console.log("Button clicked, GOING TO HTTPS:", httpstrGo , gGlobalButtonNameStr, gGlobalButtonNum);
                 window.location.href = httpstrGo;   // same browser
 
@@ -3123,7 +3142,7 @@ function resizeCanvas() {
 
         if(gDrawCanvasButtons==1){
                     // Dra wButtonArray(ctx, arr,               x, y, width, h,  idx, spacerY, lineWeight,  textCol  , fontSize, fontName ) 
-                    // DrawButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'white',     fsz0,   "Arial",  "#4C50AF", 'darkblue' );
+                    // Dr awButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'white',     fsz0,   "Arial",  "#4C50AF", 'darkblue' );
                     DrawButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'blue',     fsz0,   "Arial",  'white',  'white' );
                     DetectButtonPress(ctx, gGlobalButtons, gGlobalButton_arr);
 
@@ -3135,8 +3154,11 @@ function resizeCanvas() {
         // Function to toggle button state and call resizeCanvas
 function toggleButton(buttonNumber) {
             switch (buttonNumber) {
-                case 1:
-                    // button1 = (button1 === 1) ? 0 : 1;
+                
+                
+                // case 1:  button 1 is now in #5 spot "TIME"
+                case 5:
+                        // button1 = (button1 === 1) ? 0 : 1;
                    // ToggleHeikinAshi();
                     // ie 0 = candle, 1= line, 2= heikin ashi
 
@@ -3206,16 +3228,19 @@ function toggleButton(buttonNumber) {
                     ToggleGaps();  //gGaps_On
                     window.dispatchEvent(new Event('button4'));  // rndcolor
                     break;
-                case 5:
-                    // button5 = (button5 === 1) ? 0 : 1;   // pivots blue, then both blue+yellow, then off
-                    gDrawFinancials=0;
-                    ToggleTimeframe();  //  gDrawTimeframe= "daily";
+                // case 5:
+             case 1:
+                           
+                    window.location.href = "https://algoz.ai";   // same broswer
+                    
 
-                    // if(button5==0) button5=1;
-                    //  else if(button5==1) button5=2;
-                    //   else  if(button5==2) button5=0;
-                    window.dispatchEvent(new Event('button5'));
+            //  // button5 = (button5 === 1) ? 0 : 1;   // pivots blue, then both blue+yellow, then off
+            //         gDrawFinancials=0;
+            //         ToggleTimeframe();  //  gDrawTimeframe= "daily";
+            //         window.dispatchEvent(new Event('button5'));
                     break;
+
+
                 case 6:
                     button6 = (button6 === 1) ? 0 : 1;
                     gDrawFinancials=0;
@@ -3307,15 +3332,19 @@ function toggleButton(buttonNumber) {
 
         }else if( g_watchlistRUNNING == 1 ){
 
-                let millisecs = 750;
+                let millisecs = 1500; //750;
 
                 // Wait for 0.25 seconds ( 250 milliseconds)
                 setTimeout(() => {
                     console.log("] FINISHED SYMBOL: ", g_watchlistLoopThru_sym, " waited");
                     console.log(   millisecs, " milliseconds to pass! Calling next one in WATCHLIST...;  w.list cnt==", g_watchlistLoopThru_cnt );
                     // You can perform any actions here after the delay
+
+                    let httpsStr = gPrefixLink +"spy&loop=2";
+                    window.location.href =httpsStr ; 
+                    // "https://algoz.ai/d2/jsonget100.php?sym=spy&loop=2";   // loop=2 is not a valid input but still calls
                     // window.location.href = "https://algoz.ai/d2/jsonget100.php?sym=spy&loop=2";   // loop=2 is not a valid input but still calls
-                    window.location.href = "https://algoz.ai/d2/jsonget.php?sym=spy&loop=2";   // loop=2 is not a valid input but still calls
+                    // window.location.href = "https://algoz.ai/d2/jsonget.php?sym=spy&loop=2";   // loop=2 is not a valid input but still calls
 
                 }, millisecs);
 

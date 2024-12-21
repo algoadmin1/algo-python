@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "303.107";
+let                                                                         gVer = "303.110";
 let             gDebugInfo = 1;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget100.php?sym=" ;   
 
@@ -438,7 +438,7 @@ function DrawChart(ctx,  vrect , colScheme, typestr ) {
 
     DrawGlobalTextInfo( ctx , vrect ,  xoff, yoff ,  fszDyn, colScheme);
 
-    InitAndDrawImage(ctx, vrect, fname, img_xoff, img_yoff, gImgScale );   // let gIm gScale = 0.325;
+  //  InitAndDrawImage(ctx, vrect, fname, img_xoff, img_yoff, gImgScale );   // let gIm gScale = 0.325;
 
 }//fn 
 
@@ -2928,7 +2928,7 @@ function   drawFibonacci(ctx, vrect , hi, lo ){   // hi= price high gloat , lo =
 let gGlobalButtons = [];
 let gGlobalButtonNameStr = '';
 let gGlobalButtonNum = -1;
-let gGlobalButton_arr = ['spy', 'qqq', 'nvda', 'aapl', 'tsla', 'nflx', 'msft', 'amzn', 'mstr',  'slv',  'btc-usd',  'djt',  'gs',  'vxx', 'sol-usd' ];
+let gGlobalButton_arr = [ 'time', 'spy', 'qqq', 'nvda', 'aapl', 'tsla', 'nflx', 'msft', 'amzn', 'mstr',  'slv',  'btc-usd',   'gs',  'vxx', 'sol-usd' ];
 // Draw ButtonArray(ctx, arr, 10, 10, 100, 0, 10, 2);
 // Det ectButtonPress(ctx, gGlobalButtons, arr);
 
@@ -2969,20 +2969,36 @@ function DrawButtonArray(ctx, arr, x, y, width, buttonHeight, idx, spacerY, line
     arr.forEach((label, i) => {
 
         let vrect = { x: x, y: y + (buttonHeight + spacerY) * i, w: width, h: buttonHeight };
-        // Draw the rounded rectangle   radius                  fiilFlg
-        // DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight, 'darkblue', 1, 'blue' );   // #4C50AF
-        // DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight,  'darkblue' , 1, butCol);    
-        DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight,  butOulineCol , 1, butCol);    // butOulineCol
-        // Set the font for the button text
-        ctx.font = `${fontSize}px ${fontName}`;    // ctx.font = "16px Arial";
-        ctx.fillStyle = textCol; // Set the text color
-        // Draw centered text inside the button
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(label, vrect.x + vrect.w / 2, vrect.y + vrect.h / 2);
+        let label0= "7-year";
+        if(i==0){   // zero case  7yr
 
-        // Save the button properties in global array
-        gGlobalButtons.push({ x: vrect.x, y: vrect.y, w: vrect.w, h: vrect.h });
+                DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight+1,  butOulineCol , 1, butCol);    // butOulineCol
+                // Set the font for the button text
+                ctx.font = `${fontSize}px ${fontName}`;    // ctx.font = "16px Arial";
+                ctx.fillStyle = textCol; // Set the text color
+                // Draw centered text inside the button
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(label0, vrect.x + vrect.w / 2, vrect.y + vrect.h / 2);
+                // Save the button properties in global array
+                gGlobalButtons.push({ x: vrect.x, y: vrect.y, w: vrect.w, h: vrect.h });
+        }else{
+
+                vrect = { x: x, y: y + (buttonHeight + spacerY) * i, w: width, h: buttonHeight };
+
+                // Draw the rounded rectangle   radius                  fiilFlg
+                DrawRoundedRectCanvas(ctx, vrect, 10, lineWeight,  butOulineCol , 1, butCol);    // butOulineCol
+                ctx.font = `${fontSize}px ${fontName}`;    // ctx.font = "16px Arial";
+                ctx.fillStyle = textCol; // Set the text color
+                // Draw centered text inside the button
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(label, vrect.x + vrect.w / 2, vrect.y + vrect.h / 2);
+
+                // Save the button properties in global array
+                gGlobalButtons.push({ x: vrect.x, y: vrect.y, w: vrect.w, h: vrect.h });
+
+        }
     });
 }
 
@@ -3006,8 +3022,11 @@ function DetectButtonPress(ctx, gGlobalButtons, arr) {
                 gGlobalButtonNameStr = arr[i];
                 gGlobalButtonNum = i;
                 // console.log("Button clicked:", gGlobalButtonNameStr, gGlobalButtonNum);
+ 
+                if(i==0){   // use 0th button for time 7yr
+                    httpstrGo = httpstr + gSymbolStr  +"&per=m";
+                }else httpstrGo = httpstr + gGlobalButtonNameStr ;
 
-                httpstrGo = httpstr + gGlobalButtonNameStr ;
                 console.log("Button clicked, GOING TO HTTPS:", httpstrGo , gGlobalButtonNameStr, gGlobalButtonNum);
                 window.location.href = httpstrGo;   // same browser
 
@@ -3123,7 +3142,7 @@ function resizeCanvas() {
 
         if(gDrawCanvasButtons==1){
                     // Dra wButtonArray(ctx, arr,               x, y, width, h,  idx, spacerY, lineWeight,  textCol  , fontSize, fontName ) 
-                    // DrawButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'white',     fsz0,   "Arial",  "#4C50AF", 'darkblue' );
+                    // Dr awButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'white',     fsz0,   "Arial",  "#4C50AF", 'darkblue' );
                     DrawButtonArray(ctx, gGlobalButton_arr, but_x, 50,    wbut,  hbut,  0,       8,    2     , 'blue',     fsz0,   "Arial",  'white',  'white' );
                     DetectButtonPress(ctx, gGlobalButtons, gGlobalButton_arr);
 
@@ -3138,7 +3157,7 @@ function toggleButton(buttonNumber) {
                 
                 
                 // case 1:  button 1 is now in #5 spot "TIME"
-                case 5:
+                case 7:
                         // button1 = (button1 === 1) ? 0 : 1;
                    // ToggleHeikinAshi();
                     // ie 0 = candle, 1= line, 2= heikin ashi
@@ -3222,14 +3241,14 @@ function toggleButton(buttonNumber) {
                     break;
 
 
-                case 6:
+                case 5:  //fib
                     button6 = (button6 === 1) ? 0 : 1;
                     gDrawFinancials=0;
 
                     ToggleFib();  
                     window.dispatchEvent(new Event('button6'));
                     break;
-                case 7:
+                case 6:   // fins
                     button7 = (button7 === 1) ? 0 : 1;
 
                     console.log('button7:  gObject_arr[]=', gObject_arr);

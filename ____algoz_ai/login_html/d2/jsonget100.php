@@ -1,6 +1,6 @@
 
 <?php                       
-                                                              $ver=  "310.3";
+                                                              $ver=  "310.5";
 
 date_default_timezone_set('America/New_York');
 require_once "../login/database.php";
@@ -295,13 +295,13 @@ $button8 = 0;
 $button9 = 0;
 $button10 = 0;
 
-$button1name = "Chart";
+$button1name = "< Back"; //"Chart";
 $button2name = "Buy Sell";
 $button3name = "Sup Res";
 $button4name = "Gaps" ;              //; "Gaps Detection";
-$button5name = "Time";
-$button6name = "Fib";
-$button7name = "Fin's";
+$button5name = "Fib";  // was TIME
+$button6name = "Finan";
+$button7name = "Chart";
 $button8name = "Color";
 
 $button9name = "Aux Button 9";
@@ -3039,7 +3039,7 @@ $processedDataJson = json_encode($dataProcessed);    // $sortedSignalsArray
 
     <!-- Link to your external JavaScript file -->
     <!-- <script src="canvas0.js"></script> -->
-    <script src="canvas107.js"></script>
+    <script src="canvas110.js"></script>
     <!-- <script src="drawchart.js"></script> -->
 </body>
 </html>

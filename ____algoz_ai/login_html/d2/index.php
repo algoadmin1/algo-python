@@ -104,11 +104,13 @@ if(     $email1=="algoinvestorr@gmail.com"   ||
         //  $email1=="roguequant1@gmail.com"     ||
         $email1=="johnbotti2013@gmail.com"   ||
         $email1=="geneoss@yahoo.com"         ||
+        $email1=="alan_lasky@yahoo.com"         ||
         $email1=="johnbotti9000@gmail.com"   ){
          
         $superuser = true ;
 
-        if( $email1!="geneoss@yahoo.com"     )  $creator = true ;
+        if( $email1!="geneoss@yahoo.com" &&
+            $email1!="alan_lasky@yahoo.com" )  $creator = true ;   // if it's john give highest auth 'creator'
 
 }
 
@@ -489,7 +491,7 @@ if (isset($eventsTable[0])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="style_d2e.css">
+    <link rel="stylesheet" href="style_d2f.css">
     <link rel="stylesheet" href="style_digital.css">
     <title>algoz.ai</title>
 
