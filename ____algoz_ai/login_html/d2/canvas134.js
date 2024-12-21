@@ -1,9 +1,10 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "303.117";
+let                                                                         gVer = "303.134";
 let             gDebugInfo = 1;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget100.php?sym=" ;   
+let  g_TruncateCandles = 0;
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
 //
@@ -647,17 +648,67 @@ let gLastCandle_S4 =0;
 
 let gLastCandle_datestr ="nil";
 
+let gMAX_CANDLES_COUNTED_ADJ=0;
 
 //sets globals etc.
 function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
+    
     let cw= canvas.width;
     let ch= canvas.height;
-    let cnt = processedData.length;   /// == NaN ???
+    let cnt0 = processedData.length;   /// == NaN ???
 
 //  ##############################################################################
 
         // let vect2 = { ...vect };   // example
         gCandlesMaxes = { ...gCandlesMaxesInit };      // init the global vector
+
+
+
+
+
+// ############################################ new        
+// ############################################ new        
+
+        let cnt=0;
+        for (var date007 in processedData) {   // quick cnt only
+            if (processedData.hasOwnProperty(date007)) {
+                cnt++;
+            }
+        }
+        gMAX_CANDLES_COUNTED_ADJ = cnt;
+
+
+// canvases
+// android test jb = 360x704 
+// iphone  test jb = 428x827 
+// tesla   test jb = 1180x919 
+
+        let tmpCandleW = parseInt(  vrect.w / cnt  );
+        console.log("] inside Pr3CalcCandlesChart():  tmpCandw, cnt,  vrect.w = ", tmpCandleW , cnt,  vrect.w);
+        console.log("] inside Pr3CalcCandlesChart():  pr0cessedData==",processedData);
+
+        if(gGlobalChartVRectCurrent.w < 500 &&  g_TruncateCandles==0 ){
+
+            // let processedData = [1, 2, 3, 4, 5, 6];
+            let n = parseInt(cnt*0.70);     // Number of items to delete 1/3rd   ie 95 *.75 = 71
+
+            let entries = Object.entries(processedData);
+            // Keep only the last `n` entries
+            entries = entries.slice(-n);
+            // Convert the array back to an object
+            processedData = Object.fromEntries(entries);
+
+            g_TruncateCandles=1 ;
+
+            // processedData.splice(0, n);
+            console.log("] inside Pr3CalcCandlesChart():   n(newLen), gMAX_CANDLES_COUNTED_ADJ ==",n, gMAX_CANDLES_COUNTED_ADJ);      // Outputs: [4, 5, 6]
+        }
+
+// ############################################ new        
+// ############################################ new        
+
+
+
 
         let datestr0 = "0000-11-22";
         let i=0;
@@ -732,13 +783,13 @@ function PreCalcCandlesChart( ctx,  vrect , colScheme, wt ){
         }//loop
     
         gNextEarnings_date = "na";
-
+        gMAX_CANDLES_COUNTED_ADJ =i;
         gNumCandlesToRender = i;
         gCandlesMaxes.num2render = gNumCandlesToRender ;
         gCandlesMaxes.priceRange = gCandlesMaxes.priceHigh - gCandlesMaxes.priceLow;
         gCandlesMaxes.srRange    = gCandlesMaxes.srHigh    - gCandlesMaxes.srLow;
         gCandlesMaxes.volRange   = gCandlesMaxes.volHigh   - gCandlesMaxes.volLow;
-        console.log("] POST calcs, gCandlesMaxes   =", gCandlesMaxes );
+        console.log("] POST calcs AT END..., gCandlesMaxes, gMAX_CANDLES_COUNTED_ADJ   =", gCandlesMaxes , gMAX_CANDLES_COUNTED_ADJ);
     
     //  ############################################################################## should be a fn
     if(gDigitalCurrency==1){
@@ -2118,7 +2169,9 @@ function GetTickerZipper(url , ctx) {
 function DrawCrawl() {
     // gCrawlX = gCrawlX- gCrawlXstep;
     // let vrect0 = { x: 0, y:gCraw lY-2 , w: canvas.width, h: gCrawlFontSize+4 };
+    if(  inputString.length !=0 ) return;
 
+    ctx.save();
     ctx.fillStyle = 'yellow';   
     ctx.font =  gCrawlFontSize.toString()+"px " +gGlobalFont;   //fsz.toString()+ "px Arial";    
     let rWidth = ctx.measureText(gZipper0).width ;
@@ -2130,6 +2183,7 @@ function DrawCrawl() {
 
     DrawVRect(ctx, vrect0, 2, 'blue', "solid");
     DrawText_noclip( ctx, gZipper, gCrawlX, gCrawlY + gCrawlFontSize-7,       gCrawlFontSize , 'yellow' , gGlobalFont );
+    ctx.restore();
 
 }
 function logDateTime() {
@@ -2206,7 +2260,7 @@ function  DrawGlobalTextInfo( ctx , vrect, xoffset, yoffset , fsz, colScheme ){
 
 
 // // CRAWL ZIPPER SHOULD BE GOTTEN ONCE AT START
-//     GetTickerZipper( gZipperUrl , ctx )
+//     GetTic kerZipper( gZipperUrl , ctx )
 //     .then(data => Assign_gZipperString(data , ctx));
 //     // .then(data => printZipperString(data , ctx));
 
@@ -3148,32 +3202,40 @@ function resizeCanvas() {
 
             }
 
+            if(inputString.length!=0)  renderText( inputFontX, inputFontY, inputFontSize, 'blue');
+
 
 }//fn  r3sizeCanvas()
 
 
 let inputString = "";
 // Allowed characters string
-const charStr = "abcdefghijklmnopqrstuvwxyz0123456789./@";
+const charStr = "abcdefghijklmnopqrstuvwxyz0123456789./@-";
 
 // Function to draw the current string on the canvas
 function renderText( x_text, y_text , fsz, col) {
+
+    ctx.save();
+
     // Clear the canvas
     let cw0= canvas.width;
-    let h0 =  gGlobalChartVRectCurrent.y ; // - fsz+0;
+    let h0 =  gGlobalChartVRectCurrent.y-6 ; // - fsz+0;
     ctx.clearRect(0, 0 , cw0, h0 );
 
-   
+   let fsz0 = h0-4;
     // Set text properties (customize as needed)
-    let fszstr =  fsz.toString()+'px Arial';
+    // let fszstr =  fsz.toString()+'px Arial';
+    let fszstr =  fsz0.toString()+'px Arial';
 
     ctx.font = fszstr;
     ctx.fillStyle = col;
 
-    ctx.textAlign = "left";
+    ctx.textAlign    = "left";
     ctx.textBaseline = "top";
     // Render the string
-    ctx.fillText(inputString, x_text, y_text );
+    ctx.fillText(inputString, x_text, y_text +2);
+
+    ctx.restore();
 }
  
 
@@ -3322,9 +3384,12 @@ function toggleButton(buttonNumber) {
 // #############################################################  MAIN CODE  *****
 // #############################################################  MAIN CODE  *****
 
+let inputFontSize =36;
+let inputFontX   = 200;
+let inputFontY   = 0;
 
 let gZipperDisplay=0;
-
+const g_httpsStr="";
 
 // // Get the button and audio element
 // const playButton = document.getElementById('play-button');
@@ -3357,19 +3422,26 @@ let gZipperDisplay=0;
                 if (event.key === 'Backspace') {
                 // Handle backspace by removing the last character
                 inputString = inputString.slice(0, -1);
+
             } else if (event.key === 'Enter') {
                 // Open a new window with the specified HTTPS string
-                window.location.href = g_httpsStr;
+                if(inputString!=""){
+                    const httpsStrUSER =gPrefixLink + inputString;
+                    window.location.href = httpsStrUSER;
+                }
+               
             } else if (event.key.length === 1 && charStr.includes(event.key.toLowerCase())) {
                 // Append valid characters to the string
-                inputString += event.key;
+                // gZipperDisplay=0;
+                inputString += event.key.toUpperCase();
             }
 
-            let inputFontSize =36;
-            let inputFontY   = 20;
-            
+            // let inputFontSize =36;
+            // let inputFontX   = 200;
+            // let inputFontY   = 0;
+           // console.log("inputString, len ==",inputString, inputString.length );
             // Re-render the text on the canvas
-            renderText( 200, inputFontY, inputFontSize, 'blue');
+            renderText( inputFontX, inputFontY, inputFontSize, 'blue');
         });
 
 
@@ -3381,14 +3453,12 @@ let gZipperDisplay=0;
         // Initial resize to set up the canvas
         resizeCanvas();
 
+        // if(inputString!="") gZipperDisplay=1;
+        //     else gZipperDisplay=0;
 
-        if(inputString=="") gZipperDisplay=1;
-            else gZipperDisplay=0;
 
-            
         if( g_watchlistRUNNING == 0 ){
-            if(gZipperDisplay==1)  setInterval( DrawCrawl, gCrawlSeconds100);
-
+             setInterval( DrawCrawl, gCrawlSeconds100);
         }
 
         let arr1=[];
@@ -3396,12 +3466,10 @@ let gZipperDisplay=0;
 
         
         if( g_watchlistRUNNING == 0 ){    // CRAWL ZIPPER SHOULD BE GOTTEN ONCE AT START if we're not running watchlist
-          if(gZipperDisplay==1){
 
             GetTickerZipper( gZipperUrl , ctx )
             .then(data => Assign_gZipperString(data , ctx));
             // .then(data => printZipperString(data , ctx));
-          }
 
         }else if( g_watchlistRUNNING == 1 ){
 
