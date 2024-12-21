@@ -1,7 +1,7 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "303.136";
+let                                                                         gVer = "303.139";
 let             gDebugInfo = 1;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget100.php?sym=" ;   
 let  g_TruncateCandles = 0;
@@ -1366,7 +1366,7 @@ function DrawSegmentedLine(ctx, processedData, vrect, wt, colLine, style, xstart
 
 function GetPriceFromYCoord ( y, vrect ){
     let finalPrice = 0.0;
-    let yCoordFloat = parseFloat(y);
+    let yCoordFloat = parseFloat(y);  // unused
 
     let yrange = vrect.h;
     let yrangeFloat= parseFloat( yrange );
@@ -3469,9 +3469,17 @@ function DrawSniperSight(canvasMouse_x, canvasMouse_y, radius, weight , col, onO
   ctx.restore(); // Restore canvas state
 }
 
+ 
+
+// console.log(formattedString); //123.456789;  Output: "123.46"
+function formatFloatToString(value, decplaces) {
+    return value.toFixed(decplaces);
+}
+
+let gCrossHairColor  = 'blue';
 
 // Function to handle the crosshair drawing
-function HandleCrossHair(canvasMouse_x, canvasMouse_y, vrect) {
+function HandleCrossHair(canvasMouse_x, canvasMouse_y, vrect, col) {
   ctx.save(); // Save the current state of the canvas
   
   // Check if the mouse coordinates are outside the view rectangle
@@ -3490,7 +3498,7 @@ function HandleCrossHair(canvasMouse_x, canvasMouse_y, vrect) {
 
   // Coordinates are inside the view rectangle
   // Draw vertical line
-  ctx.strokeStyle = "yellow";
+  ctx.strokeStyle = col; //"yellow";
   ctx.beginPath();
   ctx.moveTo(canvasMouse_x, vrect.y);
   ctx.lineTo(canvasMouse_x, vrect.y + vrect.h);
@@ -3502,12 +3510,16 @@ function HandleCrossHair(canvasMouse_x, canvasMouse_y, vrect) {
   ctx.lineTo(vrect.x + vrect.w, canvasMouse_y);
   ctx.stroke();
 
+  let priceFl = GetPriceFromYCoord(canvasMouse_y, vrect);
+  let priceStr = gCurrencyStr +   formatFloatToString( priceFl ,2);  
   // Draw the coordinate text
-  ctx.fillStyle = "yellow";
+  ctx.fillStyle =col ; // "yellow";
   ctx.font = "12px Helvetica";
-  ctx.fillText(`${canvasMouse_x1},${canvasMouse_y1}`, canvasMouse_x +  xoff, canvasMouse_y + yoff);
+//   ctx.fillText(`${canvasMouse_x1},${canvasMouse_y1}`, canvasMouse_x +  xoff, canvasMouse_y + yoff);
+// ctx.fillText(`${canvasMouse_x1},${canvasMouse_y1} =$ ${priceFl}`, canvasMouse_x +  xoff, canvasMouse_y + yoff);
+ctx.fillText( priceStr, canvasMouse_x +  xoff, canvasMouse_y + yoff);
   
-  DrawSniperSight(canvasMouse_x, canvasMouse_y, 50, 2, 'yellow' , 0); // Example radius=50, weight=2
+  DrawSniperSight(canvasMouse_x, canvasMouse_y, 50, 2, col , 0);     // Example radius=50, weight=2
 
   ctx.restore(); // Restore the canvas state
 }
@@ -3619,13 +3631,13 @@ const g_httpsStr="";
         // Add event listeners for touch and mouse interactions
         canvas.addEventListener("mousedown", (event) => {
             const { x, y } = getCanvasCoordinates(event);
-            HandleCrossHair(x, y, gGlobalChartVRectCurrent );
+            HandleCrossHair(x, y, gGlobalChartVRectCurrent , gColSchemeCurrent.tx );
         });
         
         canvas.addEventListener("touchstart", (event) => {
             event.preventDefault(); // Prevent scrolling on touch
             const { x, y } = getCanvasCoordinates(event);
-            HandleCrossHair(x, y, gGlobalChartVRectCurrent);
+            HandleCrossHair(x, y, gGlobalChartVRectCurrent , gColSchemeCurrent.tx );
         });
   
 
