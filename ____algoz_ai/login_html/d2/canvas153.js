@@ -1,9 +1,10 @@
 //          canvas0.js  aka dr@wChart.js                  
 //
 
-let                                                                         gVer = "303.152";
+let                                                                         gVer = "303.153";
 let             gDebugInfo = 1;  // for   sc = 1.0
 let                                                 gPrefixLink = "https://algoz.ai/d2/jsonget100.php?sym=" ;   
+let                                                 gPrefixLink_ai= "https://algoz.ai/xai/xai.php?pr=";
 let  g_TruncateCandles = 0;
 
 //              BUGS:   NVDA Split MESSES up chart., SCALE date Print at bottom with vrect size
@@ -3308,6 +3309,7 @@ function resizeCanvas() {
 let inputString = "";
 // Allowed characters string
 const charStr = "abcdefghijklmnopqrstuvwxyz0123456789./@-";
+const charStr_ai = "abcdefghijklmnopqrstuvwxyz0123456789./@-,?: %!-+*^=;'<>(){}[]#_|";
 
 // Function to draw the current string on the canvas
 function renderText( x_text, y_text , fsz, col) {
@@ -3670,6 +3672,23 @@ function getCanvasCoordinates(event) {
 }//fn
 
 
+function startsWithAI(inputString) {
+    let inputString1 = inputString.toLowerCase();
+    // Check if the first 3 characters are '/ai'
+    if (inputString1.substring(0, 3) === '/ai') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// // Example usage
+// let inputString = "/aiExample";
+// if (startsWithAI(inputString)) {
+//     console.log("The string starts with '/ai'.");
+// } else {
+//     console.log("The string does not start with '/ai'.");
+// }
 
 
 
@@ -3711,32 +3730,50 @@ const g_httpsStr="";
         // Resize the canvas when the window is resized
         window.addEventListener('resize', resizeCanvas);
 
+// https://algoz.ai/xai/xai.php?pr=who%20founded%20nvdia?
 
         // Add event listener for keyboard input
         // document.addEventListener('keydown', (event) => {
         window.addEventListener('keydown', (event) => {
                 if (event.key === 'Backspace') {
-                // Handle backspace by removing the last character
                 inputString = inputString.slice(0, -1);
 
-            } else if (event.key === 'Enter') {
-                // Open a new window with the specified HTTPS string
-                if(inputString!=""){
-                    const httpsStrUSER =gPrefixLink + inputString;
-                    window.location.href = httpsStrUSER;
-                }
+                } else if (event.key === 'Enter') {
+                        // Open a new window with the specified HTTPS string
+                        if(inputString!=""){
+                                if (startsWithAI(inputString)) {
+                                    const httpsStrUSER =gPrefixLink_ai + inputString;
+                                    window.location.href = httpsStrUSER;
+                                }else{
+                                    const httpsStrUSER =gPrefixLink + inputString;
+                                    window.location.href = httpsStrUSER;
+                                }
+                            }
                
-            } else if (event.key.length === 1 && charStr.includes(event.key.toLowerCase())) {
-                // Append valid characters to the string
-                // gZipperDisplay=0;
-                inputString += event.key.toUpperCase();
-            }
+                }else if(startsWithAI(inputString)) {   // check for entered CHAR 
+                        // console.log("The string starts with '/ai'.");
+                        if (event.key.length === 1 && charStr_ai.includes(event.key.toLowerCase())) {
+                            inputString += event.key ;  //.toUpperCase();
+                        }
+
+                }else {
+                        // console.log("The string does not start with '/ai'.");
+                        if (event.key.length === 1 && charStr.includes(event.key.toLowerCase())) {
+                            // inputString += event.key.toUpperCase();
+                            inputString += event.key;  
+                        }
+
+                }
+                    
+
+
 
             // let inputFontSize =36;
             // let inputFontX   = 200;
             // let inputFontY   = 0;
            // console.log("inputString, len ==",inputString, inputString.length );
             // Re-render the text on the canvas
+
             renderText( inputFontX, inputFontY, inputFontSize, 'blue');
         });
 

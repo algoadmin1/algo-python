@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup with Audio</title>
+    <style>
+        /* Styles for the translucent popup */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Dark translucent background */
+            backdrop-filter: blur(5px); /* Blur effect */
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: rgba(255, 255, 255, 0.8); /* Light translucent box */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup-button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .popup-button.play {
+            background-color: blue;
+            color: white;
+        }
+
+        .popup-button.cancel {
+            background-color: red;
+            color: white;
+        }
+    </style>
+    <audio id="tutorial-audio" src="./tutorial.mp3" preload="auto"></audio>
+</head>
+<body>
+    <div>
+        <a href="#" class="report" id="show-popup">
+            <i class='bx bx-user-voice'></i>
+            <span>Quick Ref</span>
+        </a>
+    </div>
+
+    <!-- Popup -->
+    <div class="popup-overlay" id="popup-overlay">
+        <div class="popup-content">
+            <h3>Do you want to play the tutorial?</h3>
+            <button class="popup-button play" id="play-button">Play</button>
+            <button class="popup-button cancel" id="cancel-button">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Get elements
+        const popupOverlay = document.getElementById('popup-overlay');
+        const showPopup = document.getElementById('show-popup');
+        const playButton = document.getElementById('play-button');
+        const cancelButton = document.getElementById('cancel-button');
+        const audio = document.getElementById('tutorial-audio');
+
+        // Show popup when the link is clicked
+        showPopup.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent the link's default behavior
+            popupOverlay.style.display = 'flex'; // Show the popup
+        });
+
+        // Play the audio when the play button is clicked
+        playButton.addEventListener('click', () => {
+            audio.play();
+            popupOverlay.style.display = 'none'; // Hide the popup
+        });
+
+        // Hide the popup when the cancel button is clicked
+        cancelButton.addEventListener('click', () => {
+            popupOverlay.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

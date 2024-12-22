@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "29.134";  // jsonget100.php
+                                                        $ver=  "29.154";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -499,6 +499,52 @@ if (isset($eventsTable[0])) {
     <link rel="stylesheet" href="style_d2f.css">
     <link rel="stylesheet" href="style_digital.css">
     <title>algoz.ai</title>
+
+    <style>
+        /* Styles for the translucent popup */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Dark translucent background */
+            backdrop-filter: blur(5px); /* Blur effect */
+            display: none; /* Hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: rgba(255, 255, 255, 0.8); /* Light translucent box */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .popup-button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .popup-button.play {
+            background-color: blue;
+            color: white;
+        }
+
+        .popup-button.cancel {
+            background-color: red;
+            color: white;
+        }
+    </style>
+    <audio id="tutorial-audio" src="./tutorial.mp3" preload="auto"></audio>
+
 
 
     <script src="eventstable.js"></script>
@@ -1246,13 +1292,55 @@ tbody.appendChild(row);
 
 
 
-
+ 
                 </div>
                 <a href="https://algoz.ai/d2/tutorial/index.html" class="report">
                 <i class='bx bx-user-voice'></i>
                         <span>Quick Ref</span>
                     </a> 
+                </div>  
+
+<!--                 
+                
+                <div>
+                    <a href="#" class="report" id="show-popup">
+                        <i class='bx bx-user-voice'></i>
+                        <span>Quick Ref</span>
+                    </a>
                 </div>
+
+                <div class="popup-overlay" id="popup-overlay">
+                    <div class="popup-content">
+                        <h3>Do you want to play the tutorial?</h3>
+                        <button class="popup-button play" id="play-button">Play</button>
+                        <button class="popup-button cancel" id="cancel-button">Cancel</button>
+                    </div>
+                </div>
+
+                <script>
+                    const popupOverlay = document.getElementById('popup-overlay');
+                    const showPopup = document.getElementById('show-popup');
+                    const playButton = document.getElementById('play-button');
+                    const cancelButton = document.getElementById('cancel-button');
+                    const audio = document.getElementById('tutorial-audio');
+
+                    showPopup.addEventListener('click', (e) => {
+                        e.preventDefault();  
+                        popupOverlay.style.display = 'flex';  
+                    });
+
+                    playButton.addEventListener('click', () => {
+                        audio.play();
+                        popupOverlay.style.display = 'none';  
+                    });
+                    cancelButton.addEventListener('click', () => {
+                        popupOverlay.style.display = 'none';
+                    });
+                </script>
+ -->
+
+
+
 
                 
 <!-- 
