@@ -1,0 +1,170 @@
+ 
+
+/* ####################### */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f3f4f6;
+}
+
+/* Blue Banner with Slogan Styles */
+.banner {
+  width: 100%;
+  background-color: #007bff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.banner-left {
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.banner-right {
+  color: white;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.banner-right sup {
+  font-size: 12px;
+  vertical-align: top;
+}
+
+/* Header Styles */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header h1 {
+  font-size: 48px;
+  font-weight: bold;
+  color: #2d3748;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.logo {
+  height: 48px; /* Matches the heading font size */
+}
+
+/* Pricing Table and Tier Styles */
+.pricing-table {
+  display: flex;
+  gap: 20px;
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tier {
+  background: #fff;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.tier-header {
+  font-size: 24px;
+  font-weight: bold;
+  color: #fff;
+  padding: 10px 0;
+  width: 100%;
+  border-radius: 10px 10px 0 0;
+}
+
+.basic {
+  background-color: #7aabf5; /* Greyish blue */
+}
+
+.pro {
+  background-color: #35bd62; /* Green */
+}
+
+.elite {
+  background-color: #a32ae0; /* Gold */
+}
+
+.price {
+  font-size: 32px;
+  color: #4a5568;
+  margin: 10px 0;
+}
+
+.one-time {
+  font-size: 14px;
+  color: #718096;
+}
+
+.options {
+  list-style: none;
+  padding: 0;
+}
+
+.options li {
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.unavailable {
+  color: #e53e3e;
+  font-weight: bold;
+}
+
+/* Badge for "Most Popular" */
+.badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #e53e3e;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.buy-button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: #f6e05e;
+  color: #1a202c;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.buy-button:hover {
+  background-color: #f0e68c;
+}
+
+.buy-button:active {
+  background-color: #d1b62f;
+}
+
+@media (max-width: 768px) {
+  .pricing-table {
+    flex-direction: column;
+  }
+}

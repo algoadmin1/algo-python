@@ -3309,7 +3309,7 @@ function resizeCanvas() {
 let inputString = "";
 // Allowed characters string
 const charStr = "abcdefghijklmnopqrstuvwxyz0123456789./@-";
-const charStr_ai = "abcdefghijklmnopqrstuvwxyz0123456789./@-,?: %!-+*^=;'<>(){}[]#_|";
+const charStr_ai = "abcdefghijklmnopqrstuvwxyz0123456789./@-,?: %!-+*^=;'<>(){}[]#_|$~";
 
 // Function to draw the current string on the canvas
 function renderText( x_text, y_text , fsz, col) {

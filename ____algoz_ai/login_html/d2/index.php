@@ -102,6 +102,7 @@ $chatai="https://chatgpt.com/";
 $logout0= "https://algoz.ai/login/logout.php";
 
 
+$fullpassuser = false ;
 $superuser = false ;
 $creator   = false ;
 
