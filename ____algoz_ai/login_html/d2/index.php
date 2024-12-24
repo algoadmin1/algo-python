@@ -1,5 +1,5 @@
 <?php
-                                                        $ver=  "29.154";  // jsonget100.php
+                                                        $ver=  "29.155";  // jsonget100.php
 // 
 //                                                                              /algoz.ai/d2/index.php
 //
@@ -79,6 +79,7 @@ $BuyCall30min ="https://buy.stripe.com/28o5ncbru14209yaEP";
 $buySellSignals="https://algoinvestorr.com/algoz0/";
 $scans="https://algoz.ai/scans/scans.pdf";
 
+$icc = "https://algoinvestorr.com/icc/";
 $ccc = "https://algoinvestorr.com/ccc/";
 $pcc1 = "https://algoinvestorr.com/pcc/";
 $pcc ="https://algoinvestorr.com/pcc/index1.php?sym=spy";
@@ -986,6 +987,7 @@ tbody.appendChild(row);
 
             <li><a href="<?php echo $ccc; ?>"><i class='bx bx-math'></i>Covered Call Calc</a></li>
             <li><a href="<?php echo $pcc; ?>"><i class='bx bx-math'></i>Short Put Calc</a></li>
+            <li><a href="<?php echo $icc; ?>"><i class='bx bx-math'></i>IronCondor Calc</a></li>
             <!-- <li><a href="#"><i class='bx bx-analyse'></i>BuySell Signals</a></li> -->
             <!-- <li><a href=" < ? php echo $buySellSignals; ?>"><i class='bx bx-line-chart'></i>BuySell Signals</a></li> -->
 
