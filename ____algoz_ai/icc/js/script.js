@@ -1,7 +1,7 @@
 // script.js for /ccc
 // const fs = require('fs');
 
-//                                          iron condor calc   v9.4
+//                                          iron condor calc   v9.6
 //
 
 let gCryptoSym="BTC";
@@ -1092,6 +1092,7 @@ function displayKeys(jsonObj, indent = 0) {
     S3day = Pday – (R2day-S1day);
     s4day = Low- 3*(High-Pday) ;
 */
+let gClose =0.0;
 
 function CalculatePivots(){
     
@@ -1126,7 +1127,7 @@ function CalculatePivots(){
     let High  = parseFloat(data_yesterday.hi) ;
     let Low   = parseFloat(data_yesterday.lo) ;
     let Close = parseFloat(data_yesterday.cl) ;
-
+    gClose =Close;
 
       Pday  = ( High + Low + Close ) / 3;
 
@@ -1686,9 +1687,11 @@ const postMethods = () =>{
         // <h3class="description">Price: $${postData.tradePrice} (at ${postData.tradeTime} hrs):</h3>
 
 let urlbase=  "https://itraderpro.co/candlesticks.php?sym=";
+let urlbase2=  "https://algoz.ai/d2/jsonget100.php?sym=";
 let sym1    = postData.symbol ;
 let urlbase1= "&uname=guest&email=johnbotti9000@gmail.com&key=8a2b18a0";
-let urlfinal = urlbase+ sym1 +urlbase1;
+// let urlfinal = urlbase+ sym1 +urlbase1;
+let urlfinal = urlbase2+ sym1  ;
 // <button class="button" onclick="window.open('https://algoinvestorr.com/fire')">Get Chart</button>
 //      <h2 class="name">trending! </h2>
 
@@ -1796,8 +1799,8 @@ if(gSecurityType=="stocks"){
         let ShortPutStrikePrice  = roundDownToNearestModulo5(ShortPutStrikePrice0); 
 
 
-        let cccstr = "Short Call Strike $"+coveredCallStrikePrice.toString();
-        let pccstr = "Short Put Strike $"+ShortPutStrikePrice.toString();
+        let cccstr = "Short Call Strike $"+coveredCallStrikePrice.toString() +" / "+ (coveredCallStrikePrice+5).toString();
+        let pccstr = "Short Put Strike $"+ShortPutStrikePrice.toString() +" / "+ (ShortPutStrikePrice-5).toString();
 
         let blankstr = " ______ ";
 
@@ -1809,8 +1812,10 @@ if(gSecurityType=="stocks"){
         let weeks2str = "Options "+wk.toString()+" wks out: "+ GetOptionsExpiryDate(wk);
         wk=12;
         let weeks3str = "Options "+wk.toString()+" wks out: "+ GetOptionsExpiryDate(wk);
-        wk=24;
+        wk=16;
         let weeks4str = "Options "+wk.toString()+" wks out: "+ GetOptionsExpiryDate(wk);
+        wk=24;
+        let weeks5str = "Options "+wk.toString()+" wks out: "+ GetOptionsExpiryDate(wk);
 
 
 if( p_day_num < p3_day_num ){
@@ -1826,15 +1831,18 @@ if( p_day_num < p3_day_num ){
 
     <h2 class="name2">${sym0} Iron Condor Calc</h2>
     <h2 class="${trendingStylestr}">${trendingstr} </h2>
-    <p class="descriptionG">${cccstr}  </p> 
+    <p class="descriptionR">${cccstr}  </p> 
     <p class="descriptionG">${pccstr}  </p> 
     <p class="descriptionB">${weeks1str}  </p>
     <p class="descriptionB">${weeks2str}  </p>
     <p class="descriptionB">${weeks3str}  </p>
     <p class="descriptionB">${weeks4str}  </p>
+    <p class="descriptionB">${weeks5str}  </p>
     <p class="descriptionB">${blankstr}  </p>
     <p class="descriptionR">Day Resistance R1: $${r1_day}  </p>
     <p class="descriptionG">Day Support S1:   $${s1_day}  </p>
+    <p class="descriptionB">Prev-Day Close:   $${gClose}  </p>
+
         <button class="button" onclick="window.open('${urlfinal}')">Get Chart</button>
     </div>
     </div>  
@@ -1851,15 +1859,18 @@ postElement.innerHTML=`
 <div class="card-content">
 <h2 class="name2">${sym0} Iron Condor Calc</h2>
 <h2 class="${trendingStylestr}">${trendingstr} </h2>
-<p class="descriptionG">${cccstr}  </p>
+<p class="descriptionR">${cccstr}  </p>
 <p class="descriptionG">${pccstr}  </p>
 <p class="descriptionB">${weeks1str}  </p>
 <p class="descriptionB">${weeks2str}  </p>
 <p class="descriptionB">${weeks3str}  </p>
 <p class="descriptionB">${weeks4str}  </p>
+<p class="descriptionB">${weeks5str}  </p>
 <p class="descriptionB">${blankstr}  </p>
 <p class="descriptionR">Day Resistance R1: $${r1_day}  </p>
 <p class="descriptionG">Day Support S1:   $${s1_day}  </p>
+<p class="descriptionB">Prev-Day Close:   $${gClose}  </p>
+
     <button class="button" onclick="window.open('${urlfinal}')">Get Chart</button>
 </div>
 </div>  
